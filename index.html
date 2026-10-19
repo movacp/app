@@ -71,7 +71,7 @@ button{cursor:pointer}
 .topbar .wrap{display:flex;align-items:center;gap:16px;height:64px}
 .logo{display:flex;align-items:baseline;gap:8px;text-decoration:none;color:var(--ink);margin-right:auto}
 .logo b{font-weight:800;font-size:23px;letter-spacing:.04em}
-.logo span{font-size:13px;font-weight:500;color:var(--ink-2)}
+.logo span{font-size:13px;font-weight:500;color:var(--ink-2);white-space:nowrap}
 .logo i{display:inline-flex;gap:3px;margin-left:2px;transform:translateY(-3px)}
 .logo i::before,.logo i::after,.logo i em{content:"";display:block;width:6px;height:6px;border-radius:50%}
 .logo i::before{background:var(--chalk-coral)} .logo i em{background:var(--chalk-mustard)} .logo i::after{background:var(--chalk-sky)}
@@ -377,6 +377,25 @@ p{margin:0}
 .includes{margin:8px 0 0;padding-left:20px;display:grid;gap:6px;color:var(--ink-2)}
 
 .install-btn{height:40px;padding:0 14px;border-radius:999px;border:0;background:var(--navy);color:var(--navy-ink);font-weight:600;font-size:13.5px}.install-btn[hidden]{display:none}
+/* ===================== Install & contact ===================== */
+.install-card{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px;padding:16px 18px;border-radius:18px;background:var(--navy);color:var(--navy-ink);max-width:560px}
+.install-card[hidden]{display:none}
+.install-card img{width:44px;height:44px;border-radius:11px;flex:none}
+.install-card p{flex:1 1 180px;font-size:14.5px;line-height:1.45}
+.install-card p strong{display:block;font-size:15.5px}
+.install-card button{height:44px;padding:0 18px;border-radius:12px;border:0;background:var(--navy-ink);color:var(--navy);font-weight:700;font-size:14.5px}
+.contact{display:grid;gap:12px;grid-template-columns:1fr}
+@media (min-width:720px){.contact{grid-template-columns:1fr 1fr}}
+.contact a{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:18px;background:var(--surface);border:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.contact a:hover{border-color:var(--ink-3)}
+.contact .c-ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;flex:none}
+.contact .c-map{background:var(--coral-soft);color:var(--coral)}
+.contact .c-wa{background:#DCF5E5;color:#1FA855}
+.contact small{display:block;color:var(--ink-3);font-size:12.5px;font-weight:500}
+.contact b{font-weight:600;font-size:15.5px;line-height:1.35}
+.foot-contact{display:flex;flex-wrap:wrap;gap:6px 18px}
+.foot-contact a{color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.foot-contact a:hover{color:var(--ink)}
 /* ===================== Toast ===================== */
 .toast{position:fixed;left:50%;bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom,0px) + 16px);transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:12px 18px;border-radius:12px;font-weight:500;font-size:14.5px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:40;max-width:calc(100% - 32px);text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
@@ -410,17 +429,16 @@ p{margin:0}
     <nav class="nav" aria-label="Main">
       <a href="#/" data-nav="">Home</a>
       <a href="#/library" data-nav="library">Reading Library</a>
-      <a href="#/resources" data-nav="resources">Teacher Resources</a>
+      <a href="#/resources" data-nav="resources">Print &amp; Learn</a>
       <a href="#/games" data-nav="games">Games</a>
-      <a href="#/shop" data-nav="shop">Printable Shop</a>
+      <a href="#/shop" data-nav="shop">Shop</a>
     </nav>
-    <button class="install-btn" id="install-btn" type="button" hidden>Install app</button>
     <a class="saved-link" href="#/saved" data-nav="saved" aria-label="Saved items"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-9-8.6C1.7 8.6 3.6 5 7 5c2 0 3.2 1.2 5 3 1.8-1.8 3-3 5-3 3.4 0 5.3 3.6 4 6.4C19 15.6 12 20 12 20z"/></svg><span class="badge" id="saved-count" hidden>0</span></a>
   </div>
 </header>
 <main id="main" tabindex="-1"></main>
 <footer class="site-foot no-print">
-  <div class="wrap"><span>© 2026 MOVA Centro Pedagógico, Monterrey</span><span>Learning Studio v1 with demo content</span></div>
+  <div class="wrap"><span>© 2026 MOVA Centro Pedagógico</span><span class="foot-contact"><a href="https://maps.app.goo.gl/rdoxm6E2kgavVpQF7" target="_blank" rel="noopener">Av. Constituyentes de N.L. #111, Col. Lindavista</a><a href="https://wa.me/528123426038" target="_blank" rel="noopener">WhatsApp 812 342 6038</a></span></div>
 </footer>
 <nav class="tabbar no-print" aria-label="Sections">
   <ul>
@@ -911,7 +929,8 @@ const ICONS = {
   print: '<path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/>',
   refresh: '<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
-  file: '<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/>'
+  file: '<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/>',
+  pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.6"/>'
 };
 const ico = (name, size = 22) => `<svg class="ico" style="--s:${size}px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ""}</svg>`;
 
@@ -1028,15 +1047,30 @@ function gameCard(g) {
   </article>`;
 }
 
+/* ---------- Contact ---------- */
+const CONTACT = {
+  address: "Av. Constituyentes de N.L. #111, Col. Lindavista",
+  maps: "https://maps.app.goo.gl/rdoxm6E2kgavVpQF7",
+  phone: "812 342 6038",
+  whatsapp: "https://wa.me/528123426038"
+};
+const WA_ICON = '<svg class="ico" style="--s:24px" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.2a9.7 9.7 0 0 0-8.3 14.8L2.4 21.6l4.8-1.3A9.7 9.7 0 1 0 12 2.2zm0 17.7a8 8 0 0 1-4.1-1.1l-.3-.2-2.8.8.8-2.7-.2-.3A8 8 0 1 1 12 19.9zm4.4-6c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.5.1l-.8.9c-.1.2-.3.2-.5.1a6.6 6.6 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.1 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5a.9.9 0 0 0-.7.3 2.8 2.8 0 0 0-.9 2.1 5 5 0 0 0 1 2.6 11.2 11.2 0 0 0 4.3 3.8c1.6.7 2.2.7 3 .6a2.6 2.6 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .2-1.2c-.1-.1-.2-.2-.5-.3z"/></svg>';
+function contactCards() {
+  return `<div class="contact">
+    <a href="${CONTACT.maps}" target="_blank" rel="noopener"><span class="c-ico c-map">${ico("pin", 24)}</span><span><small>Dirección</small><b>${esc(CONTACT.address)}</b></span></a>
+    <a href="${CONTACT.whatsapp}" target="_blank" rel="noopener"><span class="c-ico c-wa">${WA_ICON}</span><span><small>WhatsApp</small><b>${esc(CONTACT.phone)}</b></span></a>
+  </div>`;
+}
+
 /* ---------- Views ---------- */
 function viewHome() {
   const done = READINGS.filter((r) => isDone(r.id)).length;
   const pct = Math.round((done / READINGS.length) * 100);
   const areas = [
     { href: "#/library", c: "sky", icon: "book", title: "Reading Library", text: "Leveled stories with vocabulary and questions." },
-    { href: "#/resources", c: "mint", icon: "teach", title: "Teacher Resources", text: "Printable materials for every skill." },
+    { href: "#/resources", c: "mint", icon: "teach", title: "Print & Learn", text: "Worksheets to print for class or home." },
     { href: "#/games", c: "coral", icon: "play", title: "Interactive Games", text: "Practice vocabulary through play." },
-    { href: "#/shop", c: "mustard", icon: "shop", title: "Printable Shop", text: "Our upcoming collection of packs." }
+    { href: "#/shop", c: "mustard", icon: "shop", title: "Shop", text: "Our upcoming collection of packs." }
   ];
   const featured = [byId(READINGS, "lilas-busy-monday"), byId(READINGS, "the-lost-backpack")];
   return {
@@ -1046,11 +1080,12 @@ function viewHome() {
       <div>
         <p class="hero-brand">MOVA Learning Studio</p>
         <h1 aria-label="Learn. Explore. Grow."><span>Learn.</span><span>Explore.</span><span>Grow.</span></h1>
-        <p class="lead">Lecturas, juegos y materiales para aprender inglés, matemáticas y lectoescritura, además de práctica para exámenes como el TOEFL. Creado por MOVA Centro Pedagógico para alumnos, familias y maestros.</p>
+        <p class="lead">Todo lo que se aprende en MOVA, ahora también en casa.</p>
       </div>
       <div>
         ${searchField("home-q", "Search the studio", "")}
         <div class="search-results" id="home-results" aria-live="polite"></div>
+        <div class="install-card" id="install-card" hidden><img src="icon-192.png" alt=""><p><strong>Instala la app</strong>Ábrela desde tu pantalla de inicio, como cualquier app.</p><button type="button" data-action="install">Instalar</button></div>
       </div>
     </div></section>
 
@@ -1073,14 +1108,19 @@ function viewHome() {
     </section>
 
     <section class="wrap section" aria-labelledby="rec-h">
-      <div class="section-head"><h2 id="rec-h">Recommended for teachers</h2><a href="#/resources">All resources</a></div>
+      <div class="section-head"><h2 id="rec-h">Ready to print</h2><a href="#/resources">All worksheets</a></div>
       <div class="grid cols">${["short-vowel-sort", "present-simple-routines", "reading-detective"].map((id) => resourceCard(byId(RESOURCES, id))).join("")}</div>
+    </section>
+
+    <section class="wrap section" aria-labelledby="contact-h">
+      <div class="section-head"><h2 id="contact-h">Contacto</h2></div>
+      ${contactCards()}
     </section>`,
     mount(root) {
       const input = $("#home-q", root), out = $("#home-results", root);
       const index = [
         ...READINGS.map((r) => ({ kind: "Reading", title: r.title, href: `#/library/${r.id}`, f: [r.title, r.description, r.topic, r.level, r.vocab.map((v) => v[0]).join(" ")] })),
-        ...RESOURCES.map((r) => ({ kind: "Resource", title: r.title, href: `#/resources/${r.id}`, f: [r.title, r.description, r.category, r.levels.join(" "), r.type] })),
+        ...RESOURCES.map((r) => ({ kind: "Print", title: r.title, href: `#/resources/${r.id}`, f: [r.title, r.description, r.category, r.levels.join(" "), r.type] })),
         ...GAMES.map((g) => ({ kind: "Game", title: g.title, href: `#/games/${g.id}`, f: [g.title, g.description, g.skill, "game play"] })),
         ...MOVA_GAMES.map((g) => ({ kind: "Game", title: g.title, href: g.file, f: [g.title, g.description, g.skill, g.tag, "game play juego"] })),
         ...PRODUCTS.map((p) => ({ kind: "Shop", title: p.name, href: `#/shop/${p.id}`, f: [p.name, p.description, p.levels.join(" ")] }))
@@ -1219,19 +1259,19 @@ function doneBtn(id) {
   return `<button class="btn btn-done ${d ? "is-done" : ""}" type="button" data-action="done" data-id="${esc(id)}" aria-pressed="${d}">${ico("check", 20)}<span>${d ? "Completed" : "Mark as completed"}</span></button>`;
 }
 
-/* Teacher Resources */
+/* Print & Learn */
 const resF = { cat: "all", level: "all", age: "all", q: "" };
 function viewResources() {
   return {
-    title: "Teacher Resources",
+    title: "Print & Learn",
     html: `
     <section class="page-head wrap">
-      <p class="kicker">Teacher Resources</p>
-      <h1>Ready-to-print classroom materials</h1>
-      <p class="lead">Materiales listos para imprimir en tamaño carta. Cada recurso incluye notas para el docente y, cuando aplica, clave de respuestas.</p>
+      <p class="kicker">Print &amp; Learn</p>
+      <h1>Worksheets ready to print</h1>
+      <p class="lead">Materiales listos para imprimir en tamaño carta, para el salón o para casa. Cada uno incluye sugerencias de uso y, cuando aplica, clave de respuestas.</p>
     </section>
     <section class="wrap filters" aria-label="Filter resources">
-      ${searchField("res-q", "Search resources", resF.q)}
+      ${searchField("res-q", "Search worksheets", resF.q)}
       <div class="chiprow" role="group" aria-label="Category">${["all", ...RESOURCE_CATEGORIES].map((c) => `<button type="button" class="fchip" data-cat="${esc(c)}" aria-pressed="${resF.cat === c}">${c === "all" ? "All categories" : esc(c)}</button>`).join("")}</div>
       <div class="selects">
         <label class="select"><span>Level</span><select id="res-level"><option value="all">All levels</option>${LEVELS.map((l) => `<option ${resF.level === l ? "selected" : ""}>${l}</option>`).join("")}</select></label>
@@ -1243,8 +1283,8 @@ function viewResources() {
       const out = $("#res-results", root), count = $("#res-count", root);
       const update = () => {
         const list = RESOURCES.filter((r) => (resF.cat === "all" || r.category === resF.cat) && (resF.level === "all" || r.levels.includes(resF.level)) && (resF.age === "all" || r.ages.includes(resF.age)) && matchesQuery(resF.q, [r.title, r.description, r.category, r.type]));
-        count.textContent = `Showing ${plural(list.length, "resource", "resources")}`;
-        out.innerHTML = list.length ? list.map(resourceCard).join("") : emptyState("No resources match your filters.", "Try another category, level, or age group.", "Clear filters");
+        count.textContent = `Showing ${plural(list.length, "worksheet", "worksheets")}`;
+        out.innerHTML = list.length ? list.map(resourceCard).join("") : emptyState("No worksheets match your filters.", "Try another category, level, or age group.", "Clear filters");
       };
       $("#res-q", root).addEventListener("input", (e) => { resF.q = e.target.value; update(); });
       $("#res-level", root).addEventListener("change", (e) => { resF.level = e.target.value; update(); });
@@ -1294,11 +1334,11 @@ function viewResource(id) {
     html: `
     <div class="narrow no-print">
       <div class="reading-head">
-        <a class="back" href="#/resources">${ico("back", 18)} Teacher Resources</a>
+        <a class="back" href="#/resources">${ico("back", 18)} Print &amp; Learn</a>
         <div class="chips"><span class="chip">${esc(r.category)}</span>${r.levels.map(lvlChip).join("")}<span class="chip">${esc(r.ages.join(", "))}</span></div>
         <h1>${esc(r.title)}</h1>
         <p class="lead">${esc(r.description)}</p>
-        <div class="notes"><strong>Notas para el docente</strong>${esc(r.notes)}</div>
+        <div class="notes"><strong>Sugerencias de uso</strong>${esc(r.notes)}</div>
         <div class="actions"><button class="btn btn-primary" type="button" data-action="print">${ico("print", 20)} Print or save as PDF</button>${favBtnWide("resource", r.id, r.title)}</div>
         <p class="print-hint">Para guardar como PDF, elija “Guardar como PDF” en el destino de impresión. Tamaño carta.</p>
       </div>
@@ -1504,14 +1544,14 @@ function viewQuiz() {
   };
 }
 
-/* Printable Shop */
+/* Shop */
 const shopF = { level: "all" };
 function viewShop() {
   return {
-    title: "Printable Shop",
+    title: "Shop",
     html: `
     <section class="page-head wrap">
-      <p class="kicker">Printable Shop</p>
+      <p class="kicker">Shop</p>
       <h1>Printable packs for home and school</h1>
       <p class="lead">A preview of the collections MOVA is preparing. Save the ones you like and try a free sample worksheet from each pack.</p>
     </section>
@@ -1541,7 +1581,7 @@ function viewProduct(id) {
     title: p.name,
     html: `
     <section class="wrap">
-      <a class="back" href="#/shop">${ico("back", 18)} Printable Shop</a>
+      <a class="back" href="#/shop">${ico("back", 18)} Shop</a>
       <div class="pdetail">
         ${coverHTML(p)}
         <div>
@@ -1577,7 +1617,7 @@ function viewSaved() {
       <h1>Your saved items</h1>
       <p class="lead">Saved items stay on this device only. No account or personal information is needed.</p>
     </section>
-    <div class="wrap">${total ? group("Readings", rs, readingCard) + group("Teacher resources", res, resourceCard) + group("Printable packs", ps, productCard, "shop-grid")
+    <div class="wrap">${total ? group("Readings", rs, readingCard) + group("Print & Learn", res, resourceCard) + group("Printable packs", ps, productCard, "shop-grid")
       : `<div class="empty"><strong>Nothing saved yet.</strong><p>Tap the heart on any reading, resource, or pack to keep it here.</p><a class="btn btn-primary" href="#/library">Browse the Reading Library</a></div>`}</div>`
   };
 }
@@ -1608,12 +1648,14 @@ function router() {
   document.title = (view.title ? `${view.title} | ` : "") + "MOVA Learning Studio";
   $$("[data-nav]").forEach((a) => { if (a.dataset.nav === key) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
   if (view.mount) view.mount(main);
+  syncInstall();
   window.scrollTo(0, 0);
   if (!firstRender) { const h = main.querySelector("h1"); if (h) { h.setAttribute("tabindex", "-1"); h.style.outline = "none"; h.focus({ preventScroll: true }); } }
   firstRender = false;
 }
 
 /* ---------- Global actions ---------- */
+function syncInstall() { const c = $("#install-card"); if (c) c.hidden = !window.__installEvt; }
 function updateSavedBadge() { const n = savedTotal(), b = $("#saved-count"); b.textContent = n; b.hidden = n === 0; }
 document.addEventListener("click", (e) => {
   const t = e.target.closest("[data-action]");
@@ -1650,7 +1692,7 @@ document.addEventListener("click", (e) => {
 });
 
 /* Tab bar labels */
-[["tab-home", "home", "Home"], ["tab-library", "book", "Read"], ["tab-resources", "teach", "Teach"], ["tab-games", "play", "Play"], ["tab-shop", "shop", "Shop"]]
+[["tab-home", "home", "Home"], ["tab-library", "book", "Read"], ["tab-resources", "teach", "Print"], ["tab-games", "play", "Play"], ["tab-shop", "shop", "Shop"]]
   .forEach(([id, icon, label]) => { $("#" + id).innerHTML = `${ico(icon, 23)}<span>${label}</span>`; });
 
 window.addEventListener("hashchange", router);
@@ -1661,14 +1703,15 @@ router();
 if ("serviceWorker" in navigator && location.protocol === "https:") {
   window.addEventListener("load", () => { navigator.serviceWorker.register("sw.js").catch(() => {}); });
 }
-let installEvt = null;
-window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installEvt = e; $("#install-btn").hidden = false; });
-$("#install-btn").addEventListener("click", async () => {
-  if (!installEvt) return;
-  installEvt.prompt();
-  try { await installEvt.userChoice; } catch (e) {}
-  installEvt = null; $("#install-btn").hidden = true;
+window.__installEvt = null;
+window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); window.__installEvt = e; syncInstall(); });
+document.addEventListener("click", async (e) => {
+  if (!e.target.closest('[data-action="install"]') || !window.__installEvt) return;
+  const evt = window.__installEvt;
+  evt.prompt();
+  try { await evt.userChoice; } catch (err) {}
+  window.__installEvt = null; syncInstall();
 });
-window.addEventListener("appinstalled", () => { $("#install-btn").hidden = true; toast("MOVA Learning Studio is installed"); });
+window.addEventListener("appinstalled", () => { window.__installEvt = null; syncInstall(); toast("La app quedó instalada"); });
 </script>
 </body></html>

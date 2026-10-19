@@ -1,6 +1,6 @@
 /* MOVA Learning Studio: permite abrir la app sin internet.
    Al publicar cambios, suba el número de versión para que todos reciban la actualización. */
-const VERSION = "mova-v2";
+const VERSION = "mova-v3";
 const CORE = ["./", "index.html", "manifest.json", "icon-192.png", "icon-512.png", "maskable-512.png",
   "juego-word-quest.html", "juego-mision-matematica.html", "juego-verb-memory.html", "juego-sentence-builder.html"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(VERSION).then((c) => c.addAll(CORE)).then(() => self.skipWaiting())); });
