@@ -165,6 +165,7 @@ p{margin:0}
 .area{position:relative;display:flex;flex-direction:column;gap:10px;min-height:168px;padding:18px;border-radius:22px;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);overflow:hidden}
 .area:hover{border-color:var(--ink-3)}
 .area-mark{width:44px;height:44px;border-radius:14px;display:grid;place-items:center}
+.area{min-height:0}
 .area h3{font-size:17px;margin-top:6px}
 .area p{font-size:13.5px;color:var(--ink-2);line-height:1.45}
 .area[data-c="coral"] .area-mark{background:var(--coral-soft);color:var(--coral)}
@@ -377,6 +378,22 @@ p{margin:0}
 .includes{margin:8px 0 0;padding-left:20px;display:grid;gap:6px;color:var(--ink-2)}
 
 .install-btn{height:40px;padding:0 14px;border-radius:999px;border:0;background:var(--navy);color:var(--navy-ink);font-weight:600;font-size:13.5px}.install-btn[hidden]{display:none}
+/* ===================== Thumbnails ===================== */
+.thumb{position:relative;display:block;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:var(--surface-2)}
+.thumb > svg{display:block;width:100%;height:100%}
+.item > .thumb{margin:-6px -6px 2px}
+.thumb-lg{margin-top:18px;border-radius:22px}
+.area .thumb{margin:-8px -8px 4px;border-radius:14px}
+.pthumb{display:grid;place-items:center}
+.pthumb[data-c="mint"]{background:#DDEEE5}.pthumb[data-c="sky"]{background:#DBE9F5}.pthumb[data-c="mustard"]{background:#F5E7C5}.pthumb[data-c="coral"]{background:#F7DDD4}
+.pthumb::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.55) 4px,transparent 4.5px);background-size:46px 46px;background-position:10px 8px}
+.psheet{position:relative;width:46%;height:118%;margin-top:22%;background:#FFFDFA;border-radius:6px;box-shadow:0 10px 24px -12px rgba(22,24,29,.45);transform:rotate(-4deg);padding:10px 11px;display:flex;flex-direction:column;gap:5px;color:#16181D;overflow:hidden}
+.psheet small{font-size:7px;font-weight:800;letter-spacing:.08em;border-bottom:1px solid #16181D;padding-bottom:3px}
+.psheet b{font-size:10px;line-height:1.2;font-weight:700;margin:2px 0 3px}
+.psheet .pl{height:4px;border-radius:2px;background:#DAD4CA}.psheet .pl.s{width:62%}
+.psheet em{height:16px;border-radius:3px;margin:2px 0}
+.pthumb[data-c="mint"] em{background:#BFE0CF}.pthumb[data-c="sky"] em{background:#BCD8EF}.pthumb[data-c="mustard"] em{background:#F0D894}.pthumb[data-c="coral"] em{background:#F3C3B3}
+.pgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:2px}.pgrid i{aspect-ratio:3/4;border:1px dashed #B5AEA3;border-radius:2px}
 /* ===================== Install & contact ===================== */
 .install-card{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px;padding:16px 18px;border-radius:18px;background:var(--navy);color:var(--navy-ink);max-width:560px}
 .install-card[hidden]{display:none}
@@ -985,6 +1002,7 @@ function emptyState(title, hint, resetLabel) {
 
 function readingCard(r) {
   return `<article class="item">
+    <div class="thumb" aria-hidden="true">${READING_ART[r.id] || ""}</div>
     <div class="item-top">${lvlChip(r.level)}<span class="chip">${esc(r.topic)}</span>${favBtn("reading", r.id, r.title)}</div>
     <h3 class="item-title"><a class="stretch" href="#/library/${r.id}">${esc(r.title)}</a></h3>
     <p class="item-desc">${esc(r.description)}</p>
@@ -993,6 +1011,7 @@ function readingCard(r) {
 }
 function resourceCard(r) {
   return `<article class="item">
+    ${sheetThumb(r)}
     <div class="item-top"><span class="chip">${esc(r.category)}</span>${favBtn("resource", r.id, r.title)}</div>
     <h3 class="item-title"><a class="stretch" href="#/resources/${r.id}">${esc(r.title)}</a></h3>
     <p class="item-desc">${esc(r.description)}</p>
@@ -1032,7 +1051,7 @@ function bestLabel(id) {
 }
 function movaGameCard(g) {
   return `<article class="item game-card" data-c="${g.color}">
-    <div class="art">${g.art.map((a) => `<span class="pill">${esc(a)}</span>`).join("")}</div>
+    <div class="thumb" aria-hidden="true">${GAME_ART[g.file] || ""}</div>
     <div class="item-top"><span class="chip">${esc(g.tag)}</span><span class="chip">${esc(g.skill)}</span></div>
     <h3 class="item-title"><a class="stretch" href="${g.file}">${esc(g.title)}</a></h3>
     <p class="item-desc">${esc(g.description)}</p>
@@ -1040,12 +1059,199 @@ function movaGameCard(g) {
 }
 function gameCard(g) {
   return `<article class="item game-card" data-c="${g.color}">
-    ${gameArt(g.id)}
+    <div class="thumb" aria-hidden="true">${GAME_ART[g.id] || ""}</div>
     <div class="item-top">${lvlChip(g.level)}<span class="chip">${esc(g.skill)}</span></div>
     <h3 class="item-title"><a class="stretch" href="#/games/${g.id}">${esc(g.title)}</a></h3>
     <p class="item-desc">${esc(g.description)}</p>
     <div class="item-meta">${esc(bestLabel(g.id))}</div>
   </article>`;
+}
+
+/* ---------- Ilustraciones de vista previa (originales de MOVA) ---------- */
+const DOT_POS = [[24, 22], [74, 50], [122, 14], [178, 38], [232, 16], [296, 44], [38, 100], [302, 112], [14, 156], [286, 164]];
+const scene = (bg, inner, dot = "#FFFFFF", op = 0.45) =>
+  `<svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><rect width="320" height="180" fill="${bg}"/>${DOT_POS.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="5" fill="${dot}" opacity="${op}"/>`).join("")}${inner}</svg>`;
+const mini = (key, x, y, s) => ILLUSTRATIONS[key].replace("<svg ", `<svg x="${x}" y="${y}" width="${s}" height="${s}" `);
+const T = (x, y, txt, size = 18, fill = "#1E3A5F", weight = 700, anchor = "middle") =>
+  `<text x="${x}" y="${y}" font-family="Poppins, 'Century Gothic', sans-serif" font-size="${size}" font-weight="${weight}" fill="${fill}" text-anchor="${anchor}" dominant-baseline="central">${txt}</text>`;
+const petals = (cx, cy, d, r, fill, n = 6) => Array.from({ length: n }, (_, i) => { const a = (i * 2 * Math.PI) / n; return `<circle cx="${(cx + d * Math.cos(a)).toFixed(1)}" cy="${(cy + d * Math.sin(a)).toFixed(1)}" r="${r}" fill="${fill}"/>`; }).join("");
+const starPath = (cx, cy, R, r) => { let d = ""; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + (i * Math.PI) / 5, rr = i % 2 ? r : R; d += `${i ? "L" : "M"}${(cx + rr * Math.cos(a)).toFixed(1)} ${(cy + rr * Math.sin(a)).toFixed(1)}`; } return d + "Z"; };
+
+const READING_ART = {
+  "my-cat-pip": scene("#F7DDD4", `
+    <circle cx="268" cy="44" r="22" fill="#E0B04A"/>
+    <rect x="0" y="146" width="320" height="34" fill="#EFC3B3"/>
+    <ellipse cx="168" cy="149" rx="76" ry="7" fill="#C35A3F" opacity=".15"/>
+    <path d="M208 132c34 2 44-22 30-40" stroke="#E39B3E" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <ellipse cx="172" cy="120" rx="48" ry="30" fill="#E39B3E"/>
+    <path d="M164 96q7 12 0 26M182 95q7 12 0 26M200 99q6 10 0 22" stroke="#C97F2A" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="142" cy="146" rx="13" ry="6" fill="#E39B3E"/><ellipse cx="198" cy="146" rx="13" ry="6" fill="#E39B3E"/>
+    <path d="M100 86 103 54 124 72zM152 86 149 54 128 72z" fill="#E39B3E"/>
+    <path d="M106 76 107 62 117 71zM146 76 145 62 135 71z" fill="#F2A08A"/>
+    <circle cx="126" cy="97" r="30" fill="#E39B3E"/>
+    <circle cx="115" cy="95" r="5" fill="#4E8A70"/><circle cx="137" cy="95" r="5" fill="#4E8A70"/>
+    <circle cx="116.5" cy="93.5" r="1.6" fill="#fff"/><circle cx="138.5" cy="93.5" r="1.6" fill="#fff"/>
+    <path d="M123 105h6l-3 3.5z" fill="#C35A3F"/>
+    <path d="M126 108.5c-1.5 3-4.5 3.5-6.5 2M126 108.5c1.5 3 4.5 3.5 6.5 2" stroke="#1E3A5F" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <path d="M86 101l17 2M86 109l17-2M166 101l-17 2M166 109l-17-2" stroke="#1E3A5F" stroke-width="1.4" stroke-linecap="round"/>
+    <circle cx="252" cy="138" r="15" fill="#6FA8D6"/><path d="M238 133q14 8 28 0" stroke="#fff" stroke-width="2.5" fill="none"/>`),
+
+  "day-at-the-park": scene("#DBE9F5", `
+    <circle cx="56" cy="42" r="18" fill="#E0B04A"/>
+    <path d="M0 116q80-40 160 0t160 0V180H0z" fill="#9FCBB5"/>
+    <path d="M0 138q90-26 190 4t130-6V180H0z" fill="#7FB89E"/>
+    <rect x="234" y="66" width="10" height="62" rx="3" fill="#8A5A3B"/>
+    <circle cx="239" cy="56" r="27" fill="#4E8A70"/><circle cx="219" cy="74" r="19" fill="#4E8A70"/><circle cx="259" cy="74" r="19" fill="#5E9E82"/>
+    <ellipse cx="112" cy="152" rx="64" ry="15" fill="#6FA8D6"/>
+    ${[[90, 146, 1], [118, 152, 0.85], [142, 144, 0.75]].map(([x, y, s]) => `<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="0" rx="12" ry="7" fill="#FBF6EC"/><circle cx="9" cy="-9" r="6" fill="#FBF6EC"/><path d="M14 -9l7 1.8-7 1.8z" fill="#E39B3E"/><circle cx="10" cy="-10" r="1.3" fill="#16181D"/></g>`).join("")}
+    <circle cx="206" cy="152" r="11" fill="#E8846B"/><path d="M196 149q10 6 20 0" stroke="#fff" stroke-width="2" fill="none"/>`),
+
+  "lilas-busy-monday": scene("#F5E7C5", `
+    <rect x="0" y="150" width="320" height="30" fill="#EAD3A0"/>
+    <path d="M68 116l-10 34M112 116l10 34" stroke="#1E3A5F" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="66" cy="40" r="11" fill="#E8846B"/><circle cx="114" cy="40" r="11" fill="#E8846B"/>
+    <circle cx="90" cy="80" r="44" fill="#FFFDFA" stroke="#1E3A5F" stroke-width="6"/>
+    ${Array.from({ length: 12 }, (_, i) => { const a = (i * Math.PI) / 6; return `<circle cx="${(90 + 34 * Math.sin(a)).toFixed(1)}" cy="${(80 - 34 * Math.cos(a)).toFixed(1)}" r="${i % 3 ? 1.8 : 3}" fill="#1E3A5F"/>`; }).join("")}
+    <path d="M90 80V52M90 80l-11 19" stroke="#1E3A5F" stroke-width="5" stroke-linecap="round"/><circle cx="90" cy="80" r="4" fill="#E8846B"/>
+    <path d="M196 78l-6 44" stroke="#E8846B" stroke-width="4" stroke-linecap="round"/>
+    <path d="M168 96h36l-4 54h-28z" fill="#FFFDFA"/><path d="M170.5 110h31l-3 40h-25z" fill="#E39B3E"/>
+    <rect x="226" y="84" width="66" height="68" rx="17" fill="#6FA8D6"/><rect x="238" y="110" width="42" height="27" rx="7" fill="#3F7FB5"/>
+    <path d="M244 86v-10a15 15 0 0 1 30 0v10" stroke="#3F7FB5" stroke-width="6" fill="none"/>`),
+
+  "the-school-garden": scene("#DDEEE5", `
+    <rect x="0" y="140" width="320" height="40" fill="#A9774F"/><path d="M0 141h320" stroke="#8A5A3B" stroke-width="4"/>
+    ${[[64, 52], [112, 70]].map(([x, y]) => `<path d="M${x} 140V${y}" stroke="#4E8A70" stroke-width="6"/><path d="M${x} 112q-22-4-26-18 20 0 26 12z" fill="#5E9E82"/><path d="M${x} 104q22-4 26-18-20 0-26 12z" fill="#5E9E82"/>${petals(x, y, 16, 9, "#E0B04A", 10)}<circle cx="${x}" cy="${y}" r="11" fill="#8A5A3B"/>`).join("")}
+    <path d="M196 140v-46M196 112l-16-12M196 104l15-12" stroke="#4E8A70" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="180" cy="104" r="9" fill="#E8846B"/><circle cx="212" cy="96" r="9" fill="#E8846B"/><circle cx="198" cy="88" r="8" fill="#C35A3F"/>
+    ${[250, 276].map((x) => `<path d="M${x - 8} 140l8 26 8-26z" fill="#E39B3E"/><path d="M${x} 140l-8-18M${x} 140v-22M${x} 140l8-18" stroke="#5E9E82" stroke-width="4" stroke-linecap="round"/>`).join("")}
+    <g transform="translate(160 46)"><circle cx="-7" cy="0" r="7" fill="#E8846B"/><circle cx="7" cy="0" r="7" fill="#F2A08A"/><path d="M0 -8v16" stroke="#1E3A5F" stroke-width="2.5" stroke-linecap="round"/></g>`),
+
+  "the-lost-backpack": scene("#DBE9F5", `
+    <rect y="150" width="320" height="30" fill="#A7AEB8"/><path d="M10 166h30M70 166h30M130 166h30M190 166h30M250 166h30" stroke="#FFFDFA" stroke-width="4" stroke-linecap="round"/>
+    <rect x="36" y="58" width="238" height="86" rx="18" fill="#E0B04A"/>
+    <rect x="36" y="118" width="238" height="9" fill="#E8846B"/>
+    ${[56, 110, 164].map((x) => `<rect x="${x}" y="72" width="44" height="34" rx="6" fill="#B9D6EE"/>`).join("")}
+    <rect x="226" y="72" width="34" height="62" rx="5" fill="#B9D6EE"/><path d="M243 72v62" stroke="#E0B04A" stroke-width="3"/>
+    <rect x="172" y="80" width="28" height="26" rx="7" fill="#3F7FB5"/><path d="M178 82v-4a8 8 0 0 1 16 0v4" stroke="#1E3A5F" stroke-width="3" fill="none"/>
+    <path d="${starPath(196, 110, 7, 3)}" fill="#F2C94C"/>
+    ${[86, 222].map((x) => `<circle cx="${x}" cy="146" r="17" fill="#1E3A5F"/><circle cx="${x}" cy="146" r="7" fill="#A7AEB8"/>`).join("")}`),
+
+  "weekend-in-the-mountains": scene("#1E3A5F", `
+    <circle cx="262" cy="40" r="17" fill="#FBF6EC"/><circle cx="270" cy="36" r="15" fill="#1E3A5F"/>
+    ${[[60, 30], [110, 18], [180, 44], [226, 24], [30, 64]].map(([x, y]) => `<path d="${starPath(x, y, 5, 2)}" fill="#F2C94C"/>`).join("")}
+    <path d="M-10 165 82 62l60 62 62-92 130 133z" fill="#3F7FB5"/>
+    <path d="M204 32 188 56l9-4 7 7 8-7 9 4z" fill="#FBF6EC"/><path d="M82 62 70 76l7-2 5 5 6-5 7 2z" fill="#FBF6EC"/>
+    <path d="M-10 175 64 112l52 40 72-62 150 90z" fill="#2A5580"/>
+    <rect y="160" width="320" height="20" fill="#2F4A3A"/>
+    ${[36, 58, 290].map((x) => `<path d="M${x} 166l-12 0 12-34 12 34z" fill="#4E8A70"/>`).join("")}
+    <rect x="206" y="128" width="56" height="36" fill="#8A5A3B"/><path d="M200 131 234 106l34 25z" fill="#C35A3F"/>
+    <rect x="216" y="138" width="13" height="11" rx="1.5" fill="#F2C94C"/><rect x="240" y="142" width="12" height="22" rx="1.5" fill="#5A3A26"/>`, "#FFFFFF", 0.12),
+
+  "why-bees-matter": scene("#F5E7C5", `
+    <path d="M104 180V100M60 180v-50" stroke="#4E8A70" stroke-width="7" stroke-linecap="round"/>
+    <path d="M104 146q-26-2-34-20 24-2 34 12zM104 132q26-2 34-20-24-2-34 12z" fill="#5E9E82"/>
+    ${petals(104, 82, 22, 15, "#E8846B")}<circle cx="104" cy="82" r="15" fill="#E0B04A"/>
+    ${petals(60, 124, 12, 8, "#6FA8D6", 5)}<circle cx="60" cy="124" r="8" fill="#F5E7C5"/>
+    <path d="M130 70q40-46 74-14" stroke="#1E3A5F" stroke-width="2.2" stroke-dasharray="4 7" fill="none" stroke-linecap="round"/>
+    <ellipse cx="222" cy="52" rx="13" ry="18" fill="#FFFFFF" opacity=".85" transform="rotate(-25 222 52)"/>
+    <ellipse cx="238" cy="54" rx="11" ry="16" fill="#FFFFFF" opacity=".75" transform="rotate(20 238 54)"/>
+    <ellipse cx="230" cy="78" rx="26" ry="17" fill="#E0B04A"/>
+    <path d="M222 62v32M236 62v32" stroke="#1E3A5F" stroke-width="6"/>
+    <circle cx="208" cy="76" r="9" fill="#1E3A5F"/><circle cx="205" cy="74" r="2.2" fill="#fff"/>
+    <path d="M256 78l9 0" stroke="#1E3A5F" stroke-width="3" stroke-linecap="round"/>`),
+
+  "small-steps-big-changes": scene("#DCE5EF", `
+    <rect y="160" width="320" height="20" fill="#C3D3E4"/>
+    <rect x="40" y="130" width="56" height="30" rx="4" fill="#E8846B"/>
+    <rect x="96" y="104" width="56" height="56" rx="4" fill="#E0B04A"/>
+    <rect x="152" y="78" width="56" height="82" rx="4" fill="#6FA8D6"/>
+    <rect x="208" y="52" width="56" height="108" rx="4" fill="#7FB89E"/>
+    <path d="M226 30h22l-3 22h-16z" fill="#C35A3F"/>
+    <path d="M237 30V12" stroke="#4E8A70" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M237 20q-12-2-14-12 11 0 14 8zM237 16q12-2 14-12-11 0-14 8z" fill="#5E9E82"/>
+    <rect x="52" y="118" width="32" height="12" rx="2" fill="#1E3A5F"/><path d="M56 118v12" stroke="#FBF6EC" stroke-width="2"/>
+    <path d="M286 38v10M281 43h10M24 70v8M20 74h8" stroke="#1E3A5F" stroke-width="2.4" stroke-linecap="round"/>`)
+};
+
+const card = (x, y, w, h, fill = "#FFFDFA", rot = 0, stroke = "") =>
+  `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="${fill}" ${stroke ? `stroke="${stroke}" stroke-width="3"` : ""} transform="rotate(${rot} ${x + w / 2} ${y + h / 2})"/>`;
+
+const GAME_ART = {
+  memory: scene("#F7DDD4", [
+    ["back", 34, 22], ["cat", 96, 22], ["back", 158, 22], ["star", 220, 22],
+    ["apple", 34, 98], ["back", 96, 98], ["cat", 158, 98, "#7FB89E"], ["back", 220, 98]
+  ].map(([k, x, y, st]) => k === "back"
+    ? card(x, y, 56, 64, "#1E3A5F") + T(x + 28, y + 33, "M", 20, "#FBF6EC", 800)
+    : card(x, y, 56, 64, "#FFFDFA", 0, st || "") + mini(k, x + 8, y + 12, 40)).join("")),
+
+  matching: scene("#DBE9F5", `
+    ${[["brave", 40], ["huge", 90], ["quiet", 140]].map(([w, y]) => card(22, y - 17, 92, 34) + T(68, y, w, 15)).join("")}
+    ${[["very big", 40], ["not afraid", 90], ["silent", 140]].map(([w, y]) => card(196, y - 17, 104, 34) + T(248, y, w, 14, "#4A4D55", 600)).join("")}
+    <path d="M114 40C156 40 154 90 196 90" stroke="#E8846B" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M114 90C156 90 154 40 196 40" stroke="#5E9E82" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M114 140H196" stroke="#E0B04A" stroke-width="3.5" stroke-dasharray="5 6" fill="none" stroke-linecap="round"/>`),
+
+  quiz: scene("#F5E7C5", `
+    <path d="M30 34h96a14 14 0 0 1 14 14v52a14 14 0 0 1-14 14H74l-20 18v-18H30a14 14 0 0 1-14-14V48a14 14 0 0 1 14-14z" fill="#1E3A5F"/>
+    ${T(78, 74, "?", 46, "#FBF6EC", 800)}
+    ${["A", "B", "C", "D"].map((l, i) => { const y = 28 + i * 36, ok = i === 2; return card(170, y, 130, 28, ok ? "#DCEFE3" : "#FFFDFA", 0, ok ? "#5E9E82" : "") + `<circle cx="186" cy="${y + 14}" r="9" fill="${ok ? "#5E9E82" : "#E9E4DB"}"/>` + T(186, y + 14, l, 11, ok ? "#fff" : "#1E3A5F", 700) + `<rect x="204" y="${y + 11}" width="${ok ? 60 : 70 - i * 6}" height="6" rx="3" fill="${ok ? "#5E9E82" : "#D9D4CB"}"/>`; }).join("")}`),
+
+  "juego-word-quest.html": scene("#DCE5EF", `
+    ${card(40, 40, 70, 88, "#FFFDFA", -8)}${mini("cat", 47, 52, 56)}
+    ${card(125, 30, 70, 88, "#FFFDFA", 0, "#6FA8D6")}${mini("apple", 132, 40, 56)}${T(160, 106, "apple", 13)}
+    ${card(210, 40, 70, 88, "#FFFDFA", 8)}${mini("fish", 217, 52, 56)}
+    <circle cx="160" cy="150" r="17" fill="#E8846B"/>
+    <path d="M152 145h5l7-6v22l-7-6h-5z" fill="#FFFDFA"/><path d="M168 145q4 5 0 10" stroke="#FFFDFA" stroke-width="2.2" fill="none" stroke-linecap="round"/>`),
+
+  "juego-mision-matematica.html": scene("#1E3A5F", `
+    <circle cx="266" cy="42" r="24" fill="#FBF6EC"/><circle cx="258" cy="36" r="4" fill="#E9E4DB"/><circle cx="274" cy="50" r="5" fill="#E9E4DB"/><circle cx="270" cy="32" r="2.5" fill="#E9E4DB"/>
+    ${[[40, 30], [100, 20], [200, 24], [300, 96], [24, 120]].map(([x, y]) => `<path d="${starPath(x, y, 5, 2)}" fill="#F2C94C"/>`).join("")}
+    <path d="M70 160q50-30 90-62" stroke="#FBF6EC" stroke-width="2.5" stroke-dasharray="3 8" fill="none" stroke-linecap="round" opacity=".7"/>
+    <g transform="translate(182 82) rotate(45)">
+      <path d="M0 -44C17 -27 17 14 11 28H-11C-17 14-17-27 0-44z" fill="#FBF6EC"/>
+      <circle cx="0" cy="-12" r="8" fill="#6FA8D6" stroke="#1E3A5F" stroke-width="3"/>
+      <path d="M-11 8-24 32-11 27zM11 8 24 32 11 27z" fill="#E8846B"/>
+      <path d="M-7 29 0 50 7 29z" fill="#E0B04A"/>
+    </g>
+    <rect x="22" y="132" width="86" height="32" rx="16" fill="#E0B04A"/>${T(65, 148, "3 + 4 = 7", 14, "#1E3A5F", 700)}`, "#FFFFFF", 0.12),
+
+  "juego-verb-memory.html": scene("#F5E7C5", `
+    ${[["go", 92, -12, "#7FB89E"], ["went", 160, 0, "#6FA8D6"], ["gone", 228, 12, "#F2A08A"]].map(([w, cx, r, c]) => card(cx - 40, 34, 80, 104, "#FFFDFA", r) + `<g transform="rotate(${r} ${cx} 86)"><rect x="${cx - 30}" y="44" width="60" height="10" rx="5" fill="${c}"/>${T(cx, 92, w, 22)}</g>`).join("")}
+    <path d="${starPath(160, 158, 9, 4)}" fill="#E0B04A"/>`),
+
+  "juego-sentence-builder.html": scene("#DDEEE5", `
+    ${[["I", 22, 42], ["am", 72, 62], ["learning", 142, 104]].map(([w, x, wd]) => `<rect x="${x}" y="${104}" width="${wd}" height="40" rx="10" fill="#1E3A5F"/>${T(x + wd / 2, 124, w, 16, "#FBF6EC", 600)}`).join("")}
+    <rect x="254" y="104" width="50" height="40" rx="10" fill="none" stroke="#4E8A70" stroke-width="2.5" stroke-dasharray="6 5"/>
+    <g transform="rotate(-8 270 58)"><rect x="244" y="40" width="54" height="38" rx="10" fill="#E0B04A"/>${T(271, 59, "now", 16, "#1E3A5F", 700)}</g>
+    <path d="M262 84q-2 10 4 16" stroke="#4E8A70" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="3 5"/>
+    <circle cx="40" cy="44" r="16" fill="#5E9E82"/><path d="m32 44 6 6 11-12" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`),
+
+  "juego-locked-library.html": scene("#1E3A5F", `
+    ${[[18, 34], [18, 82], [18, 130], [228, 34], [228, 82], [228, 130]].map(([x, y]) => `<rect x="${x}" y="${y + 36}" width="76" height="6" fill="#16263D"/>` + ["#E8846B", "#6FA8D6", "#E0B04A", "#7FB89E", "#F2A08A", "#B59AE0", "#FBF6EC"].map((c, i) => `<rect x="${x + 3 + i * 10.5}" y="${y + 6 + (i % 3) * 3}" width="8" height="${30 - (i % 3) * 3}" rx="1.5" fill="${c}"/>`).join("")).join("")}
+    <path d="M118 176V82a42 42 0 0 1 84 0v94z" fill="#16263D" stroke="#E0B04A" stroke-width="4"/>
+    <path d="M160 46v130" stroke="#E0B04A" stroke-width="2"/>
+    <circle cx="160" cy="118" r="11" fill="#E0B04A"/><path d="M156 122h8l3 18h-14z" fill="#E0B04A"/><circle cx="160" cy="118" r="4" fill="#16263D"/>
+    <path d="M160 0v18" stroke="#E0B04A" stroke-width="2"/><path d="M146 18h28l-6 10h-16z" fill="#E0B04A"/>
+    <ellipse cx="160" cy="34" rx="30" ry="9" fill="#F2C94C" opacity=".18"/>`, "#FFFFFF", 0.1)
+};
+
+const AREA_ART = {
+  "#/library": READING_ART["the-school-garden"],
+  "#/resources": scene("#DDEEE5", `
+    <g transform="rotate(-7 130 92)"><rect x="84" y="26" width="92" height="124" rx="6" fill="#FFFDFA"/><rect x="96" y="40" width="54" height="8" rx="4" fill="#5E9E82"/>${[60, 74, 88, 102, 116].map((y) => `<rect x="96" y="${y}" width="${y % 28 ? 68 : 48}" height="5" rx="2.5" fill="#D9D4CB"/>`).join("")}</g>
+    <g transform="rotate(6 196 96)"><rect x="150" y="30" width="92" height="124" rx="6" fill="#FFFDFA"/><rect x="162" y="44" width="60" height="8" rx="4" fill="#E0B04A"/><rect x="162" y="62" width="68" height="34" rx="4" fill="none" stroke="#6FA8D6" stroke-width="2" stroke-dasharray="4 4"/>${[106, 120, 134].map((y) => `<rect x="162" y="${y}" width="64" height="5" rx="2.5" fill="#D9D4CB"/>`).join("")}</g>
+    <g transform="rotate(35 258 132)"><rect x="252" y="80" width="12" height="80" rx="2" fill="#E0B04A"/><path d="M252 160h12l-6 14z" fill="#F1C7A5"/><path d="M256 170h4l-2 4z" fill="#1E3A5F"/><rect x="252" y="80" width="12" height="9" fill="#E8846B"/></g>`),
+  "#/games": GAME_ART.memory,
+  "#/shop": scene("#F5E7C5", [["#1E3A5F", "#E0B04A", 52, -8], ["#C35A3F", "#FBEADF", 128, 0], ["#2F4A3A", "#E8D9B5", 204, 8]].map(([c1, c2, x, r]) => `<g transform="rotate(${r} ${x + 32} 92)"><rect x="${x}" y="40" width="64" height="88" rx="6" fill="${c1}"/>${[0, 1, 2, 3].map((i) => `<circle cx="${x + 12 + i * 13}" cy="116" r="3" fill="${c2}"/>`).join("")}<rect x="${x + 10}" y="58" width="40" height="6" rx="3" fill="${c2}"/><rect x="${x + 10}" y="70" width="28" height="6" rx="3" fill="${c2}" opacity=".7"/></g>`).join("") + `<rect y="150" width="320" height="30" fill="#EAD3A0"/>`)
+};
+
+const SHEET_COLORS = { "Phonics": "mint", "Vocabulary": "sky", "Grammar": "mustard", "Spelling": "coral", "Reading comprehension": "sky", "Writing": "coral", "Flashcards": "mustard", "Worksheets": "mint" };
+function sheetThumb(r) {
+  const c = SHEET_COLORS[r.category] || "sky";
+  const body = r.category === "Flashcards"
+    ? `<span class="pgrid"><i></i><i></i><i></i><i></i><i></i><i></i></span>`
+    : `<span class="pl"></span><span class="pl"></span><span class="pl s"></span><em></em><span class="pl"></span><span class="pl s"></span>`;
+  return `<div class="thumb pthumb" data-c="${c}" aria-hidden="true"><div class="psheet"><small>MOVA</small><b>${esc(r.title)}</b>${body}</div></div>`;
 }
 
 /* ---------- Contact ---------- */
@@ -1092,7 +1298,7 @@ function viewHome() {
 
     <section class="wrap section" aria-labelledby="areas-h">
       <div class="section-head"><h2 id="areas-h">Explore the studio</h2></div>
-      <div class="areas">${areas.map((a) => `<a class="area" href="${a.href}" data-c="${a.c}"><span class="area-mark">${ico(a.icon, 24)}</span><h3>${a.title}</h3><p>${a.text}</p></a>`).join("")}</div>
+      <div class="areas">${areas.map((a) => `<a class="area" href="${a.href}" data-c="${a.c}"><span class="thumb" aria-hidden="true">${AREA_ART[a.href] || ""}</span><h3>${a.title}</h3><p>${a.text}</p></a>`).join("")}</div>
     </section>
 
     <section class="wrap section" aria-label="Your progress">
@@ -1187,6 +1393,7 @@ function viewReading(id) {
         <div class="chips">${lvlChip(r.level)}<span class="chip">${esc(r.topic)}</span><span class="chip">${readingMinutes(r)} min read</span></div>
         <h1>${esc(r.title)}</h1>
         <p class="lead">${esc(r.description)}</p>
+        <div class="thumb thumb-lg" aria-hidden="true">${READING_ART[r.id] || ""}</div>
         <div class="actions">${favBtnWide("reading", r.id, r.title)}${doneBtn(r.id)}</div>
       </div>
       <div class="reading-text" data-level="${r.level}">${r.text.map((p) => `<p>${esc(p)}</p>`).join("")}</div>
