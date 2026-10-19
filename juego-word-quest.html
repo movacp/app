@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MOVA Word Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF6E6;
+  --card:#FFFFFF;
+  --ink:#1B2A55;
+  --muted:#5B6787;
+  --coral:#FF7A6B;
+  --sky:#5BC0F0;
+  --mustard:#F2B632;
+  --mint:#4FD1A5;
+  --tile:#F5F7FC;
+  --tile-edge:#DCE2F0;
+  --track:#EEF1F8;
+  --good:#22A447;
+  --good-bg:#DDF6E4;
+  --bad:#E5484D;
+  --bad-bg:#FDE4E4;
+  --dot1:rgba(255,122,107,.55);
+  --dot2:rgba(91,192,240,.55);
+  --dot3:rgba(242,182,50,.55);
+  --dot4:rgba(79,209,165,.55);
+  --card-shadow:0 10px 0 rgba(27,42,85,.08), 0 24px 48px rgba(27,42,85,.12);
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121a33; --card:#1d2748; --ink:#F3F5FF; --muted:#AEB8D8;
+    --tile:#26315a; --tile-edge:#34407080; --track:#2b365f;
+    --good-bg:rgba(34,164,71,.22); --bad-bg:rgba(229,72,77,.22);
+    --dot1:rgba(255,122,107,.35); --dot2:rgba(91,192,240,.35);
+    --dot3:rgba(242,182,50,.35); --dot4:rgba(79,209,165,.35);
+    --card-shadow:0 10px 0 rgba(0,0,0,.25), 0 24px 48px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121a33; --card:#1d2748; --ink:#F3F5FF; --muted:#AEB8D8;
+  --tile:#26315a; --tile-edge:#34407080; --track:#2b365f;
+  --good-bg:rgba(34,164,71,.22); --bad-bg:rgba(229,72,77,.22);
+  --dot1:rgba(255,122,107,.35); --dot2:rgba(91,192,240,.35);
+  --dot3:rgba(242,182,50,.35); --dot4:rgba(79,209,165,.35);
+  --card-shadow:0 10px 0 rgba(0,0,0,.25), 0 24px 48px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;min-height:100%;
+  font-family:'Poppins','Century Gothic','Avenir Next','Segoe UI',system-ui,sans-serif;
+  color:var(--ink);
+  background-color:var(--bg);
+  background-image:
+    radial-gradient(circle, var(--dot1) 7px, transparent 8px),
+    radial-gradient(circle, var(--dot2) 7px, transparent 8px),
+    radial-gradient(circle, var(--dot3) 7px, transparent 8px),
+    radial-gradient(circle, var(--dot4) 7px, transparent 8px);
+  background-size:128px 128px;
+  background-position:0 0, 64px 32px, 32px 80px, 96px 112px;
+  -webkit-tap-highlight-color:transparent;
+}
+button{font-family:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:4px solid var(--sky);outline-offset:3px}
+.app{min-height:100%;display:flex;align-items:center;justify-content:center;padding:16px}
+.card{
+  width:100%;max-width:520px;background:var(--card);
+  border-radius:30px;padding:22px 18px 24px;box-shadow:var(--card-shadow);
+}
+[hidden]{display:none !important}
+
+/* ---------- Logo slot ---------- */
+.logo{
+  display:inline-flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:8px 18px 6px;border-radius:18px;border:3px solid var(--ink);
+  line-height:1;
+}
+.logo img{display:block;max-height:64px;max-width:180px;height:auto}
+.logo .wordmark{font-weight:800;font-size:28px;letter-spacing:.06em}
+.logo .tag{font-weight:600;font-size:10.5px;letter-spacing:.04em;color:var(--muted);margin-top:4px}
+.brand{display:flex;justify-content:center;margin-bottom:10px}
+
+/* ---------- Start ---------- */
+.title{font-weight:800;font-size:clamp(34px,10vw,46px);line-height:1.05;text-align:center;margin:8px 0 6px}
+.lead{text-align:center;color:var(--muted);font-weight:500;font-size:16px;margin:0 0 18px}
+.cats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cat{
+  --c:var(--coral);
+  border:0;border-radius:22px;padding:14px 10px 12px;
+  background:var(--c);color:#1B2A55;
+  box-shadow:0 6px 0 rgba(27,42,85,.18);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.cat:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(27,42,85,.18)}
+.cat-icon{font-size:42px;line-height:1.1;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif}
+.cat-name{font-weight:700;font-size:17px}
+.cat[aria-pressed="true"]{outline:4px solid var(--ink);outline-offset:3px}
+.play{
+  display:block;width:100%;margin-top:20px;border:0;border-radius:999px;
+  background:var(--ink);color:var(--card);
+  font-weight:800;font-size:22px;padding:16px;
+  box-shadow:0 6px 0 rgba(27,42,85,.35);
+}
+.play:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(27,42,85,.35)}
+.best{text-align:center;color:var(--muted);font-weight:600;font-size:14px;margin:14px 0 0}
+
+/* ---------- Game ---------- */
+.hud{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.icon-btn{
+  border:0;background:var(--track);border-radius:14px;width:44px;height:44px;
+  font-size:20px;display:grid;place-items:center;
+}
+.pill{background:var(--track);border-radius:999px;padding:8px 14px;font-weight:700;font-size:15px;white-space:nowrap}
+.pill.score{background:var(--mustard);color:#1B2A55}
+.streak{min-height:24px;text-align:center;font-weight:700;font-size:15px;color:var(--coral);margin-top:8px}
+.timer{height:12px;border-radius:999px;background:var(--track);overflow:hidden;margin-top:6px}
+.timer-fill{height:100%;width:100%;background:var(--mint);transform-origin:left center;border-radius:999px}
+.timer-fill.low{background:var(--coral)}
+.prompt{display:flex;flex-direction:column;align-items:center;gap:8px;margin:18px 0 16px}
+.instruction{font-weight:600;color:var(--muted);font-size:15px;margin:0}
+.say{
+  border:0;border-radius:999px;background:var(--sky);color:#0E2A44;
+  display:flex;align-items:center;gap:12px;padding:10px 26px 10px 10px;
+  box-shadow:0 6px 0 #3B97C4;min-width:200px;justify-content:flex-start;
+}
+.say:active{transform:translateY(4px);box-shadow:0 2px 0 #3B97C4}
+.say-icon{width:48px;height:48px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:24px;flex:none}
+.word{font-weight:800;font-size:clamp(26px,8vw,34px);letter-spacing:.01em}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{
+  position:relative;border:3px solid var(--tile-edge);background:var(--tile);border-radius:24px;
+  aspect-ratio:1/0.82;display:grid;place-items:center;
+  box-shadow:0 6px 0 var(--tile-edge);
+  transition:transform .1s ease;
+}
+.opt:active{transform:translateY(3px)}
+.emoji{font-size:clamp(50px,16vw,72px);line-height:1;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif}
+.swatch{width:58%;aspect-ratio:1;border-radius:50%;border:4px solid rgba(27,42,85,.15)}
+.num{font-weight:800;font-size:clamp(52px,16vw,74px);line-height:1}
+.opt.right{border-color:var(--good);background:var(--good-bg);box-shadow:0 6px 0 var(--good);animation:pop .4s ease}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg);box-shadow:0 6px 0 var(--bad);animation:shake .4s ease}
+.opt.dim{opacity:.45}
+.float{
+  position:absolute;top:8px;right:10px;font-weight:800;font-size:22px;color:var(--good);
+  animation:rise .9s ease forwards;pointer-events:none
+}
+.feedback{min-height:30px;text-align:center;font-weight:700;font-size:18px;margin-top:14px}
+.feedback.good{color:var(--good)}
+.feedback.bad{color:var(--bad)}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+@keyframes rise{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-34px)}}
+
+/* ---------- End ---------- */
+.stars{display:flex;justify-content:center;gap:10px;margin:8px 0 4px}
+.star{font-size:56px;color:var(--track);transform:scale(.6);opacity:.6;transition:transform .35s cubic-bezier(.3,1.6,.5,1), color .2s, opacity .2s}
+.star.on{color:var(--mustard);transform:scale(1);opacity:1}
+.final{font-weight:800;font-size:56px;text-align:center;line-height:1;margin:8px 0 0}
+.final-label{text-align:center;color:var(--muted);font-weight:600;margin:4px 0 0}
+.summary{display:flex;justify-content:center;gap:10px;margin:16px 0 4px;flex-wrap:wrap}
+.btn-row{display:grid;gap:10px;margin-top:18px}
+.ghost{
+  border:3px solid var(--ink);background:transparent;border-radius:999px;
+  font-weight:700;font-size:18px;padding:12px;
+}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:20}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important}
+}
+</style>
+<link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+<canvas id="fx"></canvas>
+<main class="app">
+  <div class="card">
+
+    <!-- START -->
+    <section id="screen-start">
+      <div class="brand">
+        <!-- LOGO: aquí va el logo de MOVA -->
+        <div class="logo" id="logo-start">
+          <span class="wordmark">MOVA</span>
+          <span class="tag">Centro Pedagógico</span>
+        </div>
+      </div>
+      <h1 class="title">Word Quest</h1>
+      <p class="lead">Listen, look and tap the right one!</p>
+      <div class="cats" id="cats" role="group" aria-label="Choose a topic"></div>
+      <button class="play" id="play">Play</button>
+      <p class="best" id="best-start"></p>
+    </section>
+
+    <!-- GAME -->
+    <section id="screen-game" hidden>
+      <div class="hud">
+        <button class="icon-btn" id="home" aria-label="Back to start">🏠</button>
+        <span class="pill" id="round">1 / 10</span>
+        <span class="pill score" id="score">⭐ 0</span>
+      </div>
+      <div class="streak" id="streak" aria-live="polite"></div>
+      <div class="timer"><div class="timer-fill" id="bar"></div></div>
+      <div class="prompt">
+        <p class="instruction" id="instruction">Listen and tap!</p>
+        <button class="say" id="say" aria-label="Hear the word">
+          <span class="say-icon">🔊</span>
+          <span class="word" id="word">?</span>
+        </button>
+      </div>
+      <div class="opts" id="opts"></div>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+    </section>
+
+    <!-- END -->
+    <section id="screen-end" hidden>
+      <div class="brand">
+        <div class="logo" id="logo-end">
+          <span class="wordmark">MOVA</span>
+          <span class="tag">Centro Pedagógico</span>
+        </div>
+      </div>
+      <h2 class="title" id="end-title">Amazing!</h2>
+      <div class="stars" aria-hidden="true">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="final" id="final">0</p>
+      <p class="final-label">points</p>
+      <div class="summary">
+        <span class="pill" id="correct-count">✅ 0 / 10</span>
+        <span class="pill" id="best-end">🏆 Best: 0</span>
+      </div>
+      <div class="btn-row">
+        <button class="play" id="again">Play again</button>
+        <button class="ghost" id="topics">Choose a topic</button>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const ROUNDS = 10;
+  const DURATION = 12000;
+
+  const DATA = {
+    animals:{label:'Animals', icon:'🐶', color:'var(--coral)', type:'emoji', items:[
+      ['dog','🐶'],['cat','🐱'],['cow','🐮'],['pig','🐷'],['frog','🐸'],['lion','🦁'],['monkey','🐵'],
+      ['bird','🐦'],['fish','🐟'],['rabbit','🐰'],['horse','🐴'],['duck','🦆'],['elephant','🐘'],['bear','🐻']]},
+    food:{label:'Food', icon:'🍎', color:'var(--sky)', type:'emoji', items:[
+      ['apple','🍎'],['banana','🍌'],['pizza','🍕'],['cake','🍰'],['milk','🥛'],['bread','🍞'],['egg','🥚'],
+      ['cheese','🧀'],['carrot','🥕'],['ice cream','🍦'],['cookie','🍪'],['grapes','🍇'],['orange','🍊'],['strawberry','🍓']]},
+    colors:{label:'Colors', icon:'🎨', color:'var(--mustard)', type:'color', items:[
+      ['red','#E53935'],['blue','#1E6FE0'],['yellow','#FFD21F'],['green','#2EAA4A'],['orange','#FF8A1F'],
+      ['purple','#8E44CC'],['pink','#FF6FB1'],['brown','#8B5A2B'],['black','#1B1B1B'],['white','#FFFFFF']]},
+    numbers:{label:'Numbers', icon:'🔢', color:'var(--mint)', type:'number', items:[
+      ['one','1'],['two','2'],['three','3'],['four','4'],['five','5'],['six','6'],['seven','7'],['eight','8'],['nine','9'],['ten','10']]}
+  };
+
+  const PRAISE = ['Great job!','Awesome!','You got it!','Super!','Well done!','Fantastic!'];
+  const state = { cat:'animals', round:0, score:0, streak:0, correct:0, queue:[], item:null, locked:true, raf:0, left:0, timeouts:[] };
+
+  /* ---------- Speech ---------- */
+  const synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
+  let voice = null;
+  function pickVoice(){
+    if(!synth) return;
+    const vs = synth.getVoices();
+    voice = vs.find(v => /en[-_]US/i.test(v.lang) && /Samantha|Google US|Female|Aria|Jenny/i.test(v.name))
+         || vs.find(v => /en[-_]US/i.test(v.lang))
+         || vs.find(v => /^en/i.test(v.lang)) || null;
+  }
+  if(synth){ pickVoice(); synth.onvoiceschanged = pickVoice; }
+  function speak(text){
+    if(!synth) return;
+    try{
+      synth.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US'; u.rate = .85; u.pitch = 1.1;
+      if(voice) u.voice = voice;
+      synth.speak(u);
+    }catch(e){}
+  }
+
+  /* ---------- Sounds ---------- */
+  let actx = null;
+  function unlockAudio(){
+    try{ if(!actx){ const AC = window.AudioContext || window.webkitAudioContext; if(AC) actx = new AC(); }
+         if(actx && actx.state === 'suspended') actx.resume(); }catch(e){}
+  }
+  function tones(freqs, step, type){
+    if(!actx) return;
+    const t0 = actx.currentTime;
+    freqs.forEach((f,i) => {
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = type || 'sine'; o.frequency.value = f;
+      const s = t0 + i*step;
+      g.gain.setValueAtTime(0.0001, s);
+      g.gain.exponentialRampToValueAtTime(0.18, s + .02);
+      g.gain.exponentialRampToValueAtTime(0.0001, s + step + .12);
+      o.connect(g).connect(actx.destination);
+      o.start(s); o.stop(s + step + .15);
+    });
+  }
+  const chime = () => tones([660, 880, 1175], .09, 'triangle');
+  const buzz  = () => tones([220, 180], .14, 'square');
+  const fanfare = () => tones([523, 659, 784, 1047], .13, 'triangle');
+
+  /* ---------- Storage ---------- */
+  function getBest(cat){ try{ return parseInt(localStorage.getItem('mova-wq-best-'+cat) || '0', 10) || 0; }catch(e){ return 0; } }
+  function setBest(cat, v){ try{ localStorage.setItem('mova-wq-best-'+cat, String(v)); }catch(e){} }
+
+  /* ---------- Helpers ---------- */
+  const shuffle = a => { const b = a.slice(); for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; };
+  function later(fn, ms){ state.timeouts.push(setTimeout(fn, ms)); }
+  function clearLater(){ state.timeouts.forEach(clearTimeout); state.timeouts = []; }
+  function show(id){
+    ['start','game','end'].forEach(s => $('#screen-'+s).hidden = (s !== id));
+    window.scrollTo(0,0);
+  }
+
+  /* ---------- Start screen ---------- */
+  const catsEl = $('#cats');
+  Object.entries(DATA).forEach(([key, c]) => {
+    const b = document.createElement('button');
+    b.className = 'cat'; b.dataset.cat = key;
+    b.style.setProperty('--c', c.color);
+    b.innerHTML = `<span class="cat-icon">${c.icon}</span><span class="cat-name">${c.label}</span>`;
+    b.addEventListener('click', () => { unlockAudio(); selectCat(key); speak(c.label); });
+    catsEl.appendChild(b);
+  });
+  function selectCat(key){
+    state.cat = key;
+    catsEl.querySelectorAll('.cat').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === key ? 'true' : 'false'));
+    const best = getBest(key);
+    $('#best-start').textContent = best ? `🏆 Best score in ${DATA[key].label}: ${best}` : `Topic: ${DATA[key].label}`;
+  }
+  selectCat('animals');
+
+  /* ---------- Game ---------- */
+  function startGame(){
+    unlockAudio(); clearLater();
+    const items = DATA[state.cat].items;
+    state.queue = shuffle(items).slice(0, ROUNDS);
+    state.round = 0; state.score = 0; state.streak = 0; state.correct = 0;
+    $('#score').textContent = '⭐ 0';
+    $('#streak').textContent = '';
+    show('game');
+    nextRound();
+  }
+
+  function renderFace(type, val){
+    if(type === 'color') return `<span class="swatch" style="background:${val}"></span>`;
+    if(type === 'number') return `<span class="num">${val}</span>`;
+    return `<span class="emoji">${val}</span>`;
+  }
+
+  function nextRound(){
+    if(state.round >= ROUNDS){ endGame(); return; }
+    const cat = DATA[state.cat];
+    const item = state.queue[state.round];
+    state.item = item; state.round++;
+    $('#round').textContent = `${state.round} / ${ROUNDS}`;
+    $('#feedback').textContent = ''; $('#feedback').className = 'feedback';
+
+    state.mode = (synth && Math.random() < .55) ? 'listen' : 'read';
+    $('#instruction').textContent = state.mode === 'listen' ? 'Listen and tap!' : 'Read and tap!';
+    $('#word').textContent = state.mode === 'listen' ? '?  ?  ?' : item[0];
+
+    const others = shuffle(cat.items.filter(i => i[0] !== item[0])).slice(0, 3);
+    const opts = shuffle([item, ...others]);
+    const grid = $('#opts'); grid.innerHTML = '';
+    opts.forEach(o => {
+      const b = document.createElement('button');
+      b.className = 'opt'; b.dataset.word = o[0];
+      b.setAttribute('aria-label', o[0]);
+      b.innerHTML = renderFace(cat.type, o[1]);
+      b.addEventListener('click', () => answer(b));
+      grid.appendChild(b);
+    });
+
+    state.locked = false;
+    startTimer();
+    if(state.mode === 'listen') later(() => speak(item[0]), 300);
+  }
+
+  function startTimer(){
+    cancelAnimationFrame(state.raf);
+    const bar = $('#bar');
+    const t0 = performance.now();
+    const tick = now => {
+      const left = Math.max(0, DURATION - (now - t0));
+      state.left = left;
+      bar.style.transform = `scaleX(${left / DURATION})`;
+      bar.classList.toggle('low', left < 4000);
+      if(left <= 0){ timeUp(); return; }
+      state.raf = requestAnimationFrame(tick);
+    };
+    state.raf = requestAnimationFrame(tick);
+  }
+  function stopTimer(){ cancelAnimationFrame(state.raf); }
+
+  function revealCorrect(){
+    $('#word').textContent = state.item[0];
+    $('#opts').querySelectorAll('.opt').forEach(b => {
+      if(b.dataset.word === state.item[0]) b.classList.add('right');
+      else if(!b.classList.contains('wrong')) b.classList.add('dim');
+    });
+  }
+
+  function answer(btn){
+    if(state.locked) return;
+    state.locked = true; stopTimer();
+    const fb = $('#feedback');
+    if(btn.dataset.word === state.item[0]){
+      state.streak++; state.correct++;
+      let pts = 10 + Math.ceil(state.left / 1200);
+      if(state.streak >= 3) pts += 5;
+      state.score += pts;
+      $('#score').textContent = `⭐ ${state.score}`;
+      revealCorrect();
+      const f = document.createElement('span'); f.className = 'float'; f.textContent = `+${pts}`;
+      btn.appendChild(f);
+      chime();
+      const p = PRAISE[Math.floor(Math.random()*PRAISE.length)];
+      fb.textContent = p; fb.className = 'feedback good';
+      speak(p);
+      $('#streak').textContent = state.streak >= 2 ? `🔥 ${state.streak} in a row!${state.streak >= 3 ? ' Bonus +5' : ''}` : '';
+      if(state.streak > 0 && state.streak % 5 === 0) confetti(70);
+      later(nextRound, 1400);
+    } else {
+      state.streak = 0;
+      btn.classList.add('wrong');
+      revealCorrect();
+      buzz();
+      fb.textContent = `It’s “${state.item[0]}”`; fb.className = 'feedback bad';
+      later(() => speak(state.item[0]), 250);
+      $('#streak').textContent = '';
+      later(nextRound, 2100);
+    }
+  }
+
+  function timeUp(){
+    if(state.locked) return;
+    state.locked = true; state.streak = 0;
+    revealCorrect(); buzz();
+    const fb = $('#feedback');
+    fb.textContent = `Time’s up! It’s “${state.item[0]}”`; fb.className = 'feedback bad';
+    $('#streak').textContent = '';
+    later(() => speak(state.item[0]), 250);
+    later(nextRound, 2200);
+  }
+
+  function endGame(){
+    stopTimer();
+    const stars = state.correct >= 8 ? 3 : state.correct >= 5 ? 2 : 1;
+    const titles = {3:'Amazing!', 2:'Great work!', 1:'Good try!'};
+    $('#end-title').textContent = titles[stars];
+    $('#final').textContent = state.score;
+    $('#correct-count').textContent = `✅ ${state.correct} / ${ROUNDS}`;
+    let best = getBest(state.cat);
+    const isNew = state.score > best;
+    if(isNew){ best = state.score; setBest(state.cat, best); }
+    $('#best-end').textContent = isNew ? `🏆 New best: ${best}` : `🏆 Best: ${best}`;
+    const els = document.querySelectorAll('.star');
+    els.forEach(s => s.classList.remove('on'));
+    show('end');
+    els.forEach((s, i) => { if(i < stars) later(() => { s.classList.add('on'); tones([600 + i*200], .1, 'triangle'); }, 350 + i*350); });
+    later(() => { fanfare(); speak(titles[stars]); if(stars >= 2) confetti(160); }, 350 + stars*350);
+  }
+
+  function goHome(){
+    stopTimer(); clearLater(); state.locked = true;
+    if(synth) synth.cancel();
+    selectCat(state.cat);
+    show('start');
+  }
+
+  /* ---------- Confetti ---------- */
+  const cv = $('#fx'), cx = cv.getContext('2d');
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let parts = [], fxRaf = 0;
+  function sizeCanvas(){ const d = window.devicePixelRatio || 1; cv.width = innerWidth*d; cv.height = innerHeight*d; cx.setTransform(d,0,0,d,0,0); }
+  sizeCanvas(); addEventListener('resize', sizeCanvas);
+  function confetti(n){
+    if(reduce) return;
+    const cols = ['#FF7A6B','#5BC0F0','#F2B632','#4FD1A5','#1B2A55'];
+    for(let i=0;i<n;i++){
+      parts.push({ x: innerWidth/2 + (Math.random()-.5)*120, y: innerHeight*.35,
+        vx:(Math.random()-.5)*12, vy:-Math.random()*12-4, r:Math.random()*6+4,
+        c:cols[i%cols.length], rot:Math.random()*6, vr:(Math.random()-.5)*.3, life:0, round:Math.random()<.5 });
+    }
+    if(!fxRaf) fxRaf = requestAnimationFrame(drawFx);
+  }
+  function drawFx(){
+    cx.clearRect(0,0,innerWidth,innerHeight);
+    parts.forEach(p => {
+      p.vy += .32; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life++;
+      cx.save(); cx.translate(p.x,p.y); cx.rotate(p.rot); cx.fillStyle = p.c;
+      if(p.round){ cx.beginPath(); cx.arc(0,0,p.r/1.6,0,Math.PI*2); cx.fill(); }
+      else cx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);
+      cx.restore();
+    });
+    parts = parts.filter(p => p.y < innerHeight + 30 && p.life < 240);
+    if(parts.length) fxRaf = requestAnimationFrame(drawFx);
+    else { fxRaf = 0; cx.clearRect(0,0,innerWidth,innerHeight); }
+  }
+
+  /* ---------- Wire up ---------- */
+  $('#play').addEventListener('click', startGame);
+  $('#again').addEventListener('click', startGame);
+  $('#topics').addEventListener('click', goHome);
+  $('#home').addEventListener('click', goHome);
+  $('#say').addEventListener('click', () => { unlockAudio(); if(state.item) speak(state.item[0]); });
+})();
+</script>
+<a href="./#/games" class="mova-home-btn" aria-label="Back to MOVA Learning Studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></a>
+<style>.mova-home-btn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);left:10px;z-index:2147483000;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.94);color:#1E3A5F;box-shadow:0 2px 10px rgba(0,0,0,.2);text-decoration:none}.mova-home-btn svg{width:20px;height:20px}.mova-home-btn:focus-visible{outline:3px solid #6FA8D6;outline-offset:2px}@media print{.mova-home-btn{display:none}}</style>
+</body>
+</html>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MOVA Learning Studio</title>
-<meta name="description" content="MOVA Learning Studio: English readings, games, and teaching resources by MOVA Centro Pedagógico.">
+<meta name="description" content="MOVA Learning Studio: lecturas, juegos y materiales para aprender inglés, matemáticas y lectoescritura, de MOVA Centro Pedagógico.">
 <meta name="theme-color" content="#F3EFE8" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#121417" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.json">
@@ -297,6 +297,8 @@ p{margin:0}
 .game-card[data-c="coral"] .art{background:var(--coral-soft)}
 .game-card[data-c="sky"] .art{background:var(--sky-soft)}
 .game-card[data-c="mustard"] .art{background:var(--mustard-soft)}
+.game-card[data-c="mint"] .art{background:var(--mint-soft)}
+.game-card .art{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:0 12px}
 .art .tile{width:46px;height:58px;border-radius:10px;background:var(--surface);display:grid;place-items:center;font-size:24px;box-shadow:var(--shadow)}
 .art .tile.dark{background:var(--ink);color:var(--paper);font-weight:800;font-size:16px}
 .art .pill{padding:8px 12px;border-radius:999px;background:var(--surface);font-size:13px;font-weight:600;box-shadow:var(--shadow)}
@@ -866,6 +868,14 @@ const QUIZ_BANK = [
   { q: "Which month comes after March?", options: ["April", "May", "February", "June"] }
 ];
 
+/* Juegos completos de MOVA (cada uno es su propio archivo). */
+const MOVA_GAMES = [
+  { file: "juego-word-quest.html", title: "Word Quest", color: "coral", tag: "Ages 6–9", skill: "Vocabulary and listening", description: "Listen, look, and tap the right word: animals, food, colors, and numbers.", art: ["listen", "look", "tap"] },
+  { file: "juego-mision-matematica.html", title: "Misión Matemática", color: "sky", tag: "1° a 4° de primaria", skill: "Matemáticas", description: "Resuelve operaciones y lleva el cohete hasta la Luna.", art: ["3 + 4", "= 7"] },
+  { file: "juego-verb-memory.html", title: "Verb Memory", color: "mustard", tag: "A2", skill: "Irregular verbs", description: "Find the present, past, and participle of each verb. Play alone or in pairs.", art: ["go", "went", "gone"] },
+  { file: "juego-sentence-builder.html", title: "Sentence Builder", color: "mint", tag: "A2–B1", skill: "Grammar", description: "Read a sentence in Spanish and build it in English, word by word.", art: ["I", "am", "learning"] }
+];
+
 const GAMES = [
   { id: "memory", title: "Memory Match", color: "coral", description: "Flip the cards and match each word with its picture.", skill: "Vocabulary and memory", level: "Pre-A1" },
   { id: "matching", title: "Word Matching", color: "sky", description: "Connect each English word with its meaning.", skill: "Word meanings", level: "A2" },
@@ -1000,6 +1010,14 @@ function bestLabel(id) {
   if (id === "matching") return `Best: ${b} points`;
   return `Best: ${b} of 8`;
 }
+function movaGameCard(g) {
+  return `<article class="item game-card" data-c="${g.color}">
+    <div class="art">${g.art.map((a) => `<span class="pill">${esc(a)}</span>`).join("")}</div>
+    <div class="item-top"><span class="chip">${esc(g.tag)}</span><span class="chip">${esc(g.skill)}</span></div>
+    <h3 class="item-title"><a class="stretch" href="${g.file}">${esc(g.title)}</a></h3>
+    <p class="item-desc">${esc(g.description)}</p>
+  </article>`;
+}
 function gameCard(g) {
   return `<article class="item game-card" data-c="${g.color}">
     ${gameArt(g.id)}
@@ -1028,7 +1046,7 @@ function viewHome() {
       <div>
         <p class="hero-brand">MOVA Learning Studio</p>
         <h1 aria-label="Learn. Explore. Grow."><span>Learn.</span><span>Explore.</span><span>Grow.</span></h1>
-        <p class="lead">English readings, games, and classroom materials from MOVA Centro Pedagógico. Made for students, families, and teachers.</p>
+        <p class="lead">Lecturas, juegos y materiales para aprender inglés, matemáticas y lectoescritura, además de práctica para exámenes como el TOEFL. Creado por MOVA Centro Pedagógico para alumnos, familias y maestros.</p>
       </div>
       <div>
         ${searchField("home-q", "Search the studio", "")}
@@ -1051,7 +1069,7 @@ function viewHome() {
 
     <section class="wrap section" aria-labelledby="feat-h">
       <div class="section-head"><h2 id="feat-h">Featured activities</h2><a href="#/games">All games</a></div>
-      <div class="grid cols">${gameCard(GAMES[0])}${featured.map(readingCard).join("")}</div>
+      <div class="grid cols">${movaGameCard(MOVA_GAMES[0])}${movaGameCard(MOVA_GAMES[1])}${readingCard(featured[0])}</div>
     </section>
 
     <section class="wrap section" aria-labelledby="rec-h">
@@ -1064,6 +1082,7 @@ function viewHome() {
         ...READINGS.map((r) => ({ kind: "Reading", title: r.title, href: `#/library/${r.id}`, f: [r.title, r.description, r.topic, r.level, r.vocab.map((v) => v[0]).join(" ")] })),
         ...RESOURCES.map((r) => ({ kind: "Resource", title: r.title, href: `#/resources/${r.id}`, f: [r.title, r.description, r.category, r.levels.join(" "), r.type] })),
         ...GAMES.map((g) => ({ kind: "Game", title: g.title, href: `#/games/${g.id}`, f: [g.title, g.description, g.skill, "game play"] })),
+        ...MOVA_GAMES.map((g) => ({ kind: "Game", title: g.title, href: g.file, f: [g.title, g.description, g.skill, g.tag, "game play juego"] })),
         ...PRODUCTS.map((p) => ({ kind: "Shop", title: p.name, href: `#/shop/${p.id}`, f: [p.name, p.description, p.levels.join(" ")] }))
       ];
       input.addEventListener("input", () => {
@@ -1296,9 +1315,10 @@ function viewGames() {
     <section class="page-head wrap">
       <p class="kicker">Interactive Games</p>
       <h1>Play and practice</h1>
-      <p class="lead">Three quick games to practice English vocabulary. Play as many times as you like.</p>
+      <p class="lead">Juegos para practicar inglés y matemáticas. Se pueden jugar cuantas veces quieras.</p>
     </section>
-    <section class="wrap"><div class="grid cols">${GAMES.map(gameCard).join("")}</div></section>`
+    <section class="wrap"><div class="section-head"><h2>MOVA games</h2></div><div class="grid cols">${MOVA_GAMES.map(movaGameCard).join("")}</div></section>
+    <section class="wrap section"><div class="section-head"><h2>Quick practice</h2></div><div class="grid cols">${GAMES.map(gameCard).join("")}</div></section>`
   };
 }
 let timers = [];

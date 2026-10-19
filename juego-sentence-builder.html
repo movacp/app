@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sentence Builder · MOVA Grammar Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#FCF6DA;
+  --rule:rgba(84,160,222,.45);
+  --margin:rgba(226,74,74,.6);
+  --card:#FFFFFF;
+  --ink:#16213F;
+  --muted:#5D6785;
+  --line:#DFE4EE;
+  --soft:#F5F7FB;
+  --subj:#3D6EF5;
+  --aux:#E3A21A;
+  --verb:#1FA374;
+  --wh:#8A63D2;
+  --rest:#7C86A3;
+  --ok:#1FA374;
+  --err:#E0485A;
+  --btn:#16213F;
+  --btn-ink:#FFFFFF;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --page:#0E1428; --rule:rgba(120,150,255,.06); --card:#161E38; --ink:#EEF1FA; --muted:#A3ADC9; --line:#29334F; --soft:#1C2543;
+    --subj:#6E93FF; --aux:#F2B632; --verb:#3CCB95; --wh:#B08BF5; --rest:#8E98B5; --btn:#EEF1FA; --btn-ink:#16213F;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --page:#0E1428; --rule:rgba(120,150,255,.06); --card:#161E38; --ink:#EEF1FA; --muted:#A3ADC9; --line:#29334F; --soft:#1C2543;
+  --subj:#6E93FF; --aux:#F2B632; --verb:#3CCB95; --wh:#B08BF5; --rest:#8E98B5; --btn:#EEF1FA; --btn-ink:#16213F;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;min-height:100%;color:var(--ink);
+  font-family:'Poppins','Century Gothic','Segoe UI',system-ui,sans-serif;font-size:16px;line-height:1.5;
+  background-color:var(--page);
+  background-image:
+    linear-gradient(to right, transparent 0 44px, var(--margin) 44px 46px, transparent 46px 50px, var(--margin) 50px 52px, transparent 52px),
+    repeating-linear-gradient(to bottom, transparent 0 31px, var(--rule) 31px 32px);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--margin:rgba(226,74,74,.22)}}
+:root[data-theme="dark"]{--margin:rgba(226,74,74,.22)}
+button{font-family:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--subj);outline-offset:3px}
+[hidden]{display:none !important}
+.display{font-family:'Bricolage Grotesque','Poppins',sans-serif;letter-spacing:-.02em}
+
+.shell{max-width:640px;margin:0 auto;padding:14px 14px 32px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 4px 14px}
+.mark{display:flex;align-items:baseline;gap:10px}
+.mark b{font-weight:700;font-size:17px;letter-spacing:.08em}
+.mark span{font-size:14px;color:var(--muted);padding-left:10px;border-left:1px solid var(--line)}
+.meter{display:flex;align-items:center;gap:14px;font-size:14px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+.meter strong{color:var(--ink)}
+.progress{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin:0 4px 14px}
+.progress span{display:block;height:100%;background:var(--ink);border-radius:4px;transition:width .4s ease}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px 20px;box-shadow:0 1px 0 var(--line),0 18px 40px -24px rgba(22,33,63,.35)}
+
+/* Start */
+.hero h1{font-size:clamp(40px,11vw,60px);line-height:.95;font-weight:800;margin:4px 0 14px}
+.hero p{color:var(--muted);margin:0 0 22px;max-width:46ch}
+.tenses{display:grid;gap:10px}
+.tense{
+  display:grid;grid-template-columns:56px 1fr;align-items:center;gap:14px;text-align:left;
+  border:1.5px solid var(--line);background:var(--card);border-radius:16px;padding:12px 14px;transition:border-color .15s, background .15s
+}
+.tense:hover{border-color:var(--muted)}
+.tense[aria-checked="true"]{border-color:var(--ink);background:var(--soft);box-shadow:inset 0 0 0 1px var(--ink)}
+.tense b{display:block;font-size:16px;font-weight:600}
+.tense small{display:block;font-size:13px;color:var(--muted);margin-top:1px}
+.glyph{width:56px;height:36px}
+.glyph *{stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round}
+.glyph .f{fill:var(--ink);stroke:none}
+.glyph .now{stroke:var(--muted);stroke-dasharray:2 3}
+.start-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:22px}
+.start-row span{font-size:13.5px;color:var(--muted)}
+.btn{border:0;border-radius:12px;background:var(--btn);color:var(--btn-ink);font-weight:600;font-size:16px;padding:14px 22px;transition:transform .1s ease, opacity .15s}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+.btn.quiet{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.quiet:hover{border-color:var(--muted)}
+
+/* Exercise */
+.meta{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13.5px;color:var(--muted);font-weight:500}
+.meta .tname{color:var(--ink);font-weight:600}
+.prompt{font-size:clamp(21px,5.6vw,27px);font-weight:600;line-height:1.35;margin:14px 0 16px;max-width:30ch}
+.formula{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px;font-weight:600}
+.formula .pc{border-radius:8px;padding:3px 9px;background:color-mix(in srgb, var(--c) 13%, transparent);color:var(--c)}
+.formula .plus{color:var(--muted);font-weight:500}
+.rail{
+  position:relative;margin:22px 0 18px;min-height:76px;padding:10px 4px 14px;
+  display:flex;flex-wrap:wrap;align-content:flex-end;gap:8px;border-bottom:2px solid var(--ink)
+}
+.rail .empty{color:var(--muted);font-size:15px;align-self:center}
+.bank{display:flex;flex-wrap:wrap;gap:8px;min-height:52px}
+.tile{
+  border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:9px 14px;
+  font-size:17px;font-weight:600;line-height:1.2;box-shadow:0 2px 0 var(--line);transition:transform .08s ease, opacity .15s
+}
+.tile:hover{border-color:var(--muted)}
+.tile:active{transform:translateY(1px);box-shadow:0 1px 0 var(--line)}
+.tile.spent{opacity:0;pointer-events:none}
+.rail .tile{animation:drop .18s ease}
+@keyframes drop{from{transform:translateY(-6px);opacity:.4}to{transform:none;opacity:1}}
+.rail.locked .tile{pointer-events:none}
+.rail.xray .tile{border-color:var(--c);color:var(--c);background:color-mix(in srgb, var(--c) 10%, var(--card));box-shadow:0 2px 0 color-mix(in srgb, var(--c) 45%, transparent)}
+.rail.xray .tile{transition:color .25s, background .25s, border-color .25s}
+.rail.bad{border-bottom-color:var(--err)}
+.actions{display:flex;gap:8px;margin-top:22px}
+.actions .grow{flex:1}
+.fb{margin-top:20px;border-radius:16px;padding:16px;background:var(--soft);border:1px solid var(--line)}
+.fb .status{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px}
+.fb .status i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;color:#fff;font-size:13px}
+.fb.ok .status i{background:var(--ok)}
+.fb.no .status i{background:var(--err)}
+.fb .answer{font-size:18px;font-weight:600;margin:10px 0 4px;line-height:1.5}
+.fb .answer span{border-bottom:3px solid var(--c);padding-bottom:1px;margin-right:6px;display:inline-block}
+.fb .note{color:var(--muted);font-size:14.5px;margin:6px 0 0}
+.fb .btn{width:100%;margin-top:14px}
+
+/* Results */
+.res-top{display:grid;grid-template-columns:132px 1fr;gap:18px;align-items:center}
+.ring{position:relative;width:132px;height:132px}
+.ring svg{transform:rotate(-90deg)}
+.ring .v{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:34px;line-height:1}
+.ring .v small{display:block;font-family:'Poppins',sans-serif;font-weight:500;font-size:12px;color:var(--muted);margin-top:4px}
+.res-top h2{font-size:clamp(26px,7vw,34px);font-weight:800;line-height:1.05;margin:0 0 6px}
+.res-top p{color:var(--muted);margin:0;font-size:15px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:22px 0 4px}
+.stat{background:var(--soft);border-radius:12px;padding:12px}
+.stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.stat span{font-size:12.5px;color:var(--muted)}
+.bars{display:grid;gap:10px;margin-top:18px}
+.bar-row{display:grid;grid-template-columns:150px 1fr 44px;align-items:center;gap:10px;font-size:14px;font-weight:500}
+.bar-row .track{height:8px;background:var(--line);border-radius:8px;overflow:hidden}
+.bar-row .track span{display:block;height:100%;background:var(--ink);border-radius:8px}
+.bar-row .n{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.review{margin-top:22px}
+.review h3{font-size:16px;margin:0 0 10px}
+.rv{border-top:1px solid var(--line);padding:12px 0}
+.rv .es{font-size:13.5px;color:var(--muted)}
+.rv .en{font-weight:600;margin-top:2px}
+.rv .yours{font-size:14px;color:var(--err);margin-top:2px;text-decoration:line-through;text-decoration-thickness:1px}
+.res-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:22px}
+.copy-box{width:100%;min-height:120px;margin-top:10px;border-radius:12px;border:1px solid var(--line);background:var(--soft);color:var(--ink);padding:10px;font:13px 'Poppins',sans-serif}
+@media (max-width:420px){ .bar-row{grid-template-columns:118px 1fr 40px} .res-top{grid-template-columns:110px 1fr} .ring,.ring svg{width:110px;height:110px} }
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+<link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="mark"><b>MOVA</b><span>Grammar Lab</span></div>
+    <div class="meter" id="meter" hidden><span><strong id="m-n">1</strong> of 10</span><span><strong id="m-pts">0</strong> pts</span></div>
+  </header>
+  <div class="progress" id="progress" hidden><span id="pbar" style="width:0%"></span></div>
+
+  <!-- START -->
+  <main class="card hero" id="v-start">
+    <h1 class="display">Sentence<br>Builder</h1>
+    <p>Read the sentence in Spanish and build it in English, word by word. Choose the tense you want to practice.</p>
+    <div class="tenses" role="radiogroup" aria-label="Tense" id="tenses"></div>
+    <div class="start-row">
+      <span>10 sentences per session</span>
+      <button class="btn" id="start">Start session</button>
+    </div>
+  </main>
+
+  <!-- EXERCISE -->
+  <main class="card" id="v-play" hidden>
+    <div class="meta"><span class="tname" id="p-tense"></span><span id="p-type"></span></div>
+    <p class="prompt" id="p-prompt" lang="es"></p>
+    <div class="formula" id="p-formula" aria-label="Sentence structure"></div>
+    <div class="rail" id="rail" aria-label="Your sentence"></div>
+    <div class="bank" id="bank" aria-label="Word bank"></div>
+    <div class="actions" id="actions">
+      <button class="btn quiet" id="hint">Hint</button>
+      <button class="btn quiet" id="clear">Clear</button>
+      <button class="btn grow" id="check" disabled>Check</button>
+    </div>
+    <div class="fb" id="fb" hidden aria-live="polite">
+      <div class="status"><i id="fb-i"></i><span id="fb-title"></span></div>
+      <div class="answer" id="fb-answer"></div>
+      <p class="note" id="fb-note" lang="es"></p>
+      <button class="btn" id="next">Continue</button>
+    </div>
+  </main>
+
+  <!-- RESULTS -->
+  <main class="card" id="v-end" hidden>
+    <div class="res-top">
+      <div class="ring">
+        <svg width="132" height="132" viewBox="0 0 132 132"><circle cx="66" cy="66" r="56" stroke="var(--line)" stroke-width="10" fill="none"/><circle id="ring-arc" cx="66" cy="66" r="56" stroke="var(--verb)" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="351.86" stroke-dashoffset="351.86" style="transition:stroke-dashoffset 1s ease"/></svg>
+        <div class="v"><div><span id="r-pct">0%</span><small>accuracy</small></div></div>
+      </div>
+      <div><h2 class="display" id="r-title"></h2><p id="r-sub"></p></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="r-pts">0</b><span>points</span></div>
+      <div class="stat"><b id="r-streak">0</b><span>best streak</span></div>
+      <div class="stat"><b id="r-time">0:00</b><span>time</span></div>
+    </div>
+    <div class="bars" id="r-bars"></div>
+    <div class="review" id="r-review"></div>
+    <div class="res-actions">
+      <button class="btn quiet" id="copy">Copy results</button>
+      <button class="btn" id="again">New session</button>
+    </div>
+    <textarea class="copy-box" id="copy-box" readonly hidden></textarea>
+  </main>
+</div>
+
+<script>
+(function(){
+const $ = s => document.querySelector(s);
+const shuffle = a => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; };
+const SESSION = 10;
+
+/* roles: s subject · a auxiliary · v main verb · q question word · x rest */
+const ROLE = { s:'var(--subj)', a:'var(--aux)', v:'var(--verb)', q:'var(--wh)', x:'var(--rest)' };
+const TENSES = {
+  ps:{ name:'Present simple', small:'Habits, routines and facts', glyph:'<svg class="glyph" viewBox="0 0 56 36"><line x1="4" y1="18" x2="52" y2="18"/><circle class="f" cx="12" cy="18" r="3.5"/><circle class="f" cx="24" cy="18" r="3.5"/><circle class="f" cx="36" cy="18" r="3.5"/><circle class="f" cx="48" cy="18" r="3.5"/></svg>',
+    f:{ a:[['Subject','s'],['verb (+s / es)','v'],['…','x']], n:[['Subject','s'],['don’t / doesn’t','a'],['base verb','v'],['…','x']], q:[['(Wh-)','q'],['Do / Does','a'],['subject','s'],['base verb','v'],['?','x']] } },
+  pc:{ name:'Present continuous', small:'Actions happening right now', glyph:'<svg class="glyph" viewBox="0 0 56 36"><line class="now" x1="28" y1="6" x2="28" y2="30"/><line x1="10" y1="18" x2="46" y2="18" stroke-width="5"/><circle class="f" cx="46" cy="18" r="4.5"/></svg>',
+    f:{ a:[['Subject','s'],['am / is / are','a'],['verb + ing','v'],['…','x']], n:[['Subject','s'],['am not / isn’t / aren’t','a'],['verb + ing','v'],['…','x']], q:[['(Wh-)','q'],['Am / Is / Are','a'],['subject','s'],['verb + ing','v'],['?','x']] } },
+  pp:{ name:'Present perfect', small:'Experiences and results up to now', glyph:'<svg class="glyph" viewBox="0 0 56 36"><line class="now" x1="46" y1="6" x2="46" y2="30"/><path d="M8 26 Q26 2 44 22"/><circle class="f" cx="8" cy="26" r="3.5"/><path d="M38 21 L45 23 L43 16" /></svg>',
+    f:{ a:[['Subject','s'],['have / has','a'],['past participle','v'],['…','x']], n:[['Subject','s'],['haven’t / hasn’t','a'],['past participle','v'],['…','x']], q:[['(Wh-)','q'],['Have / Has','a'],['subject','s'],['past participle','v'],['?','x']] } },
+  mix:{ name:'Mixed practice', small:'All three tenses together', glyph:'<svg class="glyph" viewBox="0 0 56 36"><circle class="f" cx="10" cy="18" r="4"/><line x1="20" y1="18" x2="34" y2="18" stroke-width="5"/><path d="M38 24 Q45 8 52 20"/></svg>' }
+};
+
+const BANK = {
+  ps:[
+    ['a','She walks to school every day.','s v x x x x','Ella camina a la escuela todos los días.','walk','Con he / she / it, el verbo lleva -s: walks.'],
+    ['n','They don’t eat meat on Fridays.','s a v x x x','Ellos no comen carne los viernes.','doesn’t','Con they se usa don’t + verbo en forma base.'],
+    ['q','Does your brother play the guitar?','a s s v x x','¿Tu hermano toca la guitarra?','plays','En preguntas con does, el verbo va en forma base: play.'],
+    ['a','We usually have breakfast at seven.','s x v x x x','Normalmente desayunamos a las siete.','has','Los adverbios de frecuencia van antes del verbo principal.'],
+    ['n','My dad doesn’t drink coffee.','s s a v x','Mi papá no toma café.','drinks','Después de doesn’t, el verbo pierde la -s.'],
+    ['q','Where do you live?','q a s v','¿Dónde vives?','does','Wh- word + do / does + sujeto + verbo.'],
+    ['a','The store opens at nine o’clock.','s s v x x x','La tienda abre a las nueve.','open','The store equivale a it, por eso opens lleva -s.'],
+    ['a','I never watch TV in the morning.','s x v x x x x','Nunca veo la tele en la mañana.','watches','Con I, el verbo no lleva -s.'],
+    ['q','Do they speak French?','a s v x','¿Ellos hablan francés?','speaks','Do + sujeto + verbo en forma base.'],
+    ['a','Water boils at 100 degrees.','s v x x x','El agua hierve a 100 grados.','boil','El presente simple expresa hechos y verdades generales.'],
+    ['q','How often does she go to the gym?','q q a s v x x x','¿Qué tan seguido va ella al gimnasio?','goes','Con does, el verbo regresa a su forma base: go.'],
+    ['a','He studies English on Tuesdays.','s v x x x','Él estudia inglés los martes.','study','Consonante + y cambia a -ies: study → studies.']
+  ],
+  pc:[
+    ['a','I am reading a great book right now.','s a v x x x x x','Estoy leyendo un libro buenísimo ahorita.','read','am / is / are + verbo con -ing.'],
+    ['a','They are playing soccer in the park.','s a v x x x x','Ellos están jugando futbol en el parque.','is','Con they se usa are.'],
+    ['n','She isn’t working today.','s a v x','Ella no está trabajando hoy.','doesn’t','Negativo: isn’t + verbo con -ing.'],
+    ['q','Are you listening to me?','a s v x x','¿Me estás escuchando?','Do','Pregunta: Am / Is / Are + sujeto + verbo con -ing.'],
+    ['a','We are having dinner at the moment.','s a v x x x x','Estamos cenando en este momento.','have','At the moment indica algo que pasa ahora.'],
+    ['a','It is raining outside.','s a v x','Está lloviendo afuera.','rains','Para acciones en progreso usamos be + -ing.'],
+    ['q','What is he doing?','q a s v','¿Qué está haciendo él?','does','Wh- word + is + sujeto + verbo con -ing.'],
+    ['n','My parents aren’t watching TV.','s s a v x','Mis papás no están viendo la tele.','isn’t','My parents equivale a they, por eso aren’t.'],
+    ['q','Why are you laughing?','q a s v','¿Por qué te estás riendo?','laugh','El verbo principal siempre lleva -ing: laughing.'],
+    ['a','The baby is sleeping now.','s s a v x','El bebé está durmiendo ahora.','sleeps','Now indica una acción en progreso.'],
+    ['n','I’m not wearing a jacket today.','s a v x x x','Hoy no traigo chamarra.','wear','I’m not + verbo con -ing.'],
+    ['q','Is your sister studying for the exam?','a s s v x x x','¿Tu hermana está estudiando para el examen?','Does','Is + sujeto + verbo con -ing.']
+  ],
+  pp:[
+    ['a','I have finished my homework.','s a v x x','He terminado mi tarea.','finish','have / has + participio pasado.'],
+    ['a','She has never been to Paris.','s a x v x x','Ella nunca ha estado en París.','have','Con she se usa has.'],
+    ['q','Have you ever eaten sushi?','a s x v x','¿Alguna vez has comido sushi?','ate','Ever va entre el sujeto y el participio. Eat → eaten.'],
+    ['n','They haven’t seen the new movie yet.','s a v x x x x','Todavía no han visto la película nueva.','saw','Yet va al final en negativos y preguntas. See → seen.'],
+    ['a','We have lived in Monterrey for five years.','s a v x x x x x','Hemos vivido en Monterrey por cinco años.','since','For + periodo de tiempo; since + punto de inicio.'],
+    ['a','He has already bought the tickets.','s a x v x x','Él ya compró los boletos.','buy','Already va entre has y el participio. Buy → bought.'],
+    ['q','Has she called you today?','a s v x x','¿Ella te ha llamado hoy?','Have','Con she, la pregunta empieza con has.'],
+    ['n','I haven’t spoken to him since Monday.','s a v x x x x','No he hablado con él desde el lunes.','for','Since + punto de inicio (Monday).'],
+    ['q','How long have you known her?','q q a s v x','¿Cuánto tiempo tienes de conocerla?','knew','How long + have + sujeto + participio. Know → known.'],
+    ['a','My brother has broken his phone.','s s a v x x','Mi hermano ha roto su celular.','broke','Break → broke → broken.'],
+    ['q','Have they arrived yet?','a s v x','¿Ya llegaron ellos?','Has','Con they se usa have.'],
+    ['a','It has rained a lot this week.','s a v x x x x','Ha llovido mucho esta semana.','rain','This week es un periodo que no ha terminado: presente perfecto.']
+  ]
+};
+const TYPE = { a:'Affirmative', n:'Negative', q:'Question' };
+const KEEP = new Set(['I','I’m','French','English','TV','Fridays','Tuesdays','Monday','Monterrey','Paris']);
+const shown = w => KEEP.has(w) ? w : w.charAt(0).toLowerCase() + w.slice(1);
+
+function parse(t, row){
+  const [type, sent, roles, es, distract, note] = row;
+  const end = sent.slice(-1);
+  const words = sent.slice(0,-1).split(' ');
+  return { tense:t, type, sent, end, words, roles:roles.split(' '), es, distract, note };
+}
+
+/* state */
+const st = { tense:'ps', items:[], i:0, pts:0, streak:0, best:0, correct:0, t0:0, hinted:false, placed:[], log:[] };
+
+/* start */
+const tensesEl = $('#tenses');
+Object.entries(TENSES).forEach(([k,t]) => {
+  const b = document.createElement('button');
+  b.className = 'tense'; b.setAttribute('role','radio'); b.dataset.k = k;
+  b.innerHTML = `${t.glyph}<div><b>${t.name}</b><small>${t.small}</small></div>`;
+  b.addEventListener('click', () => select(k));
+  tensesEl.appendChild(b);
+});
+function select(k){ st.tense = k; tensesEl.querySelectorAll('.tense').forEach(b => b.setAttribute('aria-checked', b.dataset.k===k ? 'true':'false')); }
+select('ps');
+
+function view(v){ ['start','play','end'].forEach(x => $('#v-'+x).hidden = x!==v); $('#meter').hidden = v!=='play'; $('#progress').hidden = v!=='play'; window.scrollTo(0,0); }
+
+function startSession(){
+  let pool;
+  if(st.tense === 'mix'){
+    pool = shuffle([...shuffle(BANK.ps).slice(0,4).map(r=>parse('ps',r)), ...shuffle(BANK.pc).slice(0,3).map(r=>parse('pc',r)), ...shuffle(BANK.pp).slice(0,3).map(r=>parse('pp',r))]);
+  } else pool = shuffle(BANK[st.tense]).slice(0, SESSION).map(r => parse(st.tense, r));
+  st.items = pool; st.i = 0; st.pts = 0; st.streak = 0; st.best = 0; st.correct = 0; st.log = []; st.t0 = Date.now();
+  view('play'); render();
+}
+
+function render(){
+  const it = st.items[st.i];
+  st.placed = []; st.hinted = false;
+  $('#m-n').textContent = st.i + 1; $('#m-pts').textContent = st.pts;
+  $('#pbar').style.width = `${(st.i / SESSION) * 100}%`;
+  $('#p-tense').textContent = TENSES[it.tense].name;
+  $('#p-type').textContent = TYPE[it.type];
+  $('#p-prompt').textContent = it.es;
+  const f = TENSES[it.tense].f[it.type];
+  $('#p-formula').innerHTML = f.filter(p => !(p[0]==='(Wh-)' && it.roles[0] !== 'q')).map((p, k, arr) =>
+    `<span class="pc" style="--c:${ROLE[p[1]]}">${p[0]}</span>${k < arr.length-1 ? '<span class="plus">+</span>' : ''}`).join('');
+  const rail = $('#rail'); rail.className = 'rail'; rail.innerHTML = '<span class="empty">Tap the words in order</span>';
+  const bank = $('#bank'); bank.innerHTML = '';
+  const tiles = shuffle([...it.words.map((w, k) => ({w, k})), {w:it.distract, k:-1}]);
+  tiles.forEach((t, n) => {
+    const b = document.createElement('button');
+    b.className = 'tile'; b.textContent = shown(t.w); b.dataset.w = t.w; b.dataset.n = n;
+    b.addEventListener('click', () => place(b));
+    bank.appendChild(b);
+  });
+  $('#actions').hidden = false; $('#fb').hidden = true;
+  $('#check').disabled = true; $('#hint').disabled = false;
+}
+
+function place(src){
+  const rail = $('#rail');
+  if(rail.classList.contains('locked')) return;
+  const empty = rail.querySelector('.empty'); if(empty) empty.remove();
+  src.classList.add('spent');
+  const t = document.createElement('button');
+  t.className = 'tile'; t.textContent = src.textContent; t.dataset.w = src.dataset.w;
+  t.addEventListener('click', () => { if(rail.classList.contains('locked')) return; src.classList.remove('spent'); t.remove(); st.placed = st.placed.filter(x => x.t !== t); afterChange(); });
+  rail.appendChild(t);
+  st.placed.push({t, src});
+  afterChange();
+}
+function afterChange(){
+  const it = st.items[st.i];
+  $('#check').disabled = st.placed.length === 0;
+  const rail = $('#rail');
+  if(!st.placed.length && !rail.querySelector('.empty')) rail.innerHTML = '<span class="empty">Tap the words in order</span>';
+  rail.classList.remove('bad');
+}
+$('#clear').addEventListener('click', () => {
+  if($('#rail').classList.contains('locked')) return;
+  st.placed.forEach(p => { p.src.classList.remove('spent'); p.t.remove(); }); st.placed = []; afterChange();
+});
+$('#hint').addEventListener('click', () => {
+  const it = st.items[st.i];
+  // keep the correct prefix, then add the next correct word
+  let ok = 0; while(ok < st.placed.length && st.placed[ok].t.dataset.w === it.words[ok]) ok++;
+  st.placed.slice(ok).forEach(p => { p.src.classList.remove('spent'); p.t.remove(); });
+  st.placed = st.placed.slice(0, ok);
+  if(ok < it.words.length){
+    const target = it.words[ok];
+    const src = [...$('#bank').children].find(b => !b.classList.contains('spent') && b.dataset.w === target);
+    if(src) place(src);
+  }
+  st.hinted = true;
+  afterChange();
+});
+
+$('#check').addEventListener('click', () => {
+  const it = st.items[st.i];
+  const built = st.placed.map(p => p.t.dataset.w);
+  const ok = built.length === it.words.length && built.every((w,k) => w === it.words[k]);
+  const rail = $('#rail'); rail.classList.add('locked');
+  const fb = $('#fb');
+  if(ok){
+    rail.classList.add('xray');
+    st.placed.forEach((p, k) => p.t.style.setProperty('--c', ROLE[it.roles[k]]));
+    const gain = st.hinted ? 50 : 100;
+    st.pts += gain; st.streak++; st.best = Math.max(st.best, st.streak); st.correct++;
+    fb.className = 'fb ok';
+    $('#fb-i').textContent = '✓';
+    $('#fb-title').textContent = st.hinted ? `Correct · +${gain} with hint` : (st.streak >= 3 ? `Correct · ${st.streak} in a row` : `Correct · +${gain}`);
+    $('#fb-answer').innerHTML = '';
+  } else {
+    rail.classList.add('bad');
+    st.streak = 0;
+    fb.className = 'fb no';
+    $('#fb-i').textContent = '✕';
+    $('#fb-title').textContent = 'Not quite. Here is the correct sentence:';
+    const ans = $('#fb-answer'); ans.innerHTML = '';
+    it.words.forEach((w, k) => { const s = document.createElement('span'); s.style.setProperty('--c', ROLE[it.roles[k]]); s.textContent = (k===0 ? w : shown(w)) + (k === it.words.length-1 ? it.end : ''); ans.appendChild(s); });
+    st.log.push({ es:it.es, en:it.sent, yours: built.map((w,k) => k===0 ? w.charAt(0).toUpperCase()+w.slice(1) : shown(w)).join(' ') + it.end, tense:it.tense });
+  }
+  st.log.push({ tense:it.tense, ok, mark:true });
+  $('#m-pts').textContent = st.pts;
+  $('#fb-note').textContent = it.note;
+  $('#actions').hidden = true; fb.hidden = false;
+  $('#next').textContent = st.i === SESSION - 1 ? 'See results' : 'Continue';
+  $('#next').focus({preventScroll:true});
+});
+$('#next').addEventListener('click', () => { st.i++; if(st.i >= SESSION) results(); else render(); });
+
+function results(){
+  const secs = Math.round((Date.now() - st.t0)/1000);
+  const pct = Math.round(st.correct / SESSION * 100);
+  view('end');
+  $('#r-pct').textContent = pct + '%';
+  const arc = $('#ring-arc'); arc.style.strokeDashoffset = 351.86;
+  requestAnimationFrame(() => requestAnimationFrame(() => { arc.style.strokeDashoffset = 351.86 * (1 - pct/100); }));
+  $('#r-title').textContent = pct >= 90 ? 'Excellent work' : pct >= 70 ? 'Solid progress' : 'Keep building';
+  $('#r-sub').textContent = `${st.correct} of ${SESSION} sentences correct${st.tense==='mix' ? ' across three tenses' : ' in ' + TENSES[st.tense].name.toLowerCase()}.`;
+  $('#r-pts').textContent = st.pts; $('#r-streak').textContent = st.best;
+  $('#r-time').textContent = `${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}`;
+  const marks = st.log.filter(l => l.mark);
+  const bars = $('#r-bars'); bars.innerHTML = '';
+  ['ps','pc','pp'].forEach(k => {
+    const m = marks.filter(l => l.tense === k); if(!m.length) return;
+    const c = m.filter(l => l.ok).length;
+    const r = document.createElement('div'); r.className = 'bar-row';
+    r.innerHTML = `<span>${TENSES[k].name}</span><span class="track"><span style="width:${Math.round(c/m.length*100)}%"></span></span><span class="n">${c}/${m.length}</span>`;
+    bars.appendChild(r);
+  });
+  const errs = st.log.filter(l => !l.mark);
+  const rv = $('#r-review'); rv.innerHTML = '';
+  if(errs.length){
+    const h = document.createElement('h3'); h.textContent = 'Sentences to review'; rv.appendChild(h);
+    errs.forEach(e => { const d = document.createElement('div'); d.className = 'rv';
+      d.innerHTML = '<div class="es" lang="es"></div><div class="en"></div><div class="yours"></div>';
+      d.querySelector('.es').textContent = e.es; d.querySelector('.en').textContent = e.en; d.querySelector('.yours').textContent = e.yours;
+      rv.appendChild(d); });
+  }
+  st.summary = [
+    'MOVA Grammar Lab · Sentence Builder',
+    `Practice: ${TENSES[st.tense].name}`,
+    `Score: ${st.correct}/${SESSION} (${pct}%) · ${st.pts} pts`,
+    `Best streak: ${st.best} · Time: ${$('#r-time').textContent}`,
+    ...['ps','pc','pp'].map(k => { const m = marks.filter(l => l.tense===k); return m.length ? `${TENSES[k].name}: ${m.filter(l=>l.ok).length}/${m.length}` : null; }).filter(Boolean)
+  ].join('\n');
+  $('#copy-box').hidden = true; $('#copy').textContent = 'Copy results';
+}
+$('#copy').addEventListener('click', async () => {
+  try{ await navigator.clipboard.writeText(st.summary); $('#copy').textContent = 'Copied'; }
+  catch(e){ const b = $('#copy-box'); b.value = st.summary; b.hidden = false; b.select(); $('#copy').textContent = 'Select and copy'; }
+});
+$('#again').addEventListener('click', () => view('start'));
+$('#start').addEventListener('click', startSession);
+})();
+</script>
+<a href="./#/games" class="mova-home-btn" aria-label="Back to MOVA Learning Studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></a>
+<style>.mova-home-btn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);left:10px;z-index:2147483000;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.94);color:#1E3A5F;box-shadow:0 2px 10px rgba(0,0,0,.2);text-decoration:none}.mova-home-btn svg{width:20px;height:20px}.mova-home-btn:focus-visible{outline:3px solid #6FA8D6;outline-offset:2px}@media print{.mova-home-btn{display:none}}</style>
+</body>
+</html>
