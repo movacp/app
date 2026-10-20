@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -6,491 +6,413 @@
 <title>Misión Matemática · MOVA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<script src="mova-voice.js"></script>
 <style>
 :root{
-  --page:#1B2A55;
-  --card:#FFFFFF;
-  --ink:#1B2A55;
-  --muted:#5E6886;
-  --orange:#5BC0F0;
-  --orange-deep:#2F8FC2;
-  --peach:#E3F3FC;
-  --tile:#F7FAFF;
-  --tile-edge:#DCE6F2;
-  --track:#EEF1F8;
-  --good:#1E9A52; --good-bg:#DDF5E5;
-  --bad:#E5484D; --bad-bg:#FDE3E3;
-  --sym-o:%23FF8A3D; --sym-s:%235BC0F0; --sym-m:%234FD1A5; --sym-y:%23F2B632;
-  --pattern-opacity:.9;
-  --logo-filter:none;
-  color-scheme:light;
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px);
+  --page:#1B2A55; --card:#FFFFFF; --ink:#1B2A55; --muted:#5B6787; --tile:#F3F6FC; --edge:#DCE2F0; --track:#E9EEF8;
+  --sky:#5BC0F0; --pink:#F47FB0; --mint:#4FD1A5; --mustard:#F2B632; --coral:#FF7A6B; --lilac:#A98BE8;
+  --good:#1F9A47; --good-bg:#DDF6E4; --bad:#E5484D; --bad-bg:#FDE4E4;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --page:#0E1430; --card:#1e2645; --ink:#F6F0E6; --muted:#B3BBD6;
-    --peach:rgba(91,192,240,.18); --tile:#252f55; --tile-edge:#384471; --track:#2b3560;
-    --good-bg:rgba(30,154,82,.22); --bad-bg:rgba(229,72,77,.22);
-    --pattern-opacity:.7; --logo-filter:brightness(0) invert(1);
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --page:#0E1430; --card:#1e2645; --ink:#F6F0E6; --muted:#B3BBD6;
-  --peach:rgba(91,192,240,.18); --tile:#252f55; --tile-edge:#384471; --track:#2b3560;
-  --good-bg:rgba(30,154,82,.22); --bad-bg:rgba(229,72,77,.22);
-  --pattern-opacity:.7; --logo-filter:brightness(0) invert(1);
-  color-scheme:dark;
-}
-*,*::before,*::after{box-sizing:border-box}
-html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
-body{
-  margin:0;min-height:100%;color:var(--ink);background:var(--page);
-  font-family:'Poppins','Century Gothic','Avenir Next','Segoe UI',system-ui,sans-serif;
-  -webkit-tap-highlight-color:transparent;position:relative;
-}
-body::before{
-  content:"";position:fixed;inset:0;z-index:-1;opacity:var(--pattern-opacity);pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260' font-family='Arial%2CHelvetica%2Csans-serif' font-weight='800'%3E%3Ctext x='22' y='46' font-size='40' fill='%23FF8A3D' transform='rotate%28-12 22 46%29'%3E%2B%3C/text%3E%3Ctext x='118' y='38' font-size='34' fill='%235BC0F0' transform='rotate%2810 118 38%29'%3E%C3%97%3C/text%3E%3Ctext x='200' y='52' font-size='34' fill='%23F2B632' transform='rotate%28-8 200 52%29'%3E7%3C/text%3E%3Ctext x='62' y='104' font-size='34' fill='%234FD1A5' transform='rotate%286 62 104%29'%3E%C3%B7%3C/text%3E%3Ctext x='164' y='110' font-size='36' fill='%23FF7AA8' transform='rotate%28-10 164 110%29'%3E=%3C/text%3E%3Ctext x='236' y='132' font-size='30' fill='%23FF8A3D' transform='rotate%2812 236 132%29'%3E3%3C/text%3E%3Ctext x='18' y='170' font-size='40' fill='%23F2B632' transform='rotate%280 18 170%29'%3E%E2%88%92%3C/text%3E%3Ctext x='104' y='172' font-size='28' fill='%23B98CFF' transform='rotate%28-14 104 172%29'%3E%25%3C/text%3E%3Ctext x='178' y='192' font-size='34' fill='%234FD1A5' transform='rotate%288 178 192%29'%3E5%3C/text%3E%3Ctext x='232' y='226' font-size='30' fill='%235BC0F0' transform='rotate%2814 232 226%29'%3E%2B%3C/text%3E%3Ctext x='44' y='238' font-size='30' fill='%23FF7AA8' transform='rotate%28-6 44 238%29'%3E%C3%97%3C/text%3E%3Ctext x='132' y='248' font-size='30' fill='%235BC0F0' transform='rotate%28-10 132 248%29'%3E2%3C/text%3E%3Ctext x='80' y='52' font-size='24' fill='%23FF7AA8' transform='rotate%2816 80 52%29'%3E9%3C/text%3E%3C/svg%3E");
-  background-size:260px 260px;
-}
-button{font-family:inherit;color:inherit;cursor:pointer}
-button:focus-visible{outline:4px solid var(--orange);outline-offset:3px}
-[hidden]{display:none !important}
-.app{min-height:100%;display:flex;align-items:center;justify-content:center;padding:16px 14px}
-.card{width:100%;max-width:540px;background:var(--card);border-radius:30px;padding:22px 18px 24px;box-shadow:0 10px 0 #5BC0F0,0 28px 60px rgba(0,0,0,.35)}
-.brand{display:flex;flex-direction:column;align-items:center;width:max-content;margin:0 auto;padding:8px 18px 6px;border:3px solid var(--ink);border-radius:18px;line-height:1}
-.brand .wordmark{font-weight:800;font-size:26px;letter-spacing:.06em}
-.brand .tag{font-weight:600;font-size:10px;letter-spacing:.04em;color:var(--muted);margin-top:4px}
-.brand.sm{margin:0;padding:5px 10px 4px;border-width:2px;border-radius:12px}
-.brand.sm .wordmark{font-size:15px}
-
-/* Start */
-h1{font-weight:800;font-size:clamp(32px,9.5vw,44px);line-height:1.05;text-align:center;margin:14px 0 6px}
-.lead{text-align:center;color:var(--muted);font-weight:500;font-size:15.5px;line-height:1.5;margin:0 0 18px}
-.label{font-weight:700;font-size:15px;margin:16px 0 8px}
-.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.grade{
-  --c:#FFC48A;border:0;border-radius:20px;padding:14px 4px 10px;background:var(--c);color:#1B2A55;
-  box-shadow:0 5px 0 rgba(27,42,85,.16);display:flex;flex-direction:column;align-items:center;line-height:1.1
-}
-.grade b{font-size:28px;font-weight:800}
-.grade span{font-size:12px;font-weight:600}
-.grade[aria-pressed="true"]{outline:4px solid var(--ink);outline-offset:3px}
-.grade:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(27,42,85,.16)}
-.topics{font-size:13.5px;color:var(--muted);text-align:center;margin:12px 0 0;min-height:20px}
-.toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:var(--track);border-radius:999px;padding:5px}
-.toggle button{border:0;background:transparent;border-radius:999px;padding:10px;font-weight:700;font-size:15px}
-.toggle button[aria-pressed="true"]{background:var(--card);box-shadow:0 2px 8px rgba(27,42,85,.12)}
-.primary{
-  display:block;width:100%;margin-top:22px;border:0;border-radius:999px;background:var(--orange);color:#1B2A55;
-  font-weight:800;font-size:21px;padding:16px;box-shadow:0 6px 0 var(--orange-deep)
-}
-.primary:active{transform:translateY(4px);box-shadow:0 2px 0 var(--orange-deep)}
-.best{text-align:center;color:var(--muted);font-weight:600;font-size:14px;margin:14px 0 0}
-
-/* Game */
-.hud{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.icon-btn{border:0;background:var(--track);border-radius:14px;width:44px;height:44px;font-size:19px;display:grid;place-items:center}
-.pill{background:var(--track);border-radius:999px;padding:8px 14px;font-weight:700;font-size:15px;white-space:nowrap}
-.pill.score{background:#F2B632;color:#1B2A55}
-.space{position:relative;height:56px;margin:14px 0 4px;border-radius:999px;background:var(--peach);overflow:hidden}
-.space::before{content:"";position:absolute;left:46px;right:46px;top:50%;border-top:3px dashed var(--tile-edge)}
-.space .earth,.space .moon{position:absolute;top:50%;transform:translateY(-50%);font-size:30px;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif}
-.space .earth{left:10px}.space .moon{right:10px}
-.rocket{position:absolute;top:50%;left:46px;font-size:30px;transform:translate(-50%,-50%) rotate(45deg);transition:left .6s cubic-bezier(.3,1.4,.5,1);font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif}
-.streak{min-height:22px;text-align:center;font-weight:700;font-size:14.5px;color:#E5487A}
-.timer{height:10px;border-radius:999px;background:var(--track);overflow:hidden;margin-top:4px}
-.timer span{display:block;height:100%;width:100%;background:var(--orange);transform-origin:left center;border-radius:999px}
-.timer span.low{background:var(--bad)}
-.ask{display:flex;align-items:flex-start;justify-content:center;gap:10px;margin:16px 0 4px}
-.prompt{font-weight:600;font-size:16px;color:var(--muted);text-align:center;margin:0}
-.speak{border:0;background:var(--track);border-radius:50%;width:38px;height:38px;flex:none;font-size:17px;margin-top:-6px}
-.problem{
-  text-align:center;font-weight:800;font-size:clamp(40px,13vw,60px);line-height:1.15;margin:6px 0 14px;
-  font-variant-numeric:tabular-nums;letter-spacing:.01em
-}
-.problem.story{font-size:clamp(19px,5.4vw,23px);font-weight:600;line-height:1.5;padding:0 4px}
-.problem .q{display:inline-block;min-width:1.2em;border-radius:14px;background:var(--peach);color:var(--orange-deep);padding:0 .15em}
-.count{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:330px;margin:4px auto 14px;font-size:36px;line-height:1.1;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif}
-.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.opts.three{grid-template-columns:repeat(3,1fr)}
-.opt{
-  position:relative;border:3px solid var(--tile-edge);background:var(--tile);border-radius:22px;
-  padding:16px 6px;font-weight:800;font-size:clamp(28px,8.5vw,36px);font-variant-numeric:tabular-nums;
-  box-shadow:0 6px 0 var(--tile-edge);transition:transform .1s ease
-}
-.opt:active{transform:translateY(3px)}
-.opt.right{border-color:var(--good);background:var(--good-bg);box-shadow:0 6px 0 var(--good);animation:pop .4s ease}
-.opt.wrong{border-color:var(--bad);background:var(--bad-bg);box-shadow:0 6px 0 var(--bad);animation:shake .4s ease}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--card:#1F2B52;--ink:#F3F5FF;--muted:#B3BDDC;--tile:#28356A;--edge:#3A4880;--track:#2C3A70;--good-bg:rgba(31,154,71,.25);--bad-bg:rgba(229,72,77,.25);color-scheme:dark}}
+:root[data-theme="dark"]{--card:#1F2B52;--ink:#F3F5FF;--muted:#B3BDDC;--tile:#28356A;--edge:#3A4880;--track:#2C3A70;--good-bg:rgba(31,154,71,.25);--bad-bg:rgba(229,72,77,.25);color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%}
+body{margin:0;font-family:Poppins,"Century Gothic",system-ui,sans-serif;color:var(--ink);background:var(--page);overflow-x:hidden}
+.sym{position:fixed;inset:0;z-index:0;pointer-events:none}
+.sym svg{width:100%;height:100%}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--mustard);outline-offset:3px;border-radius:12px}
+.app{position:relative;z-index:1;min-height:100%;display:grid;place-items:center;padding:18px 14px 28px}
+.card{width:100%;max-width:580px;background:var(--card);border-radius:30px;box-shadow:0 12px 0 rgba(91,192,240,.45),0 30px 60px rgba(0,0,0,.3);padding:24px 20px 26px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:inline-block;border:1.5px solid var(--ink);padding:4px 9px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:.06em}
+.back{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;padding:8px 0}
+h1{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:clamp(36px,10vw,52px);line-height:.98;margin:18px 0 6px;letter-spacing:-.02em}
+.lead{color:var(--muted);margin:0 0 16px}
+.label{font-size:13px;font-weight:600;color:var(--muted);margin:16px 0 8px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:5px;background:var(--tile);border-radius:16px}
+.tab{padding:10px 6px;border-radius:12px;font-size:14px;font-weight:600}
+.tab[aria-pressed="true"]{background:var(--card);box-shadow:0 2px 8px rgba(27,42,85,.15)}
+.grades{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.grade{padding:12px 8px;border-radius:16px;background:var(--tile);border:2.5px solid transparent;display:grid;gap:2px;justify-items:center}
+.grade b{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:24px;line-height:1;color:var(--c)}
+.grade small{font-size:12px;color:var(--muted);font-weight:500}
+.grade[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,var(--card))}
+.topics{font-size:13.5px;color:var(--muted);margin:12px 2px 0;line-height:1.5;min-height:40px}
+.toggle{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.toggle button{padding:11px;border-radius:14px;background:var(--tile);font-weight:600;font-size:14px;border:2px solid transparent}
+.toggle button[aria-pressed="true"]{border-color:var(--ink)}
+.primary{width:100%;margin-top:20px;height:56px;border-radius:18px;background:var(--ink);color:var(--card);font-weight:700;font-size:17px;box-shadow:0 6px 0 rgba(0,0,0,.3)}
+.primary:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.ghost{width:100%;margin-top:10px;height:50px;border-radius:16px;background:var(--tile);font-weight:600}
+.best{text-align:center;font-size:13px;color:var(--muted);margin:12px 0 0;min-height:20px}
+.hud{display:flex;align-items:center;gap:8px}
+.pill{padding:6px 12px;border-radius:999px;background:var(--tile);font-size:13.5px;font-weight:600;white-space:nowrap}
+.pill.score{margin-left:auto;background:color-mix(in srgb,var(--mustard) 25%,var(--card))}
+.icon-btn{width:40px;height:40px;border-radius:12px;background:var(--tile);display:grid;place-items:center}
+.icon-btn svg{width:20px;height:20px}
+.space{position:relative;height:74px;margin:14px 0 6px;border-radius:18px;background:#16224A;overflow:hidden}
+.space .stars{position:absolute;inset:0}
+.space .earth{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:46px;height:46px}
+.space .moon{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:42px;height:42px}
+.space .rocket{position:absolute;left:52px;top:50%;width:46px;height:46px;transform:translate(0,-50%) rotate(90deg);transition:left .7s cubic-bezier(.3,.8,.3,1)}
+.timer{height:8px;border-radius:8px;background:var(--track);overflow:hidden;margin:8px 0 4px}
+.timer i{display:block;height:100%;background:var(--mint);transform-origin:left;border-radius:8px}
+.timer i.low{background:var(--coral)}
+.timer[hidden]{display:none}
+.streak{height:22px;text-align:center;font-size:13px;font-weight:700;color:var(--coral)}
+.ask{display:flex;align-items:flex-start;gap:10px;margin-top:4px}
+.prompt{flex:1;font-size:15px;font-weight:600;color:var(--muted);margin:6px 0 0}
+.speak{width:42px;height:42px;border-radius:50%;background:var(--ink);color:var(--card);display:grid;place-items:center;flex:none}
+.speak svg{width:20px;height:20px}
+.speak[hidden]{display:none}
+.problem{margin:12px 0 16px;padding:20px 16px;border-radius:22px;background:var(--tile);text-align:center;font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:clamp(28px,8vw,42px);line-height:1.25;word-break:break-word}
+.problem.text{font-family:Poppins,sans-serif;font-weight:600;font-size:clamp(17px,4.6vw,20px);line-height:1.5;text-align:left}
+.problem .q{display:inline-grid;place-items:center;min-width:1.4em;padding:0 .2em;border-radius:12px;background:var(--mustard);color:#1B2A55}
+.problem sup{font-size:.55em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1;margin:0 .08em;font-size:.8em}
+.frac span:first-child{border-bottom:.08em solid currentColor;padding:0 .1em .06em}
+.frac span:last-child{padding-top:.06em}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{min-height:70px;border-radius:20px;background:var(--card);border:2.5px solid var(--edge);font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:clamp(20px,5.5vw,26px);padding:8px;box-shadow:0 5px 0 var(--edge)}
+.opt:active{transform:translateY(3px);box-shadow:0 2px 0 var(--edge)}
+.opt.right{background:var(--good-bg);border-color:var(--good);color:var(--good);box-shadow:none}
+.opt.wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad);box-shadow:none;animation:shake .35s}
 .opt.dim{opacity:.4}
-.float{position:absolute;top:4px;right:10px;font-size:20px;color:var(--good);animation:rise .9s ease forwards;pointer-events:none}
-.feedback{min-height:56px;text-align:center;font-weight:700;font-size:18px;margin-top:14px;line-height:1.4}
-.feedback.good{color:var(--good)}
-.feedback.bad{color:var(--bad)}
-.feedback small{display:block;font-size:15px;color:var(--muted);font-weight:600}
-@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.07)}100%{transform:scale(1)}}
-@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
-@keyframes rise{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-32px)}}
-
-/* End */
-.end-title{font-weight:800;font-size:clamp(28px,8vw,36px);text-align:center;margin:16px 0 4px;line-height:1.15}
-.end-sub{text-align:center;color:var(--muted);font-weight:500;margin:0}
-.stars{display:flex;justify-content:center;gap:10px;margin:14px 0 6px}
-.star{font-size:56px;color:var(--track);transform:scale(.6);transition:transform .35s cubic-bezier(.3,1.6,.5,1),color .2s}
-.star.on{color:#F2B632;transform:scale(1)}
-.final{font-weight:800;font-size:58px;text-align:center;line-height:1;margin:6px 0 0}
-.final-label{text-align:center;color:var(--muted);font-weight:600;margin:4px 0 0}
-.summary{display:flex;justify-content:center;gap:10px;margin:16px 0 0;flex-wrap:wrap}
-.ghost{display:block;width:100%;margin-top:12px;border:3px solid var(--ink);background:transparent;border-radius:999px;font-weight:700;font-size:18px;padding:12px}
-#fx{position:fixed;inset:0;pointer-events:none;z-index:20}
-@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.feedback{min-height:26px;margin-top:14px;font-weight:700;text-align:center}
+.feedback.good{color:var(--good)} .feedback.bad{color:var(--bad)}
+.explain{margin-top:8px;padding:12px 14px;border-radius:14px;background:var(--tile);font-size:14.5px;line-height:1.5}
+.explain[hidden]{display:none}
+.next{margin-top:12px}
+.end{text-align:center}
+.end-title{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:30px;margin:18px 0 2px}
+.end-sub{color:var(--muted);margin:0}
+.starsrow{display:flex;justify-content:center;gap:6px;margin:14px 0 4px}
+.starsrow svg{width:44px;height:44px}
+.final{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:60px;line-height:1;margin:4px 0 0}
+.final-l{color:var(--muted);margin:2px 0 12px}
+.sumrow{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.review{margin-top:18px;text-align:left;background:var(--tile);border-radius:18px;padding:14px 16px}
+.review h3{margin:0 0 8px;font-size:14px}
+.review ol{margin:0;padding-left:20px;display:grid;gap:8px;font-size:14.5px;line-height:1.45}
+.review b{font-weight:600}
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:5}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
+<div class="sym" aria-hidden="true" id="sym"></div>
 <canvas id="fx"></canvas>
 <main class="app">
-  <div class="card">
+<div class="card">
 
-    <section id="s-start">
-      <div class="brand"><span class="wordmark">MOVA</span><span class="tag">Centro Pedagógico</span></div>
-      <h1>Misión Matemática</h1>
-      <p class="lead">Resuelve cada operación para llevar el cohete hasta la Luna.</p>
-      <div class="label">¿En qué grado estás?</div>
-      <div class="grades" id="grades"></div>
-      <p class="topics" id="topics"></p>
-      <div class="label">Modo de juego</div>
-      <div class="toggle" role="group" aria-label="Modo de juego">
-        <button data-timed="1" aria-pressed="true">⏱ Con tiempo</button>
-        <button data-timed="0" aria-pressed="false">🧘 Sin tiempo</button>
-      </div>
-      <button class="primary" id="play">Comenzar misión</button>
-      <p class="best" id="best"></p>
-    </section>
+  <section id="s-start">
+    <div class="top"><a class="back" href="./#/games">MOVA Learning Studio</a><span class="brand">MOVA · Centro Pedagógico</span></div>
+    <h1>Misión Matemática</h1>
+    <p class="lead">Resuelve cada ejercicio para llevar el cohete hasta la Luna.</p>
+    <div class="tabs" id="tabs" role="group" aria-label="Nivel escolar"></div>
+    <div class="grades" id="grades" role="group" aria-label="Grado"></div>
+    <p class="topics" id="topics"></p>
+    <div class="label">Modo de juego</div>
+    <div class="toggle" role="group" aria-label="Modo de juego">
+      <button data-timed="1" aria-pressed="false">Con tiempo</button>
+      <button data-timed="0" aria-pressed="true">Sin tiempo</button>
+    </div>
+    <button class="primary" id="play">Comenzar misión</button>
+    <p class="best" id="best"></p>
+  </section>
 
-    <section id="s-game" hidden>
-      <div class="hud">
-        <button class="icon-btn" id="home" aria-label="Volver al inicio">🏠</button>
-        <div class="brand sm"><span class="wordmark">MOVA</span></div>
-        <span class="pill" id="round">1 / 12</span>
-        <span class="pill score" id="score">⭐ 0</span>
-      </div>
-      <div class="space" aria-hidden="true">
-        <span class="earth">🌎</span><span class="rocket" id="rocket">🚀</span><span class="moon">🌕</span>
-      </div>
-      <div class="streak" id="streak" aria-live="polite"></div>
-      <div class="timer" id="timer"><span id="tbar"></span></div>
-      <div class="ask">
-        <p class="prompt" id="prompt"></p>
-        <button class="speak" id="speak" aria-label="Escuchar la pregunta">🔊</button>
-      </div>
-      <div class="count" id="count" hidden></div>
-      <div class="problem" id="problem"></div>
-      <div class="opts" id="opts"></div>
-      <div class="feedback" id="feedback" aria-live="polite"></div>
-    </section>
+  <section id="s-game" hidden>
+    <div class="hud">
+      <button class="icon-btn" id="home" aria-label="Volver al inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></button>
+      <span class="pill" id="gname"></span>
+      <span class="pill" id="round"></span>
+      <span class="pill score" id="score">0 pts</span>
+    </div>
+    <div class="space" aria-hidden="true">
+      <svg class="stars" viewBox="0 0 300 74" preserveAspectRatio="none"><g fill="#fff" opacity=".7"><circle cx="70" cy="14" r="1.2"/><circle cx="120" cy="54" r="1"/><circle cx="160" cy="20" r="1.4"/><circle cx="200" cy="58" r="1"/><circle cx="236" cy="16" r="1.2"/><circle cx="96" cy="36" r=".9"/><circle cx="180" cy="40" r=".9"/></g></svg>
+      <svg class="earth" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#5BC0F0"/><path d="M10 16c6-2 8 3 13 2s6-6 11-4c3 1 4 5 1 7-4 3-9 0-11 4s3 7 0 10c-3 2-8 1-10-3-2-5 3-7 0-10-2-2-7-1-4-6z" fill="#4FD1A5"/></svg>
+      <svg class="rocket" id="rocket" viewBox="0 0 48 48"><path d="M24 3c7 6 9 17 6 28h-12c-3-11-1-22 6-28z" fill="#FFFFFF"/><circle cx="24" cy="17" r="4.5" fill="#5BC0F0" stroke="#1B2A55" stroke-width="2"/><path d="M18 24l-7 11 7-2zM30 24l7 11-7-2z" fill="#FF7A6B"/><path d="M20 31l4 12 4-12z" fill="#F2B632"/></svg>
+      <svg class="moon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="#FFF3C9"/><circle cx="17" cy="18" r="4" fill="#F2E2A6"/><circle cx="30" cy="29" r="5" fill="#F2E2A6"/><circle cx="29" cy="14" r="2.4" fill="#F2E2A6"/></svg>
+    </div>
+    <div class="timer" id="timer" hidden><i id="tbar"></i></div>
+    <div class="streak" id="streak" aria-live="polite"></div>
+    <div class="ask"><p class="prompt" id="prompt"></p><button class="speak" id="speak" aria-label="Escuchar"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+    <div class="problem" id="problem"></div>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="feedback" aria-live="polite"></div>
+    <div class="explain" id="explain" hidden></div>
+    <button class="primary next" id="next" hidden>Siguiente</button>
+  </section>
 
-    <section id="s-end" hidden>
-      <div class="brand"><span class="wordmark">MOVA</span><span class="tag">Centro Pedagógico</span></div>
-      <p class="end-title" id="end-title"></p>
-      <p class="end-sub" id="end-sub"></p>
-      <div class="stars" aria-hidden="true"><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-      <p class="final" id="final">0</p>
-      <p class="final-label">puntos</p>
-      <div class="summary">
-        <span class="pill" id="correct-count"></span>
-        <span class="pill" id="best-end"></span>
-      </div>
-      <button class="primary" id="again">Jugar otra vez</button>
-      <button class="ghost" id="change">Cambiar de grado</button>
-    </section>
+  <section id="s-end" class="end" hidden>
+    <div class="top"><a class="back" href="./#/games">MOVA Learning Studio</a><span class="brand">MOVA · Centro Pedagógico</span></div>
+    <p class="end-title" id="end-title"></p>
+    <p class="end-sub" id="end-sub"></p>
+    <div class="starsrow" id="starsrow"></div>
+    <p class="final" id="final">0</p>
+    <p class="final-l">puntos</p>
+    <div class="sumrow"><span class="pill" id="sum-c"></span><span class="pill" id="sum-b"></span></div>
+    <div class="review" id="review" hidden><h3>Para repasar</h3><ol id="review-list"></ol></div>
+    <button class="primary" id="again">Jugar otra vez</button>
+    <button class="ghost" id="change">Cambiar de grado</button>
+  </section>
 
-  </div>
+</div>
 </main>
 <script>
 (function(){
-const $ = s => document.querySelector(s);
-const ROUNDS = 12;
-const rnd = (a,b) => a + Math.floor(Math.random()*(b-a+1));
-const pick = arr => arr[Math.floor(Math.random()*arr.length)];
-const shuffle = a => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; };
-const NAMES = ['Ana','Luis','Sofi','Mateo','Valeria','Pablo','Regina','Diego','Camila','Emilio'];
-const fmtN = n => n.toLocaleString('es-MX');
+"use strict";
+const $ = (s) => document.querySelector(s);
+const ROUNDS = 10;
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = (a) => a[Math.floor(Math.random() * a.length)];
+const shuffle = (a) => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+const NAMES = ["Ana", "Luis", "Sofía", "Mateo", "Valeria", "Pablo", "Regina", "Diego", "Camila", "Emilio"];
+const fmt = (n) => { const r = Math.round(n * 1000) / 1000; return r.toLocaleString("es-MX", { maximumFractionDigits: 3 }); };
+const gcd = (a, b) => (b ? gcd(b, a % b) : Math.abs(a));
+const lcm = (a, b) => (a * b) / gcd(a, b);
+const fr = (n, d) => `<span class="frac"><span>${n}</span><span>${d}</span></span>`;
+const simp = (n, d) => { const g = gcd(n, d); return [n / g, d / g]; };
+const frS = (n, d) => { const [a, b] = simp(n, d); return b === 1 ? String(a) : `${a}/${b}`; };
 
-/* ---------- Question builders ---------- */
-function opts4(ans, spread){
-  const set = new Set([ans]);
-  const cands = shuffle([ans+1, ans-1, ans+2, ans-2, ans+10, ans-10, ans+spread, ans-spread, ans+5, ans-5]);
-  for(const c of cands){ if(set.size >= 4) break; if(c >= 0 && c !== ans) set.add(c); }
-  while(set.size < 4) set.add(ans + set.size + 3);
-  return shuffle([...set]).map(String);
+/* Opciones numéricas cercanas a la respuesta */
+function numOpts(ans, spread, allowNeg) {
+  const s = new Set([fmt(ans)]);
+  const step = Number.isInteger(ans) ? 1 : (String(ans).split(".")[1] || "").length === 1 ? 0.1 : 0.01;
+  const cands = shuffle([1, -1, 2, -2, 10, -10, spread, -spread, 5, -5].map((k) => ans + k * (Math.abs(k) >= 5 ? 1 : step * (Number.isInteger(ans) ? 1 : 10))));
+  for (const c of cands) { if (s.size >= 4) break; if ((allowNeg || c >= 0) && Math.abs(c - ans) > 1e-9) s.add(fmt(c)); }
+  let k = 3; while (s.size < 4) s.add(fmt(ans + k++));
+  return shuffle([...s]);
 }
-function arith(a, op, b, missing){
-  const res = op==='+' ? a+b : op==='−' ? a-b : op==='×' ? a*b : a/b;
-  if(missing === 'b') return { html:`${fmtN(a)} ${op} <span class="q">?</span> = ${fmtN(res)}`, say:`${a} ${sayOp(op)} qué número da ${res}`, ans:b, explain:`${fmtN(a)} ${op} ${fmtN(b)} = ${fmtN(res)}`, prompt:'¿Qué número falta?' };
-  return { html:`${fmtN(a)} ${op} ${fmtN(b)} = <span class="q">?</span>`, say:`¿Cuánto es ${a} ${sayOp(op)} ${b}?`, ans:res, explain:`${fmtN(a)} ${op} ${fmtN(b)} = ${fmtN(res)}`, prompt:'Resuelve' };
-}
-function sayOp(op){ return {'+':'más','−':'menos','×':'por','÷':'entre'}[op]; }
-function compare(max){
-  let a = rnd(0,max), b = Math.random()<.15 ? a : rnd(0,max);
-  const ans = a > b ? '>' : a < b ? '<' : '=';
-  return { html:`${fmtN(a)} <span class="q">?</span> ${fmtN(b)}`, say:`¿Qué signo va entre ${a} y ${b}?`, ans, options:['<','=','>'], explain:`${fmtN(a)} ${ans} ${fmtN(b)}`, prompt:'¿Qué signo va?' };
-}
-function counting(){
-  const items = ['🍎','⭐','🐞','🎈','🍓','🐟','🌸','⚽'];
-  const it = pick(items), n = rnd(4,15);
-  return { count: it.repeat ? Array(n).fill(it) : [], html:'', say:`¿Cuántos hay?`, ans:n, explain:`Hay ${n}`, prompt:`¿Cuántos ${it} hay?`, countItem:it, n };
-}
-function story(text, sayText, ans, explain){ return { story:true, html:text, say:sayText||text, ans, explain, prompt:'Lee y resuelve' }; }
+const Q = (o) => Object.assign({ prompt: "Resuelve", say: "", text: false }, o);
+const num = (o) => Q(Object.assign(o, { ans: fmt(o.ans), opts: numOpts(o.ans, o.spread || 10, o.neg) }));
+const choice = (o) => { const a = String(o.ans), w = [...new Set(o.wrong.map(String))].filter((x) => x !== a).slice(0, 3); return Q(Object.assign(o, { opts: shuffle([a, ...w]), ans: a })); };
 
-const GRADES = {
-  1:{ label:'1°', sub:'grado', color:'#FF8FB1', secs:30, topics:'Contar, sumas y restas hasta 20, comparar números',
-      gen:[
-        () => { const a=rnd(1,10), b=rnd(1,10); return arith(a,'+',b); },
-        () => { const a=rnd(5,20), b=rnd(1,a); return arith(a,'−',b); },
-        () => counting(),
-        () => compare(50),
-        () => { const a=rnd(1,9), b=rnd(1,9); return arith(a,'+',b,'b'); },
-        () => { const n=pick(NAMES), a=rnd(3,9), b=rnd(2,8); return story(`${n} tiene ${a} 🎈 y le regalan ${b} más. ¿Cuántos globos tiene ahora?`, null, a+b, `${a} + ${b} = ${a+b}`); }
-      ]},
-  2:{ label:'2°', sub:'grado', color:'#5BC0F0', secs:30, topics:'Sumas y restas hasta 100, dobles y mitades, problemas',
-      gen:[
-        () => { const a=rnd(12,68), b=rnd(11,31); return arith(a,'+',b); },
-        () => { const a=rnd(30,99), b=rnd(11,a-5); return arith(a,'−',b); },
-        () => { const n=rnd(6,25); return { html:`El doble de ${n}`, say:`¿Cuál es el doble de ${n}?`, ans:n*2, explain:`${n} + ${n} = ${n*2}`, prompt:'¿Cuánto es?' }; },
-        () => { const n=rnd(3,25)*2; return { html:`La mitad de ${n}`, say:`¿Cuál es la mitad de ${n}?`, ans:n/2, explain:`${n/2} + ${n/2} = ${n}`, prompt:'¿Cuánto es?' }; },
-        () => compare(999),
-        () => { const a=rnd(10,40), b=rnd(10,40); return arith(a,'+',b,'b'); },
-        () => { const n=pick(NAMES), a=rnd(25,60), b=rnd(10,24); return story(`${n} tenía ${a} estampas y regaló ${b}. ¿Cuántas estampas le quedan?`, null, a-b, `${a} − ${b} = ${a-b}`); },
-        () => { const n=pick(NAMES), a=rnd(15,45), b=rnd(12,40); return story(`En la biblioteca hay ${a} cuentos y ${b} revistas. ¿Cuántos libros hay en total?`, null, a+b, `${a} + ${b} = ${a+b}`); }
-      ]},
-  3:{ label:'3°', sub:'grado', color:'#4FD1A5', secs:25, topics:'Tablas del 2 al 6, sumas y restas hasta 1,000, divisiones sencillas',
-      gen:[
-        () => { const a=rnd(2,6), b=rnd(1,10); return arith(a,'×',b); },
-        () => { const a=rnd(2,6), b=rnd(2,10); return arith(a,'×',b,'b'); },
-        () => { const a=rnd(120,560), b=rnd(110,420); return arith(a,'+',b); },
-        () => { const a=rnd(300,999), b=rnd(100,a-50); return arith(a,'−',b); },
-        () => { const d=rnd(2,5), q=rnd(2,10); return arith(d*q,'÷',d); },
-        () => { const c=rnd(3,8), p=rnd(4,9); return story(`Hay ${c} cajas con ${p} lápices cada una. ¿Cuántos lápices hay en total?`, null, c*p, `${c} × ${p} = ${c*p}`); },
-        () => { const n=pick(NAMES), a=rnd(150,450), b=rnd(100,350); return story(`${n} recorrió ${a} metros en bici por la mañana y ${b} por la tarde. ¿Cuántos metros recorrió?`, null, a+b, `${a} + ${b} = ${a+b}`); }
-      ]},
-  4:{ label:'4°', sub:'grado', color:'#F2B632', secs:25, topics:'Tablas hasta el 10, multiplicaciones, divisiones y fracciones',
-      gen:[
-        () => { const a=rnd(6,10), b=rnd(3,10); return arith(a,'×',b); },
-        () => { const a=rnd(12,48), b=rnd(2,6); return arith(a,'×',b); },
-        () => { const d=rnd(3,9), q=rnd(3,10); return arith(d*q,'÷',d); },
-        () => { const a=rnd(1200,5600), b=rnd(1100,3900); return arith(a,'+',b); },
-        () => { const den=pick([2,3,4,5]), k=rnd(2,9), n=den*k; return { html:`<sup>1</sup>⁄<sub>${den}</sub> de ${n}`, say:`¿Cuánto es un ${({2:'medio',3:'tercio',4:'cuarto',5:'quinto'})[den]} de ${n}?`, ans:k, explain:`${n} ÷ ${den} = ${k}`, prompt:'¿Cuánto es?' }; },
-        () => { const d=rnd(3,8), q=rnd(3,9); return story(`Se reparten ${d*q} dulces entre ${d} niños en partes iguales. ¿Cuántos dulces le tocan a cada uno?`, null, q, `${d*q} ÷ ${d} = ${q}`); },
-        () => { const p=rnd(12,35), c=rnd(3,6); return story(`Un boleto para el museo cuesta $${p}. ¿Cuánto pagan ${c} amigos en total?`, `Un boleto para el museo cuesta ${p} pesos. ¿Cuánto pagan ${c} amigos en total?`, p*c, `${p} × ${c} = ${p*c}`); }
-      ]}
+/* ---------- Generadores por grado ---------- */
+const GEN = {
+  p1: [
+    () => { const a = rnd(1, 10), b = rnd(1, 9); return num({ html: `${a} + ${b} = <span class="q">?</span>`, ans: a + b, say: `¿Cuánto es ${a} más ${b}?`, why: `Juntamos ${a} y ${b}: contamos ${b} lugares después del ${a} y llegamos a ${a + b}.`, spread: 3 }); },
+    () => { const a = rnd(6, 20), b = rnd(1, a - 1); return num({ html: `${a} − ${b} = <span class="q">?</span>`, ans: a - b, say: `¿Cuánto es ${a} menos ${b}?`, why: `Si a ${a} le quitamos ${b}, quedan ${a - b}.`, spread: 3 }); },
+    () => { const c = rnd(8, 20), a = rnd(1, c - 1); return num({ prompt: "¿Qué número falta?", html: `${a} + <span class="q">?</span> = ${c}`, ans: c - a, say: `${a} más qué número da ${c}`, why: `Contamos desde ${a} hasta ${c}: faltan ${c - a}.`, spread: 3 }); },
+    () => { const d = rnd(1, 9) * 10; return num({ prompt: "Decenas", html: `¿Cuántas decenas hay en ${d}?`, text: true, ans: d / 10, say: `¿Cuántas decenas hay en ${d}?`, why: `Cada decena vale 10. En ${d} caben ${d / 10} decenas.`, spread: 2 }); },
+    () => { const n = pick(NAMES), a = rnd(3, 9), b = rnd(2, 9); return num({ prompt: "Problema", text: true, html: `${n} tiene ${a} canicas y su abuela le regala ${b}. ¿Cuántas canicas tiene ahora?`, ans: a + b, say: `${n} tiene ${a} canicas y su abuela le regala ${b}. ¿Cuántas tiene ahora?`, why: `Regalar es agregar: ${a} + ${b} = ${a + b}.`, spread: 2 }); }
+  ],
+  p2: [
+    () => { const a = rnd(15, 69), b = rnd(12, 29); return num({ html: `${a} + ${b} = <span class="q">?</span>`, ans: a + b, say: `¿Cuánto es ${a} más ${b}?`, why: `Sumamos unidades (${a % 10} + ${b % 10}) y luego decenas. Si las unidades pasan de 9, llevamos 1 a las decenas. Resultado: ${a + b}.` }); },
+    () => { const a = rnd(40, 99), b = rnd(11, a - 10); return num({ html: `${a} − ${b} = <span class="q">?</span>`, ans: a - b, say: `¿Cuánto es ${a} menos ${b}?`, why: `Restamos unidades y luego decenas. Si no alcanza, pedimos prestada una decena. Resultado: ${a - b}.` }); },
+    () => { const t = pick([2, 5, 10]), b = rnd(1, 10); return num({ html: `${t} × ${b} = <span class="q">?</span>`, ans: t * b, say: `¿Cuánto es ${t} por ${b}?`, why: `${t} × ${b} es sumar ${t} ${b} veces: ${t * b}.`, spread: t }); },
+    () => { const n = rnd(3, 25) * 2; return Math.random() < .5
+      ? num({ prompt: "La mitad", html: `La mitad de ${n} es <span class="q">?</span>`, ans: n / 2, say: `¿Cuál es la mitad de ${n}?`, why: `La mitad es repartir en 2 partes iguales: ${n} ÷ 2 = ${n / 2}.`, spread: 2 })
+      : num({ prompt: "El doble", html: `El doble de ${n / 2} es <span class="q">?</span>`, ans: n, say: `¿Cuál es el doble de ${n / 2}?`, why: `El doble es sumar el número dos veces: ${n / 2} + ${n / 2} = ${n}.`, spread: 2 }); },
+    () => { const n = pick(NAMES), a = rnd(30, 60), b = rnd(10, 25); return num({ prompt: "Problema", text: true, html: `${n} tenía ${a} estampas y regaló ${b}. ¿Cuántas le quedan?`, ans: a - b, say: `${n} tenía ${a} estampas y regaló ${b}. ¿Cuántas le quedan?`, why: `Regalar es quitar: ${a} − ${b} = ${a - b}.`, spread: 5 }); }
+  ],
+  p3: [
+    () => { const a = rnd(2, 10), b = rnd(2, 10); return num({ html: `${a} × ${b} = <span class="q">?</span>`, ans: a * b, say: `¿Cuánto es ${a} por ${b}?`, why: `Tabla del ${a}: ${a} × ${b} = ${a * b}.`, spread: a }); },
+    () => { const b = rnd(2, 9), c = rnd(2, 10); return num({ html: `${b * c} ÷ ${b} = <span class="q">?</span>`, ans: c, say: `¿Cuánto es ${b * c} entre ${b}?`, why: `Buscamos qué número por ${b} da ${b * c}: ${b} × ${c} = ${b * c}, entonces la respuesta es ${c}.`, spread: 2 }); },
+    () => { const a = rnd(120, 599), b = rnd(105, 399); return num({ html: `${a} + ${b} = <span class="q">?</span>`, ans: a + b, say: `¿Cuánto es ${a} más ${b}?`, why: `Sumamos unidades, decenas y centenas, llevando cuando pasa de 9. Resultado: ${a + b}.`, spread: 100 }); },
+    () => { const d = pick([2, 4]), n = d * rnd(2, 10); return num({ prompt: "Fracciones", html: `${fr(1, d)} de ${n} = <span class="q">?</span>`, ans: n / d, say: `¿Cuánto es un ${d === 2 ? "medio" : "cuarto"} de ${n}?`, why: `Dividimos ${n} en ${d} partes iguales: ${n} ÷ ${d} = ${n / d}.`, spread: 2 }); },
+    () => { const n = pick(NAMES), a = rnd(3, 9), b = rnd(4, 9); return num({ prompt: "Problema", text: true, html: `${n} compra ${a} cajas con ${b} galletas cada una. ¿Cuántas galletas son en total?`, ans: a * b, say: `${n} compra ${a} cajas con ${b} galletas cada una. ¿Cuántas galletas son?`, why: `Grupos iguales se multiplican: ${a} × ${b} = ${a * b}.`, spread: b }); }
+  ],
+  p4: [
+    () => { const a = rnd(12, 98), b = rnd(3, 9); return num({ html: `${a} × ${b} = <span class="q">?</span>`, ans: a * b, say: `¿Cuánto es ${a} por ${b}?`, why: `${a} × ${b} = (${Math.floor(a / 10) * 10} × ${b}) + (${a % 10} × ${b}) = ${Math.floor(a / 10) * 10 * b} + ${(a % 10) * b} = ${a * b}.`, spread: b }); },
+    () => { const b = rnd(3, 9), q = rnd(4, 12), r = rnd(1, b - 1), a = b * q + r; return num({ prompt: "Residuo", html: `¿Cuál es el residuo de ${a} ÷ ${b}?`, text: true, ans: r, say: `¿Cuál es el residuo de ${a} entre ${b}?`, why: `${b} × ${q} = ${b * q}. De ${a} sobran ${a} − ${b * q} = ${r}.`, spread: 2 }); },
+    () => { const w = rnd(3, 15), h = rnd(2, 12); return num({ prompt: "Perímetro", text: true, html: `Un rectángulo mide ${w} cm de largo y ${h} cm de ancho. ¿Cuál es su perímetro en cm?`, ans: 2 * (w + h), why: `El perímetro es la suma de todos los lados: ${w} + ${h} + ${w} + ${h} = ${2 * (w + h)} cm.`, spread: 4 }); },
+    () => { const a = rnd(11, 89) / 10, b = rnd(11, 59) / 10; return num({ prompt: "Decimales", html: `${fmt(a)} + ${fmt(b)} = <span class="q">?</span>`, ans: Math.round((a + b) * 10) / 10, why: `Alineamos el punto decimal y sumamos: ${fmt(a)} + ${fmt(b)} = ${fmt(Math.round((a + b) * 10) / 10)}.`, spread: 1 }); },
+    () => { const d = pick([2, 3, 4, 5]), k = pick([2, 3, 4]), n = rnd(1, d - 1); return num({ prompt: "Fracciones equivalentes", html: `${fr(n, d)} = ${fr('<span class="q">?</span>', d * k)}`, ans: n * k, why: `Si el denominador se multiplicó por ${k} (${d} → ${d * k}), el numerador también: ${n} × ${k} = ${n * k}.`, spread: 2 }); }
+  ],
+  p5: [
+    () => { const d = pick([5, 6, 7, 8, 9, 10, 12]), a = rnd(1, d - 2), b = rnd(1, d - a - 1); return choice({ prompt: "Suma de fracciones", html: `${fr(a, d)} + ${fr(b, d)} = <span class="q">?</span>`, ans: frS(a + b, d), wrong: [`${a + b}/${d + d}`, frS(a + b + 1, d), `${a * b}/${d}`].filter((x) => x !== frS(a + b, d)), why: `Con el mismo denominador, sumamos los numeradores: ${a} + ${b} = ${a + b}. Resultado: ${a + b}/${d}${frS(a + b, d) !== `${a + b}/${d}` ? `, que simplificado es ${frS(a + b, d)}` : ""}.` }); },
+    () => { const a = rnd(105, 899) / 100, b = rnd(105, 499) / 100, s = Math.random() < .5; const r = Math.round((s ? a + b : Math.max(a, b) - Math.min(a, b)) * 100) / 100; return num({ prompt: "Decimales", html: s ? `${fmt(a)} + ${fmt(b)} = <span class="q">?</span>` : `${fmt(Math.max(a, b))} − ${fmt(Math.min(a, b))} = <span class="q">?</span>`, ans: r, why: `Alineamos el punto decimal y operamos columna por columna. Resultado: ${fmt(r)}.`, spread: 1 }); },
+    () => { const p = pick([10, 25, 50, 20]), n = pick([40, 60, 80, 120, 200, 240, 300, 400]); return num({ prompt: "Porcentajes", html: `${p}% de ${n} = <span class="q">?</span>`, ans: (p * n) / 100, why: `${p}% significa ${p} de cada 100: ${n} × ${p} ÷ 100 = ${(p * n) / 100}.`, spread: 10 }); },
+    () => { const b = rnd(4, 14), h = rnd(2, 12) * (Math.random() < .5 ? 1 : 2), tri = Math.random() < .5; return num({ prompt: "Área", text: true, html: tri ? `Un triángulo tiene base ${b} cm y altura ${h} cm. ¿Cuál es su área en cm²?` : `Un rectángulo mide ${b} cm por ${h} cm. ¿Cuál es su área en cm²?`, ans: tri ? (b * h) / 2 : b * h, why: tri ? `Área del triángulo = base × altura ÷ 2 = ${b} × ${h} ÷ 2 = ${fmt((b * h) / 2)} cm².` : `Área del rectángulo = base × altura = ${b} × ${h} = ${b * h} cm².`, spread: 6 }); },
+    () => { const m = pick([6, 7, 8, 9, 12]), k = rnd(3, 9); return choice({ prompt: "Múltiplos", html: `¿Cuál es múltiplo de ${m}?`, text: true, ans: m * k, wrong: [m * k + 1, m * k - 2, m * (k + 1) + 3], why: `Un múltiplo de ${m} se obtiene al multiplicar ${m} por un número entero: ${m} × ${k} = ${m * k}.` }); }
+  ],
+  p6: [
+    () => { const a = rnd(12, 95) / 10, b = pick([2, 3, 4, 5, 0.5]); return num({ prompt: "Decimales", html: `${fmt(a)} × ${fmt(b)} = <span class="q">?</span>`, ans: Math.round(a * b * 100) / 100, why: `Multiplicamos como enteros y luego contamos los decimales: ${fmt(a)} × ${fmt(b)} = ${fmt(Math.round(a * b * 100) / 100)}.`, spread: 1 }); },
+    () => { const d = pick([3, 4, 5, 8]), n = rnd(1, d - 1), t = d * rnd(3, 12); return num({ prompt: "Fracción de una cantidad", html: `${fr(n, d)} de ${t} = <span class="q">?</span>`, ans: (t / d) * n, why: `Dividimos entre el denominador y multiplicamos por el numerador: ${t} ÷ ${d} = ${t / d}; ${t / d} × ${n} = ${(t / d) * n}.`, spread: t / d }); },
+    () => { const p = pick([5, 15, 30, 40, 75]), n = pick([80, 120, 200, 360, 400, 600]); return num({ prompt: "Porcentajes", html: `${p}% de ${n} = <span class="q">?</span>`, ans: (p * n) / 100, why: `${n} × ${p} ÷ 100 = ${fmt((p * n) / 100)}.`, spread: 10 }); },
+    () => { const a = rnd(2, 9), b = rnd(2, 9), c = rnd(2, 9); return num({ prompt: "Volumen", text: true, html: `Una caja mide ${a} cm × ${b} cm × ${c} cm. ¿Cuál es su volumen en cm³?`, ans: a * b * c, why: `Volumen = largo × ancho × alto = ${a} × ${b} × ${c} = ${a * b * c} cm³.`, spread: 6 }); },
+    () => { const pairs = [[4, 6], [6, 8], [6, 9], [8, 12], [10, 15], [12, 18], [9, 12], [4, 10]], [a, b] = pick(pairs); return Math.random() < .5
+      ? num({ prompt: "Mínimo común múltiplo", html: `m.c.m. (${a}, ${b}) = <span class="q">?</span>`, ans: lcm(a, b), why: `El m.c.m. es el número más pequeño que es múltiplo de los dos. Múltiplos de ${a} y de ${b} coinciden primero en ${lcm(a, b)}.`, spread: 6 })
+      : num({ prompt: "Máximo común divisor", html: `M.C.D. (${a}, ${b}) = <span class="q">?</span>`, ans: gcd(a, b), why: `El M.C.D. es el número más grande que divide exactamente a ${a} y a ${b}: ${gcd(a, b)}.`, spread: 2 }); }
+  ],
+  s1: [
+    () => { const a = rnd(-15, 15), b = rnd(-15, 15); return num({ prompt: "Números con signo", html: `(${a}) + (${b}) = <span class="q">?</span>`, ans: a + b, neg: true, why: `Signos iguales se suman y se conserva el signo; signos diferentes se restan y queda el signo del de mayor valor absoluto. Resultado: ${a + b}.`, spread: 4 }); },
+    () => { const x = rnd(-9, 15), a = rnd(2, 20); return num({ prompt: "Ecuaciones", html: `x + ${a} = ${x + a}<br>x = <span class="q">?</span>`, ans: x, neg: true, why: `Pasamos el ${a} restando al otro lado: x = ${x + a} − ${a} = ${x}.`, spread: 3 }); },
+    () => { const x = rnd(2, 12), a = rnd(2, 9); return num({ prompt: "Ecuaciones", html: `${a}x = ${a * x}<br>x = <span class="q">?</span>`, ans: x, why: `Pasamos el ${a} dividiendo: x = ${a * x} ÷ ${a} = ${x}.`, spread: 2 }); },
+    () => { const b = rnd(2, 5), e = rnd(2, 4); return num({ prompt: "Potencias", html: `${b}<sup>${e}</sup> = <span class="q">?</span>`, ans: b ** e, why: `${b}<sup>${e}</sup> es multiplicar ${b} por sí mismo ${e} veces: ${Array(e).fill(b).join(" × ")} = ${b ** e}.`, spread: b }); },
+    () => { const r = rnd(4, 15); return num({ prompt: "Raíz cuadrada", html: `√${r * r} = <span class="q">?</span>`, ans: r, why: `Buscamos el número que multiplicado por sí mismo da ${r * r}: ${r} × ${r} = ${r * r}.`, spread: 2 }); },
+    () => { const a = rnd(2, 6), p = rnd(10, 30), b = a * rnd(2, 4); return num({ prompt: "Proporciones", text: true, html: `Si ${a} cuadernos cuestan $${a * p}, ¿cuánto cuestan ${b} cuadernos?`, ans: b * p, why: `Cada cuaderno cuesta $${a * p} ÷ ${a} = $${p}. Entonces ${b} cuadernos: ${b} × $${p} = $${b * p}.`, spread: p }); }
+  ],
+  s2: [
+    () => { const x = rnd(-6, 12), a = rnd(2, 7), b = rnd(-15, 15); return num({ prompt: "Ecuaciones de dos pasos", html: `${a}x ${b < 0 ? "−" : "+"} ${Math.abs(b)} = ${a * x + b}<br>x = <span class="q">?</span>`, ans: x, neg: true, why: `Primero pasamos el ${Math.abs(b)} ${b < 0 ? "sumando" : "restando"}: ${a}x = ${a * x}. Luego dividimos entre ${a}: x = ${x}.`, spread: 3 }); },
+    () => { const a = rnd(2, 12), b = rnd(2, 9), c = rnd(2, 9); return num({ prompt: "Jerarquía de operaciones", html: `${a} + ${b} × ${c} = <span class="q">?</span>`, ans: a + b * c, why: `Primero la multiplicación: ${b} × ${c} = ${b * c}. Después la suma: ${a} + ${b * c} = ${a + b * c}.`, spread: 8 }); },
+    () => { const r = rnd(2, 10); return num({ prompt: "Área del círculo (π = 3.14)", html: `r = ${r} cm<br>A = <span class="q">?</span> cm²`, ans: Math.round(3.14 * r * r * 100) / 100, why: `A = π × r² = 3.14 × ${r}² = 3.14 × ${r * r} = ${fmt(3.14 * r * r)} cm².`, spread: 5 }); },
+    () => { const opts = [["sacar un número par en un dado", "1/2", ["1/6", "1/3", "2/3"]], ["sacar un 6 en un dado", "1/6", ["1/2", "6/6", "1/3"]], ["sacar águila al lanzar una moneda", "1/2", ["1/4", "1", "2/3"]], ["sacar un número mayor que 4 en un dado", "1/3", ["1/2", "2/3", "1/6"]]], [txt, a, w] = pick(opts); return choice({ prompt: "Probabilidad", text: true, html: `¿Cuál es la probabilidad de ${txt}?`, ans: a, wrong: w, why: `Probabilidad = casos favorables ÷ casos posibles. En este caso es ${a}.` }); },
+    () => { const p = pick([10, 20, 25, 50]), n = pick([200, 400, 500, 800, 1200]); return num({ prompt: "Aumento porcentual", text: true, html: `Un producto cuesta $${n} y sube ${p}%. ¿Cuál es el nuevo precio?`, ans: n + (n * p) / 100, why: `El aumento es ${p}% de ${n} = $${(n * p) / 100}. Nuevo precio: $${n} + $${(n * p) / 100} = $${n + (n * p) / 100}.`, spread: 20 }); }
+  ],
+  s3: [
+    () => { const x = rnd(2, 12); return choice({ prompt: "Ecuaciones cuadráticas", html: `x² = ${x * x}<br>x = <span class="q">?</span>`, ans: `±${x}`, wrong: [`${x}`, `±${x * 2}`, `±${x + 1}`], why: `Sacamos raíz cuadrada en ambos lados: x = ±√${x * x} = ±${x}. Hay dos soluciones porque (−${x})² también da ${x * x}.` }); },
+    () => { const t = pick([[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 15, 17], [9, 12, 15]]); return num({ prompt: "Teorema de Pitágoras", text: true, html: `Los catetos de un triángulo rectángulo miden ${t[0]} y ${t[1]}. ¿Cuánto mide la hipotenusa?`, ans: t[2], why: `c² = a² + b² = ${t[0]}² + ${t[1]}² = ${t[0] ** 2} + ${t[1] ** 2} = ${t[2] ** 2}. Entonces c = √${t[2] ** 2} = ${t[2]}.`, spread: 2 }); },
+    () => { const x = rnd(2, 12), y = rnd(1, x - 1); return num({ prompt: "Sistema de ecuaciones", html: `x + y = ${x + y}<br>x − y = ${x - y}<br>x = <span class="q">?</span>`, ans: x, why: `Sumamos las dos ecuaciones: 2x = ${2 * x}, entonces x = ${x}.`, spread: 2 }); },
+    () => { const a = rnd(2, 9), b = rnd(1, 8); return num({ prompt: "Productos notables", html: `(${a} + ${b})² = <span class="q">?</span>`, ans: (a + b) ** 2, why: `(a + b)² = a² + 2ab + b² = ${a * a} + ${2 * a * b} + ${b * b} = ${(a + b) ** 2}.`, spread: 10 }); },
+    () => { const x1 = rnd(-3, 3), y1 = rnd(-4, 4), m = pick([-3, -2, -1, 1, 2, 3, 4]), dx = rnd(1, 4); const x2 = x1 + dx, y2 = y1 + m * dx; return num({ prompt: "Pendiente", html: `A(${x1}, ${y1}) &nbsp; B(${x2}, ${y2})<br>m = <span class="q">?</span>`, ans: m, neg: true, why: `m = (y₂ − y₁) ÷ (x₂ − x₁) = (${y2} − ${y1}) ÷ (${x2} − ${x1}) = ${m * dx} ÷ ${dx} = ${m}.`, spread: 2 }); }
+  ],
+  prepa: [
+    () => { const a = rnd(2, 6), n = rnd(2, 5); return choice({ prompt: "Derivadas", html: `f(x) = ${a}x<sup>${n}</sup><br>f′(x) = <span class="q">?</span>`, ans: `${a * n}x${n - 1 > 1 ? `^${n - 1}` : ""}`, wrong: [`${a}x^${n - 1}`, `${a * n}x^${n}`, `${a + n}x^${n - 1}`], why: `Regla de la potencia: la derivada de axⁿ es a·n·xⁿ⁻¹ = ${a} × ${n} x^${n - 1} = ${a * n}x${n - 1 > 1 ? `^${n - 1}` : ""}.` }); },
+    () => { const b = pick([2, 3, 10]), e = rnd(2, b === 10 ? 4 : 6); return num({ prompt: "Logaritmos", html: `log<sub>${b}</sub> ${b ** e} = <span class="q">?</span>`, ans: e, why: `log<sub>${b}</sub> ${b ** e} pregunta a qué exponente hay que elevar ${b} para obtener ${b ** e}: ${b}^${e} = ${b ** e}.`, spread: 2 }); },
+    () => { const opts = [["sen 30°", "1/2", ["√3/2", "1", "√2/2"]], ["cos 60°", "1/2", ["√3/2", "0", "1"]], ["sen 90°", "1", ["0", "1/2", "√2/2"]], ["cos 0°", "1", ["0", "1/2", "−1"]], ["tan 45°", "1", ["0", "√3", "1/2"]], ["sen 45°", "√2/2", ["1/2", "√3/2", "1"]]], [t, a, w] = pick(opts); return choice({ prompt: "Trigonometría", html: `${t} = <span class="q">?</span>`, ans: a, wrong: w, why: `Es un ángulo notable: ${t} = ${a}. Conviene memorizar la tabla de 0°, 30°, 45°, 60° y 90°.` }); },
+    () => { const a = rnd(1, 4), b = rnd(-6, 6), x = rnd(-4, 4); return num({ prompt: "Funciones", html: `f(x) = ${a}x² ${b < 0 ? "−" : "+"} ${Math.abs(b)}<br>f(${x}) = <span class="q">?</span>`, ans: a * x * x + b, neg: true, why: `Sustituimos x = ${x}: ${a}(${x})² ${b < 0 ? "−" : "+"} ${Math.abs(b)} = ${a * x * x} ${b < 0 ? "−" : "+"} ${Math.abs(b)} = ${a * x * x + b}.`, spread: 4 }); },
+    () => { const m = rnd(2, 6), n = rnd(2, 6), b = pick([2, 3, 5, "x"]); return choice({ prompt: "Leyes de los exponentes", html: `${b}<sup>${m}</sup> · ${b}<sup>${n}</sup> = <span class="q">?</span>`, ans: `${b}^${m + n}`, wrong: [`${b}^${m * n}`, `${b}^${Math.abs(m - n) || 1}`, `${typeof b === "number" ? b * 2 : "2x"}^${m + n}`], why: `Misma base que se multiplica: se suman los exponentes, ${m} + ${n} = ${m + n}.` }); },
+    () => { const a = rnd(1, 4), b = rnd(-5, 5), c = rnd(-3, 3); return num({ prompt: "Límites", html: `lim<sub>x→${c}</sub> (${a}x ${b < 0 ? "−" : "+"} ${Math.abs(b)}) = <span class="q">?</span>`, ans: a * c + b, neg: true, why: `En un polinomio el límite se obtiene sustituyendo: ${a}(${c}) ${b < 0 ? "−" : "+"} ${Math.abs(b)} = ${a * c + b}.`, spread: 3 }); }
+  ]
 };
+const GRADES = {
+  primaria: [["p1", "1°", "Sumas y restas hasta 20, decenas y problemas.", "var(--sky)"], ["p2", "2°", "Sumas y restas con llevar, tablas del 2, 5 y 10, mitades y dobles.", "var(--pink)"], ["p3", "3°", "Tablas, divisiones exactas, sumas de 3 cifras y fracciones.", "var(--mint)"], ["p4", "4°", "Multiplicaciones, residuos, perímetro, decimales y fracciones equivalentes.", "var(--mustard)"], ["p5", "5°", "Fracciones, decimales, porcentajes, áreas y múltiplos.", "var(--coral)"], ["p6", "6°", "Decimales, fracción de una cantidad, porcentajes, volumen, m.c.m. y M.C.D.", "var(--lilac)"]],
+  secundaria: [["s1", "1°", "Números con signo, ecuaciones, potencias, raíces y proporciones.", "var(--sky)"], ["s2", "2°", "Ecuaciones de dos pasos, jerarquía de operaciones, círculo, probabilidad y porcentajes.", "var(--mint)"], ["s3", "3°", "Cuadráticas, Pitágoras, sistemas, productos notables y pendiente.", "var(--coral)"]],
+  prepa: [["prepa", "Prepa", "Derivadas, logaritmos, trigonometría, funciones, exponentes y límites.", "var(--mustard)"]]
+};
+const GROUP_LABEL = { primaria: "Primaria", secundaria: "Secundaria", prepa: "Preparatoria" };
+const findGrade = (id) => { for (const [g, list] of Object.entries(GRADES)) { const f = list.find((x) => x[0] === id); if (f) return { group: g, data: f }; } return null; };
 
-const PRAISE = ['¡Muy bien!','¡Excelente!','¡Lo lograste!','¡Genial!','¡Bravo!','¡Perfecto!'];
-const st = { grade:1, timed:true, round:0, score:0, streak:0, correct:0, q:null, locked:true, raf:0, left:0, timeouts:[] };
-
-/* ---------- Speech (es-MX) ---------- */
-const synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
-let voice = null;
-function pickVoice(){ if(!synth) return; const vs = synth.getVoices();
-  voice = vs.find(v => /es[-_]MX/i.test(v.lang)) || vs.find(v => /es[-_](US|419)/i.test(v.lang)) || vs.find(v => /^es/i.test(v.lang)) || null; }
-if(synth){ pickVoice(); synth.onvoiceschanged = pickVoice; }
-function speak(t){ if(!synth) return; try{ if(synth.paused) synth.resume(); synth.cancel(); const u = new SpeechSynthesisUtterance(t.replace(/[🎈⭐🍎]/g,'')); u.lang='es-MX'; u.rate=.95; if(voice) u.voice=voice; synth.speak(u); }catch(e){} }
-if(!synth) $('#speak').hidden = true;
-
-/* ---------- Sounds ---------- */
+/* ---------- Estado, voz y sonido ---------- */
+const st = { group: "primaria", grade: "p1", timed: false, round: 0, score: 0, streak: 0, correct: 0, q: null, locked: true, raf: 0, missed: [], timeouts: [] };
+const synth = window.speechSynthesis || null;
+function speak(t) { if (!synth || !t) return; try { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "es-MX"; u.rate = .92; synth.speak(u); } catch (e) {} }
 let actx = null;
-function unlockAudio(){ try{ if(!actx){ const AC = window.AudioContext || window.webkitAudioContext; if(AC) actx = new AC(); } if(actx && actx.state==='suspended') actx.resume(); }catch(e){} }
-function tones(freqs, step, type){
-  if(!actx) return; const t0 = actx.currentTime;
-  freqs.forEach((f,i) => { const o=actx.createOscillator(), g=actx.createGain(); o.type=type||'sine'; o.frequency.value=f;
-    const s=t0+i*step; g.gain.setValueAtTime(.0001,s); g.gain.exponentialRampToValueAtTime(.18,s+.02); g.gain.exponentialRampToValueAtTime(.0001,s+step+.12);
-    o.connect(g).connect(actx.destination); o.start(s); o.stop(s+step+.15); });
-}
-const chime = () => tones([660,880,1175], .09, 'triangle');
-const buzz = () => tones([220,180], .14, 'square');
-const fanfare = () => tones([523,659,784,1047], .13, 'triangle');
+function unlock() { try { if (!actx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) actx = new AC(); } if (actx && actx.state === "suspended") actx.resume(); } catch (e) {} }
+function tones(fs, step, type) { if (!actx) return; const t0 = actx.currentTime; fs.forEach((f, i) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = type || "sine"; o.frequency.value = f; const s = t0 + i * step; g.gain.setValueAtTime(.0001, s); g.gain.exponentialRampToValueAtTime(.16, s + .02); g.gain.exponentialRampToValueAtTime(.0001, s + step + .12); o.connect(g).connect(actx.destination); o.start(s); o.stop(s + step + .15); }); }
+const chime = () => tones([660, 880, 1175], .08, "triangle"), buzz = () => tones([220, 180], .13, "square"), fanfare = () => tones([523, 659, 784, 1047], .12, "triangle");
+const bestKey = () => `mova-mm2-${st.grade}-${st.timed ? 1 : 0}`;
+const getBest = () => { try { return +(localStorage.getItem(bestKey()) || 0); } catch (e) { return 0; } };
+const setBest = (v) => { try { localStorage.setItem(bestKey(), String(v)); } catch (e) {} };
+const later = (fn, ms) => st.timeouts.push(setTimeout(fn, ms));
+const clearLater = () => { st.timeouts.forEach(clearTimeout); st.timeouts = []; cancelAnimationFrame(st.raf); };
+const show = (id) => { ["start", "game", "end"].forEach((s) => { $("#s-" + s).hidden = s !== id; }); window.scrollTo(0, 0); };
+const isYoung = () => ["p1", "p2", "p3"].includes(st.grade);
+const gradeName = () => { const f = findGrade(st.grade); return f.group === "prepa" ? "Preparatoria" : `${f.data[1]} ${GROUP_LABEL[f.group].toLowerCase()}`; };
 
-/* ---------- Storage ---------- */
-const getBest = g => { try{ return parseInt(localStorage.getItem('mova-mm-best-'+g)||'0',10)||0; }catch(e){ return 0; } };
-const setBest = (g,v) => { try{ localStorage.setItem('mova-mm-best-'+g, String(v)); }catch(e){} };
+/* ---------- Inicio ---------- */
+function renderStart() {
+  $("#tabs").innerHTML = Object.keys(GRADES).map((g) => `<button class="tab" data-g="${g}" aria-pressed="${g === st.group}">${GROUP_LABEL[g]}</button>`).join("");
+  $("#grades").innerHTML = GRADES[st.group].map(([id, n, , c]) => `<button class="grade" data-id="${id}" style="--c:${c}" aria-pressed="${id === st.grade}"><b>${n}</b><small>${st.group === "prepa" ? "Bachillerato" : GROUP_LABEL[st.group]}</small></button>`).join("");
+  $("#grades").style.gridTemplateColumns = st.group === "prepa" ? "1fr" : "repeat(3,1fr)";
+  $("#topics").textContent = findGrade(st.grade).data[2];
+  document.querySelectorAll(".toggle button").forEach((b) => b.setAttribute("aria-pressed", (b.dataset.timed === "1") === st.timed));
+  const best = getBest(); $("#best").textContent = best ? `Récord en ${gradeName()}: ${best} puntos` : "";
+}
+$("#tabs").addEventListener("click", (e) => { const b = e.target.closest(".tab"); if (!b) return; st.group = b.dataset.g; st.grade = GRADES[st.group][0][0]; renderStart(); });
+$("#grades").addEventListener("click", (e) => { const b = e.target.closest(".grade"); if (!b) return; st.grade = b.dataset.id; renderStart(); });
+document.querySelectorAll(".toggle button").forEach((b) => b.addEventListener("click", () => { st.timed = b.dataset.timed === "1"; renderStart(); }));
+renderStart();
 
-/* ---------- Helpers ---------- */
-function later(fn, ms){ st.timeouts.push(setTimeout(fn, ms)); }
-function clearLater(){ st.timeouts.forEach(clearTimeout); st.timeouts = []; }
-function show(id){ ['start','game','end'].forEach(s => $('#s-'+s).hidden = s!==id); window.scrollTo(0,0); }
-
-/* ---------- Start ---------- */
-const gradesEl = $('#grades');
-Object.entries(GRADES).forEach(([k,g]) => {
-  const b = document.createElement('button');
-  b.className = 'grade'; b.dataset.g = k; b.style.setProperty('--c', g.color);
-  b.innerHTML = `<b>${g.label}</b><span>${g.sub}</span>`;
-  b.addEventListener('click', () => { unlockAudio(); selectGrade(+k); });
-  gradesEl.appendChild(b);
-});
-function selectGrade(g){
-  st.grade = g;
-  gradesEl.querySelectorAll('.grade').forEach(b => b.setAttribute('aria-pressed', +b.dataset.g===g ? 'true':'false'));
-  $('#topics').textContent = GRADES[g].topics;
-  const best = getBest(g);
-  $('#best').textContent = best ? `🏆 Mejor puntaje en ${g}° grado: ${best}` : '';
+/* ---------- Juego ---------- */
+function start() {
+  unlock(); clearLater();
+  Object.assign(st, { round: 0, score: 0, streak: 0, correct: 0, missed: [] });
+  $("#score").textContent = "0 pts"; $("#streak").textContent = ""; $("#gname").textContent = gradeName();
+  $("#timer").hidden = !st.timed; moveRocket(0);
+  show("game"); next();
 }
-document.querySelectorAll('[data-timed]').forEach(b => b.addEventListener('click', () => {
-  st.timed = b.dataset.timed === '1';
-  document.querySelectorAll('[data-timed]').forEach(x => x.setAttribute('aria-pressed', x===b ? 'true':'false'));
-}));
-selectGrade(1);
-
-/* ---------- Game ---------- */
-function startGame(){
-  unlockAudio(); clearLater();
-  st.round = 0; st.score = 0; st.streak = 0; st.correct = 0; st.lastGen = -1;
-  $('#score').textContent = '⭐ 0'; $('#streak').textContent = '';
-  $('#timer').hidden = !st.timed;
-  moveRocket();
-  show('game'); nextRound();
+let lastGen = -1;
+function next() {
+  if (st.round >= ROUNDS) return finish();
+  const gens = GEN[st.grade];
+  let gi; do { gi = Math.floor(Math.random() * gens.length); } while (gens.length > 1 && gi === lastGen);
+  lastGen = gi;
+  const q = st.q = gens[gi]();
+  st.round++; st.locked = false;
+  $("#round").textContent = `${st.round} / ${ROUNDS}`;
+  $("#prompt").textContent = q.prompt;
+  const P = $("#problem"); P.className = "problem" + (q.text ? " text" : ""); P.innerHTML = q.html;
+  $("#feedback").textContent = ""; $("#feedback").className = "feedback";
+  $("#explain").hidden = true; $("#next").hidden = true;
+  $("#opts").innerHTML = q.opts.map((o) => `<button class="opt" data-v="${o}">${o.replace(/\^(\d+)/g, "<sup>$1</sup>")}</button>`).join("");
+  $("#speak").hidden = !(synth && isYoung() && q.say);
+  if (synth && isYoung() && q.say && st.grade === "p1") later(() => speak(q.say), 300);
+  if (st.timed) startTimer(q.text ? 40000 : 25000);
 }
-function moveRocket(){
-  const pct = st.correct / ROUNDS;
-  $('#rocket').style.left = `calc(46px + (100% - 92px) * ${pct})`;
-}
-function makeQuestion(){
-  const gens = GRADES[st.grade].gen;
-  let i; do { i = Math.floor(Math.random()*gens.length); } while(gens.length > 1 && i === st.lastGen);
-  st.lastGen = i;
-  const q = gens[i]();
-  if(!q.options) q.options = opts4(q.ans, st.grade >= 3 ? 10 : 3);
-  return q;
-}
-function nextRound(){
-  if(st.round >= ROUNDS){ endGame(); return; }
-  st.round++;
-  const q = makeQuestion(); st.q = q;
-  $('#round').textContent = `${st.round} / ${ROUNDS}`;
-  $('#feedback').innerHTML = ''; $('#feedback').className = 'feedback';
-  $('#prompt').textContent = q.prompt;
-  const cnt = $('#count');
-  if(q.countItem){ cnt.hidden = false; cnt.textContent = q.countItem.repeat(q.n); cnt.innerHTML = Array(q.n).fill(`<span>${q.countItem}</span>`).join(''); }
-  else cnt.hidden = true;
-  const pr = $('#problem');
-  pr.className = 'problem' + (q.story ? ' story' : '');
-  pr.innerHTML = q.countItem ? '<span class="q">?</span>' : q.html;
-  const box = $('#opts'); box.innerHTML = '';
-  box.className = 'opts' + (q.options.length === 3 ? ' three' : '');
-  q.options.forEach(o => {
-    const b = document.createElement('button');
-    b.className = 'opt'; b.dataset.v = o;
-    b.textContent = /^\d+$/.test(o) ? fmtN(+o) : o;
-    b.addEventListener('click', () => answer(b));
-    box.appendChild(b);
-  });
-  st.locked = false;
-  if(st.timed) startTimer();
-  if(st.grade === 1) later(() => speak(q.countItem ? q.prompt.replace(/[^\wáéíóúñ¿? ]/gi,'').trim() : (q.say)), 300);
-}
-function startTimer(){
+$("#opts").addEventListener("click", (e) => { const b = e.target.closest(".opt"); if (b) answer(b); });
+$("#speak").addEventListener("click", () => { unlock(); speak(st.q && st.q.say); });
+function startTimer(ms) {
   cancelAnimationFrame(st.raf);
-  const bar = $('#tbar'), D = GRADES[st.grade].secs*1000, t0 = performance.now();
-  const tick = now => { const left = Math.max(0, D-(now-t0)); st.left = left;
-    bar.style.transform = `scaleX(${left/D})`; bar.classList.toggle('low', left < 6000);
-    if(left <= 0){ timeUp(); return; } st.raf = requestAnimationFrame(tick); };
-  st.raf = requestAnimationFrame(tick);
+  const bar = $("#tbar"), t0 = performance.now();
+  const loop = (now) => { const left = Math.max(0, ms - (now - t0)); bar.style.transform = `scaleX(${left / ms})`; bar.classList.toggle("low", left < 6000); if (left <= 0) { if (!st.locked) answer(null); return; } st.raf = requestAnimationFrame(loop); };
+  st.raf = requestAnimationFrame(loop);
 }
-function stopTimer(){ cancelAnimationFrame(st.raf); }
-function reveal(){
-  $('#opts').querySelectorAll('.opt').forEach(b => {
-    if(b.dataset.v === String(st.q.ans)) b.classList.add('right');
-    else if(!b.classList.contains('wrong')) b.classList.add('dim');
-  });
-  const pr = $('#problem'); const qEl = pr.querySelector('.q');
-  if(qEl) qEl.textContent = /^\d+$/.test(String(st.q.ans)) ? fmtN(st.q.ans) : st.q.ans;
-}
-function answer(btn){
-  if(st.locked) return; st.locked = true; stopTimer();
-  if(synth) synth.cancel();
-  const fb = $('#feedback');
-  if(btn.dataset.v === String(st.q.ans)){
-    st.streak++; st.correct++;
-    let pts = 10 + (st.timed ? Math.ceil(st.left/3000) : 0);
-    if(st.streak >= 3) pts += 5;
-    st.score += pts; $('#score').textContent = `⭐ ${st.score}`;
-    reveal(); moveRocket();
-    const f = document.createElement('span'); f.className='float'; f.textContent = `+${pts}`; btn.appendChild(f);
-    chime();
-    fb.textContent = pick(PRAISE); fb.className = 'feedback good';
-    $('#streak').textContent = st.streak >= 2 ? `🔥 ${st.streak} seguidas${st.streak>=3 ? ' · +5 extra' : ''}` : '';
-    if(st.streak % 5 === 0) confetti(70);
-    later(nextRound, 1300);
+function moveRocket(n) { const sp = $(".space"); const w = sp.clientWidth || 300; $("#rocket").style.left = `${52 + ((w - 150) * n) / ROUNDS}px`; }
+function answer(btn) {
+  if (st.locked) return; st.locked = true; cancelAnimationFrame(st.raf);
+  const q = st.q, ok = btn && btn.dataset.v === q.ans;
+  document.querySelectorAll(".opt").forEach((b) => { if (b.dataset.v === q.ans) b.classList.add("right"); else if (b !== btn) b.classList.add("dim"); });
+  const fb = $("#feedback");
+  if (ok) {
+    st.correct++; st.streak++; const pts = 100 + Math.min(st.streak - 1, 5) * 20; st.score += pts; chime();
+    fb.className = "feedback good"; fb.textContent = `¡Correcto! +${pts}`;
+    $("#streak").textContent = st.streak >= 3 ? `${st.streak} seguidas` : "";
+    moveRocket(st.correct);
+    later(next, 1000);
   } else {
-    st.streak = 0; btn.classList.add('wrong'); reveal(); buzz();
-    fb.innerHTML = `Casi. La respuesta es <b></b><small></small>`;
-    fb.querySelector('b').textContent = /^\d+$/.test(String(st.q.ans)) ? fmtN(st.q.ans) : st.q.ans;
-    fb.querySelector('small').textContent = st.q.explain;
-    fb.className = 'feedback bad'; $('#streak').textContent = '';
-    later(nextRound, 2600);
+    if (btn) btn.classList.add("wrong");
+    st.streak = 0; $("#streak").textContent = ""; buzz();
+    fb.className = "feedback bad"; fb.textContent = btn ? `La respuesta es ${q.ans.replace(/\^(\d+)/g, "^$1")}` : `Se acabó el tiempo. La respuesta es ${q.ans}`;
+    const ex = $("#explain"); ex.innerHTML = q.why; ex.hidden = false; $("#next").hidden = false;
+    st.missed.push({ html: q.html.replace(/<br>/g, " · "), ans: q.ans, why: q.why });
   }
+  $("#score").textContent = `${st.score} pts`;
 }
-function timeUp(){
-  if(st.locked) return; st.locked = true; st.streak = 0; reveal(); buzz();
-  const fb = $('#feedback');
-  fb.innerHTML = `Se acabó el tiempo<small></small>`; fb.querySelector('small').textContent = st.q.explain;
-  fb.className = 'feedback bad'; $('#streak').textContent = '';
-  later(nextRound, 2600);
+$("#next").addEventListener("click", next);
+function finish() {
+  clearLater(); show("end");
+  const pct = st.correct / ROUNDS, stars = pct >= .9 ? 3 : pct >= .6 ? 2 : pct >= .3 ? 1 : 0;
+  $("#starsrow").innerHTML = [0, 1, 2].map((i) => `<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.5l1.3-6.6L2.5 9.3l6.6-.8z" fill="${i < stars ? "#F2B632" : "var(--track)"}"/></svg>`).join("");
+  $("#end-title").textContent = st.correct === ROUNDS ? "¡Llegaste a la Luna!" : ["Sigue practicando", "Buen intento", "¡Muy bien!", "¡Excelente!"][stars];
+  $("#end-sub").textContent = gradeName();
+  $("#final").textContent = st.score;
+  $("#sum-c").textContent = `${st.correct} / ${ROUNDS} correctas`;
+  const best = getBest(); if (st.score > best) setBest(st.score);
+  $("#sum-b").textContent = st.score > best ? "Nuevo récord" : `Récord: ${best}`;
+  $("#review").hidden = !st.missed.length;
+  $("#review-list").innerHTML = st.missed.map((m) => `<li><b>${m.html.replace(/<span class="q">\?<\/span>/, "?")}</b> → ${m.ans.replace(/\^(\d+)/g, "<sup>$1</sup>")}<br>${m.why}</li>`).join("");
+  if (stars >= 2) { fanfare(); burst(120); }
 }
-function endGame(){
-  stopTimer();
-  const c = st.correct, stars = c >= 10 ? 3 : c >= 7 ? 2 : 1;
-  const landed = c >= 8;
-  $('#end-title').textContent = landed ? '¡Llegaste a la Luna! 🌕' : (stars === 2 ? '¡Ya casi llegas!' : '¡Buen intento!');
-  $('#end-sub').textContent = landed ? 'Misión cumplida, eres un gran astronauta matemático.' : 'Cada práctica te acerca más. ¿Lo intentamos otra vez?';
-  $('#final').textContent = st.score;
-  $('#correct-count').textContent = `✅ ${c} / ${ROUNDS}`;
-  let best = getBest(st.grade); const isNew = st.score > best;
-  if(isNew){ best = st.score; setBest(st.grade, best); }
-  $('#best-end').textContent = isNew ? `🏆 ¡Nuevo récord! ${best}` : `🏆 Récord: ${best}`;
-  const els = document.querySelectorAll('.star'); els.forEach(s => s.classList.remove('on'));
-  show('end');
-  els.forEach((s,i) => { if(i < stars) later(() => { s.classList.add('on'); tones([600+i*200], .1, 'triangle'); }, 350+i*350); });
-  later(() => { fanfare(); if(stars >= 2) confetti(160); }, 350 + stars*350);
-}
-function goHome(){ stopTimer(); clearLater(); st.locked = true; if(synth) synth.cancel(); selectGrade(st.grade); show('start'); }
+$("#play").addEventListener("click", start);
+$("#again").addEventListener("click", start);
+$("#change").addEventListener("click", () => { renderStart(); show("start"); });
+$("#home").addEventListener("click", () => { clearLater(); if (synth) synth.cancel(); renderStart(); show("start"); });
+addEventListener("resize", () => moveRocket(st.correct));
 
-/* ---------- Confetti ---------- */
-const cv = $('#fx'), cx = cv.getContext('2d');
-const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-let parts = [], fxRaf = 0;
-function sizeCanvas(){ const d = window.devicePixelRatio||1; cv.width = innerWidth*d; cv.height = innerHeight*d; cx.setTransform(d,0,0,d,0,0); }
-sizeCanvas(); addEventListener('resize', sizeCanvas);
-function confetti(n){
-  if(reduce) return;
-  const cols = ['#FF8A3D','#5BC0F0','#F2B632','#4FD1A5','#1B2A55','#FF7A6B'];
-  for(let i=0;i<n;i++) parts.push({x:innerWidth/2+(Math.random()-.5)*120, y:innerHeight*.35, vx:(Math.random()-.5)*12, vy:-Math.random()*12-4, r:Math.random()*6+4, c:cols[i%cols.length], rot:Math.random()*6, vr:(Math.random()-.5)*.3, life:0, round:Math.random()<.5});
-  if(!fxRaf) fxRaf = requestAnimationFrame(drawFx);
-}
-function drawFx(){
-  cx.clearRect(0,0,innerWidth,innerHeight);
-  parts.forEach(p => { p.vy+=.32; p.vx*=.99; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.life++;
-    cx.save(); cx.translate(p.x,p.y); cx.rotate(p.rot); cx.fillStyle=p.c;
-    if(p.round){ cx.beginPath(); cx.arc(0,0,p.r/1.6,0,Math.PI*2); cx.fill(); } else cx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);
-    cx.restore(); });
-  parts = parts.filter(p => p.y < innerHeight+30 && p.life < 240);
-  if(parts.length) fxRaf = requestAnimationFrame(drawFx); else { fxRaf = 0; cx.clearRect(0,0,innerWidth,innerHeight); }
-}
+/* ---------- Fondo de símbolos ---------- */
+(function () {
+  const cols = ["#5BC0F0", "#F47FB0", "#4FD1A5", "#F2B632", "#FF7A6B", "#A98BE8"], syms = ["+", "−", "×", "÷", "=", "%", "π", "√", "²", "½"];
+  let s = '<svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice">';
+  for (let i = 0; i < 46; i++) { const x = (i * 97) % 400, y = (i * 173) % 800, r = (i * 37) % 60 - 30; s += `<text x="${x}" y="${y}" font-family="Bricolage Grotesque, Poppins, sans-serif" font-weight="800" font-size="${18 + (i % 4) * 8}" fill="${cols[i % cols.length]}" opacity=".32" transform="rotate(${r} ${x} ${y})">${syms[i % syms.length]}</text>`; }
+  $("#sym").innerHTML = s + "</svg>";
+})();
 
-/* ---------- Wire ---------- */
-$('#play').addEventListener('click', startGame);
-$('#again').addEventListener('click', startGame);
-$('#change').addEventListener('click', goHome);
-$('#home').addEventListener('click', goHome);
-$('#speak').addEventListener('click', () => { unlockAudio(); if(st.q) speak(st.q.countItem ? '¿Cuántos hay?' : st.q.say); });
+/* ---------- Confeti ---------- */
+const cv = $("#fx"), cx = cv.getContext("2d"); let parts = [], fxOn = false;
+function size() { cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; }
+size(); addEventListener("resize", size);
+function burst(n) {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cols = ["#5BC0F0", "#F47FB0", "#4FD1A5", "#F2B632", "#A98BE8"];
+  for (let i = 0; i < n; i++) parts.push({ x: cv.width / 2, y: cv.height / 3, vx: (Math.random() - .5) * 16 * devicePixelRatio, vy: (Math.random() * -12 - 4) * devicePixelRatio, r: (4 + Math.random() * 5) * devicePixelRatio, c: cols[i % cols.length], life: 90 });
+  if (!fxOn) { fxOn = true; requestAnimationFrame(draw); }
+}
+function draw() {
+  cx.clearRect(0, 0, cv.width, cv.height);
+  parts.forEach((p) => { p.x += p.vx; p.y += p.vy; p.vy += .45 * devicePixelRatio; p.life--; cx.fillStyle = p.c; cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, 6.28); cx.fill(); });
+  parts = parts.filter((p) => p.life > 0 && p.y < cv.height + 40);
+  if (parts.length) requestAnimationFrame(draw); else { fxOn = false; cx.clearRect(0, 0, cv.width, cv.height); }
+}
 })();
 </script>
-<a href="./#/games" class="mova-home-btn" aria-label="Back to MOVA Learning Studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></a>
-<style>.mova-home-btn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);left:10px;z-index:2147483000;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.94);color:#1E3A5F;box-shadow:0 2px 10px rgba(0,0,0,.2);text-decoration:none}.mova-home-btn svg{width:20px;height:20px}.mova-home-btn:focus-visible{outline:3px solid #6FA8D6;outline-offset:2px}@media print{.mova-home-btn{display:none}}</style>
 </body>
 </html>

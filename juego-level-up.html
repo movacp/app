@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MOVA Level Up · Examen de nivel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Poppins:wght@400;500;600;700&family=Literata:opsz,wght@7..72,400;7..72,500&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<script src="mova-voice.js"></script>
+<style>
+:root{
+  --page:#172449; --card:#FFFFFF; --ink:#172449; --muted:#5B6787; --tile:#F3F6FC; --edge:#DCE2F0; --track:#E8EDF7;
+  --A1:#4FD1A5; --A2:#5BC0F0; --B1:#F2B632; --B2:#FF7A6B; --C1:#A98BE8; --pre:#9AA6C2;
+  --good:#1F9A47; --good-bg:#DDF6E4; --bad:#E5484D; --bad-bg:#FDE4E4;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--card:#1F2B52;--ink:#F3F5FF;--muted:#B3BDDC;--tile:#28356A;--edge:#3A4880;--track:#2C3A70;--good-bg:rgba(31,154,71,.25);--bad-bg:rgba(229,72,77,.25);color-scheme:dark}}
+:root[data-theme="dark"]{--card:#1F2B52;--ink:#F3F5FF;--muted:#B3BDDC;--tile:#28356A;--edge:#3A4880;--track:#2C3A70;--good-bg:rgba(31,154,71,.25);--bad-bg:rgba(229,72,77,.25);color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%}
+body{margin:0;font-family:Poppins,"Century Gothic",system-ui,sans-serif;color:var(--ink);background-color:var(--page);
+  background-image:radial-gradient(rgba(255,255,255,.06) 1.2px,transparent 1.6px),radial-gradient(circle at 15% 10%,rgba(91,192,240,.22),transparent 40%),radial-gradient(circle at 90% 85%,rgba(169,139,232,.22),transparent 45%);
+  background-size:18px 18px,100% 100%,100% 100%;background-attachment:fixed}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--B1);outline-offset:3px;border-radius:12px}
+.app{min-height:100%;display:grid;place-items:center;padding:18px 14px 28px}
+.card{width:100%;max-width:600px;background:var(--card);border-radius:30px;box-shadow:0 12px 0 rgba(242,182,50,.35),0 30px 60px rgba(0,0,0,.35);padding:24px 20px 26px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:inline-block;border:1.5px solid var(--ink);padding:4px 9px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:.06em}
+.back{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;padding:8px 0}
+h1{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:clamp(40px,11vw,58px);line-height:.95;margin:18px 0 8px;letter-spacing:-.02em}
+.lead{color:var(--muted);margin:0 0 16px;line-height:1.55}
+.stamps{display:flex;gap:6px;margin:6px 0 18px;flex-wrap:wrap}
+.stamp{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:15px;color:#172449;background:var(--c);position:relative}
+.stamp::after{content:"";position:absolute;inset:4px;border-radius:50%;border:1.5px dashed rgba(255,255,255,.8)}
+.label{font-size:13px;font-weight:600;color:var(--muted);margin:14px 0 8px}
+.field{width:100%;height:52px;border-radius:14px;border:2px solid var(--edge);background:var(--tile);padding:0 14px;font-size:16px}
+.field:focus{outline:none;border-color:var(--A2)}
+.who{display:grid;gap:8px}
+.who button{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 16px;border-radius:16px;background:var(--tile);border:2px solid transparent;text-align:left}
+.who button b{font-weight:600}.who button small{color:var(--muted);font-size:13px}
+.who button[aria-pressed="true"]{border-color:var(--ink)}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0 0}
+.facts div{padding:10px;border-radius:14px;background:var(--tile);text-align:center}
+.facts b{display:block;font-family:"Bricolage Grotesque",Poppins,sans-serif;font-size:22px}
+.facts small{font-size:12px;color:var(--muted)}
+.primary{width:100%;margin-top:20px;height:56px;border-radius:18px;background:var(--ink);color:var(--card);font-weight:700;font-size:17px;box-shadow:0 6px 0 rgba(0,0,0,.3)}
+.primary:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.primary[disabled]{opacity:.45}
+.ghost{width:100%;margin-top:10px;height:50px;border-radius:16px;background:var(--tile);font-weight:600}
+.hint{font-size:13px;color:var(--muted);text-align:center;margin:10px 0 0}
+.hud{display:flex;align-items:center;gap:8px}
+.lvlpill{padding:6px 12px;border-radius:999px;font-size:13.5px;font-weight:700;background:var(--c);color:#172449}
+.pill{padding:6px 12px;border-radius:999px;background:var(--tile);font-size:13.5px;font-weight:600;white-space:nowrap}
+.pill.r{margin-left:auto}
+.path{display:flex;gap:6px;margin:14px 0 4px}
+.path span{flex:1;height:8px;border-radius:8px;background:var(--track)}
+.path span.on{background:var(--c)}
+.path span.done{background:color-mix(in srgb,var(--c) 45%,var(--track))}
+.dots{display:flex;gap:5px;justify-content:center;margin:10px 0 14px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--track)}
+.dots i.now{background:var(--ink)} .dots i.ok{background:var(--good)} .dots i.no{background:var(--bad)}
+.skill{font-size:13px;font-weight:600;color:var(--muted);margin:0 0 8px}
+.passage{font-family:Literata,Georgia,serif;font-size:16.5px;line-height:1.7;padding:16px 18px;border-radius:18px;background:var(--tile);margin:0 0 14px}
+.listen{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;background:var(--tile);margin:0 0 14px;flex-wrap:wrap}
+.listen .play{width:48px;height:48px;border-radius:50%;background:var(--ink);color:var(--card);display:grid;place-items:center;flex:none}
+.listen .play svg{width:22px;height:22px}
+.listen p{margin:0;font-size:14px;color:var(--muted);flex:1;min-width:150px}
+.listen .noaudio{font-size:13px;font-weight:600;text-decoration:underline;color:var(--muted)}
+.script{font-family:Literata,Georgia,serif;font-size:15.5px;line-height:1.6;width:100%;margin-top:6px}
+.q{font-size:clamp(18px,4.8vw,21px);font-weight:600;line-height:1.45;margin:0 0 14px}
+.opts{display:grid;gap:9px}
+.opt{min-height:54px;padding:12px 16px;border-radius:16px;background:var(--card);border:2.5px solid var(--edge);text-align:left;font-size:16px;font-weight:500;display:flex;gap:12px;align-items:center}
+.opt span{width:28px;height:28px;border-radius:50%;background:var(--tile);display:grid;place-items:center;font-size:13px;font-weight:700;flex:none}
+.opt:hover{border-color:var(--A2)}
+.opt.sel{border-color:var(--ink);background:var(--tile)}
+.level-up{text-align:center;padding:18px 6px}
+.level-up .stamp{width:96px;height:96px;font-size:26px;margin:0 auto 12px}
+.level-up h2{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:28px;margin:0 0 6px}
+.level-up p{color:var(--muted);margin:0}
+.result{text-align:center}
+.cert{margin-top:16px;padding:22px 18px;border-radius:24px;border:2px solid var(--edge);position:relative;overflow:hidden}
+.cert::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 100% 0,color-mix(in srgb,var(--c) 30%,transparent),transparent 55%);pointer-events:none}
+.cert .stamp{width:110px;height:110px;font-size:32px;margin:6px auto 12px}
+.cert h2{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:30px;margin:0}
+.cert .name{font-size:17px;font-weight:600;margin:6px 0 2px}
+.cert .date{font-size:13px;color:var(--muted)}
+.desc{text-align:left;margin:16px 0 0;line-height:1.6}
+.prog{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--tile);text-align:left;font-size:14.5px}
+.prog b{display:block}
+.bars{display:grid;gap:10px;margin-top:16px;text-align:left}
+.bar{display:grid;grid-template-columns:90px 1fr 44px;align-items:center;gap:10px;font-size:13.5px}
+.bar i{height:10px;border-radius:10px;background:var(--track);overflow:hidden}
+.bar i b{display:block;height:100%;background:var(--A2);border-radius:10px}
+.journey{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.journey span{padding:5px 10px;border-radius:999px;font-size:12.5px;font-weight:600;background:var(--tile)}
+.journey span.pass{background:var(--good-bg);color:var(--good)} .journey span.fail{background:var(--bad-bg);color:var(--bad)}
+.wa{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:18px;height:54px;border-radius:18px;background:#1FA855;color:#fff;font-weight:700;text-decoration:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.fade{animation:fade .35s ease both}@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<main class="app">
+<div class="card" id="card">
+
+  <section id="s-start">
+    <div class="top"><a class="back" href="./#/games">MOVA Learning Studio</a><span class="brand">MOVA · Centro Pedagógico</span></div>
+    <h1>Level Up</h1>
+    <p class="lead">Un examen que se adapta a ti: si respondes bien, las preguntas suben de nivel; si se complican, bajan. Al final te decimos tu nivel de inglés.</p>
+    <div class="stamps" aria-hidden="true">
+      <span class="stamp" style="--c:var(--A1)">A1</span><span class="stamp" style="--c:var(--A2)">A2</span><span class="stamp" style="--c:var(--B1)">B1</span><span class="stamp" style="--c:var(--B2)">B2</span><span class="stamp" style="--c:var(--C1)">C1</span>
+    </div>
+    <label class="label" for="name">Nombre del alumno</label>
+    <input class="field" id="name" autocomplete="name" placeholder="Escribe tu nombre">
+    <p class="label">¿Quién presenta el examen?</p>
+    <div class="who" id="who">
+      <button data-s="kids" aria-pressed="false"><b>MOVA Kids</b><small>6 a 8 años</small></button>
+      <button data-s="children" aria-pressed="false"><b>MOVA Children</b><small>9 a 12 años</small></button>
+      <button data-s="teens" aria-pressed="false"><b>MOVA Teens</b><small>12 a 17 años</small></button>
+      <button data-s="adults" aria-pressed="false"><b>Adultos</b><small>18 años o más</small></button>
+    </div>
+    <div class="facts"><div><b>18–36</b><small>preguntas</small></div><div><b>15–30</b><small>minutos</small></div><div><b>4</b><small>habilidades</small></div></div>
+    <button class="primary" id="go" disabled>Comenzar examen</button>
+    <p class="hint">Necesitas audio para las preguntas de listening.</p>
+  </section>
+
+  <section id="s-test" hidden>
+    <div class="hud"><span class="lvlpill" id="lvl">A2</span><span class="pill" id="block">Bloque 1</span><span class="pill r" id="qn">1 / 6</span></div>
+    <div class="path" id="path"></div>
+    <div class="dots" id="dots"></div>
+    <div id="item"></div>
+    <button class="primary" id="confirm" disabled>Confirmar respuesta</button>
+  </section>
+
+  <section id="s-between" hidden></section>
+
+  <section id="s-result" class="result" hidden></section>
+
+</div>
+</main>
+<script>
+(function(){
+"use strict";
+const $ = (s) => document.querySelector(s);
+const shuffle = (a) => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const LEVELS = ["A1", "A2", "B1", "B2", "C1"];
+const BLOCK = 6;
+
+/* Banco de preguntas. La PRIMERA opción es la correcta.
+   t: g = grammar, v = vocabulary, r = reading, l = listening. */
+const BANK = {
+  A1: [
+    { t: "g", q: "My sister ___ ten years old.", o: ["is", "are", "am", "be"] },
+    { t: "g", q: "___ you like pizza?", o: ["Do", "Does", "Are", "Is"] },
+    { t: "g", q: "There ___ two cats in the garden.", o: ["are", "is", "be", "am"] },
+    { t: "g", q: "He ___ to school every day.", o: ["walks", "walk", "walking", "is walk"] },
+    { t: "g", q: "This is ___ book. It’s mine.", o: ["my", "me", "I", "mine"] },
+    { t: "v", q: "Which one is a day of the week?", o: ["Tuesday", "April", "Summer", "Morning"] },
+    { t: "v", q: "The opposite of “big” is ___.", o: ["small", "tall", "long", "fast"] },
+    { t: "v", q: "You use a ___ to write.", o: ["pencil", "plate", "pillow", "ball"] },
+    { t: "r", s: "Hi! I’m Lucas. I’m eight. I have a dog. His name is Rocky. He is black and white. We play in the park every Saturday.", q: "When do Lucas and Rocky play in the park?", o: ["on Saturdays", "every day", "on Sundays", "after school"] },
+    { t: "r", s: "Mia’s favorite food is spaghetti. She doesn’t like fish. Her brother loves fish, but he doesn’t like vegetables.", q: "What doesn’t Mia like?", o: ["fish", "spaghetti", "vegetables", "her brother"] },
+    { t: "l", s: "Good morning! My name is Anna. I’m from Canada. I live in a small house with my mom, my dad and my two brothers.", q: "How many brothers does Anna have?", o: ["two", "one", "three", "none"] },
+    { t: "l", s: "Can I have a glass of orange juice and a cheese sandwich, please?", q: "What does the person want to drink?", o: ["orange juice", "milk", "water", "apple juice"] }
+  ],
+  A2: [
+    { t: "g", q: "Yesterday we ___ a great movie.", o: ["saw", "see", "seen", "seeing"] },
+    { t: "g", q: "She ___ TV when the phone rang.", o: ["was watching", "watched", "is watching", "watches"] },
+    { t: "g", q: "This book is ___ than the other one.", o: ["more interesting", "interestinger", "most interesting", "more interested"] },
+    { t: "g", q: "I’m ___ visit my grandparents next weekend.", o: ["going to", "go to", "will", "going"] },
+    { t: "g", q: "How ___ sugar do you want in your coffee?", o: ["much", "many", "long", "often"] },
+    { t: "v", q: "I’m really ___. I haven’t eaten since breakfast.", o: ["hungry", "angry", "sleepy", "thirsty"] },
+    { t: "v", q: "We need to ___ the bus at the next stop.", o: ["get off", "get out", "take off", "go off"] },
+    { t: "v", q: "My brother is very ___. He always helps people.", o: ["kind", "lazy", "rude", "boring"] },
+    { t: "r", s: "Last summer, Pablo went to Oaxaca with his family. They stayed in a hotel near the main square. Every evening they ate tlayudas and listened to music. Pablo’s favorite part was visiting Monte Albán, but his sister preferred the markets.", q: "What did Pablo’s sister like most?", o: ["the markets", "Monte Albán", "the hotel", "the music"] },
+    { t: "r", s: "NOTICE: The swimming pool will be closed on Monday for cleaning. It will open again on Tuesday at 7 a.m. Children under 12 must swim with an adult.", q: "When will the pool open again?", o: ["Tuesday at 7 a.m.", "Monday at 7 a.m.", "next week", "Tuesday afternoon"] },
+    { t: "l", s: "Woman: Are you coming to the party on Friday? Man: I’d love to, but I have a math exam on Saturday morning, so I need to study.", q: "Why can’t the man go to the party?", o: ["He has to study for an exam.", "He is sick.", "He has to work.", "He doesn’t like parties."] },
+    { t: "l", s: "Attention, passengers. The train to Saltillo will leave from platform four, not platform two. The train is fifteen minutes late.", q: "What is the problem with the train?", o: ["It is late and leaves from a different platform.", "It is cancelled.", "It leaves early.", "It is full."] }
+  ],
+  B1: [
+    { t: "g", q: "I ___ in Monterrey since 2019.", o: ["have lived", "lived", "am living", "live"] },
+    { t: "g", q: "If it rains tomorrow, we ___ the picnic.", o: ["will cancel", "cancel", "would cancel", "cancelled"] },
+    { t: "g", q: "The museum ___ in 1910.", o: ["was built", "built", "has built", "is building"] },
+    { t: "g", q: "When we arrived, the movie ___.", o: ["had already started", "already started", "has already started", "was already start"] },
+    { t: "g", q: "She asked me where ___.", o: ["I lived", "did I live", "do I live", "I do live"] },
+    { t: "v", q: "Could you ___ my plants while I’m on vacation?", o: ["look after", "look for", "look up", "look into"] },
+    { t: "v", q: "The concert was ___. Everyone left before the end.", o: ["disappointing", "disappointed", "amazing", "excited"] },
+    { t: "v", q: "Our flight was ___ because of the storm.", o: ["delayed", "spent", "missed", "wasted"] },
+    { t: "r", s: "Many people believe that multitasking makes them more productive. However, research suggests the opposite. When we switch between tasks, our brain needs time to refocus, which causes us to lose time and make more mistakes. Experts recommend working on one task at a time for short, focused periods.", q: "What is the main idea of the text?", o: ["Doing one task at a time is more effective.", "Multitasking is the best way to work.", "Our brain never needs rest.", "Experts work for short periods."] },
+    { t: "r", s: "Dear Mr. Torres, I am writing to apologize for missing yesterday’s meeting. My car broke down on the highway and my phone had no battery, so I couldn’t call. I would be happy to meet at any time this week. Best regards, Laura", q: "Why is Laura writing?", o: ["to apologize and ask for a new meeting", "to complain about her car", "to cancel all her meetings", "to ask Mr. Torres for help with her phone"] },
+    { t: "l", s: "Man: I’ve been thinking about joining a gym, but the monthly fee is quite high. Woman: Have you tried running in the park? It’s free, and there’s a group that meets every morning at six.", q: "What does the woman suggest?", o: ["running with a group in the park", "paying for a cheaper gym", "exercising at night", "buying a treadmill"] },
+    { t: "l", s: "Hi, this is Daniel from the bookstore. The book you ordered has arrived, but unfortunately the second volume is still out of stock. We expect it next Thursday. You can pick up the first one any time.", q: "What will happen next Thursday?", o: ["The second volume should arrive.", "The bookstore will close.", "Daniel will deliver the book.", "The first volume will arrive."] }
+  ],
+  B2: [
+    { t: "g", q: "If I ___ about the traffic, I would have left earlier.", o: ["had known", "knew", "have known", "would know"] },
+    { t: "g", q: "She’s used to ___ up early for work.", o: ["getting", "get", "got", "have got"] },
+    { t: "g", q: "By next June, they ___ the new hospital.", o: ["will have finished", "will finish", "have finished", "are finishing"] },
+    { t: "g", q: "I wish I ___ more time to travel.", o: ["had", "have", "would have", "will have"] },
+    { t: "g", q: "Not only ___ late, but he also forgot the documents.", o: ["did he arrive", "he arrived", "he did arrive", "arrived he"] },
+    { t: "v", q: "The company decided to ___ the launch until next year.", o: ["postpone", "prevent", "pretend", "propose"] },
+    { t: "v", q: "Her argument was so ___ that everyone agreed with her.", o: ["convincing", "convinced", "reluctant", "doubtful"] },
+    { t: "v", q: "We have to ___ a decision before Friday.", o: ["make", "do", "take out", "give"] },
+    { t: "r", s: "Remote work has transformed the way companies recruit. Freed from geographical limits, employers can now hire talent from anywhere. Yet this flexibility comes at a cost: many workers report feeling isolated, and managers struggle to build a shared culture when teams rarely meet in person.", q: "According to the text, what is a disadvantage of remote work?", o: ["Workers may feel isolated.", "Companies cannot find talent.", "Salaries are lower.", "Teams meet too often."] },
+    { t: "r", s: "Although the new bridge was praised for its elegant design, engineers had warned that the budget was unrealistic. Two years and several delays later, the final cost was nearly double the original estimate, prompting an official investigation.", q: "What can we infer about the engineers’ warning?", o: ["It turned out to be correct.", "It was ignored because it was wrong.", "It was about the design.", "It caused the delays."] },
+    { t: "l", s: "Woman: I can’t believe they’ve raised the rent again. Man: Have you considered moving further from the city center? You’d have a longer commute, but you could save quite a bit. Woman: I suppose so, but I’d hate to spend two hours a day in traffic.", q: "How does the woman feel about the man’s suggestion?", o: ["She has doubts because of the long commute.", "She thinks it’s a perfect idea.", "She has already moved.", "She wants to buy a car."] },
+    { t: "l", s: "Today’s lecture focuses on why some habits are so hard to break. The key point is that habits are triggered by cues in our environment. Rather than relying on willpower, the most effective strategy is to change the cues themselves.", q: "What does the speaker recommend?", o: ["changing the cues in your environment", "using more willpower", "breaking all habits at once", "ignoring your environment"] }
+  ],
+  C1: [
+    { t: "g", q: "Hardly ___ the room when the lights went out.", o: ["had she entered", "she had entered", "did she entered", "she entered"] },
+    { t: "g", q: "It’s high time we ___ this problem seriously.", o: ["took", "take", "will take", "have taken"] },
+    { t: "g", q: "___ the weather been better, the event would have been a success.", o: ["Had", "If", "Were", "Should"] },
+    { t: "g", q: "The proposal, ___ was rejected last year, has been presented again.", o: ["which", "that", "what", "who"] },
+    { t: "g", q: "She denied ___ the confidential files.", o: ["having leaked", "to have leak", "to leak", "leak"] },
+    { t: "v", q: "The minister’s comments were deliberately ___, leaving room for multiple interpretations.", o: ["ambiguous", "explicit", "unanimous", "redundant"] },
+    { t: "v", q: "Despite numerous setbacks, the team ___ and finished the project.", o: ["persevered", "deteriorated", "hesitated", "withdrew"] },
+    { t: "v", q: "The new policy is likely to ___ widespread criticism.", o: ["provoke", "evoke", "revoke", "invoke"] },
+    { t: "r", s: "Critics of standardized testing argue that it measures little more than a student’s ability to take tests. Proponents counter that, for all its flaws, it remains the most objective tool available for comparing schools. The debate, however, often obscures a more fundamental question: what, exactly, do we want education to achieve?", q: "What is the author’s main point in the last sentence?", o: ["The debate distracts from a deeper question about education’s goals.", "Standardized tests should be eliminated.", "Testing is the most objective tool.", "Schools should be compared more often."] },
+    { t: "r", s: "The novelist’s early work was dismissed as sentimental, yet a generation later the same books were hailed as daring explorations of domestic life. The shift says less about the novels themselves than about the critics who read them.", q: "What does the author suggest?", o: ["Critics’ attitudes changed more than the books did.", "The novels were rewritten.", "The early criticism was accurate.", "Domestic life became less important."] },
+    { t: "l", s: "Man: The report makes some valid points, but I’m not convinced the data supports such sweeping conclusions. Woman: Fair enough, though you have to admit the trend is hard to ignore. Man: A trend, yes. A cause, not necessarily.", q: "What is the man’s main concern?", o: ["The report confuses a trend with a cause.", "The data is completely false.", "The report is too short.", "The woman ignored the trend."] },
+    { t: "l", s: "What’s striking about the findings is not that people overestimate their abilities, which is well documented, but that the least skilled participants were the most confident. In other words, the very skills needed to perform well are the ones needed to recognize poor performance.", q: "What surprised the speaker most?", o: ["The least skilled people were the most confident.", "People overestimate their abilities.", "Skilled people lacked confidence.", "The study had few participants."] }
+  ]
+};
+const SKILL = { g: "Grammar", v: "Vocabulary", r: "Reading", l: "Listening" };
+const DESC = {
+  "Pre-A1": ["Estás dando tus primeros pasos", "Reconoces algunas palabras sueltas y frases muy básicas. Es el momento ideal para construir bases sólidas de vocabulario, pronunciación y estructuras simples."],
+  A1: ["Usuario básico · Principiante", "Entiendes y usas expresiones cotidianas y frases muy sencillas. Puedes presentarte, hablar de tu familia y de tus gustos si la otra persona habla despacio."],
+  A2: ["Usuario básico · Elemental", "Te comunicas en situaciones de rutina: compras, escuela, planes y experiencias pasadas. Entiendes textos cortos y mensajes claros sobre temas conocidos."],
+  B1: ["Usuario independiente · Intermedio", "Manejas la mayoría de las situaciones de un viaje o de la vida diaria. Puedes contar experiencias, dar opiniones y entender las ideas principales de textos y audios claros."],
+  B2: ["Usuario independiente · Intermedio alto", "Te expresas con fluidez y naturalidad. Entiendes textos complejos, defiendes tus ideas y sigues conversaciones con hablantes nativos sin mucho esfuerzo."],
+  C1: ["Usuario competente · Avanzado", "Usas el inglés de forma flexible y eficaz en contextos sociales, académicos y profesionales. Entiendes textos largos y exigentes e identificas significados implícitos."]
+};
+const STAGE = { kids: ["MOVA Kids", "A1"], children: ["MOVA Children", "A1"], teens: ["MOVA Teens", "A2"], adults: ["Adultos", "A2"] };
+const program = (stage, lvl) => {
+  const n = STAGE[stage][0];
+  if (stage === "adults") return lvl === "B2" || lvl === "C1" ? "Te recomendamos nuestro programa de preparación TOEFL o de certificación." : `Te recomendamos clases de inglés para adultos, nivel ${lvl === "Pre-A1" ? "A1" : lvl}.`;
+  if (stage === "teens" && (lvl === "B2" || lvl === "C1")) return `${n}, nivel ${lvl}. También es buen momento para preparar el TOEFL o el EXCI.`;
+  return `${n}, nivel ${lvl === "Pre-A1" ? "inicial" : lvl}.`;
+};
+
+/* Estado */
+const st = { name: "", stage: null, level: 0, block: 0, items: [], idx: 0, sel: null, used: {}, results: {}, journey: [], skill: { g: [0, 0], v: [0, 0], r: [0, 0], l: [0, 0] }, plays: 0, current: [] };
+const synth = window.speechSynthesis || null;
+function speak(text) { if (!synth) return; try { synth.cancel(); const parts = text.split(/(?=\b(?:Man|Woman):)/); parts.forEach((p) => { const m = p.match(/^(Man|Woman):\s*/); const u = new SpeechSynthesisUtterance(p.replace(/^(Man|Woman):\s*/, "")); u.lang = "en-US"; u.rate = .9; if (m) u.movaGender = m[1] === "Man" ? "m" : "f"; synth.speak(u); }); } catch (e) {} }
+function show(id) { ["start", "test", "between", "result"].forEach((s) => { $("#s-" + s).hidden = s !== id; }); window.scrollTo(0, 0); }
+
+/* Inicio */
+$("#who").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; st.stage = b.dataset.s; $("#who").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b)); $("#go").disabled = false; });
+$("#go").addEventListener("click", () => {
+  st.name = $("#name").value.trim();
+  st.level = LEVELS.indexOf(STAGE[st.stage][1]);
+  if (synth) { try { const u = new SpeechSynthesisUtterance(" "); synth.speak(u); } catch (e) {} }
+  startBlock();
+});
+
+function pickItems(lvl) {
+  const L = LEVELS[lvl], used = st.used[L] || (st.used[L] = new Set());
+  const pool = BANK[L].map((x, i) => ({ ...x, i })).filter((x) => !used.has(x.i));
+  const byT = (t) => shuffle(pool.filter((x) => x.t === t));
+  const g = byT("g"), v = byT("v"), r = byT("r"), l = byT("l");
+  let chosen = [g[0], g[1], v[0], r[0], l[0], (synth ? l[1] : null) || v[1] || g[2]].filter(Boolean);
+  if (chosen.length < BLOCK) chosen = chosen.concat(shuffle(pool.filter((x) => !chosen.includes(x)))).slice(0, BLOCK);
+  chosen.forEach((x) => used.add(x.i));
+  return shuffle(chosen);
+}
+function startBlock() {
+  st.block++; st.items = pickItems(st.level); st.idx = 0; st.current = [];
+  show("test"); renderPath(); renderItem();
+}
+function renderPath() {
+  const L = LEVELS[st.level];
+  $("#lvl").textContent = L; $("#lvl").style.setProperty("--c", `var(--${L})`);
+  $("#block").textContent = `Bloque ${st.block}`;
+  $("#path").innerHTML = LEVELS.map((x, i) => `<span style="--c:var(--${x})" class="${i === st.level ? "on" : st.results[x] ? "done" : ""}"></span>`).join("");
+}
+function renderItem() {
+  const it = st.items[st.idx]; st.sel = null; st.plays = 0;
+  $("#qn").textContent = `${st.idx + 1} / ${st.items.length}`;
+  $("#dots").innerHTML = st.items.map((_, i) => `<i class="${i < st.idx ? (st.current[i] ? "ok" : "no") : i === st.idx ? "now" : ""}"></i>`).join("");
+  const opts = shuffle(it.o.map((o, i) => ({ o, ok: i === 0 })));
+  it._opts = opts;
+  let lead = "";
+  if (it.t === "r") lead = `<div class="passage">${esc(it.s)}</div>`;
+  if (it.t === "l") lead = `<div class="listen"><button class="play" id="play" aria-label="Escuchar el audio"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12-7.5z"/></svg></button><p id="plays">Escucha el audio. Puedes oírlo dos veces.</p>${synth ? '<button class="noaudio" id="noaudio">No tengo audio</button>' : ""}<div class="script" id="script" hidden>${esc(it.s)}</div></div>`;
+  $("#item").innerHTML = `<div class="fade"><p class="skill">${SKILL[it.t]}</p>${lead}<p class="q">${esc(it.q).replace("___", "<b>_____</b>")}</p>
+    <div class="opts">${opts.map((x, i) => `<button class="opt" data-i="${i}"><span>${"ABCD"[i]}</span>${esc(x.o)}</button>`).join("")}</div></div>`;
+  $("#confirm").disabled = true;
+  if (it.t === "l") {
+    if (!synth) $("#script").hidden = false;
+    const p = $("#play");
+    if (p) p.addEventListener("click", () => { if (st.plays >= 2) return; st.plays++; speak(it.s); $("#plays").textContent = st.plays >= 2 ? "Ya escuchaste el audio dos veces." : "Puedes escucharlo una vez más."; if (st.plays >= 2) p.disabled = true, p.style.opacity = .4; });
+    const n = $("#noaudio"); if (n) n.addEventListener("click", () => { $("#script").hidden = false; n.remove(); });
+  }
+}
+$("#item").addEventListener("click", (e) => {
+  const b = e.target.closest(".opt"); if (!b) return;
+  st.sel = +b.dataset.i;
+  $("#item").querySelectorAll(".opt").forEach((x) => x.classList.toggle("sel", x === b));
+  $("#confirm").disabled = false;
+});
+$("#confirm").addEventListener("click", () => {
+  if (st.sel === null) return;
+  if (synth) synth.cancel();
+  const it = st.items[st.idx], ok = it._opts[st.sel].ok;
+  st.current.push(ok); st.skill[it.t][1]++; if (ok) st.skill[it.t][0]++;
+  st.idx++;
+  if (st.idx < st.items.length) renderItem(); else endBlock();
+});
+
+/* Lógica adaptativa */
+function endBlock() {
+  const L = LEVELS[st.level], score = st.current.filter(Boolean).length;
+  const r = st.results[L] || (st.results[L] = { score: 0, total: 0, status: null });
+  r.score += score; r.total += st.current.length;
+  const pct = r.score / r.total;
+  if (r.total === BLOCK && score === 4) { r.status = "retry"; return between("same"); }
+  r.status = (r.total === BLOCK ? score >= 5 : pct >= 2 / 3) ? "pass" : "fail";
+  st.journey.push([L, r.status, r.score, r.total]);
+  if (r.status === "pass") {
+    if (st.level === LEVELS.length - 1) return finish("C1");
+    const up = LEVELS[st.level + 1];
+    if (st.results[up] && st.results[up].status === "fail") return finish(L);
+    st.level++; return between("up");
+  }
+  if (st.level === 0) return finish("Pre-A1");
+  const down = LEVELS[st.level - 1];
+  if (st.results[down] && st.results[down].status === "pass") return finish(down);
+  st.level--; return between("down");
+}
+function between(kind) {
+  const L = LEVELS[st.level];
+  const msg = kind === "up" ? ["¡Subiste de nivel!", `Ahora vienen preguntas de nivel ${L}.`] : kind === "down" ? ["Ajustamos el nivel", `Vamos a confirmar tu nivel con preguntas ${L}.`] : ["Casi lo logras", `Vamos con otras seis preguntas de nivel ${L} para confirmar.`];
+  const s = $("#s-between");
+  s.innerHTML = `<div class="level-up fade"><span class="stamp" style="--c:var(--${L})">${L}</span><h2>${msg[0]}</h2><p>${msg[1]}</p><button class="primary" id="cont">Continuar</button></div>`;
+  show("between");
+  $("#cont").addEventListener("click", startBlock);
+}
+function finish(level) {
+  const c = level === "Pre-A1" ? "pre" : level;
+  const [title, text] = DESC[level];
+  const today = new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
+  const total = Object.values(st.skill).reduce((a, b) => a + b[1], 0), right = Object.values(st.skill).reduce((a, b) => a + b[0], 0);
+  const prog = program(st.stage, level);
+  const msg = `Hola, MOVA. ${st.name ? st.name + " presentó" : "Presenté"} el examen Level Up y el resultado fue nivel ${level} (${right} de ${total} respuestas correctas). Me gustaría recibir informes.`;
+  $("#s-result").innerHTML = `
+    <div class="top"><a class="back" href="./#/games">MOVA Learning Studio</a><span class="brand">MOVA · Centro Pedagógico</span></div>
+    <div class="cert fade" style="--c:var(--${c})">
+      <p class="skill" style="margin:0">Resultado del examen Level Up</p>
+      <span class="stamp" style="--c:var(--${c})">${level}</span>
+      <h2>${title}</h2>
+      ${st.name ? `<p class="name">${esc(st.name)}</p>` : ""}
+      <p class="date">${today} · ${right} de ${total} respuestas correctas</p>
+    </div>
+    <p class="desc">${text}</p>
+    <div class="prog"><b>Programa recomendado</b>${esc(prog)}</div>
+    <div class="bars">${Object.entries(st.skill).filter(([, v]) => v[1]).map(([k, v]) => `<div class="bar"><span>${SKILL[k]}</span><i><b style="width:${Math.round((v[0] / v[1]) * 100)}%"></b></i><span>${Math.round((v[0] / v[1]) * 100)}%</span></div>`).join("")}</div>
+    <div class="journey">${st.journey.map(([L, s, a, b]) => `<span class="${s}">${L} · ${a}/${b}</span>`).join("")}</div>
+    <a class="wa" href="https://wa.me/528123426038?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Enviar resultado a MOVA por WhatsApp</a>
+    <button class="ghost" id="restart">Presentar de nuevo</button>`;
+  show("result");
+  $("#restart").addEventListener("click", () => location.reload());
+}
+})();
+</script>
+</body>
+</html>
