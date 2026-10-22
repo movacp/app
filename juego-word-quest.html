@@ -12,7 +12,7 @@
 <style>
 :root{
   --bg:#FFF6E6; --card:#FFFFFF; --ink:#1B2A55; --muted:#5B6787; --tile:#F5F7FC; --edge:#DCE2F0; --track:#EEF1F8;
-  --coral:#FF7A6B; --sky:#5BC0F0; --mustard:#F2B632; --mint:#4FD1A5; --lilac:#A98BE8; --pink:#F47FB0;
+  --coral:#FF7A6B; --sky:#5BC0F0; --mustard:#F2B632; --mint:#4FD1A5; --lilac:#A98BE8; --pink:#F47FB0; --navy:#1E3A5F;
   --good:#1F9A47; --good-bg:#DDF6E4; --bad:#E5484D; --bad-bg:#FDE4E4;
   --d1:rgba(255,122,107,.5); --d2:rgba(91,192,240,.5); --d3:rgba(242,182,50,.5); --d4:rgba(79,209,165,.5);
   --shadow:0 10px 0 rgba(27,42,85,.07),0 24px 48px rgba(27,42,85,.12);
@@ -37,6 +37,11 @@ h1{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-siz
 h2{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:28px;margin:0}
 .lead{color:var(--muted);margin:0 0 18px}
 .label{font-size:13px;font-weight:600;color:var(--muted);margin:16px 0 8px}
+.stages{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stage{display:grid;gap:1px;text-align:left;padding:11px 12px;border-radius:16px;background:var(--tile);border:2px solid transparent;min-height:60px}
+.stage b{font-size:14px;line-height:1.15}
+.stage small{font-size:12px;color:var(--muted);font-weight:500}
+.stage[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 16%,var(--card))}
 .topics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 @media (min-width:480px){.topics{grid-template-columns:repeat(3,1fr)}}
 .topic{display:flex;align-items:center;gap:10px;padding:10px;border-radius:16px;background:var(--tile);border:2px solid transparent;text-align:left;min-height:58px}
@@ -67,13 +72,16 @@ h2{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-siz
 .say .spk{width:44px;height:44px;border-radius:50%;background:var(--ink);color:var(--card);display:grid;place-items:center;flex:none}
 .say .spk svg{width:22px;height:22px}
 .word{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:clamp(26px,7vw,38px);line-height:1.1}
-.sentence{font-size:clamp(19px,5vw,24px);font-weight:600;line-height:1.4;text-align:left}
+.sentence{font-size:clamp(18px,4.8vw,23px);font-weight:600;line-height:1.45;text-align:left}
 .sentence .gap{display:inline-block;min-width:64px;border-bottom:3px solid var(--sky);margin:0 4px}
+.sentence .cue{color:var(--muted);font-weight:500}
 .es{font-size:14px;color:var(--muted);margin-top:8px}
 .face-swatch{width:84px;height:84px;border-radius:22px;border:3px solid var(--edge);display:inline-block}
 .face-digit{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:64px;line-height:1}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.opt{min-height:74px;border-radius:20px;background:var(--tile);border:2.5px solid var(--edge);font-size:19px;font-weight:600;display:grid;place-items:center;padding:8px;transition:transform .12s}
+.opts.three{grid-template-columns:1fr}
+@media (min-width:480px){.opts.three{grid-template-columns:repeat(3,1fr)}}
+.opt{min-height:66px;border-radius:20px;background:var(--tile);border:2.5px solid var(--edge);font-size:18px;font-weight:600;display:grid;place-items:center;padding:8px 10px;transition:transform .12s;line-height:1.25}
 .opt:active{transform:scale(.97)}
 .opt .face-swatch{width:54px;height:54px;border-radius:16px}
 .opt .face-digit{font-size:42px}
@@ -93,6 +101,7 @@ h2{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-siz
 .spell-tools button{padding:9px 16px;border-radius:12px;background:var(--tile);font-weight:600;font-size:14px}
 .feedback{min-height:28px;text-align:center;font-weight:700;margin-top:14px}
 .feedback.good{color:var(--good)} .feedback.bad{color:var(--bad)}
+.why{margin:8px auto 0;max-width:46ch;text-align:center;font-size:14px;color:var(--muted);min-height:20px}
 .end{text-align:center}
 .stars{display:flex;justify-content:center;gap:6px;margin:14px 0 4px}
 .stars svg{width:44px;height:44px}
@@ -116,7 +125,9 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:5}
   <section id="s-start">
     <div class="top"><a class="back" href="./#/games">MOVA Learning Studio</a><span class="brand">MOVA · Centro Pedagógico</span></div>
     <h1>Word Quest</h1>
-    <p class="lead">Choose a world of words and a way to play.</p>
+    <p class="lead">Choose your stage, a world of words and a way to play.</p>
+    <p class="label">Stage</p>
+    <div class="stages" id="stages"></div>
     <p class="label">Topic</p>
     <div class="topics" id="topics"></div>
     <p class="label">Mode</p>
@@ -137,6 +148,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:5}
     <div class="prompt" id="prompt"></div>
     <div id="answer"></div>
     <div class="feedback" id="feedback" aria-live="polite"></div>
+    <p class="why" id="why"></p>
   </section>
 
   <section id="s-end" class="end" hidden>
@@ -146,7 +158,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:5}
     <p class="final" id="final">0</p>
     <p class="final-l">points</p>
     <div class="sumrow"><span class="pill" id="sum-correct"></span><span class="pill" id="sum-best"></span><span class="pill" id="sum-streak"></span></div>
-    <div class="review" id="review" hidden><h3>Words to review</h3><ul id="review-list"></ul></div>
+    <div class="review" id="review" hidden><h3 id="review-h">Words to review</h3><ul id="review-list"></ul></div>
     <button class="play" id="again">Play again</button>
     <button class="ghost" id="change">Choose another topic</button>
   </section>
@@ -160,7 +172,13 @@ const $ = (s) => document.querySelector(s);
 const shuffle = (a) => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
 const ROUNDS = 10, RUSH = 60000;
 
-/* Iconos de temas (SVG simples) */
+const STAGES = [
+  { id: "kids", name: "MOVA Kids", ages: "Ages 6–8", c: "var(--coral)" },
+  { id: "children", name: "MOVA Children", ages: "Ages 9–12", c: "var(--sky)" },
+  { id: "teens", name: "MOVA Teens", ages: "Ages 12–17", c: "var(--mint)" }
+];
+
+/* Topic icons */
 const G = {
   animals: '<circle cx="8" cy="7" r="2.2"/><circle cx="16" cy="7" r="2.2"/><circle cx="4.5" cy="12" r="2"/><circle cx="19.5" cy="12" r="2"/><path d="M12 11c-3.5 0-6 3.5-6 6 0 2 2 3 3.5 2.5 1.6-.6 3.4-.6 5 0C16 20 18 19 18 17c0-2.5-2.5-6-6-6z"/>',
   food: '<path d="M12 7c-2-1.5-7-1.5-7.5 4C4 16 7 21 9.5 21c1 0 1.6-.5 2.5-.5s1.5.5 2.5.5C17 21 20 16 19.5 11 19 5.5 14 5.5 12 7z"/><path d="M12 7c0-2 .6-3.5 2-4.5" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>',
@@ -171,32 +189,206 @@ const G = {
   clothes: '<path d="M8 3 3 6l2 4 2-1v12h10V9l2 1 2-4-5-3c-.5 1.6-2 2.6-4 2.6S8.5 4.6 8 3z"/>',
   verbs: '<circle cx="14" cy="4" r="2.4"/><path d="m11 8 4 1 2 4 3 1-.8 2-4-1.4-1.4-2.2-1.4 3.6 2.6 2.6V22h-2v-3.4l-3-2.6L8 20l-2-1 2.6-5.4L10 10l-2 1-1 3-2-.6L6.5 9z"/>',
   pronouns: '<path d="M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-9l-5 4v-4H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/>',
-  weather: '<circle cx="9" cy="9" r="4"/><path d="M8 20a4 4 0 0 1 0-8 5 5 0 0 1 9.5 1.5A3.3 3.3 0 0 1 17 20z" opacity=".85"/>'
+  weather: '<circle cx="9" cy="9" r="4"/><path d="M8 20a4 4 0 0 1 0-8 5 5 0 0 1 9.5 1.5A3.3 3.3 0 0 1 17 20z" opacity=".85"/>',
+  freq: '<path d="M12 2.5a9.5 9.5 0 1 0 0 19 9.5 9.5 0 0 0 0-19zm0 3a6.5 6.5 0 0 1 6.5 6.5H12z"/>',
+  past: '<path d="M12 3a9 9 0 1 1-8.5 6h3.2A6 6 0 1 0 12 6v2.5L7.5 5 12 1.5z"/><path d="M11 8h2v4.6l3 1.8-1 1.7-4-2.4z"/>',
+  compare: '<rect x="3" y="13" width="5" height="8" rx="1.5"/><rect x="9.5" y="8" width="5" height="13" rx="1.5"/><rect x="16" y="3" width="5" height="18" rx="1.5"/>',
+  prep: '<path d="M3 11h18v10H3z" opacity=".75"/><circle cx="12" cy="6" r="4"/>',
+  quant: '<path d="M5 6h6v15H5zM13 11h6v10h-6z"/><path d="M5 3h6v2H5zM13 8h6v2h-6z" opacity=".7"/>',
+  contin: '<path d="M2 12h5l2-5 3 10 2-5h8" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>',
+  participle: '<path d="M5 3h10l4 4v14H5z"/><path d="m8.5 13 2.5 2.5 4.5-5" fill="none" stroke="#1B2A55" stroke-opacity=".55" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
+  perfect: '<path d="M2 11h20v2H2z"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="12" r="3"/>',
+  passive: '<path d="M4 7h12l-3-3 1.5-1.5L20 8l-5.5 5.5L13 12l3-3H4zM20 17H8l3 3-1.5 1.5L4 16l5.5-5.5L11 12l-3 3h12z"/>',
+  cond: '<path d="M11 21v-7L5 8V4h2v3.2l5 5 5-5V4h2v4l-6 6v7z"/>',
+  modals: '<circle cx="8" cy="12" r="5"/><path d="M12 11h10v3h-2v3h-3v-3h-5z"/>',
+  gerund: '<path d="M4 5h3v14H4zM9 9h3v10H9zM14 9h3a3 3 0 0 1 3 3v7h-3v-7h-3z"/>',
+  linkers: '<path d="M9.5 14.5 7 17a3.5 3.5 0 0 1-5-5l3.5-3.5a3.5 3.5 0 0 1 5 0l-1.5 1.5a1.4 1.4 0 0 0-2 0L3.5 13.5a1.4 1.4 0 0 0 2 2l2.5-2.5zM14.5 9.5 17 7a3.5 3.5 0 0 1 5 5l-3.5 3.5a3.5 3.5 0 0 1-5 0l1.5-1.5a1.4 1.4 0 0 0 2 0l3.5-3.5a1.4 1.4 0 0 0-2-2L16 11zM8.5 14l5.5-5.5 1.5 1.5L10 15.5z"/>'
 };
+
+/* Sentence items: [sentence with ___, answer, hint, options (answer first)] */
 const DATA = {
-  animals: { label: "Animals", c: "var(--coral)", items: [["dog","perro"],["cat","gato"],["bird","pájaro"],["fish","pez"],["horse","caballo"],["cow","vaca"],["rabbit","conejo"],["duck","pato"],["lion","león"],["monkey","mono"],["frog","rana"],["bear","oso"],["elephant","elefante"],["turtle","tortuga"]] },
-  food: { label: "Food", c: "var(--sky)", items: [["apple","manzana"],["bread","pan"],["milk","leche"],["egg","huevo"],["cheese","queso"],["rice","arroz"],["banana","plátano"],["water","agua"],["cookie","galleta"],["soup","sopa"],["chicken","pollo"],["orange","naranja"],["juice","jugo"],["salad","ensalada"]] },
-  colors: { label: "Colors", c: "var(--mustard)", face: "swatch", items: [["red","rojo","#E53935"],["blue","azul","#1E6FE0"],["yellow","amarillo","#FFD21F"],["green","verde","#2EAA4A"],["orange","naranja","#FF8A1F"],["purple","morado","#8E44CC"],["pink","rosa","#FF6FB1"],["brown","café","#8B5A2B"],["black","negro","#1B1B1B"],["white","blanco","#FFFFFF"],["gray","gris","#9AA1AD"]] },
-  numbers: { label: "Numbers", c: "var(--mint)", face: "digit", items: [["one","uno","1"],["two","dos","2"],["three","tres","3"],["four","cuatro","4"],["five","cinco","5"],["six","seis","6"],["seven","siete","7"],["eight","ocho","8"],["nine","nueve","9"],["ten","diez","10"],["eleven","once","11"],["twelve","doce","12"],["fifteen","quince","15"],["twenty","veinte","20"]] },
-  family: { label: "Family", c: "var(--pink)", items: [["mother","mamá"],["father","papá"],["sister","hermana"],["brother","hermano"],["grandmother","abuela"],["grandfather","abuelo"],["baby","bebé"],["aunt","tía"],["uncle","tío"],["cousin","primo"],["son","hijo"],["daughter","hija"]] },
-  body: { label: "My Body", c: "var(--lilac)", items: [["head","cabeza"],["eyes","ojos"],["nose","nariz"],["mouth","boca"],["ears","orejas"],["hands","manos"],["feet","pies"],["arm","brazo"],["leg","pierna"],["hair","cabello"],["teeth","dientes"],["fingers","dedos"]] },
-  clothes: { label: "Clothes", c: "var(--sky)", items: [["shirt","camisa"],["pants","pantalón"],["dress","vestido"],["shoes","zapatos"],["hat","sombrero"],["jacket","chamarra"],["socks","calcetines"],["skirt","falda"],["sweater","suéter"],["shorts","shorts"],["boots","botas"],["cap","gorra"]] },
-  verbs: { label: "Action Verbs", c: "var(--coral)", items: [["run","correr"],["jump","saltar"],["eat","comer"],["drink","beber"],["sleep","dormir"],["read","leer"],["write","escribir"],["swim","nadar"],["sing","cantar"],["dance","bailar"],["play","jugar"],["walk","caminar"],["draw","dibujar"],["cook","cocinar"]] },
-  pronouns: { label: "Pronouns", c: "var(--mint)", type: "sentence", options: ["I","You","He","She","It","We","They"], items: [
-    ["Ana is my sister. ___ is nine.","She","Ana es mi hermana. Ella tiene nueve años."],
-    ["Tom is my friend. ___ plays soccer.","He","Tom es mi amigo. Él juega futbol."],
-    ["My dog is brown. ___ is very funny.","It","Mi perro es café. Es muy chistoso."],
-    ["Leo and I are cousins. ___ live in Monterrey.","We","Leo y yo somos primos. Vivimos en Monterrey."],
-    ["My parents are teachers. ___ work at a school.","They","Mis papás son maestros. Trabajan en una escuela."],
-    ["Hello! ___ am Sofía.","I","¡Hola! Yo soy Sofía."],
-    ["Mia, ___ are my best friend!","You","¡Mia, tú eres mi mejor amiga!"],
-    ["The books are on the table. ___ are new.","They","Los libros están en la mesa. Son nuevos."],
-    ["My grandpa is seventy. ___ likes music.","He","Mi abuelo tiene setenta. Le gusta la música."],
-    ["The cat is under the bed. ___ is sleeping.","It","El gato está debajo de la cama. Está durmiendo."],
-    ["Mom and I cook on Sundays. ___ make pancakes.","We","Mamá y yo cocinamos los domingos. Hacemos hot cakes."],
-    ["My teacher is Miss Karla. ___ is very nice.","She","Mi maestra es Miss Karla. Es muy amable."]
+  /* ---------- MOVA Kids ---------- */
+  animals: { stage: "kids", label: "Animals", c: "var(--coral)", items: [["dog","perro"],["cat","gato"],["bird","pájaro"],["fish","pez"],["horse","caballo"],["cow","vaca"],["rabbit","conejo"],["duck","pato"],["lion","león"],["monkey","mono"],["frog","rana"],["bear","oso"],["elephant","elefante"],["turtle","tortuga"]] },
+  food: { stage: "kids", label: "Food", c: "var(--sky)", items: [["apple","manzana"],["bread","pan"],["milk","leche"],["egg","huevo"],["cheese","queso"],["rice","arroz"],["banana","plátano"],["water","agua"],["cookie","galleta"],["soup","sopa"],["chicken","pollo"],["orange","naranja"],["juice","jugo"],["salad","ensalada"]] },
+  colors: { stage: "kids", label: "Colors", c: "var(--mustard)", face: "swatch", items: [["red","rojo","#E53935"],["blue","azul","#1E6FE0"],["yellow","amarillo","#FFD21F"],["green","verde","#2EAA4A"],["orange","naranja","#FF8A1F"],["purple","morado","#8E44CC"],["pink","rosa","#FF6FB1"],["brown","café","#8B5A2B"],["black","negro","#1B1B1B"],["white","blanco","#FFFFFF"],["gray","gris","#9AA1AD"]] },
+  numbers: { stage: "kids", label: "Numbers", c: "var(--mint)", face: "digit", items: [["one","uno","1"],["two","dos","2"],["three","tres","3"],["four","cuatro","4"],["five","cinco","5"],["six","seis","6"],["seven","siete","7"],["eight","ocho","8"],["nine","nueve","9"],["ten","diez","10"],["eleven","once","11"],["twelve","doce","12"],["fifteen","quince","15"],["twenty","veinte","20"]] },
+  family: { stage: "kids", label: "Family", c: "var(--pink)", items: [["mother","mamá"],["father","papá"],["sister","hermana"],["brother","hermano"],["grandmother","abuela"],["grandfather","abuelo"],["baby","bebé"],["aunt","tía"],["uncle","tío"],["cousin","primo"],["son","hijo"],["daughter","hija"]] },
+  body: { stage: "kids", label: "My Body", c: "var(--lilac)", items: [["head","cabeza"],["eyes","ojos"],["nose","nariz"],["mouth","boca"],["ears","orejas"],["hands","manos"],["feet","pies"],["arm","brazo"],["leg","pierna"],["hair","cabello"],["teeth","dientes"],["fingers","dedos"]] },
+  clothes: { stage: "kids", label: "Clothes", c: "var(--sky)", items: [["shirt","camisa"],["pants","pantalón"],["dress","vestido"],["shoes","zapatos"],["hat","sombrero"],["jacket","chamarra"],["socks","calcetines"],["skirt","falda"],["sweater","suéter"],["shorts","shorts"],["boots","botas"],["cap","gorra"]] },
+  verbs: { stage: "kids", label: "Action Verbs", c: "var(--coral)", items: [["run","correr"],["jump","saltar"],["eat","comer"],["drink","beber"],["sleep","dormir"],["read","leer"],["write","escribir"],["swim","nadar"],["sing","cantar"],["dance","bailar"],["play","jugar"],["walk","caminar"],["draw","dibujar"],["cook","cocinar"]] },
+  pronouns: { stage: "kids", label: "Pronouns", c: "var(--mint)", type: "sentence", instr: "Choose the right pronoun", options: ["I","You","He","She","It","We","They"], items: [
+    ["Ana is my sister. ___ is nine.","She"],
+    ["Tom is my friend. ___ plays soccer.","He"],
+    ["My dog is brown. ___ is very funny.","It"],
+    ["Leo and I are cousins. ___ live in Monterrey.","We"],
+    ["My parents are teachers. ___ work at a school.","They"],
+    ["Hello! ___ am Sofía.","I"],
+    ["Mia, ___ are my best friend!","You"],
+    ["The books are on the table. ___ are new.","They"],
+    ["My grandpa is seventy. ___ likes music.","He"],
+    ["The cat is under the bed. ___ is sleeping.","It"],
+    ["Mom and I cook on Sundays. ___ make pancakes.","We"],
+    ["My teacher is Miss Karla. ___ is very nice.","She"]
   ] },
-  weather: { label: "Weather", c: "var(--mustard)", items: [["sunny","soleado"],["rainy","lluvioso"],["cloudy","nublado"],["windy","con viento"],["snowy","con nieve"],["hot","calor"],["cold","frío"],["stormy","con tormenta"],["warm","templado"],["foggy","con neblina"]] }
+  weather: { stage: "kids", label: "Weather", c: "var(--mustard)", items: [["sunny","soleado"],["rainy","lluvioso"],["cloudy","nublado"],["windy","con viento"],["snowy","con nieve"],["hot","calor"],["cold","frío"],["stormy","con tormenta"],["warm","templado"],["foggy","con neblina"]] },
+
+  /* ---------- MOVA Children ---------- */
+  freq: { stage: "children", label: "Adverbs of Frequency", c: "var(--coral)", type: "sentence", instr: "How often? Choose the adverb", rule: "always 100% · usually 80% · often 70% · sometimes 50% · rarely 10% · never 0%", options: ["always","usually","often","sometimes","rarely","never"], items: [
+    ["I ___ brush my teeth before bed.","always","100%"],
+    ["We ___ eat pizza on Fridays, but not every week.","sometimes","50%"],
+    ["My cat ___ swims. It hates water!","never","0%"],
+    ["She ___ walks to school, but on rainy days she takes the bus.","usually","80%"],
+    ["He is ___ late. He arrives on time every day.","never","0%"],
+    ["My dad ___ drinks coffee in the morning. Every single day!","always","100%"],
+    ["I ___ go to bed late. Only on my birthday.","rarely","10%"],
+    ["They ___ play soccer after school, about twice a week.","sometimes","50%"],
+    ["Choose the correct sentence.","She is always happy.","After the verb to be",["She is always happy.","She always is happy.","Always she is happy."]],
+    ["Choose the correct sentence.","I usually walk to school.","Before the main verb",["I usually walk to school.","I walk usually to school.","Usually I to school walk."]],
+    ["___ do you play video games? Every weekend.","How often","Asking about frequency",["How often","How much","What time"]]
+  ] },
+  past: { stage: "children", label: "Irregular Past", c: "var(--mustard)", type: "sentence", instr: "Choose the past simple", rule: "Irregular verbs don’t take -ed. go → went, eat → ate, see → saw.", items: [
+    ["Yesterday I ___ (go) to the park.","went","",["went","goed","gone"]],
+    ["We ___ (eat) tacos last night.","ate","",["ate","eated","eaten"]],
+    ["She ___ (see) a rainbow after the rain.","saw","",["saw","seed","seen"]],
+    ["My brother ___ (buy) a new ball.","bought","",["bought","buyed","buys"]],
+    ["They ___ (swim) in the lake last summer.","swam","",["swam","swimmed","swum"]],
+    ["I ___ (write) a letter to my grandma.","wrote","",["wrote","writed","written"]],
+    ["He ___ (take) the bus to school.","took","",["took","taked","taken"]],
+    ["We ___ (have) a great time at the party.","had","",["had","haved","has"]],
+    ["Last week, Mia ___ (find) a coin in the street.","found","",["found","finded","find"]],
+    ["The baby ___ (sleep) all afternoon.","slept","",["slept","sleeped","sleep"]],
+    ["I ___ (not / go) to school on Monday.","didn’t go","After didn’t, use the base verb",["didn’t go","didn’t went","not went"]],
+    ["___ you ___ (see) the game?","Did / see","Did + base verb",["Did / see","Did / saw","Do / saw"]]
+  ] },
+  compare: { stage: "children", label: "Comparatives", c: "var(--sky)", type: "sentence", instr: "Compare people and things", rule: "Short adjectives: -er / the -est. Long adjectives: more / the most. good → better → the best.", items: [
+    ["An elephant is ___ than a dog.","bigger","",["bigger","more big","biggest"]],
+    ["My sister is ___ than me.","taller","",["taller","more tall","tallest"]],
+    ["Math is ___ than art for me.","more difficult","",["more difficult","difficulter","most difficult"]],
+    ["This test is ___ than the last one.","easier","",["easier","easyer","more easy"]],
+    ["Today is ___ than yesterday.","hotter","",["hotter","hoter","more hot"]],
+    ["My new phone is ___ than my old phone.","better","",["better","gooder","best"]],
+    ["Mount Everest is the ___ mountain in the world.","highest","",["highest","higher","most high"]],
+    ["That was the ___ movie I have ever seen!","worst","",["worst","baddest","worse"]],
+    ["A cheetah is ___ than a horse.","faster","",["faster","more fast","fastest"]],
+    ["Gold is ___ than silver.","more expensive","",["more expensive","expensiver","most expensive"]]
+  ] },
+  prep: { stage: "children", label: "In, On, At", c: "var(--mint)", type: "sentence", instr: "Choose the preposition", rule: "in + months, years, seasons · on + days, dates · at + times, places like the bus stop.", options: ["in","on","at"], items: [
+    ["My birthday is ___ May.","in"],
+    ["The party is ___ Saturday.","on"],
+    ["School starts ___ 8 o’clock.","at"],
+    ["We go to the beach ___ summer.","in"],
+    ["The book is ___ the table.","on"],
+    ["My mom works ___ night.","at"],
+    ["She was born ___ 2015.","in"],
+    ["There is a picture ___ the wall.","on"],
+    ["Wait for me ___ the bus stop.","at"],
+    ["We have English class ___ Monday afternoons.","on"],
+    ["The cookies are ___ the box.","in"],
+    ["See you ___ noon!","at"]
+  ] },
+  quant: { stage: "children", label: "Much, Many, Some, Any", c: "var(--lilac)", type: "sentence", instr: "How much or how many?", rule: "many + things you can count · much + things you can’t count · some in positive sentences · any in questions and negatives.", items: [
+    ["How ___ apples do you want?","many","Apples can be counted",["many","much","any"]],
+    ["How ___ water do you drink every day?","much","Water can’t be counted",["much","many","some"]],
+    ["There is ___ milk in the fridge.","some","Positive sentence",["some","many","any"]],
+    ["There aren’t ___ cookies left.","any","Negative sentence",["any","some","much"]],
+    ["I don’t have ___ time today.","much","Time can’t be counted",["much","many","some"]],
+    ["Are there ___ students in the classroom?","any","Question",["any","much","a"]],
+    ["We need ___ eggs for the cake.","some","Positive sentence",["some","much","any"]],
+    ["She has ___ friends at her new school.","many","Friends can be counted",["many","much","any"]],
+    ["Is there ___ juice in the bottle?","any","Question",["any","many","a"]],
+    ["There isn’t ___ sugar in my tea.","much","Sugar can’t be counted",["much","many","some"]]
+  ] },
+  contin: { stage: "children", label: "Present Continuous", c: "var(--pink)", type: "sentence", instr: "What is happening now?", rule: "am / is / are + verb-ing for actions happening right now.", items: [
+    ["Look! The dog ___ the ball.","is chasing","",["is chasing","chases","chasing"]],
+    ["I ___ my homework right now.","am doing","",["am doing","do","doing"]],
+    ["They ___ soccer at the moment.","are playing","",["are playing","is playing","play"]],
+    ["Listen! The baby ___.","is crying","",["is crying","cries","crying"]],
+    ["We ___ TV now. We are reading.","aren’t watching","",["aren’t watching","don’t watch","isn’t watching"]],
+    ["___ she sleeping?","Is","",["Is","Does","Are"]],
+    ["My mom ___ dinner in the kitchen.","is cooking","",["is cooking","cooking","cooks"]],
+    ["What ___ you doing?","are","",["are","do","is"]],
+    ["The kids ___ in the pool right now.","are swimming","Double the m",["are swimming","are swiming","swims"]]
+  ] },
+
+  /* ---------- MOVA Teens ---------- */
+  participle: { stage: "teens", label: "Past Participles", c: "var(--coral)", type: "sentence", instr: "Choose the past participle", rule: "have / has + past participle. go → went → gone · eat → ate → eaten.", items: [
+    ["I have never ___ (eat) sushi.","eaten","",["eaten","ate","eated"]],
+    ["She has ___ (write) three books.","written","",["written","wrote","writed"]],
+    ["Have you ever ___ (be) to Cancún?","been","",["been","was","be"]],
+    ["We have ___ (see) that movie twice.","seen","",["seen","saw","seed"]],
+    ["He has ___ (break) his phone again!","broken","",["broken","broke","breaked"]],
+    ["They have ___ (go) to the cinema.","gone","",["gone","went","goed"]],
+    ["Has she ___ (speak) to the teacher?","spoken","",["spoken","spoke","speaked"]],
+    ["I have ___ (lose) my keys.","lost","",["lost","losed","lose"]],
+    ["The bell has already ___ (ring).","rung","",["rung","rang","ringed"]],
+    ["Have you ___ (take) your medicine?","taken","",["taken","took","taked"]],
+    ["My cousins have ___ (fly) to Madrid.","flown","",["flown","flew","flied"]],
+    ["We have ___ (know) each other for years.","known","",["known","knew","knowed"]]
+  ] },
+  perfect: { stage: "teens", label: "For, Since, Already, Yet", c: "var(--mustard)", type: "sentence", instr: "Complete the present perfect", rule: "for + a period · since + a starting point · already in positive sentences · yet in questions and negatives.", items: [
+    ["I have lived here ___ 2018.","since","Starting point",["since","for","yet"]],
+    ["She has studied English ___ five years.","for","Period of time",["for","since","already"]],
+    ["Have you finished your project ___?","yet","Question",["yet","already","since"]],
+    ["We have ___ eaten. We aren’t hungry.","already","Positive sentence",["already","yet","since"]],
+    ["He hasn’t called me ___.","yet","Negative sentence",["yet","already","for"]],
+    ["They have known each other ___ they were kids.","since","Starting point",["since","for","yet"]],
+    ["I haven’t seen her ___ a long time.","for","Period of time",["for","since","yet"]],
+    ["The movie has ___ started! Hurry!","already","Positive sentence",["already","yet","for"]]
+  ] },
+  passive: { stage: "teens", label: "Passive Voice", c: "var(--sky)", type: "sentence", instr: "Choose the passive form", rule: "be + past participle. The action is more important than who does it.", items: [
+    ["English ___ in many countries.","is spoken","",["is spoken","speaks","is speaking"]],
+    ["The Mona Lisa ___ by Leonardo da Vinci.","was painted","",["was painted","painted","is painting"]],
+    ["This bridge ___ in 1920.","was built","",["was built","built","is build"]],
+    ["The letters ___ every morning.","are delivered","",["are delivered","deliver","are deliver"]],
+    ["My bike ___ last night!","was stolen","",["was stolen","stole","was stole"]],
+    ["The winners ___ tomorrow.","will be announced","",["will be announced","will announce","are announcing"]],
+    ["Tacos ___ with corn tortillas.","are made","",["are made","make","are making"]],
+    ["The homework must ___ by Friday.","be finished","",["be finished","finish","finished"]],
+    ["A new library ___ next year.","will be opened","",["will be opened","will open","opens"]],
+    ["Harry Potter ___ into more than 80 languages.","has been translated","",["has been translated","has translated","translated"]]
+  ] },
+  cond: { stage: "teens", label: "Conditionals", c: "var(--mint)", type: "sentence", instr: "Complete the conditional", rule: "Zero: if + present, present · First: if + present, will · Second: if + past, would.", items: [
+    ["If it rains, we ___ at home.","will stay","First conditional",["will stay","would stay","stayed"]],
+    ["If I ___ rich, I would travel the world.","were","Second conditional",["were","am","will be"]],
+    ["If you heat ice, it ___.","melts","Zero conditional: a fact",["melts","would melt","melted"]],
+    ["If she studies, she ___ the exam.","will pass","First conditional",["will pass","would pass","passes"]],
+    ["If I had a dog, I ___ it every day.","would walk","Second conditional",["would walk","will walk","walk"]],
+    ["What would you do if you ___ a million pesos?","won","Second conditional",["won","win","will win"]],
+    ["If you don’t hurry, you ___ the bus.","will miss","First conditional",["will miss","would miss","missed"]],
+    ["If I ___ you, I would apologize.","were","Advice with the second conditional",["were","was being","am"]]
+  ] },
+  modals: { stage: "teens", label: "Modal Verbs", c: "var(--lilac)", type: "sentence", instr: "Choose the modal verb", rule: "must = obligation · should = advice · might = possibility · don’t have to = not necessary · mustn’t = not allowed.", items: [
+    ["You ___ wear a seatbelt. It’s the law.","must","Obligation",["must","might","could"]],
+    ["You look tired. You ___ go to bed early.","should","Advice",["should","mustn’t","might"]],
+    ["It ___ rain later. Take an umbrella just in case.","might","Possibility",["might","must","should"]],
+    ["You ___ use your phone during the exam.","mustn’t","Not allowed",["mustn’t","don’t have to","might"]],
+    ["Tomorrow is Saturday, so I ___ get up early.","don’t have to","Not necessary",["don’t have to","mustn’t","shouldn’t"]],
+    ["When I was five, I ___ swim.","could","Past ability",["could","can","must"]],
+    ["She ___ be at home. Her car is outside.","must","Almost certain",["must","should","mustn’t"]],
+    ["___ I borrow your pencil, please?","Could","Polite request",["Could","Must","Should"]]
+  ] },
+  gerund: { stage: "teens", label: "Gerunds and Infinitives", c: "var(--coral)", type: "sentence", instr: "-ing or to + verb?", rule: "enjoy, finish, mind, stop + -ing · want, decide, hope, promise + to · after prepositions, use -ing.", items: [
+    ["I enjoy ___ books.","reading","enjoy + -ing",["reading","to read","read"]],
+    ["She wants ___ a doctor.","to be","want + to",["to be","being","be"]],
+    ["They decided ___ to the beach.","to go","decide + to",["to go","going","go"]],
+    ["He finished ___ his homework.","doing","finish + -ing",["doing","to do","do"]],
+    ["We hope ___ you soon.","to see","hope + to",["to see","seeing","see"]],
+    ["Do you mind ___ the door?","closing","mind + -ing",["closing","to close","close"]],
+    ["I’m good at ___ soccer.","playing","After a preposition",["playing","to play","play"]],
+    ["She promised ___ me with my project.","to help","promise + to",["to help","helping","help"]],
+    ["Please stop ___ noise!","making","stop + -ing",["making","to make","make"]],
+    ["I’d like ___ pizza tonight.","to order","would like + to",["to order","ordering","order"]]
+  ] },
+  linkers: { stage: "teens", label: "Linking Words", c: "var(--mustard)", type: "sentence", instr: "Connect the ideas", rule: "because = reason · so / therefore = result · but / however = contrast · although = surprising contrast.", items: [
+    ["I was tired, ___ I went to bed early.","so","Result",["so","but","because"]],
+    ["She didn’t go to school ___ she was sick.","because","Reason",["because","so","although"]],
+    ["___ it was raining, we played outside.","Although","Surprising contrast",["Although","Because","So"]],
+    ["He studied a lot. ___, he failed the exam.","However","Contrast",["However","Therefore","Because"]],
+    ["I like tea, ___ I prefer coffee.","but","Contrast",["but","so","because"]],
+    ["It was very late. ___, we took a taxi.","Therefore","Result",["Therefore","However","Although"]],
+    ["___ the traffic, we arrived on time.","Despite","Despite + noun",["Despite","Although","However"]],
+    ["You can have pizza ___ tacos. Choose one.","or","Alternative",["or","so","because"]]
+  ] }
 };
 const MODES = {
   mix: ["Mix", "A little of everything: listen, read and spell."],
@@ -206,17 +398,19 @@ const MODES = {
   rush: ["60-second rush", "How many can you answer in one minute?"]
 };
 const PRAISE = ["Great job!", "Awesome!", "You got it!", "Super!", "Well done!", "Fantastic!", "Brilliant!"];
-const st = { topic: "animals", mode: "mix", round: 0, score: 0, streak: 0, bestStreak: 0, correct: 0, total: 0, queue: [], item: null, kind: null, locked: true, raf: 0, timeouts: [], missed: [], rushEnd: 0 };
+const st = { stage: "kids", topic: "animals", mode: "mix", round: 0, score: 0, streak: 0, bestStreak: 0, correct: 0, total: 0, queue: [], item: null, kind: null, locked: true, raf: 0, timeouts: [], missed: [], rushEnd: 0 };
+try { const s = localStorage.getItem("mova-wq-stage"); if (s && STAGES.some((x) => x.id === s)) { st.stage = s; st.topic = Object.keys(DATA).find((k) => DATA[k].stage === s); } } catch (e) {}
 
-/* Voz y sonidos */
+/* Voice and sounds */
 const synth = window.speechSynthesis || null;
-function speak(text, rate) { if (!synth) return; try { synth.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = "en-US"; u.rate = rate || .85; synth.speak(u); } catch (e) {} }
+function speak(text, rate) { if (!synth) return; try { synth.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = "en-US"; u.rate = rate || .9; u.movaGender = "f"; synth.speak(u); } catch (e) {} }
+const spoken = (s) => s.replace(/\s*\([^)]*\)/g, "").replace("___", "blank");
 let actx = null;
 function unlock() { try { if (!actx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) actx = new AC(); } if (actx && actx.state === "suspended") actx.resume(); } catch (e) {} }
 function tones(fs, step, type) { if (!actx) return; const t0 = actx.currentTime; fs.forEach((f, i) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = type || "sine"; o.frequency.value = f; const s = t0 + i * step; g.gain.setValueAtTime(.0001, s); g.gain.exponentialRampToValueAtTime(.16, s + .02); g.gain.exponentialRampToValueAtTime(.0001, s + step + .12); o.connect(g).connect(actx.destination); o.start(s); o.stop(s + step + .15); }); }
 const chime = () => tones([660, 880, 1175], .08, "triangle"), buzz = () => tones([220, 180], .13, "square"), fanfare = () => tones([523, 659, 784, 1047], .12, "triangle"), tick = () => tones([980], .03, "sine");
 
-/* Récords */
+/* Records */
 const bestKey = () => `mova-wq2-${st.topic}-${st.mode}`;
 const getBest = () => { try { return +(localStorage.getItem(bestKey()) || 0); } catch (e) { return 0; } };
 const setBest = (v) => { try { localStorage.setItem(bestKey(), String(v)); } catch (e) {} };
@@ -224,16 +418,27 @@ const setBest = (v) => { try { localStorage.setItem(bestKey(), String(v)); } cat
 function later(fn, ms) { st.timeouts.push(setTimeout(fn, ms)); }
 function clearLater() { st.timeouts.forEach(clearTimeout); st.timeouts = []; cancelAnimationFrame(st.raf); }
 function show(id) { ["start", "game", "end"].forEach((s) => { $("#s-" + s).hidden = s !== id; }); window.scrollTo(0, 0); }
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-/* Pantalla de inicio */
-const topicsEl = $("#topics"), modesEl = $("#modes");
-Object.entries(DATA).forEach(([k, t]) => {
+/* Start screen */
+const stagesEl = $("#stages"), topicsEl = $("#topics"), modesEl = $("#modes");
+STAGES.forEach((s) => {
   const b = document.createElement("button");
-  b.className = "topic"; b.dataset.k = k; b.style.setProperty("--c", t.c);
-  b.innerHTML = `<span class="mark"><svg viewBox="0 0 24 24" fill="#fff">${G[k]}</svg></span><b>${t.label}</b>`;
-  b.addEventListener("click", () => { unlock(); st.topic = k; refresh(); speak(t.label); });
-  topicsEl.appendChild(b);
+  b.className = "stage"; b.dataset.k = s.id; b.style.setProperty("--c", s.c);
+  b.innerHTML = `<b>${s.name}</b><small>${s.ages}</small>`;
+  b.addEventListener("click", () => { unlock(); st.stage = s.id; st.topic = Object.keys(DATA).find((k) => DATA[k].stage === s.id); try { localStorage.setItem("mova-wq-stage", s.id); } catch (e) {} drawTopics(); refresh(); });
+  stagesEl.appendChild(b);
 });
+function drawTopics() {
+  topicsEl.innerHTML = "";
+  Object.entries(DATA).filter(([, t]) => t.stage === st.stage).forEach(([k, t]) => {
+    const b = document.createElement("button");
+    b.className = "topic"; b.dataset.k = k; b.style.setProperty("--c", t.c);
+    b.innerHTML = `<span class="mark"><svg viewBox="0 0 24 24" fill="#fff">${G[k]}</svg></span><b>${t.label}</b>`;
+    b.addEventListener("click", () => { unlock(); st.topic = k; refresh(); speak(t.label); });
+    topicsEl.appendChild(b);
+  });
+}
 Object.entries(MODES).forEach(([k, m]) => {
   const b = document.createElement("button");
   b.className = "mode"; b.dataset.k = k; b.textContent = m[0];
@@ -241,16 +446,18 @@ Object.entries(MODES).forEach(([k, m]) => {
   modesEl.appendChild(b);
 });
 function refresh() {
-  if (DATA[st.topic].type === "sentence" && st.mode === "spell") st.mode = "mix";
+  const t = DATA[st.topic], isS = t.type === "sentence";
+  if (isS && (st.mode === "spell" || st.mode === "read")) st.mode = "mix";
+  stagesEl.querySelectorAll(".stage").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === st.stage));
   topicsEl.querySelectorAll(".topic").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === st.topic));
-  modesEl.querySelectorAll(".mode").forEach((b) => { b.setAttribute("aria-pressed", b.dataset.k === st.mode); b.hidden = b.dataset.k === "spell" && DATA[st.topic].type === "sentence"; });
-  $("#mode-hint").textContent = DATA[st.topic].type === "sentence" ? "Read the sentence and choose the right pronoun." : MODES[st.mode][1];
+  modesEl.querySelectorAll(".mode").forEach((b) => { b.setAttribute("aria-pressed", b.dataset.k === st.mode); b.hidden = isS && (b.dataset.k === "spell" || b.dataset.k === "read"); if (b.dataset.k === "mix") b.textContent = isS ? "Practice" : "Mix"; });
+  $("#mode-hint").textContent = isS ? (st.mode === "rush" ? MODES.rush[1] : (t.rule || t.instr + ".")) : MODES[st.mode][1];
   const best = getBest();
-  $("#best").textContent = best ? `Best score in ${DATA[st.topic].label} · ${MODES[st.mode][0]}: ${best}` : "";
+  $("#best").textContent = best ? `Best score in ${t.label}: ${best}` : "";
 }
-refresh();
+drawTopics(); refresh();
 
-/* Juego */
+/* Game */
 function start() {
   unlock(); clearLater();
   const t = DATA[st.topic];
@@ -273,6 +480,7 @@ function pickKind(t, item) {
 }
 const face = (t, item) => t.face === "swatch" ? `<span class="face-swatch" style="background:${item[2]}"></span>` : t.face === "digit" ? `<span class="face-digit">${item[2]}</span>` : "";
 const speakerBtn = (inner) => `<button class="say" id="say" aria-label="Hear it again"><span class="spk"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>${inner}</button>`;
+const sentenceHTML = (s) => esc(s).replace(/\(([^)]*)\)/g, '<span class="cue">($1)</span>').replace("___", '<span class="gap"></span>');
 
 function next() {
   if (st.mode !== "rush" && st.round >= ROUNDS) return finish();
@@ -283,11 +491,11 @@ function next() {
   st.item = item; st.round++; st.locked = false;
   const kind = st.kind = pickKind(t, item);
   $("#round").textContent = st.mode === "rush" ? `${st.correct} correct` : `${st.round} / ${ROUNDS}`;
-  $("#feedback").textContent = ""; $("#feedback").className = "feedback";
-  const P = $("#prompt"), A = $("#answer");
+  $("#feedback").textContent = ""; $("#feedback").className = "feedback"; $("#why").textContent = "";
+  const P = $("#prompt");
 
   if (kind === "spell") {
-    const w = item[0];
+    const w = item[0], A = $("#answer");
     P.innerHTML = `<p class="instr">Listen and spell the word</p>${speakerBtn(`<span class="es">${item[1]}</span>`)}`;
     const extra = shuffle("abcdefghijklmnoprstuwy".split("").filter((l) => !w.includes(l))).slice(0, 2);
     const tiles = shuffle([...w.split(""), ...extra]);
@@ -305,11 +513,12 @@ function next() {
     $("#clear").addEventListener("click", () => { while (typed.length) typed.pop().b.disabled = false; paint(); });
     later(() => speak(w), 350);
   } else if (kind === "sentence") {
-    const [s, a, es] = item;
-    P.innerHTML = `<p class="instr">Choose the right pronoun</p>${speakerBtn(`<span class="sentence">${s.replace("___", '<span class="gap"></span>')}</span>`)}<p class="es">${es}</p>`;
-    const others = shuffle(t.options.filter((o) => o !== a)).slice(0, 3);
-    renderOpts(shuffle([a, ...others]).map((o) => ({ key: o, html: o })), a);
-    later(() => speak(s.replace("___", "blank")), 350);
+    const [s, a, hint, own] = item;
+    const kidsHint = t.stage === "kids" ? "" : (hint ? `<p class="es">${esc(hint)}</p>` : "");
+    P.innerHTML = `<p class="instr">${esc(t.instr)}</p>${speakerBtn(`<span class="sentence">${sentenceHTML(s)}</span>`)}${kidsHint}`;
+    const choices = own ? own.slice() : [a, ...shuffle(t.options.filter((o) => o !== a)).slice(0, 3)];
+    renderOpts(shuffle(choices).map((o) => ({ key: o, html: esc(o) })), a, choices.length === 3);
+    if (st.mode === "listen") later(() => speak(spoken(s)), 350);
   } else {
     const others = shuffle(t.items.filter((i) => i[0] !== item[0])).slice(0, 3);
     const opts = shuffle([item, ...others]);
@@ -329,12 +538,12 @@ function next() {
     }
   }
   const sayBtn = $("#say");
-  if (sayBtn) sayBtn.addEventListener("click", () => { unlock(); speak(kind === "sentence" ? item[0].replace("___", "blank") : item[0]); });
-  if (st.mode !== "rush") startTimer(kind === "spell" ? 25000 : 14000);
+  if (sayBtn) sayBtn.addEventListener("click", () => { unlock(); speak(kind === "sentence" ? spoken(item[0]) : item[0]); });
+  if (st.mode !== "rush") startTimer(kind === "spell" ? 25000 : kind === "sentence" && t.stage !== "kids" ? 22000 : 14000);
 }
-function renderOpts(opts, correct) {
+function renderOpts(opts, correct, three) {
   const A = $("#answer");
-  A.innerHTML = `<div class="opts">${opts.map((o) => `<button class="opt" data-k="${o.key}" aria-label="${o.key}">${o.html}</button>`).join("")}</div>`;
+  A.innerHTML = `<div class="opts${three ? " three" : ""}">${opts.map((o) => `<button class="opt" data-k="${esc(o.key)}">${o.html}</button>`).join("")}</div>`;
   A.querySelector(".opts").addEventListener("click", (e) => { const b = e.target.closest(".opt"); if (b) answer(b.dataset.k === correct, b); });
 }
 function startTimer(ms) {
@@ -363,8 +572,8 @@ function answer(ok, btn, timeout) {
   if (st.locked) return; st.locked = true;
   if (st.mode !== "rush") cancelAnimationFrame(st.raf);
   st.total++;
-  const t = DATA[st.topic], item = st.item, fb = $("#feedback");
-  const correctKey = t.type === "sentence" ? item[1] : item[0];
+  const t = DATA[st.topic], item = st.item, fb = $("#feedback"), isS = t.type === "sentence";
+  const correctKey = isS ? item[1] : item[0];
   document.querySelectorAll(".opt").forEach((b) => { if (b.dataset.k === correctKey) b.classList.add("right"); else if (b !== btn) b.classList.add("dim"); });
   if (ok) {
     st.correct++; st.streak++; st.bestStreak = Math.max(st.bestStreak, st.streak);
@@ -378,12 +587,13 @@ function answer(ok, btn, timeout) {
     st.streak = 0; $("#combo").textContent = ""; buzz();
     fb.className = "feedback bad";
     fb.textContent = timeout ? `Time’s up! It’s “${correctKey}”.` : `It’s “${correctKey}”.`;
-    if (!st.missed.some((m) => m[0] === item[0])) st.missed.push(t.type === "sentence" ? [item[0].replace("___", item[1]), ""] : [item[0], item[1]]);
-    if (t.type !== "sentence") speak(item[0]);
+    if (isS && t.stage !== "kids") $("#why").textContent = item[2] ? `${item[2]}. ${t.rule || ""}` : (t.rule || "");
+    if (!st.missed.some((m) => m[2] === item[0])) st.missed.push(isS ? [item[0].includes("___") ? item[0].replace(/\s*\([^)]*\)/g, "").replace("___", item[1]) : item[1], "", item[0]] : [item[0], item[1], item[0]]);
+    if (!isS) speak(item[0]);
   }
   $("#score").textContent = `${st.score} pts`;
   if (st.mode === "rush") $("#round").textContent = `${st.correct} correct`;
-  later(next, ok ? (st.mode === "rush" ? 550 : 950) : 1700);
+  later(next, ok ? (st.mode === "rush" ? 550 : 950) : (isS && t.stage !== "kids" ? 3200 : 1700));
 }
 function finish() {
   clearLater(); show("end");
@@ -398,7 +608,8 @@ function finish() {
   $("#sum-best").textContent = st.score > best ? "New record!" : `Record: ${best}`;
   const rv = $("#review");
   rv.hidden = !st.missed.length;
-  $("#review-list").innerHTML = st.missed.map(([a, b]) => `<li><span>${a}</span><span>${b}</span></li>`).join("");
+  $("#review-h").textContent = DATA[st.topic].type === "sentence" ? "Sentences to review" : "Words to review";
+  $("#review-list").innerHTML = st.missed.map(([a, b]) => `<li><span>${esc(a)}</span><span>${esc(b)}</span></li>`).join("");
   if (stars >= 2) { fanfare(); burst(120); }
 }
 $("#play").addEventListener("click", start);
@@ -406,7 +617,7 @@ $("#again").addEventListener("click", start);
 $("#change").addEventListener("click", () => { refresh(); show("start"); });
 $("#home").addEventListener("click", () => { clearLater(); if (synth) synth.cancel(); refresh(); show("start"); });
 
-/* Confeti */
+/* Confetti */
 const cv = $("#fx"), cx = cv.getContext("2d"); let parts = [], fxOn = false;
 function size() { cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; }
 size(); addEventListener("resize", size);
