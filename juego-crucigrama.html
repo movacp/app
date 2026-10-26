@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Crossword · MOVA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --page:#DCEAF6; --card:#FFFDFA; --ink:#1E3A5F; --muted:#5B6A82; --tile:#F2F7FC; --edge:#C8D9EA; --track:#CFE1F1;
+  --sky:#6FA8D6; --sky-deep:#3E7DB4; --pencil:#E0B04A; --sel:#FFF0C4; --word:#E4EFF9; --good:#1F9A52; --bad:#E5484D;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#121D2E;--card:#1C2A40;--ink:#EEF4FB;--muted:#AFC0D6;--tile:#22334D;--edge:#34496A;--track:#253752;--sel:#5A4A1E;--word:#2A4263;color-scheme:dark}}
+:root[data-theme="dark"]{--page:#121D2E;--card:#1C2A40;--ink:#EEF4FB;--muted:#AFC0D6;--tile:#22334D;--edge:#34496A;--track:#253752;--sel:#5A4A1E;--word:#2A4263;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--page);color:var(--ink);font-family:Poppins,"Century Gothic",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+button{font-family:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible{outline:3px solid var(--sky-deep);outline-offset:3px}
+[hidden]{display:none!important}
+.wrap{max-width:560px;margin:0 auto;padding:62px 16px 28px}
+.brand{display:inline-block;border:1.5px solid var(--ink);padding:4px 9px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:.06em}
+h1{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:clamp(44px,13vw,62px);line-height:.95;letter-spacing:-.02em;margin:16px 0 10px}
+.lead{color:var(--muted);font-size:15.5px;line-height:1.55;margin:0 0 20px;max-width:34em}
+h2{font-size:15px;font-weight:700;margin:22px 0 10px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--track);padding:5px;border-radius:16px}
+.seg button{height:44px;border-radius:12px;font-weight:600;font-size:15px}
+.seg button[aria-pressed="true"]{background:var(--card);box-shadow:0 2px 0 var(--edge)}
+.topics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.topic{text-align:left;background:var(--card);border:2px solid var(--edge);border-radius:18px;padding:12px;display:flex;gap:10px;align-items:center;min-height:64px}
+.topic .em{font-size:28px;line-height:1;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.topic b{display:block;font-size:15px;line-height:1.2}
+.topic small{display:block;font-size:12px;color:var(--sky-deep);font-weight:700;margin-top:2px}
+.topic:active{transform:translateY(2px)}
+
+/* Juego */
+.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.bar .t{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:24px;line-height:1.05}
+.bar .t small{display:block;font-family:Poppins,sans-serif;font-size:12px;font-weight:600;color:var(--muted);margin-top:3px}
+.count{font-weight:700;font-size:14px;background:var(--card);border:2px solid var(--edge);border-radius:999px;padding:6px 12px;flex:none;font-variant-numeric:tabular-nums}
+.paper{background:var(--card);border-radius:20px;padding:12px;box-shadow:0 6px 0 var(--edge);overflow-x:auto}
+.cw{display:grid;gap:3px;margin:0 auto;width:max-content;max-width:100%}
+.sq{position:relative;width:var(--s);height:var(--s);border-radius:6px;background:transparent}
+.sq.on{background:var(--tile);border:2px solid var(--ink);display:grid;place-items:center;font-weight:700;font-size:calc(var(--s) * .52);text-transform:uppercase;padding:0}
+.sq.on.word{background:var(--word)}
+.sq.on.cur{background:var(--sel);border-color:var(--pencil)}
+.sq.on.ok{color:var(--good)}
+.sq.on.no{color:var(--bad)}
+.sq.on.given{color:var(--sky-deep)}
+.sq sup{position:absolute;top:1px;left:3px;font-size:calc(var(--s) * .26);font-weight:700;line-height:1;color:var(--muted)}
+.clue{display:flex;align-items:center;gap:8px;margin:14px 0 10px;background:var(--card);border-left:6px solid var(--pencil);border-radius:14px;padding:10px 10px 10px 12px;min-height:62px}
+.clue .txt{flex:1;font-weight:600;font-size:15.5px;line-height:1.35}
+.clue .txt b{color:var(--sky-deep);margin-right:4px}
+.clue .em{font-size:30px;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.clue button{width:38px;height:38px;border-radius:12px;background:var(--track);font-size:18px;font-weight:800;flex:none}
+.kb{background:var(--card);padding:10px 8px;border-radius:20px;box-shadow:0 5px 0 var(--edge);display:grid;grid-template-columns:repeat(10,1fr);gap:5px;user-select:none;-webkit-user-select:none}
+.kb button{height:46px;border-radius:9px;background:var(--card);box-shadow:0 3px 0 var(--edge);font-weight:700;font-size:17px}
+.kb button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
+.kb .wide{grid-column:span 2;font-size:14px}
+.row{display:flex;gap:8px;margin-top:14px}
+.btn{flex:1;height:50px;border-radius:14px;font-weight:700;font-size:15px;background:var(--card);border:2px solid var(--edge)}
+.btn.main{background:var(--ink);border-color:var(--ink);color:var(--card)}
+details{margin-top:16px;background:var(--card);border-radius:16px;padding:12px 14px}
+summary{font-weight:700;cursor:pointer}
+.list h3{font-size:13px;margin:12px 0 6px;color:var(--muted)}
+.list p{margin:0 0 6px;font-size:14.5px;line-height:1.4}
+.list p.done{color:var(--muted);text-decoration:line-through}
+.win{background:var(--card);border-radius:24px;padding:24px 20px;text-align:center;box-shadow:0 6px 0 var(--edge);margin-top:16px}
+.win h2{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-size:32px;font-weight:800;margin:0 0 6px}
+.win p{color:var(--muted);margin:0}
+.stars{font-size:36px;letter-spacing:4px;color:var(--pencil);margin:12px 0 0}
+
+/* ===== Estilo MOVA colorido ===== */
+:root{--c1:#E8846B;--c2:#6FA8D6;--c3:#E0B04A;--c4:#7FB89E;--c5:#B59AE0;
+  --d1:#C95F45;--d2:#3E7DB4;--d3:#A97A0B;--d4:#3F8F6A;--d5:#7E5BC9;--navy:#1E3A5F}
+body{
+  background-color:#FFF8EF;
+  background-image:
+    radial-gradient(circle, rgba(232,132,107,.55) 7px, transparent 8px),
+    radial-gradient(circle, rgba(111,168,214,.55) 7px, transparent 8px),
+    radial-gradient(circle, rgba(224,176,74,.55) 7px, transparent 8px),
+    radial-gradient(circle, rgba(127,184,158,.55) 7px, transparent 8px);
+  background-size:128px 128px;
+  background-position:0 0, 64px 32px, 32px 80px, 96px 112px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body{background-color:#1C1A2A;
+  background-image:radial-gradient(circle, rgba(232,132,107,.28) 7px, transparent 8px),radial-gradient(circle, rgba(111,168,214,.28) 7px, transparent 8px),radial-gradient(circle, rgba(224,176,74,.28) 7px, transparent 8px),radial-gradient(circle, rgba(127,184,158,.28) 7px, transparent 8px)}}
+.brand{background:var(--card)}
+h1 .ch{display:inline-block} h1 .wd{display:inline-block;white-space:nowrap}
+h1 .wd:nth-child(4n+3) .ch:nth-child(5n+1),h1 .ch:nth-child(5n+1){color:var(--d1)} h1 .ch:nth-child(5n+2){color:var(--d2)} h1 .ch:nth-child(5n+3){color:var(--d3)} h1 .ch:nth-child(5n+4){color:var(--d4)} h1 .ch:nth-child(5n+5){color:var(--d5)}
+h1 .sp{display:inline-block;width:.28em}
+.intro{background:var(--card);border-radius:28px;padding:22px 18px 20px;box-shadow:0 8px 0 var(--accent),0 20px 44px rgba(30,58,95,.14)}
+.lead{margin-bottom:16px}
+.seg{background:var(--tile)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff;box-shadow:0 3px 0 var(--accent-deep)}
+.topic{border:0;box-shadow:0 5px 0 var(--tc,var(--edge));border:2px solid color-mix(in srgb,var(--tc) 35%,transparent);background:var(--card)}
+.topic .badge{flex:none;width:42px;height:42px;border-radius:50%;background:var(--tc);color:#fff;font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:20px;display:grid;place-items:center}
+.topic small,.topic small em{color:var(--tcd)}
+.bar .t{background:var(--card);border-radius:16px;padding:8px 14px;box-shadow:0 4px 0 var(--edge)}
+.stripe{height:8px;border-radius:999px;margin:0 0 12px;background:linear-gradient(90deg,var(--c1) 0 20%,var(--c2) 20% 40%,var(--c3) 40% 60%,var(--c4) 60% 80%,var(--c5) 80%)}
+.win{box-shadow:0 8px 0 var(--accent),0 20px 44px rgba(30,58,95,.14)}
+.win .stars{color:var(--c3)}
+.btn.main{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 5px 0 var(--accent-deep)}
+.btn{box-shadow:0 4px 0 var(--edge)}
+
+:root{--accent:#6FA8D6;--accent-deep:#3E7DB4}
+.paper{box-shadow:0 8px 0 var(--c2),0 20px 44px rgba(30,58,95,.14);border-radius:26px;padding:14px}
+.sq.on{background:var(--card);border-color:var(--navy);font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800}
+.sq.on span{color:var(--lc,var(--navy))}
+.sq.on.word{background:color-mix(in srgb,var(--c4) 22%,var(--card))}
+.sq.on.cur{background:color-mix(in srgb,var(--c3) 38%,var(--card));border-color:var(--d3)}
+.sq.on.ok span{color:var(--good)} .sq.on.no span{color:var(--bad)} .sq.on.given span{color:var(--d5)}
+.sq sup{color:var(--d1);font-weight:800}
+.clue{border-left:0;box-shadow:0 5px 0 var(--c3);border:2px solid color-mix(in srgb,var(--c3) 45%,transparent)}
+.clue .txt b{color:var(--d1)}
+.clue button{background:color-mix(in srgb,var(--c2) 25%,var(--card));color:var(--d2)}
+.kb button{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800}
+.kb button.r0{background:color-mix(in srgb,var(--c1) 18%,var(--card));color:var(--d1);box-shadow:0 3px 0 color-mix(in srgb,var(--c1) 55%,transparent)}
+.kb button.r1{background:color-mix(in srgb,var(--c2) 18%,var(--card));color:var(--d2);box-shadow:0 3px 0 color-mix(in srgb,var(--c2) 55%,transparent)}
+.kb button.r2{background:color-mix(in srgb,var(--c4) 20%,var(--card));color:var(--d4);box-shadow:0 3px 0 color-mix(in srgb,var(--c4) 55%,transparent)}
+.kb button.wide{background:var(--card);color:var(--ink)}
+.count{border-color:var(--c4)}
+details{box-shadow:0 4px 0 var(--edge)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section id="s-start">
+    <span class="brand">MOVA · Centro Pedagógico</span>
+    <div class="intro">
+    <h1>Crossword</h1>
+    <p class="lead">Read the clue, tap a square and type the word. Every game makes a new crossword.</p>
+    <h2>Stage</h2>
+    <div class="seg" id="stage"><button data-v="kids">Kids</button><button data-v="children">Children</button><button data-v="teens">Teens</button></div>
+    <h2>Choose a topic</h2>
+    <div class="topics" id="topics"></div>
+  </div>
+  </section>
+
+  <section id="s-game" hidden>
+    <div class="stripe" aria-hidden="true"></div>
+    <div class="bar"><div class="t" id="g-title"></div><div class="count" id="count"></div></div>
+    <div class="paper"><div class="cw" id="cw" role="grid"></div></div>
+    <div class="clue" id="clue" aria-live="polite">
+      <button id="prev" aria-label="Previous clue">‹</button>
+      <span class="em" id="clue-em"></span>
+      <div class="txt" id="clue-txt"></div>
+      <button id="nextc" aria-label="Next clue">›</button>
+    </div>
+    <div class="kb" id="kb"></div>
+    <div class="row">
+      <button class="btn" id="b-letter">Show a letter</button>
+      <button class="btn" id="b-check">Check</button>
+      <button class="btn main" id="b-new">New</button>
+    </div>
+    <details><summary>All clues</summary><div class="list" id="list"></div></details>
+  </section>
+
+  <section id="s-end" hidden>
+    <span class="brand">MOVA · Centro Pedagógico</span>
+    <div class="win">
+      <h2 id="w-title"></h2>
+      <p id="w-sub"></p>
+      <div class="stars" id="w-stars"></div>
+    </div>
+    <div class="row">
+      <button class="btn" id="e-topics">Topics</button>
+      <button class="btn main" id="e-again">New crossword</button>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+const $ = (s) => document.querySelector(s);
+const TC = [["#E8846B","#C95F45"],["#6FA8D6","#3E7DB4"],["#E0B04A","#A97A0B"],["#7FB89E","#3F8F6A"],["#B59AE0","#7E5BC9"],["#F47FB0","#C2477D"]];
+const colorTitle = () => { const h = document.querySelector("h1"); h.setAttribute("aria-label", h.textContent); h.innerHTML = h.textContent.split(" ").map((w) => `<span class="wd">${[...w].map((c) => `<span class="ch" aria-hidden="true">${c}</span>`).join("")}</span>`).join('<span class="sp"></span>'); };
+colorTitle();
+
+const shuffle = (a) => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+
+/* [palabra, pista, emoji opcional] */
+const DATA = {
+  kids: [
+    { id: "animals", name: "Animals", em: "🐾", level: "A1", words: [["cat","It says meow.","🐱"],["dog","It says woof.","🐶"],["fish","It lives in water.","🐟"],["bird","It can fly.","🐦"],["frog","It is green and jumps.","🐸"],["lion","The king of the jungle.","🦁"],["duck","It says quack.","🦆"],["horse","You can ride it.","🐴"],["cow","It gives us milk.","🐮"],["bee","It makes honey.","🐝"]] },
+    { id: "food", name: "Food", em: "🍎", level: "A1", words: [["apple","A red or green fruit.","🍎"],["milk","A white drink.","🥛"],["bread","You make a sandwich with it.","🍞"],["egg","A chicken lays it.","🥚"],["cake","You eat it on your birthday.","🎂"],["pizza","A round food with cheese.","🍕"],["banana","A long yellow fruit.","🍌"],["juice","Orange ___","🧃"],["rice","Small white grains.","🍚"],["soup","Hot food you eat with a spoon.","🍲"]] },
+    { id: "home", name: "My house", em: "🏠", level: "A1+", words: [["bed","You sleep in it.","🛏️"],["door","You open it to go in.","🚪"],["chair","You sit on it.","🪑"],["table","You eat at it.","🍽️"],["window","You look outside through it.","🪟"],["lamp","It gives light.","💡"],["sofa","A soft seat for two or three.","🛋️"],["kitchen","You cook here.","🍳"],["bath","You get clean in it.","🛁"]] },
+    { id: "body", name: "My body", em: "🖐️", level: "A2", words: [["head","Your hair is on it.","🙂"],["hand","It has five fingers.","✋"],["nose","You smell with it.","👃"],["mouth","You eat with it.","👄"],["ear","You hear with it.","👂"],["knee","It is in the middle of your leg.","🦵"],["teeth","You brush them every day.","🦷"],["foot","You put a shoe on it.","🦶"],["eyes","You see with them.","👀"]] }
+  ],
+  children: [
+    { id: "school", name: "School", em: "🎒", level: "A1+", words: [["pencil","You write with it."],["eraser","It removes pencil marks."],["ruler","It measures lines."],["teacher","This person helps you learn."],["library","A room full of books."],["desk","Your table in the classroom."],["recess","Break time to play outside."],["homework","Work you do at home."],["scissors","You cut paper with them."]] },
+    { id: "weather", name: "Weather", em: "🌦️", level: "A2", words: [["sunny","No clouds, lots of light."],["rainy","Take an umbrella!"],["windy","Good weather to fly a kite."],["snow","White and cold, it falls in winter."],["storm","Thunder and lightning."],["cloudy","The sky is gray."],["rainbow","Seven colors in the sky."],["hot","The opposite of cold."],["foggy","You can't see far."]] },
+    { id: "jobs", name: "Jobs", em: "👩‍🚒", level: "B1", words: [["doctor","Works in a hospital and helps sick people."],["pilot","Flies a plane."],["chef","Cooks in a restaurant."],["farmer","Grows food and keeps animals."],["dentist","Takes care of your teeth."],["firefighter","Puts out fires."],["vet","An animal doctor."],["baker","Makes bread and cakes."],["mechanic","Fixes cars."],["author","Writes books."]] },
+    { id: "science", name: "Science", em: "🔬", level: "B1", words: [["planet","Earth and Mars are examples."],["magnet","It attracts metal."],["oxygen","The gas we need to breathe."],["gravity","The force that pulls things down."],["energy","You need it to move and work."],["volcano","A mountain that can erupt."],["insect","An animal with six legs."],["liquid","Water is in this state."],["experiment","A test to learn something new."]] }
+  ],
+  teens: [
+    { id: "travel", name: "Travel", em: "✈️", level: "A2+", words: [["passport","The document you need to enter another country."],["luggage","Your bags and suitcases."],["boarding","___ pass: you need it to get on the plane."],["delay","When a flight leaves late."],["hostel","Cheap shared accommodation."],["souvenir","Something you buy to remember a trip."],["sightseeing","Visiting famous places as a tourist."],["currency","The money used in a country."],["itinerary","A plan of your trip."]] },
+    { id: "tech", name: "Technology", em: "💻", level: "B1", words: [["password","A secret word to log in."],["download","Copy a file from the internet to your device."],["update","A newer version of an app."],["browser","The app you use to visit websites."],["hashtag","A word with # on social media."],["charger","You plug it in to fill your battery."],["screenshot","A picture of your screen."],["offline","Not connected to the internet."],["streaming","Watching video online without downloading it."]] },
+    { id: "environment", name: "Environment", em: "🌍", level: "B2", words: [["drought","A long period without rain."],["recycle","Use materials again instead of throwing them away."],["emissions","Gases released into the air by cars and factories."],["renewable","Energy that does not run out, like solar."],["habitat","The natural home of an animal."],["endangered","At risk of disappearing forever."],["deforestation","Cutting down forests on a large scale."],["sustainable","Able to continue without harming the planet."],["footprint","Carbon ___: the impact of your actions."]] },
+    { id: "advanced", name: "Advanced words", em: "🎓", level: "C1–C2", words: [["ambiguous","Open to more than one interpretation."],["meticulous","Showing great attention to detail."],["resilient","Able to recover quickly from difficulties."],["pragmatic","Practical rather than idealistic."],["eloquent","Fluent and persuasive in speaking."],["candid","Honest and direct."],["skeptical","Not easily convinced."],["ubiquitous","Found everywhere."],["nuance","A subtle difference in meaning."],["tenacious","Determined and persistent."]] }
+  ]
+};
+const COUNT = { kids: 6, children: 7, teens: 7 };
+
+const st = { stage: "kids", topic: null, words: [], grid: null, R: 0, C: 0, cur: 0, pos: 0, reveals: 0, checks: 0 };
+try { const s = localStorage.getItem("mova-cw-stage"); if (DATA[s]) st.stage = s; } catch (e) {}
+
+const synth = "speechSynthesis" in window ? speechSynthesis : null;
+function speak(t) { if (!synth) return; try { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "en-US"; u.rate = .9; const v = synth.getVoices().find((x) => /en[-_]US/i.test(x.lang)); if (v) u.voice = v; synth.speak(u); } catch (e) {} }
+let actx = null;
+function tones(fs, step) { try { if (!actx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) actx = new AC(); } if (!actx) return; if (actx.state === "suspended") actx.resume(); const t0 = actx.currentTime; fs.forEach((f, i) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = "triangle"; o.frequency.value = f; const s = t0 + i * step; g.gain.setValueAtTime(.0001, s); g.gain.exponentialRampToValueAtTime(.13, s + .02); g.gain.exponentialRampToValueAtTime(.0001, s + step + .1); o.connect(g).connect(actx.destination); o.start(s); o.stop(s + step + .12); }); } catch (e) {} }
+
+function show(id) { ["start", "game", "end"].forEach((s) => $("#s-" + s).hidden = s !== id); scrollTo(0, 0); }
+
+/* ---------- Inicio ---------- */
+function renderStart() {
+  $("#stage").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === st.stage));
+  const box = $("#topics"); box.innerHTML = "";
+  DATA[st.stage].forEach((tp, ti) => {
+    const b = document.createElement("button"); b.className = "topic"; b.style.setProperty("--tc", TC[ti % TC.length][0]); b.style.setProperty("--tcd", TC[ti % TC.length][1]);
+    b.innerHTML = `<span class="badge" aria-hidden="true">${tp.name[0]}</span><span><b>${tp.name}</b><small>${tp.level}</small></span>`;
+    b.addEventListener("click", () => { st.topic = tp; newGame(); });
+    box.appendChild(b);
+  });
+}
+$("#stage").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; st.stage = b.dataset.v; try { localStorage.setItem("mova-cw-stage", st.stage); } catch (er) {} renderStart(); });
+
+/* ---------- Generador ---------- */
+function generate(list, want) {
+  let best = null;
+  for (let attempt = 0; attempt < 40; attempt++) {
+    const words = shuffle(list).map(([w, clue, em]) => ({ ans: w.toUpperCase(), clue, em })).sort((a, b) => b.ans.length - a.ans.length);
+    const cells = new Map(); const key = (r, c) => r + "," + c;
+    const placed = [];
+    const get = (r, c) => cells.get(key(r, c));
+    const canPlace = (w, r, c, dir) => {
+      const dr = dir === "down" ? 1 : 0, dc = dir === "across" ? 1 : 0;
+      if (get(r - dr, c - dc) || get(r + dr * w.length, c + dc * w.length)) return -1;
+      let cross = 0;
+      for (let i = 0; i < w.length; i++) {
+        const rr = r + dr * i, cc = c + dc * i, ch = get(rr, cc);
+        if (ch) { if (ch.ch !== w[i] || ch[dir]) return -1; cross++; }
+        else if (get(rr + dc, cc + dr) || get(rr - dc, cc - dr)) return -1;
+      }
+      return cross;
+    };
+    const put = (w, r, c, dir) => {
+      const dr = dir === "down" ? 1 : 0, dc = dir === "across" ? 1 : 0;
+      for (let i = 0; i < w.ans.length; i++) { const k = key(r + dr * i, c + dc * i); const cell = cells.get(k) || { ch: w.ans[i] }; cell[dir] = true; cells.set(k, cell); }
+      placed.push({ ...w, r, c, dir });
+    };
+    put(words[0], 0, 0, "across");
+    for (const w of words.slice(1)) {
+      if (placed.length >= want) break;
+      const opts = [];
+      for (const p of placed) for (let i = 0; i < p.ans.length; i++) for (let j = 0; j < w.ans.length; j++) {
+        if (p.ans[i] !== w.ans[j]) continue;
+        const dir = p.dir === "across" ? "down" : "across";
+        const r = p.dir === "across" ? p.r - j : p.r + i, c = p.dir === "across" ? p.c + i : p.c - j;
+        const x = canPlace(w.ans, r, c, dir); if (x > 0) opts.push({ r, c, dir, x });
+      }
+      if (opts.length) { const o = shuffle(opts).sort((a, b) => b.x - a.x)[0]; put(w, o.r, o.c, o.dir); }
+    }
+    const rs = [...cells.keys()].map((k) => +k.split(",")[0]), cs = [...cells.keys()].map((k) => +k.split(",")[1]);
+    const R = Math.max(...rs) - Math.min(...rs) + 1, C = Math.max(...cs) - Math.min(...cs) + 1;
+    const score = placed.length * 100 - Math.max(R, C) * 3 - Math.abs(R - C);
+    if (!best || score > best.score) best = { placed, minR: Math.min(...rs), minC: Math.min(...cs), R, C, score };
+    if (placed.length >= want && Math.max(R, C) <= 13) break;
+  }
+  return best;
+}
+
+/* ---------- Juego ---------- */
+function newGame() {
+  const tp = st.topic, g = generate(tp.words, COUNT[st.stage]);
+  st.R = g.R; st.C = g.C; st.reveals = 0; st.checks = 0;
+  st.grid = Array.from({ length: g.R }, () => Array(g.C).fill(null));
+  const words = g.placed.map((w) => ({ ...w, r: w.r - g.minR, c: w.c - g.minC }));
+  words.forEach((w) => { for (let i = 0; i < w.ans.length; i++) { const r = w.r + (w.dir === "down" ? i : 0), c = w.c + (w.dir === "across" ? i : 0); st.grid[r][c] = st.grid[r][c] || { ans: w.ans[i], val: "", given: false }; } });
+  // numeración en orden de lectura
+  let n = 0; const starts = new Map();
+  for (let r = 0; r < st.R; r++) for (let c = 0; c < st.C; c++) if (words.some((w) => w.r === r && w.c === c)) starts.set(r + "," + c, ++n);
+  words.forEach((w) => w.num = starts.get(w.r + "," + w.c));
+  st.words = words.sort((a, b) => (a.dir === b.dir ? a.num - b.num : a.dir === "across" ? -1 : 1));
+  st.cur = 0; st.pos = 0;
+  $("#g-title").innerHTML = `${tp.name}<small>${tp.level} · ${st.words.length} words</small>`;
+  drawGrid(starts); select(0, 0); renderList();
+  show("game");
+}
+function cellsOf(w) { return Array.from({ length: w.ans.length }, (_, i) => [w.r + (w.dir === "down" ? i : 0), w.c + (w.dir === "across" ? i : 0)]); }
+function drawGrid(starts) {
+  const cw = $("#cw"), maxW = Math.min(innerWidth, 560) - 56;
+  const s = Math.max(20, Math.min(40, Math.floor((maxW - (st.C - 1) * 3) / st.C)));
+  cw.style.setProperty("--s", s + "px");
+  cw.style.gridTemplateColumns = `repeat(${st.C}, ${s}px)`;
+  cw.innerHTML = "";
+  for (let r = 0; r < st.R; r++) for (let c = 0; c < st.C; c++) {
+    const cell = st.grid[r][c];
+    if (!cell) { const d = document.createElement("div"); d.className = "sq"; cw.appendChild(d); continue; }
+    const b = document.createElement("button"); b.className = "sq on"; b.dataset.r = r; b.dataset.c = c; b.style.setProperty("--lc", ["var(--d1)","var(--d2)","var(--d3)","var(--d4)","var(--d5)"][(r + c) % 5]);
+    const num = starts.get(r + "," + c);
+    b.innerHTML = (num ? `<sup>${num}</sup>` : "") + `<span></span>`;
+    b.setAttribute("aria-label", `Row ${r + 1}, column ${c + 1}`);
+    b.addEventListener("click", () => tapCell(r, c));
+    cell.el = b; cw.appendChild(b);
+  }
+}
+function tapCell(r, c) {
+  const here = st.words.map((w, i) => ({ w, i })).filter(({ w }) => cellsOf(w).some(([a, b]) => a === r && b === c));
+  if (!here.length) return;
+  const curIdx = here.findIndex((h) => h.i === st.cur);
+  const target = curIdx >= 0 && cellsOf(st.words[st.cur]).some(([a, b], k) => a === r && b === c && k === st.pos) && here.length > 1 ? here[(curIdx + 1) % here.length] : (curIdx >= 0 ? here[curIdx] : here[0]);
+  const pos = cellsOf(target.w).findIndex(([a, b]) => a === r && b === c);
+  select(target.i, pos);
+}
+function select(i, pos) {
+  st.cur = (i + st.words.length) % st.words.length; st.pos = pos;
+  const w = st.words[st.cur], mine = cellsOf(w);
+  document.querySelectorAll(".sq.on").forEach((e) => e.classList.remove("word", "cur"));
+  mine.forEach(([r, c], k) => st.grid[r][c].el.classList.add(k === pos ? "cur" : "word"));
+  $("#clue-em").textContent = "";
+  $("#clue-txt").innerHTML = `<b>${w.num} ${w.dir === "across" ? "Across" : "Down"}</b>${w.clue} <span style="color:var(--muted);font-weight:500">(${w.ans.length})</span>`;
+  updateCount();
+}
+function type(ch) {
+  const w = st.words[st.cur], mine = cellsOf(w);
+  const [r, c] = mine[st.pos], cell = st.grid[r][c];
+  if (!cell.given) { cell.val = ch; paint(cell); }
+  tones([520], .04);
+  // avanzar a la siguiente casilla vacía de la palabra
+  let p = st.pos + 1;
+  while (p < mine.length && st.grid[mine[p][0]][mine[p][1]].given) p++;
+  if (p < mine.length) select(st.cur, p);
+  else afterWord();
+}
+function back() {
+  const mine = cellsOf(st.words[st.cur]);
+  const [r, c] = mine[st.pos], cell = st.grid[r][c];
+  if (cell.val && !cell.given) { cell.val = ""; paint(cell); return; }
+  if (st.pos > 0) { select(st.cur, st.pos - 1); const [r2, c2] = mine[st.pos]; const c2el = st.grid[r2][c2]; if (!c2el.given) { c2el.val = ""; paint(c2el); } }
+}
+function paint(cell) { cell.el.querySelector("span").textContent = cell.val; cell.el.classList.remove("ok", "no"); cell.el.classList.toggle("given", cell.given); }
+function solved(w) { return cellsOf(w).every(([r, c]) => st.grid[r][c].val === st.grid[r][c].ans); }
+function filled(w) { return cellsOf(w).every(([r, c]) => st.grid[r][c].val); }
+function afterWord() {
+  const w = st.words[st.cur];
+  if (solved(w)) { tones([660, 880], .07); speak(w.ans.toLowerCase()); }
+  updateCount(); renderList();
+  if (st.words.every(solved)) { setTimeout(win, 700); return; }
+  // siguiente palabra sin terminar
+  for (let k = 1; k <= st.words.length; k++) { const j = (st.cur + k) % st.words.length; if (!filled(st.words[j])) { const p = cellsOf(st.words[j]).findIndex(([r, c]) => !st.grid[r][c].val); select(j, Math.max(0, p)); return; } }
+}
+function updateCount() { $("#count").textContent = `${st.words.filter(solved).length} / ${st.words.length}`; }
+function renderList() {
+  const box = $("#list"); box.innerHTML = "";
+  ["across", "down"].forEach((d) => {
+    const ws = st.words.filter((w) => w.dir === d); if (!ws.length) return;
+    const h = document.createElement("h3"); h.textContent = d === "across" ? "Across" : "Down"; box.appendChild(h);
+    ws.forEach((w) => { const p = document.createElement("p"); if (solved(w)) p.className = "done"; p.textContent = `${w.num}. ${w.clue}`; box.appendChild(p); });
+  });
+}
+
+/* teclado */
+const kb = $("#kb");
+["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"].forEach((row, i) => {
+  [...row].forEach((ch) => { const b = document.createElement("button"); b.className = "r" + i; b.textContent = ch; b.addEventListener("click", () => type(ch)); kb.appendChild(b); });
+  if (i === 1) { const sp = document.createElement("span"); kb.appendChild(sp); }
+  if (i === 2) { const b = document.createElement("button"); b.className = "wide"; b.textContent = "⌫"; b.setAttribute("aria-label", "Delete"); b.addEventListener("click", back); kb.appendChild(b); const h = document.createElement("button"); h.textContent = "🔊"; h.setAttribute("aria-label", "Hear the clue"); h.addEventListener("click", () => speak(st.words[st.cur].clue)); kb.appendChild(h); }
+});
+addEventListener("keydown", (e) => {
+  if ($("#s-game").hidden || e.metaKey || e.ctrlKey) return;
+  if (/^[a-z]$/i.test(e.key)) { type(e.key.toUpperCase()); e.preventDefault(); }
+  else if (e.key === "Backspace") { back(); e.preventDefault(); }
+  else if (e.key === "ArrowRight" || e.key === "ArrowDown") { const L = st.words[st.cur].ans.length; select(st.cur, Math.min(L - 1, st.pos + 1)); }
+  else if (e.key === "ArrowLeft" || e.key === "ArrowUp") select(st.cur, Math.max(0, st.pos - 1));
+  else if (e.key === "Tab") { e.preventDefault(); select(st.cur + (e.shiftKey ? -1 : 1), 0); }
+});
+$("#prev").addEventListener("click", () => select(st.cur - 1, 0));
+$("#nextc").addEventListener("click", () => select(st.cur + 1, 0));
+$("#b-letter").addEventListener("click", () => {
+  const mine = cellsOf(st.words[st.cur]);
+  let k = mine.findIndex(([r, c]) => st.grid[r][c].val !== st.grid[r][c].ans);
+  if (k < 0) return;
+  const cell = st.grid[mine[k][0]][mine[k][1]];
+  cell.val = cell.ans; cell.given = true; st.reveals++; paint(cell);
+  if (solved(st.words[st.cur])) afterWord(); else select(st.cur, k);
+});
+$("#b-check").addEventListener("click", () => {
+  st.checks++;
+  st.words.forEach((w) => cellsOf(w).forEach(([r, c]) => { const cell = st.grid[r][c]; if (cell.val && !cell.given) { cell.el.classList.toggle("ok", cell.val === cell.ans); cell.el.classList.toggle("no", cell.val !== cell.ans); } }));
+});
+$("#b-new").addEventListener("click", newGame);
+
+function win() {
+  const stars = st.reveals === 0 ? 3 : st.reveals <= 3 ? 2 : 1;
+  $("#w-title").textContent = ["Good job!", "Great work!", "Perfect crossword!"][stars - 1];
+  $("#w-sub").textContent = `${st.topic.name} · ${st.topic.level} · ${st.words.length} words`;
+  $("#w-stars").textContent = "★".repeat(stars) + "☆".repeat(3 - stars);
+  tones([523, 659, 784, 1047], .13);
+  show("end");
+}
+$("#e-again").addEventListener("click", newGame);
+$("#e-topics").addEventListener("click", () => { renderStart(); show("start"); });
+
+renderStart();
+})();
+</script>
+<a href="./#/games" class="mova-home-btn" aria-label="Back to MOVA Learning Studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></a>
+<style>.mova-home-btn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);left:10px;z-index:2147483000;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.94);color:#1E3A5F;box-shadow:0 2px 10px rgba(0,0,0,.2);text-decoration:none}.mova-home-btn svg{width:20px;height:20px}.mova-home-btn:focus-visible{outline:3px solid #6FA8D6;outline-offset:2px}@media print{.mova-home-btn{display:none}}</style>
+</body>
+</html>

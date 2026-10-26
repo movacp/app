@@ -12,7 +12,7 @@
 <style>
 :root{
   --page:#172449; --card:#FFFFFF; --ink:#172449; --muted:#5B6787; --tile:#F3F6FC; --edge:#DCE2F0; --track:#E8EDF7;
-  --A1:#4FD1A5; --A2:#5BC0F0; --B1:#F2B632; --B2:#FF7A6B; --C1:#A98BE8; --pre:#9AA6C2;
+  --A1:#4FD1A5; --A2:#5BC0F0; --B1:#F2B632; --B2:#FF7A6B; --C1:#A98BE8; --C2:#F47FB0; --pre:#9AA6C2;
   --good:#1F9A47; --good-bg:#DDF6E4; --bad:#E5484D; --bad-bg:#FDE4E4;
   color-scheme:light; box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
@@ -35,7 +35,7 @@ button{cursor:pointer;border:0;background:none}
 h1{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:clamp(40px,11vw,58px);line-height:.95;margin:18px 0 8px;letter-spacing:-.02em}
 .lead{color:var(--muted);margin:0 0 16px;line-height:1.55}
 .stamps{display:flex;gap:6px;margin:6px 0 18px;flex-wrap:wrap}
-.stamp{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:15px;color:#172449;background:var(--c);position:relative}
+.stamp{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:15px;color:#172449;background:var(--c);position:relative}
 .stamp::after{content:"";position:absolute;inset:4px;border-radius:50%;border:1.5px dashed rgba(255,255,255,.8)}
 .label{font-size:13px;font-weight:600;color:var(--muted);margin:14px 0 8px}
 .field{width:100%;height:52px;border-radius:14px;border:2px solid var(--edge);background:var(--tile);padding:0 14px;font-size:16px}
@@ -111,9 +111,9 @@ h1{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-siz
   <section id="s-start">
     <div class="top"><a class="back" href="./#/games">MOVA Learning Studio</a><span class="brand">MOVA · Centro Pedagógico</span></div>
     <h1>Level Up</h1>
-    <p class="lead">Un examen que se adapta a ti: si respondes bien, las preguntas suben de nivel; si se complican, bajan. Al final te decimos tu nivel de inglés.</p>
+    <p class="lead">Un examen que se adapta a ti: si respondes bien, las preguntas suben de nivel; si se complican, bajan. Al final conocerás tu nivel estimado de inglés, de A1 a C2.</p>
     <div class="stamps" aria-hidden="true">
-      <span class="stamp" style="--c:var(--A1)">A1</span><span class="stamp" style="--c:var(--A2)">A2</span><span class="stamp" style="--c:var(--B1)">B1</span><span class="stamp" style="--c:var(--B2)">B2</span><span class="stamp" style="--c:var(--C1)">C1</span>
+      <span class="stamp" style="--c:var(--A1)">A1</span><span class="stamp" style="--c:var(--A2)">A2</span><span class="stamp" style="--c:var(--B1)">B1</span><span class="stamp" style="--c:var(--B2)">B2</span><span class="stamp" style="--c:var(--C1)">C1</span><span class="stamp" style="--c:var(--C2)">C2</span>
     </div>
     <label class="label" for="name">Nombre del alumno</label>
     <input class="field" id="name" autocomplete="name" placeholder="Escribe tu nombre">
@@ -124,7 +124,7 @@ h1{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-siz
       <button data-s="teens" aria-pressed="false"><b>MOVA Teens</b><small>12 a 17 años</small></button>
       <button data-s="adults" aria-pressed="false"><b>Adultos</b><small>18 años o más</small></button>
     </div>
-    <div class="facts"><div><b>18–36</b><small>preguntas</small></div><div><b>15–30</b><small>minutos</small></div><div><b>4</b><small>habilidades</small></div></div>
+    <div class="facts"><div><b>18–42</b><small>preguntas</small></div><div><b>15–35</b><small>minutos</small></div><div><b>4</b><small>habilidades</small></div></div>
     <button class="primary" id="go" disabled>Comenzar examen</button>
     <p class="hint">Necesitas audio para las preguntas de listening.</p>
   </section>
@@ -149,7 +149,7 @@ h1{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-siz
 const $ = (s) => document.querySelector(s);
 const shuffle = (a) => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const LEVELS = ["A1", "A2", "B1", "B2", "C1"];
+const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 const BLOCK = 6;
 
 /* Banco de preguntas. La PRIMERA opción es la correcta.
@@ -224,6 +224,20 @@ const BANK = {
     { t: "r", s: "The novelist’s early work was dismissed as sentimental, yet a generation later the same books were hailed as daring explorations of domestic life. The shift says less about the novels themselves than about the critics who read them.", q: "What does the author suggest?", o: ["Critics’ attitudes changed more than the books did.", "The novels were rewritten.", "The early criticism was accurate.", "Domestic life became less important."] },
     { t: "l", s: "Man: The report makes some valid points, but I’m not convinced the data supports such sweeping conclusions. Woman: Fair enough, though you have to admit the trend is hard to ignore. Man: A trend, yes. A cause, not necessarily.", q: "What is the man’s main concern?", o: ["The report confuses a trend with a cause.", "The data is completely false.", "The report is too short.", "The woman ignored the trend."] },
     { t: "l", s: "What’s striking about the findings is not that people overestimate their abilities, which is well documented, but that the least skilled participants were the most confident. In other words, the very skills needed to perform well are the ones needed to recognize poor performance.", q: "What surprised the speaker most?", o: ["The least skilled people were the most confident.", "People overestimate their abilities.", "Skilled people lacked confidence.", "The study had few participants."] }
+  ],
+  C2: [
+    { t: "g", q: "Little ___ that the decision would cost him his career.", o: ["did he suspect", "he suspected", "he did suspect", "suspected he"] },
+    { t: "g", q: "Were the government ___ the tax, prices would rise sharply.", o: ["to raise", "raising", "raise", "raised"] },
+    { t: "g", q: "So convincing ___ that nobody questioned it.", o: ["was his explanation", "his explanation was", "his explanation", "did his explanation"] },
+    { t: "g", q: "Much as I admire her work, I ___ with her conclusions.", o: ["cannot agree", "can’t to agree", "am not agreeing", "won’t have agreed"] },
+    { t: "g", q: "The results, ___ they may seem, are entirely consistent with the theory.", o: ["surprising as", "as surprising", "however surprising as", "so surprising"] },
+    { t: "v", q: "His speech was full of ___ remarks that made the audience uncomfortable.", o: ["disparaging", "dispensable", "disparate", "dispassionate"] },
+    { t: "v", q: "The evidence is ___ at best; we need far more data before drawing conclusions.", o: ["tenuous", "tenacious", "tentative", "tenable"] },
+    { t: "v", q: "After years of ___ negotiations, the treaty was finally signed.", o: ["protracted", "protruding", "prolific", "profound"] },
+    { t: "r", s: "To call the reform a failure would be premature, yet to hail it as a triumph would be equally disingenuous. What it has achieved, above all, is to expose the gulf between the rhetoric of its architects and the lived experience of those it was meant to serve.", q: "What is the author’s overall attitude toward the reform?", o: ["cautiously critical, avoiding a final verdict", "enthusiastically supportive", "completely dismissive", "indifferent"] },
+    { t: "r", s: "Translation is often described as a bridge between cultures, but the metaphor flatters the translator’s task. A bridge connects two fixed points; a translation must invent the very ground on which the second point stands, negotiating meanings that have no exact equivalent on the other side.", q: "Why does the author consider the bridge metaphor misleading?", o: ["Translation creates meaning rather than simply connecting existing points.", "Bridges are rarely built between cultures.", "Translators dislike metaphors.", "Every word has an exact equivalent."] },
+    { t: "l", s: "Woman: So you’re saying the merger was a mistake? Man: I wouldn’t go that far. It’s more that the timing was unfortunate. Had they waited another year, the market would have absorbed it far more easily.", q: "What is the man’s view of the merger?", o: ["The idea was sound, but the timing was poor.", "It was a complete mistake.", "It should never be repeated.", "It was perfectly timed."] },
+    { t: "l", s: "It would be tempting to attribute the decline in readership solely to digital distraction. But that explanation, convenient as it is, ignores a more uncomfortable possibility: that many publications simply stopped offering readers anything worth their attention.", q: "What does the speaker suggest?", o: ["Publications may share responsibility for losing readers.", "Digital distraction is the only cause.", "People no longer read at all.", "Readers prefer short articles."] }
   ]
 };
 const SKILL = { g: "Grammar", v: "Vocabulary", r: "Reading", l: "Listening" };
@@ -233,13 +247,15 @@ const DESC = {
   A2: ["Usuario básico · Elemental", "Te comunicas en situaciones de rutina: compras, escuela, planes y experiencias pasadas. Entiendes textos cortos y mensajes claros sobre temas conocidos."],
   B1: ["Usuario independiente · Intermedio", "Manejas la mayoría de las situaciones de un viaje o de la vida diaria. Puedes contar experiencias, dar opiniones y entender las ideas principales de textos y audios claros."],
   B2: ["Usuario independiente · Intermedio alto", "Te expresas con fluidez y naturalidad. Entiendes textos complejos, defiendes tus ideas y sigues conversaciones con hablantes nativos sin mucho esfuerzo."],
-  C1: ["Usuario competente · Avanzado", "Usas el inglés de forma flexible y eficaz en contextos sociales, académicos y profesionales. Entiendes textos largos y exigentes e identificas significados implícitos."]
+  C1: ["Usuario competente · Avanzado", "Usas el inglés de forma flexible y eficaz en contextos sociales, académicos y profesionales. Entiendes textos largos y exigentes e identificas significados implícitos."],
+  C2: ["Usuario competente · Maestría", "Comprendes prácticamente todo lo que lees y escuchas. Te expresas con precisión, matices y espontaneidad, incluso en temas complejos, y distingues sutilezas de significado."]
 };
 const STAGE = { kids: ["MOVA Kids", "A1"], children: ["MOVA Children", "A1"], teens: ["MOVA Teens", "A2"], adults: ["Adultos", "A2"] };
+const HIGH = ["B2", "C1", "C2"];
 const program = (stage, lvl) => {
   const n = STAGE[stage][0];
-  if (stage === "adults") return lvl === "B2" || lvl === "C1" ? "Te recomendamos nuestro programa de preparación TOEFL o de certificación." : `Te recomendamos clases de inglés para adultos, nivel ${lvl === "Pre-A1" ? "A1" : lvl}.`;
-  if (stage === "teens" && (lvl === "B2" || lvl === "C1")) return `${n}, nivel ${lvl}. También es buen momento para preparar el TOEFL o el EXCI.`;
+  if (stage === "adults") return HIGH.includes(lvl) ? "Te recomendamos nuestro programa de preparación TOEFL o de certificación." : `Te recomendamos clases de inglés para adultos, nivel ${lvl === "Pre-A1" ? "A1" : lvl}.`;
+  if (stage === "teens" && HIGH.includes(lvl)) return `${n}, nivel ${lvl}. También es buen momento para preparar el TOEFL o el EXCI.`;
   return `${n}, nivel ${lvl === "Pre-A1" ? "inicial" : lvl}.`;
 };
 
@@ -322,7 +338,7 @@ function endBlock() {
   r.status = (r.total === BLOCK ? score >= 5 : pct >= 2 / 3) ? "pass" : "fail";
   st.journey.push([L, r.status, r.score, r.total]);
   if (r.status === "pass") {
-    if (st.level === LEVELS.length - 1) return finish("C1");
+    if (st.level === LEVELS.length - 1) return finish(LEVELS[LEVELS.length - 1]);
     const up = LEVELS[st.level + 1];
     if (st.results[up] && st.results[up].status === "fail") return finish(L);
     st.level++; return between("up");
@@ -346,11 +362,11 @@ function finish(level) {
   const today = new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
   const total = Object.values(st.skill).reduce((a, b) => a + b[1], 0), right = Object.values(st.skill).reduce((a, b) => a + b[0], 0);
   const prog = program(st.stage, level);
-  const msg = `Hola, MOVA. ${st.name ? st.name + " presentó" : "Presenté"} el examen Level Up y el resultado fue nivel ${level} (${right} de ${total} respuestas correctas). Me gustaría recibir informes.`;
+  const msg = `Hola, MOVA. ${st.name ? st.name + " presentó" : "Presenté"} el examen Level Up y el resultado fue nivel estimado ${level} (${right} de ${total} respuestas correctas). Me gustaría recibir informes.`;
   $("#s-result").innerHTML = `
     <div class="top"><a class="back" href="./#/games">MOVA Learning Studio</a><span class="brand">MOVA · Centro Pedagógico</span></div>
     <div class="cert fade" style="--c:var(--${c})">
-      <p class="skill" style="margin:0">Resultado del examen Level Up</p>
+      <p class="skill" style="margin:0">Nivel estimado · Examen Level Up</p>
       <span class="stamp" style="--c:var(--${c})">${level}</span>
       <h2>${title}</h2>
       ${st.name ? `<p class="name">${esc(st.name)}</p>` : ""}

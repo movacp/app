@@ -48,6 +48,7 @@ h2{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-siz
 .topic .mark{width:36px;height:36px;border-radius:11px;background:var(--c);display:grid;place-items:center;flex:none}
 .topic .mark svg{width:22px;height:22px}
 .topic b{font-size:14px;line-height:1.2;font-weight:600}
+.topic .tl{display:grid;gap:1px}.topic .tl small{font-size:11.5px;font-weight:600;color:var(--muted)}
 .topic[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 14%,var(--card))}
 .modes{display:flex;gap:6px;flex-wrap:wrap}
 .mode{padding:9px 14px;border-radius:999px;background:var(--tile);font-size:14px;font-weight:600;border:2px solid transparent}
@@ -125,7 +126,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:5}
   <section id="s-start">
     <div class="top"><a class="back" href="./#/games">MOVA Learning Studio</a><span class="brand">MOVA · Centro Pedagógico</span></div>
     <h1>Word Quest</h1>
-    <p class="lead">Choose your stage, a world of words and a way to play.</p>
+    <p class="lead">Choose your stage, a world of words and a way to play. Every topic shows its level.</p>
     <p class="label">Stage</p>
     <div class="stages" id="stages"></div>
     <p class="label">Topic</p>
@@ -202,21 +203,42 @@ const G = {
   cond: '<path d="M11 21v-7L5 8V4h2v3.2l5 5 5-5V4h2v4l-6 6v7z"/>',
   modals: '<circle cx="8" cy="12" r="5"/><path d="M12 11h10v3h-2v3h-3v-3h-5z"/>',
   gerund: '<path d="M4 5h3v14H4zM9 9h3v10H9zM14 9h3a3 3 0 0 1 3 3v7h-3v-7h-3z"/>',
-  linkers: '<path d="M9.5 14.5 7 17a3.5 3.5 0 0 1-5-5l3.5-3.5a3.5 3.5 0 0 1 5 0l-1.5 1.5a1.4 1.4 0 0 0-2 0L3.5 13.5a1.4 1.4 0 0 0 2 2l2.5-2.5zM14.5 9.5 17 7a3.5 3.5 0 0 1 5 5l-3.5 3.5a3.5 3.5 0 0 1-5 0l1.5-1.5a1.4 1.4 0 0 0 2 0l3.5-3.5a1.4 1.4 0 0 0-2-2L16 11zM8.5 14l5.5-5.5 1.5 1.5L10 15.5z"/>'
+  linkers: '<path d="M9.5 14.5 7 17a3.5 3.5 0 0 1-5-5l3.5-3.5a3.5 3.5 0 0 1 5 0l-1.5 1.5a1.4 1.4 0 0 0-2 0L3.5 13.5a1.4 1.4 0 0 0 2 2l2.5-2.5zM14.5 9.5 17 7a3.5 3.5 0 0 1 5 5l-3.5 3.5a3.5 3.5 0 0 1-5 0l1.5-1.5a1.4 1.4 0 0 0 2 0l3.5-3.5a1.4 1.4 0 0 0-2-2L16 11zM8.5 14l5.5-5.5 1.5 1.5L10 15.5z"/>',
+  feelings: '<circle cx="12" cy="12" r="9.5"/><circle cx="9" cy="10" r="1.4" fill="#1B2A55" fill-opacity=".55"/><circle cx="15" cy="10" r="1.4" fill="#1B2A55" fill-opacity=".55"/><path d="M8 14.5q4 3.5 8 0" fill="none" stroke="#1B2A55" stroke-opacity=".55" stroke-width="1.8" stroke-linecap="round"/>',
+  town: '<path d="M3 21V10l5-3v14zM9 21V5l6-3v19zM16 21v-9l5 2v7z"/>',
+  waswere: '<path d="M12 3a9 9 0 1 1-8.5 6h3.2A6 6 0 1 0 12 6v2.5L7.5 5 12 1.5z"/>',
+  habitats: '<path d="M2 20 9 7l4 7 3-4 6 10z"/><circle cx="18" cy="6" r="2.5"/>',
+  science: '<path d="M9 3h6v2h-1v5l5 9a2 2 0 0 1-1.8 3H6.8A2 2 0 0 1 5 19l5-9V5H9z"/>',
+  school: '<path d="M4 4h7v16H4zM13 4h7v16h-7z" opacity=".9"/><path d="M11 6h2v14h-2z" opacity=".6"/>',
+  routine: '<path d="M12 2.5a9.5 9.5 0 1 0 0 19 9.5 9.5 0 0 0 0-19zm1 4v5.2l3.6 2.1-1 1.7L11 13V6.5z"/>',
+  hobbies: '<circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18" stroke="#1B2A55" stroke-opacity=".4" stroke-width="1.6"/>',
+  phrasal1: '<rect x="2" y="7" width="11" height="10" rx="3"/><rect x="14" y="9" width="8" height="6" rx="2.5" opacity=".75"/>',
+  edIng: '<circle cx="8" cy="12" r="6"/><circle cx="17" cy="12" r="5" opacity=".7"/>',
+  environment: '<path d="M20 4C9 4 4 9 4 16c0 1.5.3 2.8.8 4C7 14 11 11 15 9c-4 3-7 6-8.5 11.5C14 21 20 16 20 4z"/>',
+  basics: '<path d="M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-9l-5 4v-4H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/>',
+  nations: '<path d="M5 3h2v18H5z"/><path d="M7 4h12l-3 4 3 4H7z" opacity=".85"/>',
+  tech: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M1 18h22v2H1z"/>',
+  travel: '<path d="M21 15v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V8l-8 5v2l8-2.5V18l-2 1.5V21l3.5-1 3.5 1v-1.5L13 18v-5.5z"/>',
+  usedto: '<path d="M4 5h16v14H4z" opacity=".8"/><path d="M8 9h8M8 13h5" stroke="#1B2A55" stroke-opacity=".5" stroke-width="2"/>',
+  phrasal2: '<rect x="2" y="6" width="9" height="12" rx="3"/><rect x="13" y="6" width="9" height="12" rx="3" opacity=".7"/>',
+  colloc: '<path d="M9.5 14.5 7 17a3.5 3.5 0 0 1-5-5l3.5-3.5a3.5 3.5 0 0 1 5 0M14.5 9.5 17 7a3.5 3.5 0 0 1 5 5l-3.5 3.5a3.5 3.5 0 0 1-5 0"/><path d="M8 16 16 8" stroke="#fff" stroke-width="2.4"/>',
+  idioms: '<path d="M12 2l2.6 6.2L21 9l-5 4.4L17.5 20 12 16.6 6.5 20 8 13.4 3 9l6.4-.8z"/>',
+  academic: '<path d="M2 9 12 4l10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5l-6 3z" opacity=".8"/>',
+  nuance: '<path d="M12 2 4 7v10l8 5 8-5V7z"/><path d="M12 7l4 2.5v5L12 17l-4-2.5v-5z" fill="#1B2A55" fill-opacity=".3"/>'
 };
 
 /* Sentence items: [sentence with ___, answer, hint, options (answer first)] */
 const DATA = {
   /* ---------- MOVA Kids ---------- */
-  animals: { stage: "kids", label: "Animals", c: "var(--coral)", items: [["dog","perro"],["cat","gato"],["bird","pájaro"],["fish","pez"],["horse","caballo"],["cow","vaca"],["rabbit","conejo"],["duck","pato"],["lion","león"],["monkey","mono"],["frog","rana"],["bear","oso"],["elephant","elefante"],["turtle","tortuga"]] },
-  food: { stage: "kids", label: "Food", c: "var(--sky)", items: [["apple","manzana"],["bread","pan"],["milk","leche"],["egg","huevo"],["cheese","queso"],["rice","arroz"],["banana","plátano"],["water","agua"],["cookie","galleta"],["soup","sopa"],["chicken","pollo"],["orange","naranja"],["juice","jugo"],["salad","ensalada"]] },
-  colors: { stage: "kids", label: "Colors", c: "var(--mustard)", face: "swatch", items: [["red","rojo","#E53935"],["blue","azul","#1E6FE0"],["yellow","amarillo","#FFD21F"],["green","verde","#2EAA4A"],["orange","naranja","#FF8A1F"],["purple","morado","#8E44CC"],["pink","rosa","#FF6FB1"],["brown","café","#8B5A2B"],["black","negro","#1B1B1B"],["white","blanco","#FFFFFF"],["gray","gris","#9AA1AD"]] },
-  numbers: { stage: "kids", label: "Numbers", c: "var(--mint)", face: "digit", items: [["one","uno","1"],["two","dos","2"],["three","tres","3"],["four","cuatro","4"],["five","cinco","5"],["six","seis","6"],["seven","siete","7"],["eight","ocho","8"],["nine","nueve","9"],["ten","diez","10"],["eleven","once","11"],["twelve","doce","12"],["fifteen","quince","15"],["twenty","veinte","20"]] },
-  family: { stage: "kids", label: "Family", c: "var(--pink)", items: [["mother","mamá"],["father","papá"],["sister","hermana"],["brother","hermano"],["grandmother","abuela"],["grandfather","abuelo"],["baby","bebé"],["aunt","tía"],["uncle","tío"],["cousin","primo"],["son","hijo"],["daughter","hija"]] },
-  body: { stage: "kids", label: "My Body", c: "var(--lilac)", items: [["head","cabeza"],["eyes","ojos"],["nose","nariz"],["mouth","boca"],["ears","orejas"],["hands","manos"],["feet","pies"],["arm","brazo"],["leg","pierna"],["hair","cabello"],["teeth","dientes"],["fingers","dedos"]] },
-  clothes: { stage: "kids", label: "Clothes", c: "var(--sky)", items: [["shirt","camisa"],["pants","pantalón"],["dress","vestido"],["shoes","zapatos"],["hat","sombrero"],["jacket","chamarra"],["socks","calcetines"],["skirt","falda"],["sweater","suéter"],["shorts","shorts"],["boots","botas"],["cap","gorra"]] },
-  verbs: { stage: "kids", label: "Action Verbs", c: "var(--coral)", items: [["run","correr"],["jump","saltar"],["eat","comer"],["drink","beber"],["sleep","dormir"],["read","leer"],["write","escribir"],["swim","nadar"],["sing","cantar"],["dance","bailar"],["play","jugar"],["walk","caminar"],["draw","dibujar"],["cook","cocinar"]] },
-  pronouns: { stage: "kids", label: "Pronouns", c: "var(--mint)", type: "sentence", instr: "Choose the right pronoun", options: ["I","You","He","She","It","We","They"], items: [
+  animals: { level: "Pre-A1", stage: "kids", label: "Animals", c: "var(--coral)", items: [["dog","perro"],["cat","gato"],["bird","pájaro"],["fish","pez"],["horse","caballo"],["cow","vaca"],["rabbit","conejo"],["duck","pato"],["lion","león"],["monkey","mono"],["frog","rana"],["bear","oso"],["elephant","elefante"],["turtle","tortuga"]] },
+  food: { level: "Pre-A1", stage: "kids", label: "Food", c: "var(--sky)", items: [["apple","manzana"],["bread","pan"],["milk","leche"],["egg","huevo"],["cheese","queso"],["rice","arroz"],["banana","plátano"],["water","agua"],["cookie","galleta"],["soup","sopa"],["chicken","pollo"],["orange","naranja"],["juice","jugo"],["salad","ensalada"]] },
+  colors: { level: "Pre-A1", stage: "kids", label: "Colors", c: "var(--mustard)", face: "swatch", items: [["red","rojo","#E53935"],["blue","azul","#1E6FE0"],["yellow","amarillo","#FFD21F"],["green","verde","#2EAA4A"],["orange","naranja","#FF8A1F"],["purple","morado","#8E44CC"],["pink","rosa","#FF6FB1"],["brown","café","#8B5A2B"],["black","negro","#1B1B1B"],["white","blanco","#FFFFFF"],["gray","gris","#9AA1AD"]] },
+  numbers: { level: "Pre-A1", stage: "kids", label: "Numbers", c: "var(--mint)", face: "digit", items: [["one","uno","1"],["two","dos","2"],["three","tres","3"],["four","cuatro","4"],["five","cinco","5"],["six","seis","6"],["seven","siete","7"],["eight","ocho","8"],["nine","nueve","9"],["ten","diez","10"],["eleven","once","11"],["twelve","doce","12"],["fifteen","quince","15"],["twenty","veinte","20"]] },
+  family: { level: "A1", stage: "kids", label: "Family", c: "var(--pink)", items: [["mother","mamá"],["father","papá"],["sister","hermana"],["brother","hermano"],["grandmother","abuela"],["grandfather","abuelo"],["baby","bebé"],["aunt","tía"],["uncle","tío"],["cousin","primo"],["son","hijo"],["daughter","hija"]] },
+  body: { level: "A1", stage: "kids", label: "My Body", c: "var(--lilac)", items: [["head","cabeza"],["eyes","ojos"],["nose","nariz"],["mouth","boca"],["ears","orejas"],["hands","manos"],["feet","pies"],["arm","brazo"],["leg","pierna"],["hair","cabello"],["teeth","dientes"],["fingers","dedos"]] },
+  clothes: { level: "A1", stage: "kids", label: "Clothes", c: "var(--sky)", items: [["shirt","camisa"],["pants","pantalón"],["dress","vestido"],["shoes","zapatos"],["hat","sombrero"],["jacket","chamarra"],["socks","calcetines"],["skirt","falda"],["sweater","suéter"],["shorts","shorts"],["boots","botas"],["cap","gorra"]] },
+  verbs: { level: "A1", stage: "kids", label: "Action Verbs", c: "var(--coral)", items: [["run","correr"],["jump","saltar"],["eat","comer"],["drink","beber"],["sleep","dormir"],["read","leer"],["write","escribir"],["swim","nadar"],["sing","cantar"],["dance","bailar"],["play","jugar"],["walk","caminar"],["draw","dibujar"],["cook","cocinar"]] },
+  pronouns: { level: "A1", stage: "kids", label: "Pronouns", c: "var(--mint)", type: "sentence", instr: "Choose the right pronoun", options: ["I","You","He","She","It","We","They"], items: [
     ["Ana is my sister. ___ is nine.","She"],
     ["Tom is my friend. ___ plays soccer.","He"],
     ["My dog is brown. ___ is very funny.","It"],
@@ -230,10 +252,10 @@ const DATA = {
     ["Mom and I cook on Sundays. ___ make pancakes.","We"],
     ["My teacher is Miss Karla. ___ is very nice.","She"]
   ] },
-  weather: { stage: "kids", label: "Weather", c: "var(--mustard)", items: [["sunny","soleado"],["rainy","lluvioso"],["cloudy","nublado"],["windy","con viento"],["snowy","con nieve"],["hot","calor"],["cold","frío"],["stormy","con tormenta"],["warm","templado"],["foggy","con neblina"]] },
+  weather: { level: "A1+", stage: "kids", label: "Weather", c: "var(--mustard)", items: [["sunny","soleado"],["rainy","lluvioso"],["cloudy","nublado"],["windy","con viento"],["snowy","con nieve"],["hot","calor"],["cold","frío"],["stormy","con tormenta"],["warm","templado"],["foggy","con neblina"]] },
 
   /* ---------- MOVA Children ---------- */
-  freq: { stage: "children", label: "Adverbs of Frequency", c: "var(--coral)", type: "sentence", instr: "How often? Choose the adverb", rule: "always 100% · usually 80% · often 70% · sometimes 50% · rarely 10% · never 0%", options: ["always","usually","often","sometimes","rarely","never"], items: [
+  freq: { level: "A1+", stage: "children", label: "Adverbs of Frequency", c: "var(--coral)", type: "sentence", instr: "How often? Choose the adverb", rule: "always 100% · usually 80% · often 70% · sometimes 50% · rarely 10% · never 0%", options: ["always","usually","often","sometimes","rarely","never"], items: [
     ["I ___ brush my teeth before bed.","always","100%"],
     ["We ___ eat pizza on Fridays, but not every week.","sometimes","50%"],
     ["My cat ___ swims. It hates water!","never","0%"],
@@ -246,7 +268,7 @@ const DATA = {
     ["Choose the correct sentence.","I usually walk to school.","Before the main verb",["I usually walk to school.","I walk usually to school.","Usually I to school walk."]],
     ["___ do you play video games? Every weekend.","How often","Asking about frequency",["How often","How much","What time"]]
   ] },
-  past: { stage: "children", label: "Irregular Past", c: "var(--mustard)", type: "sentence", instr: "Choose the past simple", rule: "Irregular verbs don’t take -ed. go → went, eat → ate, see → saw.", items: [
+  past: { level: "A2", stage: "children", label: "Irregular Past", c: "var(--mustard)", type: "sentence", instr: "Choose the past simple", rule: "Irregular verbs don’t take -ed. go → went, eat → ate, see → saw.", items: [
     ["Yesterday I ___ (go) to the park.","went","",["went","goed","gone"]],
     ["We ___ (eat) tacos last night.","ate","",["ate","eated","eaten"]],
     ["She ___ (see) a rainbow after the rain.","saw","",["saw","seed","seen"]],
@@ -260,7 +282,7 @@ const DATA = {
     ["I ___ (not / go) to school on Monday.","didn’t go","After didn’t, use the base verb",["didn’t go","didn’t went","not went"]],
     ["___ you ___ (see) the game?","Did / see","Did + base verb",["Did / see","Did / saw","Do / saw"]]
   ] },
-  compare: { stage: "children", label: "Comparatives", c: "var(--sky)", type: "sentence", instr: "Compare people and things", rule: "Short adjectives: -er / the -est. Long adjectives: more / the most. good → better → the best.", items: [
+  compare: { level: "A2", stage: "children", label: "Comparatives", c: "var(--sky)", type: "sentence", instr: "Compare people and things", rule: "Short adjectives: -er / the -est. Long adjectives: more / the most. good → better → the best.", items: [
     ["An elephant is ___ than a dog.","bigger","",["bigger","more big","biggest"]],
     ["My sister is ___ than me.","taller","",["taller","more tall","tallest"]],
     ["Math is ___ than art for me.","more difficult","",["more difficult","difficulter","most difficult"]],
@@ -272,7 +294,7 @@ const DATA = {
     ["A cheetah is ___ than a horse.","faster","",["faster","more fast","fastest"]],
     ["Gold is ___ than silver.","more expensive","",["more expensive","expensiver","most expensive"]]
   ] },
-  prep: { stage: "children", label: "In, On, At", c: "var(--mint)", type: "sentence", instr: "Choose the preposition", rule: "in + months, years, seasons · on + days, dates · at + times, places like the bus stop.", options: ["in","on","at"], items: [
+  prep: { level: "A2", stage: "children", label: "In, On, At", c: "var(--mint)", type: "sentence", instr: "Choose the preposition", rule: "in + months, years, seasons · on + days, dates · at + times, places like the bus stop.", options: ["in","on","at"], items: [
     ["My birthday is ___ May.","in"],
     ["The party is ___ Saturday.","on"],
     ["School starts ___ 8 o’clock.","at"],
@@ -286,7 +308,7 @@ const DATA = {
     ["The cookies are ___ the box.","in"],
     ["See you ___ noon!","at"]
   ] },
-  quant: { stage: "children", label: "Much, Many, Some, Any", c: "var(--lilac)", type: "sentence", instr: "How much or how many?", rule: "many + things you can count · much + things you can’t count · some in positive sentences · any in questions and negatives.", items: [
+  quant: { level: "A2+", stage: "children", label: "Much, Many, Some, Any", c: "var(--lilac)", type: "sentence", instr: "How much or how many?", rule: "many + things you can count · much + things you can’t count · some in positive sentences · any in questions and negatives.", items: [
     ["How ___ apples do you want?","many","Apples can be counted",["many","much","any"]],
     ["How ___ water do you drink every day?","much","Water can’t be counted",["much","many","some"]],
     ["There is ___ milk in the fridge.","some","Positive sentence",["some","many","any"]],
@@ -298,7 +320,7 @@ const DATA = {
     ["Is there ___ juice in the bottle?","any","Question",["any","many","a"]],
     ["There isn’t ___ sugar in my tea.","much","Sugar can’t be counted",["much","many","some"]]
   ] },
-  contin: { stage: "children", label: "Present Continuous", c: "var(--pink)", type: "sentence", instr: "What is happening now?", rule: "am / is / are + verb-ing for actions happening right now.", items: [
+  contin: { level: "A1", stage: "children", label: "Present Continuous", c: "var(--pink)", type: "sentence", instr: "What is happening now?", rule: "am / is / are + verb-ing for actions happening right now.", items: [
     ["Look! The dog ___ the ball.","is chasing","",["is chasing","chases","chasing"]],
     ["I ___ my homework right now.","am doing","",["am doing","do","doing"]],
     ["They ___ soccer at the moment.","are playing","",["are playing","is playing","play"]],
@@ -311,7 +333,7 @@ const DATA = {
   ] },
 
   /* ---------- MOVA Teens ---------- */
-  participle: { stage: "teens", label: "Past Participles", c: "var(--coral)", type: "sentence", instr: "Choose the past participle", rule: "have / has + past participle. go → went → gone · eat → ate → eaten.", items: [
+  participle: { level: "B1", stage: "teens", label: "Past Participles", c: "var(--coral)", type: "sentence", instr: "Choose the past participle", rule: "have / has + past participle. go → went → gone · eat → ate → eaten.", items: [
     ["I have never ___ (eat) sushi.","eaten","",["eaten","ate","eated"]],
     ["She has ___ (write) three books.","written","",["written","wrote","writed"]],
     ["Have you ever ___ (be) to Cancún?","been","",["been","was","be"]],
@@ -325,7 +347,7 @@ const DATA = {
     ["My cousins have ___ (fly) to Madrid.","flown","",["flown","flew","flied"]],
     ["We have ___ (know) each other for years.","known","",["known","knew","knowed"]]
   ] },
-  perfect: { stage: "teens", label: "For, Since, Already, Yet", c: "var(--mustard)", type: "sentence", instr: "Complete the present perfect", rule: "for + a period · since + a starting point · already in positive sentences · yet in questions and negatives.", items: [
+  perfect: { level: "B1", stage: "teens", label: "For, Since, Already, Yet", c: "var(--mustard)", type: "sentence", instr: "Complete the present perfect", rule: "for + a period · since + a starting point · already in positive sentences · yet in questions and negatives.", items: [
     ["I have lived here ___ 2018.","since","Starting point",["since","for","yet"]],
     ["She has studied English ___ five years.","for","Period of time",["for","since","already"]],
     ["Have you finished your project ___?","yet","Question",["yet","already","since"]],
@@ -335,7 +357,7 @@ const DATA = {
     ["I haven’t seen her ___ a long time.","for","Period of time",["for","since","yet"]],
     ["The movie has ___ started! Hurry!","already","Positive sentence",["already","yet","for"]]
   ] },
-  passive: { stage: "teens", label: "Passive Voice", c: "var(--sky)", type: "sentence", instr: "Choose the passive form", rule: "be + past participle. The action is more important than who does it.", items: [
+  passive: { level: "B1", stage: "teens", label: "Passive Voice", c: "var(--sky)", type: "sentence", instr: "Choose the passive form", rule: "be + past participle. The action is more important than who does it.", items: [
     ["English ___ in many countries.","is spoken","",["is spoken","speaks","is speaking"]],
     ["The Mona Lisa ___ by Leonardo da Vinci.","was painted","",["was painted","painted","is painting"]],
     ["This bridge ___ in 1920.","was built","",["was built","built","is build"]],
@@ -347,7 +369,7 @@ const DATA = {
     ["A new library ___ next year.","will be opened","",["will be opened","will open","opens"]],
     ["Harry Potter ___ into more than 80 languages.","has been translated","",["has been translated","has translated","translated"]]
   ] },
-  cond: { stage: "teens", label: "Conditionals", c: "var(--mint)", type: "sentence", instr: "Complete the conditional", rule: "Zero: if + present, present · First: if + present, will · Second: if + past, would.", items: [
+  cond: { level: "B1", stage: "teens", label: "Conditionals", c: "var(--mint)", type: "sentence", instr: "Complete the conditional", rule: "Zero: if + present, present · First: if + present, will · Second: if + past, would.", items: [
     ["If it rains, we ___ at home.","will stay","First conditional",["will stay","would stay","stayed"]],
     ["If I ___ rich, I would travel the world.","were","Second conditional",["were","am","will be"]],
     ["If you heat ice, it ___.","melts","Zero conditional: a fact",["melts","would melt","melted"]],
@@ -357,7 +379,7 @@ const DATA = {
     ["If you don’t hurry, you ___ the bus.","will miss","First conditional",["will miss","would miss","missed"]],
     ["If I ___ you, I would apologize.","were","Advice with the second conditional",["were","was being","am"]]
   ] },
-  modals: { stage: "teens", label: "Modal Verbs", c: "var(--lilac)", type: "sentence", instr: "Choose the modal verb", rule: "must = obligation · should = advice · might = possibility · don’t have to = not necessary · mustn’t = not allowed.", items: [
+  modals: { level: "B1", stage: "teens", label: "Modal Verbs", c: "var(--lilac)", type: "sentence", instr: "Choose the modal verb", rule: "must = obligation · should = advice · might = possibility · don’t have to = not necessary · mustn’t = not allowed.", items: [
     ["You ___ wear a seatbelt. It’s the law.","must","Obligation",["must","might","could"]],
     ["You look tired. You ___ go to bed early.","should","Advice",["should","mustn’t","might"]],
     ["It ___ rain later. Take an umbrella just in case.","might","Possibility",["might","must","should"]],
@@ -367,7 +389,7 @@ const DATA = {
     ["She ___ be at home. Her car is outside.","must","Almost certain",["must","should","mustn’t"]],
     ["___ I borrow your pencil, please?","Could","Polite request",["Could","Must","Should"]]
   ] },
-  gerund: { stage: "teens", label: "Gerunds and Infinitives", c: "var(--coral)", type: "sentence", instr: "-ing or to + verb?", rule: "enjoy, finish, mind, stop + -ing · want, decide, hope, promise + to · after prepositions, use -ing.", items: [
+  gerund: { level: "B1", stage: "teens", label: "Gerunds and Infinitives", c: "var(--coral)", type: "sentence", instr: "-ing or to + verb?", rule: "enjoy, finish, mind, stop + -ing · want, decide, hope, promise + to · after prepositions, use -ing.", items: [
     ["I enjoy ___ books.","reading","enjoy + -ing",["reading","to read","read"]],
     ["She wants ___ a doctor.","to be","want + to",["to be","being","be"]],
     ["They decided ___ to the beach.","to go","decide + to",["to go","going","go"]],
@@ -379,7 +401,7 @@ const DATA = {
     ["Please stop ___ noise!","making","stop + -ing",["making","to make","make"]],
     ["I’d like ___ pizza tonight.","to order","would like + to",["to order","ordering","order"]]
   ] },
-  linkers: { stage: "teens", label: "Linking Words", c: "var(--mustard)", type: "sentence", instr: "Connect the ideas", rule: "because = reason · so / therefore = result · but / however = contrast · although = surprising contrast.", items: [
+  linkers: { level: "B2", stage: "teens", label: "Linking Words", c: "var(--mustard)", type: "sentence", instr: "Connect the ideas", rule: "because = reason · so / therefore = result · but / however = contrast · although = surprising contrast.", items: [
     ["I was tired, ___ I went to bed early.","so","Result",["so","but","because"]],
     ["She didn’t go to school ___ she was sick.","because","Reason",["because","so","although"]],
     ["___ it was raining, we played outside.","Although","Surprising contrast",["Although","Because","So"]],
@@ -388,7 +410,93 @@ const DATA = {
     ["It was very late. ___, we took a taxi.","Therefore","Result",["Therefore","However","Although"]],
     ["___ the traffic, we arrived on time.","Despite","Despite + noun",["Despite","Although","However"]],
     ["You can have pizza ___ tacos. Choose one.","or","Alternative",["or","so","because"]]
+  ] },
+  /* ---------- Lote 10: temas nuevos para cubrir todos los niveles ---------- */
+  feelings: { stage: "kids", level: "A1+", label: "Feelings", c: "var(--pink)", items: [["happy","feliz"],["sad","triste"],["angry","enojado"],["scared","asustado"],["tired","cansado"],["hungry","con hambre"],["thirsty","con sed"],["excited","emocionado"],["sleepy","con sueño"],["surprised","sorprendido"],["bored","aburrido"],["calm","tranquilo"]] },
+  town: { stage: "kids", level: "A2", label: "Places in Town", c: "var(--sky)", items: [["park","parque"],["school","escuela"],["hospital","hospital"],["library","biblioteca"],["supermarket","supermercado"],["bakery","panadería"],["bank","banco"],["museum","museo"],["zoo","zoológico"],["restaurant","restaurante"],["post office","oficina de correos"],["bus stop","parada de autobús"]] },
+  waswere: { stage: "kids", level: "A2+", label: "Was or Were", c: "var(--mint)", type: "sentence", instr: "Choose was or were", rule: "was with I, he, she, it · were with you, we, they.", options: ["was","were"], items: [
+    ["Yesterday I ___ at the park.","was"],["My friends ___ at my party.","were"],["The cake ___ delicious.","was"],["We ___ very happy.","were"],["She ___ tired after school.","was"],["The dogs ___ in the garden.","were"],["It ___ cold last night.","was"],["You ___ late this morning.","were"],["My grandpa ___ a teacher.","was"],["The books ___ on the table.","were"],["Tom and I ___ in the same class.","were"],["The movie ___ very funny.","was"]
+  ] },
+  habitats: { stage: "kids", level: "B1", label: "Nature and Habitats", c: "var(--mint)", items: [["desert","desierto"],["jungle","selva"],["ocean","océano"],["forest","bosque"],["river","río"],["mountain","montaña"],["island","isla"],["cave","cueva"],["lake","lago"],["volcano","volcán"],["beach","playa"],["nest","nido"]] },
+  science: { stage: "kids", level: "B2", label: "Science Words", c: "var(--lilac)", items: [["planet","planeta"],["gravity","gravedad"],["energy","energía"],["oxygen","oxígeno"],["magnet","imán"],["skeleton","esqueleto"],["experiment","experimento"],["microscope","microscopio"],["temperature","temperatura"],["liquid","líquido"],["solid","sólido"],["habitat","hábitat"]] },
+
+  school: { stage: "children", level: "Pre-A1", label: "School Things", c: "var(--mustard)", items: [["pencil","lápiz"],["eraser","goma"],["ruler","regla"],["book","libro"],["notebook","cuaderno"],["backpack","mochila"],["scissors","tijeras"],["glue","pegamento"],["desk","pupitre"],["board","pizarrón"],["crayon","crayola"],["teacher","maestra"]] },
+  routine: { stage: "children", level: "A1", label: "Daily Routine", c: "var(--sky)", items: [["wake up","despertarse"],["get dressed","vestirse"],["brush my teeth","lavarme los dientes"],["have breakfast","desayunar"],["go to school","ir a la escuela"],["do homework","hacer la tarea"],["have a shower","bañarse"],["have lunch","comer"],["have dinner","cenar"],["go to bed","irse a dormir"]] },
+  hobbies: { stage: "children", level: "A1+", label: "Hobbies and Sports", c: "var(--coral)", items: [["painting","pintura"],["swimming","natación"],["cycling","ciclismo"],["reading","lectura"],["dancing","baile"],["skating","patinaje"],["cooking","cocina"],["gardening","jardinería"],["photography","fotografía"],["chess","ajedrez"],["karate","karate"],["singing","canto"]] },
+  phrasal1: { stage: "children", level: "B1", label: "Phrasal Verbs", c: "var(--mint)", type: "sentence", instr: "Choose the phrasal verb", rule: "A phrasal verb is a verb + a small word. Its meaning changes: look for = buscar, look after = cuidar.", items: [
+    ["It’s cold. ___ your jacket.","Put on","",["Put on","Take off","Turn on"]],
+    ["Please ___ the lights when you leave.","turn off","",["turn off","turn up","put on"]],
+    ["I’m ___ my keys. Have you seen them?","looking for","",["looking for","looking after","looking at"]],
+    ["Can you ___ my dog this weekend?","look after","",["look after","look for","look up"]],
+    ["I ___ at 7 every morning.","get up","",["get up","get on","give up"]],
+    ["Don’t ___! You can do it.","give up","",["give up","get up","pick up"]],
+    ["Please ___ your toys and put them in the box.","pick up","",["pick up","put on","get off"]],
+    ["We ___ the bus at the museum.","got off","",["got off","got up","took off"]],
+    ["If you don’t know the word, ___ it ___ in the dictionary.","look … up","",["look … up","look … for","look … after"]],
+    ["The plane ___ at 9 o’clock.","took off","",["took off","got off","put on"]],
+    ["Can you ___ the music? I can’t hear it.","turn up","",["turn up","turn off","give up"]],
+    ["My sister and I ___ very well. We are best friends.","get on","",["get on","get off","get up"]]
+  ] },
+  edIng: { stage: "children", level: "B1", label: "-ed or -ing Adjectives", c: "var(--pink)", type: "sentence", instr: "Choose the right adjective", rule: "-ed = how a person feels (I’m bored) · -ing = what causes the feeling (The movie is boring).", items: [
+    ["The movie was very long and ___.","boring","",["boring","bored"]],
+    ["I’m ___. Let’s play a game!","bored","",["bored","boring"]],
+    ["This book is really ___.","interesting","",["interesting","interested"]],
+    ["She is ___ in science.","interested","",["interested","interesting"]],
+    ["We were ___ about the trip to the beach.","excited","",["excited","exciting"]],
+    ["The final was an ___ match.","exciting","",["exciting","excited"]],
+    ["I was ___ after the long walk.","tired","",["tired","tiring"]],
+    ["Cleaning the whole house is ___.","tiring","",["tiring","tired"]],
+    ["The test results were ___.","surprising","",["surprising","surprised"]],
+    ["He was ___ when he saw the gift.","surprised","",["surprised","surprising"]]
+  ] },
+  environment: { stage: "children", level: "B2", label: "The Environment", c: "var(--mint)", items: [["pollution","contaminación"],["recycle","reciclar"],["renewable","renovable"],["drought","sequía"],["deforestation","deforestación"],["endangered","en peligro de extinción"],["waste","desperdicio"],["climate","clima"],["emissions","emisiones"],["conservation","conservación"],["sustainable","sostenible"],["wildlife","vida silvestre"]] },
+
+  basics: { stage: "teens", level: "Pre-A1", label: "Everyday Phrases", c: "var(--sky)", items: [["hello","hola"],["goodbye","adiós"],["please","por favor"],["thank you","gracias"],["sorry","perdón"],["good morning","buenos días"],["good night","buenas noches"],["excuse me","disculpe"],["welcome","bienvenido"],["see you later","hasta luego"],["how are you?","¿cómo estás?"],["nice to meet you","mucho gusto"]] },
+  nations: { stage: "teens", level: "A1", label: "Countries and Nationalities", c: "var(--coral)", items: [["Mexican","mexicano"],["American","estadounidense"],["Canadian","canadiense"],["Brazilian","brasileño"],["Spanish","español"],["French","francés"],["German","alemán"],["Italian","italiano"],["Japanese","japonés"],["Chinese","chino"],["British","británico"],["Argentinian","argentino"]] },
+  tech: { stage: "teens", level: "A1+", label: "Technology", c: "var(--lilac)", items: [["password","contraseña"],["screen","pantalla"],["keyboard","teclado"],["download","descargar"],["upload","subir"],["battery","batería"],["charger","cargador"],["headphones","audífonos"],["laptop","laptop"],["message","mensaje"],["camera","cámara"],["website","sitio web"]] },
+  travel: { stage: "teens", level: "A2", label: "Travel", c: "var(--mustard)", items: [["airport","aeropuerto"],["passport","pasaporte"],["luggage","equipaje"],["ticket","boleto"],["flight","vuelo"],["map","mapa"],["souvenir","recuerdo"],["guide","guía"],["reservation","reservación"],["delay","retraso"],["customs","aduana"],["boarding pass","pase de abordar"]] },
+  usedto: { stage: "teens", level: "A2+", label: "Used To", c: "var(--pink)", type: "sentence", instr: "Complete with used to", rule: "used to + verb = something you did in the past but don’t do now. Negative: didn’t use to.", items: [
+    ["When I was a child, I ___ play with toy cars.","used to","",["used to","use to","was used"]],
+    ["She ___ like vegetables, but now she loves them.","didn’t use to","",["didn’t use to","didn’t used to","not used to"]],
+    ["___ you use to live in Monterrey?","Did","",["Did","Do","Were"]],
+    ["My grandpa ___ work on a farm.","used to","",["used to","uses to","is used"]],
+    ["We ___ go to the beach every summer.","used to","",["used to","use","were use to"]],
+    ["I ___ be afraid of the dark, but now I’m not.","used to","",["used to","use to","am used"]],
+    ["He ___ wear glasses. He got them last year.","didn’t use to","",["didn’t use to","used not","doesn’t use to"]],
+    ["There ___ be a cinema here, but they closed it.","used to","",["used to","use to","was"]],
+    ["They ___ have a dog when they were young.","used to","",["used to","were used","use to"]],
+    ["Did you ___ watch cartoons on Saturday mornings?","use to","",["use to","used to","using to"]]
+  ] },
+  phrasal2: { stage: "teens", level: "B2", label: "Phrasal Verbs Plus", c: "var(--sky)", type: "sentence", instr: "Choose the phrasal verb", rule: "Common B2 phrasal verbs: put off = postpone · come up with = think of · run out of = have no more · turn down = reject.", items: [
+    ["We’ve ___ milk. Can you buy some?","run out of","",["run out of","run into","run over"]],
+    ["They decided to ___ the meeting until Friday.","put off","",["put off","put up with","put on"]],
+    ["She ___ a brilliant idea for the project.","came up with","",["came up with","came across","came down with"]],
+    ["He ___ the job offer because the salary was too low.","turned down","",["turned down","turned up","turned out"]],
+    ["It took her weeks to ___ the flu.","get over","",["get over","get through","get by"]],
+    ["I’m really ___ seeing you next week!","looking forward to","",["looking forward to","looking up to","looking into"]],
+    ["I can’t ___ this noise any longer.","put up with","",["put up with","put off","put away"]],
+    ["The police are ___ the robbery.","looking into","",["looking into","looking after","looking forward to"]],
+    ["I ___ an old friend at the supermarket yesterday.","ran into","",["ran into","ran out of","ran over"]],
+    ["The plan ___ to be a great success.","turned out","",["turned out","turned down","turned up"]]
+  ] },
+  colloc: { stage: "teens", level: "B2", label: "Collocations", c: "var(--coral)", type: "sentence", instr: "Make, do, take or have?", rule: "make a decision / a mistake / progress · do homework / research / a favor · take a break / a risk · have a chat / an argument.", options: ["make","do","take","have"], items: [
+    ["Can you ___ me a favor?","do"],["I need to ___ a decision soon.","make"],["Let’s ___ a break for ten minutes.","take"],["She ___ a lot of progress this year.","made"],["We ___ an interesting chat after class.","had"],["Don’t worry. Everybody ___ mistakes.","makes"],["I have to ___ some research for my essay.","do"],["Sometimes you have to ___ a risk.","take"],["They ___ an argument about money.","had"],["He always ___ his homework before dinner.","does"]
+  ].map(([s, a]) => [s, a, "", [a, ...["make","do","take","have","made","does","makes","had"].filter((x) => x !== a && x[0] !== a[0]).slice(0, 2)]]) },
+  idioms: { stage: "teens", level: "C1", label: "Idioms", c: "var(--mint)", items: [["break the ice","romper el hielo"],["a piece of cake","pan comido"],["hit the books","ponerse a estudiar"],["under the weather","sentirse mal"],["once in a blue moon","muy de vez en cuando"],["cost an arm and a leg","costar un ojo de la cara"],["spill the beans","soltar la sopa"],["hit the nail on the head","dar en el clavo"],["the ball is in your court","te toca decidir"],["on the same page","estar de acuerdo"],["call it a day","dar por terminado el día"],["beat around the bush","andarse por las ramas"]] },
+  academic: { stage: "teens", level: "C1", label: "Academic Vocabulary", c: "var(--lilac)", items: [["analyze","analizar"],["evidence","evidencia"],["hypothesis","hipótesis"],["significant","significativo"],["approach","enfoque"],["assess","evaluar"],["consistent","coherente"],["framework","marco"],["interpret","interpretar"],["derive","derivar"],["implement","implementar"],["subsequent","posterior"]] },
+  nuance: { stage: "teens", level: "C2", label: "Advanced Vocabulary", c: "var(--pink)", type: "sentence", instr: "Choose the most precise word", rule: "At C2, choose words for their exact nuance, not just their general meaning.", items: [
+    ["The evidence was ___: it could support either conclusion.","equivocal","",["equivocal","unequivocal","eloquent"]],
+    ["His ___ remarks made everyone feel uncomfortable.","disparaging","",["disparaging","disparate","dispensable"]],
+    ["The negotiations were ___, lasting more than three years.","protracted","",["protracted","prolific","protruding"]],
+    ["She gave a ___ summary that captured every key point in a few lines.","succinct","",["succinct","verbose","tentative"]],
+    ["The minister’s apology seemed ___ rather than sincere.","perfunctory","",["perfunctory","profound","pertinent"]],
+    ["The writer’s style is famously ___, full of hidden meanings.","enigmatic","",["enigmatic","emphatic","empathic"]],
+    ["Despite the criticism, he remained ___ in his beliefs.","steadfast","",["steadfast","steady-handed","stagnant"]],
+    ["The ___ of the plan only became clear after it failed.","flaws","",["flaws","floors","flows"]],
+    ["Her argument was so ___ that nobody could refute it.","cogent","",["cogent","cognate","contingent"]],
+    ["The policy had the ___ effect of increasing prices.","unintended","",["unintended","uninterested","undeterred"]]
   ] }
+
 };
 const MODES = {
   mix: ["Mix", "A little of everything: listen, read and spell."],
@@ -398,8 +506,9 @@ const MODES = {
   rush: ["60-second rush", "How many can you answer in one minute?"]
 };
 const PRAISE = ["Great job!", "Awesome!", "You got it!", "Super!", "Well done!", "Fantastic!", "Brilliant!"];
+const firstTopic = (sid) => { const LV = ["Pre-A1", "A1", "A1+", "A2", "A2+", "B1", "B1+", "B2", "C1", "C2"]; return Object.keys(DATA).filter((k) => DATA[k].stage === sid).sort((a, b) => LV.indexOf(DATA[a].level) - LV.indexOf(DATA[b].level))[0]; };
 const st = { stage: "kids", topic: "animals", mode: "mix", round: 0, score: 0, streak: 0, bestStreak: 0, correct: 0, total: 0, queue: [], item: null, kind: null, locked: true, raf: 0, timeouts: [], missed: [], rushEnd: 0 };
-try { const s = localStorage.getItem("mova-wq-stage"); if (s && STAGES.some((x) => x.id === s)) { st.stage = s; st.topic = Object.keys(DATA).find((k) => DATA[k].stage === s); } } catch (e) {}
+try { const s = localStorage.getItem("mova-wq-stage"); if (s && STAGES.some((x) => x.id === s)) { st.stage = s; st.topic = firstTopic(s); } } catch (e) {}
 
 /* Voice and sounds */
 const synth = window.speechSynthesis || null;
@@ -426,15 +535,16 @@ STAGES.forEach((s) => {
   const b = document.createElement("button");
   b.className = "stage"; b.dataset.k = s.id; b.style.setProperty("--c", s.c);
   b.innerHTML = `<b>${s.name}</b><small>${s.ages}</small>`;
-  b.addEventListener("click", () => { unlock(); st.stage = s.id; st.topic = Object.keys(DATA).find((k) => DATA[k].stage === s.id); try { localStorage.setItem("mova-wq-stage", s.id); } catch (e) {} drawTopics(); refresh(); });
+  b.addEventListener("click", () => { unlock(); st.stage = s.id; st.topic = firstTopic(s.id); try { localStorage.setItem("mova-wq-stage", s.id); } catch (e) {} drawTopics(); refresh(); });
   stagesEl.appendChild(b);
 });
 function drawTopics() {
   topicsEl.innerHTML = "";
-  Object.entries(DATA).filter(([, t]) => t.stage === st.stage).forEach(([k, t]) => {
+  const LV = ["Pre-A1", "A1", "A1+", "A2", "A2+", "B1", "B1+", "B2", "C1", "C2"];
+  Object.entries(DATA).filter(([, t]) => t.stage === st.stage).sort((a, b) => LV.indexOf(a[1].level) - LV.indexOf(b[1].level)).forEach(([k, t]) => {
     const b = document.createElement("button");
     b.className = "topic"; b.dataset.k = k; b.style.setProperty("--c", t.c);
-    b.innerHTML = `<span class="mark"><svg viewBox="0 0 24 24" fill="#fff">${G[k]}</svg></span><b>${t.label}</b>`;
+    b.innerHTML = `<span class="mark"><svg viewBox="0 0 24 24" fill="#fff">${G[k]}</svg></span><span class="tl"><b>${t.label}</b><small>${t.level}</small></span>`;
     b.addEventListener("click", () => { unlock(); st.topic = k; refresh(); speak(t.label); });
     topicsEl.appendChild(b);
   });

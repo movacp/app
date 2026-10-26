@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lee con Mochi · MOVA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#EFE8FF;
+  --card:#FFFFFF;
+  --ink:#1B2A55;
+  --muted:#5E6886;
+  --lila:#9B7BEA;
+  --lila-deep:#6E4FC9;
+  --lila-soft:#F1EBFF;
+  --tile:#FAF8FF;
+  --edge:#E1D8F7;
+  --track:#F0ECFA;
+  --good:#1E9A52; --good-bg:#DDF5E5;
+  --bad:#E5484D; --bad-bg:#FDE3E3;
+  --gold:#F2B632;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --page:#17132e; --card:#221d42; --ink:#F4F0FF; --muted:#BDB5DA; --lila-soft:#2e2758; --tile:#29234f; --edge:#3d3570; --track:#2e2858;
+    --good-bg:rgba(30,154,82,.22); --bad-bg:rgba(229,72,77,.22); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --page:#17132e; --card:#221d42; --ink:#F4F0FF; --muted:#BDB5DA; --lila-soft:#2e2758; --tile:#29234f; --edge:#3d3570; --track:#2e2858;
+  --good-bg:rgba(30,154,82,.22); --bad-bg:rgba(229,72,77,.22); color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;min-height:100%;color:var(--ink);
+  font-family:'Poppins','Century Gothic','Avenir Next','Segoe UI',system-ui,sans-serif;
+  background-color:var(--page);
+  background-image:
+    radial-gradient(circle, rgba(155,123,234,.55) 7px, transparent 8px),
+    radial-gradient(circle, rgba(255,143,177,.5) 7px, transparent 8px),
+    radial-gradient(circle, rgba(79,209,165,.5) 7px, transparent 8px),
+    radial-gradient(circle, rgba(242,182,50,.5) 7px, transparent 8px);
+  background-size:128px 128px;
+  background-position:0 0, 64px 32px, 32px 80px, 96px 112px;
+  -webkit-tap-highlight-color:transparent;
+}
+button{font-family:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:4px solid var(--lila);outline-offset:3px}
+[hidden]{display:none !important}
+.app{min-height:100%;display:flex;align-items:center;justify-content:center;padding:16px 12px}
+.panel{width:100%;max-width:540px;background:var(--card);border-radius:30px;padding:20px 18px 24px;box-shadow:0 10px 0 var(--lila),0 26px 56px rgba(60,40,120,.22)}
+.brand{display:flex;flex-direction:column;align-items:center;width:max-content;margin:0 auto;padding:8px 18px 6px;border:3px solid var(--ink);border-radius:18px;line-height:1}
+.brand .wordmark{font-weight:800;font-size:24px;letter-spacing:.06em}
+.brand .tag{font-weight:600;font-size:10px;letter-spacing:.04em;color:var(--muted);margin-top:4px}
+.brand.sm{margin:0;padding:5px 10px 4px;border-width:2px;border-radius:12px}
+.brand.sm .wordmark{font-size:15px}
+.lit{font-family:'Andika','Century Gothic','Poppins',sans-serif}
+
+/* Mochi */
+.mochi{display:block;margin:0 auto}
+.mochi.happy{animation:hop .6s ease}
+.mochi.sad{animation:wob .5s ease}
+@keyframes hop{0%,100%{transform:translateY(0)}35%{transform:translateY(-16px) scale(1.04)}65%{transform:translateY(0) scale(.98,1.02)}}
+@keyframes wob{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.mochi .lid{transform-origin:center;animation:blink 4.5s infinite}
+@keyframes blink{0%,94%,100%{transform:scaleY(0)}96%,98%{transform:scaleY(1)}}
+
+/* Start */
+h1{font-weight:800;font-size:clamp(32px,9.5vw,42px);line-height:1.05;text-align:center;margin:6px 0 6px}
+.lead{text-align:center;color:var(--muted);font-weight:500;font-size:15.5px;line-height:1.5;margin:0 0 6px}
+.label{font-weight:700;font-size:15px;margin:16px 0 8px}
+.letters{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.letter{
+  --c:var(--lila);border:0;border-radius:20px;padding:10px 4px;background:var(--c);color:#1B2A55;
+  box-shadow:0 5px 0 rgba(27,42,85,.16);font-family:'Andika',sans-serif;font-weight:700;font-size:30px;line-height:1.1
+}
+.letter small{display:block;font-family:'Poppins',sans-serif;font-size:11px;font-weight:600}
+.letter[aria-pressed="true"]{outline:4px solid var(--ink);outline-offset:3px}
+.letter:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(27,42,85,.16)}
+.primary{display:block;width:100%;margin-top:22px;border:0;border-radius:999px;background:var(--lila);color:#fff;font-weight:800;font-size:21px;padding:16px;box-shadow:0 6px 0 var(--lila-deep)}
+.primary:active{transform:translateY(4px);box-shadow:0 2px 0 var(--lila-deep)}
+.ghost{display:block;width:100%;margin-top:12px;border:3px solid var(--ink);background:transparent;border-radius:999px;font-weight:700;font-size:17px;padding:12px}
+
+.blocks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.block{--c:var(--lila);position:relative;border:3px solid transparent;border-radius:22px;padding:12px 12px 10px 54px;background:var(--tile);text-align:left;min-height:84px;box-shadow:0 5px 0 var(--edge)}
+.block .n{position:absolute;left:10px;top:12px;width:34px;height:34px;border-radius:50%;background:var(--c);color:#1B2A55;font-weight:800;font-size:17px;display:grid;place-items:center}
+.block b{display:block;font-size:16.5px;line-height:1.15}
+.block span{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-top:3px;line-height:1.3}
+.block i{display:block;font-style:normal;font-size:12px;font-weight:700;color:var(--gold);margin-top:4px;min-height:15px}
+.block[aria-pressed="true"]{border-color:var(--ink);background:var(--card)}
+.block:active{transform:translateY(3px)}
+.reading{font-family:'Andika','Century Gothic',sans-serif;font-weight:700;font-size:clamp(30px,9vw,40px);line-height:1.2;text-align:center;background:var(--lila-soft);border-radius:20px;padding:14px 18px;border:0;color:var(--ink);max-width:100%}
+.slots.words .slot{min-width:0;height:56px;font-size:24px;padding:0 12px}
+.opts.words .opt{font-size:clamp(22px,6.5vw,28px);padding:14px 8px}
+.opts.pics .opt{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;font-size:52px;padding:10px 6px}
+
+/* Game */
+.hud{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.icon-btn{border:0;background:var(--track);border-radius:14px;width:44px;height:44px;font-size:19px;display:grid;place-items:center}
+.starbar{display:flex;gap:3px;font-size:17px;color:var(--edge)}
+.starbar .on{color:var(--gold)}
+.stage{display:grid;grid-template-columns:96px 1fr;align-items:center;gap:10px;margin:14px 0 6px}
+.bubble{position:relative;background:var(--lila-soft);border-radius:18px;padding:12px 14px;font-weight:700;font-size:16px;line-height:1.35;min-height:52px;display:flex;align-items:center}
+.bubble::before{content:"";position:absolute;left:-10px;top:50%;transform:translateY(-50%);border:10px solid transparent;border-right-color:var(--lila-soft);border-left:0}
+.task{display:flex;flex-direction:column;align-items:center;gap:10px;margin:8px 0 14px;min-height:120px;justify-content:center}
+.big-emoji{font-size:84px;line-height:1;border:0;background:transparent;padding:0;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif}
+.listen{display:flex;align-items:center;gap:10px;border:0;border-radius:999px;background:var(--lila);color:#fff;font-weight:700;font-size:17px;padding:10px 22px 10px 10px;box-shadow:0 5px 0 var(--lila-deep)}
+.listen .ic{width:46px;height:46px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:22px}
+.listen:active{transform:translateY(3px);box-shadow:0 2px 0 var(--lila-deep)}
+.slots{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.slot{min-width:78px;height:64px;border-radius:16px;border:3px dashed var(--edge);display:grid;place-items:center;font-size:34px;font-weight:700;padding:0 10px}
+.slot.filled{border-style:solid;border-color:var(--lila);background:var(--lila-soft)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opts.tiles{grid-template-columns:repeat(auto-fit,minmax(90px,1fr))}
+.opt{
+  position:relative;border:3px solid var(--edge);background:var(--tile);border-radius:22px;padding:14px 6px;
+  font-family:'Andika',sans-serif;font-weight:700;font-size:clamp(34px,10vw,44px);line-height:1.1;box-shadow:0 6px 0 var(--edge);transition:transform .1s ease
+}
+.opt:active{transform:translateY(3px)}
+.opt.used{opacity:.25;pointer-events:none}
+.opt.right{border-color:var(--good);background:var(--good-bg);box-shadow:0 6px 0 var(--good);animation:pop .4s ease}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg);box-shadow:0 6px 0 var(--bad);animation:shake .4s ease}
+.tools{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.tools button{border:2px solid var(--edge);background:var(--card);border-radius:999px;padding:9px 16px;font-weight:700;font-size:14px}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.07)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
+/* End */
+.end-title{font-weight:800;font-size:clamp(28px,8vw,36px);text-align:center;margin:10px 0 4px;line-height:1.15}
+.end-sub{text-align:center;color:var(--muted);margin:0;font-weight:500}
+.end-stars{text-align:center;font-size:30px;letter-spacing:2px;margin:14px 0 4px;color:var(--gold)}
+.end-count{text-align:center;font-weight:700;margin:0}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:20}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+<link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+<canvas id="fx"></canvas>
+
+<template id="mochi-tpl">
+<svg class="mochi" viewBox="0 0 120 120" aria-hidden="true">
+  <g stroke="#1B2A55" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M36 31 L27 7 L49 22Z" fill="#3F86D9"/>
+    <path d="M84 31 L93 7 L71 22Z" fill="#3F86D9"/>
+    <path d="M31 74 C22 72 15 66 17 54" fill="none"/>
+    <path d="M89 74 C98 72 105 66 103 54" fill="none"/>
+    <path d="M31 104 L31 56 C31 31 45 19 60 19 C75 19 89 31 89 56 L89 104 C83 99 77 99 71 103 C65 108 55 108 49 103 C43 99 37 99 31 104Z" fill="#5BA8F0"/>
+    <circle cx="48" cy="52" r="10" fill="#fff"/><circle cx="72" cy="52" r="10" fill="#fff"/>
+  </g>
+  <circle cx="50" cy="54" r="5.5" fill="#1B2A55"/><circle cx="74" cy="54" r="5.5" fill="#1B2A55"/>
+  <circle cx="51.8" cy="52" r="1.9" fill="#fff"/><circle cx="75.8" cy="52" r="1.9" fill="#fff"/>
+  <rect class="lid" x="36.5" y="40.5" width="23" height="23" rx="11.5" fill="#5BA8F0" stroke="#1B2A55" stroke-width="3"/>
+  <rect class="lid" x="60.5" y="40.5" width="23" height="23" rx="11.5" fill="#5BA8F0" stroke="#1B2A55" stroke-width="3"/>
+  <circle cx="38" cy="67" r="5" fill="#FF8FB1"/><circle cx="82" cy="67" r="5" fill="#FF8FB1"/>
+  <g stroke="#1B2A55" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M53.5 74 L56 80.5 L58.5 75.8Z" fill="#fff"/>
+    <path d="M61.5 75.8 L64 80.5 L66.5 74Z" fill="#fff"/>
+    <path d="M49 70 Q60 80 71 70" fill="none"/>
+  </g>
+</svg>
+</template>
+
+<main class="app">
+  <div class="panel">
+
+    <section id="s-start">
+      <div class="brand"><span class="wordmark">MOVA</span><span class="tag">Centro Pedagógico</span></div>
+      <div id="mochi-start" style="width:130px;margin:14px auto 0"></div>
+      <h1>Lee con Mochi</h1>
+      <p class="lead">Paso a paso: vocales, sílabas, palabras y frases.</p>
+      <div class="label">Elige un bloque</div>
+      <div class="blocks" id="blocks"></div>
+      <div id="letter-pick">
+        <div class="label">¿Qué letra vamos a practicar?</div>
+        <div class="letters" id="letters"></div>
+      </div>
+      <button class="primary" id="play">Jugar con Mochi</button>
+    </section>
+
+    <section id="s-game" hidden>
+      <div class="hud">
+        <button class="icon-btn" id="home" aria-label="Volver al inicio">🏠</button>
+        <div class="starbar" id="starbar" aria-label="Estrellas"></div>
+        <div class="brand sm"><span class="wordmark">MOVA</span></div>
+      </div>
+      <div class="stage">
+        <div id="mochi-game" style="width:96px"></div>
+        <div class="bubble" id="bubble" aria-live="polite"></div>
+      </div>
+      <div class="task" id="task"></div>
+      <div class="opts" id="opts"></div>
+      <div class="tools" id="tools"></div>
+    </section>
+
+    <section id="s-end" hidden>
+      <div class="brand"><span class="wordmark">MOVA</span><span class="tag">Centro Pedagógico</span></div>
+      <div id="mochi-end" style="width:140px;margin:14px auto 0"></div>
+      <p class="end-title" id="end-title"></p>
+      <p class="end-sub" id="end-sub"></p>
+      <div class="end-stars" id="end-stars"></div>
+      <p class="end-count" id="end-count"></p>
+      <button class="primary" id="again">Jugar otra vez</button>
+      <button class="primary" id="nextblock" hidden>Siguiente bloque</button>
+      <button class="ghost" id="change">Elegir otro bloque</button>
+    </section>
+
+  </div>
+</main>
+
+<script>
+(function(){
+const $ = s => document.querySelector(s);
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const shuffle = a => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; };
+const ROUNDS = 10;
+const VOWELS = ['a','e','i','o','u'];
+
+const LETTERS = {
+  m:{color:'#C9B6FA', words:[['mano','✋',['ma','no']],['mono','🐒',['mo','no']],['moto','🏍️',['mo','to']],['mapa','🗺️',['ma','pa']],['mesa','🪑',['me','sa']],['muñeca','🪆',['mu','ñe','ca']],['mamá','👩',['ma','má']]]},
+  p:{color:'#FF8FB1', words:[['pato','🦆',['pa','to']],['papa','🥔',['pa','pa']],['pera','🍐',['pe','ra']],['pino','🌲',['pi','no']],['piña','🍍',['pi','ña']],['pollo','🐔',['po','llo']],['puma','🐆',['pu','ma']]]},
+  s:{color:'#4FD1A5', words:[['sapo','🐸',['sa','po']],['sopa','🍲',['so','pa']],['seta','🍄',['se','ta']],['silla','🪑',['si','lla']],['suma','➕',['su','ma']],['sirena','🧜‍♀️',['si','re','na']]]},
+  l:{color:'#F2B632', words:[['luna','🌙',['lu','na']],['lata','🥫',['la','ta']],['limón','🍋',['li','món']],['lobo','🐺',['lo','bo']],['leche','🥛',['le','che']],['lápiz','✏️',['lá','piz']]]},
+  t:{color:'#5BC0F0', words:[['taza','☕',['ta','za']],['tomate','🍅',['to','ma','te']],['tigre','🐯',['ti','gre']],['toro','🐂',['to','ro']],['tela','🧵',['te','la']],['tortuga','🐢',['tor','tu','ga']]]},
+  n:{color:'#FFB370', words:[['nube','☁️',['nu','be']],['nariz','👃',['na','riz']],['niña','👧',['ni','ña']],['nopal','🌵',['no','pal']],['naranja','🍊',['na','ran','ja']],['nieve','❄️',['nie','ve']]]},
+  d:{color:'#A8D86E', words:[['dado','🎲',['da','do']],['dedo','☝️',['de','do']],['dona','🍩',['do','na']],['dino','🦕',['di','no']],['delfín','🐬',['del','fín']],['diente','🦷',['dien','te']]]},
+  b:{color:'#F7A3C8', words:[['bebé','👶',['be','bé']],['boca','👄',['bo','ca']],['bota','🥾',['bo','ta']],['ballena','🐋',['ba','lle','na']],['búho','🦉',['bú','ho']],['banana','🍌',['ba','na','na']]]},
+  r:{color:'#8FD3E8', words:[['rosa','🌹',['ro','sa']],['ropa','👕',['ro','pa']],['ratón','🐭',['ra','tón']],['regalo','🎁',['re','ga','lo']],['rueda','🛞',['rue','da']],['reloj','⌚',['re','loj']]]},
+  f:{color:'#FFD166', words:[['foca','🦭',['fo','ca']],['foco','💡',['fo','co']],['fila','🚶',['fi','la']],['fresa','🍓',['fre','sa']],['fuego','🔥',['fue','go']],['flor','🌸',['flor']]]}
+};
+const VOWEL_WORDS = {
+  a:[['abeja','🐝'],['avión','✈️'],['árbol','🌳'],['araña','🕷️']],
+  e:[['elefante','🐘'],['estrella','⭐'],['escoba','🧹'],['erizo','🦔']],
+  i:[['iguana','🦎'],['isla','🏝️'],['imán','🧲'],['iglú','🧊']],
+  o:[['oso','🐻'],['ojo','👁️'],['oveja','🐑'],['ola','🌊']],
+  u:[['uvas','🍇'],['uno','1️⃣'],['unicornio','🦄'],['uña','💅']]
+};
+const PHRASES = [
+  ['El sapo salta.','🐸'],['La luna sale.','🌙'],['Mi mamá me mima.','👩'],['El pato nada.','🦆'],
+  ['La nube es blanca.','☁️'],['El tomate es rojo.','🍅'],['Toma la sopa.','🍲'],['El lobo aúlla.','🐺'],
+  ['El oso come miel.','🐻'],['El sol brilla.','☀️'],['La foca nada.','🦭'],['El perro come.','🐶'],
+  ['La vaca da leche.','🐮'],['El bebé duerme.','👶'],['Mi dedo toca la nariz.','👃'],['La rosa es roja.','🌹']
+];
+const BLOCKS = [
+  { id:'vocales', n:1, title:'Vocales', sub:'a, e, i, o, u', color:'#C9B6FA' },
+  { id:'silabas', n:2, title:'Sílabas', sub:'ma, pe, si, lo, tu', color:'#FF8FB1' },
+  { id:'palabras', n:3, title:'Palabras', sub:'Lee y arma palabras', color:'#4FD1A5' },
+  { id:'frases', n:4, title:'Frases', sub:'Lee oraciones cortas', color:'#F2B632' }
+];
+const BEST_KEY = 'mova-mochi-best';
+const getBest = () => { try{ return JSON.parse(localStorage.getItem(BEST_KEY)) || {}; }catch(e){ return {}; } };
+const saveBest = (id, n) => { try{ const b = getBest(); if(!(b[id] >= n)){ b[id] = n; localStorage.setItem(BEST_KEY, JSON.stringify(b)); } }catch(e){} };
+const ALL = { color:'#B9E3F7', label:'Todas' };
+
+const PRAISE = ['¡Muy bien!','¡Excelente!','¡Lo lograste!','¡Qué bien lees!','¡Bravo!','¡Perfecto!'];
+const RETRY = ['¡Casi! Inténtalo otra vez.','Escucha bien y vuelve a intentarlo.','Tú puedes, prueba de nuevo.'];
+const st = { block:'vocales', letter:'m', round:0, stars:0, q:null, firstTry:true, built:[], lock:false, timeouts:[] };
+
+/* Mochi */
+function mountMochi(id){ const el = $('#'+id); el.innerHTML = ''; el.appendChild($('#mochi-tpl').content.cloneNode(true)); return el.querySelector('svg'); }
+const mStart = mountMochi('mochi-start'), mGame = mountMochi('mochi-game'), mEnd = mountMochi('mochi-end');
+function react(m, cls){ m.classList.remove('happy','sad'); void m.getBoundingClientRect(); m.classList.add(cls); }
+
+/* speech es-MX */
+const synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
+let voice = null;
+function pickVoice(){ if(!synth) return; const vs = synth.getVoices();
+  voice = vs.find(v => /es[-_]MX/i.test(v.lang)) || vs.find(v => /es[-_](US|419)/i.test(v.lang)) || vs.find(v => /^es/i.test(v.lang)) || null; }
+if(synth){ pickVoice(); synth.onvoiceschanged = pickVoice; }
+function speak(t, rate){ if(!synth) return; try{ if(synth.paused) synth.resume(); synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang='es-MX'; u.rate=rate||.85; u.pitch=1.15; if(voice) u.voice=voice; synth.speak(u); }catch(e){} }
+
+/* sounds */
+let actx = null;
+function unlockAudio(){ try{ if(!actx){ const AC = window.AudioContext || window.webkitAudioContext; if(AC) actx = new AC(); } if(actx && actx.state==='suspended') actx.resume(); }catch(e){} }
+function tones(freqs, step, type, vol){
+  if(!actx) return; const t0 = actx.currentTime;
+  freqs.forEach((f,i) => { const o=actx.createOscillator(), g=actx.createGain(); o.type=type||'sine'; o.frequency.value=f;
+    const s=t0+i*step; g.gain.setValueAtTime(.0001,s); g.gain.exponentialRampToValueAtTime(vol||.16,s+.02); g.gain.exponentialRampToValueAtTime(.0001,s+step+.12);
+    o.connect(g).connect(actx.destination); o.start(s); o.stop(s+step+.15); });
+}
+const chime = () => tones([660,880,1175], .09, 'triangle');
+const boop = () => tones([330,260], .12, 'sine', .1);
+const tap = () => tones([520], .05, 'sine', .07);
+const fanfare = () => tones([523,659,784,1047], .13, 'triangle');
+
+function later(fn, ms){ st.timeouts.push(setTimeout(fn, ms)); }
+function clearLater(){ st.timeouts.forEach(clearTimeout); st.timeouts = []; }
+function show(id){ ['start','game','end'].forEach(s => $('#s-'+s).hidden = s!==id); window.scrollTo(0,0); }
+function say(text){ $('#bubble').textContent = text; }
+
+/* start */
+const lettersEl = $('#letters');
+[...Object.keys(LETTERS), 'all'].forEach(k => {
+  const b = document.createElement('button');
+  b.className = 'letter'; b.dataset.l = k;
+  b.style.setProperty('--c', k === 'all' ? ALL.color : LETTERS[k].color);
+  b.innerHTML = k === 'all' ? `★<small>Repaso</small>` : `${k.toUpperCase()}${k}<small>${k}a ${k}e ${k}i</small>`;
+  b.addEventListener('click', () => { unlockAudio(); selectLetter(k); if(k !== 'all') speak(`${k}a, ${k}e, ${k}i, ${k}o, ${k}u`); });
+  lettersEl.appendChild(b);
+});
+const blocksEl = $('#blocks');
+function renderBlocks(){
+  const best = getBest(); blocksEl.innerHTML = '';
+  BLOCKS.forEach(bk => {
+    const b = document.createElement('button'); b.className = 'block'; b.dataset.b = bk.id;
+    b.style.setProperty('--c', bk.color);
+    b.innerHTML = `<span class="n">${bk.n}</span><b>${bk.title}</b><span>${bk.sub}</span><i>${best[bk.id] ? '★ ' + best[bk.id] + ' de ' + ROUNDS : ''}</i>`;
+    b.setAttribute('aria-pressed', bk.id === st.block ? 'true' : 'false');
+    b.addEventListener('click', () => { unlockAudio(); tap(); selectBlock(bk.id); speak(bk.title); });
+    blocksEl.appendChild(b);
+  });
+}
+function selectBlock(id){ st.block = id; blocksEl.querySelectorAll('.block').forEach(b => b.setAttribute('aria-pressed', b.dataset.b === id ? 'true' : 'false')); $('#letter-pick').hidden = id !== 'silabas'; }
+renderBlocks(); selectBlock('vocales');
+function selectLetter(k){ st.letter = k; lettersEl.querySelectorAll('.letter').forEach(b => b.setAttribute('aria-pressed', b.dataset.l===k ? 'true':'false')); }
+selectLetter('m');
+
+/* questions */
+function lettersInPlay(){ return st.letter === 'all' ? Object.keys(LETTERS) : [st.letter]; }
+function syllOptions(correct, cons){
+  const pool = new Set([correct]);
+  shuffle(VOWELS).forEach(v => { if(pool.size < 4) pool.add(cons + v); });
+  return shuffle([...pool]);
+}
+function makeSylQ(){
+  const L = pick(lettersInPlay());
+  const type = pick(['listen','first','build','build','first']);
+  if(type === 'listen'){
+    const syl = L + pick(VOWELS);
+    const opts = st.letter === 'all' ? shuffle([syl, ...shuffle(Object.keys(LETTERS).filter(x=>x!==L)).slice(0,3).map(c => c + syl[1])]) : syllOptions(syl, L);
+    return { type, ans:syl, opts, say:syl, prompt:'Escucha y toca la sílaba que dice Mochi.' };
+  }
+  const plain = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const simple = LETTERS[L].words.filter(x => plain(x[2][0]).length === 2);
+  const w = type === 'first' ? pick(simple) : pick(LETTERS[L].words);
+  if(type === 'first'){
+    const first = w[2][0];
+    const base = first.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const cons = base.slice(0, base.length-1);
+    const opts = shuffle([first, ...shuffle(VOWELS.map(v => cons + v).filter(s => s !== base)).slice(0,3)]);
+    return { type, ans:first, opts, word:w[0], emoji:w[1], prompt:`¿Con qué sílaba empieza ${w[0]}?` };
+  }
+  const extraL = pick(Object.keys(LETTERS));
+  const distract = extraL + pick(VOWELS);
+  const tiles = w[2].includes(distract) ? w[2].slice() : [...w[2], distract];
+  return { type:'build', word:w[0], emoji:w[1], parts:w[2], tiles:shuffle(tiles), prompt:'Arma la palabra con las sílabas.' };
+}
+
+function makeQ(){
+  if(st.block === 'silabas') return makeSylQ();
+  if(st.block === 'vocales'){
+    if(Math.random() < .5){ const v = pick(VOWELS); return { type:'listen', ans:v, opts:shuffle(shuffle(VOWELS.filter(x => x !== v)).slice(0,3).concat(v)), say:v, prompt:'Escucha y toca la vocal que dice Mochi.' }; }
+    const v = pick(VOWELS), w = pick(VOWEL_WORDS[v]);
+    return { type:'first', ans:v, opts:shuffle(shuffle(VOWELS.filter(x => x !== v)).slice(0,3).concat(v)), word:w[0], emoji:w[1], prompt:`¿Con qué vocal empieza ${w[0]}?` };
+  }
+  const allWords = Object.values(LETTERS).flatMap(x => x.words);
+  if(st.block === 'palabras'){
+    const w = pick(allWords);
+    if(Math.random() < .5){
+      const others = shuffle(allWords.filter(x => x[1] !== w[1])).slice(0,3).map(x => x[1]);
+      return { type:'readpick', ans:w[1], opts:shuffle([w[1], ...others]), word:w[0], prompt:'Lee la palabra y toca su dibujo.' };
+    }
+    const extraL = pick(Object.keys(LETTERS)); const distract = extraL + pick(VOWELS);
+    const tiles = w[2].includes(distract) ? w[2].slice() : [...w[2], distract];
+    return { type:'build', word:w[0], emoji:w[1], parts:w[2], tiles:shuffle(tiles), prompt:'Arma la palabra con las sílabas.' };
+  }
+  const ph = pick(PHRASES);
+  if(Math.random() < .5){
+    const others = shuffle(PHRASES.filter(x => x[1] !== ph[1])).slice(0,3).map(x => x[1]);
+    return { type:'readpick', ans:ph[1], opts:shuffle([ph[1], ...others]), word:ph[0], phrase:true, prompt:'Lee la frase y toca el dibujo correcto.' };
+  }
+  const parts = ph[0].split(' ');
+  return { type:'build', word:ph[0], emoji:ph[1], parts, tiles:shuffle(parts), words:true, prompt:'Ordena las palabras para formar la frase.' };
+}
+
+/* game */
+function startGame(){
+  unlockAudio(); clearLater();
+  st.round = 0; st.stars = 0;
+  renderStars(); show('game'); next();
+}
+function renderStars(){
+  const bar = $('#starbar'); bar.innerHTML = '';
+  for(let i=0;i<ROUNDS;i++){ const s = document.createElement('span'); s.textContent = '★'; if(i < st.stars) s.className = 'on'; bar.appendChild(s); }
+}
+function next(){
+  if(st.round >= ROUNDS){ end(); return; }
+  st.round++; st.firstTry = true; st.lock = false; st.built = [];
+  const q = makeQ(); st.q = q;
+  say(q.prompt);
+  const task = $('#task'), opts = $('#opts'), tools = $('#tools');
+  task.innerHTML = ''; opts.innerHTML = ''; tools.innerHTML = '';
+  opts.className = 'opts' + (q.type === 'build' ? ' tiles' : '') + (q.words ? ' words' : '') + (q.type === 'readpick' ? ' pics' : '');
+
+  if(q.type === 'readpick'){
+    const r = document.createElement('button'); r.className = 'reading'; r.textContent = q.word;
+    r.setAttribute('aria-label', 'Escuchar: ' + q.word);
+    r.addEventListener('click', () => speak(q.word, .8));
+    task.appendChild(r);
+    const hint = document.createElement('button'); hint.textContent = '🔊 Ayuda: escuchar'; hint.addEventListener('click', () => { st.firstTry = false; speak(q.word, .8); });
+    tools.appendChild(hint);
+  } else if(q.type === 'listen'){
+    const b = document.createElement('button'); b.className = 'listen';
+    b.innerHTML = '<span class="ic">🔊</span><span>Escuchar</span>';
+    b.addEventListener('click', () => speak(q.say, .75));
+    task.appendChild(b);
+    later(() => speak(q.say, .75), 400);
+  } else {
+    const e = document.createElement('button'); e.className = 'big-emoji'; e.textContent = q.emoji;
+    e.setAttribute('aria-label', 'Escuchar la palabra');
+    e.addEventListener('click', () => speak(q.word));
+    task.appendChild(e);
+    if(q.type === 'build'){
+      const slots = document.createElement('div'); slots.className = 'slots lit' + (q.words ? ' words' : ''); slots.id = 'slots';
+      q.parts.forEach(() => { const s = document.createElement('div'); s.className = 'slot'; slots.appendChild(s); });
+      task.appendChild(slots);
+      const undo = document.createElement('button'); undo.textContent = '↩︎ Borrar'; undo.addEventListener('click', undoTile);
+      const hear = document.createElement('button'); hear.textContent = q.words ? '🔊 Escuchar frase' : '🔊 Escuchar palabra'; hear.addEventListener('click', () => speak(q.word));
+      tools.append(hear, undo);
+    }
+    if(q.type !== 'readpick') later(() => speak(q.type === 'build' ? q.word : q.prompt), 400);
+    else later(() => speak(q.prompt), 400);
+  }
+
+  const list = q.type === 'build' ? q.tiles : q.opts;
+  list.forEach((t, i) => {
+    const b = document.createElement('button');
+    b.className = 'opt'; b.textContent = t; b.dataset.t = t; b.dataset.i = i;
+    b.addEventListener('click', () => q.type === 'build' ? placeTile(b) : choose(b));
+    opts.appendChild(b);
+  });
+}
+function choose(btn){
+  if(st.lock) return;
+  const q = st.q; if(q.type !== 'readpick') speak(btn.dataset.t, .8);
+  if(btn.dataset.t === q.ans) success(btn);
+  else { st.firstTry = false; btn.classList.add('wrong'); boop(); react(mGame, 'sad'); say(pick(RETRY)); later(() => btn.classList.remove('wrong'), 450); }
+}
+function placeTile(btn){
+  if(st.lock) return;
+  const q = st.q; if(st.built.length >= q.parts.length) return;
+  tap(); speak(btn.dataset.t, .8);
+  st.built.push(btn); btn.classList.add('used');
+  const slots = $('#slots').children;
+  slots[st.built.length-1].textContent = btn.dataset.t; slots[st.built.length-1].classList.add('filled');
+  if(st.built.length === q.parts.length){
+    const ok = st.built.every((b, k) => b.dataset.t === q.parts[k]);
+    if(ok){ success(null); }
+    else {
+      st.firstTry = false; st.lock = true; boop(); react(mGame, 'sad'); say(pick(RETRY));
+      [...slots].forEach(s => s.style.borderColor = 'var(--bad)');
+      later(() => { [...slots].forEach(s => { s.textContent=''; s.classList.remove('filled'); s.style.borderColor=''; }); st.built.forEach(b => b.classList.remove('used')); st.built = []; st.lock = false; }, 1000);
+    }
+  }
+}
+function undoTile(){
+  if(st.lock || !st.built.length) return;
+  const b = st.built.pop(); b.classList.remove('used');
+  const s = $('#slots').children[st.built.length]; s.textContent = ''; s.classList.remove('filled');
+}
+function success(btn){
+  st.lock = true;
+  if(btn) btn.classList.add('right');
+  else [...$('#slots').children].forEach(s => { s.style.borderColor = 'var(--good)'; s.style.background = 'var(--good-bg)'; });
+  chime(); react(mGame, 'happy');
+  const p = pick(PRAISE);
+  if(st.firstTry){ st.stars++; renderStars(); }
+  const q = st.q;
+  if(q.type === 'build') { say(q.words ? `${p} ${q.word}` : `${p} ${q.parts.join(' - ')}: ${q.word}`); later(() => speak(`${p} ${q.word}`), 250); }
+  else if(q.type === 'readpick') { say(`${p} ${q.word}`); later(() => speak(`${p} ${q.word}`), 250); }
+  else if(q.type === 'first') { say(`${p} ${q.word} empieza con ${q.ans}`); later(() => speak(`${p} ${q.word} empieza con ${q.ans}`), 250); }
+  else { say(p); later(() => speak(p), 300); }
+  if(st.stars > 0 && st.stars % 5 === 0 && st.firstTry) confetti(60);
+  later(next, 2000);
+}
+function end(){
+  const s = st.stars;
+  $('#end-title').textContent = s >= 8 ? '¡Eres una estrella leyendo!' : s >= 5 ? '¡Muy buen trabajo!' : '¡Sigue practicando con Mochi!';
+  const bk = BLOCKS.find(b => b.id === st.block);
+  $('#end-sub').textContent = st.block === 'silabas' ? (st.letter === 'all' ? 'Repasaste todas las sílabas.' : `Practicaste las sílabas con ${st.letter.toUpperCase()}.`) : `Terminaste el bloque ${bk.n}: ${bk.title}.`;
+  saveBest(st.block, s); renderBlocks(); selectBlock(st.block);
+  const nb = BLOCKS[bk.n]; const nx = $('#nextblock'); nx.hidden = !(nb && s >= 7); if(nb) nx.textContent = `Siguiente bloque: ${nb.title}`;
+  $('#end-stars').textContent = '★'.repeat(s) || '☆';
+  $('#end-count').textContent = `${s} de ${ROUNDS} estrellas`;
+  show('end'); react(mEnd, 'happy'); fanfare();
+  later(() => speak($('#end-title').textContent), 400);
+  if(s >= 5) confetti(160);
+}
+function home(){ clearLater(); if(synth) synth.cancel(); show('start'); }
+
+/* confetti (stars + dots) */
+const cv = $('#fx'), cx = cv.getContext('2d');
+const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let parts = [], fxRaf = 0;
+function sizeCanvas(){ const d = window.devicePixelRatio||1; cv.width = innerWidth*d; cv.height = innerHeight*d; cx.setTransform(d,0,0,d,0,0); }
+sizeCanvas(); addEventListener('resize', sizeCanvas);
+function confetti(n){
+  if(reduce) return;
+  const cols = ['#9B7BEA','#FF8FB1','#F2B632','#4FD1A5','#5BC0F0'];
+  for(let i=0;i<n;i++) parts.push({x:innerWidth/2+(Math.random()-.5)*120, y:innerHeight*.35, vx:(Math.random()-.5)*12, vy:-Math.random()*12-4, r:Math.random()*6+5, c:cols[i%cols.length], rot:Math.random()*6, vr:(Math.random()-.5)*.3, life:0, star:Math.random()<.45});
+  if(!fxRaf) fxRaf = requestAnimationFrame(drawFx);
+}
+function starPath(r){ cx.beginPath(); for(let i=0;i<10;i++){ const a = Math.PI/5*i - Math.PI/2, rr = i%2 ? r*.45 : r; cx.lineTo(Math.cos(a)*rr, Math.sin(a)*rr); } cx.closePath(); }
+function drawFx(){
+  cx.clearRect(0,0,innerWidth,innerHeight);
+  parts.forEach(p => { p.vy+=.32; p.vx*=.99; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.life++;
+    cx.save(); cx.translate(p.x,p.y); cx.rotate(p.rot); cx.fillStyle=p.c;
+    if(p.star){ starPath(p.r); cx.fill(); } else { cx.beginPath(); cx.arc(0,0,p.r/1.7,0,Math.PI*2); cx.fill(); }
+    cx.restore(); });
+  parts = parts.filter(p => p.y < innerHeight+30 && p.life < 240);
+  if(parts.length) fxRaf = requestAnimationFrame(drawFx); else { fxRaf = 0; cx.clearRect(0,0,innerWidth,innerHeight); }
+}
+
+$('#play').addEventListener('click', startGame);
+$('#again').addEventListener('click', startGame);
+$('#change').addEventListener('click', home);
+$('#nextblock').addEventListener('click', () => { const bk = BLOCKS.find(b => b.id === st.block); const nb = BLOCKS[bk.n]; if(nb){ selectBlock(nb.id); startGame(); } });
+$('#home').addEventListener('click', home);
+})();
+</script>
+<a href="./#/games" class="mova-home-btn" aria-label="Back to MOVA Learning Studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></a>
+<style>.mova-home-btn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);left:10px;z-index:2147483000;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.94);color:#1E3A5F;box-shadow:0 2px 10px rgba(0,0,0,.2);text-decoration:none}.mova-home-btn svg{width:20px;height:20px}.mova-home-btn:focus-visible{outline:3px solid #6FA8D6;outline-offset:2px}@media print{.mova-home-btn{display:none}}</style>
+</body>
+</html>

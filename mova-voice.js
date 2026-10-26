@@ -5,7 +5,6 @@
   var FEM = /Aria|Jenny|Ava\b|Emma|Michelle|Ana\b|Samantha|Karen|Moira|Tessa|Zira|Allison|Susan|Victoria|Nicky|Joelle|Dalia|Paulina|M[oó]nica|Sabina|Elena|Renata|Marisol|Helena|Laura|Lupe|Larissa|Female|Mujer/i;
   var MAL = /Guy\b|Andrew|Brian|Christopher|Eric\b|Roger|Steffan|Davis|Tony\b|Jason|Aaron|Alex\b|Daniel|Tom\b|Mark\b|Jorge|Juan\b|Diego|Gerardo|Pablo|Carlos|Liam|Evan\b|Nathan|Male|Hombre/i;
   var NOVELTY = /Compact|eSpeak|Fred|Albert|Bad News|Bells|Boing|Bubbles|Cellos|Jester|Organ|Trinoids|Whisper|Zarvox|Wobble|Superstar|Grandma|Grandpa|Rocko|Shelley|Junior|Ralph|Kathy|Flo\b|Eddy|Sandy|Reed\b/i;
-
   function quality(v){
     var n = v.name, s = 0;
     if(/Natural|Neural/i.test(n)) s += 100;
@@ -50,7 +49,6 @@
     }
     return pool[0];
   }
-
   var orig = S.speak.bind(S);
   S.speak = function(u){
     try{
