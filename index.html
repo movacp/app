@@ -2060,7 +2060,26 @@ router();
 
 /* ---------- Installable app (PWA) ---------- */
 if ("serviceWorker" in navigator && location.protocol === "https:") {
-  window.addEventListener("load", () => { navigator.serviceWorker.register("sw.js").catch(() => {}); });
+  /* Actualizaciones: busca versión nueva al abrir la app y al volver a ella; si hay, avisa con un aviso para recargar. */
+  const hadController = !!navigator.serviceWorker.controller;
+  let updateShown = false;
+  const showUpdate = () => {
+    if (updateShown || !hadController) return; updateShown = true;
+    const bar = document.createElement("div");
+    bar.setAttribute("role", "status");
+    bar.style.cssText = "position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 86px);z-index:2147483600;display:flex;align-items:center;gap:12px;width:min(92vw,440px);padding:12px 12px 12px 18px;border-radius:20px;background:#1E3A5F;color:#fff;font-family:Poppins,'Century Gothic',system-ui,sans-serif;box-shadow:0 6px 0 #E8846B,0 18px 40px rgba(30,58,95,.3)";
+    bar.innerHTML = '<span style="flex:1;font-size:14.5px;line-height:1.35"><b style="display:block;font-size:15.5px">Hay una nueva versión</b>MOVA Learning Studio se actualizó.</span><button type="button" style="border:0;border-radius:14px;background:#E8846B;color:#fff;font:700 15px Poppins,system-ui,sans-serif;padding:11px 16px;cursor:pointer">Actualizar</button>';
+    bar.querySelector("button").addEventListener("click", () => location.reload());
+    document.body.appendChild(bar);
+  };
+  navigator.serviceWorker.addEventListener("controllerchange", showUpdate);
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then((reg) => {
+      const check = () => reg.update().catch(() => {});
+      document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") check(); });
+      setInterval(check, 30 * 60 * 1000);
+    }).catch(() => {});
+  });
 }
 window.__installEvt = null;
 window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); window.__installEvt = e; syncInstall(); });
