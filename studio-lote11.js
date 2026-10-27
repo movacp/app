@@ -3931,6 +3931,204 @@ Object.assign(READING_ART, {
     <g transform="translate(60 60)"><path d="M-8 14l8-26 8 26" stroke="#A9774F" stroke-width="3" fill="none"/><path d="M-12 -4q12 6 24 0" stroke="#A9774F" stroke-width="3" fill="none"/><circle cy="-16" r="5" fill="#E0B04A"/></g>`)
 });
 
+/* =====================================================================
+   READ ALOUD — el alumno se graba leyendo cada lectura en inglés.
+   Opcional: no es requisito para marcar la lectura como completada.
+   Audio en IndexedDB (solo en el dispositivo); datos en localStorage.
+   ===================================================================== */
+(function () {
+  const RKEY = "mova-readaloud", DB = "mova-audio", ST = "recs";
+  const meta = () => { try { return JSON.parse(localStorage.getItem(RKEY) || "{}"); } catch (e) { return {}; } };
+  const saveMeta = (m) => { try { localStorage.setItem(RKEY, JSON.stringify(m)); } catch (e) {} };
+  const recsOf = (id) => meta()[id] || [];
+  let dbp = null;
+  const db = () => dbp || (dbp = new Promise((res, rej) => {
+    const q = indexedDB.open(DB, 1);
+    q.onupgradeneeded = () => q.result.createObjectStore(ST);
+    q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error);
+  }));
+  const idb = (mode, fn) => db().then((d) => new Promise((res, rej) => { const t = d.transaction(ST, mode); const r = fn(t.objectStore(ST)); t.oncomplete = () => res(r && r.result); t.onerror = () => rej(t.error); }));
+  const putBlob = (k, b) => idb("readwrite", (s) => s.put(b, k));
+  const getBlob = (k) => idb("readonly", (s) => s.get(k));
+  const delBlob = (k) => idb("readwrite", (s) => s.delete(k));
+
+  const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+  const MIC = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="#fff"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>`;
+  const MIC_S = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>`;
+  const PLAY = `<svg width="18" height="18" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg>`;
+  const PAUSE = `<svg width="18" height="18" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1" fill="#fff"/><rect x="14" y="5" width="4" height="14" rx="1" fill="#fff"/></svg>`;
+  const STAR = (on) => `<svg viewBox="0 0 24 24" width="34" height="34"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z" fill="${on ? "#E0B04A" : "none"}" stroke="${on ? "#E0B04A" : "#BFB8AC"}" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
+
+  const css = document.createElement("style");
+  css.textContent = `
+  .ra [hidden]{display:none!important}
+  .ra{margin-top:18px;border-radius:22px;background:var(--surface);border:1px solid var(--line);padding:18px;position:relative;overflow:hidden}
+  .ra::before{content:"";position:absolute;right:-26px;top:-26px;width:110px;height:110px;border-radius:50%;background:var(--coral-soft)}
+  .ra-h{display:flex;gap:12px;align-items:center;position:relative}
+  .ra-ic{width:44px;height:44px;border-radius:14px;background:#E8846B;display:grid;place-items:center;flex:none}
+  .ra-h b{display:block;font-size:17px;font-weight:700}.ra-h span{display:block;font-size:13px;color:var(--ink-2);line-height:1.45;margin-top:2px}
+  .ra-tips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;position:relative}.ra-tips span{font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:99px;background:var(--navy-soft);color:var(--navy)}
+  .ra-cta{margin-top:14px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px;font:700 15px var(--font-ui);padding:14px;border:0;border-radius:16px;background:#E8846B;color:#fff;cursor:pointer;position:relative}
+  .ra-cta.sec{background:var(--surface-2);color:var(--ink)}
+  .ra-player{margin-top:14px;position:relative}
+  .ra-pl{display:flex;align-items:center;gap:12px;background:var(--paper);border-radius:16px;padding:12px}
+  .ra-pb{width:46px;height:46px;border-radius:50%;border:0;background:#1E3A5F;display:grid;place-items:center;cursor:pointer;flex:none}
+  .ra-wave{flex:1;height:38px;display:flex;align-items:center;gap:2px}.ra-wave i{flex:1;border-radius:2px;background:var(--line)}.ra-wave i.on{background:#E8846B}
+  .ra-time{font-size:12px;font-weight:600;color:var(--ink-2);min-width:38px;text-align:right}
+  .ra-rate{margin-top:14px}.ra-rate p{font-size:13px;font-weight:600}.ra-stars{display:flex;gap:6px;margin-top:6px}.ra-stars button{border:0;background:none;padding:2px;cursor:pointer}
+  .ra-row{display:flex;gap:8px;margin-top:14px}.ra-row .ra-cta{margin-top:0}
+  .ra-msg{margin-top:12px;font-size:13px;color:var(--coral);font-weight:600;position:relative}
+  .reading-text.ra-live{box-shadow:0 0 0 3px #E8846B}
+  .ra-mine{margin-top:18px;position:relative}.ra-mine h3{font-size:15px;font-weight:700}
+  .ra-rec{display:flex;align-items:center;gap:12px;background:var(--paper);border-radius:14px;padding:10px 12px;margin-top:8px}
+  .ra-rec .ra-pb{width:38px;height:38px}.ra-rec div{flex:1}.ra-rec b{display:block;font-size:13.5px}.ra-rec small{font-size:12px;color:var(--ink-3)}
+  .ra-del{border:0;background:none;color:var(--ink-3);font:600 12px var(--font-ui);cursor:pointer}
+  .ra-st{color:#E0B04A;letter-spacing:1px}
+  .ra-bar{position:fixed;left:0;right:0;bottom:0;background:#1E3A5F;color:#fff;padding:12px 18px;z-index:40;box-shadow:0 -6px 20px rgba(0,0,0,.18)}
+  .ra-bar .in{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:12px}
+  .ra-dot{width:12px;height:12px;border-radius:50%;background:#FF6B5A;animation:raP 1.4s infinite;flex:none}
+  @keyframes raP{0%{box-shadow:0 0 0 0 rgba(255,107,90,.6)}70%{box-shadow:0 0 0 12px rgba(255,107,90,0)}100%{box-shadow:0 0 0 0 rgba(255,107,90,0)}}
+  .ra-bar .t{font-weight:700;font-size:15px;font-variant-numeric:tabular-nums;display:block;min-width:44px}.ra-bar .lab{font-size:11.5px;color:#AEB8D6;display:block}
+  .ra-lw{flex:1;height:32px;display:flex;align-items:center;gap:2px}.ra-lw i{flex:1;background:#6FA8D6;border-radius:2px;min-height:3px}
+  .ra-stop{border:0;border-radius:14px;background:#fff;color:#1E3A5F;font:700 14px var(--font-ui);padding:11px 16px;display:flex;align-items:center;gap:8px;cursor:pointer}.ra-stop i{width:12px;height:12px;border-radius:3px;background:#E8846B;display:block}
+  .ra-tag{display:inline-flex;align-items:center;gap:4px;color:#C35A3F;font-weight:600;margin-left:8px}
+  @media (prefers-color-scheme:dark){.ra-tag{color:#EE9A80}}
+  @media print{.ra,.ra-bar{display:none!important}}`;
+  document.head.appendChild(css);
+
+  /* Estado de grabación activo (uno a la vez) */
+  let active = null;
+  const stopActive = () => { if (active) active.abort(); };
+  window.addEventListener("hashchange", stopActive);
+
+  function wave(el, arr, prog) { el.innerHTML = arr.map((v, i) => `<i class="${i / arr.length < prog ? "on" : ""}" style="height:${Math.max(10, v * 100)}%"></i>`).join(""); }
+  function bindPlayer(btn, rec, waveEl, timeEl) {
+    let audio = null, iv = 0, playing = false;
+    const upd = (p) => { if (waveEl) wave(waveEl, rec.peaks, p); if (timeEl) timeEl.textContent = fmt(Math.min(rec.dur, p * rec.dur)); };
+    const end = () => { playing = false; btn.innerHTML = PLAY; clearInterval(iv); upd(0); if (timeEl) timeEl.textContent = fmt(rec.dur); };
+    btn.innerHTML = PLAY;
+    btn.onclick = async () => {
+      if (playing) { playing = false; btn.innerHTML = PLAY; audio && audio.pause(); clearInterval(iv); return; }
+      if (!audio) {
+        const blob = rec.blob || await getBlob(rec.id).catch(() => null);
+        if (!blob) return;
+        audio = new Audio(URL.createObjectURL(blob)); audio.onended = end;
+      }
+      playing = true; btn.innerHTML = PAUSE; audio.play();
+      iv = setInterval(() => { const d = isFinite(audio.duration) && audio.duration > 0 ? audio.duration : rec.dur; upd(audio.currentTime / d); }, 100);
+    };
+  }
+
+  function mountReadAloud(root, r) {
+    const head = root.querySelector(".reading-head .actions");
+    const textEl = root.querySelector(".reading-text");
+    if (!head || !textEl) return;
+    head.insertAdjacentHTML("afterend", `
+      <section class="ra no-print" aria-label="Read aloud">
+        <div class="ra-h"><div class="ra-ic">${MIC}</div><div><b>Read Aloud</b><span class="ra-sub">Read the story out loud and record yourself. Then listen and check your pronunciation.</span></div></div>
+        <div class="ra-tips"><span>Speak clearly</span><span>Pause at periods</span><span>Try hard words twice</span></div>
+        <button class="ra-cta ra-start" type="button"><svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" fill="#fff"/></svg><span>Start recording</span></button>
+        <p class="ra-msg" hidden></p>
+        <div class="ra-player" hidden>
+          <div class="ra-pl"><button class="ra-pb ra-play" type="button" aria-label="Play"></button><div class="ra-wave"></div><span class="ra-time">0:00</span></div>
+          <div class="ra-rate"><p>How did you read?</p><div class="ra-stars"></div></div>
+          <div class="ra-row"><button class="ra-cta sec ra-again" type="button">Record again</button><button class="ra-cta ra-save" type="button">Save</button></div>
+        </div>
+        <div class="ra-mine"></div>
+      </section>`);
+    const box = root.querySelector(".ra"), q = (s) => box.querySelector(s);
+    const sub = q(".ra-sub"), start = q(".ra-start"), msg = q(".ra-msg"), player = q(".ra-player"), tips = q(".ra-tips");
+    let current = null, rating = 0;
+
+    const stars = () => { q(".ra-stars").innerHTML = [1, 2, 3].map((n) => `<button type="button" data-n="${n}" aria-label="${n} star${n > 1 ? "s" : ""}">${STAR(n <= rating)}</button>`).join(""); q(".ra-stars").querySelectorAll("button").forEach((b) => b.onclick = () => { rating = +b.dataset.n; stars(); }); };
+    const renderMine = () => {
+      const list = recsOf(r.id);
+      q(".ra-mine").innerHTML = list.length ? `<h3>My recordings</h3>${list.map((x) => { const d = new Date(x.date); return `<div class="ra-rec"><button class="ra-pb" type="button" data-id="${x.id}" aria-label="Play recording"></button><div><b>${d.toLocaleDateString("en-US", { month: "short", day: "numeric" })} · ${d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}</b><small>${fmt(x.dur)} · <span class="ra-st">${"★".repeat(x.rating)}${"☆".repeat(3 - x.rating)}</span></small></div><button class="ra-del" type="button" data-del="${x.id}">Delete</button></div>`; }).join("")}` : "";
+      q(".ra-mine").querySelectorAll(".ra-pb").forEach((b) => bindPlayer(b, list.find((x) => x.id === b.dataset.id)));
+      q(".ra-mine").querySelectorAll(".ra-del").forEach((b) => b.onclick = () => {
+        if (!confirm("Delete this recording?")) return;
+        const m = meta(); m[r.id] = (m[r.id] || []).filter((x) => x.id !== b.dataset.del); if (!m[r.id].length) delete m[r.id]; saveMeta(m);
+        delBlob(b.dataset.del).catch(() => {}); renderMine();
+      });
+    };
+    renderMine();
+
+    async function record() {
+      msg.hidden = true; player.hidden = true; rating = 0;
+      if (!navigator.mediaDevices || !window.MediaRecorder) { msg.textContent = "Recording is not available on this browser."; msg.hidden = false; return; }
+      let stream;
+      try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+      catch (e) { msg.textContent = "Please allow microphone access to record yourself."; msg.hidden = false; return; }
+      const chunks = [], levels = [];
+      const mr = new MediaRecorder(stream);
+      const AC = window.AudioContext || window.webkitAudioContext, ac = new AC(), an = ac.createAnalyser(); an.fftSize = 64; ac.createMediaStreamSource(stream).connect(an);
+      const tab = document.querySelector(".tabbar"), off = tab && getComputedStyle(tab).display !== "none" ? tab.offsetHeight : 0;
+      const bar = document.createElement("div"); bar.className = "ra-bar no-print"; bar.style.bottom = off + "px"; if (!off) bar.style.paddingBottom = "calc(12px + env(safe-area-inset-bottom,0px))";
+      bar.innerHTML = `<div class="in"><span class="ra-dot"></span><div><span class="t">0:00</span><span class="lab">Recording…</span></div><div class="ra-lw">${"<i></i>".repeat(24)}</div><button class="ra-stop" type="button"><i></i>Stop</button></div>`;
+      document.body.appendChild(bar);
+      textEl.classList.add("ra-live"); start.hidden = true; tips.hidden = true;
+      sub.textContent = "Recording… read the story out loud. Tap Stop when you finish.";
+      textEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      const t0 = Date.now(), bars = bar.querySelectorAll(".ra-lw i"), d = new Uint8Array(32); let raf = 0, tick = 0, cancelled = false;
+      const loop = () => {
+        an.getByteFrequencyData(d);
+        const lv = Array.from({ length: 24 }, (_, i) => Math.min(1, d[i] / 200 + 0.05));
+        bars.forEach((b, i) => b.style.height = lv[i] * 100 + "%");
+        if (Date.now() - tick > 180) { tick = Date.now(); levels.push(lv.reduce((a, b) => a + b) / 24); }
+        const s = (Date.now() - t0) / 1000; bar.querySelector(".t").textContent = fmt(s);
+        if (s >= 300) finish(); else raf = requestAnimationFrame(loop);
+      };
+      const cleanup = () => { cancelAnimationFrame(raf); bar.remove(); textEl.classList.remove("ra-live"); stream.getTracks().forEach((t) => t.stop()); ac.close().catch(() => {}); active = null; };
+      function finish() { if (mr.state !== "inactive") mr.stop(); }
+      mr.ondataavailable = (e) => e.data.size && chunks.push(e.data);
+      mr.onstop = () => {
+        const dur = (Date.now() - t0) / 1000; cleanup();
+        if (cancelled) return;
+        const peaks = Array.from({ length: 40 }, (_, i) => +(levels[Math.floor(i * levels.length / 40)] || 0.2).toFixed(2));
+        current = { id: `${r.id}-${Date.now()}`, dur, peaks, blob: new Blob(chunks, { type: mr.mimeType || "audio/webm" }) };
+        sub.textContent = "Great job! Listen to your recording. Are there any words you want to practice again?";
+        player.hidden = false; q(".ra-time").textContent = fmt(dur); wave(q(".ra-wave"), peaks, 0); stars();
+        bindPlayer(q(".ra-play"), current, q(".ra-wave"), q(".ra-time"));
+        box.scrollIntoView({ behavior: "smooth", block: "start" });
+      };
+      active = { abort: () => { cancelled = true; finish(); } };
+      bar.querySelector(".ra-stop").onclick = finish;
+      mr.start(); loop();
+    }
+
+    start.onclick = () => { stopActive(); record(); };
+    q(".ra-again").onclick = () => { current = null; record(); };
+    q(".ra-save").onclick = async () => {
+      if (!current) return;
+      try { await putBlob(current.id, current.blob); }
+      catch (e) { msg.textContent = "We couldn’t save this recording. Please check your phone’s storage."; msg.hidden = false; return; }
+      const m = meta(); (m[r.id] = m[r.id] || []).unshift({ id: current.id, date: Date.now(), dur: Math.round(current.dur * 10) / 10, rating, peaks: current.peaks }); saveMeta(m);
+      current = null; player.hidden = true; start.hidden = false; tips.hidden = false; start.querySelector("span").textContent = "Record again";
+      sub.textContent = "Saved! Read it again another day and compare your recordings.";
+      renderMine();
+    };
+  }
+
+  /* Vista de lectura: agrega la tarjeta Read Aloud */
+  const prevReading = window.viewReading;
+  window.viewReading = function (id) {
+    const v = prevReading(id);
+    const r = READINGS.find((x) => x.id === id);
+    if (!r || !v.mount) return v;
+    const m = v.mount;
+    v.mount = function (root) { m(root); mountReadAloud(root, r); };
+    return v;
+  };
+
+  /* Biblioteca: insignia de micrófono en las lecturas grabadas */
+  const prevCard = window.readingCard;
+  window.readingCard = function (r) {
+    const html = prevCard(r);
+    if (!recsOf(r.id).length) return html;
+    return html.replace(/(<div class="item-meta">[\s\S]*?)(<\/div>\s*<\/article>\s*)$/, `$1<span class="ra-tag">${MIC_S} Read aloud</span>$2`);
+  };
+})();
+
 /* ---------- Level Up → abre la biblioteca en la etapa y nivel del alumno ---------- */
 (function () {
   const prevLib = window.viewLibrary;
