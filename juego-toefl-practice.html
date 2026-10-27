@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
 <script src="mova-voice.js"></script>
+<script src="toefl-bank.js"></script>
 <style>
 :root{
   --paper:#F3EFE8; --surface:#FFFDFA; --surface-2:#EDE7DC; --ink:#17202E; --ink-2:#4A4F5A; --ink-3:#7A7D84; --line:#DAD4CA;
@@ -147,6 +148,25 @@ details.ptoggle summary{cursor:pointer;font-weight:600;font-size:14px;color:var(
 .end-actions{display:grid;gap:10px;margin-top:20px}
 .end-actions .btn{width:100%}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.simcard{display:grid;gap:6px;margin-top:14px;padding:20px;border-radius:22px;background:var(--navy);color:var(--on-navy);text-decoration:none;box-shadow:var(--shadow)}
+.simcard b{font-size:18px}
+.simcard span{font-size:14.5px;line-height:1.55;opacity:.9}
+.simcard i{font-style:normal;justify-self:start;margin-top:6px;background:var(--coral);color:#fff;font-weight:700;font-size:14.5px;padding:10px 16px;border-radius:12px}
+.setup{display:grid;gap:4px}
+.su-lead{margin:6px 0 0;color:var(--ink-2);font-size:15px;line-height:1.55}
+.opts3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.opts3.two{grid-template-columns:1fr 1fr}
+.opts3 button{text-align:left;padding:14px;border-radius:18px;background:var(--surface);border:2px solid var(--line);display:grid;gap:4px}
+.opts3 button b{font-size:17px;color:var(--navy)}
+.opts3 button span{font-size:12.5px;line-height:1.4;color:var(--ink-2)}
+.opts3 button[aria-pressed="true"]{border-color:var(--navy);background:var(--sky-soft)}
+.btn.wide{width:100%;margin-top:22px}
+.clock.timed{color:var(--bad);font-weight:700}
+.sec[data-c="lilac"] .ic{background:#ECE5F8;color:#7E5BC9}
+.sec[data-c="rose"] .ic{background:#FBE3EC;color:#C2477D}
+.sec[disabled]{opacity:.55;pointer-events:none}
+.vword{font-weight:800;color:var(--navy);background:var(--mustard-soft);padding:0 6px;border-radius:6px}
 </style>
 </head>
 <body>
@@ -171,7 +191,7 @@ details.ptoggle summary{cursor:pointer;font-weight:600;font-size:14px;color:var(
       <circle cx="40" cy="44" r="10" fill="#6FA8D6" opacity=".9"/><circle cx="196" cy="24" r="6" fill="#7FB89E"/>
     </svg>
     <h1>TOEFL Practice</h1>
-    <p>Short practice sets for each section of the TOEFL ITP: Structure, Written Expression, Reading and Listening.</p>
+    <p>Warm-up practice for the TOEFL ITP: 100 Structure questions, 100 Written Expression, 20 reading passages, listening and academic vocabulary. Practice at your own pace or against the clock.</p>
     <span class="note">Practice sets with instant feedback, not a full simulation</span>
   </header>
 
@@ -179,12 +199,33 @@ details.ptoggle summary{cursor:pointer;font-weight:600;font-size:14px;color:var(
   <div class="sections" id="sections"></div>
 
   <div class="tipcard"><b>Strategy of the day</b><span id="tip"></span></div>
+  <a class="simcard" href="https://wa.me/528123426038?text=Hola%2C%20me%20interesa%20agendar%20una%20simulaci%C3%B3n%20completa%20del%20TOEFL%20ITP%20en%20MOVA." target="_blank" rel="noopener">
+    <b>Ready for the real thing?</b>
+    <span>Take the full TOEFL ITP simulation at MOVA, with official timing, all three sections and a detailed score report.</span>
+    <i>Book your simulation</i>
+  </a>
 </section>
 
 <section id="v-read" hidden>
   <div class="bar"><button class="icon-btn" data-home aria-label="Back to sections"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span class="title">Reading Comprehension</span></div>
+  <div class="opts3 two" id="rd-mode" style="margin-top:6px"><button data-v="free" aria-pressed="true"><b>Practice</b><span>No time limit.</span></button><button data-v="timed" aria-pressed="false"><b>Timed</b><span>About 1 minute per question, like the real test.</span></button></div>
   <h2 class="sec-title">Choose a passage</h2>
   <div class="picks" id="picks"></div>
+</section>
+
+<section id="v-setup" hidden>
+  <div class="bar"><button class="icon-btn" data-home aria-label="Back to sections"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span class="title" id="su-title"></span></div>
+  <div class="setup">
+    <p class="su-lead" id="su-lead"></p>
+    <h2 class="sec-title">How many questions?</h2>
+    <div class="opts3" id="su-n"></div>
+    <h2 class="sec-title">Mode</h2>
+    <div class="opts3 two" id="su-mode">
+      <button data-v="free" aria-pressed="true"><b>Practice</b><span>No time limit. Explanation after each answer.</span></button>
+      <button data-v="timed" aria-pressed="false"><b>Timed</b><span id="su-pace">TOEFL pace.</span></button>
+    </div>
+    <button class="btn wide" id="su-go">Start</button>
+  </div>
 </section>
 
 <section id="v-q" hidden>
@@ -318,6 +359,36 @@ const PASSAGE_ART = {
   butterfly: '<rect width="64" height="64" fill="#F8E1D9"/><path d="M32 30C24 14 8 14 10 26c1 6 10 9 22 6z" fill="#E8846B"/><path d="M32 30c8-16 24-16 22-4-1 6-10 9-22 6z" fill="#E8846B"/><path d="M32 34c-8 2-16 8-12 14 3 4 10 0 12-10zM32 34c8 2 16 8 12 14-3 4-10 0-12-10z" fill="#E0B04A"/><path d="M32 22v24" stroke="#1E3A5F" stroke-width="3" stroke-linecap="round"/><circle cx="18" cy="24" r="2" fill="#FFFDFA"/><circle cx="46" cy="24" r="2" fill="#FFFDFA"/>'
 };
 
+/* ---------- Banco ampliado ---------- */
+const BANK = window.TOEFL_BANK || {};
+STRUCTURE.push(...(BANK.structure || []));
+WRITTEN.push(...(BANK.written || []));
+PASSAGES.push(...(BANK.passages || []));
+LISTENING.push(...(BANK.listening || []));
+Object.assign(PASSAGE_ART, BANK.art || {});
+const VOCAB = BANK.vocab || [];
+SECTIONS.find((s) => s.id === "listening").n = LISTENING.length;
+SECTIONS.find((s) => s.id === "structure").n = STRUCTURE.length;
+SECTIONS.find((s) => s.id === "written").n = WRITTEN.length;
+SECTIONS.push(
+  { id: "vocab", name: "Academic Vocabulary", desc: "Choose the word closest in meaning, like the vocabulary questions in Reading.", c: "lilac", n: VOCAB.length, icon: '<path d="M5 4h10a4 4 0 0 1 4 4v12H9a4 4 0 0 1-4-4z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M9 9h6M9 13h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
+  { id: "review", name: "Review my mistakes", desc: "Practice again the questions you answered incorrectly. They leave the list when you get them right.", c: "rose", n: 0, icon: '<path d="M4 12a8 8 0 1 0 3-6.2" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M4 4v4h4" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' }
+);
+/* Ritmo TOEFL ITP: Structure y Written 25 min / 40 preguntas, Reading 55 min / 50 preguntas */
+const PACE = { structure: 37, written: 37, vocab: 30, reading: 66, review: 45 };
+const MKEY = "mova-toefl-mistakes";
+const loadM = () => { try { return JSON.parse(localStorage.getItem(MKEY)) || []; } catch (e) { return []; } };
+const saveM = (m) => { try { localStorage.setItem(MKEY, JSON.stringify(m.slice(-200))); } catch (e) {} };
+const refKey = (r) => r.s + ":" + r.k;
+function itemFromRef(r) {
+  if (r.s === "structure") { const x = STRUCTURE[r.k]; return x && { type: "mc", stem: x[0], o: x[1], why: x[2] }; }
+  if (r.s === "written") { const x = WRITTEN[r.k]; return x && { type: "we", s: x[0], k: x[1], fix: x[2], why: x[3] }; }
+  if (r.s === "vocab") { const x = VOCAB[r.k]; return x && { type: "vc", w: x[0], sent: x[1], o: x[2], why: `“${x[0]}” means ${x[2][0]}.` }; }
+  if (r.s === "listening") { const x = LISTENING[r.k]; return x && { type: "ls", ...x }; }
+  if (r.s === "reading") { const [pid, qi] = r.k.split("|"); const p = PASSAGES.find((y) => y.id === pid); const x = p && p.q[+qi]; return x && { type: "rd", q: x[0], o: x[1], why: x[2], passage: p }; }
+  return null;
+}
+
 /* ---------- Storage ---------- */
 const KEY = "mova-toefl-practice";
 const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } };
@@ -337,25 +408,45 @@ function speak(text, onend) {
 }
 
 /* ---------- Views ---------- */
-function show(id) { ["home", "read", "q", "end"].forEach((v) => { $("#v-" + v).hidden = v !== id; }); window.scrollTo(0, 0); }
+function show(id) { ["home", "setup", "read", "q", "end"].forEach((v) => { $("#v-" + v).hidden = v !== id; }); window.scrollTo(0, 0); }
 const st = { section: null, items: [], i: 0, score: 0, log: [], t0: 0, clock: 0, passage: null };
 
 function drawHome() {
   const rec = load();
   $("#sections").innerHTML = SECTIONS.map((s) => {
     const r = rec[s.id];
-    const count = s.id === "reading" ? `${PASSAGES.length} passages` : `${s.n} questions per set`;
+    const m = loadM().length;
+    const count = s.id === "reading" ? `${PASSAGES.length} passages · ${PASSAGES.reduce((a, p) => a + p.q.length, 0)} questions` : s.id === "review" ? (m ? `${m} to review` : "No mistakes saved yet") : s.id === "listening" ? `${s.n} audios` : `${s.n} questions`;
     return `<button class="sec" data-s="${s.id}" data-c="${s.c}"><span class="ic"><svg viewBox="0 0 24 24" fill="none">${s.icon}</svg></span><span><h3>${s.name}</h3><p>${s.desc}</p><span class="meta"><span class="chip">${count}</span>${r ? `<span class="chip best">Best: ${r}%</span>` : ""}</span></span></button>`;
   }).join("");
   $("#tip").textContent = TIPS[new Date().getDate() % TIPS.length];
 }
-$("#sections").addEventListener("click", (e) => { const b = e.target.closest(".sec"); if (b) open(b.dataset.s); });
+$("#sections").addEventListener("click", (e) => { const b = e.target.closest(".sec"); if (!b) return; if (b.dataset.s === "review" && !loadM().length) return; open(b.dataset.s); });
 
 function open(id) {
   st.section = id;
   if (id === "reading") { drawPicks(); show("read"); return; }
-  begin();
+  if (id === "listening") { st.n = LISTENING.length; st.timed = false; begin(); return; }
+  setup(id);
 }
+function setup(id) {
+  const sec = SECTIONS.find((s) => s.id === id);
+  $("#su-title").textContent = sec.name;
+  $("#su-lead").textContent = sec.desc;
+  const max = id === "review" ? loadM().length : sec.n;
+  const sizes = [10, 20, 40].filter((n) => n <= max);
+  if (!sizes.length || sizes[sizes.length - 1] < max && max < 40) sizes.push(max);
+  st.n = sizes[0]; st.timed = false;
+  $("#su-n").innerHTML = sizes.map((n, i) => `<button data-v="${n}" aria-pressed="${i === 0}"><b>${n}</b><span>${n === max && id !== "review" ? "All questions" : "questions"}</span></button>`).join("");
+  $("#su-pace").textContent = `${PACE[id]} seconds per question, like the TOEFL ITP.`;
+  $$("#su-mode button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === "free"));
+  show("setup");
+}
+const pickOne = (box, cb) => box.addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; $$("button", box).forEach((x) => x.setAttribute("aria-pressed", x === b)); cb(b.dataset.v); });
+pickOne($("#su-n"), (v) => st.n = +v);
+pickOne($("#su-mode"), (v) => st.timed = v === "timed");
+pickOne($("#rd-mode"), (v) => st.timed = v === "timed");
+$("#su-go").addEventListener("click", begin);
 function drawPicks() {
   const rec = load();
   $("#picks").innerHTML = PASSAGES.map((p) => `<button class="pick" data-p="${p.id}"><span class="pi"><svg viewBox="0 0 64 64">${PASSAGE_ART[p.art]}</svg></span><span><b>${esc(p.title)}</b><span>${p.q.length} questions${rec["reading-" + p.id] ? ` · Best: ${rec["reading-" + p.id]}%` : ""}</span></span></button>`).join("");
@@ -364,15 +455,26 @@ $("#picks").addEventListener("click", (e) => { const b = e.target.closest(".pick
 
 function begin() {
   const id = st.section;
-  if (id === "structure") st.items = shuffle(STRUCTURE).slice(0, 10).map(([stem, o, why]) => ({ type: "mc", stem, o, why }));
-  if (id === "written") st.items = shuffle(WRITTEN).slice(0, 10).map(([s, k, fix, why]) => ({ type: "we", s, k, fix, why }));
-  if (id === "reading") st.items = st.passage.q.map(([q, o, why]) => ({ type: "rd", q, o, why }));
-  if (id === "listening") st.items = shuffle(LISTENING).map((x) => ({ type: "ls", ...x }));
+  const idx = (arr) => shuffle(arr.map((_, k) => k)).slice(0, st.n || 10);
+  if (id === "structure") st.items = idx(STRUCTURE).map((k) => ({ ...itemFromRef({ s: id, k }), ref: { s: id, k } }));
+  if (id === "written") st.items = idx(WRITTEN).map((k) => ({ ...itemFromRef({ s: id, k }), ref: { s: id, k } }));
+  if (id === "vocab") st.items = idx(VOCAB).map((k) => ({ ...itemFromRef({ s: id, k }), ref: { s: id, k } }));
+  if (id === "reading") st.items = st.passage.q.map((_, qi) => { const ref = { s: "reading", k: st.passage.id + "|" + qi }; return { ...itemFromRef(ref), ref }; });
+  if (id === "listening") st.items = shuffle(LISTENING.map((_, k) => k)).slice(0, 8).map((k) => ({ ...itemFromRef({ s: id, k }), ref: { s: id, k } }));
+  if (id === "review") st.items = shuffle(loadM()).slice(0, st.n || 10).map((ref) => ({ ...itemFromRef(ref), ref })).filter((x) => x.type);
   st.i = 0; st.score = 0; st.log = [];
   $("#q-title").textContent = id === "reading" ? st.passage.title : SECTIONS.find((s) => s.id === id).name;
-  st.t0 = Date.now(); clearInterval(st.clock);
-  st.clock = setInterval(() => { const s = Math.floor((Date.now() - st.t0) / 1000); $("#clock").textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; }, 1000);
-  $("#clock").textContent = "0:00";
+  st.t0 = Date.now(); clearInterval(st.clock); st.timeUp = false;
+  const limit = st.timed && id !== "listening" ? st.items.length * PACE[id] : 0;
+  const fmt = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+  $("#clock").classList.toggle("timed", !!limit);
+  const tick = () => {
+    const s = Math.floor((Date.now() - st.t0) / 1000);
+    if (!limit) { $("#clock").textContent = fmt(s); return; }
+    const left = Math.max(0, limit - s); $("#clock").textContent = fmt(left);
+    if (left === 0) { st.timeUp = true; finish(); }
+  };
+  st.clock = setInterval(tick, 1000); tick();
   show("q"); render();
 }
 
@@ -393,11 +495,16 @@ function render() {
     const parts = [...it.s.matchAll(/\[([^\]]+)\]/g)].map((m) => m[1]);
     it.parts = parts;
     html = `<div class="qcard">${head}<p class="direction">Which underlined part must be changed for the sentence to be correct?</p><p class="stem">${stem}</p><div class="choices">${parts.map((w, i) => `<button class="choice" data-v="${i}"><span class="key">${KEYS[i]}</span><span>${esc(w)}</span></button>`).join("")}</div><div id="ex"></div></div>`;
+  } else if (it.type === "vc") {
+    it.shuffled = shuffle(it.o);
+    const sent = esc(it.sent).replace(new RegExp("\\b(" + it.w + ")\\b", "i"), '<span class="vword">$1</span>');
+    html = `<div class="qcard">${head}<p class="direction">The word in color is closest in meaning to…</p><p class="stem">${sent}</p>${choicesHTML(it.shuffled)}<div id="ex"></div></div>`;
   } else if (it.type === "rd") {
     it.shuffled = shuffle(it.o);
-    const p = st.passage;
+    const p = it.passage || st.passage;
+    const firstOfPassage = st.i === 0 || (st.items[st.i - 1].passage || st.passage) !== p;
     const passage = `<article class="passage"><h2>${esc(p.title)}</h2>${p.text.map((t, i) => `<p><span class="ln">${i + 1}</span>${esc(t)}</p>`).join("")}</article>`;
-    html = (st.i === 0 ? passage : `<details class="ptoggle" open><summary>Show or hide the passage</summary>${passage}</details>`) +
+    html = (firstOfPassage ? passage : `<details class="ptoggle" open><summary>Show or hide the passage</summary>${passage}</details>`) +
       `<div class="qcard">${head}<p class="stem" style="font-size:19px">${esc(it.q)}</p>${choicesHTML(it.shuffled)}<div id="ex"></div></div>`;
   } else if (it.type === "ls") {
     it.shuffled = shuffle(it.o); it.plays = 0;
@@ -410,7 +517,7 @@ function render() {
   A.innerHTML = html;
   if (it.type === "ls") wireListening(it);
   $$(".choice", A).forEach((b) => b.addEventListener("click", () => pick(b)));
-  if (it.type === "rd" && st.i === 0) window.scrollTo(0, 0);
+  if (it.type === "rd") window.scrollTo(0, 0);
 }
 function wireListening(it) {
   const btn = $("#pa"), lbl = $("#plays");
@@ -435,8 +542,9 @@ function pick(btn) {
   $$(".choice", A).forEach((b) => { b.disabled = true; if (b.dataset.v === correctVal) b.classList.add("right"); else if (b === btn) b.classList.add("wrong"); });
   if (it.type === "we") { const u = $(`u[data-u="${it.k}"]`, A); if (u) u.classList.add("hit"); }
   if (ok) st.score++;
+  if (it.ref) { const m = loadM(), key = refKey(it.ref), has = m.findIndex((r) => refKey(r) === key); if (!ok && has < 0) m.push(it.ref); if (ok && has >= 0) m.splice(has, 1); saveM(m); }
   const label = it.type === "we" ? `${KEYS[it.k]}: change “${it.parts[it.k]}” to “${it.fix}”.` : `Answer: ${correctVal}`;
-  st.log.push({ ok, q: it.type === "mc" ? it.stem.replace("___", "_____") : it.type === "we" ? it.s.replace(/[\[\]]/g, "") : it.q, a: it.type === "we" ? `Change “${it.parts[it.k]}” to “${it.fix}”` : correctVal });
+  st.log.push({ ok, q: it.type === "mc" ? it.stem.replace("___", "_____") : it.type === "we" ? it.s.replace(/[\[\]]/g, "") : it.type === "vc" ? `${it.w}: ${it.sent}` : it.q, a: it.type === "we" ? `Change “${it.parts[it.k]}” to “${it.fix}”` : correctVal });
   const script = it.type === "ls" ? `<p class="script">${esc(it.say)}</p>` : "";
   const last = st.i === st.items.length - 1;
   $("#ex").innerHTML = `<div class="explain"><b>${ok ? "Correct." : "Not quite."} ${esc(label)}</b>${esc(it.why)}${script}</div>
@@ -447,6 +555,11 @@ function pick(btn) {
 }
 function finish() {
   clearInterval(st.clock);
+  if (st.timeUp) {
+    const m = loadM();
+    st.items.slice(st.log.length).forEach((it) => { st.log.push({ ok: false, q: it.type === "mc" ? it.stem : it.type === "we" ? it.s.replace(/[\[\]]/g, "") : it.type === "vc" ? `${it.w}: ${it.sent}` : it.q, a: "Not answered: time ran out" }); if (it.ref && !m.some((r) => refKey(r) === refKey(it.ref))) m.push(it.ref); });
+    saveM(m);
+  }
   const n = st.items.length, pct = Math.round((st.score / n) * 100);
   const key = st.section === "reading" ? "reading-" + st.passage.id : st.section;
   const rec = load(); const prev = rec[key] || 0;
@@ -460,11 +573,11 @@ function finish() {
   requestAnimationFrame(() => requestAnimationFrame(() => { arc.style.transition = "stroke-dashoffset 1s ease"; arc.style.strokeDashoffset = 327 * (1 - pct / 100); }));
   const secs = Math.floor((Date.now() - st.t0) / 1000);
   $("#r-title").textContent = pct >= 80 ? "Excellent work" : pct >= 50 ? "Good progress" : "Keep practicing";
-  $("#r-text").textContent = `${st.score} of ${n} correct in ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}. ${pct > prev && prev ? "New personal best! " : ""}Review the explanations below and try another set to keep improving.`;
+  $("#r-text").textContent = (st.timeUp ? "Time is up. " : "") + `${st.score} of ${n} correct in ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}. ${pct > prev && prev ? "New personal best! " : ""}Review the explanations below and try another set to keep improving.`;
   $("#rv").innerHTML = st.log.map((l) => `<li class="${l.ok ? "ok" : "no"}"><span class="mk">${l.ok ? "✓" : "✕"}</span><span>${esc(l.q)}<small>${esc(l.a)}</small></span></li>`).join("");
   $("#again").textContent = st.section === "reading" ? "Read another passage" : "Practice this section again";
 }
-$("#again").addEventListener("click", () => { if (st.section === "reading") { drawPicks(); show("read"); } else begin(); });
+$("#again").addEventListener("click", () => { if (st.section === "reading") { drawPicks(); show("read"); } else if (st.section === "review") { if (loadM().length) setup("review"); else { drawHome(); show("home"); } } else begin(); });
 $$("[data-home]").forEach((b) => b.addEventListener("click", () => { clearInterval(st.clock); if (synth) synth.cancel(); drawHome(); show("home"); }));
 
 drawHome();
