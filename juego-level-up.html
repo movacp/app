@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="es">
 <head>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("mova-theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MOVA Level Up · Examen de nivel</title>
@@ -12,7 +14,7 @@
 <style>
 :root{
   --page:#172449; --card:#FFFFFF; --ink:#172449; --muted:#5B6787; --tile:#F3F6FC; --edge:#DCE2F0; --track:#E8EDF7;
-  --A1:#4FD1A5; --A2:#5BC0F0; --B1:#F2B632; --B2:#FF7A6B; --C1:#A98BE8; --C2:#F47FB0; --pre:#9AA6C2;
+  --A1:#4FD1A5; --A2:#5BC0F0; --B1:#F7D774; --B2:#FF7A6B; --C1:#A98BE8; --C2:#F47FB0; --pre:#9AA6C2;
   --good:#1F9A47; --good-bg:#DDF6E4; --bad:#E5484D; --bad-bg:#FDE4E4;
   color-scheme:light; box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
@@ -130,7 +132,7 @@ h1{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-siz
 .lu-box.can ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
 .lu-box.can li{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:start}
 .lu-box.can li svg{width:22px;height:22px;color:var(--good);margin-top:1px}
-.lu-box.next{background:color-mix(in srgb,#F2B632 22%,var(--card));border-left:5px solid #F2B632}
+.lu-box.next{background:color-mix(in srgb,#F7D774 22%,var(--card));border-left:5px solid #F7D774}
 .lu-box.parents{background:color-mix(in srgb,#5BC0F0 16%,var(--card));border-left:5px solid #5BC0F0}
 .lu-box.progress .prow{display:flex;align-items:center;gap:10px;margin:4px 0 8px}
 .pchip{padding:5px 12px;border-radius:999px;background:var(--c);color:#172449;font-weight:800}
@@ -350,7 +352,7 @@ const INFO = {
   C1: { band: "Avanzado", head: "Dominas el inglés en contextos exigentes", can: ["Usas el inglés con flexibilidad en contextos sociales, académicos y profesionales.", "Comprendes textos largos y complejos, e identificas significados implícitos.", "Te expresas con fluidez, buena estructura y vocabulario preciso."], next: "Pulir los matices del idioma y alcanzar la precisión de un usuario experto.", parents: "Su hijo(a) tiene un dominio avanzado del inglés, suficiente para estudiar o trabajar en este idioma. Le recomendamos certificar su nivel para respaldarlo oficialmente." },
   C2: { band: "Maestría", head: "Tu inglés está en el nivel más alto", can: ["Comprendes prácticamente todo lo que lees y escuchas.", "Te expresas con espontaneidad, precisión y matices sutiles.", "Manejas con soltura temas complejos, académicos y profesionales."], next: "Mantener tu nivel con lectura, escritura y conversación constantes, y certificarlo oficialmente.", parents: "Su hijo(a) muestra un dominio del inglés comparable al de un usuario experto. Le recomendamos certificar su nivel para respaldarlo oficialmente." }
 };
-const LCOL = { "Pre-A1": "#7C9CFF", A1: "#4FD1A5", A2: "#5BC0F0", B1: "#F2B632", B2: "#FF7A6B", C1: "#A98BE8", C2: "#F47FB0" };
+const LCOL = { "Pre-A1": "#7C9CFF", A1: "#4FD1A5", A2: "#5BC0F0", B1: "#F7D774", B2: "#FF7A6B", C1: "#A98BE8", C2: "#F47FB0" };
 const shade = (hex, k) => "#" + [1, 3, 5].map((i) => Math.max(0, Math.min(255, Math.round(parseInt(hex.substr(i, 2), 16) * k))).toString(16).padStart(2, "0")).join("");
 function badge(L, size, noText) {
   const c = LCOL[L], d = shade(c, .78), pts = Array.from({ length: 18 }, (_, i) => { const a = (i / 18) * Math.PI * 2; return `<circle cx="${(80 + Math.cos(a) * 60).toFixed(1)}" cy="${(80 + Math.sin(a) * 60).toFixed(1)}" r="13" fill="${c}"/>`; }).join("");
@@ -480,7 +482,7 @@ function between(kind) {
   $("#cont").addEventListener("click", startBlock);
 }
 function chime() { try { const A = new (window.AudioContext || window.webkitAudioContext)(); [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => { const o = A.createOscillator(), g = A.createGain(); o.type = "sine"; o.frequency.value = f; o.connect(g); g.connect(A.destination); const t = A.currentTime + i * .13; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.18, t + .02); g.gain.exponentialRampToValueAtTime(.001, t + .7); o.start(t); o.stop(t + .75); }); } catch (e) {} }
-function confetti() { const b = document.createElement("div"); b.className = "confetti"; const cs = ["#E8846B", "#5BC0F0", "#F2B632", "#4FD1A5", "#A98BE8", "#F47FB0"]; b.innerHTML = Array.from({ length: 60 }, (_, i) => `<i style="left:${Math.random() * 100}%;background:${cs[i % 6]};animation-delay:${Math.random() * .7}s;animation-duration:${1.6 + Math.random()}s"></i>`).join(""); document.body.appendChild(b); setTimeout(() => b.remove(), 3500); }
+function confetti() { const b = document.createElement("div"); b.className = "confetti"; const cs = ["#E8846B", "#5BC0F0", "#F7D774", "#4FD1A5", "#A98BE8", "#F47FB0"]; b.innerHTML = Array.from({ length: 60 }, (_, i) => `<i style="left:${Math.random() * 100}%;background:${cs[i % 6]};animation-delay:${Math.random() * .7}s;animation-duration:${1.6 + Math.random()}s"></i>`).join(""); document.body.appendChild(b); setTimeout(() => b.remove(), 3500); }
 function finish(level) {
   const s = $("#s-between");
   s.innerHTML = `<div class="calc fade"><div class="calc-stamps">${["A1", "A2", "B1", "B2", "C1", "C2"].map((x, i) => `<span class="stamp" style="--c:var(--${x});animation-delay:${i * .12}s">${x}</span>`).join("")}</div><h2>Calculando tu nivel…</h2><p>Estamos revisando tus respuestas de gramática, vocabulario, lectura y comprensión auditiva.</p></div>`;
@@ -540,7 +542,7 @@ function reveal(level) {
   $("#dl-story").addEventListener("click", () => storyImage(data));
 }
 function certHTML(d) {
-  const dots = [["#E8846B", 8, 18, 5], ["#5BC0F0", 74, 10, 3.5], ["#F2B632", 70, 52, 2.5], ["#4FD1A5", 12, 150, 3], ["#A98BE8", 76, 178, 5], ["#F47FB0", 6, 98, 2.5], ["#F2B632", 5, 196, 3.5], ["#5BC0F0", 80, 120, 2.5]];
+  const dots = [["#E8846B", 8, 18, 5], ["#5BC0F0", 74, 10, 3.5], ["#F7D774", 70, 52, 2.5], ["#4FD1A5", 12, 150, 3], ["#A98BE8", 76, 178, 5], ["#F47FB0", 6, 98, 2.5], ["#F7D774", 5, 196, 3.5], ["#5BC0F0", 80, 120, 2.5]];
   const lvIdx = ORDER.indexOf(d.level);
   return `<div class="pc" style="--lc:${LCOL[d.level]}">
     <aside class="pc-side">${dots.map(([c, x, y, r]) => `<i class="dot" style="background:${c};left:${x}mm;top:${y}mm;width:${r * 2}mm;height:${r * 2}mm"></i>`).join("")}
@@ -563,49 +565,173 @@ function certHTML(d) {
       <p class="pc-note"><span>Nivel estimado en línea con el examen adaptativo Level Up. Confírmalo con tu evaluación diagnóstica en MOVA.</span><span>Av. Constituyentes de N.L. #111, Col. Lindavista · 812 342 6038 · @movacp.mx</span></p>
     </section></div>`;
 }
-function printResult(d) {
-  $("#lu-print").innerHTML = certHTML(d);
-  document.body.classList.add("luprint");
-  const done = () => { document.body.classList.remove("luprint"); window.removeEventListener("afterprint", done); };
-  window.addEventListener("afterprint", done);
-  setTimeout(() => { window.print(); setTimeout(done, 1500); }, 80);
+const BUTTER = "#F7D774";
+const DOTS6 = ["#E8846B", "#5BC0F0", BUTTER, "#4FD1A5", "#A98BE8", "#F47FB0"];
+async function luFonts() { try { await Promise.all(["800 60px 'Bricolage Grotesque'", "700 40px Poppins", "600 40px Poppins", "500 40px Poppins", "400 40px Poppins"].map((f) => document.fonts.load(f))); } catch (e) {} }
+function luCtx(cv) {
+  const x = cv.getContext("2d");
+  x.rr = (X, Y, w, h, r) => { r = Math.min(r, w / 2, h / 2); x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r); x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath(); };
+  x.T = (t, X, Y, font, col, al, sp) => { x.font = font; x.fillStyle = col; x.textAlign = al || "left"; x.textBaseline = "alphabetic"; if ("letterSpacing" in x) x.letterSpacing = sp || "0px"; x.fillText(t, X, Y); const w = x.measureText(t).width; if ("letterSpacing" in x) x.letterSpacing = "0px"; return w; };
+  x.wrap = (t, maxW, font) => { x.font = font; const out = []; let line = ""; t.split(" ").forEach((w) => { const s = line ? line + " " + w : w; if (x.measureText(s).width > maxW && line) { out.push(line); line = w; } else line = s; }); if (line) out.push(line); return out; };
+  return x;
 }
+const loadImg = (src) => new Promise((r) => { const i = new Image(); i.onload = () => r(i); i.onerror = () => r(null); i.src = src; });
+const mix = (hex, k) => "#" + [1, 3, 5].map((i) => Math.round(parseInt(hex.substr(i, 2), 16) * k + 255 * (1 - k)).toString(16).padStart(2, "0")).join("");
+
+/* ---------- Diploma tamaño carta horizontal ---------- */
+async function certCanvas(d) {
+  await luFonts();
+  const MM = 8, W = Math.round(279.4 * MM), H = Math.round(215.9 * MM), PT = 0.3528 * MM;
+  const cv = document.createElement("canvas"); cv.width = W; cv.height = H; const x = luCtx(cv);
+  const c = LCOL[d.level], sp = (em, pt) => Math.round(em * pt * PT) + "px", m = (v) => v * MM, f = (w, pt, fam) => `${w} ${Math.round(pt * PT)}px ${fam === "b" ? "'Bricolage Grotesque', Poppins, sans-serif" : "Poppins, sans-serif"}`;
+  // lateral azul marino
+  x.fillStyle = "#172449"; x.fillRect(0, 0, m(86), H);
+  [["#E8846B", 8, 18, 5], ["#5BC0F0", 74, 10, 3.5], [BUTTER, 70, 52, 2.5], ["#4FD1A5", 12, 150, 3], ["#A98BE8", 76, 178, 5], ["#F47FB0", 6, 98, 2.5], [BUTTER, 5, 196, 3.5], ["#5BC0F0", 80, 120, 2.5]]
+    .forEach(([col, X, Y, r]) => { x.fillStyle = col; x.beginPath(); x.arc(m(X + r), m(Y + r), m(r), 0, 7); x.fill(); });
+  const cx = m(43);
+  x.T("MOVA", cx + m(1.3), m(26), f(800, 26, "b"), "#FFFFFF", "center", sp(.16, 26));
+  x.T("CENTRO PEDAGÓGICO", cx + m(1.2), m(32.5), f(600, 7.5), "#AEB8D6", "center", sp(.32, 7.5));
+  x.fillStyle = c; x.rr(cx - m(7), m(37), m(14), m(1.2), m(.6)); x.fill();
+  const bi = await loadImg("data:image/svg+xml;charset=utf-8," + encodeURIComponent(badge(d.level, 205)));
+  if (bi) { x.save(); x.shadowColor = "rgba(0,0,0,.35)"; x.shadowBlur = m(4); x.shadowOffsetY = m(3); x.drawImage(bi, cx - m(27), m(50), m(54), m(66)); x.restore(); }
+  x.T(`NIVEL MCER · ${d.level}`, cx, m(128), f(700, 9), "#AEB8D6", "center", sp(.28, 9));
+  x.T(d.I.band, cx, m(137), f(800, 17, "b"), c, "center");
+  x.T("FOLIO", cx, m(197), f(500, 7.5), "#AEB8D6", "center", sp(.2, 7.5));
+  x.T(d.folio, cx, m(203), f(700, 10), "#FFFFFF", "center", sp(.08, 10));
+  // cuerpo
+  x.fillStyle = "#FFFDF8"; x.fillRect(m(86), 0, W - m(86), H);
+  x.strokeStyle = "#E4DCCF"; x.lineWidth = m(.4); x.rr(m(92), m(6), W - m(98), H - m(12), m(4)); x.stroke();
+  const L = m(101), R = W - m(16), CW = R - L;
+  let w = x.T("LEVEL UP RESULT", L, m(18), f(700, 9), "#E8846B", "left", sp(.34, 9));
+  x.fillStyle = "#E8DCCB"; x.fillRect(L + w + m(4), m(16.6), R - L - w - m(4), m(.35));
+  x.T("Reporte de nivel de inglés", L, m(26), f(800, 13, "b"), "#5B6787");
+  x.T("Nivel de inglés estimado de", L, m(36), f(400, 10), "#5B6787");
+  const nl = x.wrap(d.name, CW, f(800, 34, "b")); let y = m(48);
+  nl.forEach((l, i) => x.T(l, L, y + i * m(12.6), f(800, 34, "b"), "#172449"));
+  y += (nl.length - 1) * m(12.6) + m(5);
+  x.fillStyle = c; x.rr(L, y, m(48), m(1.3), m(.6)); x.fill();
+  y += m(9.5); x.T(d.I.head, L, y, f(600, 13), "#172449");
+  y += m(6);
+  const sw = (CW - 6 * m(1.4)) / 7, lvIdx = ORDER.indexOf(d.level);
+  ORDER.forEach((lv, i) => { const X = L + i * (sw + m(1.4)), on = i === lvIdx, hh = on ? m(11.5) : m(9), Y = on ? y - m(1.25) : y;
+    if (on) { x.save(); x.shadowColor = "rgba(23,36,73,.25)"; x.shadowBlur = m(2.5); x.shadowOffsetY = m(1.2); }
+    x.fillStyle = on ? LCOL[lv] : mix(LCOL[lv], .22); x.rr(X, Y, sw, hh, m(2)); x.fill(); if (on) x.restore();
+    x.T(lv, X + sw / 2, Y + hh / 2 + m(on ? 1.4 : 1.1), f(700, on ? 11 : 8.5), on ? "#172449" : "#5B6787", "center"); });
+  y += m(9) + m(5);
+  x.T("BÁSICO", L, y, f(400, 7.5), "#8A94B0", "left", sp(.14, 7.5));
+  x.T("INTERMEDIO", L + CW / 2, y, f(400, 7.5), "#8A94B0", "center", sp(.12, 7.5));
+  x.T("AVANZADO", R, y, f(400, 7.5), "#8A94B0", "right", sp(.14, 7.5));
+  y += m(6);
+  const kw = (CW - 3 * m(3.5)) / 4, kh = m(19);
+  d.skills.forEach(([k, p], i) => { const X = L + i * (kw + m(3.5));
+    x.fillStyle = "#FFFFFF"; x.rr(X, y, kw, kh, m(3)); x.fill(); x.strokeStyle = "#ECE5D8"; x.lineWidth = m(.35); x.stroke();
+    x.T(k.toUpperCase(), X + m(3.5), y + m(5.5), f(700, 7.5), "#5B6787", "left", sp(.16, 7.5));
+    x.T(p + "%", X + m(3.5), y + m(13), f(800, 19, "b"), "#172449");
+    x.fillStyle = "#EEF1F7"; x.rr(X + m(3.5), y + m(15.3), kw - m(7), m(1.6), m(.8)); x.fill();
+    x.fillStyle = c; x.rr(X + m(3.5), y + m(15.3), Math.max(m(1.6), (kw - m(7)) * p / 100), m(1.6), m(.8)); x.fill(); });
+  y += kh + m(8);
+  x.T("LO QUE YA PUEDES HACER", L, y, f(700, 7.5), "#5B6787", "left", sp(.18, 7.5));
+  y += m(6);
+  const cw3 = (CW - 2 * m(5)) / 3;
+  d.I.can.forEach((t, i) => { const X = L + i * (cw3 + m(5)); x.fillStyle = c; x.beginPath(); x.arc(X + m(1.5), y - m(1.2), m(1.5), 0, 7); x.fill();
+    x.wrap(t, cw3 - m(5.5), f(400, 9)).forEach((l, j) => x.T(l, X + m(5.5), y + j * m(4.6), f(400, 9), "#2B3758")); });
+  // pie
+  const FY = H - m(32), c1 = L, c2 = L + CW * .29, c3 = L + CW * .64, c3w = R - c3;
+  x.T("FECHA", c1, FY, f(600, 7.5), "#8A94B0", "left", sp(.18, 7.5)); x.T(d.today, c1, FY + m(5), f(700, 10.5), "#172449");
+  x.T("NIVEL MOVA ASIGNADO", c2, FY, f(600, 7.5), "#8A94B0", "left", sp(.18, 7.5)); x.T(d.asg, c2, FY + m(5), f(700, 10.5), "#172449");
+  x.fillStyle = "#172449"; x.fillRect(c3, FY - m(3), c3w, m(.45));
+  if (SIGNATURE) { const si = await loadImg(SIGNATURE); if (si) { const sh = m(26), sw2 = sh * si.width / si.height; x.drawImage(si, c3 + c3w / 2 - sw2 / 2, FY - m(3) - sh + m(1.5), sw2, sh); } }
+  x.T("Miss Karla Rodríguez", c3 + c3w / 2, FY + m(3.5), f(700, 10), "#172449", "center");
+  x.T("MOVA CENTRO PEDAGÓGICO", c3 + c3w / 2, FY + m(7.5), f(600, 7.5), "#8A94B0", "center", sp(.12, 7.5));
+  x.T("Nivel estimado en línea con el examen adaptativo Level Up. Confírmalo con tu evaluación diagnóstica en MOVA.", L, H - m(13.5), f(400, 7.2), "#8A94B0");
+  x.T("Av. Constituyentes de N.L. #111, Col. Lindavista · 812 342 6038 · @movacp.mx", L, H - m(9.5), f(400, 7.2), "#8A94B0");
+  return cv;
+}
+function pdfFromJpeg(bytes, pw, ph) {
+  const enc = new TextEncoder(), parts = [], offs = []; let len = 0;
+  const add = (p) => { const b = typeof p === "string" ? enc.encode(p) : p; parts.push(b); len += b.length; };
+  const obj = (n, body) => { offs[n] = len; add(`${n} 0 obj\n`); body.forEach(add); add("\nendobj\n"); };
+  add("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n");
+  const content = `q ${pw} 0 0 ${ph} 0 0 cm /Im0 Do Q`;
+  obj(1, ["<< /Type /Catalog /Pages 2 0 R >>"]);
+  obj(2, ["<< /Type /Pages /Kids [3 0 R] /Count 1 >>"]);
+  obj(3, [`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pw} ${ph}] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>`]);
+  obj(4, [`<< /Type /XObject /Subtype /Image /Width ${bytes.w} /Height ${bytes.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bytes.data.length} >>\nstream\n`, bytes.data, "\nendstream"]);
+  obj(5, [`<< /Length ${content.length} >>\nstream\n${content}\nendstream`]);
+  const xref = len;
+  add(`xref\n0 6\n0000000000 65535 f \n${[1, 2, 3, 4, 5].map((n) => String(offs[n]).padStart(10, "0") + " 00000 n \n").join("")}trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
+  return new Blob(parts, { type: "application/pdf" });
+}
+async function saveFile(blob, fname, title) {
+  try { const file = new File([blob], fname, { type: blob.type }); if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title }); return; } } catch (e) { if (e && e.name === "AbortError") return; }
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = fname; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+async function printResult(d) {
+  const btn = $("#dl-pdf"), old = btn ? btn.innerHTML : ""; if (btn) { btn.disabled = true; btn.textContent = "Preparando PDF…"; }
+  try {
+    const cv = await certCanvas(d);
+    const jb = await new Promise((r) => cv.toBlob(r, "image/jpeg", 0.93));
+    const data = new Uint8Array(await jb.arrayBuffer());
+    const pdf = pdfFromJpeg({ data, w: cv.width, h: cv.height }, 792, 612);
+    await saveFile(pdf, `Level-Up-Result-${d.name.replace(/\s+/g, "-")}.pdf`, "Level Up Result");
+  } finally { if (btn) { btn.disabled = false; btn.innerHTML = old; } }
+}
+
+/* ---------- Imagen para Instagram (1080 × 1920) ---------- */
 async function storyImage(d) {
-  const W = 1080, H = 1920, cv = document.createElement("canvas"); cv.width = W; cv.height = H; const x = cv.getContext("2d");
-  try { await Promise.all(["800 60px 'Bricolage Grotesque'", "700 40px Poppins", "600 40px Poppins", "500 40px Poppins"].map((f) => document.fonts.load(f))); } catch (e) {}
-  const c = LCOL[d.level];
-  x.fillStyle = "#172449"; x.fillRect(0, 0, W, H);
-  const dots = [["#E8846B", 90, 150], ["#5BC0F0", 980, 110], ["#F2B632", 170, 1790], ["#4FD1A5", 930, 1820], ["#A98BE8", 60, 980], ["#F47FB0", 1020, 900], ["#F2B632", 840, 230], ["#5BC0F0", 230, 1650]];
-  dots.forEach(([col, cx, cy]) => { x.fillStyle = col; x.globalAlpha = .55; x.beginPath(); x.arc(cx, cy, 26, 0, 7); x.fill(); }); x.globalAlpha = 1;
-  const rr = (X, Y, w, h, r) => { x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r); x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath(); };
-  x.fillStyle = "#FFFDF8"; rr(90, 250, 900, 1500, 56); x.fill();
-  x.fillStyle = c; rr(90, 250, 900, 22, 11); x.fill();
-  const T = (t, y, font, col, sp) => { x.font = font; x.fillStyle = col; x.textAlign = "center"; if ("letterSpacing" in x) x.letterSpacing = sp || "0px"; x.fillText(t, W / 2, y); if ("letterSpacing" in x) x.letterSpacing = "0px"; };
-  T("MOVA", 180, "800 64px 'Bricolage Grotesque', Poppins, sans-serif", "#FFFFFF", "10px");
-  T("LEVEL UP RESULT", 360, "700 34px Poppins, sans-serif", "#5B6787", "8px");
-  const img = new Image(); img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(badge(d.level, 380, true));
-  await new Promise((r) => { img.onload = r; img.onerror = r; });
-  x.drawImage(img, W / 2 - 190, 410, 380, 465);
-  T("LEVEL", 580, "700 22px Poppins, sans-serif", "#5B6787", "6px");
-  T(d.level, d.level === "Pre-A1" ? 668 : 690, `800 ${d.level === "Pre-A1" ? 72 : 100}px 'Bricolage Grotesque', Poppins, sans-serif`, "#172449");
-  T(`${d.level} · ${d.I.band}`, 950, "700 40px Poppins, sans-serif", shade(c, .7));
-  x.font = "700 54px Poppins, sans-serif"; x.fillStyle = "#172449"; x.textAlign = "center";
-  const words = d.I.head.split(" "); let line = "", lines = []; words.forEach((w) => { const t = line ? line + " " + w : w; if (x.measureText(t).width > 780) { lines.push(line); line = w; } else line = t; }); lines.push(line);
-  lines.forEach((l, i) => x.fillText(l, W / 2, 1040 + i * 66));
-  let y = 1040 + lines.length * 66 + 40;
-  T(d.name, y, "600 44px Poppins, sans-serif", "#172449"); y += 50;
-  T(d.today, y, "500 30px Poppins, sans-serif", "#5B6787"); y += 70;
-  d.skills.forEach(([k, p]) => { x.font = "600 30px Poppins, sans-serif"; x.fillStyle = "#172449"; x.textAlign = "left"; x.fillText(k, 190, y + 10); x.fillStyle = "#E8EDF7"; rr(450, y - 12, 340, 26, 13); x.fill(); x.fillStyle = c; rr(450, y - 12, Math.max(26, 340 * p / 100), 26, 13); x.fill(); x.fillStyle = "#172449"; x.textAlign = "right"; x.fillText(p + "%", 890, y + 10); y += 62; });
-  y += 20; T(`Nivel MOVA: ${d.asg}`, y, "700 32px Poppins, sans-serif", "#172449");
-  y += 64; T("Nivel estimado en línea · Confírmalo en MOVA", y, "500 26px Poppins, sans-serif", "#5B6787");
-  y += 44; T(d.folio, y, "600 24px Poppins, sans-serif", "#9AA6C2", "3px");
-  T("@movacp.mx", 1845, "700 40px Poppins, sans-serif", "#FFFFFF", "2px");
-  cv.toBlob(async (blob) => {
-    const fname = `Level-Up-Result-${d.name.replace(/\s+/g, "-")}.png`;
-    try { const file = new File([blob], fname, { type: "image/png" }); if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: "Level Up Result" }); return; } } catch (e) { if (e && e.name === "AbortError") return; }
-    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = fname; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 800);
-  }, "image/png");
+  await luFonts();
+  const W = 1080, H = 1920, cv = document.createElement("canvas"); cv.width = W; cv.height = H; const x = luCtx(cv);
+  const c = LCOL[d.level], B = "'Bricolage Grotesque', Poppins, sans-serif";
+  // fondo crema con polka dots de colores
+  x.fillStyle = "#FBF6EC"; x.fillRect(0, 0, W, H);
+  for (let r = 0; r < 26; r++) for (let k = 0; k < 12; k++) { x.fillStyle = DOTS6[(r + k) % 6]; x.globalAlpha = .22; x.beginPath(); x.arc(k * 96 + (r % 2 ? 48 : 0) + 20, r * 80 + 20, 9, 0, 7); x.fill(); }
+  x.globalAlpha = 1;
+  // panel azul marino
+  x.fillStyle = "#172449"; x.rr(60, 60, 960, 820, 56); x.fill();
+  [["#E8846B", 130, 150, 26], ["#5BC0F0", 950, 130, 18], [BUTTER, 900, 330, 13], ["#4FD1A5", 120, 700, 16], ["#A98BE8", 960, 760, 26], ["#F47FB0", 100, 430, 12], [BUTTER, 180, 820, 10], ["#5BC0F0", 980, 560, 12]]
+    .forEach(([col, X, Y, r]) => { x.fillStyle = col; x.beginPath(); x.arc(X, Y, r, 0, 7); x.fill(); });
+  x.T("MOVA", W / 2 + 6, 175, `800 62px ${B}`, "#FFFFFF", "center", "12px");
+  x.T("CENTRO PEDAGÓGICO", W / 2 + 4, 215, "600 20px Poppins, sans-serif", "#AEB8D6", "center", "7px");
+  x.fillStyle = c; x.rr(W / 2 - 34, 240, 68, 7, 4); x.fill();
+  const bi = await loadImg("data:image/svg+xml;charset=utf-8," + encodeURIComponent(badge(d.level, 300)));
+  if (bi) { x.save(); x.shadowColor = "rgba(0,0,0,.35)"; x.shadowBlur = 40; x.shadowOffsetY = 22; x.drawImage(bi, W / 2 - 150, 280, 300, 368); x.restore(); }
+  x.T(`NIVEL MCER · ${d.level}`, W / 2, 728, "700 26px Poppins, sans-serif", "#AEB8D6", "center", "6px");
+  x.T(d.I.band, W / 2, 800, `800 56px ${B}`, c, "center");
+  // tarjeta blanca
+  x.save(); x.shadowColor = "rgba(23,36,73,.18)"; x.shadowBlur = 50; x.shadowOffsetY = 20; x.fillStyle = "#FFFDF8"; x.rr(60, 840, 960, 930, 48); x.fill(); x.restore();
+  const L = 120, R = 960;
+  let w = x.T("LEVEL UP RESULT", L, 925, "700 24px Poppins, sans-serif", "#E8846B", "left", "7px");
+  x.fillStyle = "#E8DCCB"; x.fillRect(L + w + 18, 916, R - L - w - 18, 2);
+  x.T("Nivel de inglés estimado de", L, 985, "400 28px Poppins, sans-serif", "#5B6787");
+  const nl = x.wrap(d.name, R - L, `800 66px ${B}`); let y = 1060;
+  nl.slice(0, 2).forEach((l, i) => x.T(l, L, y + i * 70, `800 66px ${B}`, "#172449")); y += (Math.min(nl.length, 2) - 1) * 70 + 26;
+  x.fillStyle = c; x.rr(L, y, 150, 9, 5); x.fill(); y += 62;
+  x.wrap(d.I.head, R - L, "600 34px Poppins, sans-serif").forEach((l, i) => { x.T(l, L, y, "600 34px Poppins, sans-serif", "#172449"); y += 44; });
+  y += 4;
+  const sw = (R - L - 6 * 8) / 7, lv = ORDER.indexOf(d.level);
+  ORDER.forEach((o, i) => { const X = L + i * (sw + 8), on = i === lv, hh = on ? 66 : 52, Y = on ? y - 7 : y;
+    if (on) { x.save(); x.shadowColor = "rgba(23,36,73,.28)"; x.shadowBlur = 16; x.shadowOffsetY = 7; }
+    x.fillStyle = on ? LCOL[o] : mix(LCOL[o], .25); x.rr(X, Y, sw, hh, 14); x.fill(); if (on) x.restore();
+    x.T(o, X + sw / 2, Y + hh / 2 + (on ? 10 : 8), `700 ${on ? 28 : 21}px Poppins, sans-serif`, on ? "#172449" : "#5B6787", "center"); });
+  y += 92;
+  const SKC = ["#E8846B", "#5BC0F0", "#4FD1A5", "#A98BE8"], kw = (R - L - 20) / 2, kh = 128;
+  d.skills.forEach(([k, p], i) => { const X = L + (i % 2) * (kw + 20), Y = y + Math.floor(i / 2) * (kh + 20), col = SKC[i % 4];
+    x.fillStyle = mix(col, .14); x.rr(X, Y, kw, kh, 24); x.fill();
+    x.T(k.toUpperCase(), X + 28, Y + 42, "700 20px Poppins, sans-serif", "#5B6787", "left", "4px");
+    x.T(p + "%", X + 28, Y + 96, `800 50px ${B}`, "#172449");
+    x.fillStyle = "#FFFFFF"; x.rr(X + 170, Y + 76, kw - 200, 14, 7); x.fill();
+    x.fillStyle = col; x.rr(X + 170, Y + 76, Math.max(14, (kw - 200) * p / 100), 14, 7); x.fill(); });
+  y += 2 * kh + 20 + 58;
+  x.T(d.asg, L, y, "700 30px Poppins, sans-serif", "#172449"); x.T(d.today, R, y, "500 26px Poppins, sans-serif", "#5B6787", "right");
+  y += 40; x.T(d.folio, L, y, "600 20px Poppins, sans-serif", "#9AA6C2", "left", "3px");
+  x.T("Nivel estimado en línea · Confírmalo en MOVA", R, y, "500 20px Poppins, sans-serif", "#9AA6C2", "right");
+  // pie
+  x.fillStyle = "#172449"; x.rr(W / 2 - 170, 1806, 340, 64, 32); x.fill();
+  x.T("@movacp.mx", W / 2, 1849, "700 30px Poppins, sans-serif", "#FFFFFF", "center", "2px");
+  const blob = await new Promise((r) => cv.toBlob(r, "image/png"));
+  await saveFile(blob, `Level-Up-Result-${d.name.replace(/\s+/g, "-")}.png`, "Level Up Result");
 }
+
 
 })();
 </script>
