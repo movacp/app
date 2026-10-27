@@ -13,19 +13,20 @@
 :root{
   --bg:#FFF6E6; --card:#FFFFFF; --ink:#1B2A55; --muted:#5B6787; --tile:#F5F7FC; --edge:#DCE2F0; --track:#EEF1F8;
   --coral:#FF7A6B; --sky:#5BC0F0; --mustard:#F2B632; --mint:#4FD1A5; --lilac:#A98BE8; --pink:#F47FB0; --navy:#1E3A5F;
+  --butter:#F7D96B; --purple:#8B6CE0; --gold:#E9B93A;
   --good:#1F9A47; --good-bg:#DDF6E4; --bad:#E5484D; --bad-bg:#FDE4E4;
-  --d1:rgba(255,122,107,.5); --d2:rgba(91,192,240,.5); --d3:rgba(242,182,50,.5); --d4:rgba(79,209,165,.5);
+  --d1:rgba(255,122,107,.5); --d2:rgba(91,192,240,.5); --d3:rgba(247,217,107,.75); --d4:rgba(79,209,165,.5); --d5:rgba(169,139,232,.5); --d6:rgba(244,127,176,.45);
   --shadow:0 10px 0 rgba(27,42,85,.07),0 24px 48px rgba(27,42,85,.12);
   color-scheme:light; box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a33;--card:#1d2748;--ink:#F3F5FF;--muted:#AEB8D8;--tile:#26315a;--edge:#36437a;--track:#2b365f;--good-bg:rgba(31,154,71,.24);--bad-bg:rgba(229,72,77,.24);--d1:rgba(255,122,107,.3);--d2:rgba(91,192,240,.3);--d3:rgba(242,182,50,.3);--d4:rgba(79,209,165,.3);--shadow:0 10px 0 rgba(0,0,0,.25),0 24px 48px rgba(0,0,0,.35);color-scheme:dark}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a33;--card:#1d2748;--ink:#F3F5FF;--muted:#AEB8D8;--tile:#26315a;--edge:#36437a;--track:#2b365f;--good-bg:rgba(31,154,71,.24);--bad-bg:rgba(229,72,77,.24);--d1:rgba(255,122,107,.3);--d2:rgba(91,192,240,.3);--d3:rgba(247,217,107,.3);--d4:rgba(79,209,165,.3);--d5:rgba(169,139,232,.3);--d6:rgba(244,127,176,.3);--shadow:0 10px 0 rgba(0,0,0,.25),0 24px 48px rgba(0,0,0,.35);color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#121a33;--card:#1d2748;--ink:#F3F5FF;--muted:#AEB8D8;--tile:#26315a;--edge:#36437a;--track:#2b365f;--good-bg:rgba(31,154,71,.24);--bad-bg:rgba(229,72,77,.24);color-scheme:dark}
 *,*::before,*::after{box-sizing:inherit}
 html,body{height:100%}
 body{margin:0;font-family:Poppins,"Century Gothic",system-ui,sans-serif;color:var(--ink);background-color:var(--bg);
-  background-image:radial-gradient(var(--d1) 7px,transparent 8px),radial-gradient(var(--d2) 6px,transparent 7px),radial-gradient(var(--d3) 8px,transparent 9px),radial-gradient(var(--d4) 5px,transparent 6px);
-  background-size:120px 120px,150px 150px,180px 180px,95px 95px;background-position:10px 20px,70px 90px,30px 130px,90px 40px;background-attachment:fixed}
+  background-image:radial-gradient(var(--d1) 7px,transparent 8px),radial-gradient(var(--d2) 6px,transparent 7px),radial-gradient(var(--d3) 8px,transparent 9px),radial-gradient(var(--d4) 5px,transparent 6px),radial-gradient(var(--d5) 6px,transparent 7px),radial-gradient(var(--d6) 5px,transparent 6px);
+  background-size:120px 120px,150px 150px,180px 180px,95px 95px,135px 135px,110px 110px;background-position:10px 20px,70px 90px,30px 130px,90px 40px,50px 60px,100px 10px;background-attachment:fixed}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 :focus-visible{outline:3px solid var(--sky);outline-offset:3px;border-radius:12px}
 .app{min-height:100%;display:grid;place-items:center;padding:18px 14px 28px}
@@ -33,83 +34,92 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 .top{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .brand{display:inline-block;border:1.5px solid var(--ink);padding:4px 9px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:.06em}
 .back{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;padding:8px 0}
-h1{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:clamp(40px,11vw,56px);line-height:.95;margin:18px 0 6px;letter-spacing:-.02em}
+h1{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:clamp(40px,11vw,56px);line-height:.95;margin:18px 0 8px;letter-spacing:-.02em}
+h1.title{display:flex;flex-wrap:wrap;gap:0 .25em}
+h1.title .w{display:inline-flex;white-space:nowrap}
+h1.title .l{display:inline-block;color:var(--c);text-shadow:0 3px 0 color-mix(in srgb,var(--c) 45%,#1B2A55);transform:rotate(var(--r))}
 h2{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:28px;margin:0}
 .lead{color:var(--muted);margin:0 0 18px}
 .label{font-size:13px;font-weight:600;color:var(--muted);margin:16px 0 8px}
 .stages{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.stage{display:grid;gap:1px;text-align:left;padding:11px 12px;border-radius:16px;background:var(--tile);border:2px solid transparent;min-height:60px}
+.stage{display:grid;gap:1px;text-align:left;padding:11px 12px;border-radius:16px;background:color-mix(in srgb,var(--c) 12%,var(--card));border:2px solid transparent;min-height:60px}
 .stage b{font-size:14px;line-height:1.15}
 .stage small{font-size:12px;color:var(--muted);font-weight:500}
-.stage[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 16%,var(--card))}
+.stage[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 26%,var(--card))}
 .topics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 @media (min-width:480px){.topics{grid-template-columns:repeat(3,1fr)}}
-.topic{display:flex;align-items:center;gap:10px;padding:10px;border-radius:16px;background:var(--tile);border:2px solid transparent;text-align:left;min-height:58px}
-.topic .mark{width:36px;height:36px;border-radius:11px;background:var(--c);display:grid;place-items:center;flex:none}
+.topic{display:flex;align-items:center;gap:10px;padding:10px;border-radius:16px;background:color-mix(in srgb,var(--c) 12%,var(--card));border:2px solid transparent;text-align:left;min-height:58px}
+.topic .mark{width:36px;height:36px;border-radius:11px;background:var(--c);display:grid;place-items:center;flex:none;box-shadow:0 3px 0 color-mix(in srgb,var(--c) 60%,#1B2A55)}
 .topic .mark svg{width:22px;height:22px}
 .topic b{font-size:14px;line-height:1.2;font-weight:600}
-.topic .tl{display:grid;gap:1px}.topic .tl small{font-size:11.5px;font-weight:600;color:var(--muted)}
-.topic[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 14%,var(--card))}
+.topic .tl{display:grid;gap:3px;justify-items:start}
+.topic .lvl{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--c);color:#fff;line-height:1.5}
+.topic[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 26%,var(--card))}
 .modes{display:flex;gap:6px;flex-wrap:wrap}
-.mode{padding:9px 14px;border-radius:999px;background:var(--tile);font-size:14px;font-weight:600;border:2px solid transparent}
-.mode[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+.mode{padding:9px 14px;border-radius:999px;background:color-mix(in srgb,var(--c) 18%,var(--card));font-size:14px;font-weight:600;border:2px solid transparent}
+.mode[aria-pressed="true"]{background:var(--c);color:#fff;box-shadow:0 3px 0 color-mix(in srgb,var(--c) 60%,#1B2A55)}
 .mode-hint{font-size:13px;color:var(--muted);margin:8px 2px 0;min-height:20px}
-.play{width:100%;margin-top:20px;height:56px;border-radius:18px;background:var(--ink);color:var(--card);font-weight:700;font-size:17px;box-shadow:0 6px 0 color-mix(in srgb,var(--ink) 60%,#000)}
-.play:active{transform:translateY(3px);box-shadow:0 3px 0 color-mix(in srgb,var(--ink) 60%,#000)}
+.play{width:100%;margin-top:20px;height:56px;border-radius:18px;background:linear-gradient(90deg,#FF7A6B,#F47FB0 35%,#A98BE8 70%,#5BC0F0);color:#fff;font-weight:700;font-size:17px;box-shadow:0 6px 0 #6E5BB8;text-shadow:0 1px 0 rgba(27,42,85,.2)}
+.play:active{transform:translateY(3px);box-shadow:0 3px 0 #6E5BB8}
 .ghost{width:100%;margin-top:10px;height:50px;border-radius:16px;background:var(--tile);font-weight:600}
 .best{text-align:center;font-size:13px;color:var(--muted);margin:12px 0 0;min-height:20px}
 .hud{display:flex;align-items:center;gap:8px}
 .pill{padding:6px 12px;border-radius:999px;background:var(--tile);font-size:13.5px;font-weight:600;white-space:nowrap}
-.pill.score{margin-left:auto;background:color-mix(in srgb,var(--mustard) 25%,var(--card))}
+#round{background:color-mix(in srgb,var(--sky) 20%,var(--card));font-weight:700}
+.pill.score{margin-left:auto;background:var(--butter);color:#1B2A55;font-weight:700}
 .icon-btn{width:40px;height:40px;border-radius:12px;background:var(--tile);display:grid;place-items:center}
 .icon-btn svg{width:20px;height:20px}
 .timer{height:10px;border-radius:10px;background:var(--track);overflow:hidden;margin:14px 0 4px}
-.timer i{display:block;height:100%;background:var(--mint);transform-origin:left;border-radius:10px}
-.timer i.low{background:var(--coral)}
-.combo{height:22px;text-align:center;font-size:13px;font-weight:700;color:var(--coral)}
+.timer i{display:block;height:100%;background:linear-gradient(90deg,#4FD1A5,#5BC0F0,#A98BE8);transform-origin:left;border-radius:10px}
+.timer i.low{background:linear-gradient(90deg,#FF7A6B,#F47FB0)}
+.combo{height:22px;text-align:center;font-size:13px;font-weight:800;color:var(--pink)}
 .prompt{text-align:center;padding:6px 0 12px}
 .instr{font-size:14px;font-weight:600;color:var(--muted);margin:0 0 10px}
-.say{display:inline-flex;align-items:center;gap:12px;padding:14px 22px;border-radius:22px;background:var(--tile);min-height:76px;max-width:100%}
-.say .spk{width:44px;height:44px;border-radius:50%;background:var(--ink);color:var(--card);display:grid;place-items:center;flex:none}
+.say{display:inline-flex;align-items:center;gap:12px;padding:14px 22px;border-radius:22px;background:linear-gradient(135deg,color-mix(in srgb,var(--butter) 30%,var(--card)),color-mix(in srgb,var(--pink) 16%,var(--card)));min-height:76px;max-width:100%}
+.say .spk{width:44px;height:44px;border-radius:50%;background:var(--purple);color:#fff;display:grid;place-items:center;flex:none}
 .say .spk svg{width:22px;height:22px}
 .word{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:clamp(26px,7vw,38px);line-height:1.1}
+.word .wl{color:var(--c)}
 .sentence{font-size:clamp(18px,4.8vw,23px);font-weight:600;line-height:1.45;text-align:left}
-.sentence .gap{display:inline-block;min-width:64px;border-bottom:3px solid var(--sky);margin:0 4px}
+.sentence .gap{display:inline-block;min-width:64px;border-bottom:3px solid var(--purple);margin:0 4px}
 .sentence .cue{color:var(--muted);font-weight:500}
 .es{font-size:14px;color:var(--muted);margin-top:8px}
 .face-swatch{width:84px;height:84px;border-radius:22px;border:3px solid var(--edge);display:inline-block}
-.face-digit{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:64px;line-height:1}
+.face-digit{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:64px;line-height:1;color:var(--purple)}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .opts.three{grid-template-columns:1fr}
 @media (min-width:480px){.opts.three{grid-template-columns:repeat(3,1fr)}}
-.opt{min-height:66px;border-radius:20px;background:var(--tile);border:2.5px solid var(--edge);font-size:18px;font-weight:600;display:grid;place-items:center;padding:8px 10px;transition:transform .12s;line-height:1.25}
+.opt{min-height:66px;border-radius:20px;background:color-mix(in srgb,var(--c) 14%,var(--card));border:2.5px solid color-mix(in srgb,var(--c) 55%,var(--card));box-shadow:0 4px 0 color-mix(in srgb,var(--c) 40%,var(--card));font-size:18px;font-weight:600;display:grid;place-items:center;padding:8px 10px;transition:transform .12s;line-height:1.25}
 .opt:active{transform:scale(.97)}
 .opt .face-swatch{width:54px;height:54px;border-radius:16px}
 .opt .face-digit{font-size:42px}
-.opt.right{background:var(--good-bg);border-color:var(--good);color:var(--good)}
-.opt.wrong{background:var(--bad-bg);border-color:var(--bad);animation:shake .35s}
+.opt.right{background:var(--good-bg);border-color:var(--good);color:var(--good);box-shadow:0 4px 0 #9ED9B1}
+.opt.wrong{background:var(--bad-bg);border-color:var(--bad);box-shadow:0 4px 0 #F2A9AB;animation:shake .35s}
 .opt.dim{opacity:.4}
 @keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .spell-slots{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:6px 0 14px}
 .slot{width:40px;height:50px;border-radius:12px;border:2.5px dashed var(--edge);display:grid;place-items:center;font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:24px}
-.slot.on{border-style:solid;border-color:var(--sky);background:color-mix(in srgb,var(--sky) 14%,var(--card))}
+.slot.on{border-style:solid;border-color:var(--c);background:color-mix(in srgb,var(--c) 16%,var(--card));color:color-mix(in srgb,var(--c) 70%,#1B2A55)}
 .slots-ok .slot{border-color:var(--good);background:var(--good-bg);color:var(--good)}
-.slots-bad .slot{border-color:var(--bad);background:var(--bad-bg);animation:shake .35s}
+.slots-bad .slot{border-color:var(--bad);background:var(--bad-bg);color:var(--bad);animation:shake .35s}
 .letters{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}
-.letter{width:46px;height:52px;border-radius:14px;background:var(--card);border:2.5px solid var(--edge);font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:22px;box-shadow:0 4px 0 var(--edge)}
+.letter{width:46px;height:52px;border-radius:14px;background:var(--c);color:#fff;font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:23px;box-shadow:0 4px 0 color-mix(in srgb,var(--c) 60%,#1B2A55);text-shadow:0 1px 0 rgba(27,42,85,.25)}
 .letter[disabled]{opacity:.25;box-shadow:none}
 .spell-tools{display:flex;justify-content:center;gap:8px;margin-top:12px}
 .spell-tools button{padding:9px 16px;border-radius:12px;background:var(--tile);font-weight:600;font-size:14px}
-.feedback{min-height:28px;text-align:center;font-weight:700;margin-top:14px}
+.feedback{min-height:28px;text-align:center;font-weight:800;margin-top:14px}
 .feedback.good{color:var(--good)} .feedback.bad{color:var(--bad)}
 .why{margin:8px auto 0;max-width:46ch;text-align:center;font-size:14px;color:var(--muted);min-height:20px}
 .end{text-align:center}
 .stars{display:flex;justify-content:center;gap:6px;margin:14px 0 4px}
 .stars svg{width:44px;height:44px}
-.final{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:64px;line-height:1;margin:6px 0 0}
+.final{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:64px;line-height:1;margin:6px 0 0;color:var(--purple)}
 .final-l{color:var(--muted);margin:2px 0 14px}
 .sumrow{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
-.review{margin-top:18px;text-align:left;background:var(--tile);border-radius:18px;padding:14px 16px}
+.sumrow .pill:nth-child(1){background:color-mix(in srgb,var(--mint) 22%,var(--card))}
+.sumrow .pill:nth-child(2){background:var(--butter);color:#1B2A55}
+.sumrow .pill:nth-child(3){background:color-mix(in srgb,var(--pink) 20%,var(--card))}
+.review{margin-top:18px;text-align:left;background:color-mix(in srgb,var(--lilac) 12%,var(--card));border-radius:18px;padding:14px 16px}
 .review h3{margin:0 0 8px;font-size:14px}
 .review ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
 .review li{display:flex;justify-content:space-between;gap:10px;font-size:15px}
@@ -125,7 +135,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:5}
 
   <section id="s-start">
     <div class="top"><a class="back" href="./#/games">MOVA Learning Studio</a><span class="brand">MOVA · Centro Pedagógico</span></div>
-    <h1>Word Quest</h1>
+    <h1 class="title" id="title" aria-label="Word Quest"></h1>
     <p class="lead">Choose your stage, a world of words and a way to play. Every topic shows its level.</p>
     <p class="label">Stage</p>
     <div class="stages" id="stages"></div>
@@ -173,10 +183,16 @@ const $ = (s) => document.querySelector(s);
 const shuffle = (a) => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
 const ROUNDS = 10, RUSH = 60000;
 
+/* Paleta de colores para letras, opciones y fichas */
+const PAL = ["var(--coral)", "var(--sky)", "var(--gold)", "var(--mint)", "var(--purple)", "var(--pink)"];
+const rainbow = (s) => [...String(s)].map((ch, i) => ch === " " ? " " : `<span class="wl" style="--c:${PAL[i % PAL.length]}">${ch.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]))}</span>`).join("");
+(function () { let n = 0;
+  $("#title").innerHTML = "Word Quest".split(" ").map((w) => `<span class="w" aria-hidden="true">${[...w].map((ch) => { const i = n++; return `<span class="l" style="--c:${PAL[i % PAL.length]};--r:${i % 2 ? 4 : -4}deg">${ch}</span>`; }).join("")}</span>`).join(""); })();
+
 const STAGES = [
   { id: "kids", name: "MOVA Kids", ages: "Ages 6–8", c: "var(--coral)" },
   { id: "children", name: "MOVA Children", ages: "Ages 9–12", c: "var(--sky)" },
-  { id: "teens", name: "MOVA Teens", ages: "Ages 12–17", c: "var(--mint)" }
+  { id: "teens", name: "MOVA Teens", ages: "Ages 12–17", c: "var(--lilac)" }
 ];
 
 /* Topic icons */
@@ -232,10 +248,10 @@ const DATA = {
   /* ---------- MOVA Kids ---------- */
   animals: { level: "Pre-A1", stage: "kids", label: "Animals", c: "var(--coral)", items: [["dog","perro"],["cat","gato"],["bird","pájaro"],["fish","pez"],["horse","caballo"],["cow","vaca"],["rabbit","conejo"],["duck","pato"],["lion","león"],["monkey","mono"],["frog","rana"],["bear","oso"],["elephant","elefante"],["turtle","tortuga"]] },
   food: { level: "Pre-A1", stage: "kids", label: "Food", c: "var(--sky)", items: [["apple","manzana"],["bread","pan"],["milk","leche"],["egg","huevo"],["cheese","queso"],["rice","arroz"],["banana","plátano"],["water","agua"],["cookie","galleta"],["soup","sopa"],["chicken","pollo"],["orange","naranja"],["juice","jugo"],["salad","ensalada"]] },
-  colors: { level: "Pre-A1", stage: "kids", label: "Colors", c: "var(--mustard)", face: "swatch", items: [["red","rojo","#E53935"],["blue","azul","#1E6FE0"],["yellow","amarillo","#FFD21F"],["green","verde","#2EAA4A"],["orange","naranja","#FF8A1F"],["purple","morado","#8E44CC"],["pink","rosa","#FF6FB1"],["brown","café","#8B5A2B"],["black","negro","#1B1B1B"],["white","blanco","#FFFFFF"],["gray","gris","#9AA1AD"]] },
+  colors: { level: "Pre-A1", stage: "kids", label: "Colors", c: "var(--gold)", face: "swatch", items: [["red","rojo","#E53935"],["blue","azul","#1E6FE0"],["yellow","amarillo","#FFD21F"],["green","verde","#2EAA4A"],["orange","naranja","#FF8A1F"],["purple","morado","#8E44CC"],["pink","rosa","#FF6FB1"],["brown","café","#8B5A2B"],["black","negro","#1B1B1B"],["white","blanco","#FFFFFF"],["gray","gris","#9AA1AD"]] },
   numbers: { level: "Pre-A1", stage: "kids", label: "Numbers", c: "var(--mint)", face: "digit", items: [["one","uno","1"],["two","dos","2"],["three","tres","3"],["four","cuatro","4"],["five","cinco","5"],["six","seis","6"],["seven","siete","7"],["eight","ocho","8"],["nine","nueve","9"],["ten","diez","10"],["eleven","once","11"],["twelve","doce","12"],["fifteen","quince","15"],["twenty","veinte","20"]] },
   family: { level: "A1", stage: "kids", label: "Family", c: "var(--pink)", items: [["mother","mamá"],["father","papá"],["sister","hermana"],["brother","hermano"],["grandmother","abuela"],["grandfather","abuelo"],["baby","bebé"],["aunt","tía"],["uncle","tío"],["cousin","primo"],["son","hijo"],["daughter","hija"]] },
-  body: { level: "A1", stage: "kids", label: "My Body", c: "var(--lilac)", items: [["head","cabeza"],["eyes","ojos"],["nose","nariz"],["mouth","boca"],["ears","orejas"],["hands","manos"],["feet","pies"],["arm","brazo"],["leg","pierna"],["hair","cabello"],["teeth","dientes"],["fingers","dedos"]] },
+  body: { level: "A1", stage: "kids", label: "My Body", c: "var(--purple)", items: [["head","cabeza"],["eyes","ojos"],["nose","nariz"],["mouth","boca"],["ears","orejas"],["hands","manos"],["feet","pies"],["arm","brazo"],["leg","pierna"],["hair","cabello"],["teeth","dientes"],["fingers","dedos"]] },
   clothes: { level: "A1", stage: "kids", label: "Clothes", c: "var(--sky)", items: [["shirt","camisa"],["pants","pantalón"],["dress","vestido"],["shoes","zapatos"],["hat","sombrero"],["jacket","chamarra"],["socks","calcetines"],["skirt","falda"],["sweater","suéter"],["shorts","shorts"],["boots","botas"],["cap","gorra"]] },
   verbs: { level: "A1", stage: "kids", label: "Action Verbs", c: "var(--coral)", items: [["run","correr"],["jump","saltar"],["eat","comer"],["drink","beber"],["sleep","dormir"],["read","leer"],["write","escribir"],["swim","nadar"],["sing","cantar"],["dance","bailar"],["play","jugar"],["walk","caminar"],["draw","dibujar"],["cook","cocinar"]] },
   pronouns: { level: "A1", stage: "kids", label: "Pronouns", c: "var(--mint)", type: "sentence", instr: "Choose the right pronoun", options: ["I","You","He","She","It","We","They"], items: [
@@ -252,7 +268,7 @@ const DATA = {
     ["Mom and I cook on Sundays. ___ make pancakes.","We"],
     ["My teacher is Miss Karla. ___ is very nice.","She"]
   ] },
-  weather: { level: "A1+", stage: "kids", label: "Weather", c: "var(--mustard)", items: [["sunny","soleado"],["rainy","lluvioso"],["cloudy","nublado"],["windy","con viento"],["snowy","con nieve"],["hot","calor"],["cold","frío"],["stormy","con tormenta"],["warm","templado"],["foggy","con neblina"]] },
+  weather: { level: "A1+", stage: "kids", label: "Weather", c: "var(--gold)", items: [["sunny","soleado"],["rainy","lluvioso"],["cloudy","nublado"],["windy","con viento"],["snowy","con nieve"],["hot","calor"],["cold","frío"],["stormy","con tormenta"],["warm","templado"],["foggy","con neblina"]] },
 
   /* ---------- MOVA Children ---------- */
   freq: { level: "A1+", stage: "children", label: "Adverbs of Frequency", c: "var(--coral)", type: "sentence", instr: "How often? Choose the adverb", rule: "always 100% · usually 80% · often 70% · sometimes 50% · rarely 10% · never 0%", options: ["always","usually","often","sometimes","rarely","never"], items: [
@@ -268,7 +284,7 @@ const DATA = {
     ["Choose the correct sentence.","I usually walk to school.","Before the main verb",["I usually walk to school.","I walk usually to school.","Usually I to school walk."]],
     ["___ do you play video games? Every weekend.","How often","Asking about frequency",["How often","How much","What time"]]
   ] },
-  past: { level: "A2", stage: "children", label: "Irregular Past", c: "var(--mustard)", type: "sentence", instr: "Choose the past simple", rule: "Irregular verbs don’t take -ed. go → went, eat → ate, see → saw.", items: [
+  past: { level: "A2", stage: "children", label: "Irregular Past", c: "var(--gold)", type: "sentence", instr: "Choose the past simple", rule: "Irregular verbs don’t take -ed. go → went, eat → ate, see → saw.", items: [
     ["Yesterday I ___ (go) to the park.","went","",["went","goed","gone"]],
     ["We ___ (eat) tacos last night.","ate","",["ate","eated","eaten"]],
     ["She ___ (see) a rainbow after the rain.","saw","",["saw","seed","seen"]],
@@ -308,7 +324,7 @@ const DATA = {
     ["The cookies are ___ the box.","in"],
     ["See you ___ noon!","at"]
   ] },
-  quant: { level: "A2+", stage: "children", label: "Much, Many, Some, Any", c: "var(--lilac)", type: "sentence", instr: "How much or how many?", rule: "many + things you can count · much + things you can’t count · some in positive sentences · any in questions and negatives.", items: [
+  quant: { level: "A2+", stage: "children", label: "Much, Many, Some, Any", c: "var(--purple)", type: "sentence", instr: "How much or how many?", rule: "many + things you can count · much + things you can’t count · some in positive sentences · any in questions and negatives.", items: [
     ["How ___ apples do you want?","many","Apples can be counted",["many","much","any"]],
     ["How ___ water do you drink every day?","much","Water can’t be counted",["much","many","some"]],
     ["There is ___ milk in the fridge.","some","Positive sentence",["some","many","any"]],
@@ -347,7 +363,7 @@ const DATA = {
     ["My cousins have ___ (fly) to Madrid.","flown","",["flown","flew","flied"]],
     ["We have ___ (know) each other for years.","known","",["known","knew","knowed"]]
   ] },
-  perfect: { level: "B1", stage: "teens", label: "For, Since, Already, Yet", c: "var(--mustard)", type: "sentence", instr: "Complete the present perfect", rule: "for + a period · since + a starting point · already in positive sentences · yet in questions and negatives.", items: [
+  perfect: { level: "B1", stage: "teens", label: "For, Since, Already, Yet", c: "var(--gold)", type: "sentence", instr: "Complete the present perfect", rule: "for + a period · since + a starting point · already in positive sentences · yet in questions and negatives.", items: [
     ["I have lived here ___ 2018.","since","Starting point",["since","for","yet"]],
     ["She has studied English ___ five years.","for","Period of time",["for","since","already"]],
     ["Have you finished your project ___?","yet","Question",["yet","already","since"]],
@@ -379,7 +395,7 @@ const DATA = {
     ["If you don’t hurry, you ___ the bus.","will miss","First conditional",["will miss","would miss","missed"]],
     ["If I ___ you, I would apologize.","were","Advice with the second conditional",["were","was being","am"]]
   ] },
-  modals: { level: "B1", stage: "teens", label: "Modal Verbs", c: "var(--lilac)", type: "sentence", instr: "Choose the modal verb", rule: "must = obligation · should = advice · might = possibility · don’t have to = not necessary · mustn’t = not allowed.", items: [
+  modals: { level: "B1", stage: "teens", label: "Modal Verbs", c: "var(--purple)", type: "sentence", instr: "Choose the modal verb", rule: "must = obligation · should = advice · might = possibility · don’t have to = not necessary · mustn’t = not allowed.", items: [
     ["You ___ wear a seatbelt. It’s the law.","must","Obligation",["must","might","could"]],
     ["You look tired. You ___ go to bed early.","should","Advice",["should","mustn’t","might"]],
     ["It ___ rain later. Take an umbrella just in case.","might","Possibility",["might","must","should"]],
@@ -401,7 +417,7 @@ const DATA = {
     ["Please stop ___ noise!","making","stop + -ing",["making","to make","make"]],
     ["I’d like ___ pizza tonight.","to order","would like + to",["to order","ordering","order"]]
   ] },
-  linkers: { level: "B2", stage: "teens", label: "Linking Words", c: "var(--mustard)", type: "sentence", instr: "Connect the ideas", rule: "because = reason · so / therefore = result · but / however = contrast · although = surprising contrast.", items: [
+  linkers: { level: "B2", stage: "teens", label: "Linking Words", c: "var(--gold)", type: "sentence", instr: "Connect the ideas", rule: "because = reason · so / therefore = result · but / however = contrast · although = surprising contrast.", items: [
     ["I was tired, ___ I went to bed early.","so","Result",["so","but","because"]],
     ["She didn’t go to school ___ she was sick.","because","Reason",["because","so","although"]],
     ["___ it was raining, we played outside.","Although","Surprising contrast",["Although","Because","So"]],
@@ -418,9 +434,9 @@ const DATA = {
     ["Yesterday I ___ at the park.","was"],["My friends ___ at my party.","were"],["The cake ___ delicious.","was"],["We ___ very happy.","were"],["She ___ tired after school.","was"],["The dogs ___ in the garden.","were"],["It ___ cold last night.","was"],["You ___ late this morning.","were"],["My grandpa ___ a teacher.","was"],["The books ___ on the table.","were"],["Tom and I ___ in the same class.","were"],["The movie ___ very funny.","was"]
   ] },
   habitats: { stage: "kids", level: "B1", label: "Nature and Habitats", c: "var(--mint)", items: [["desert","desierto"],["jungle","selva"],["ocean","océano"],["forest","bosque"],["river","río"],["mountain","montaña"],["island","isla"],["cave","cueva"],["lake","lago"],["volcano","volcán"],["beach","playa"],["nest","nido"]] },
-  science: { stage: "kids", level: "B2", label: "Science Words", c: "var(--lilac)", items: [["planet","planeta"],["gravity","gravedad"],["energy","energía"],["oxygen","oxígeno"],["magnet","imán"],["skeleton","esqueleto"],["experiment","experimento"],["microscope","microscopio"],["temperature","temperatura"],["liquid","líquido"],["solid","sólido"],["habitat","hábitat"]] },
+  science: { stage: "kids", level: "B2", label: "Science Words", c: "var(--purple)", items: [["planet","planeta"],["gravity","gravedad"],["energy","energía"],["oxygen","oxígeno"],["magnet","imán"],["skeleton","esqueleto"],["experiment","experimento"],["microscope","microscopio"],["temperature","temperatura"],["liquid","líquido"],["solid","sólido"],["habitat","hábitat"]] },
 
-  school: { stage: "children", level: "Pre-A1", label: "School Things", c: "var(--mustard)", items: [["pencil","lápiz"],["eraser","goma"],["ruler","regla"],["book","libro"],["notebook","cuaderno"],["backpack","mochila"],["scissors","tijeras"],["glue","pegamento"],["desk","pupitre"],["board","pizarrón"],["crayon","crayola"],["teacher","maestra"]] },
+  school: { stage: "children", level: "Pre-A1", label: "School Things", c: "var(--gold)", items: [["pencil","lápiz"],["eraser","goma"],["ruler","regla"],["book","libro"],["notebook","cuaderno"],["backpack","mochila"],["scissors","tijeras"],["glue","pegamento"],["desk","pupitre"],["board","pizarrón"],["crayon","crayola"],["teacher","maestra"]] },
   routine: { stage: "children", level: "A1", label: "Daily Routine", c: "var(--sky)", items: [["wake up","despertarse"],["get dressed","vestirse"],["brush my teeth","lavarme los dientes"],["have breakfast","desayunar"],["go to school","ir a la escuela"],["do homework","hacer la tarea"],["have a shower","bañarse"],["have lunch","comer"],["have dinner","cenar"],["go to bed","irse a dormir"]] },
   hobbies: { stage: "children", level: "A1+", label: "Hobbies and Sports", c: "var(--coral)", items: [["painting","pintura"],["swimming","natación"],["cycling","ciclismo"],["reading","lectura"],["dancing","baile"],["skating","patinaje"],["cooking","cocina"],["gardening","jardinería"],["photography","fotografía"],["chess","ajedrez"],["karate","karate"],["singing","canto"]] },
   phrasal1: { stage: "children", level: "B1", label: "Phrasal Verbs", c: "var(--mint)", type: "sentence", instr: "Choose the phrasal verb", rule: "A phrasal verb is a verb + a small word. Its meaning changes: look for = buscar, look after = cuidar.", items: [
@@ -453,8 +469,8 @@ const DATA = {
 
   basics: { stage: "teens", level: "Pre-A1", label: "Everyday Phrases", c: "var(--sky)", items: [["hello","hola"],["goodbye","adiós"],["please","por favor"],["thank you","gracias"],["sorry","perdón"],["good morning","buenos días"],["good night","buenas noches"],["excuse me","disculpe"],["welcome","bienvenido"],["see you later","hasta luego"],["how are you?","¿cómo estás?"],["nice to meet you","mucho gusto"]] },
   nations: { stage: "teens", level: "A1", label: "Countries and Nationalities", c: "var(--coral)", items: [["Mexican","mexicano"],["American","estadounidense"],["Canadian","canadiense"],["Brazilian","brasileño"],["Spanish","español"],["French","francés"],["German","alemán"],["Italian","italiano"],["Japanese","japonés"],["Chinese","chino"],["British","británico"],["Argentinian","argentino"]] },
-  tech: { stage: "teens", level: "A1+", label: "Technology", c: "var(--lilac)", items: [["password","contraseña"],["screen","pantalla"],["keyboard","teclado"],["download","descargar"],["upload","subir"],["battery","batería"],["charger","cargador"],["headphones","audífonos"],["laptop","laptop"],["message","mensaje"],["camera","cámara"],["website","sitio web"]] },
-  travel: { stage: "teens", level: "A2", label: "Travel", c: "var(--mustard)", items: [["airport","aeropuerto"],["passport","pasaporte"],["luggage","equipaje"],["ticket","boleto"],["flight","vuelo"],["map","mapa"],["souvenir","recuerdo"],["guide","guía"],["reservation","reservación"],["delay","retraso"],["customs","aduana"],["boarding pass","pase de abordar"]] },
+  tech: { stage: "teens", level: "A1+", label: "Technology", c: "var(--purple)", items: [["password","contraseña"],["screen","pantalla"],["keyboard","teclado"],["download","descargar"],["upload","subir"],["battery","batería"],["charger","cargador"],["headphones","audífonos"],["laptop","laptop"],["message","mensaje"],["camera","cámara"],["website","sitio web"]] },
+  travel: { stage: "teens", level: "A2", label: "Travel", c: "var(--gold)", items: [["airport","aeropuerto"],["passport","pasaporte"],["luggage","equipaje"],["ticket","boleto"],["flight","vuelo"],["map","mapa"],["souvenir","recuerdo"],["guide","guía"],["reservation","reservación"],["delay","retraso"],["customs","aduana"],["boarding pass","pase de abordar"]] },
   usedto: { stage: "teens", level: "A2+", label: "Used To", c: "var(--pink)", type: "sentence", instr: "Complete with used to", rule: "used to + verb = something you did in the past but don’t do now. Negative: didn’t use to.", items: [
     ["When I was a child, I ___ play with toy cars.","used to","",["used to","use to","was used"]],
     ["She ___ like vegetables, but now she loves them.","didn’t use to","",["didn’t use to","didn’t used to","not used to"]],
@@ -483,7 +499,7 @@ const DATA = {
     ["Can you ___ me a favor?","do"],["I need to ___ a decision soon.","make"],["Let’s ___ a break for ten minutes.","take"],["She ___ a lot of progress this year.","made"],["We ___ an interesting chat after class.","had"],["Don’t worry. Everybody ___ mistakes.","makes"],["I have to ___ some research for my essay.","do"],["Sometimes you have to ___ a risk.","take"],["They ___ an argument about money.","had"],["He always ___ his homework before dinner.","does"]
   ].map(([s, a]) => [s, a, "", [a, ...["make","do","take","have","made","does","makes","had"].filter((x) => x !== a && x[0] !== a[0]).slice(0, 2)]]) },
   idioms: { stage: "teens", level: "C1", label: "Idioms", c: "var(--mint)", items: [["break the ice","romper el hielo"],["a piece of cake","pan comido"],["hit the books","ponerse a estudiar"],["under the weather","sentirse mal"],["once in a blue moon","muy de vez en cuando"],["cost an arm and a leg","costar un ojo de la cara"],["spill the beans","soltar la sopa"],["hit the nail on the head","dar en el clavo"],["the ball is in your court","te toca decidir"],["on the same page","estar de acuerdo"],["call it a day","dar por terminado el día"],["beat around the bush","andarse por las ramas"]] },
-  academic: { stage: "teens", level: "C1", label: "Academic Vocabulary", c: "var(--lilac)", items: [["analyze","analizar"],["evidence","evidencia"],["hypothesis","hipótesis"],["significant","significativo"],["approach","enfoque"],["assess","evaluar"],["consistent","coherente"],["framework","marco"],["interpret","interpretar"],["derive","derivar"],["implement","implementar"],["subsequent","posterior"]] },
+  academic: { stage: "teens", level: "C1", label: "Academic Vocabulary", c: "var(--purple)", items: [["analyze","analizar"],["evidence","evidencia"],["hypothesis","hipótesis"],["significant","significativo"],["approach","enfoque"],["assess","evaluar"],["consistent","coherente"],["framework","marco"],["interpret","interpretar"],["derive","derivar"],["implement","implementar"],["subsequent","posterior"]] },
   nuance: { stage: "teens", level: "C2", label: "Advanced Vocabulary", c: "var(--pink)", type: "sentence", instr: "Choose the most precise word", rule: "At C2, choose words for their exact nuance, not just their general meaning.", items: [
     ["The evidence was ___: it could support either conclusion.","equivocal","",["equivocal","unequivocal","eloquent"]],
     ["His ___ remarks made everyone feel uncomfortable.","disparaging","",["disparaging","disparate","dispensable"]],
@@ -499,11 +515,11 @@ const DATA = {
 
 };
 const MODES = {
-  mix: ["Mix", "A little of everything: listen, read and spell."],
-  listen: ["Listen", "Hear the word and tap the right answer."],
-  read: ["Read", "Read the word in Spanish or English and find its match."],
-  spell: ["Spell", "Hear the word and build it letter by letter."],
-  rush: ["60-second rush", "How many can you answer in one minute?"]
+  mix: ["Mix", "A little of everything: listen, read and spell.", "var(--coral)"],
+  listen: ["Listen", "Hear the word and tap the right answer.", "var(--sky)"],
+  read: ["Read", "Read the word in Spanish or English and find its match.", "var(--mint)"],
+  spell: ["Spell", "Hear the word and build it letter by letter.", "var(--purple)"],
+  rush: ["60-second rush", "How many can you answer in one minute?", "var(--gold)"]
 };
 const PRAISE = ["Great job!", "Awesome!", "You got it!", "Super!", "Well done!", "Fantastic!", "Brilliant!"];
 const firstTopic = (sid) => { const LV = ["Pre-A1", "A1", "A1+", "A2", "A2+", "B1", "B1+", "B2", "C1", "C2"]; return Object.keys(DATA).filter((k) => DATA[k].stage === sid).sort((a, b) => LV.indexOf(DATA[a].level) - LV.indexOf(DATA[b].level))[0]; };
@@ -544,14 +560,14 @@ function drawTopics() {
   Object.entries(DATA).filter(([, t]) => t.stage === st.stage).sort((a, b) => LV.indexOf(a[1].level) - LV.indexOf(b[1].level)).forEach(([k, t]) => {
     const b = document.createElement("button");
     b.className = "topic"; b.dataset.k = k; b.style.setProperty("--c", t.c);
-    b.innerHTML = `<span class="mark"><svg viewBox="0 0 24 24" fill="#fff">${G[k]}</svg></span><span class="tl"><b>${t.label}</b><small>${t.level}</small></span>`;
+    b.innerHTML = `<span class="mark"><svg viewBox="0 0 24 24" fill="#fff">${G[k] || ""}</svg></span><span class="tl"><b>${t.label}</b><span class="lvl">${t.level}</span></span>`;
     b.addEventListener("click", () => { unlock(); st.topic = k; refresh(); speak(t.label); });
     topicsEl.appendChild(b);
   });
 }
 Object.entries(MODES).forEach(([k, m]) => {
   const b = document.createElement("button");
-  b.className = "mode"; b.dataset.k = k; b.textContent = m[0];
+  b.className = "mode"; b.dataset.k = k; b.textContent = m[0]; b.style.setProperty("--c", m[2]);
   b.addEventListener("click", () => { st.mode = k; refresh(); });
   modesEl.appendChild(b);
 });
@@ -610,10 +626,10 @@ function next() {
     const extra = shuffle("abcdefghijklmnoprstuwy".split("").filter((l) => !w.includes(l))).slice(0, 2);
     const tiles = shuffle([...w.split(""), ...extra]);
     A.innerHTML = `<div class="spell-slots" id="slots">${w.split("").map(() => '<span class="slot"></span>').join("")}</div>
-      <div class="letters" id="letters">${tiles.map((l, i) => `<button class="letter" data-i="${i}" data-l="${l}">${l}</button>`).join("")}</div>
+      <div class="letters" id="letters">${tiles.map((l, i) => `<button class="letter" data-i="${i}" data-l="${l}" style="--c:${PAL[i % PAL.length]}">${l}</button>`).join("")}</div>
       <div class="spell-tools"><button id="undo">Undo</button><button id="clear">Clear</button></div>`;
     const typed = [];
-    const paint = () => { $("#slots").querySelectorAll(".slot").forEach((s, i) => { s.textContent = typed[i] ? typed[i].l : ""; s.classList.toggle("on", !!typed[i]); }); };
+    const paint = () => { $("#slots").querySelectorAll(".slot").forEach((s, i) => { s.textContent = typed[i] ? typed[i].l : ""; s.classList.toggle("on", !!typed[i]); s.style.setProperty("--c", typed[i] ? typed[i].b.style.getPropertyValue("--c") : ""); }); };
     $("#letters").addEventListener("click", (e) => {
       const b = e.target.closest(".letter"); if (!b || st.locked || b.disabled) return;
       tick(); typed.push({ l: b.dataset.l, b }); b.disabled = true; paint();
@@ -633,18 +649,18 @@ function next() {
     const others = shuffle(t.items.filter((i) => i[0] !== item[0])).slice(0, 3);
     const opts = shuffle([item, ...others]);
     if (kind === "listen") {
-      P.innerHTML = `<p class="instr">Listen and tap</p>${speakerBtn('<span class="word">? ? ?</span>')}`;
-      renderOpts(opts.map((o) => ({ key: o[0], html: t.face ? face(t, o) : o[0] })), item[0]);
+      P.innerHTML = `<p class="instr">Listen and tap</p>${speakerBtn(`<span class="word">${rainbow("? ? ?")}</span>`)}`;
+      renderOpts(opts.map((o) => ({ key: o[0], html: t.face ? face(t, o) : esc(o[0]) })), item[0]);
       later(() => speak(item[0]), 350);
     } else if (kind === "face") {
       P.innerHTML = `<p class="instr">What is it in English?</p><div class="say">${face(t, item)}</div>`;
-      renderOpts(opts.map((o) => ({ key: o[0], html: o[0] })), item[0]);
+      renderOpts(opts.map((o) => ({ key: o[0], html: esc(o[0]) })), item[0]);
     } else if (kind === "es2en") {
-      P.innerHTML = `<p class="instr">How do you say it in English?</p><div class="say"><span class="word">${item[1]}</span></div>`;
-      renderOpts(opts.map((o) => ({ key: o[0], html: o[0] })), item[0]);
+      P.innerHTML = `<p class="instr">How do you say it in English?</p><div class="say"><span class="word">${rainbow(item[1])}</span></div>`;
+      renderOpts(opts.map((o) => ({ key: o[0], html: esc(o[0]) })), item[0]);
     } else {
-      P.innerHTML = `<p class="instr">What does it mean?</p>${speakerBtn(`<span class="word">${item[0]}</span>`)}`;
-      renderOpts(opts.map((o) => ({ key: o[0], html: o[1] })), item[0]);
+      P.innerHTML = `<p class="instr">What does it mean?</p>${speakerBtn(`<span class="word">${rainbow(item[0])}</span>`)}`;
+      renderOpts(opts.map((o) => ({ key: o[0], html: esc(o[1]) })), item[0]);
     }
   }
   const sayBtn = $("#say");
@@ -652,8 +668,8 @@ function next() {
   if (st.mode !== "rush") startTimer(kind === "spell" ? 25000 : kind === "sentence" && t.stage !== "kids" ? 22000 : 14000);
 }
 function renderOpts(opts, correct, three) {
-  const A = $("#answer");
-  A.innerHTML = `<div class="opts${three ? " three" : ""}">${opts.map((o) => `<button class="opt" data-k="${esc(o.key)}">${o.html}</button>`).join("")}</div>`;
+  const A = $("#answer"), start = Math.floor(Math.random() * PAL.length);
+  A.innerHTML = `<div class="opts${three ? " three" : ""}">${opts.map((o, i) => `<button class="opt" data-k="${esc(o.key)}" style="--c:${PAL[(start + i) % PAL.length]}">${o.html}</button>`).join("")}</div>`;
   A.querySelector(".opts").addEventListener("click", (e) => { const b = e.target.closest(".opt"); if (b) answer(b.dataset.k === correct, b); });
 }
 function startTimer(ms) {
@@ -733,7 +749,7 @@ function size() { cv.width = innerWidth * devicePixelRatio; cv.height = innerHei
 size(); addEventListener("resize", size);
 function burst(n) {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const cols = ["#FF7A6B", "#5BC0F0", "#F2B632", "#4FD1A5", "#A98BE8"];
+  const cols = ["#FF7A6B", "#5BC0F0", "#F7D96B", "#4FD1A5", "#8B6CE0", "#F47FB0"];
   for (let i = 0; i < n; i++) parts.push({ x: cv.width / 2, y: cv.height / 3, vx: (Math.random() - .5) * 16 * devicePixelRatio, vy: (Math.random() * -12 - 4) * devicePixelRatio, r: (4 + Math.random() * 5) * devicePixelRatio, c: cols[i % cols.length], life: 90 });
   if (!fxOn) { fxOn = true; requestAnimationFrame(drawFx); }
 }
