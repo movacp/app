@@ -1,6 +1,6 @@
 /* =====================================================================
-   MOVA Learning Studio — JUEGOS (octubre 2026, lote 9 y lote 12)
-   TOEFL Practice, Sentence Scramble, Word Quest por etapas y Penalty Shootout.
+   MOVA Learning Studio — JUEGOS (octubre 2026, lote 9)
+   TOEFL Practice, Sentence Scramble y Word Quest por etapas.
    Se carga después de studio-plus.js.
    ===================================================================== */
 (function () {
@@ -25,10 +25,6 @@ insertAfter("juego-word-quest.html", {
   file: "juego-toefl-practice.html", title: "TOEFL Practice", color: "mustard", tag: "MOVA Teens", skill: "TOEFL ITP strategies",
   description: "Short practice sets for Structure, Written Expression, Reading and Listening, with an explanation for every answer."
 });
-insertAfter("juego-locked-library.html", {
-  file: "juego-penalty-shootout.html", title: "Penalty Shootout", color: "sky", tag: "Kids · Children · Teens", skill: "Grammar and math",
-  description: "Score goals and make saves by choosing the right answer before time runs out. English by stage, plus math in Spanish."
-});
 
 /* ---------- Ilustraciones ---------- */
 GAME_ART["juego-toefl-practice.html"] = scene("#1E3A5F", `
@@ -48,19 +44,6 @@ GAME_ART["juego-sentence-scramble.html"] = scene("#DCEAF6", `
   ${[["I", 46, 30], ["have", 84, 50], ["seen", 142, 50]].map(([w, x, wd]) => `<rect x="${x}" y="114" width="${wd}" height="30" rx="9" fill="#FFFDFA" stroke="#5E9E82" stroke-width="2"/>${T(x + wd / 2, 129, w, 13, "#1E3A5F", 700)}`).join("")}
   <rect x="200" y="112" width="4" height="34" rx="2" fill="#6FA8D6"/>
   <path d="M246 70l16 24-10-1-4 10z" fill="#1E3A5F" stroke="#FFFDFA" stroke-width="2" stroke-linejoin="round"/>`);
-
-GAME_ART["juego-penalty-shootout.html"] = scene("#3B9A5C", `
-  <rect x="0" y="0" width="320" height="58" fill="#1E3A5F" opacity=".9"/>
-  ${[0, 1, 2].map((r) => Array.from({ length: 27 }, (_, i) => `<circle cx="${6 + i * 12 + (r % 2) * 6}" cy="${10 + r * 13}" r="3.4" fill="${["#E8846B", "#6FA8D6", "#E0B04A", "#7FB89E", "#FFFDFA"][(i + r) % 5]}" opacity=".6"/>`).join("")).join("")}
-  <path d="M0 150H320" stroke="#FFFDFA" stroke-width="2" opacity=".7"/>
-  <path d="M66 150V42H254V150" fill="none" stroke="#FFFDFA" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-  ${Array.from({ length: 9 }, (_, i) => `<path d="M${76 + i * 20} 48V146" stroke="#FFFDFA" stroke-width="1.2" opacity=".35"/>`).join("")}
-  ${Array.from({ length: 5 }, (_, i) => `<path d="M70 ${62 + i * 20}H250" stroke="#FFFDFA" stroke-width="1.2" opacity=".35"/>`).join("")}
-  <g transform="rotate(-6 112 78)"><rect x="84" y="64" width="56" height="28" rx="9" fill="#FFFDFA"/>${T(112, 78, "went", 13, "#1E3A5F", 700)}</g>
-  <g transform="rotate(5 208 78)"><rect x="180" y="64" width="56" height="28" rx="9" fill="#E8846B"/>${T(208, 78, "goed", 13, "#FFFDFA", 700)}</g>
-  <path d="M150 168C138 140 122 110 108 96" stroke="#FFFDFA" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 9" opacity=".8"/>
-  <circle cx="160" cy="166" r="15" fill="#FFFDFA" stroke="#1E3A5F" stroke-width="3"/>
-  <path d="M160 158.5l6.7 4.9-2.6 7.8h-8.2l-2.6-7.8z" fill="#1E3A5F"/>`);
 
 /* ---------- Navegación: Learn + pestaña MOVA ---------- */
 const nav = document.querySelector(".nav");
