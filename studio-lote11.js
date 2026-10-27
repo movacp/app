@@ -713,7 +713,7 @@ document.head.insertAdjacentHTML("beforeend", `<style>
 @keyframes mfl{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 .lehero{position:relative;display:grid;grid-template-columns:112px 1fr;gap:12px;align-items:center;padding:18px 18px 16px;border-radius:26px;margin-bottom:18px;overflow:hidden;background:#FFFDF8;border:1px solid var(--line);
   background-image:radial-gradient(circle at 12px 12px,#F7DDD4 5px,transparent 6px),radial-gradient(circle at 42px 34px,#DBE9F5 5px,transparent 6px),radial-gradient(circle at 72px 14px,#F5E7C5 5px,transparent 6px),radial-gradient(circle at 26px 52px,#DDEEE5 5px,transparent 6px);background-size:84px 64px}
-@media (prefers-color-scheme:dark){.lehero{background-color:var(--surface);background-image:none}}
+:root[data-theme="dark"] .lehero{background-color:var(--surface);background-image:none}
 .bubble{position:relative;background:#fff;color:#1E3A5F;border:2.5px solid #1E3A5F;border-radius:20px;padding:12px 15px;font-weight:700;font-size:16px;line-height:1.35;box-shadow:0 4px 0 #1E3A5F}
 .bubble:before{content:"";position:absolute;left:-12px;top:22px;border:8px solid transparent;border-right:12px solid #1E3A5F;border-left:0}
 .bubble:after{content:"";position:absolute;left:-7px;top:24px;border:6px solid transparent;border-right:9px solid #fff;border-left:0}
@@ -3992,7 +3992,7 @@ Object.assign(READING_ART, {
   .ra-lw{flex:1;height:32px;display:flex;align-items:center;gap:2px}.ra-lw i{flex:1;background:#6FA8D6;border-radius:2px;min-height:3px}
   .ra-stop{border:0;border-radius:14px;background:#fff;color:#1E3A5F;font:700 14px var(--font-ui);padding:11px 16px;display:flex;align-items:center;gap:8px;cursor:pointer}.ra-stop i{width:12px;height:12px;border-radius:3px;background:#E8846B;display:block}
   .ra-tag{display:inline-flex;align-items:center;gap:4px;color:#C35A3F;font-weight:600;margin-left:8px}
-  @media (prefers-color-scheme:dark){.ra-tag{color:#EE9A80}}
+  :root[data-theme="dark"] .ra-tag{color:#EE9A80}
   @media print{.ra,.ra-bar{display:none!important}}`;
   document.head.appendChild(css);
 
