@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("mova-theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>WordSearch · MOVA</title>
@@ -200,6 +202,7 @@ const LEVEL_DIFF = { "Pre-A1": 1, "A1": 1, "A1+": 2, "A2": 2, "A2+": 3, "B1": 3,
 
 const EN = {
   kids: [
+    { id: "halloween", name: "Halloween", em: "🎃", level: "A1", holiday: true, words: [["bat","🦇"],["cat","🐈‍⬛"],["hat","🎩"],["owl","🦉"],["moon","🌙"],["candy","🍬"],["ghost","👻"],["witch","🧙"]] },
     { id: "colors", name: "Colors", em: "🎨", level: "Pre-A1", words: [["red","🔴"],["blue","🔵"],["green","🟢"],["pink","🩷"],["black","⚫"],["white","⚪"],["brown","🟤"],["gray","🩶"]] },
     { id: "animals", name: "Animals", em: "🐶", level: "A1", words: [["cat","🐱"],["dog","🐶"],["fish","🐟"],["bird","🐦"],["frog","🐸"],["duck","🦆"],["lion","🦁"],["bear","🐻"]] },
     { id: "family", name: "Family", em: "👨‍👩‍👧", level: "A1", words: [["mom","👩"],["dad","👨"],["baby","👶"],["sister","👧"],["brother","👦"],["grandma","👵"],["grandpa","👴"],["aunt","👩‍🦰"]] },
@@ -207,6 +210,7 @@ const EN = {
     { id: "body", name: "My body", em: "🖐️", level: "A2", words: [["head","🙂"],["hand","✋"],["foot","🦶"],["nose","👃"],["mouth","👄"],["ear","👂"],["eyes","👀"],["knee","🦵"],["teeth","🦷"]] }
   ],
   children: [
+    { id: "halloween", name: "Halloween", em: "🎃", level: "A2", holiday: true, words: [["pumpkin"],["costume"],["spider"],["candle"],["broom"],["monster"],["haunted"],["mask"],["skeleton"]] },
     { id: "school", name: "School", em: "🎒", level: "A1", words: [["book"],["pencil"],["ruler"],["desk"],["teacher"],["eraser"],["glue"],["paper"]] },
     { id: "sports", name: "Sports", em: "⚽", level: "A2", words: [["soccer"],["tennis"],["swim"],["run"],["goal"],["team"],["coach"],["ball"],["race"]] },
     { id: "weather", name: "Weather", em: "🌦️", level: "A2", words: [["sunny"],["rainy"],["windy"],["cloudy"],["snow"],["storm"],["cold"],["hot"],["foggy"]] },
@@ -214,6 +218,7 @@ const EN = {
     { id: "nature", name: "Nature", em: "🌋", level: "B1", words: [["volcano"],["river"],["desert"],["forest"],["island"],["valley"],["ocean"],["canyon"],["glacier"]] }
   ],
   teens: [
+    { id: "halloween", name: "Halloween", em: "🎃", level: "B1", holiday: true, words: [["cauldron"],["cobweb"],["graveyard"],["werewolf"],["vampire"],["potion"],["eerie"],["spooky"],["lantern"],["costume"]] },
     { id: "travel", name: "Travel", em: "✈️", level: "A2+", words: [["airport"],["ticket"],["luggage"],["hotel"],["passport"],["map"],["guide"],["delay"],["tour"]] },
     { id: "tech", name: "Technology", em: "💻", level: "B1", words: [["laptop"],["password"],["download"],["screen"],["update"],["wifi"],["browser"],["app"],["cloud"]] },
     { id: "environment", name: "Environment", em: "🌍", level: "B2", words: [["climate"],["recycle"],["pollution"],["energy"],["drought"],["species"],["carbon"],["habitat"],["waste"],["solar"]] },
@@ -222,6 +227,7 @@ const EN = {
   ]
 };
 const ES = [
+  { id: "halloween", name: "Halloween", em: "🎃", level: "1°–6°", diff: 2, holiday: true, words: [["calabaza","🎃"],["bruja","🧙"],["fantasma","👻"],["disfraz","🎭"],["dulces","🍬"],["araña","🕷️"],["escoba","🧹"],["luna","🌙"],["vela","🕯️"]] },
   { id: "animales", name: "Animales", em: "🐢", level: "1°", diff: 1, words: [["gato","🐱"],["perro","🐶"],["pato","🦆"],["oso","🐻"],["sapo","🐸"],["vaca","🐮"],["pez","🐟"],["mono","🐒"]] },
   { id: "frutas", name: "Frutas", em: "🍓", level: "1°", diff: 1, words: [["uva","🍇"],["pera","🍐"],["piña","🍍"],["mango","🥭"],["fresa","🍓"],["limón","🍋"],["coco","🥥"],["kiwi","🥝"]] },
   { id: "colores", name: "Colores", em: "🌈", level: "1°–2°", diff: 1, words: [["rojo","🔴"],["azul","🔵"],["verde","🟢"],["rosa","🩷"],["negro","⚫"],["blanco","⚪"],["gris","🩶"],["café","🟤"]] },
@@ -259,7 +265,8 @@ function renderStart() {
   list.forEach((tp, ti) => {
     const b = document.createElement("button"); b.className = "topic"; b.style.setProperty("--tc", TC[ti % TC.length][0]); b.style.setProperty("--tcd", TC[ti % TC.length][1]);
     const d = tp.diff || LEVEL_DIFF[tp.level];
-    b.innerHTML = `<span class="badge" aria-hidden="true">${tp.name[0]}</span><span><b>${tp.name}</b><small><em>${tp.level}</em> · ${DIFF[d].size}×${DIFF[d].size}</small></span>`;
+    b.innerHTML = `<span class="badge" aria-hidden="true">${tp.name[0]}</span><span><b>${tp.name}</b><small><em>${tp.level}</em> · ${DIFF[d].size}×${DIFF[d].size}${tp.holiday ? " · Holidays" : ""}</small></span>`;
+    if (tp.holiday) { b.style.setProperty("--tc", "#E8846B"); b.style.setProperty("--tcd", "#2A2440"); }
     b.addEventListener("click", () => { st.topic = tp; newGame(); });
     box.appendChild(b);
   });
@@ -419,6 +426,13 @@ $("#e-again").addEventListener("click", newGame);
 $("#e-topics").addEventListener("click", () => { renderStart(); show("start"); });
 
 renderStart();
+(function () {
+  const q = new URLSearchParams(location.search), id = q.get("topic"); if (!id) return;
+  if (q.get("lang") === "es") st.lang = "es"; else { st.lang = "en"; if (["kids", "children", "teens"].includes(q.get("stage"))) st.stage = q.get("stage"); }
+  renderStart();
+  const list = st.lang === "es" ? ES : EN[st.stage]; const tp = list.find((t) => t.id === id);
+  if (tp) { st.topic = tp; newGame(); }
+})();
 })();
 </script>
 <a href="./#/games" class="mova-home-btn" aria-label="Volver a MOVA Learning Studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></a>

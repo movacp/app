@@ -4146,6 +4146,297 @@ Object.assign(READING_ART, {
   };
 })();
 
+/* =====================================================================
+   HOLIDAYS — Halloween (lote 14): lecturas en inglés, vitrina de
+   temporada, sopas de letras imprimibles y dibujos para colorear.
+   ===================================================================== */
+(function () {
+const NI = "#2A2440", NI2 = "#3A3258", PU = "#E8846B", PU2 = "#F09A80", PU3 = "#D9714F", GO = "#E0B04A", MO = "#F5E7C5";
+const pumpkin = (x, y, s, face = true) => `<g transform="translate(${x} ${y}) scale(${s})"><path d="M0-44c2-10 8-16 16-18" stroke="#7FB89E" stroke-width="6" fill="none" stroke-linecap="round"/><ellipse rx="54" ry="44" fill="${PU}"/><ellipse rx="22" ry="44" fill="${PU2}"/><ellipse cx="-32" rx="14" ry="40" fill="${PU3}" opacity=".5"/><ellipse cx="32" rx="14" ry="40" fill="${PU3}" opacity=".5"/>${face ? `<path d="M-24-12l14 8-14 6zM24-12l-14 8 14 6z" fill="${NI}"/><path d="M-26 14c16 14 36 14 52 0l-8 3-6-6-6 7-6-7-6 7-6-7-6 6z" fill="${NI}"/>` : ""}</g>`;
+const bat = (x, y, s = 1) => `<path transform="translate(${x} ${y}) scale(${s})" d="M0 0c6-6 12-6 16 0 4-6 10-6 16 0-6-1-10 2-16 8-6-6-10-9-16-8z" fill="#16131F"/>`;
+const moon = (x, y, bg = NI) => `<circle cx="${x}" cy="${y}" r="24" fill="${MO}"/><circle cx="${x + 10}" cy="${y - 6}" r="22" fill="${bg}"/>`;
+
+/* ---------- Lecturas en inglés ---------- */
+READINGS.push(
+  {
+    id: "kids-halloween-night", level: "A1", stage: "kids", topic: "Halloween", holiday: "halloween", title: "Halloween Night",
+    description: "Leo and Mia put on their costumes and go trick-or-treating.",
+    text: [
+      "Today is October 31. It is Halloween!",
+      "Leo is a black cat. He has ears and a long tail. Mia is a witch. She has a big hat and a broom.",
+      "Mom has a pumpkin. It has two eyes and a big smile. It is orange and it shines at night.",
+      "Leo and Mia go to the houses on their street. They knock on the doors and say, “Trick or treat!”",
+      "The neighbors give them candy. Leo has ten candies. Mia has twelve!",
+      "At home, they share the candy with Mom and Dad. Happy Halloween!"
+    ],
+    vocab: [["costume", "special clothes to look like a character"], ["witch", "a woman in stories with a big hat and a broom"], ["pumpkin", "a big orange vegetable"], ["knock", "to hit a door softly with your hand"], ["share", "to give some of your things to other people"]],
+    questions: [
+      ["What day is Halloween?", ["October 31", "December 25", "May 10"]],
+      ["What is Leo’s costume?", ["a black cat", "a witch", "a ghost"]],
+      ["What does Mia have?", ["a big hat and a broom", "ears and a tail", "a pumpkin"]],
+      ["What do they say at the doors?", ["“Trick or treat!”", "“Good morning!”", "“Happy birthday!”"]],
+      ["How many candies does Mia have?", ["twelve", "ten", "two"]]
+    ]
+  },
+  {
+    id: "children-the-haunted-classroom", level: "A2", stage: "children", topic: "Halloween", holiday: "halloween", title: "The Haunted Classroom",
+    description: "Strange noises in Room 4 the day before Halloween. Is it a ghost?",
+    text: [
+      "The day before Halloween, the students in Room 4 were decorating their classroom with paper bats and orange lights.",
+      "Suddenly, they heard a noise. Scratch, scratch, scratch. It came from the closet at the back of the room. Everyone stopped working.",
+      "“It’s a ghost!” whispered Sofía. “Ghosts don’t scratch,” said Daniel, but he looked a little nervous too.",
+      "Their teacher, Ms. Garza, walked slowly to the closet. The students held their breath. She opened the door very carefully and…",
+      "A small gray kitten jumped out! It was hiding in a box of costumes. It was hungry and a little scared.",
+      "The class gave the kitten some milk and named it Boo. Ms. Garza called the school director, and the next day a family from the school adopted Boo. It was the best Halloween surprise ever."
+    ],
+    vocab: [["decorate", "to make a place look pretty for a special day"], ["noise", "a sound, often loud or strange"], ["whisper", "to speak very quietly"], ["nervous", "a little worried or afraid"], ["adopt", "to take an animal or child into your family"]],
+    questions: [
+      ["What were the students doing?", ["decorating their classroom", "taking an exam", "eating lunch"]],
+      ["Where did the noise come from?", ["the closet", "the window", "the teacher’s desk"]],
+      ["What did Sofía think it was?", ["a ghost", "a kitten", "a mouse"]],
+      ["What was really in the closet?", ["a small gray kitten", "a ghost", "a bat"]],
+      ["What happened to Boo?", ["a family adopted it", "it stayed in the closet", "it ran away"]]
+    ]
+  },
+  {
+    id: "teens-the-real-story-of-halloween", level: "B1", stage: "teens", topic: "Halloween", holiday: "halloween", title: "The Real Story of Halloween",
+    description: "From an ancient Celtic festival to costumes and candy: how Halloween became what it is today.",
+    text: [
+      "Every October 31, millions of people put on costumes, carve pumpkins and fill bags with candy. But Halloween didn’t start as a party. Its roots go back more than 2,000 years, to an ancient Celtic festival called Samhain.",
+      "The Celts lived in what is now Ireland, Scotland and parts of France. For them, Samhain marked the end of the harvest and the beginning of the dark, cold half of the year. They believed that on that night the boundary between the world of the living and the world of the dead became thin, so they lit huge bonfires and wore animal skins to confuse wandering spirits.",
+      "Centuries later, the Church established All Saints’ Day on November 1. The evening before was called All Hallows’ Eve, a name that eventually became “Halloween.”",
+      "The famous jack-o’-lantern also has an interesting history. In Ireland, people originally carved faces into turnips and potatoes to scare away evil spirits. When Irish immigrants arrived in the United States in the 1800s, they discovered that pumpkins were bigger and much easier to carve.",
+      "Trick-or-treating became popular in the United States in the twentieth century, and from there it spread around the world through movies and television. Today, Halloween is a mix of ancient beliefs, religious traditions and modern pop culture — which may be exactly why so many people enjoy it."
+    ],
+    vocab: [["roots", "the origin or beginning of something"], ["harvest", "the time when crops are collected from the fields"], ["boundary", "a line that separates two areas"], ["carve", "to cut a shape into something hard"], ["spread", "to move to more places or people"]],
+    questions: [
+      ["What was the name of the ancient Celtic festival?", ["Samhain", "All Saints’ Day", "Hallows"]],
+      ["What did Samhain mark?", ["the end of the harvest and the start of the dark half of the year", "the first day of spring", "the birthday of a Celtic king"]],
+      ["Where does the word “Halloween” come from?", ["All Hallows’ Eve", "a Celtic god", "an American movie"]],
+      ["What did people in Ireland originally carve?", ["turnips and potatoes", "pumpkins", "apples"]],
+      ["How did trick-or-treating spread around the world?", ["through movies and television", "through Celtic songs", "through school books"]]
+    ]
+  }
+);
+Object.assign(READING_ART, {
+  "kids-halloween-night": scene(NI, `${moon(262, 44)}${bat(70, 40)}${bat(200, 30, .8)}<rect y="148" width="320" height="32" fill="${NI2}"/>${pumpkin(160, 118, .62)}
+    <g transform="translate(80 120)"><circle cy="-22" r="13" fill="#16131F"/><path d="M-12-30l4-14 6 10zM12-30l-4-14-6 10z" fill="#16131F"/><circle cx="-5" cy="-23" r="2.4" fill="${GO}"/><circle cx="5" cy="-23" r="2.4" fill="${GO}"/><rect x="-12" y="-10" width="24" height="34" rx="10" fill="#16131F"/><path d="M12 14q22-6 16-30" stroke="#16131F" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+    <g transform="translate(240 118)"><circle cy="-20" r="12" fill="#F2C9A8"/><path d="M-26-26h52l-26-34z" fill="#5A3A8A"/><rect x="-26" y="-30" width="52" height="6" rx="3" fill="#5A3A8A"/><path d="M-14-8h28l6 34h-40z" fill="#5A3A8A"/><path d="M22 0l26 30" stroke="#A9774F" stroke-width="4"/><path d="M44 26l12 6-6 8z" fill="${GO}"/></g>`, GO, .25),
+  "children-the-haunted-classroom": scene("#E7E2F3", `<rect x="40" y="26" width="140" height="70" rx="6" fill="#2F4F45"/><path d="M60 50h40M60 66h70" stroke="#FFFDFA" stroke-width="3" stroke-linecap="round" opacity=".7"/>${bat(130, 40, .8)}${bat(150, 60, .6)}
+    <path d="M20 22q60 18 120 0t120 0" stroke="#7A6A9A" stroke-width="2" fill="none"/>${[40, 80, 120, 160, 200, 240, 280].map((x, i) => `<circle cx="${x}" cy="${26 + (i % 2) * 6}" r="5" fill="${[PU, GO][i % 2]}"/>`).join("")}
+    <rect x="214" y="58" width="72" height="104" rx="4" fill="#B98A5E"/><rect x="214" y="58" width="36" height="104" fill="#A9774F"/><circle cx="244" cy="112" r="3" fill="${GO}"/>
+    <g transform="translate(268 150)"><ellipse cx="0" cy="0" rx="18" ry="12" fill="#9AA3AE"/><circle cx="-14" cy="-10" r="10" fill="#9AA3AE"/><path d="M-22-16l2-10 6 6zM-8-18l0-10-6 6z" fill="#9AA3AE"/><circle cx="-17" cy="-11" r="1.8" fill="#16131F"/><circle cx="-11" cy="-11" r="1.8" fill="#16131F"/><path d="M16 0q14-6 10-18" stroke="#9AA3AE" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+    <rect y="162" width="320" height="18" fill="#CFC6E0"/>${pumpkin(92, 140, .32)}<g transform="translate(150 132)"><circle cy="-14" r="12" fill="#D9A47E"/><path d="M-12-20q12-12 24 0" fill="#2E2A28"/><rect x="-12" y="-2" width="24" height="30" rx="8" fill="#6FA8D6"/></g>`, "#FFFFFF", .5),
+  "teens-the-real-story-of-halloween": scene("#1E2340", `<circle cx="70" cy="50" r="26" fill="${MO}"/><path d="M0 140l40-26 50 18 60-30 60 24 50-20 60 22v52H0z" fill="#2E3560"/>
+    <g transform="translate(110 120)">${[[-30, 0], [0, -6], [30, 2]].map(([dx, dy]) => `<path d="M${dx - 10} ${dy + 20}q10-50 20 0z" fill="${GO}"/><path d="M${dx - 5} ${dy + 20}q5-30 10 0z" fill="${PU}"/>`).join("")}<rect x="-46" y="20" width="92" height="10" rx="4" fill="#5A3A28"/></g>
+    <g transform="translate(220 128)"><ellipse rx="26" ry="22" fill="#E9DCC3"/><path d="M0-22q-2-10 6-14" stroke="#7FB89E" stroke-width="4" fill="none"/><path d="M-12-6l7 4-7 3zM12-6l-7 4 7 3z" fill="#5A3A28"/><path d="M-12 8q12 8 24 0" stroke="#5A3A28" stroke-width="3" fill="none"/></g>
+    ${pumpkin(278, 136, .42)}<path d="M200 60l3 7 7 1-5 5 1 7-6-4-6 4 1-7-5-5 7-1z" fill="${GO}"/>`, "#6FA8D6", .2)
+});
+
+/* Chip de temporada en las tarjetas */
+const prevCard = window.readingCard;
+window.readingCard = function (r) {
+  const h = prevCard(r);
+  return r.holiday ? h.replace('<span class="chip">Halloween</span>', '<span class="chip hol-chip">Halloween</span>') : h;
+};
+
+/* ---------- Datos de sopas de letras ---------- */
+const WS = [
+  { id: "halloween-kids", stage: "kids", label: "MOVA Kids", level: "A1", lang: "en", size: 8, dirs: [[0, 1], [1, 0]], words: ["bat", "cat", "hat", "owl", "moon", "candy", "ghost", "witch"] },
+  { id: "halloween-children", stage: "children", label: "MOVA Children", level: "A2", lang: "en", size: 10, dirs: [[0, 1], [1, 0], [1, 1]], words: ["pumpkin", "costume", "spider", "candle", "broom", "monster", "haunted", "mask", "skeleton"] },
+  { id: "halloween-teens", stage: "teens", label: "MOVA Teens", level: "B1", lang: "en", size: 11, dirs: [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1]], words: ["cauldron", "cobweb", "graveyard", "werewolf", "vampire", "potion", "eerie", "spooky", "lantern", "costume"] },
+  { id: "halloween-espanol", stage: "es", label: "Español", level: "1° a 6°", lang: "es", size: 10, dirs: [[0, 1], [1, 0], [1, 1]], words: ["calabaza", "bruja", "fantasma", "disfraz", "dulces", "araña", "escoba", "luna", "vela"] }
+];
+const plain = (w) => w.normalize("NFD").replace(/[\u0300-\u0302\u0304-\u036f]/g, "").normalize("NFC").toUpperCase().replace(/[^A-ZÑ]/g, "");
+const rng = (seed) => { let a = 0; for (const ch of seed) a = (a * 31 + ch.charCodeAt(0)) | 0; return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
+function buildWS(ws) {
+  const N = ws.size, R = rng(ws.id + "-v1");
+  for (let tries = 0; tries < 400; tries++) {
+    const g = Array.from({ length: N }, () => Array(N).fill("")), placed = [];
+    let ok = true;
+    for (const w of ws.words.slice().sort((a, b) => b.length - a.length)) {
+      const key = plain(w); let done = false;
+      for (let k = 0; k < 300 && !done; k++) {
+        const [dr, dc] = ws.dirs[Math.floor(R() * ws.dirs.length)], r0 = Math.floor(R() * N), c0 = Math.floor(R() * N);
+        const r1 = r0 + dr * (key.length - 1), c1 = c0 + dc * (key.length - 1);
+        if (r1 < 0 || r1 >= N || c1 < 0 || c1 >= N) continue;
+        let fit = true; for (let i = 0; i < key.length; i++) { const ch = g[r0 + dr * i][c0 + dc * i]; if (ch && ch !== key[i]) { fit = false; break; } }
+        if (!fit) continue;
+        const cells = []; for (let i = 0; i < key.length; i++) { g[r0 + dr * i][c0 + dc * i] = key[i]; cells.push((r0 + dr * i) * N + c0 + dc * i); }
+        placed.push({ w, cells }); done = true;
+      }
+      if (!done) { ok = false; break; }
+    }
+    if (!ok) continue;
+    const abc = ws.lang === "es" ? "ABCDEFGHIJLMNÑOPRSTUVZ" : "ABCDEFGHIJKLMNOPRSTUVWY";
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) if (!g[r][c]) g[r][c] = abc[Math.floor(R() * abc.length)];
+    return { g, placed };
+  }
+  return null;
+}
+
+/* ---------- Dibujos para colorear (línea negra, tamaño carta) ---------- */
+const K = 'fill="#fff" stroke="#1b1b1b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"';
+const KN = 'fill="none" stroke="#1b1b1b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"';
+const star = (x, y, r) => `<path ${K} stroke-width="4" d="M${x} ${y - r}l${r * .29} ${r * .6} ${r * .66} ${r * .1}-${r * .48} ${r * .46} ${r * .12} ${r * .66}-${r * .59}-${r * .31}-${r * .59} ${r * .31} ${r * .12}-${r * .66}-${r * .48}-${r * .46} ${r * .66}-${r * .1}z"/>`;
+const title = (t, y = 92) => `<text x="300" y="${y}" text-anchor="middle" font-family="Poppins, 'Century Gothic', sans-serif" font-size="50" font-weight="800" fill="#fff" stroke="#1b1b1b" stroke-width="3" letter-spacing="1">${t}</text>`;
+const lineBat = (x, y, s = 1) => `<path transform="translate(${x} ${y}) scale(${s})" ${K} stroke-width="${4 / s}" d="M0 0c10-14 26-14 34-2 4-8 10-12 16-12 6 0 12 4 16 12 8-12 24-12 34 2-14-2-24 6-30 18-6-6-12-8-20-8s-14 2-20 8C24 6 14-2 0 0z"/>`;
+const COLOR = [
+  { id: "halloween-pumpkin-patch", holiday: "halloween", title: "Pumpkin Patch", desc: "A smiling jack-o’-lantern with its pumpkin friends.", svg: `<svg viewBox="0 0 600 760" xmlns="http://www.w3.org/2000/svg">${title("Happy Halloween!")}
+    ${star(70, 170, 26)}${star(530, 160, 22)}${star(480, 240, 14)}
+    <path ${KN} d="M300 250c0-40 20-66 54-74"/><path ${K} d="M300 230c-30 8-60 6-80-14 26-14 56-12 80 14z"/>
+    <path ${K} d="M300 250c-150-10-220 80-220 190s90 190 220 190 220-80 220-190-70-200-220-190z"/>
+    <path ${KN} d="M190 268c-70 60-80 260-8 340M410 268c70 60 80 260 8 340M262 256c-14 20-20 50-22 80M338 256c14 20 20 50 22 80M244 560c4 30 10 52 20 66M356 560c-4 30-10 52-20 66"/>
+    <path ${K} d="M200 380l60 30-60 26zM400 380l-60 30 60 26z"/><path ${K} d="M285 450l15-26 15 26z"/>
+    <path ${K} d="M175 500c70 70 180 70 250 0l-30 12-18-22-20 28-26-24-26 24-26-24-20 28-18-22z"/>
+    <path ${K} d="M110 700c-40 0-60-26-60-56s24-56 60-56 60 24 60 56-20 56-60 56z"/><path ${KN} d="M110 590c0-16 6-26 18-30M110 590c-12 30-12 80 0 110M110 590c12 30 12 80 0 110"/>
+    <path ${K} d="M495 710c-36 0-56-22-56-50s22-50 56-50 56 22 56 50-20 50-56 50z"/><path ${KN} d="M495 610c0-14 6-24 16-28M495 610c-10 28-10 72 0 100M495 610c10 28 10 72 0 100"/>
+    <path ${KN} d="M40 740h520"/></svg>` },
+  { id: "halloween-friendly-ghost", holiday: "halloween", title: "Friendly Ghost", desc: "A happy ghost with a candy bucket under the moon.", svg: `<svg viewBox="0 0 600 760" xmlns="http://www.w3.org/2000/svg">${title("Trick or Treat!")}
+    <path ${K} d="M500 140a70 70 0 1 0 40 128 80 80 0 1 1-40-128z"/>${star(90, 170, 24)}${star(150, 240, 14)}${lineBat(250, 160, .9)}${lineBat(80, 300, .8)}
+    <path ${K} d="M300 230c-110 0-160 90-160 200v220l40-30 40 30 40-30 40 30 40-30 40 30 40-30 40 30V430c0-110-50-200-160-200z"/>
+    <ellipse ${K} cx="255" cy="380" rx="20" ry="30"/><ellipse ${K} cx="345" cy="380" rx="20" ry="30"/><circle cx="262" cy="370" r="7" fill="#1b1b1b"/><circle cx="352" cy="370" r="7" fill="#1b1b1b"/>
+    <path ${K} d="M260 440c20 24 60 24 80 0"/><ellipse ${K} cx="220" cy="430" rx="18" ry="10"/><ellipse ${K} cx="380" cy="430" rx="18" ry="10"/>
+    <path ${K} d="M430 500c30-10 60 0 70 20"/><path ${K} d="M440 540h110l-14 120h-82z"/><path ${KN} d="M450 540c0-50 90-50 90 0"/>
+    <path ${K} d="M468 590l12 10-12 10zM500 600l14-12v24zM520 620l10 10-12 6z"/>
+    <path ${K} d="M70 640l20-10 20 10-20 10zM120 690l20-10 20 10-20 10z"/><path ${KN} d="M40 740h520"/></svg>` },
+  { id: "halloween-haunted-house", holiday: "halloween", title: "Haunted House", desc: "A spooky house on the hill with bats and a full moon.", svg: `<svg viewBox="0 0 600 760" xmlns="http://www.w3.org/2000/svg">${title("Spooky Night")}
+    <circle ${K} cx="470" cy="190" r="62"/>${lineBat(90, 170)}${lineBat(240, 140, .8)}${lineBat(380, 290, .7)}
+    <path ${K} d="M40 700c100-60 420-60 520 0v40H40z"/>
+    <path ${K} d="M150 650V420h300v230z"/><path ${K} d="M120 430l180-130 180 130z"/><path ${K} d="M380 360V250h60v150"/><path ${K} d="M366 256l44-60 44 60z"/>
+    <path ${K} d="M270 650v-110a30 30 0 0 1 60 0v110z"/><circle cx="318" cy="600" r="5" fill="#1b1b1b"/>
+    <rect ${K} x="180" y="460" width="60" height="60"/><path ${KN} d="M210 460v60M180 490h60"/><rect ${K} x="360" y="460" width="60" height="60"/><path ${KN} d="M390 460v60M360 490h60"/>
+    <circle ${K} cx="300" cy="380" r="28"/><path ${KN} d="M300 352v56M272 380h56"/><rect ${K} x="396" y="290" width="28" height="36"/>
+    
+    <path ${K} d="M60 690v-70a30 30 0 0 1 60 0v70z"/><path ${KN} d="M78 640h24M90 628v30"/><path ${K} d="M500 690v-60a26 26 0 0 1 52 0v60z"/></svg>` },
+  { id: "halloween-cat-cauldron", holiday: "halloween", title: "Kitty and the Cauldron", desc: "A little cat in a witch hat stirring a bubbly potion.", svg: `<svg viewBox="0 0 600 760" xmlns="http://www.w3.org/2000/svg">${title("Happy Halloween!")}
+    ${star(80, 160, 22)}${star(520, 170, 26)}${star(460, 250, 14)}
+    <path ${K} d="M110 660c-60-10-70-80-20-90"/><path ${K} d="M160 470c-50 60-50 180 20 210h120c70-30 70-150 20-210z"/><ellipse ${K} cx="200" cy="676" rx="30" ry="18"/><ellipse ${K} cx="280" cy="676" rx="30" ry="18"/><path ${KN} d="M190 676v10M210 676v10M270 676v10M290 676v10"/><circle ${K} cx="240" cy="400" r="78"/><path ${K} d="M178 360l-14-70 60 34zM302 360l14-70-60 34z"/>
+    <path ${K} d="M150 340l90-200 90 200z"/><path ${K} d="M120 340c40 20 200 20 240 0-10 20-220 20-240 0z"/><path ${KN} d="M176 300c40 10 88 10 128 0"/><rect ${K} x="226" y="296" width="28" height="24" rx="4"/>
+    <ellipse ${K} cx="212" cy="400" rx="14" ry="20"/><ellipse ${K} cx="268" cy="400" rx="14" ry="20"/><circle cx="214" cy="404" r="6" fill="#1b1b1b"/><circle cx="270" cy="404" r="6" fill="#1b1b1b"/>
+    <path ${K} d="M232 432l8 8 8-8z"/><path ${KN} d="M240 440c-6 12-20 12-24 2M240 440c6 12 20 12 24 2M190 430l-50-8M190 442l-48 8M290 430l50-8M290 442l48 8"/>
+    <path ${K} d="M380 560h200c0 80-40 140-100 140s-100-60-100-140z"/><path ${K} d="M370 560c0-18 220-18 220 0 0 18-220 18-220 0z"/>
+    <circle ${K} cx="440" cy="520" r="18"/><circle ${K} cx="490" cy="500" r="24"/><circle ${K} cx="540" cy="526" r="14"/><circle ${K} cx="470" cy="460" r="10"/>
+    <path ${KN} d="M430 560l-26-120"/><ellipse ${K} cx="402" cy="432" rx="10" ry="16"/><path ${KN} d="M400 700l-14 30M560 700l14 30"/><path ${KN} d="M40 740h520"/></svg>` }
+];
+
+/* ---------- Estilos ---------- */
+const st = document.createElement("style");
+st.textContent = `.chip.hol-chip{background:#2A2440;color:#F5E7C5;border-color:#2A2440}
+.hol-tabs{display:flex;gap:8px;flex-wrap:wrap}.hol-tabs span{padding:8px 16px;border-radius:999px;font-weight:600;font-size:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink-3)}
+.hol-tabs span.on{background:#2A2440;color:#F5E7C5;border-color:#2A2440}.hol-tabs span small{font-weight:500;font-size:11px;margin-left:4px;opacity:.8}
+.hol-hero{border-radius:24px;overflow:hidden;aspect-ratio:16/7;margin-top:16px}.hol-hero svg{width:100%;height:100%;display:block}
+.hol-sub{color:var(--ink-2);margin:-6px 0 14px;font-size:15px}
+.color-thumb{background:#fff;display:grid;place-items:center;height:100%}.color-thumb svg{height:96%;width:auto}
+.ws-sheet .ws-grid{display:grid;margin:18px auto 0;border:2px solid #1b1b1b;border-radius:8px;width:min(100%,5.6in);aspect-ratio:1}
+.ws-sheet .ws-grid span{display:grid;place-items:center;font-weight:700;font-size:clamp(12px,3.6vw,22px);border-right:1px solid #ddd;border-bottom:1px solid #ddd}
+.ws-sheet .ws-grid span.k{background:#FBE3DA}
+.ws-bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}.ws-bank span{padding:4px 14px;border:1.5px solid #1b1b1b;border-radius:999px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;font-size:13px}
+.ws-key{break-before:page;margin-top:36px}.ws-key h3{font-size:15px;margin:0 0 6px}.ws-key .ws-grid{width:min(100%,3.6in)}.ws-key .ws-grid span{font-size:13px}
+.color-sheet .art{margin-top:10px}.color-sheet .art svg{width:100%;height:auto;max-height:8.4in;display:block;margin:0 auto}
+@media print{.color-sheet .sheet-name{margin-top:6px}.ws-sheet .ws-grid span.k{background:none}.ws-key .ws-grid span.k{background:#ddd!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}`;
+document.head.appendChild(st);
+
+/* ---------- Tarjetas ---------- */
+const wsThumb = (ws) => scene(NI, `${moon(276, 40)}${bat(40, 30, .8)}<g transform="translate(110 40)">${Array.from({ length: 16 }, (_, i) => `<rect x="${(i % 4) * 26}" y="${Math.floor(i / 4) * 26}" width="24" height="24" rx="5" fill="${[2, 6, 10].includes(i) ? PU : "#FFFDFA"}" opacity="${[2, 6, 10].includes(i) ? 1 : .9}"/><text x="${(i % 4) * 26 + 12}" y="${Math.floor(i / 4) * 26 + 17}" font-family="Poppins,sans-serif" font-size="13" font-weight="800" text-anchor="middle" fill="${NI}">${plain(ws.words.join("")).charAt(i * 2) || "A"}</text>`).join("")}</g>${pumpkin(258, 140, .36)}`, GO, .25);
+const wsGameHref = (ws) => ws.lang === "es" ? "juego-sopa-de-letras.html?topic=halloween&lang=es" : `juego-sopa-de-letras.html?topic=halloween&stage=${ws.stage}`;
+const item = (href, thumb, chips, t, d, ext) => `<article class="item"><div class="thumb" aria-hidden="true">${thumb}</div><div class="item-top">${chips.map((c) => `<span class="chip${c === "Halloween" ? " hol-chip" : ""}">${esc(c)}</span>`).join("")}</div><h3 class="item-title"><a class="stretch" href="${href}"${ext ? "" : ""}>${esc(t)}</a></h3><p class="item-desc">${esc(d)}</p></article>`;
+const wsPlayCard = (ws) => item(wsGameHref(ws), wsThumb(ws), ["Halloween", ws.label, ws.level], `WordSearch: ${ws.lang === "es" ? "Sopa de letras" : ws.label.replace("MOVA ", "")}`, ws.lang === "es" ? "Encuentra las palabras de Halloween en español." : "Find the hidden Halloween words and hear how they sound.");
+const wsPrintCard = (ws) => item(`#/wordsearch/${ws.id}`, wsThumb(ws), ["Halloween", ws.label, "Print"], ws.lang === "es" ? "Sopa de letras para imprimir" : `Printable WordSearch · ${ws.label.replace("MOVA ", "")}`, ws.lang === "es" ? "Hoja tamaño carta con banco de palabras y clave de respuestas." : "Letter-size sheet with a word bank and an answer key.");
+const colorCard = (c) => item(`#/coloring/${c.id}`, `<div class="color-thumb">${c.svg}</div>`, ["Halloween", "Coloring page"], c.title, c.desc);
+
+const HERO = scene(NI, `${moon(268, 46)}${bat(60, 40)}${bat(190, 26, .8)}${bat(110, 70, .6)}<rect y="150" width="320" height="30" fill="${NI2}"/>${pumpkin(160, 120, .62)}${pumpkin(70, 150, .3, false)}${pumpkin(250, 148, .34)}`, GO, .25);
+
+/* ---------- Vitrina de temporada ---------- */
+function viewHolidays() {
+  const en = READINGS.filter((r) => r.holiday === "halloween");
+  const es = (window.MOVA_ES ? window.MOVA_ES.LECTURAS.filter((l) => l.tema === "halloween") : []);
+  const tabs = [["Halloween", "", true], ["Thanksgiving", "Nov", false], ["Christmas", "Dec", false], ["New Year’s Eve", "Dec 31", false]];
+  return {
+    title: "Halloween",
+    html: `
+    <section class="page-head wrap">
+      <p class="kicker">This season</p>
+      <h1>Halloween</h1>
+      <p class="lead">Lecturas, juegos y dibujos para colorear de temporada, para todas las etapas.</p>
+      <div class="hol-tabs" aria-label="Holidays">${tabs.map(([t, d, on]) => `<span class="${on ? "on" : ""}">${t}${on ? "" : `<small>· coming soon</small>`}</span>`).join("")}</div>
+      <div class="hol-hero" aria-hidden="true">${HERO}</div>
+    </section>
+    <section class="wrap section" aria-labelledby="h-read"><div class="section-head"><h2 id="h-read">Read</h2></div>
+      <p class="hol-sub">English readings for Kids, Children and Teens.</p>
+      <div class="grid cols">${en.map((r) => window.readingCard(r)).join("")}</div>
+      ${es.length ? `<p class="hol-sub" style="margin-top:22px">Lecturas en español.</p><div class="grid cols">${es.map((l) => window.MOVA_ES.esCard(l)).join("")}</div>` : ""}
+    </section>
+    <section class="wrap section" aria-labelledby="h-play"><div class="section-head"><h2 id="h-play">Play</h2></div>
+      <div class="grid cols">${WS.map(wsPlayCard).join("")}</div>
+    </section>
+    <section class="wrap section" aria-labelledby="h-print"><div class="section-head"><h2 id="h-print">Print &amp; Color</h2><a href="#/coloring">All coloring pages</a></div>
+      <div class="grid cols">${COLOR.filter((c) => c.holiday === "halloween").map(colorCard).join("")}${WS.map(wsPrintCard).join("")}</div>
+    </section>`
+  };
+}
+
+/* ---------- Coloring Pages (lista) ---------- */
+function viewColoring() {
+  return {
+    title: "Coloring Pages",
+    html: `
+    <section class="page-head wrap">
+      <a class="back" href="#/resources">${ico("back", 18)} Print &amp; Learn</a>
+      <p class="kicker">Print &amp; Color</p>
+      <h1>Coloring Pages</h1>
+      <p class="lead">Dibujos para colorear y sopas de letras de temporada, listos para imprimir en tamaño carta.</p>
+    </section>
+    <section class="wrap section"><div class="section-head"><h2>Halloween</h2></div>
+      <div class="grid cols">${COLOR.map(colorCard).join("")}</div>
+    </section>
+    <section class="wrap section"><div class="section-head"><h2>Holiday WordSearch</h2></div>
+      <div class="grid cols">${WS.map(wsPrintCard).join("")}</div>
+    </section>`
+  };
+}
+const printHead = (back, backLabel, chips, t, d) => `
+    <div class="narrow no-print"><div class="reading-head">
+      <a class="back" href="${back}">${ico("back", 18)} ${backLabel}</a>
+      <div class="chips">${chips.map((c) => `<span class="chip${c === "Halloween" ? " hol-chip" : ""}">${esc(c)}</span>`).join("")}</div>
+      <h1>${esc(t)}</h1><p class="lead">${esc(d)}</p>
+      <div class="actions"><button class="btn btn-primary" type="button" data-action="print">${ico("print", 20)} Print or save as PDF</button></div>
+      <p class="print-hint">Para guardar como PDF, elija “Guardar como PDF” en el destino de impresión. Tamaño carta.</p>
+    </div></div>`;
+function viewColorPage(id) {
+  const c = COLOR.find((x) => x.id === id);
+  if (!c) return viewNotFound("We couldn’t find that coloring page.", "#/coloring", "Coloring Pages");
+  return { title: c.title, html: printHead("#/coloring", "Coloring Pages", ["Halloween", "Coloring page"], c.title, c.desc) + `
+    <div class="wrap sheet-wrap"><div class="sheet color-sheet"><div class="sheet-top"><b>MOVA</b><span>Learning Studio</span></div><div class="sheet-name"><span>Name:</span><span>Date:</span></div><div class="art">${c.svg}</div></div></div>` };
+}
+function viewWsPrint(id) {
+  const ws = WS.find((x) => x.id === id), res = ws && buildWS(ws);
+  if (!res) return viewNotFound("We couldn’t find that word search.", "#/coloring", "Coloring Pages");
+  const N = ws.size, keyCells = new Set(res.placed.flatMap((p) => p.cells));
+  const grid = (key) => `<div class="ws-grid" style="grid-template-columns:repeat(${N},1fr)">${res.g.flat().map((ch, i) => `<span class="${key && keyCells.has(i) ? "k" : ""}">${ch}</span>`).join("")}</div>`;
+  const es = ws.lang === "es";
+  const tTitle = es ? "Sopa de letras de Halloween" : "Halloween WordSearch";
+  return { title: tTitle, html: printHead("#/coloring", "Coloring Pages", ["Halloween", ws.label, ws.level], tTitle, es ? "Encuentra las palabras escondidas. Incluye clave de respuestas en la segunda hoja." : "Find the hidden words. The answer key is on the second page.") + `
+    <div class="wrap sheet-wrap"><div class="sheet ws-sheet"><div class="sheet-top"><b>MOVA</b><span>Learning Studio</span></div><div class="sheet-name"><span>Name:</span><span>Date:</span></div>
+      <h2 class="sheet-title">${tTitle}</h2><p class="sheet-instr">${es ? "Encuentra y encierra las palabras del banco." : `Find and circle the words. They go ${ws.dirs.length > 3 ? "in many directions" : ws.dirs.length === 3 ? "across, down and diagonally" : "across and down"}.`}</p>
+      ${grid(false)}<div class="ws-bank">${res.placed.map((p) => p.w).sort().map((w) => `<span>${esc(w)}</span>`).join("")}</div>
+      <div class="ws-key"><h3>${es ? "Clave de respuestas" : "Answer key"}</h3>${grid(true)}</div>
+      <div class="sheet-foot"><span>MOVA Centro Pedagógico</span><span>${esc(ws.label)} · ${esc(ws.level)}</span></div></div></div>` };
+}
+
+ROUTES.holidays = () => viewHolidays();
+ROUTES.coloring = (p) => (p[0] ? viewColorPage(p[0]) : viewColoring());
+ROUTES.wordsearch = (p) => viewWsPrint(p[0]);
+
+/* Accesos en Print & Learn */
+const prevRes = window.viewResources;
+window.viewResources = function () {
+  const v = prevRes();
+  v.html = v.html.replace(/(<\/section>)/, `$1<section class="wrap" style="margin-top:4px"><a class="es-banner" href="#/coloring"><span class="mark" style="background:#2A2440;color:#F5E7C5">${ico("print", 22)}</span><span><b>Coloring Pages &amp; Holidays</b><small>Dibujos para colorear y sopas de letras de Halloween para imprimir.</small></span>${ico("arrow", 20)}</a></section>`);
+  return v;
+};
+})();
+
 /* ---------- Inicio reorganizado, Para familias y MOVA (lote 13) ---------- */
 (function () {
   const FAM_CSS = ".fam-page{--coral-c:var(--chalk-coral);--coral-s:var(--coral-soft);--sky-c:var(--chalk-sky);--sky-s:var(--sky-soft);--mustard-c:var(--chalk-mustard);--mustard-s:var(--mustard-soft);--mint-c:var(--chalk-mint);--mint-s:var(--mint-soft);margin:0;color:var(--ink);font-family:Poppins,\"Century Gothic\",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;\n\nbackground-image:radial-gradient(circle,#E8846B 3.5px,transparent 4px),radial-gradient(circle,#6FA8D6 3.5px,transparent 4px),radial-gradient(circle,#E0B04A 3.5px,transparent 4px),radial-gradient(circle,#7FB89E 3.5px,transparent 4px);\nbackground-size:120px 120px;background-position:0 0,60px 30px,30px 75px,90px 100px;;margin:0;padding:0}.fam-page .fam-wrap{max-width:720px;margin:0 auto;padding:22px 16px 60px}.fam-page .hero{position:relative;overflow:hidden;background:var(--surface);border-radius:28px;padding:28px 22px 26px;box-shadow:var(--shadow)}.fam-page .hero .blob{position:absolute;border-radius:50%;opacity:.9}.fam-page .eyebrow{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--coral-c);padding:5px 12px;border-radius:999px;margin:0 0 14px;position:relative}.fam-page h1{position:relative;font-size:clamp(30px,8.5vw,44px);line-height:1.08;font-weight:800;color:var(--navy);margin:0 0 14px;letter-spacing:-.02em}.fam-page h1 .c1{color:var(--coral-c)}.fam-page h1 .c2{color:var(--sky-c)}.fam-page h1 .c3{color:var(--mustard-c)}.fam-page h1 .c4{color:var(--mint-c)}.fam-page .lead{position:relative;font-family:Literata,Georgia,serif;font-size:17.5px;color:var(--ink-2);margin:0;max-width:34em}.fam-page .hero-art{position:relative;display:block;width:100%;max-width:340px;margin:20px auto 0}.fam-page h2{font-size:22px;font-weight:800;color:var(--navy);margin:40px 4px 4px;display:flex;align-items:center;gap:10px}.fam-page h2 i{width:12px;height:12px;border-radius:50%;flex:none}.fam-page .sub{color:var(--ink-2);font-size:15px;margin:0 4px 16px}.fam-page .ages{display:grid;gap:12px}.fam-page .age{border-radius:22px;padding:18px 18px 16px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}.fam-page .age .num{width:58px;height:58px;border-radius:18px;background:#fff;display:grid;place-items:center;font-weight:800;font-size:16px;box-shadow:0 6px 14px -8px rgba(0,0,0,.25)}.fam-page .age h3{margin:0;font-size:17px;font-weight:700;color:var(--navy)}.fam-page .age p{margin:2px 0 0;font-size:14.5px;color:var(--ink-2)}.fam-page .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.fam-page .chips span{font-size:12px;font-weight:600;padding:4px 11px;border-radius:999px;background:#fff;color:var(--ink-2)}.fam-page .ideas{display:grid;gap:12px}.fam-page @media(min-width:600px){.ideas{grid-template-columns:1fr 1fr}.fam-page }\n.idea{background:var(--surface);border-radius:22px;overflow:hidden;box-shadow:var(--shadow)}.fam-page .idea .art{height:118px;display:grid;place-items:center}.fam-page .idea .art svg{height:96px;width:auto}.fam-page .idea .tx{padding:14px 16px 16px}.fam-page .idea h4{margin:0 0 3px;font-size:16px;color:var(--navy)}.fam-page .idea p{margin:0;font-size:14px;color:var(--ink-2)}.fam-page .tips{background:var(--surface);border-radius:24px;padding:8px 18px;box-shadow:var(--shadow)}.fam-page .tip{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:14px 0;border-top:2px dotted var(--line)}.fam-page .tip:first-child{border-top:0}.fam-page .tip .ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center}.fam-page .tip .ic svg{width:22px;height:22px}.fam-page .tip h4{margin:0;font-size:15.5px;color:var(--navy)}.fam-page .tip p{margin:0;font-size:14px;color:var(--ink-2)}.fam-page .close{position:relative;overflow:hidden;margin-top:36px;background:var(--navy);color:#fff;border-radius:26px;padding:26px 22px}.fam-page .close p{position:relative;margin:0;font-family:Literata,Georgia,serif;font-size:19px;line-height:1.5}.fam-page .close small{position:relative;display:block;margin-top:14px;font-size:13px;color:#C9D6E6}.fam-page .close a{color:#fff}.fam-page .close .d{position:absolute;border-radius:50%}";
