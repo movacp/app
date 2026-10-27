@@ -4281,44 +4281,15 @@ const KN = 'fill="none" stroke="#1b1b1b" stroke-width="6" stroke-linecap="round"
 const star = (x, y, r) => `<path ${K} stroke-width="4" d="M${x} ${y - r}l${r * .29} ${r * .6} ${r * .66} ${r * .1}-${r * .48} ${r * .46} ${r * .12} ${r * .66}-${r * .59}-${r * .31}-${r * .59} ${r * .31} ${r * .12}-${r * .66}-${r * .48}-${r * .46} ${r * .66}-${r * .1}z"/>`;
 const title = (t, y = 92) => `<text x="300" y="${y}" text-anchor="middle" font-family="Poppins, 'Century Gothic', sans-serif" font-size="50" font-weight="800" fill="#fff" stroke="#1b1b1b" stroke-width="3" letter-spacing="1">${t}</text>`;
 const lineBat = (x, y, s = 1) => `<path transform="translate(${x} ${y}) scale(${s})" ${K} stroke-width="${4 / s}" d="M0 0c10-14 26-14 34-2 4-8 10-12 16-12 6 0 12 4 16 12 8-12 24-12 34 2-14-2-24 6-30 18-6-6-12-8-20-8s-14 2-20 8C24 6 14-2 0 0z"/>`;
+const cimg = (file, alt) => `<img src="${file}" alt="${alt}" loading="lazy" decoding="async">`;
 const COLOR = [
-  { id: "halloween-pumpkin-patch", holiday: "halloween", title: "Pumpkin Patch", desc: "A smiling jack-o’-lantern with its pumpkin friends.", svg: `<svg viewBox="0 0 600 760" xmlns="http://www.w3.org/2000/svg">${title("Happy Halloween!")}
-    ${star(70, 170, 26)}${star(530, 160, 22)}${star(480, 240, 14)}
-    <path ${KN} d="M300 250c0-40 20-66 54-74"/><path ${K} d="M300 230c-30 8-60 6-80-14 26-14 56-12 80 14z"/>
-    <path ${K} d="M300 250c-150-10-220 80-220 190s90 190 220 190 220-80 220-190-70-200-220-190z"/>
-    <path ${KN} d="M190 268c-70 60-80 260-8 340M410 268c70 60 80 260 8 340M262 256c-14 20-20 50-22 80M338 256c14 20 20 50 22 80M244 560c4 30 10 52 20 66M356 560c-4 30-10 52-20 66"/>
-    <path ${K} d="M200 380l60 30-60 26zM400 380l-60 30 60 26z"/><path ${K} d="M285 450l15-26 15 26z"/>
-    <path ${K} d="M175 500c70 70 180 70 250 0l-30 12-18-22-20 28-26-24-26 24-26-24-20 28-18-22z"/>
-    <path ${K} d="M110 700c-40 0-60-26-60-56s24-56 60-56 60 24 60 56-20 56-60 56z"/><path ${KN} d="M110 590c0-16 6-26 18-30M110 590c-12 30-12 80 0 110M110 590c12 30 12 80 0 110"/>
-    <path ${K} d="M495 710c-36 0-56-22-56-50s22-50 56-50 56 22 56 50-20 50-56 50z"/><path ${KN} d="M495 610c0-14 6-24 16-28M495 610c-10 28-10 72 0 100M495 610c10 28 10 72 0 100"/>
-    <path ${KN} d="M40 740h520"/></svg>` },
-  { id: "halloween-friendly-ghost", holiday: "halloween", title: "Friendly Ghost", desc: "A happy ghost with a candy bucket under the moon.", svg: `<svg viewBox="0 0 600 760" xmlns="http://www.w3.org/2000/svg">${title("Trick or Treat!")}
-    <path ${K} d="M500 140a70 70 0 1 0 40 128 80 80 0 1 1-40-128z"/>${star(90, 170, 24)}${star(150, 240, 14)}${lineBat(250, 160, .9)}${lineBat(80, 300, .8)}
-    <path ${K} d="M300 230c-110 0-160 90-160 200v220l40-30 40 30 40-30 40 30 40-30 40 30 40-30 40 30V430c0-110-50-200-160-200z"/>
-    <ellipse ${K} cx="255" cy="380" rx="20" ry="30"/><ellipse ${K} cx="345" cy="380" rx="20" ry="30"/><circle cx="262" cy="370" r="7" fill="#1b1b1b"/><circle cx="352" cy="370" r="7" fill="#1b1b1b"/>
-    <path ${K} d="M260 440c20 24 60 24 80 0"/><ellipse ${K} cx="220" cy="430" rx="18" ry="10"/><ellipse ${K} cx="380" cy="430" rx="18" ry="10"/>
-    <path ${K} d="M430 500c30-10 60 0 70 20"/><path ${K} d="M440 540h110l-14 120h-82z"/><path ${KN} d="M450 540c0-50 90-50 90 0"/>
-    <path ${K} d="M468 590l12 10-12 10zM500 600l14-12v24zM520 620l10 10-12 6z"/>
-    <path ${K} d="M70 640l20-10 20 10-20 10zM120 690l20-10 20 10-20 10z"/><path ${KN} d="M40 740h520"/></svg>` },
-  { id: "halloween-haunted-house", holiday: "halloween", title: "Haunted House", desc: "A spooky house on the hill with bats and a full moon.", svg: `<svg viewBox="0 0 600 760" xmlns="http://www.w3.org/2000/svg">${title("Spooky Night")}
-    <circle ${K} cx="470" cy="190" r="62"/>${lineBat(90, 170)}${lineBat(240, 140, .8)}${lineBat(380, 290, .7)}
-    <path ${K} d="M40 700c100-60 420-60 520 0v40H40z"/>
-    <path ${K} d="M150 650V420h300v230z"/><path ${K} d="M120 430l180-130 180 130z"/><path ${K} d="M380 360V250h60v150"/><path ${K} d="M366 256l44-60 44 60z"/>
-    <path ${K} d="M270 650v-110a30 30 0 0 1 60 0v110z"/><circle cx="318" cy="600" r="5" fill="#1b1b1b"/>
-    <rect ${K} x="180" y="460" width="60" height="60"/><path ${KN} d="M210 460v60M180 490h60"/><rect ${K} x="360" y="460" width="60" height="60"/><path ${KN} d="M390 460v60M360 490h60"/>
-    <circle ${K} cx="300" cy="380" r="28"/><path ${KN} d="M300 352v56M272 380h56"/><rect ${K} x="396" y="290" width="28" height="36"/>
-    
-    <path ${K} d="M60 690v-70a30 30 0 0 1 60 0v70z"/><path ${KN} d="M78 640h24M90 628v30"/><path ${K} d="M500 690v-60a26 26 0 0 1 52 0v60z"/></svg>` },
-  { id: "halloween-cat-cauldron", holiday: "halloween", title: "Kitty and the Cauldron", desc: "A little cat in a witch hat stirring a bubbly potion.", svg: `<svg viewBox="0 0 600 760" xmlns="http://www.w3.org/2000/svg">${title("Happy Halloween!")}
-    ${star(80, 160, 22)}${star(520, 170, 26)}${star(460, 250, 14)}
-    <path ${K} d="M110 660c-60-10-70-80-20-90"/><path ${K} d="M160 470c-50 60-50 180 20 210h120c70-30 70-150 20-210z"/><ellipse ${K} cx="200" cy="676" rx="30" ry="18"/><ellipse ${K} cx="280" cy="676" rx="30" ry="18"/><path ${KN} d="M190 676v10M210 676v10M270 676v10M290 676v10"/><circle ${K} cx="240" cy="400" r="78"/><path ${K} d="M178 360l-14-70 60 34zM302 360l14-70-60 34z"/>
-    <path ${K} d="M150 340l90-200 90 200z"/><path ${K} d="M120 340c40 20 200 20 240 0-10 20-220 20-240 0z"/><path ${KN} d="M176 300c40 10 88 10 128 0"/><rect ${K} x="226" y="296" width="28" height="24" rx="4"/>
-    <ellipse ${K} cx="212" cy="400" rx="14" ry="20"/><ellipse ${K} cx="268" cy="400" rx="14" ry="20"/><circle cx="214" cy="404" r="6" fill="#1b1b1b"/><circle cx="270" cy="404" r="6" fill="#1b1b1b"/>
-    <path ${K} d="M232 432l8 8 8-8z"/><path ${KN} d="M240 440c-6 12-20 12-24 2M240 440c6 12 20 12 24 2M190 430l-50-8M190 442l-48 8M290 430l50-8M290 442l48 8"/>
-    <path ${K} d="M380 560h200c0 80-40 140-100 140s-100-60-100-140z"/><path ${K} d="M370 560c0-18 220-18 220 0 0 18-220 18-220 0z"/>
-    <circle ${K} cx="440" cy="520" r="18"/><circle ${K} cx="490" cy="500" r="24"/><circle ${K} cx="540" cy="526" r="14"/><circle ${K} cx="470" cy="460" r="10"/>
-    <path ${KN} d="M430 560l-26-120"/><ellipse ${K} cx="402" cy="432" rx="10" ry="16"/><path ${KN} d="M400 700l-14 30M560 700l14 30"/><path ${KN} d="M40 740h520"/></svg>` }
+  { id: "halloween-little-witch", holiday: "halloween", title: "Little Witch", desc: "A sweet little witch with her pumpkins and a black cat.", file: "color-halloween-little-witch.png" },
+  { id: "halloween-friendly-ghost", holiday: "halloween", title: "Friendly Ghost", desc: "A happy ghost with a bucket full of candy.", file: "color-halloween-friendly-ghost.png" },
+  { id: "halloween-pumpkin-patch", holiday: "halloween", title: "Pumpkin Patch", desc: "A smiling jack-o’-lantern with its pumpkin friends.", file: "color-halloween-pumpkin-patch.png" },
+  { id: "halloween-kitty-potion", holiday: "halloween", title: "Kitty’s Potion", desc: "A little cat in a witch hat stirring a bubbly potion.", file: "color-halloween-kitty-potion.png" },
+  { id: "halloween-haunted-house", holiday: "halloween", title: "Haunted House", desc: "A cozy haunted house with smiling bats and a happy moon.", file: "color-halloween-haunted-house.png" }
 ];
+COLOR.forEach((c) => { c.svg = cimg(c.file, c.title + " coloring page"); });
 
 /* ---------- Estilos ---------- */
 const st = document.createElement("style");
@@ -4327,13 +4298,13 @@ st.textContent = `.chip.hol-chip{background:#2A2440;color:#F5E7C5;border-color:#
 .hol-tabs span.on{background:#2A2440;color:#F5E7C5;border-color:#2A2440}.hol-tabs span small{font-weight:500;font-size:11px;margin-left:4px;opacity:.8}
 .hol-hero{border-radius:24px;overflow:hidden;aspect-ratio:16/7;margin-top:16px}.hol-hero svg{width:100%;height:100%;display:block}
 .hol-sub{color:var(--ink-2);margin:-6px 0 14px;font-size:15px}
-.color-thumb{background:#fff;display:grid;place-items:center;height:100%}.color-thumb svg{height:96%;width:auto}
+.color-thumb{background:#fff;display:block;aspect-ratio:16/9;overflow:hidden}.color-thumb img{width:100%!important;height:100%!important;object-fit:contain!important;padding:6px;display:block}
 .ws-sheet .ws-grid{display:grid;margin:18px auto 0;border:2px solid #1b1b1b;border-radius:8px;width:min(100%,5.6in);aspect-ratio:1}
 .ws-sheet .ws-grid span{display:grid;place-items:center;font-weight:700;font-size:clamp(12px,3.6vw,22px);border-right:1px solid #ddd;border-bottom:1px solid #ddd}
 .ws-sheet .ws-grid span.k{background:#FBE3DA}
 .ws-bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}.ws-bank span{padding:4px 14px;border:1.5px solid #1b1b1b;border-radius:999px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;font-size:13px}
 .ws-key{break-before:page;margin-top:36px}.ws-key h3{font-size:15px;margin:0 0 6px}.ws-key .ws-grid{width:min(100%,3.6in)}.ws-key .ws-grid span{font-size:13px}
-.color-sheet .art{margin-top:10px}.color-sheet .art svg{width:100%;height:auto;max-height:8.4in;display:block;margin:0 auto}
+.color-sheet .art{margin-top:10px}.color-sheet .art img{width:100%;height:auto;max-height:8.6in;object-fit:contain;display:block;margin:0 auto}
 @media print{.color-sheet .sheet-name{margin-top:6px}.ws-sheet .ws-grid span.k{background:none}.ws-key .ws-grid span.k{background:#ddd!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}`;
 document.head.appendChild(st);
 
