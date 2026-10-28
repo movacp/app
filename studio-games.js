@@ -596,5 +596,228 @@ if (ul && ROUTES.learn) ul.innerHTML = [["", "home", "Home"], ["library", "book"
   new MutationObserver(patch).observe(document.body, { childList: true, subtree: true });
 })();
 
+
+/* =====================================================================
+   PORTADAS ILUSTRADAS DE LAS LECTURAS (v35)
+   Cada portada se dibuja según el título, la descripción y el tema de
+   la lectura: un escenario + el objeto o animal principal de la historia.
+   Las lecturas que ya tienen imagen propia (p. ej. Halloween) se respetan.
+   ===================================================================== */
+(function () {
+  const N = "#1E3A5F";
+  const S = `stroke="${N}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"`;
+  const S2 = `stroke="${N}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"`;
+  const C = { coral: "#E8846B", mustard: "#E0B04A", sky: "#6FA8D6", mint: "#7FB89E", lilac: "#B59AE0", pink: "#F2A08A", cream: "#FFFDFA", gold: "#F2C94C" };
+  const SKIN = ["#F1C7A5", "#E2A87E", "#C98B5E", "#9A6440"];
+  const HAIR = ["#3B2A20", "#7A4A2E", "#1E1A18", "#B7743E", "#4A3426"];
+  const SHIRT = [C.coral, C.sky, C.mint, C.mustard, C.lilac, C.pink];
+  const hash = (s) => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
+  const g = (x, y, s, inner) => `<g transform="translate(${x} ${y}) scale(${s})">${inner}</g>`;
+  const cloud = (x, y, s) => g(x, y, s, `<ellipse cx="0" cy="0" rx="22" ry="9" fill="#fff"/><ellipse cx="12" cy="-6" rx="13" ry="9" fill="#fff"/><ellipse cx="-8" cy="-4" rx="10" ry="7" fill="#fff"/>`);
+
+  /* ---------- Escenarios ---------- */
+  const SCENES = {
+    park: (h) => `<rect width="320" height="180" fill="#CFE6F5"/><circle cx="${270 - h % 40}" cy="34" r="16" fill="#F6D27A"/>${cloud(60 + h % 50, 32, 1)}${cloud(200, 22, .7)}<path d="M0 132 Q70 98 150 124 T320 112 V180 H0Z" fill="#B7DCC4"/><rect y="140" width="320" height="40" fill="#9FCBB5"/><path d="M0 150h320" stroke="#8CBDA6" stroke-width="5"/>`,
+    city: (h, mty) => `<rect width="320" height="180" fill="#D6E6F5"/>${cloud(70, 28, .9)}${mty ? `<path d="M0 118 L60 70 L95 92 L120 58 L150 96 L190 76 L240 110 L320 90 V140 H0Z" fill="#A8BFA9"/>` : ""}<g fill="#A9C6E2">${[[8, 82, 34], [46, 64, 30], [80, 92, 26], [222, 70, 32], [258, 86, 28], [290, 60, 30]].map(([x, y, w]) => `<rect x="${x}" y="${y}" width="${w}" height="${140 - y}" rx="2"/>`).join("")}</g><g fill="#FFFDFA" opacity=".8">${[[14, 92], [24, 92], [52, 74], [62, 74], [52, 90], [230, 80], [240, 80], [296, 70], [306, 70], [296, 86]].map(([x, y]) => `<rect x="${x}" y="${y}" width="6" height="7" rx="1"/>`).join("")}</g><rect y="140" width="320" height="40" fill="#C9D3DF"/><path d="M0 160h320" stroke="#FFFDFA" stroke-width="3" stroke-dasharray="14 12"/>`,
+    home: (h) => `<rect width="320" height="180" fill="#F4E6D3"/><rect x="${22 + h % 30}" y="26" width="62" height="56" rx="5" fill="#BFDAF1" ${S}/><path d="M${53 + h % 30} 26v56M${22 + h % 30} 54h62" ${S}/><rect x="250" y="36" width="44" height="34" rx="3" fill="${C.mustard}" ${S2}/><rect x="256" y="42" width="32" height="22" fill="#FFFDFA" opacity=".7"/><rect y="140" width="320" height="40" fill="#D9B48A"/><rect y="140" width="320" height="4" fill="#C79E72"/>`,
+    school: () => `<rect width="320" height="180" fill="#E3EEDF"/><rect x="34" y="20" width="160" height="78" rx="5" fill="#2F5D50" stroke="#8C6A4A" stroke-width="5"/><path d="M48 40q20-8 40 0M48 56h70M48 72q30 6 60-2" stroke="#FFFDFA" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".85"/><path d="M140 46l10 10M150 46l-10 10" stroke="${C.gold}" stroke-width="2.4" stroke-linecap="round"/><circle cx="270" cy="38" r="15" fill="#FFFDFA" ${S2}/><path d="M270 38v-8M270 38l6 4" ${S2}/><rect y="140" width="320" height="40" fill="#D9B48A"/><rect y="140" width="320" height="4" fill="#C79E72"/>`,
+    beach: (h) => `<rect width="320" height="180" fill="#CDE7F5"/><circle cx="${250 + h % 40}" cy="34" r="17" fill="#F6D27A"/>${cloud(70, 30, .9)}<rect y="96" width="320" height="40" fill="#6FC3D6"/><path d="M0 104q20-6 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0" stroke="#FFFDFA" stroke-width="2.5" fill="none" opacity=".7"/><path d="M0 132 Q160 118 320 134 V180 H0Z" fill="#F2D9A6"/>`,
+    space: (h) => `<rect width="320" height="180" fill="#1E2A55"/>${Array.from({ length: 26 }, (_, i) => `<circle cx="${(h >>> (i % 13)) % 320 * 0 + (i * 53 + h) % 320}" cy="${(i * 37 + (h % 97)) % 170}" r="${i % 3 ? 1.2 : 2}" fill="#FFFDFA" opacity="${i % 2 ? .9 : .5}"/>`).join("")}<circle cx="48" cy="140" r="54" fill="#B59AE0" opacity=".55"/><circle cx="280" cy="36" r="14" fill="${C.mustard}"/><ellipse cx="280" cy="36" rx="24" ry="6" fill="none" stroke="${C.pink}" stroke-width="2.5"/>`,
+    forest: (h) => `<rect width="320" height="180" fill="#DDEFE4"/><circle cx="60" cy="34" r="15" fill="#F6D27A"/><path d="M0 120 L60 70 L110 110 L170 60 L240 110 L290 80 L320 100 V180 H0Z" fill="#A9CDB5"/>${[[20, 1], [56, .8], [262, 1], [298, .85]].map(([x, s]) => g(x, 140, s, `<rect x="-3" y="-14" width="6" height="14" fill="#8C6A4A"/><path d="M0 -60 L18 -14 H-18Z" fill="#5E9E82" ${S2}/>`)).join("")}<rect y="140" width="320" height="40" fill="#A7BE8A"/>`,
+    mountain: (h) => `<rect width="320" height="180" fill="#FBE2C3"/><circle cx="262" cy="36" r="17" fill="#F6C65B"/><path d="M0 130 L50 82 L96 110 L150 52 L204 104 L250 70 L320 116 V180 H0Z" fill="#D7BFA0" ${S2}/><path d="M150 52 L136 74 L150 70 L162 78Z" fill="#FFFDFA" opacity=".8"/><rect y="140" width="320" height="40" fill="#E3C79A"/>`,
+    kitchen: () => `<rect width="320" height="180" fill="#FFF1DE"/><g stroke="#F2DDC0" stroke-width="2">${Array.from({ length: 9 }, (_, i) => `<path d="M${i * 40} 0v120"/>`).join("")}${Array.from({ length: 3 }, (_, i) => `<path d="M0 ${i * 40}h320"/>`).join("")}</g><rect y="120" width="320" height="60" fill="#E8B48F"/><rect y="120" width="320" height="8" fill="#C9654D"/>`,
+    night: (h) => `<rect width="320" height="180" fill="#2B3A6B"/>${Array.from({ length: 18 }, (_, i) => `<circle cx="${(i * 61 + h) % 320}" cy="${(i * 29 + h % 50) % 110}" r="${i % 3 ? 1.2 : 2}" fill="#FFFDFA" opacity=".85"/>`).join("")}<circle cx="262" cy="40" r="20" fill="#F6E3A8"/><circle cx="272" cy="34" r="17" fill="#2B3A6B"/><path d="M0 140 Q160 120 320 140 V180 H0Z" fill="#3E5A7C"/>`,
+    lab: () => `<rect width="320" height="180" fill="#E4EAF7"/><g stroke="#C6D2EA" stroke-width="3" fill="none"><path d="M0 40h60l20 20h60"/><path d="M320 60h-50l-20-20h-40"/><circle cx="80" cy="60" r="4" fill="#C6D2EA"/><circle cx="250" cy="40" r="4" fill="#C6D2EA"/></g><rect y="132" width="320" height="48" fill="#C9D3E8"/><rect y="132" width="320" height="5" fill="#AEBCDB"/>`,
+    snow: (h) => `<rect width="320" height="180" fill="#DCE8F2"/>${Array.from({ length: 22 }, (_, i) => `<circle cx="${(i * 47 + h) % 320}" cy="${(i * 31) % 130}" r="2" fill="#FFFFFF"/>`).join("")}<path d="M0 126 Q90 104 180 124 T320 118 V180 H0Z" fill="#FFFFFF"/><rect y="146" width="320" height="34" fill="#F1F5FA"/>`,
+    halloween: (h) => `<rect width="320" height="180" fill="#3A2E55"/><circle cx="262" cy="42" r="22" fill="#F6C65B"/>${Array.from({ length: 12 }, (_, i) => `<circle cx="${(i * 67 + h) % 320}" cy="${(i * 23) % 100}" r="1.4" fill="#FFFDFA" opacity=".8"/>`).join("")}<path d="M0 140 Q160 118 320 140 V180 H0Z" fill="#5A4675"/>`,
+    sky: (h) => `<rect width="320" height="180" fill="#CDE4F6"/>${cloud(50, 40, 1.1)}${cloud(250, 60, .9)}${cloud(150, 140, 1.3)}<circle cx="276" cy="28" r="14" fill="#F6D27A"/>`,
+    soft: (h) => `<rect width="320" height="180" fill="#F7EFE3"/>${Array.from({ length: 14 }, (_, i) => `<circle cx="${(i % 7) * 50 + (i > 6 ? 25 : 0) + 12}" cy="${i > 6 ? 130 : 46}" r="7" fill="${[C.coral, C.sky, C.mustard, C.mint][i % 4]}" opacity=".35"/>`).join("")}`
+  };
+
+  /* ---------- Personaje ---------- */
+  const kid = (x, y, h, s = 1) => {
+    const skin = SKIN[h % 4], hair = HAIR[(h >>> 3) % 5], shirt = SHIRT[(h >>> 5) % 6], pants = [N, "#5C6F8C", "#8C6A4A"][(h >>> 7) % 3];
+    const long = (h >>> 9) % 2;
+    return g(x, y, s, `<path d="M-8 30 L-11 54 M8 30 L11 54" stroke="${pants}" stroke-width="9" stroke-linecap="round"/><path d="M-14 56h8M8 56h8" stroke="${N}" stroke-width="5" stroke-linecap="round"/><path d="M-16 8 Q-28 18 -24 30 M16 8 Q30 -2 30 -14" stroke="${skin}" stroke-width="6" stroke-linecap="round" fill="none"/><rect x="-16" y="0" width="32" height="34" rx="11" fill="${shirt}" ${S2}/>${long ? `<path d="M-16 -18 Q-20 6 -10 8 H10 Q20 6 16 -18Z" fill="${hair}"/>` : ""}<circle cx="0" cy="-16" r="15" fill="${skin}" ${S2}/><path d="M-15 -18 Q-14 -34 0 -33 Q15 -33 15 -18 Q8 -26 -4 -24 Q-10 -24 -15 -18Z" fill="${hair}"/><circle cx="-5" cy="-14" r="1.8" fill="${N}"/><circle cx="5" cy="-14" r="1.8" fill="${N}"/><path d="M-4 -8 Q0 -5 4 -8" stroke="${N}" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="-9" cy="-10" r="2.4" fill="${C.pink}" opacity=".7"/><circle cx="9" cy="-10" r="2.4" fill="${C.pink}" opacity=".7"/>`);
+  };
+
+  /* ---------- Objetos y animales ---------- */
+  const M = {
+    cat: () => `<path d="M24 22 Q44 10 38 -8" stroke="#E0A060" stroke-width="7" fill="none" stroke-linecap="round"/><ellipse cx="6" cy="18" rx="24" ry="16" fill="#E0A060" ${S}/><path d="M-26 -14 L-24 -32 L-12 -22Z M2 -22 L8 -34 L12 -16Z" fill="#E0A060" ${S}/><circle cx="-10" cy="-8" r="18" fill="#E0A060" ${S}/><circle cx="-16" cy="-10" r="2.2" fill="${N}"/><circle cx="-4" cy="-10" r="2.2" fill="${N}"/><path d="M-12 -3 l2 2 2 -2" ${S2} fill="none"/><path d="M-30 -4h-10M-30 0h-9M10 -4h10M10 0h9" stroke="${N}" stroke-width="1.2"/>`,
+    dog: () => `<path d="M30 6 Q42 -4 38 -14" stroke="#B7743E" stroke-width="6" fill="none" stroke-linecap="round"/><ellipse cx="8" cy="16" rx="26" ry="15" fill="#C98B4E" ${S}/><path d="M-10 26v14M24 26v14" stroke="#C98B4E" stroke-width="8" stroke-linecap="round"/><circle cx="-14" cy="-8" r="17" fill="#C98B4E" ${S}/><path d="M-28 -16 Q-36 4 -26 8 Q-22 -6 -22 -16Z" fill="#7A4A2E" ${S2}/><ellipse cx="-26" cy="-2" rx="9" ry="7" fill="#E6C29A" ${S2}/><circle cx="-31" cy="-4" r="3" fill="${N}"/><circle cx="-12" cy="-12" r="2.2" fill="${N}"/><path d="M-4 0 q6 6 0 10" stroke="${C.coral}" stroke-width="4" fill="none" stroke-linecap="round"/>`,
+    bird: () => `<path d="M-40 30 Q0 22 40 30" stroke="#8C6A4A" stroke-width="5" fill="none" stroke-linecap="round"/><ellipse cx="0" cy="6" rx="20" ry="18" fill="${C.sky}" ${S}/><path d="M-4 4 Q8 -2 16 12 Q2 16 -4 4Z" fill="#4E86B8" ${S2}/><circle cx="-8" cy="-2" r="2.4" fill="${N}"/><path d="M-20 0 l-10 4 10 3Z" fill="${C.mustard}" ${S2}/><path d="M-4 24v6M4 24v6" ${S2}/>`,
+    owl: () => `<path d="M-40 34 Q0 26 40 34" stroke="#8C6A4A" stroke-width="5" fill="none"/><ellipse cx="0" cy="4" rx="24" ry="28" fill="#B7743E" ${S}/><path d="M-20 -18 L-18 -32 L-8 -22Z M20 -18 L18 -32 L8 -22Z" fill="#B7743E" ${S2}/><circle cx="-9" cy="-6" r="9" fill="#FFFDFA" ${S2}/><circle cx="9" cy="-6" r="9" fill="#FFFDFA" ${S2}/><circle cx="-8" cy="-5" r="3.5" fill="${N}"/><circle cx="8" cy="-5" r="3.5" fill="${N}"/><path d="M-3 4 l3 5 3 -5Z" fill="${C.mustard}"/><ellipse cx="0" cy="18" rx="13" ry="10" fill="#E6C29A"/>`,
+    fish: () => `<path d="M24 0 L42 -14 L42 14Z" fill="${C.coral}" ${S}/><ellipse cx="0" cy="0" rx="28" ry="18" fill="${C.coral}" ${S}/><path d="M-4 -16 Q4 0 -4 16" stroke="${N}" stroke-width="1.8" fill="none"/><circle cx="-14" cy="-4" r="3" fill="${N}"/><circle cx="-36" cy="-22" r="4" fill="none" stroke="#FFFDFA" stroke-width="2"/><circle cx="-44" cy="-34" r="3" fill="none" stroke="#FFFDFA" stroke-width="2"/>`,
+    whale: () => `<path d="M-46 4 Q-40 -26 0 -24 Q36 -22 40 4 Q40 22 0 22 Q-40 22 -46 4Z" fill="${C.sky}" ${S}/><path d="M38 -2 L58 -20 L52 0 L58 18Z" fill="${C.sky}" ${S}/><path d="M-40 10 Q0 22 36 8" stroke="#FFFDFA" stroke-width="3" fill="none" opacity=".7"/><circle cx="-28" cy="-6" r="2.8" fill="${N}"/><path d="M-10 -26 Q-14 -40 -22 -42 M-10 -26 Q-6 -40 2 -42" stroke="#FFFDFA" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+    bee: () => `<ellipse cx="-6" cy="-18" rx="12" ry="16" fill="#FFFDFA" opacity=".9" ${S2}/><ellipse cx="10" cy="-16" rx="10" ry="14" fill="#FFFDFA" opacity=".9" ${S2}/><ellipse cx="0" cy="4" rx="26" ry="18" fill="${C.gold}" ${S}/><path d="M-8 -12v32M6 -13v34" stroke="${N}" stroke-width="6"/><circle cx="-18" cy="0" r="2.6" fill="${N}"/><path d="M26 4l8 0" ${S}/>${g(48, 30, .6, `<circle r="10" fill="${C.pink}"/><circle r="4" fill="${C.gold}"/>`)}`,
+    butterfly: () => `<path d="M0 0 Q-34 -40 -40 -6 Q-36 12 0 4Z" fill="${C.lilac}" ${S}/><path d="M0 0 Q34 -40 40 -6 Q36 12 0 4Z" fill="${C.coral}" ${S}/><path d="M0 4 Q-26 30 -18 36 Q-6 32 0 8Z" fill="${C.mustard}" ${S2}/><path d="M0 4 Q26 30 18 36 Q6 32 0 8Z" fill="${C.mint}" ${S2}/><path d="M0 -12v34" stroke="${N}" stroke-width="5" stroke-linecap="round"/><path d="M0 -12 q-6 -12 -12 -14 M0 -12 q6 -12 12 -14" ${S2} fill="none"/>`,
+    turtle: () => `<ellipse cx="-30" cy="6" rx="10" ry="8" fill="${C.mint}" ${S}/><path d="M-26 22v8M20 22v8" stroke="${C.mint}" stroke-width="8" stroke-linecap="round"/><path d="M-26 18 Q-24 -24 2 -24 Q30 -24 32 18Z" fill="#5E9E82" ${S}/><path d="M-10 -14 L2 0 L18 -14M2 0v18" ${S2} fill="none"/><circle cx="-34" cy="4" r="2" fill="${N}"/>`,
+    rabbit: () => `<path d="M-14 -24 Q-22 -60 -8 -58 Q0 -40 -6 -22Z M2 -24 Q4 -62 16 -56 Q16 -38 8 -22Z" fill="#F4F0EA" ${S}/><ellipse cx="4" cy="18" rx="24" ry="20" fill="#F4F0EA" ${S}/><circle cx="-2" cy="-12" r="16" fill="#F4F0EA" ${S}/><circle cx="-8" cy="-14" r="2.2" fill="${N}"/><circle cx="4" cy="-14" r="2.2" fill="${N}"/><circle cx="-2" cy="-7" r="2.4" fill="${C.pink}"/><circle cx="28" cy="22" r="6" fill="#FFFFFF" ${S2}/>`,
+    elephant: () => `<ellipse cx="8" cy="10" rx="34" ry="24" fill="#A8B4C8" ${S}/><path d="M-14 26v14M24 26v14" stroke="#A8B4C8" stroke-width="11" stroke-linecap="round"/><circle cx="-22" cy="-8" r="18" fill="#A8B4C8" ${S}/><path d="M-36 -6 Q-46 14 -38 28" stroke="#A8B4C8" stroke-width="9" fill="none" stroke-linecap="round"/><ellipse cx="-8" cy="-6" rx="11" ry="15" fill="#C6CFDC" ${S2}/><circle cx="-26" cy="-12" r="2.4" fill="${N}"/>`,
+    cow: () => `<ellipse cx="6" cy="10" rx="32" ry="20" fill="#FFFDFA" ${S}/><path d="M-6 0 q10 -8 16 4 q-8 8 -16 -4Z M20 14 q10 -4 12 6 q-8 6 -12 -6Z" fill="${N}"/><path d="M-14 26v12M24 26v12" stroke="#FFFDFA" stroke-width="8" stroke-linecap="round"/><path d="M-14 26v12M24 26v12" ${S2}/><circle cx="-26" cy="-6" r="15" fill="#FFFDFA" ${S}/><ellipse cx="-30" cy="2" rx="10" ry="7" fill="${C.pink}" ${S2}/><circle cx="-22" cy="-12" r="2" fill="${N}"/><path d="M-34 -18l-6 -6M-18 -18l4 -7" ${S}/>`,
+    flower: () => `<path d="M0 40V0" stroke="#5E9E82" stroke-width="5"/><path d="M0 26 Q-18 16 -22 26 Q-10 34 0 26Z" fill="${C.mint}" ${S2}/>${[0, 72, 144, 216, 288].map((a) => `<ellipse cx="0" cy="-14" rx="9" ry="14" fill="${C.pink}" transform="rotate(${a})" ${S2}/>`).join("")}<circle r="9" fill="${C.gold}" ${S2}/>${g(-36, 30, .55, `<path d="M0 20V0" stroke="#5E9E82" stroke-width="5"/>${[0, 90, 180, 270].map((a) => `<ellipse cx="0" cy="-12" rx="8" ry="12" fill="${C.lilac}" transform="rotate(${a})"/>`).join("")}<circle r="7" fill="${C.gold}"/>`)}`,
+    tree: () => `<rect x="-7" y="0" width="14" height="40" rx="3" fill="#8C6A4A" ${S2}/><circle cx="0" cy="-20" r="30" fill="#7FB89E" ${S}/><circle cx="-18" cy="-4" r="18" fill="#6FAA90" ${S2}/><circle cx="18" cy="-6" r="18" fill="#6FAA90" ${S2}/><circle cx="-8" cy="-26" r="4" fill="${C.coral}"/><circle cx="12" cy="-14" r="4" fill="${C.coral}"/>`,
+    sun: () => `${Array.from({ length: 10 }, (_, i) => `<path d="M0 -30 V-42" stroke="${C.mustard}" stroke-width="5" stroke-linecap="round" transform="rotate(${i * 36})"/>`).join("")}<circle r="24" fill="${C.gold}" ${S}/><circle cx="-8" cy="-4" r="2.4" fill="${N}"/><circle cx="8" cy="-4" r="2.4" fill="${N}"/><path d="M-8 6 Q0 13 8 6" ${S2} fill="none"/>`,
+    umbrella: () => `<path d="M-36 -2 Q-34 -38 0 -40 Q34 -38 36 -2 Q27 -10 18 -2 Q9 -10 0 -2 Q-9 -10 -18 -2 Q-27 -10 -36 -2Z" fill="${C.coral}" ${S}/><path d="M0 -40v-6M0 -2v38 q0 8 -8 8 q-7 0 -7 -7" ${S} fill="none"/>${[[-40, -60], [-12, -70], [24, -62], [46, -48], [-50, -30]].map(([x, y]) => `<path d="M${x} ${y} q-4 8 0 12 q4 -4 0 -12z" fill="${C.sky}"/>`).join("")}`,
+    rainbow: () => `${[C.coral, C.mustard, C.mint, C.sky].map((c, i) => `<path d="M${-50 + i * 9} 20 a${50 - i * 9} ${50 - i * 9} 0 0 1 ${100 - i * 18} 0" stroke="${c}" stroke-width="9" fill="none"/>`).join("")}${cloud(-50, 20, .8)}${cloud(50, 20, .8)}`,
+    snowman: () => `<circle cy="22" r="22" fill="#FFFFFF" ${S}/><circle cy="-12" r="16" fill="#FFFFFF" ${S}/><path d="M-14 -24h28M-9 -24v-14h18v14" fill="${N}" ${S2}/><circle cx="-5" cy="-14" r="2" fill="${N}"/><circle cx="5" cy="-14" r="2" fill="${N}"/><path d="M0 -10 l10 3 -10 2Z" fill="${C.coral}"/><path d="M-14 0 Q0 6 14 0 L16 8 L8 6" fill="${C.coral}" ${S2}/><path d="M-20 14 L-38 2M20 14 L38 0" stroke="#8C6A4A" stroke-width="3" stroke-linecap="round"/>`,
+    moon: () => `<path d="M8 -29 A30 30 0 1 0 29 10 A22 22 0 1 1 8 -29Z" fill="#F6E3A8" ${S}/><circle cx="-14" cy="10" r="4" fill="#E8D08A"/><path d="M30 -30l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z" fill="${C.gold}"/>`,
+    rocket: () => `<path d="M0 -50 Q22 -24 18 18 H-18 Q-22 -24 0 -50Z" fill="#FFFDFA" ${S}/><circle cy="-14" r="9" fill="${C.sky}" ${S}/><path d="M-18 4 L-32 26 L-18 20Z M18 4 L32 26 L18 20Z" fill="${C.coral}" ${S}/><path d="M-10 18 Q0 46 10 18Z" fill="${C.gold}" ${S2}/><path d="M-6 18 Q0 34 6 18Z" fill="${C.coral}"/>`,
+    cake: () => `<rect x="-36" y="-2" width="72" height="34" rx="6" fill="${C.pink}" ${S}/><rect x="-28" y="-26" width="56" height="26" rx="5" fill="#FFFDFA" ${S}/><path d="M-36 8 q9 8 18 0 t18 0 t18 0 t18 0" stroke="#FFFDFA" stroke-width="4" fill="none"/>${[-14, 0, 14].map((x) => `<rect x="${x - 2}" y="-40" width="4" height="14" fill="${C.sky}"/><path d="M${x} -48 q4 4 0 8 q-4 -4 0 -8z" fill="${C.gold}"/>`).join("")}<rect x="-44" y="32" width="88" height="6" rx="3" fill="#C9D3DF" ${S2}/>`,
+    gift: () => `<rect x="-30" y="-10" width="60" height="44" rx="4" fill="${C.sky}" ${S}/><rect x="-34" y="-22" width="68" height="14" rx="3" fill="#4E86B8" ${S}/><path d="M0 -22v56" stroke="${C.coral}" stroke-width="8"/><path d="M0 -22 Q-20 -40 -16 -24 Q-12 -20 0 -22 Q12 -20 16 -24 Q20 -40 0 -22Z" fill="${C.coral}" ${S2}/>`,
+    pumpkin: () => `<ellipse cx="-14" cy="6" rx="18" ry="26" fill="#E8846B" ${S}/><ellipse cx="14" cy="6" rx="18" ry="26" fill="#E8846B" ${S}/><ellipse cx="0" cy="6" rx="16" ry="27" fill="#F0955F" ${S}/><path d="M0 -20 q2 -10 8 -12" stroke="#5E9E82" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M-12 0l5 -7 5 7Z M2 0l5 -7 5 7Z" fill="${N}"/><path d="M-12 14 q12 10 24 0 l-4 4 -4 -3 -4 3 -4 -3 -4 3Z" fill="${N}"/>`,
+    skull: () => `<path d="M-26 0 Q-28 -34 0 -36 Q28 -34 26 0 Q24 12 14 14 V24 H-14 V14 Q-24 12 -26 0Z" fill="#FFFDFA" ${S}/><circle cx="-10" cy="-8" r="8" fill="${C.sky}" ${S2}/><circle cx="10" cy="-8" r="8" fill="${C.pink}" ${S2}/><path d="M0 2 l-3 6h6Z" fill="${N}"/><path d="M-8 18v6M0 18v6M8 18v6" ${S2}/>${[[-16, -24, C.mustard], [0, -28, C.coral], [16, -24, C.mint]].map(([x, y, c]) => `<circle cx="${x}" cy="${y}" r="4" fill="${c}"/>`).join("")}${g(-40, 26, .6, `${[0, 60, 120, 180, 240, 300].map((a) => `<circle cx="0" cy="-8" r="7" fill="#F2A33A" transform="rotate(${a})"/>`).join("")}<circle r="6" fill="#E0B04A"/>`)}${g(40, 26, .5, `${[0, 60, 120, 180, 240, 300].map((a) => `<circle cx="0" cy="-8" r="7" fill="#F2A33A" transform="rotate(${a})"/>`).join("")}<circle r="6" fill="#E0B04A"/>`)}`,
+    pizza: () => `<path d="M-34 -20 Q0 -34 34 -20 L0 40Z" fill="#F6D27A" ${S}/><path d="M-34 -20 Q0 -34 34 -20 L30 -12 Q0 -24 -30 -12Z" fill="#D9A15F" ${S2}/>${[[-12, -6], [10, -4], [0, 14]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="5.5" fill="${C.coral}" ${S2}/>`).join("")}<circle cx="-2" cy="2" r="2.5" fill="${C.mint}"/>`,
+    food: () => `<ellipse cx="0" cy="18" rx="44" ry="10" fill="#FFFDFA" ${S}/><path d="M-30 14 Q-30 -22 0 -22 Q30 -22 30 14Z" fill="#F6D27A" ${S}/><path d="M-26 8 Q-20 -6 -10 2 Q0 -10 10 2 Q20 -6 26 8" stroke="${C.mint}" stroke-width="5" fill="none" stroke-linecap="round"/>${[[-14, -6, C.coral], [6, -12, C.coral], [14, 0, "#8C6A4A"]].map(([x, y, c]) => `<circle cx="${x}" cy="${y}" r="4" fill="${c}"/>`).join("")}<path d="M-8 -30 q-4 -8 0 -14 M4 -30 q-4 -8 0 -14" stroke="#C9D3DF" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    apple: () => `<path d="M0 -14 Q-30 -26 -30 4 Q-28 32 0 30 Q28 32 30 4 Q30 -26 0 -14Z" fill="#E86B5B" ${S}/><path d="M0 -14 Q2 -26 8 -32" ${S} fill="none"/><path d="M4 -24 Q18 -34 22 -22 Q10 -16 4 -24Z" fill="${C.mint}" ${S2}/><ellipse cx="-14" cy="-2" rx="4" ry="7" fill="#FFFDFA" opacity=".55"/>${g(40, 18, .55, `<path d="M0 -14 Q-30 -26 -30 4 Q-28 32 0 30 Q28 32 30 4 Q30 -26 0 -14Z" fill="#A8D06E" ${S}/>`)}`,
+    icecream: () => `<path d="M-16 4 L0 44 L16 4Z" fill="#E6B87A" ${S}/><path d="M-10 12l14 14M2 8l10 10M-6 4l14 14" stroke="#C99A5A" stroke-width="2"/><circle cx="-8" cy="-6" r="13" fill="${C.pink}" ${S}/><circle cx="8" cy="-6" r="13" fill="#F6E3A8" ${S}/><circle cx="0" cy="-20" r="13" fill="${C.mint}" ${S}/><circle cx="0" cy="-35" r="4" fill="${C.coral}"/>`,
+    ball: () => `<circle r="26" fill="#FFFDFA" ${S}/><path d="M0 -9 L9 -3 L6 8 H-6 L-9 -3Z" fill="${N}"/><path d="M0 -9V-26M9 -3L24 -9M6 8L15 21M-6 8L-15 21M-9 -3L-24 -9" ${S2}/><path d="M-30 30h60" stroke="#8CBDA6" stroke-width="4" stroke-linecap="round"/>`,
+    basketball: () => `<circle r="26" fill="#E8846B" ${S}/><path d="M-26 0h52M0 -26v52M-18 -18 Q0 0 -18 18M18 -18 Q0 0 18 18" ${S2} fill="none"/>`,
+    bike: () => `<circle cx="-26" cy="16" r="18" fill="none" ${S}/><circle cx="26" cy="16" r="18" fill="none" ${S}/><path d="M-26 16 L-6 -14 H18 L26 16 M-6 -14 L2 16 L18 -14 M-10 -22h10M18 -14 l-4 -12 h10" stroke="${C.coral}" stroke-width="4.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/><circle cx="2" cy="16" r="4" fill="${N}"/>`,
+    guitar: () => `<path d="M14 -16 L44 -46" stroke="#8C6A4A" stroke-width="7" stroke-linecap="round"/><rect x="40" y="-56" width="14" height="10" rx="3" transform="rotate(45 47 -51)" fill="${N}"/><path d="M-6 -24 Q10 -30 16 -14 Q24 4 10 12 Q6 30 -14 28 Q-34 26 -32 6 Q-30 -10 -18 -12 Q-16 -22 -6 -24Z" fill="${C.mustard}" ${S}/><circle cx="-8" cy="4" r="6" fill="${N}"/><path d="M-18 14 L18 -18" stroke="#FFFDFA" stroke-width="1.2"/><path d="M36 10 v-18 l12 -4 v18" ${S2} fill="none"/><circle cx="33" cy="10" r="4" fill="${N}"/><circle cx="45" cy="6" r="4" fill="${N}"/>`,
+    palette: () => `<path d="M0 -30 Q34 -30 36 -2 Q38 18 18 16 Q8 16 10 26 Q10 34 -2 32 Q-36 28 -36 -2 Q-34 -30 0 -30Z" fill="#F4E1C1" ${S}/>${[[-20, -12, C.coral], [-4, -20, C.mustard], [14, -16, C.sky], [22, 0, C.mint], [-22, 8, C.lilac]].map(([x, y, c]) => `<circle cx="${x}" cy="${y}" r="6" fill="${c}"/>`).join("")}<circle cx="0" cy="12" r="5" fill="#FFFDFA" ${S2}/><path d="M30 34 L54 -10" stroke="#8C6A4A" stroke-width="5" stroke-linecap="round"/><path d="M54 -10 l4 -10 4 6Z" fill="${C.coral}" ${S2}/>`,
+    camera: () => `<rect x="-34" y="-18" width="68" height="44" rx="8" fill="${N}"/><rect x="-14" y="-28" width="28" height="12" rx="3" fill="${N}"/><circle cy="4" r="15" fill="#A9C6E2" stroke="#FFFDFA" stroke-width="4"/><circle cx="-4" cy="0" r="4" fill="#FFFDFA" opacity=".8"/><circle cx="24" cy="-10" r="3" fill="${C.coral}"/>`,
+    phone: () => `<rect x="-20" y="-36" width="40" height="72" rx="8" fill="${N}"/><rect x="-16" y="-28" width="32" height="54" rx="3" fill="#BFDAF1"/><rect x="-12" y="-22" width="18" height="10" rx="3" fill="${C.coral}"/><rect x="-6" y="-6" width="18" height="10" rx="3" fill="#FFFDFA"/><path d="M-10 14 Q-4 20 2 14 Q6 10 10 16" stroke="${C.mint}" stroke-width="3" fill="none"/><path d="M26 -20 q8 -8 16 0 q-8 10 -16 0Z" fill="${C.pink}"/>`,
+    robot: () => `<path d="M0 -40v-10" ${S}/><circle cy="-52" r="4" fill="${C.coral}"/><rect x="-26" y="-40" width="52" height="38" rx="10" fill="#C6D2EA" ${S}/><circle cx="-10" cy="-22" r="6" fill="${C.sky}" ${S2}/><circle cx="10" cy="-22" r="6" fill="${C.sky}" ${S2}/><path d="M-8 -10h16" ${S2}/><rect x="-22" y="2" width="44" height="34" rx="8" fill="#A9B8D8" ${S}/><circle cy="18" r="6" fill="${C.gold}"/><path d="M-22 10 L-36 24M22 10 L36 24" ${S}/>`,
+    laptop: () => `<rect x="-32" y="-30" width="64" height="40" rx="4" fill="${N}"/><rect x="-27" y="-25" width="54" height="30" fill="#BFDAF1"/><path d="M-20 -16h20M-20 -8h30M-20 0h14" stroke="#FFFDFA" stroke-width="3" stroke-linecap="round"/><path d="M-40 10 H40 L34 18 H-34Z" fill="#A9B8D8" ${S}/>`,
+    book: () => `<path d="M0 26 C-14 18 -32 18 -44 24 V-20 C-32 -26 -14 -26 0 -18Z" fill="#FFFDFA" ${S}/><path d="M0 26 C14 18 32 18 44 24 V-20 C32 -26 14 -26 0 -18Z" fill="#FFFDFA" ${S}/><path d="M0 -18V26" ${S}/>${[0, 1, 2].map((i) => `<path d="M-36 ${-10 + i * 9}q16 -4 30 2" stroke="#C9D6E4" stroke-width="2.6" fill="none"/><path d="M6 ${-8 + i * 9}q16 -6 30 -2" stroke="#C9D6E4" stroke-width="2.6" fill="none"/>`).join("")}<path d="M20 -36l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z" fill="${C.gold}"/>`,
+    backpack: () => `<path d="M-12 -30 Q0 -44 12 -30" stroke="${N}" stroke-width="4" fill="none"/><rect x="-26" y="-30" width="52" height="64" rx="16" fill="${C.coral}" ${S}/><rect x="-18" y="6" width="36" height="22" rx="6" fill="#F2A08A" ${S2}/><path d="M-18 14h36" ${S2}/><path d="M-26 -6h52" stroke="#C9654D" stroke-width="3"/>${g(40, 14, .7, `<rect x="-4" y="-30" width="8" height="50" fill="${C.mustard}" ${S2}/><path d="M-4 20 L0 30 L4 20Z" fill="#F3CFA8" ${S2}/>`)}`,
+    tent: () => `<path d="M-44 30 L0 -34 L44 30Z" fill="${C.coral}" ${S}/><path d="M0 -34 L-12 30 H12Z" fill="#C9654D" ${S2}/><path d="M0 -34 V-44" ${S}/><path d="M0 -44 l12 4 -12 4" fill="${C.mustard}"/>${g(58, 26, .6, `<path d="M-14 6 L14 -2 M-14 -2 L14 6" stroke="#8C6A4A" stroke-width="5"/><path d="M0 -4 Q-10 -18 0 -30 Q10 -18 0 -4Z" fill="${C.mustard}"/><path d="M0 -6 Q-5 -14 0 -20 Q5 -14 0 -6Z" fill="${C.coral}"/>`)}`,
+    plane: () => `<path d="M-46 4 Q-46 -6 -30 -6 H34 Q46 -6 48 4 Q46 12 34 12 H-30 Q-46 12 -46 4Z" fill="#FFFDFA" ${S}/><path d="M-4 -6 L-20 -32 H-8 L14 -6Z M-4 12 L-18 34 H-6 L14 12Z" fill="${C.sky}" ${S}/><path d="M-40 -6 L-48 -22 H-38 L-30 -6Z" fill="${C.coral}" ${S2}/>${[0, 1, 2, 3].map((i) => `<circle cx="${18 - i * 12}" cy="2" r="3" fill="${C.sky}"/>`).join("")}`,
+    bus: () => `<rect x="-48" y="-30" width="96" height="50" rx="9" fill="${C.mustard}" ${S}/>${[0, 1, 2, 3].map((i) => `<rect x="${-40 + i * 20}" y="-22" width="15" height="16" rx="3" fill="#FFFDFA" ${S2}/>`).join("")}<rect x="38" y="-22" width="8" height="30" rx="2" fill="#BFDAF1" ${S2}/><path d="M-48 4h96" stroke="#C99A3A" stroke-width="3"/><circle cx="-26" cy="22" r="9" fill="${N}"/><circle cx="26" cy="22" r="9" fill="${N}"/><circle cx="-26" cy="22" r="3" fill="#C9D3DF"/><circle cx="26" cy="22" r="3" fill="#C9D3DF"/>`,
+    car: () => `<path d="M-44 10 V-2 Q-42 -10 -30 -12 L-18 -28 H18 L30 -12 Q44 -10 44 0 V10Z" fill="${C.sky}" ${S}/><path d="M-14 -24 H-2 V-12 H-24Z M2 -24 H14 L22 -12 H2Z" fill="#FFFDFA" ${S2}/><circle cx="-24" cy="12" r="10" fill="${N}"/><circle cx="24" cy="12" r="10" fill="${N}"/><circle cx="-24" cy="12" r="4" fill="#C9D3DF"/><circle cx="24" cy="12" r="4" fill="#C9D3DF"/>`,
+    house: () => `<path d="M-40 -6 L0 -40 L40 -6Z" fill="${C.coral}" ${S}/><rect x="-32" y="-6" width="64" height="44" fill="#FFFDFA" ${S}/><rect x="-8" y="12" width="16" height="26" rx="2" fill="${C.sky}" ${S2}/><rect x="-26" y="2" width="14" height="12" fill="#BFDAF1" ${S2}/><rect x="12" y="2" width="14" height="12" fill="#BFDAF1" ${S2}/><path d="M20 -26v-12h8v18" fill="#8C6A4A" ${S2}/><path d="M0 -20 a5 5 0 0 1 8 -2 a5 5 0 0 1 8 2 L8 -10Z" fill="${C.pink}" transform="translate(-8 -2)"/>`,
+    heart: () => `<path d="M0 26 C-40 0 -34 -34 -12 -30 C-4 -28 0 -20 0 -16 C0 -20 4 -28 12 -30 C34 -34 40 0 0 26Z" fill="${C.coral}" ${S}/><ellipse cx="-14" cy="-14" rx="5" ry="7" fill="#FFFDFA" opacity=".5"/>${g(38, -26, .4, `<path d="M0 26 C-40 0 -34 -34 -12 -30 C-4 -28 0 -20 0 -16 C0 -20 4 -28 12 -30 C34 -34 40 0 0 26Z" fill="${C.pink}"/>`)}`,
+    globe: () => `<circle r="32" fill="${C.sky}" ${S}/><path d="M-24 -12 Q-10 -20 -6 -8 Q-12 4 -2 10 Q-6 22 -18 18 Q-30 6 -24 -12Z M8 -26 Q22 -24 26 -10 Q16 -6 12 4 Q4 -6 8 -26Z M10 14 Q20 10 24 18 Q16 26 10 14Z" fill="${C.mint}" ${S2}/>${g(30, 26, .5, `<path d="M0 -26 Q28 -26 26 0 Q14 24 0 30 Q-4 8 0 -26Z" fill="#7FB89E" ${S}/><path d="M0 -26 Q10 0 0 30" ${S} fill="none"/>`)}`,
+    drop: () => `<path d="M0 -40 Q30 0 26 14 Q20 34 0 34 Q-20 34 -26 14 Q-30 0 0 -40Z" fill="${C.sky}" ${S}/><path d="M-12 6 Q-14 18 -4 24" stroke="#FFFDFA" stroke-width="4" fill="none" stroke-linecap="round"/>${g(36, 22, .45, `<path d="M0 -40 Q30 0 26 14 Q20 34 0 34 Q-20 34 -26 14 Q-30 0 0 -40Z" fill="#9CC9EA" ${S}/>`)}`,
+    coins: () => `<rect x="-30" y="-6" width="40" height="40" rx="14" fill="${C.pink}" ${S}/><path d="M-14 -6 V-12 H-6 V-6" fill="${N}"/><circle cx="-18" cy="10" r="2.5" fill="${N}"/><ellipse cx="-30" cy="18" rx="5" ry="7" fill="${C.pink}" ${S2}/>${[0, 1, 2].map((i) => `<ellipse cx="30" cy="${26 - i * 8}" rx="16" ry="6" fill="${C.gold}" ${S2}/>`).join("")}<circle cx="30" cy="-6" r="12" fill="${C.gold}" ${S}/><path d="M30 -12v12M26 -9h7a3 3 0 0 1 0 6h-6" ${S2} fill="none"/>`,
+    clock: () => `<circle r="32" fill="#FFFDFA" ${S}/><circle r="32" fill="none" stroke="${C.coral}" stroke-width="6"/>${Array.from({ length: 12 }, (_, i) => `<path d="M0 -24v4" stroke="${N}" stroke-width="2.5" transform="rotate(${i * 30})"/>`).join("")}<path d="M0 0V-18M0 0l12 6" ${S}/><circle r="3" fill="${N}"/>`,
+    bulb: () => `<path d="M0 -38 Q26 -38 26 -12 Q26 4 12 14 V22 H-12 V14 Q-26 4 -26 -12 Q-26 -38 0 -38Z" fill="${C.gold}" ${S}/><rect x="-12" y="22" width="24" height="12" rx="3" fill="#A9B8D8" ${S2}/><path d="M-6 0 l6 -10 6 10" ${S2} fill="none"/>${[[-44, -20], [44, -20], [-36, -48], [36, -48], [0, -58]].map(([x, y]) => `<path d="M${x * .8} ${y * .8} L${x} ${y}" stroke="${C.mustard}" stroke-width="4" stroke-linecap="round"/>`).join("")}`,
+    trophy: () => `<path d="M-22 -30 H22 V-6 Q22 16 0 18 Q-22 16 -22 -6Z" fill="${C.gold}" ${S}/><path d="M-22 -22 Q-38 -22 -34 -6 Q-30 4 -20 2 M22 -22 Q38 -22 34 -6 Q30 4 20 2" ${S} fill="none"/><rect x="-5" y="18" width="10" height="10" fill="${C.gold}" ${S2}/><rect x="-18" y="28" width="36" height="10" rx="2" fill="#8C6A4A" ${S2}/><path d="M0 -20l3 6 6 1 -4.5 4 1 6 -5.5 -3 -5.5 3 1 -6 -4.5 -4 6 -1z" fill="#FFFDFA"/>`,
+    map: () => `<path d="M-44 -28 L-14 -36 L16 -28 L44 -36 V28 L16 36 L-14 28 L-44 36Z" fill="#F4E1C1" ${S}/><path d="M-14 -36V28M16 -28V36" ${S2}/><path d="M-34 14 Q-20 0 -4 8 T26 -6" stroke="${C.coral}" stroke-width="3" stroke-dasharray="5 5" fill="none"/><path d="M28 -14 Q28 -26 36 -26 Q44 -26 44 -14 Q44 -6 36 4 Q28 -6 28 -14Z" transform="translate(-6 0)" fill="${C.coral}" ${S2}/>`,
+    brain: () => `<path d="M-4 -30 Q-22 -34 -28 -18 Q-40 -12 -34 4 Q-38 20 -20 24 Q-10 34 -2 26Z" fill="${C.pink}" ${S}/><path d="M4 -30 Q22 -34 28 -18 Q40 -12 34 4 Q38 20 20 24 Q10 34 2 26Z" fill="${C.pink}" ${S}/><path d="M-20 -14 q8 4 4 12 M-24 8 q10 -2 12 8 M20 -14 q-8 4 -4 12 M24 8 q-10 -2 -12 8" ${S2} fill="none"/>`,
+    star: () => `<path d="M0 -36 L10 -12 L36 -10 L16 6 L22 32 L0 18 L-22 32 L-16 6 L-36 -10 L-10 -12Z" fill="${C.gold}" ${S}/>`
+  };
+
+  /* ---------- Palabras clave → objeto principal y escenario ---------- */
+  const RULES = [
+    [/halloween|ghost|fantasma|witch|bruja|pumpkin|calabaza|monster|monstru/, "pumpkin", "halloween"],
+    [/muertos|calavera|ofrenda|catrina|cempas[uú]/, "skull", "halloween"],
+    [/rainbow|arco ?[ií]ris/, "rainbow", "park"],
+    [/\brain|umbrella|storm|lluvi|llover|paraguas|tormenta/, "umbrella", "park"],
+    [/snow|winter|freez|nieve|invierno/, "snowman", "snow"],
+    [/climate|environment|recycl|plastic|pollution|fashion|t-shirt|clima|ambiente|recicl|pl[aá]stico|contamina|basura/, "globe", "park"],
+    [/space|planet|astronaut|rocket|\bmars\b|galax|espacio|planeta|astronaut|cohete|galaxia/, "rocket", "space"],
+    [/climb|potrero|hiking|\bhike|camping|campamento|escal|excursi/, "tent", "mountain"],
+    [/mountain|monta[ñn]a|volcan|volc[aá]n|desert|desierto/, "tent", "mountain"],
+    [/\bcats?\b|kitten|\bgat[oa]s?\b|\bmichi/, "cat", "home"],
+    [/\bdogs?\b|pupp|\bperr[oa]s?\b|perrit|cachorr/, "dog", "park"],
+    [/\bowl|b[uú]ho|tecolote/, "owl", "night"],
+    [/bird|parrot|eagle|hummingbird|p[aá]jar|\baves?\b|loro|[aá]guila|colibr/, "bird", "park"],
+    [/whale|dolphin|ballena|delf[ií]n/, "whale", "beach"],
+    [/turtle|tortuga/, "turtle", "beach"],
+    [/\bfish|shark|ocean|\bsea\b|coral reef|\bpez\b|peces|tibur|oc[eé]ano|\bmar\b/, "fish", "beach"],
+    [/beach|playa/, "sun", "beach"],
+    [/\bbees?\b|honey|abeja|miel/, "bee", "park"],
+    [/butterfl|mariposa|monarc/, "butterfly", "park"],
+    [/rabbit|bunny|conej/, "rabbit", "park"],
+    [/elephant|\bzoo\b|\blion|giraffe|elefante|zool[oó]gico|\ble[oó]n\b|jirafa/, "elephant", "park"],
+    [/\bfarm|\bcows?\b|horse|granja|\bvaca|caballo/, "cow", "park"],
+    [/birthday|party|celebrat|cumplea|fiesta/, "cake", "home"],
+    [/christmas|gift|present\b|navidad|regalo/, "gift", "home"],
+    [/pizza/, "pizza", "kitchen"],
+    [/ice cream|helado/, "icecream", "park"],
+    [/\bapples?\b|fruit|vegetable|healthy|manzana|fruta|verdura|saludable/, "apple", "kitchen"],
+    [/taco|tamal|\bmole\b|food|\bcook|recipe|kitchen|breakfast|lunch|dinner|restaurant|comida|cocin|receta|desayun|cena\b|restaurante/, "food", "kitchen"],
+    [/soccer|football|f[uú]tbol|\bgoal|\bgol\b/, "ball", "park"],
+    [/basketball|b[aá]squet|baloncesto/, "basketball", "park"],
+    [/\bbikes?\b|bicycle|bicicleta|\bbici/, "bike", "park"],
+    [/music|\bsongs?\b|guitar|\bband\b|concert|piano|singer|m[uú]sica|canci[oó]n|guitarra|concierto|cantar/, "guitar", "home"],
+    [/\bart\b|artist|paint|draw|museum|frida|mural|pintar|pintur|dibuj|museo|arte\b/, "palette", "home"],
+    [/photo|camera|c[aá]mara|fotograf/, "camera", "park"],
+    [/robot|artificial intelligence|\bai\b|chatbot|inteligencia artificial/, "robot", "lab"],
+    [/phone|social media|internet|online|screen|video ?game|celular|redes sociales|pantalla|videojuego/, "phone", "home"],
+    [/computer|technology|coding|program|tecnolog|computadora/, "laptop", "lab"],
+    [/brain|memory|sleep science|neuro|cerebro|memoria/, "brain", "lab"],
+    [/science|experiment|invent|idea|discover|ciencia|experimento|invent|descubr/, "bulb", "lab"],
+    [/\bmoon|night|\bstars?\b|sleep|dream|\bluna\b|noche|estrella|dormir|sue[ñn]o/, "moon", "night"],
+    [/travel|\btrip\b|airport|plane|vacation|viaje|aeropuerto|avi[oó]n|vacaciones/, "plane", "sky"],
+    [/\bmaps?\b|treasure|explor|mapa|tesoro|explorador/, "map", "forest"],
+    [/water|drought|river|\blake|\bagua\b|sequ[ií]a|\br[ií]o\b|lago/, "drop", "park"],
+    [/garden|plant|flower|seed|spring|jard[ií]n|planta|\bflor|semilla|huerto|primavera/, "flower", "park"],
+    [/\btrees?\b|forest|jungle|bosque|[aá]rbol|selva/, "tree", "forest"],
+    [/money|\bshop|store|\bbuy|market|\bsave\b|saving|dinero|tienda|comprar|mercado|ahorr/, "coins", "city"],
+    [/\btime\b|clock|\blate\b|routine|reloj|\bhora|rutina|temprano/, "clock", "home"],
+    [/school|class|teacher|\bexam|\btest\b|homework|student|escuela|\bclase|maestr|examen|tarea|sal[oó]n|alumn/, "backpack", "school"],
+    [/library|\bbooks?\b|\bread(ing|s)?\b|\bstor(y|ies)\b|novel|biblioteca|libro|\bleer|cuento|lectura/, "book", "home"],
+    [/sport|\bteam|\bwin\b|trophy|\brace\b|olymp|champion|deporte|equipo|carrera|ganar|campe[oó]n/, "trophy", "park"],
+    [/\bcars?\b|traffic|\broad|coche|\bcarro|tr[aá]fico/, "car", "city"],
+    [/monterrey|\bcity|\btown|street|neighbo|\bbus\b|ciudad|\bcalle|colonia|cami[oó]n/, "bus", "city"],
+    [/\bsun\b|\bhot\b|summer|\bsol\b|calor|verano/, "sun", "park"],
+    [/family|\bmom\b|\bdad\b|grandm|grandp|grandpa|brother|sister|\bhome\b|\bhouse|familia|mam[aá]|pap[aá]|abuel|herman|\bcasa\b/, "house", "home"],
+    [/friend|helping|\blove\b|amig|ayud|amor|cari[ñn]o/, "heart", "park"]
+  ];
+  const TOPIC_SCENE = { weather: "park", school: "school", family: "home", food: "kitchen", animals: "park", sports: "park", environment: "park", science: "lab", art: "home", travel: "city", technology: "lab", health: "park", music: "home", history: "city", culture: "city", nature: "forest", space: "space", city: "city", holidays: "home", hobbies: "home", friends: "park", feelings: "home", jobs: "city", work: "city" };
+  const NO_KID = { rocket: 1, whale: 1, skull: 1, pumpkin: 0, bus: 1, plane: 1, globe: 0, moon: 0 };
+
+  function compose(key, title, text, topic) {
+    const h = hash(key + title);
+    const low = (title + " · " + (topic || "") + " · " + text).toLowerCase();
+    const head = (title + " · " + (topic || "")).toLowerCase();
+    const hits = [];
+    const scan = (str) => RULES.forEach((r) => { if (r[0].test(str) && !hits.some((x) => x[1] === r[1])) hits.push(r); });
+    scan(head); scan(low);
+    const main = hits[0], second = hits[1];
+    const sceneKey = (main && main[2]) || TOPIC_SCENE[(topic || "").toLowerCase()] || "soft";
+    const mty = /monterrey|cerro de la silla|nuevo le[oó]n/.test(low);
+    let body = (SCENES[sceneKey] || SCENES.soft)(h, mty);
+    const motif = main ? main[1] : ["book", "star", "heart"][h % 3];
+    const withKid = !NO_KID[motif] && (h % 10) < 7;
+    const flip = (h >>> 4) % 2;
+    const kx = flip ? 238 : 84, mx = withKid ? (flip ? 112 : 206) : 160;
+    if (second && second[1] !== motif) {
+      const sx = withKid ? (flip ? 280 : 40) : (flip ? 64 : 258);
+      body += g(sx, 60, .48, M[second[1]]());
+    }
+    body += g(mx, 98, withKid ? 1 : 1.18, M[motif]());
+    if (withKid) body += kid(kx, 96, h, .96);
+    return `<svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">${body}</svg>`;
+  }
+  window.MOVA_COVER = compose;
+
+  /* ---------- Lecturas en inglés ---------- */
+  const keepOwn = (art) => typeof art === "string" && /<image\b/.test(art);
+  function applyEnglish() {
+    if (typeof READINGS === "undefined" || typeof READING_ART !== "object") return;
+    READINGS.forEach((r) => {
+      if (keepOwn(READING_ART[r.id])) return;
+      READING_ART[r.id] = compose(r.id, r.title || "", (r.description || "") + " " + (r.text ? r.text.slice(0, 2).join(" ") : ""), r.topic || "");
+    });
+  }
+  applyEnglish();
+  window.addEventListener("load", applyEnglish);
+
+  /* ---------- Lecturas en español (se ilustran en pantalla) ---------- */
+  function applySpanish() {
+    if (!/^#\/lecturas/.test(location.hash)) return;
+    document.querySelectorAll("article").forEach((card) => {
+      if (card.hasAttribute("data-cover")) return;
+      const a = card.querySelector('a[href^="#/lecturas/"]'); if (!a) return;
+      const svg = [...card.querySelectorAll("svg")].find((s) => { const vb = (s.getAttribute("viewBox") || "").split(/[\s,]+/).map(Number); return vb.length === 4 && vb[2] >= 200; });
+      if (!svg || /<image\b/.test(svg.outerHTML)) { card.setAttribute("data-cover", "0"); return; }
+      card.setAttribute("data-cover", "1");
+      const id = a.getAttribute("href").split("/").pop();
+      const title = a.textContent.trim();
+      const desc = [...card.querySelectorAll("p")].map((p) => p.textContent).join(" ");
+      const art = compose(id, title, desc, "");
+      const box = svg.parentNode;
+      svg.outerHTML = art;
+      const ns = box.querySelector("svg"); if (ns) { ns.style.width = "100%"; ns.style.height = "100%"; ns.style.display = "block"; }
+    });
+  }
+  new MutationObserver(applySpanish).observe(document.body, { childList: true, subtree: true });
+  window.addEventListener("hashchange", () => setTimeout(applySpanish, 0));
+})();
+
 router();
 })();

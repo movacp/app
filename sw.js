@@ -1,6 +1,6 @@
 /* MOVA Learning Studio: permite abrir la app sin internet.
    Al publicar cambios, suba el número de versión para que todos reciban la actualización. */
-const VERSION = "mova-v34";
+const VERSION = "mova-v35";
 const CORE = ["./", "index.html", "studio-plus.js", "studio-games.js", "studio-lote10.js", "studio-lote11.js", "toefl-bank.js", "mova-voice.js", "manifest.json", "icon-192.png", "icon-512.png", "maskable-512.png"];
 /* Los juegos y las imágenes se guardan en el celular la primera vez que se abren (ver "fetch"). */
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(VERSION).then((c) => c.addAll(CORE)).then(() => self.skipWaiting())); });
