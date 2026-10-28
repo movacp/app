@@ -1,8 +1,10 @@
 /* MOVA Learning Studio: permite abrir la app sin internet.
    Al publicar cambios, suba el número de versión para que todos reciban la actualización. */
-const VERSION = "mova-v39";
-const CORE = ["./", "index.html", "studio-plus.js", "studio-games.js", "studio-lote10.js", "studio-lote11.js", "toefl-bank.js", "mova-voice.js", "manifest.json", "icon-192.png", "icon-512.png", "maskable-512.png"];
-/* Los juegos y las imágenes se guardan en el celular la primera vez que se abren (ver "fetch"). */
+const VERSION = "mova-v16";
+const CORE = ["./", "index.html", "studio-plus.js", "studio-games.js", "studio-lote10.js", "studio-lote11.js", "toefl-bank.js", "mova-voice.js", "manifest.json", "icon-192.png", "icon-512.png", "maskable-512.png",
+  "juego-word-quest.html", "juego-mision-matematica.html", "juego-level-up.html", "juego-verb-memory.html", "juego-sentence-builder.html", "juego-locked-library.html",
+  "juego-toefl-practice.html", "juego-sentence-scramble.html",
+  "juego-lee-con-mochi.html", "juego-sopa-de-letras.html", "juego-crucigrama.html"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(VERSION).then((c) => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener("fetch", (e) => {
