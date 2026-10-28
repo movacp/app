@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="mochi-lee.webp">
 <style>
 :root{
   --page:#EFE8FF;
@@ -65,13 +66,13 @@ button:focus-visible{outline:4px solid var(--lila);outline-offset:3px}
 .lit{font-family:'Andika','Century Gothic','Poppins',sans-serif}
 
 /* Mochi */
-.mochi{display:block;margin:0 auto}
+.mochi{display:block;margin:0 auto;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain;user-select:none;-webkit-user-drag:none;transform-origin:50% 90%}
+.mochi.idle{animation:breathe 3.2s ease-in-out infinite}
 .mochi.happy{animation:hop .6s ease}
 .mochi.sad{animation:wob .5s ease}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.025,.985)}}
 @keyframes hop{0%,100%{transform:translateY(0)}35%{transform:translateY(-16px) scale(1.04)}65%{transform:translateY(0) scale(.98,1.02)}}
 @keyframes wob{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
-.mochi .lid{transform-origin:center;animation:blink 4.5s infinite}
-@keyframes blink{0%,94%,100%{transform:scaleY(0)}96%,98%{transform:scaleY(1)}}
 
 /* Start */
 h1{font-weight:800;font-size:clamp(32px,9.5vw,42px);line-height:1.05;text-align:center;margin:6px 0 6px}
@@ -107,7 +108,7 @@ h1{font-weight:800;font-size:clamp(32px,9.5vw,42px);line-height:1.05;text-align:
 .icon-btn{border:0;background:var(--track);border-radius:14px;width:44px;height:44px;font-size:19px;display:grid;place-items:center}
 .starbar{display:flex;gap:3px;font-size:17px;color:var(--edge)}
 .starbar .on{color:var(--gold)}
-.stage{display:grid;grid-template-columns:96px 1fr;align-items:center;gap:10px;margin:14px 0 6px}
+.stage{display:grid;grid-template-columns:104px 1fr;align-items:center;gap:10px;margin:14px 0 6px}
 .bubble{position:relative;background:var(--lila-soft);border-radius:18px;padding:12px 14px;font-weight:700;font-size:16px;line-height:1.35;min-height:52px;display:flex;align-items:center}
 .bubble::before{content:"";position:absolute;left:-10px;top:50%;transform:translateY(-50%);border:10px solid transparent;border-right-color:var(--lila-soft);border-left:0}
 .task{display:flex;flex-direction:column;align-items:center;gap:10px;margin:8px 0 14px;min-height:120px;justify-content:center}
@@ -146,35 +147,12 @@ h1{font-weight:800;font-size:clamp(32px,9.5vw,42px);line-height:1.05;text-align:
 <body>
 <canvas id="fx"></canvas>
 
-<template id="mochi-tpl">
-<svg class="mochi" viewBox="0 0 120 120" aria-hidden="true">
-  <g stroke="#1B2A55" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
-    <path d="M36 31 L27 7 L49 22Z" fill="#3F86D9"/>
-    <path d="M84 31 L93 7 L71 22Z" fill="#3F86D9"/>
-    <path d="M31 74 C22 72 15 66 17 54" fill="none"/>
-    <path d="M89 74 C98 72 105 66 103 54" fill="none"/>
-    <path d="M31 104 L31 56 C31 31 45 19 60 19 C75 19 89 31 89 56 L89 104 C83 99 77 99 71 103 C65 108 55 108 49 103 C43 99 37 99 31 104Z" fill="#5BA8F0"/>
-    <circle cx="48" cy="52" r="10" fill="#fff"/><circle cx="72" cy="52" r="10" fill="#fff"/>
-  </g>
-  <circle cx="50" cy="54" r="5.5" fill="#1B2A55"/><circle cx="74" cy="54" r="5.5" fill="#1B2A55"/>
-  <circle cx="51.8" cy="52" r="1.9" fill="#fff"/><circle cx="75.8" cy="52" r="1.9" fill="#fff"/>
-  <rect class="lid" x="36.5" y="40.5" width="23" height="23" rx="11.5" fill="#5BA8F0" stroke="#1B2A55" stroke-width="3"/>
-  <rect class="lid" x="60.5" y="40.5" width="23" height="23" rx="11.5" fill="#5BA8F0" stroke="#1B2A55" stroke-width="3"/>
-  <circle cx="38" cy="67" r="5" fill="#FF8FB1"/><circle cx="82" cy="67" r="5" fill="#FF8FB1"/>
-  <g stroke="#1B2A55" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round">
-    <path d="M53.5 74 L56 80.5 L58.5 75.8Z" fill="#fff"/>
-    <path d="M61.5 75.8 L64 80.5 L66.5 74Z" fill="#fff"/>
-    <path d="M49 70 Q60 80 71 70" fill="none"/>
-  </g>
-</svg>
-</template>
-
 <main class="app">
   <div class="panel">
 
     <section id="s-start">
       <div class="brand"><span class="wordmark">MOVA</span><span class="tag">Centro Pedagógico</span></div>
-      <div id="mochi-start" style="width:130px;margin:14px auto 0"></div>
+      <div id="mochi-start" style="width:170px;margin:12px auto 0"></div>
       <h1>Lee con Mochi</h1>
       <p class="lead">Paso a paso: vocales, sílabas, palabras y frases.</p>
       <div class="label">Elige un bloque</div>
@@ -193,7 +171,7 @@ h1{font-weight:800;font-size:clamp(32px,9.5vw,42px);line-height:1.05;text-align:
         <div class="brand sm"><span class="wordmark">MOVA</span></div>
       </div>
       <div class="stage">
-        <div id="mochi-game" style="width:96px"></div>
+        <div id="mochi-game" style="width:104px"></div>
         <div class="bubble" id="bubble" aria-live="polite"></div>
       </div>
       <div class="task" id="task"></div>
@@ -203,7 +181,7 @@ h1{font-weight:800;font-size:clamp(32px,9.5vw,42px);line-height:1.05;text-align:
 
     <section id="s-end" hidden>
       <div class="brand"><span class="wordmark">MOVA</span><span class="tag">Centro Pedagógico</span></div>
-      <div id="mochi-end" style="width:140px;margin:14px auto 0"></div>
+      <div id="mochi-end" style="width:180px;margin:12px auto 0"></div>
       <p class="end-title" id="end-title"></p>
       <p class="end-sub" id="end-sub"></p>
       <div class="end-stars" id="end-stars"></div>
@@ -264,10 +242,23 @@ const PRAISE = ['¡Muy bien!','¡Excelente!','¡Lo lograste!','¡Qué bien lees!
 const RETRY = ['¡Casi! Inténtalo otra vez.','Escucha bien y vuelve a intentarlo.','Tú puedes, prueba de nuevo.'];
 const st = { block:'vocales', letter:'m', round:0, stars:0, q:null, firstTry:true, built:[], lock:false, timeouts:[] };
 
-/* Mochi */
-function mountMochi(id){ const el = $('#'+id); el.innerHTML = ''; el.appendChild($('#mochi-tpl').content.cloneNode(true)); return el.querySelector('svg'); }
-const mStart = mountMochi('mochi-start'), mGame = mountMochi('mochi-game'), mEnd = mountMochi('mochi-end');
-function react(m, cls){ m.classList.remove('happy','sad'); void m.getBoundingClientRect(); m.classList.add(cls); }
+/* Mochi (ilustraciones) */
+const POSES = { lee:'mochi-lee.webp', hola:'mochi-hola.webp', salta:'mochi-salta.webp', piensa:'mochi-piensa.webp' };
+Object.values(POSES).forEach(src => { const i = new Image(); i.src = src; });
+function mountMochi(id, pose){
+  const el = $('#'+id); el.innerHTML = '';
+  const img = document.createElement('img');
+  img.className = 'mochi idle'; img.alt = 'Mochi'; img.draggable = false;
+  img.dataset.base = pose; img.src = POSES[pose];
+  el.appendChild(img); return img;
+}
+const mStart = mountMochi('mochi-start', 'lee'), mGame = mountMochi('mochi-game', 'hola'), mEnd = mountMochi('mochi-end', 'salta');
+function react(m, cls){
+  clearTimeout(m._back);
+  m.src = POSES[cls === 'happy' ? 'salta' : 'piensa'];
+  m.classList.remove('happy','sad','idle'); void m.getBoundingClientRect(); m.classList.add(cls);
+  m._back = setTimeout(() => { m.src = POSES[m.dataset.base]; m.classList.remove('happy','sad'); m.classList.add('idle'); }, 1700);
+}
 
 /* speech es-MX */
 const synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
@@ -490,6 +481,7 @@ function end(){
   const nb = BLOCKS[bk.n]; const nx = $('#nextblock'); nx.hidden = !(nb && s >= 7); if(nb) nx.textContent = `Siguiente bloque: ${nb.title}`;
   $('#end-stars').textContent = '★'.repeat(s) || '☆';
   $('#end-count').textContent = `${s} de ${ROUNDS} estrellas`;
+  mEnd.dataset.base = s >= 5 ? 'salta' : 'hola'; mEnd.src = POSES[mEnd.dataset.base];
   show('end'); react(mEnd, 'happy'); fanfare();
   later(() => speak($('#end-title').textContent), 400);
   if(s >= 5) confetti(160);

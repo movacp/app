@@ -177,6 +177,36 @@ GAME_ART["juego-trapped-in-the-train.html"] = scene("#2A1E16", photo(IMG_DIR + "
   put();
 })();
 
+/* ---------- Miniaturas ilustradas de los juegos anteriores y del área Learn ---------- */
+(function () {
+  const OLD = {
+    "juego-word-quest.html": "thumb-word-quest.webp", "juego-level-up.html": "thumb-level-up.webp",
+    "juego-verb-memory.html": "thumb-verb-memory.webp", "juego-sentence-builder.html": "thumb-sentence-builder.webp",
+    "juego-locked-library.html": "thumb-locked-library.webp", "juego-toefl-practice.html": "thumb-toefl-practice.webp",
+    "juego-sentence-scramble.html": "thumb-sentence-scramble.webp", "juego-mision-matematica.html": "thumb-mision-matematica.webp",
+    "juego-lee-con-mochi.html": "thumb-lee-con-mochi.webp", "juego-sopa-de-letras.html": "thumb-sopa-de-letras.webp",
+    "juego-crucigrama.html": "thumb-crucigrama.webp"
+  };
+  const art = (img) => scene("#F4ECE0", photo(IMG_DIR + img));
+  const setArt = () => { if (typeof GAME_ART === "object") Object.entries(OLD).forEach(([f, img]) => { GAME_ART[f] = art(img); }); };
+  const isArt = (svg) => { const vb = (svg.getAttribute("viewBox") || "").split(/[\s,]+/).map(Number); return vb.length === 4 && vb[2] >= 200; };
+  const put = () => {
+    Object.entries(OLD).forEach(([f, img]) => document.querySelectorAll(`a[href="${f}"]`).forEach((a) => {
+      const card = a.closest("article, .item, .card, li") || a;
+      if (card.hasAttribute("data-old-art") || card.hasAttribute("data-hm") || card.closest('[aria-labelledby="h-play"]')) return;
+      const svg = [...card.querySelectorAll("svg")].find(isArt); if (!svg) return;
+      card.setAttribute("data-old-art", "1"); svg.outerHTML = art(img);
+    }));
+    document.querySelectorAll('a.area[href="#/learn"] .thumb').forEach((t) => {
+      if (t.hasAttribute("data-old-art")) return;
+      t.setAttribute("data-old-art", "1"); t.innerHTML = scene("#DBE9F5", photo(IMG_DIR + "area-learn.webp"));
+    });
+  };
+  setArt(); window.addEventListener("load", setArt);
+  new MutationObserver(put).observe(document.body, { childList: true, subtree: true });
+  put();
+})();
+
 /* ---------- Ilustraciones ---------- */
 GAME_ART["juego-toefl-practice.html"] = scene("#1E3A5F", `
   <g transform="rotate(-5 160 92)">
