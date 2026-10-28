@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en"><head>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("mova-theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Word Forms · TOEFL Practice · MOVA</title>
+<link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F3EFE8;--surface:#FFFDFA;--surface-2:#EDE7DC;--ink:#17202E;--ink-2:#4A4F5A;--ink-3:#7A7D84;--line:#DAD4CA;--navy:#1E3A5F;--on-navy:#F6F1E8;
+--coral:#E8846B;--butter:#F7D774;--sky:#6FA8D6;--mint:#7FB89E;--lila:#A98BE8;--coral-soft:#F8E1D9;--butter-soft:#FBF0C9;--sky-soft:#DCEAF6;--mint-soft:#DDEEE5;--lila-soft:#ECE4FB;
+--good:#2E7D55;--good-bg:#DFF1E7;--bad:#B9432F;--bad-bg:#F8E1DB;--shadow:0 1px 0 rgba(23,32,46,.04),0 14px 34px rgba(30,58,95,.10);box-sizing:border-box}
+*,*::before,*::after{box-sizing:inherit}body{margin:0;font-family:Poppins,"Century Gothic",system-ui,sans-serif;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+.wrap{max-width:640px;margin:0 auto;padding:18px 16px 48px}
+.top{display:flex;align-items:center;justify-content:space-between}.back{font-size:13px;font-weight:600;color:var(--ink-3);display:inline-flex;gap:6px;align-items:center;padding:8px 0}
+.brand{border:1.5px solid currentColor;padding:4px 9px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--ink-2)}
+.hero{margin-top:14px;border-radius:28px;background:var(--navy);color:var(--on-navy);padding:24px 22px;position:relative;overflow:hidden}
+.hero .k{font-size:11.5px;font-weight:700;letter-spacing:.2em;color:var(--butter)}
+.hero h1{font-weight:800;font-size:clamp(32px,9vw,44px);line-height:1;letter-spacing:-.02em;margin:8px 0 0}
+.hero p{margin:12px 0 0;font-size:14.5px;line-height:1.55;color:#D9E2EE;max-width:36ch}
+.hero .dots i{position:absolute;border-radius:50%}
+.sufs{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}.sufs span{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.12)}
+h2{font-size:19px;margin:26px 0 12px}
+.modes{display:grid;gap:12px}
+.mode{display:grid;grid-template-columns:auto 1fr;gap:14px;text-align:left;padding:16px;border-radius:22px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+.mode .ic{width:52px;height:52px;border-radius:16px;display:grid;place-items:center}.mode .ic svg{width:28px;height:28px}
+.mode h3{margin:2px 0 3px;font-size:16.5px;color:var(--navy)}.mode p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+.chip{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:999px;background:var(--surface-2);font-size:11.5px;font-weight:600;color:var(--ink-2)}
+.bar{display:flex;align-items:center;gap:10px;margin-top:6px}
+.ibtn{width:42px;height:42px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;flex:none}
+.prog{flex:1;height:8px;border-radius:8px;background:var(--surface-2);overflow:hidden}.prog i{display:block;height:100%;background:var(--navy);border-radius:8px;transition:width .3s}
+.pill{font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;background:var(--surface)}
+.card{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:22px 20px;box-shadow:var(--shadow)}
+.lab{font-size:11.5px;font-weight:700;letter-spacing:.18em;color:var(--coral)}
+.big{font-size:42px;font-weight:800;text-align:center;letter-spacing:-.02em;margin:22px 0 18px;color:var(--navy)}
+.big u{text-decoration:none;background:var(--butter);border-radius:8px;padding:0 4px}
+.bins{display:grid;grid-template-columns:1fr 1fr;gap:10px}.bins button{padding:14px 10px;border-radius:16px;font-weight:700;font-size:15px;border:2px solid transparent;text-align:center}
+.bins button small{display:block;font-weight:500;font-size:11.5px;color:var(--ink-2);margin-top:2px}
+.bins button:last-child{grid-column:1/-1}
+.timer{height:6px;border-radius:6px;background:var(--surface-2);margin-top:14px;overflow:hidden}.timer i{display:block;height:100%;background:var(--coral);transition:width 1s linear}
+.sent{font-size:19px;line-height:1.75;margin:14px 0 6px}
+.nw{font-weight:700;padding:2px 8px;border-radius:10px;border:2px dashed var(--lila);background:var(--lila-soft);cursor:pointer}
+.nw.on{border-style:solid;border-color:var(--navy)} .nw.ok{background:var(--good-bg);border:2px solid var(--good)} .nw.no{background:var(--bad-bg);border:2px solid var(--bad)}
+.opts{display:grid;gap:10px;margin-top:14px}.opts button{padding:14px 16px;border-radius:16px;background:var(--surface-2);font-weight:600;font-size:16px;text-align:left;border:2px solid transparent}
+.opts.g2{grid-template-columns:1fr 1fr}
+.opts button.ok,.bins button.ok{background:var(--good-bg);border-color:var(--good);color:var(--good)}.opts button.no,.bins button.no{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.blank{display:inline-block;min-width:110px;border-bottom:3px solid var(--navy);text-align:center;font-weight:700;color:var(--navy)}
+.ul{border-bottom:2.5px solid var(--ink);cursor:pointer;padding:0 2px;position:relative}.ul sup{font-size:11px;font-weight:700;color:var(--coral);margin-left:2px}
+.ul.on{background:var(--butter-soft)}.ul.ok{background:var(--good-bg);border-color:var(--good)}.ul.no{background:var(--bad-bg);border-color:var(--bad)}
+.fb{margin-top:14px;padding:14px 16px;border-radius:16px;font-size:14.5px;line-height:1.55;display:none}.fb.show{display:block}.fb.g{background:var(--good-bg)}.fb.b{background:var(--bad-bg)}
+.fb>b:first-child{display:block;font-size:15px;margin-bottom:2px}
+.next{margin-top:16px;width:100%;padding:15px;border-radius:16px;background:var(--navy);color:#fff;font-weight:700;font-size:16px;display:none}.next.show{display:block}
+.res{text-align:center}.res .score{font-size:64px;font-weight:800;color:var(--navy);letter-spacing:-.03em}
+.brk{display:grid;gap:8px;margin-top:16px;text-align:left}.brk div{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+.brk div span{flex:1}.brk div em{font-style:normal;color:var(--ink-2)}.brk .b{flex:2;height:10px;background:var(--surface-2);border-radius:10px;overflow:hidden}.brk .b i{display:block;height:100%}
+.hint{font-size:13px;color:var(--ink-2);margin-top:6px}
+
+.mode[disabled]{opacity:.55;cursor:default}.soon{background:var(--surface-2)!important;color:var(--ink-3)!important}
+.how{display:grid;gap:10px;margin-top:12px}.how div{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5;color:var(--ink-2)}
+.how b.n{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;color:#fff;background:var(--navy)}
+.cats{display:grid;gap:8px;margin-top:12px}.cats div{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:14px;font-size:14px}
+.cats div b{min-width:96px;font-size:14.5px}.cats div span{color:var(--ink-2);font-weight:500}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.choice button{padding:16px 14px;border-radius:18px;text-align:left;border:2px solid var(--line);background:var(--surface)}
+.choice button.on{border-color:var(--navy);box-shadow:0 0 0 3px var(--sky-soft)}
+.choice b{display:block;font-size:15.5px;color:var(--navy)}.choice small{font-size:12.5px;color:var(--ink-2);line-height:1.4;display:block;margin-top:3px}
+.go{margin-top:16px;width:100%;padding:16px;border-radius:16px;background:var(--navy);color:#fff;font-weight:700;font-size:16px}
+.stats{display:flex;gap:8px;margin-top:6px}.stats .pill{flex:none}
+.big{transition:transform .15s;white-space:nowrap;overflow:hidden}.pop{transform:scale(1.06)}
+.fb small{display:block;margin-top:4px;color:var(--ink-2)}
+.trow{display:flex;align-items:center;justify-content:space-between;margin-top:14px}.trow .t{font-size:13px;font-weight:700;color:var(--coral);min-width:44px;text-align:right}
+.trow .timer{flex:1;margin:0 12px 0 0}
+.kb{font-size:11.5px;color:var(--ink-3);text-align:center;margin-top:12px}
+.sumrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}.sumrow div{background:var(--surface-2);border-radius:14px;padding:10px 6px}
+.sumrow b{display:block;font-size:22px;color:var(--navy)}.sumrow span{font-size:11.5px;font-weight:600;color:var(--ink-2);letter-spacing:.04em}
+.rv{text-align:left;margin-top:18px}.rv h4{margin:0 0 8px;font-size:12px;letter-spacing:.16em;color:var(--coral)}
+.rvc{border-radius:16px;padding:12px 14px;margin-top:8px}.rvc b{font-size:14.5px}.rvc em{font-style:normal;font-size:12.5px;color:var(--ink-2);margin-left:6px}
+.rvw{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.rvw span{background:var(--surface);border-radius:999px;padding:3px 10px;font-size:13px;font-weight:600}.rvw span u{text-decoration:none;background:var(--butter);border-radius:4px;padding:0 2px}
+.second{margin-top:10px;width:100%;padding:14px;border-radius:16px;background:var(--surface-2);font-weight:700;font-size:15px;color:var(--navy)}
+.clue{background:var(--lila-soft);border-radius:16px;padding:12px 14px;margin-top:10px}.clue b{font-size:14px;color:var(--navy)}.clue p{margin:4px 0 0;font-size:14px;line-height:1.55;color:var(--ink-2)}.clue em{font-style:normal;font-weight:700;color:var(--ink)}
+.nw2{font-weight:700;padding:1px 6px;border-radius:8px;border:2px dashed var(--lila);background:#fff}.nw2 u,.nw u{text-decoration:none;background:var(--butter);border-radius:4px;padding:0 2px}
+.sent{font-size:20px;line-height:2.75}.nw{white-space:nowrap;position:relative;display:inline-block;line-height:1.5}
+.nw.on{background:#fff;border-color:var(--navy);box-shadow:0 0 0 3px var(--lila-soft)}
+.nw sub{position:absolute;left:50%;transform:translateX(-50%);bottom:-17px;font-size:9.5px;font-weight:700;letter-spacing:.04em;color:#fff;padding:1px 6px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bins button:disabled{cursor:default}
+.clues{display:grid;gap:6px;margin-top:8px}.clues div{display:grid;grid-template-columns:72px 1fr;gap:8px;font-size:14px;line-height:1.5}.clues em{font-style:normal;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding-top:2px}
+.pat{display:grid;gap:8px;margin-top:12px}.pat div{border-radius:14px;padding:11px 14px;font-size:13.5px;line-height:1.45}.pat b{display:block;font-size:14.5px}.pat span{color:var(--ink-2)}.pat em{font-style:normal;font-weight:600;color:var(--ink)}
+.sl{line-height:1.8;font-size:20px}.blank{min-width:120px;padding:0 6px;transition:all .2s}.blank.filled.g{color:var(--good);border-color:var(--good)}.blank.filled.b{color:var(--navy);border-color:var(--good)}
+.blank u,.rvs u{text-decoration:none;background:var(--butter);border-radius:4px;padding:0 2px}
+.opts button{display:flex;align-items:center;gap:12px}.let{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;background:var(--surface);border:1.5px solid var(--line);color:var(--ink-2)}
+.opts button.ok .let{background:var(--good);border-color:var(--good);color:#fff}.opts button.no .let{background:var(--bad);border-color:var(--bad);color:#fff}
+.opts button:disabled{cursor:default}
+.rvs{margin:8px 0 0;font-size:13.5px;line-height:1.5;color:var(--ink-2);background:var(--surface);border-radius:12px;padding:8px 12px}.rvs b{color:var(--ink)}
+.steps{display:flex;gap:8px}.steps span{flex:1;text-align:center;font-size:12.5px;font-weight:700;padding:8px;border-radius:999px;background:var(--surface-2);color:var(--ink-3)}
+.steps span.on{background:var(--mint);color:#fff}.steps span.dn{background:var(--mint-soft);color:var(--good)}
+.fx{line-height:2.3;font-size:20px}.fx .ul{white-space:nowrap}.fx .ul sup{position:relative;top:-2px}
+.ul.bad{background:var(--bad-bg);border-color:var(--bad)}.ul.no{background:var(--surface-2)}
+.ul.fixed{border-bottom:2.5px solid var(--good);background:var(--good-bg);border-radius:6px;padding:0 4px}.ul.fixed s{color:var(--bad);font-weight:500;text-decoration-thickness:2px}
+.hl,.ul.fixed u{text-decoration:none;background:var(--butter);border-radius:4px;padding:0 2px}
+.ex{font-size:18px;line-height:1.7;margin:10px 0 0}.exw{border-bottom:2.5px solid var(--bad);background:var(--bad-bg);padding:0 3px;font-weight:600}
+
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#121417;--surface:#1B1E23;--surface-2:#252930;--ink:#F1EEE8;--ink-2:#C4C1BB;--ink-3:#8E8F94;--line:#30343B;--navy:#22406A;--coral-soft:#3A2722;--butter-soft:#3A3220;--sky-soft:#1E2E40;--mint-soft:#1F3229;--lila-soft:#2C2540;--good:#7FCFA3;--good-bg:#1D3328;--bad:#F09A86;--bad-bg:#3A221D;--shadow:0 14px 34px rgba(0,0,0,.35);color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#121417;--surface:#1B1E23;--surface-2:#252930;--ink:#F1EEE8;--ink-2:#C4C1BB;--ink-3:#8E8F94;--line:#30343B;--navy:#22406A;--coral-soft:#3A2722;--butter-soft:#3A3220;--sky-soft:#1E2E40;--mint-soft:#1F3229;--lila-soft:#2C2540;--good:#7FCFA3;--good-bg:#1D3328;--bad:#F09A86;--bad-bg:#3A221D;--shadow:0 14px 34px rgba(0,0,0,.35);color-scheme:dark}
+:root[data-theme="dark"] .big,:root[data-theme="dark"] h2,:root[data-theme="dark"] .mode h3,:root[data-theme="dark"] .res .score,:root[data-theme="dark"] .choice b{color:#F1EEE8!important}
+:root[data-theme="dark"] .next,:root[data-theme="dark"] .go{background:#2E5487}
+:root[data-theme="dark"] .big u,:root[data-theme="dark"] .nw u,:root[data-theme="dark"] .hl,:root[data-theme="dark"] .rvw span u,:root[data-theme="dark"] .rvs u,:root[data-theme="dark"] .blank u{color:#17202E}
+a.back{text-decoration:none}
+.cover{position:relative;margin-top:14px;border-radius:26px;overflow:hidden;aspect-ratio:1376/768;background:#F3EDE1;box-shadow:var(--shadow)}
+.cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.cover .ct{position:absolute;left:clamp(16px,5vw,30px);top:50%;transform:translateY(-50%);max-width:46%;color:#1E3A5F}
+.cover .k{font-size:clamp(9.5px,2.6vw,12px);font-weight:700;letter-spacing:.18em;color:#E8846B}
+.cover h1{margin:6px 0 0;font-weight:800;font-size:clamp(28px,8.6vw,48px);line-height:.98;letter-spacing:-.03em}
+.cover h1 span{display:block}
+.cover .sub{margin-top:8px;font-size:clamp(11px,3vw,14px);font-weight:600;color:#4A4F5A}
+.lead{margin:16px 2px 0;font-size:15px;line-height:1.55;color:var(--ink-2)}
+.sufs2{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}.sufs2 span{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;color:#1E3A5F}
+.mode{grid-template-columns:108px 1fr!important;align-items:center;padding:12px!important}
+.thumb{width:108px;height:86px;border-radius:16px;background-size:cover;background-position:82% 50%;background-color:#F3EDE1}
+.banner{margin-top:14px}.banner h1{font-size:clamp(24px,7.4vw,40px)}.cover h1 span{white-space:nowrap}
+</style></head><body><div class="wrap" id="app"></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],app=$("#app");
+const CAT={person:["Person","-er · -or · -ist · -ian · -ee","var(--coral-soft)","var(--coral)"],thing:["Thing / Idea","-tion · -ment · -ness · -ity · -ance","var(--sky-soft)","var(--sky)"],verb:["Verb","-ize · -ify · -ate · -en","var(--mint-soft)","var(--mint)"],adj:["Adjective","-ful · -less · -ous · -ive · -able · -al","var(--butter-soft)","#C89B1E"],adv:["Adverb","-ly","var(--lila-soft)","var(--lila)"]};
+const SUF={er:"a person who does something, like <i>builder</i>.",or:"a person who does something, like <i>actor</i>.",ist:"a person connected to a field or activity, like <i>artist</i>.",ian:"a person connected to a subject or skill, like <i>historian</i>.",ee:"a person who receives an action, like <i>trainee</i>.",tion:"a noun for an action or its result, like <i>solution</i>.",ment:"a noun for an action or its result, like <i>payment</i>.",ness:"a noun for a quality or state, like <i>kindness</i>.",ity:"a noun for a quality or state, like <i>ability</i>.",ance:"a noun for an action or state, like <i>performance</i>.",ize:"a verb that means “to make or become”, like <i>modernize</i>.",ify:"a verb that means “to make”, like <i>simplify</i>.",ate:"a verb that means “to do or cause”, like <i>create</i>.",en:"a verb that means “to make more”, like <i>shorten</i>.",ful:"an adjective that means “full of”, like <i>powerful</i>.",less:"an adjective that means “without”, like <i>endless</i>.",ous:"an adjective that means “having the quality of”, like <i>famous</i>.",ive:"an adjective that means “tending to”, like <i>active</i>.",able:"an adjective that means “can be”, like <i>reliable</i>.",al:"an adjective that means “related to”, like <i>natural</i>.",ly:"an adverb. It describes <b>how</b> something is done, like <i>slowly</i>."};
+const H=h=>h.split(' · ').map(x=>`<span style="white-space:nowrap">${x}</span>`).join(' · ');
+const KIND={person:"a person (noun)",thing:"a thing or idea (noun)",verb:"a verb",adj:"an adjective",adv:"an adverb"};
+const ALT={er:"teacher",or:"visitor",ist:"scientist",ian:"musician",ee:"employee",tion:"education",ment:"development",ness:"darkness",ity:"equality",ance:"importance",ize:"organize",ify:"clarify",ate:"motivate",en:"widen",ful:"careful",less:"careless",ous:"dangerous",ive:"creative",able:"comfortable",al:"cultural",ly:"quickly"};
+const sufT=(x,w)=>SUF[x].replace(/<i>([^<]+)<\/i>/,(m,e)=>e===w?`<i>${ALT[x]}</i>`:m);
+const BANK=[["teach", "er", "person"], ["paint", "er", "person"], ["farm", "er", "person"], ["report", "er", "person"], ["design", "er", "person"], ["research", "er", "person"], ["manag", "er", "person"], ["own", "er", "person"], ["sing", "er", "person"], ["build", "er", "person"], ["lead", "er", "person"], ["employ", "er", "person"], ["act", "or", "person"], ["visit", "or", "person"], ["invent", "or", "person"], ["direct", "or", "person"], ["edit", "or", "person"], ["translat", "or", "person"], ["inspect", "or", "person"], ["sail", "or", "person"], ["govern", "or", "person"], ["collect", "or", "person"], ["scient", "ist", "person"], ["art", "ist", "person"], ["journal", "ist", "person"], ["dent", "ist", "person"], ["tour", "ist", "person"], ["novel", "ist", "person"], ["biolog", "ist", "person"], ["econom", "ist", "person"], ["guitar", "ist", "person"], ["special", "ist", "person"], ["music", "ian", "person"], ["librar", "ian", "person"], ["histor", "ian", "person"], ["electric", "ian", "person"], ["politic", "ian", "person"], ["magic", "ian", "person"], ["comed", "ian", "person"], ["employ", "ee", "person"], ["train", "ee", "person"], ["interview", "ee", "person"], ["refug", "ee", "person"], ["nomin", "ee", "person"], ["attend", "ee", "person"], ["educa", "tion", "thing"], ["informa", "tion", "thing"], ["pollu", "tion", "thing"], ["celebra", "tion", "thing"], ["popula", "tion", "thing"], ["construc", "tion", "thing"], ["protec", "tion", "thing"], ["competi", "tion", "thing"], ["inven", "tion", "thing"], ["solu", "tion", "thing"], ["organiza", "tion", "thing"], ["produc", "tion", "thing"], ["develop", "ment", "thing"], ["govern", "ment", "thing"], ["move", "ment", "thing"], ["agree", "ment", "thing"], ["equip", "ment", "thing"], ["achieve", "ment", "thing"], ["entertain", "ment", "thing"], ["improve", "ment", "thing"], ["pay", "ment", "thing"], ["treat", "ment", "thing"], ["happi", "ness", "thing"], ["dark", "ness", "thing"], ["kind", "ness", "thing"], ["weak", "ness", "thing"], ["ill", "ness", "thing"], ["fit", "ness", "thing"], ["aware", "ness", "thing"], ["sad", "ness", "thing"], ["fair", "ness", "thing"], ["polite", "ness", "thing"], ["equal", "ity", "thing"], ["abil", "ity", "thing"], ["secur", "ity", "thing"], ["real", "ity", "thing"], ["creativ", "ity", "thing"], ["electric", "ity", "thing"], ["major", "ity", "thing"], ["curios", "ity", "thing"], ["commun", "ity", "thing"], ["popular", "ity", "thing"], ["import", "ance", "thing"], ["appear", "ance", "thing"], ["perform", "ance", "thing"], ["toler", "ance", "thing"], ["accept", "ance", "thing"], ["assist", "ance", "thing"], ["guid", "ance", "thing"], ["resist", "ance", "thing"], ["disturb", "ance", "thing"], ["organ", "ize", "verb"], ["real", "ize", "verb"], ["modern", "ize", "verb"], ["special", "ize", "verb"], ["apolog", "ize", "verb"], ["memor", "ize", "verb"], ["summar", "ize", "verb"], ["critic", "ize", "verb"], ["final", "ize", "verb"], ["visual", "ize", "verb"], ["simpl", "ify", "verb"], ["class", "ify", "verb"], ["ident", "ify", "verb"], ["just", "ify", "verb"], ["clar", "ify", "verb"], ["ampl", "ify", "verb"], ["intens", "ify", "verb"], ["beaut", "ify", "verb"], ["terr", "ify", "verb"], ["not", "ify", "verb"], ["activ", "ate", "verb"], ["celebr", "ate", "verb"], ["educ", "ate", "verb"], ["cre", "ate", "verb"], ["motiv", "ate", "verb"], ["calcul", "ate", "verb"], ["gener", "ate", "verb"], ["illustr", "ate", "verb"], ["communic", "ate", "verb"], ["demonstr", "ate", "verb"], ["strength", "en", "verb"], ["short", "en", "verb"], ["wid", "en", "verb"], ["sharp", "en", "verb"], ["length", "en", "verb"], ["soft", "en", "verb"], ["threat", "en", "verb"], ["tight", "en", "verb"], ["bright", "en", "verb"], ["deep", "en", "verb"], ["care", "ful", "adj"], ["use", "ful", "adj"], ["power", "ful", "adj"], ["color", "ful", "adj"], ["peace", "ful", "adj"], ["success", "ful", "adj"], ["help", "ful", "adj"], ["beauti", "ful", "adj"], ["care", "less", "adj"], ["home", "less", "adj"], ["end", "less", "adj"], ["hope", "less", "adj"], ["fear", "less", "adj"], ["harm", "less", "adj"], ["danger", "ous", "adj"], ["fam", "ous", "adj"], ["nerv", "ous", "adj"], ["vari", "ous", "adj"], ["gener", "ous", "adj"], ["curi", "ous", "adj"], ["continu", "ous", "adj"], ["ambiti", "ous", "adj"], ["creat", "ive", "adj"], ["act", "ive", "adj"], ["attract", "ive", "adj"], ["expens", "ive", "adj"], ["effect", "ive", "adj"], ["impress", "ive", "adj"], ["product", "ive", "adj"], ["comfort", "able", "adj"], ["valu", "able", "adj"], ["reli", "able", "adj"], ["enjoy", "able", "adj"], ["avail", "able", "adj"], ["remark", "able", "adj"], ["afford", "able", "adj"], ["natur", "al", "adj"], ["cultur", "al", "adj"], ["music", "al", "adj"], ["nation", "al", "adj"], ["education", "al", "adj"], ["environment", "al", "adj"], ["quick", "ly", "adv"], ["careful", "ly", "adv"], ["slow", "ly", "adv"], ["quiet", "ly", "adv"], ["easi", "ly", "adv"], ["happi", "ly", "adv"], ["usual", "ly", "adv"], ["recent", "ly", "adv"], ["rapid", "ly", "adv"], ["extreme", "ly", "adv"], ["final", "ly", "adv"], ["clear", "ly", "adv"], ["nervous", "ly", "adv"], ["gradual", "ly", "adv"], ["general", "ly", "adv"], ["successful", "ly", "adv"], ["actual", "ly", "adv"], ["immediate", "ly", "adv"], ["complete", "ly", "adv"], ["frequent", "ly", "adv"], ["perfect", "ly", "adv"], ["previous", "ly", "adv"], ["brave", "ly", "adv"], ["polite", "ly", "adv"]];
+const ic={sort:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M7 12h10M10 17h4"/></svg>',det:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>',slot:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M8 12h8"/></svg>',fix:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg>'};
+const back='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>';
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const IMG={"cover": "wf-cover.webp", "sort": "wf-sorter.webp", "det": "wf-detective.webp", "slot": "wf-slot.webp", "fix": "wf-fix.webp"};
+let st={},sortMode="timed";
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function deal(n){const by={};BANK.forEach(w=>(by[w[2]]=by[w[2]]||[]).push(w));Object.keys(by).forEach(k=>by[k]=shuffle(by[k]));const out=[];let k=0;const keys=Object.keys(by);while(out.length<n){const c=keys[k%keys.length];if(by[c].length)out.push(by[c].pop());k++;if(keys.every(x=>!by[x].length))break}return shuffle(out)}
+function fit(el){let f=42;el.style.fontSize=f+'px';while(el.scrollWidth>el.clientWidth&&f>20){f-=2;el.style.fontSize=f+'px'}}
+window.addEventListener('resize',()=>{const b=document.querySelector('.big');if(b)fit(b)});
+function stop(){clearInterval(st.t);document.onkeydown=null}
+function home(){stop();app.innerHTML=`<div class="top"><a class="back" href="juego-toefl-practice.html">${back} TOEFL Practice</a><span class="brand">MOVA · TOEFL ITP</span></div>
+<div class="cover"><img src="${IMG.cover}" alt=""><div class="ct"><div class="k">TOEFL PRACTICE</div><h1><span>Word</span><span style="color:#E8846B">Forms</span></h1><div class="sub">4 ways to practice</div></div></div>
+<p class="lead">Learn to recognize nouns, verbs, adjectives and adverbs by their endings, even when you don’t know the word.</p>
+<div class="sufs2"><span style="background:#F8E1D9">-ist</span><span style="background:#DCEAF6">-tion</span><span style="background:#DCEAF6">-ment</span><span style="background:#DDEEE5">-ize</span><span style="background:#FBF0C9">-ful</span><span style="background:#FBF0C9">-ous</span><span style="background:#ECE4FB">-ly</span></div>
+<h2>Choose a mode</h2><div class="modes">
+${[["sort","Suffix Sorter","Sort each word by its ending.","Warm-up","coral",1],["det","Word Detective","Invented words, real endings. What is each word?","Strategy","lila",1],["slot","Slot Machine","Choose the word form that fits the sentence.","Structure style","sky",1],["fix","Fix the Form","Find the wrong word form and correct it.","Written Expression style","mint",1]].map(([k,t,d,c,col,on])=>`<button class="mode" data-m="${k}" ${on?"":"disabled"}><span class="thumb" style="background-image:url(${IMG[k]})"></span><span><h3>${t}</h3><p>${d}</p><span class="chip ${on?"":"soon"}" ${on?`style="background:var(--${col}-soft)"`:""}>${c}</span></span></button>`).join("")}</div>`;
+$$(".mode:not([disabled])").forEach(b=>b.onclick=()=>({sort:sortIntro,det:detIntro,slot:slotIntro,fix:fixIntro})[b.dataset.m]());}
+function sortIntro(){stop();const best=store.get("wf_sort_best");
+app.innerHTML=`<div class="top"><button class="back" id="bk">${back} Word Forms</button><span class="brand">Suffix Sorter</span></div>
+<div class="cover banner"><img src="${IMG.sort}" alt=""><div class="ct"><div class="k" style="color:#E8846B">WORD FORMS</div><h1><span>Suffix</span><span style="color:#E8846B">Sorter</span></h1></div></div>
+<div class="card"><div class="lab">HOW TO PLAY</div>
+<div class="how"><div><b class="n">1</b><span>A word appears with its <b>ending highlighted</b>.</span></div><div><b class="n">2</b><span>Look at the ending and choose what kind of word it is.</span></div><div><b class="n">3</b><span>You don’t need to know the word. <b>The ending tells you.</b></span></div></div></div>
+<div class="card"><div class="lab">THE 5 CATEGORIES</div><div class="cats">${Object.values(CAT).map(([n,h,bg])=>`<div style="background:${bg}"><b>${n}</b><span>${H(h)}</span></div>`).join("")}</div></div>
+<div class="choice"><button data-s="timed" class="${sortMode==="timed"?"on":""}"><b>Timed challenge</b><small>Sort as many words as you can in 60 seconds.${best?` Best: ${best}`:""}</small></button><button data-s="practice" class="${sortMode==="practice"?"on":""}"><b>Practice</b><small>20 words, no timer. Read the explanation after each mistake.</small></button></div>
+<button class="go" id="go">Start</button>`;
+$("#bk").onclick=home;$$(".choice button").forEach(b=>b.onclick=()=>{sortMode=b.dataset.s;$$(".choice button").forEach(x=>x.classList.toggle("on",x===b))});$("#go").onclick=sortStart;}
+function sortStart(){stop();st={m:"sort",mode:sortMode,i:0,ok:0,streak:0,bestStreak:0,missed:[],list:deal(sortMode==="timed"?80:20)};
+ if(st.mode==="timed"){st.left=60;st.t=setInterval(()=>{st.left--;const tb=$(".timer i"),tt=$(".trow .t");if(tb)tb.style.width=(st.left/60*100)+"%";if(tt)tt.textContent=st.left+"s";if(st.left<=0){stop();sortDone()}},1000)}
+ sortQ();}
+function sortQ(){if(st.i>=st.list.length)return sortDone();
+ const [r,s,c]=st.list[st.i],timed=st.mode==="timed";
+ app.innerHTML=`<div class="top"><button class="back" id="bk">${back} Word Forms</button><span class="brand">Suffix Sorter</span></div>
+ <div class="bar">${timed?"":`<div class="prog"><i style="width:${st.i/st.list.length*100}%"></i></div><span class="pill">${st.i+1}/${st.list.length}</span>`}<span class="pill" style="background:var(--butter-soft)">Score ${st.ok}</span><span class="pill" style="background:var(--coral-soft)">Streak ${st.streak}</span></div>
+ <div class="card"><div class="lab">WHAT KIND OF WORD IS IT?</div>${timed?`<div class="trow"><div class="timer"><i style="width:${st.left/60*100}%"></i></div><span class="t">${st.left}s</span></div>`:""}
+ <div class="big">${r}<u>${s}</u></div>
+ <div class="bins">${Object.entries(CAT).map(([k,[n,h,bg]])=>`<button data-c="${k}" style="background:${bg}">${n}<small>${H(h)}</small></button>`).join("")}</div>
+ <div class="fb" id="fb"></div><button class="next" id="nx">Next word</button><div class="kb">Tip: on a keyboard, press 1–5 to answer.</div></div>`;
+ fit($(".big"));
+ $("#bk").onclick=()=>{stop();sortIntro()};
+ let answered=false;
+ const pick=k=>{if(answered)return;answered=true;const b=$(`.bins [data-c="${k}"]`),good=k===c;
+  b.classList.add(good?"ok":"no");$$(".bins button").forEach(x=>x.disabled=true);
+  if(good){st.ok++;st.streak++;st.bestStreak=Math.max(st.bestStreak,st.streak);$(".big").classList.add("pop")}else{st.streak=0;st.missed.push([r,s,c]);$(`.bins [data-c="${c}"]`).classList.add("ok")}
+  const fb=$("#fb");fb.className="fb show "+(good?"g":"b");
+  fb.innerHTML=`<b>${good?"Correct!":"Not quite."}</b><b style="display:inline">-${s}</b> is ${sufT(s,r+s)}${good?"":`<small><b style="display:inline">${r}${s}</b> is <b style="display:inline">${KIND[c]}</b>.</small>`}`;
+  st.i++;
+  if(timed||good){const me=st;setTimeout(()=>{if(st!==me||(timed&&st.left<=0))return;sortQ()},good?700:1600)}
+  else{$("#nx").classList.add("show");$("#nx").onclick=sortQ}};
+ $$(".bins button").forEach(b=>b.onclick=()=>pick(b.dataset.c));
+ document.onkeydown=e=>{const k=Object.keys(CAT)[+e.key-1];if(k)pick(k);else if(e.key==="Enter"&&$("#nx.show"))sortQ()};}
+function sortDone(){stop();const n=st.i,acc=n?Math.round(st.ok/n*100):0;let best=store.get("wf_sort_best")||0,isBest=false;
+ if(st.mode==="timed"&&st.ok>best){best=st.ok;isBest=st.ok>0;store.set("wf_sort_best",best)}
+ const g={};st.missed.forEach(w=>(g[w[2]]=g[w[2]]||[]).push(w));const order=Object.keys(g).sort((a,b)=>g[b].length-g[a].length);
+ app.innerHTML=`<div class="top"><button class="back" id="bk">${back} Word Forms</button><span class="brand">Results</span></div>
+ <div class="card res"><div class="lab">${st.mode==="timed"?"TIME’S UP!":"PRACTICE COMPLETE"}</div><div class="score">${st.ok}/${n}</div>
+ <p style="color:var(--ink-2);margin:0">words sorted correctly${isBest?` · <b style="color:var(--good)">New best score!</b>`:""}</p>
+ <div class="sumrow"><div><b>${acc}%</b><span>ACCURACY</span></div><div><b>${st.bestStreak}</b><span>BEST STREAK</span></div><div><b>${st.mode==="timed"?best:n}</b><span>${st.mode==="timed"?"BEST SCORE":"WORDS"}</span></div></div>
+ ${order.length?`<div class="rv"><h4>REVIEW THESE</h4>${order.map(k=>`<div class="rvc" style="background:${CAT[k][2]}"><b>${CAT[k][0]}</b><em>${H(CAT[k][1])}</em><div class="rvw">${g[k].map(([r,s])=>`<span>${r}<u>${s}</u></span>`).join("")}</div></div>`).join("")}</div>`:n?`<p style="margin-top:16px;font-weight:600;color:var(--good)">No mistakes. Excellent work!</p>`:""}
+ <button class="next show" id="ag">Play again</button><button class="second" id="ch">Change mode</button></div>`;
+ $("#bk").onclick=home;$("#ag").onclick=sortStart;$("#ch").onclick=sortIntro;}
+/* ===== Word Detective ===== */
+const DET=[
+"The [glorpa|tion|thing|It comes right after “The”, so it names something.] was [flimous|ly|adv|It describes <b>how</b> it was organized.] organized by a [snerk|ist|person|It comes after “a” and names the one who did the action.].",
+"The [blev|er|person|It comes after “The” and names the people who want something. The -s only makes it plural.|s] wanted to [mop|ify|verb|It comes right after “to”.] the [crand|ous|adj|It comes before the noun “rules” and describes them.] rules.",
+"Her [trumb|ance|thing|It comes after “Her”, so it names something.] made the team feel [plonk|ful|adj|It comes after “feel” and describes the team.] and [zarp|less|adj|It is joined by “and” to another adjective.].",
+"The [drimm|ee|person|It comes after “The” and names the person who did the speaking.] spoke [vrastive|ly|adv|It describes <b>how</b> the person spoke.] about the new [plem|ment|thing|It comes after “the new”, so it names something.].",
+"Scientists hope to [quorb|ize|verb|It comes right after “to”.] the [frindle|ness|thing|It comes after “the”, so it names something.] of the [zelt|ive|adj|It comes before the noun “process” and describes it.] process.",
+"A [mork|ian|person|It comes after “A” and names the one who will do the action.] will [gland|ify|verb|It comes right after “will”.] the [prost|al|adj|It comes before the noun “map” and describes it.] map.",
+"The company tried to [wib|en|verb|It comes right after “to”.] its [strop|ity|thing|It comes after “its”, so it names something.] very [dravish|ly|adv|It comes after “very” and describes <b>how</b> they tried.].",
+"Every [plund|or|person|It comes after “Every” and names the people who must act.] must [crast|ate|verb|It comes right after “must”.] the [velm|able|adj|It comes before the noun “results” and describes them.] results.",
+"The [hobb|ment|thing|It comes right after “The”, so it names something.] of the old city was [gorpe|ful|adj|It comes after “was” and describes the subject.].",
+"Our [snib|er|person|It comes after “Our” and names the people who work. The -s only makes it plural.|s] work [flonk|ly|adv|It describes <b>how</b> they work.] in a [brazz|ous|adj|It comes between “a” and the noun “lab” and describes it.] lab.",
+"The [quiva|tion|thing|It comes right after “The”, so it names something.] of the [jorb|ist|person|It comes after “the” and names people. The -s only makes it plural.|s] was [narp|less|adj|It comes after “was” and describes the subject.].",
+"She [zarm|ate|verb|It comes right after the subject “She”. The -s shows a verb in the present tense.|s] the data [blonder|ly|adv|It describes <b>how</b> she does it.] every day.",
+"The [trell|ee|person|It comes after “The” and names the people who felt something. The -s only makes it plural.|s] felt [moxi|ous|adj|It comes after “felt” and describes how they felt.] about the [crimble|ness|thing|It comes after “the”, so it names something.].",
+"Teachers [kwint|ly|adv|It comes before the verb “try” and describes <b>how</b> they try.] try to [flor|ify|verb|It comes right after “to”.] the [drabb|al|adj|It comes before the noun “steps” and describes them.] steps.",
+"The [vamp|ity|thing|It comes right after “The”, so it names something.] of the [plosk|ive|adj|It comes between “the” and the noun “system” and describes it.] system surprised every [grund|or|person|It comes after “every” and names a person.].",
+"A good [sprock|er|person|It comes after “A good” and names a person.] can [flim|en|verb|It comes right after “can”.] any [twizz|ance|thing|It comes after “any”, so it names something.].",
+"They [zib|ate|verb|It comes right after the subject “They”.] the [quell|ment|thing|It comes after “the”, so it names something.] [snarful|ly|adv|It describes <b>how</b> they do it.].",
+"Her [grimp|less|adj|It comes between “Her” and the noun “idea” and describes it.] idea became a [plona|tion|thing|It comes after “a”, so it names something.] for every [vosk|ian|person|It comes after “every” and names a person.]."];
+function parseDet(s){const parts=[],re=/\[([^\]]+)\]/g;let last=0,m;while((m=re.exec(s))){if(m.index>last)parts.push(s.slice(last,m.index));const [r,suf,c,pos,tail=""]=m[1].split("|");parts.push({r,suf,c,pos,tail});last=re.lastIndex}if(last<s.length)parts.push(s.slice(last));return parts}
+function detIntro(){stop();app.innerHTML=`<div class="top"><button class="back" id="bk">${back} Word Forms</button><span class="brand">Word Detective</span></div>
+<div class="cover banner"><img src="${IMG.det}" alt=""><div class="ct"><div class="k" style="color:#A98BE8">WORD FORMS</div><h1><span>Word</span><span style="color:#A98BE8">Detective</span></h1></div></div>
+<div class="card"><div class="lab" style="color:var(--lila)">HOW TO PLAY</div>
+<p class="hint" style="font-size:14px;line-height:1.55">These sentences have <b>invented words</b>. They don’t exist, but you can still tell what kind of word each one is.</p>
+<div class="how"><div><b class="n">1</b><span>Tap an invented word in the sentence.</span></div><div><b class="n">2</b><span>Choose what kind of word it is.</span></div><div><b class="n">3</b><span>Solve all the words to go to the next sentence.</span></div></div></div>
+<div class="card"><div class="lab" style="color:var(--lila)">USE TWO CLUES</div>
+<div class="clue"><b>Clue 1 · The ending</b><p>The <span class="nw2">glorpa<u>tion</u></span> was late. <em>-tion</em> makes a noun.</p></div>
+<div class="clue"><b>Clue 2 · The position</b><p>It comes right after <em>“The”</em>, so it names something.</p></div>
+<p class="hint" style="margin-top:12px">This is exactly what you do on the TOEFL when you don’t know a word.</p></div>
+<button class="go" id="go">Start</button>`;
+$("#bk").onclick=home;$("#go").onclick=detStart;}
+function detStart(){stop();st={m:"det",s:0,ok:0,total:0,streak:0,bestStreak:0,missed:[],list:shuffle(DET).slice(0,8)};detQ()}
+function detQ(){if(st.s>=st.list.length)return detDone();
+ const parts=parseDet(st.list[st.s]),words=parts.filter(p=>typeof p!=="string");let sel=0;
+ app.innerHTML=`<div class="top"><button class="back" id="bk">${back} Word Forms</button><span class="brand">Word Detective</span></div>
+ <div class="bar"><div class="prog"><i style="width:${st.s/st.list.length*100}%"></i></div><span class="pill">${st.s+1}/${st.list.length}</span><span class="pill" id="sc" style="background:var(--butter-soft)">Score ${st.ok}</span><span class="pill" id="sk" style="background:var(--lila-soft)">Streak ${st.streak}</span></div>
+ <div class="card"><div class="lab" style="color:var(--lila)">WHAT KIND OF WORD IS IT?</div>
+ <div class="sent">${parts.map(p=>{if(typeof p==="string")return p;const i=words.indexOf(p);return `<span class="nw" data-i="${i}">${p.r}${p.suf}${p.tail}</span>`}).join("")}</div>
+ <div class="hint" id="ht">Tap a highlighted word, then choose its category.</div>
+ <div class="bins" style="margin-top:14px">${Object.entries(CAT).map(([k,[n,h,bg]])=>`<button data-c="${k}" style="background:${bg}">${n}<small>${H(h)}</small></button>`).join("")}</div>
+ <div class="fb" id="fb"></div><button class="next" id="nx">${st.s+1<st.list.length?"Next sentence":"See results"}</button></div>`;
+ $("#bk").onclick=()=>{stop();detIntro()};
+ const chips=$$(".nw");
+ const choose=i=>{if(words[i].done)return;sel=i;chips.forEach(c=>c.classList.toggle("on",+c.dataset.i===i));$$(".bins button").forEach(b=>{b.disabled=false;b.classList.remove("ok","no")})};
+ chips.forEach(c=>c.onclick=()=>choose(+c.dataset.i));
+ const answer=k=>{const w=words[sel];if(!w||w.done)return;w.done=true;st.total++;const good=k===w.c,ch=chips[sel];
+  ch.classList.remove("on");ch.classList.add(good?"ok":"no");ch.innerHTML=`${w.r}<u>${w.suf}</u>${w.tail}<sub style="background:${CAT[w.c][3]}">${CAT[w.c][0]}</sub>`;
+  $(`.bins [data-c="${k}"]`).classList.add(good?"ok":"no");if(!good)$(`.bins [data-c="${w.c}"]`).classList.add("ok");$$(".bins button").forEach(b=>b.disabled=true);
+  if(good){st.ok++;st.streak++;st.bestStreak=Math.max(st.bestStreak,st.streak)}else{st.streak=0;st.missed.push(w)}
+  $("#sc").textContent="Score "+st.ok;$("#sk").textContent="Streak "+st.streak;
+  const fb=$("#fb");fb.className="fb show "+(good?"g":"b");
+  fb.innerHTML=`<b>${good?"Correct!":"Not quite."} ${w.r}${w.suf}${w.tail} is ${KIND[w.c]}.</b><div class="clues"><div><em>Ending</em><span><b>-${w.suf}</b> is ${SUF[w.suf]}</span></div><div><em>Position</em><span>${w.pos}</span></div></div>`;
+  const nxt=words.findIndex(x=>!x.done);
+  if(nxt<0){$("#ht").textContent="Sentence solved!";$("#nx").classList.add("show");$("#nx").onclick=()=>{st.s++;detQ()}}
+  else{$("#ht").textContent="Tap the next highlighted word.";setTimeout(()=>{if(!words[nxt].done&&st.m==="det"){sel=nxt;chips[nxt].classList.add("on");$$(".bins button").forEach(b=>{b.disabled=false;b.classList.remove("ok","no")})}},good?900:1800)}};
+ $$(".bins button").forEach(b=>b.onclick=()=>answer(b.dataset.c));
+ document.onkeydown=e=>{const k=Object.keys(CAT)[+e.key-1];if(k&&!$$(".bins button")[0].disabled)answer(k);else if(e.key==="Enter"&&$("#nx.show"))$("#nx").click()};
+ choose(0);}
+function detDone(){stop();const n=st.total,acc=n?Math.round(st.ok/n*100):0;
+ const g={};st.missed.forEach(w=>(g[w.c]=g[w.c]||[]).push(w));const order=Object.keys(g).sort((a,b)=>g[b].length-g[a].length);
+ app.innerHTML=`<div class="top"><button class="back" id="bk">${back} Word Forms</button><span class="brand">Results</span></div>
+ <div class="card res"><div class="lab" style="color:var(--lila)">CASE CLOSED!</div><div class="score">${st.ok}/${n}</div>
+ <p style="color:var(--ink-2);margin:0">invented words identified correctly</p>
+ <div class="sumrow"><div><b>${acc}%</b><span>ACCURACY</span></div><div><b>${st.bestStreak}</b><span>BEST STREAK</span></div><div><b>${st.list.length}</b><span>SENTENCES</span></div></div>
+ ${order.length?`<div class="rv"><h4>REVIEW THESE</h4>${order.map(k=>`<div class="rvc" style="background:${CAT[k][2]}"><b>${CAT[k][0]}</b><em>${H(CAT[k][1])}</em><div class="rvw">${g[k].map(w=>`<span>${w.r}<u>${w.suf}</u>${w.tail}</span>`).join("")}</div></div>`).join("")}<p class="hint" style="margin-top:12px">Remember: look at the ending first, then check the word before it.</p></div>`:`<p style="margin-top:16px;font-weight:600;color:var(--good)">No mistakes. Excellent detective work!</p>`}
+ <button class="next show" id="ag">Play again</button><button class="second" id="ch">How to play</button></div>`;
+ $("#bk").onclick=home;$("#ag").onclick=detStart;$("#ch").onclick=detIntro;}
+
+/* ===== Slot Machine ===== */
+const SLOTB=[
+["The ___ of the new bridge took almost five years.","construct|construction|constructive|constructively",1,"thing","construc|tion","After “The” and before “of”, we need a <b>noun</b>."],
+["She answered every question ___.","confident|confidence|confidently|confide",2,"adv","confident|ly","It describes <b>how</b> she answered, so we need an <b>adverb</b>."],
+["Many cities want to ___ their public transportation.","modern|modernize|modernization|modernly",1,"verb","modern|ize","After “want to”, we need a <b>verb</b>."],
+["It was a very ___ decision for the company.","success|succeed|successful|successfully",2,"adj","success|ful","Between “very” and the noun “decision”, we need an <b>adjective</b>."],
+["The ___ explained the results of the experiment.","research|researcher|researchable|researched",1,"person","research|er","Someone explained the results. After “The”, we need a noun for a <b>person</b>."],
+["Regular exercise can ___ your muscles.","strong|strength|strengthen|strongly",2,"verb","strength|en","After “can”, we need a <b>verb</b>."],
+["The museum has a ___ collection of ancient coins.","valuably|valuable|value|valuation",1,"adj","valu|able","Between “a” and the noun “collection”, we need an <b>adjective</b>."],
+["The ___ of the city grew quickly after 1950.","populate|population|popular|popularly",1,"thing","popula|tion","After “The” and before “of”, we need a <b>noun</b>."],
+["Water is ___ for all living things.","essence|essential|essentially|essentialize",1,"adj","essenti|al","After “is”, we need an <b>adjective</b> that describes water."],
+["The children listened ___ to the story.","quiet|quietly|quietness|quieten",1,"adv","quiet|ly","It describes <b>how</b> they listened, so we need an <b>adverb</b>."],
+["A local ___ painted the mural on the school wall.","art|artist|artistic|artistically",1,"person","art|ist","Someone painted the mural. After “A local”, we need a noun for a <b>person</b>."],
+["Teachers try to ___ difficult ideas for their students.","simple|simplify|simplicity|simply",1,"verb","simpl|ify","After “try to”, we need a <b>verb</b>."],
+["Her ___ to help others made her very popular.","willing|willingly|willingness|willed",2,"thing","willing|ness","After “Her”, we need a <b>noun</b>. It is the subject of the sentence."],
+["The new library is very ___ for students who study late.","use|useful|usefully|usefulness",1,"adj","use|ful","After “is very”, we need an <b>adjective</b>."],
+["The ___ of the company met with all the workers.","direct|director|direction|directly",1,"person","direct|or","Someone met with the workers. After “The”, we need a noun for a <b>person</b>."],
+["Prices have increased ___ over the past year.","rapid|rapidly|rapidity|rapidness",1,"adv","rapid|ly","It describes <b>how</b> prices increased, so we need an <b>adverb</b>."],
+["The school wants to ___ the rules for using phones.","clear|clarify|clarity|clearly",1,"verb","clar|ify","After “wants to”, we need a <b>verb</b>."],
+["Scientists measured the ___ of the light.","bright|brighten|brightness|brightly",2,"thing","bright|ness","After “the” and before “of”, we need a <b>noun</b>."],
+["Many students feel ___ before an important exam.","nerve|nervous|nervously|nervousness",1,"adj","nerv|ous","After “feel”, we need an <b>adjective</b> that describes the students."],
+["His ___ in math improved after he practiced every day.","achieve|achievement|achievable|achiever",1,"thing","achieve|ment","After “His”, we need a <b>noun</b>. It is the subject of the sentence."],
+["The company hired a ___ to work on its website.","translate|translation|translator|translated",2,"person","translat|or","The company hired someone. After “a”, we need a noun for a <b>person</b>."],
+["The test was ___ difficult for most students.","extreme|extremely|extremity|extremes",1,"adv","extreme|ly","It comes before the adjective “difficult” and tells <b>how</b> difficult, so we need an <b>adverb</b>."],
+["The workers will ___ the old road next summer.","wide|widen|width|widely",1,"verb","wid|en","After “will”, we need a <b>verb</b>."],
+["Recycling is ___ for the environment.","benefit|beneficial|beneficially|beneficiary",1,"adj","benefici|al","After “is”, we need an <b>adjective</b> that describes recycling."],
+["Every ___ in the orchestra practiced for months.","music|musical|musician|musically",2,"person","music|ian","Someone practiced. After “Every”, we need a noun for a <b>person</b>."],
+["Good ___ between parents and teachers helps students.","communicate|communication|communicative|communicatively",1,"thing","communica|tion","After the adjective “Good”, we need a <b>noun</b>. It is the subject of the sentence."],
+["The rescue team worked ___ to find the hikers.","tireless|tirelessly|tirelessness|tire",1,"adv","tireless|ly","It describes <b>how</b> they worked, so we need an <b>adverb</b>."],
+["The teacher asked the students to ___ the main ideas.","summary|summarize|summarization|summarily",1,"verb","summar|ize","After “to”, we need a <b>verb</b>."],
+["An ___ of the hotel welcomed every guest.","employ|employee|employment|employable",1,"person","employ|ee","Someone welcomed the guests. After “An”, we need a noun for a <b>person</b>."],
+["Her ___ ideas impressed the judges.","create|creative|creatively|creation",1,"adj","creat|ive","Between “Her” and the noun “ideas”, we need an <b>adjective</b>."],
+["The ___ of clean water is a serious problem in some regions.","scarce|scarcely|scarcity|scarcer",2,"thing","scarc|ity","After “The” and before “of”, we need a <b>noun</b>."],
+["The old documents were ___ protected in a glass case.","careful|carefully|care|carefulness",1,"adv","careful|ly","It comes before “protected” and describes <b>how</b>, so we need an <b>adverb</b>."],
+["Doctors ___ their patients about healthy habits.","educate|education|educational|educator",0,"verb","educ|ate","After the subject “Doctors”, the sentence needs its main <b>verb</b>."],
+["This phone is not ___ for most families.","afford|affordable|affordably|affordability",1,"adj","afford|able","After “is not”, we need an <b>adjective</b> that describes the phone."]];
+const L="ABCD";
+function slotIntro(){stop();app.innerHTML=`<div class="top"><button class="back" id="bk">${back} Word Forms</button><span class="brand">Slot Machine</span></div>
+<div class="cover banner"><img src="${IMG.slot}" alt=""><div class="ct"><div class="k" style="color:#6FA8D6">WORD FORMS</div><h1><span>Slot</span><span style="color:#6FA8D6">Machine</span></h1></div></div>
+<div class="card"><div class="lab" style="color:var(--sky)">HOW TO PLAY</div>
+<p class="hint" style="font-size:14px;line-height:1.55">This is the format of the <b>Structure</b> section of the TOEFL ITP. Each sentence has a blank and four forms of the same word.</p>
+<div class="how"><div><b class="n">1</b><span>Read the words <b>around</b> the blank.</span></div><div><b class="n">2</b><span>Decide what kind of word fits: noun, verb, adjective or adverb.</span></div><div><b class="n">3</b><span>Choose the option with the right <b>ending</b>.</span></div></div></div>
+<div class="card"><div class="lab" style="color:var(--sky)">POSITION PATTERNS</div><div class="pat">
+<div style="background:var(--sky-soft)"><b>Noun</b><span>after <em>the, a, an, his, her, its</em> · before <em>of</em></span></div>
+<div style="background:var(--mint-soft)"><b>Verb</b><span>after <em>to, can, will, must</em> · after the subject</span></div>
+<div style="background:var(--butter-soft)"><b>Adjective</b><span>before a noun · after <em>is, was, feel, very</em></span></div>
+<div style="background:var(--lila-soft)"><b>Adverb</b><span>describes <em>how</em> something is done</span></div></div></div>
+<button class="go" id="go">Start · 10 sentences</button>`;
+$("#bk").onclick=home;$("#go").onclick=slotStart;}
+function slotStart(){stop();st={m:"slot",i:0,ok:0,streak:0,bestStreak:0,missed:[],list:shuffle(SLOTB).slice(0,10).map(q=>{const o=q[1].split("|"),ord=shuffle([0,1,2,3]);return {s:q[0],o:ord.map(k=>o[k]),a:ord.indexOf(q[2]),c:q[3],w:q[4].split("|"),e:q[5]}})};slotQ()}
+function slotQ(){if(st.i>=st.list.length)return slotDone();const q=st.list[st.i];
+ app.innerHTML=`<div class="top"><button class="back" id="bk">${back} Word Forms</button><span class="brand">Slot Machine</span></div>
+ <div class="bar"><div class="prog"><i style="width:${st.i/st.list.length*100}%"></i></div><span class="pill">${st.i+1}/${st.list.length}</span><span class="pill" id="sc" style="background:var(--butter-soft)">Score ${st.ok}</span><span class="pill" id="sk" style="background:var(--sky-soft)">Streak ${st.streak}</span></div>
+ <div class="card"><div class="lab" style="color:var(--sky)">COMPLETE THE SENTENCE</div>
+ <div class="sent sl">${q.s.replace("___",`<span class="blank" id="bl">&nbsp;</span>`)}</div>
+ <div class="opts" id="op">${q.o.map((o,k)=>`<button data-k="${k}"><span class="let">${L[k]}</span>${o}</button>`).join("")}</div>
+ <div class="fb" id="fb"></div><button class="next" id="nx">${st.i+1<st.list.length?"Next sentence":"See results"}</button>
+ <div class="kb">Tip: on a keyboard, press A–D to answer.</div></div>`;
+ $("#bk").onclick=()=>{stop();slotIntro()};
+ let done=false;
+ const pick=k=>{if(done)return;done=true;const good=k===q.a,bs=$$("#op button");
+  bs[k].classList.add(good?"ok":"no");if(!good)bs[q.a].classList.add("ok");bs.forEach(b=>b.disabled=true);
+  if(good){st.ok++;st.streak++;st.bestStreak=Math.max(st.bestStreak,st.streak)}else{st.streak=0;st.missed.push(q)}
+  $("#sc").textContent="Score "+st.ok;$("#sk").textContent="Streak "+st.streak;
+  const bl=$("#bl");bl.innerHTML=`${q.w[0]}<u>${q.w[1]}</u>`;bl.classList.add("filled",good?"g":"b");
+  const fb=$("#fb");fb.className="fb show "+(good?"g":"b");
+  fb.innerHTML=`<b>${good?"Correct!":`Not quite. The answer is (${L[q.a]}) ${q.o[q.a]}.`}</b><div class="clues"><div><em>Position</em><span>${q.e}</span></div><div><em>Ending</em><span><b>-${q.w[1]}</b> is ${sufT(q.w[1],q.w.join(''))}</span></div></div>`;
+  $("#nx").classList.add("show");$("#nx").onclick=()=>{st.i++;slotQ()}};
+ $$("#op button").forEach(b=>b.onclick=()=>pick(+b.dataset.k));
+ document.onkeydown=e=>{const k=L.indexOf(e.key.toUpperCase());if(k>=0&&e.key.length===1)pick(k);else if(e.key==="Enter"&&$("#nx.show"))$("#nx").click()};}
+function slotDone(){stop();const n=st.list.length,acc=Math.round(st.ok/n*100);
+ const g={};st.missed.forEach(q=>(g[q.c]=g[q.c]||[]).push(q));const order=Object.keys(g).sort((a,b)=>g[b].length-g[a].length);
+ app.innerHTML=`<div class="top"><button class="back" id="bk">${back} Word Forms</button><span class="brand">Results</span></div>
+ <div class="card res"><div class="lab" style="color:var(--sky)">ROUND COMPLETE</div><div class="score">${st.ok}/${n}</div>
+ <p style="color:var(--ink-2);margin:0">sentences completed correctly</p>
+ <div class="sumrow"><div><b>${acc}%</b><span>ACCURACY</span></div><div><b>${st.bestStreak}</b><span>BEST STREAK</span></div><div><b>${n-st.ok}</b><span>TO REVIEW</span></div></div>
+ ${order.length?`<div class="rv"><h4>REVIEW THESE</h4>${order.map(k=>`<div class="rvc" style="background:${CAT[k][2]}"><b>${CAT[k][0]}</b><em>${H(CAT[k][1])}</em>${g[k].map(q=>`<p class="rvs">${q.s.replace("___",`<b>${q.w[0]}<u>${q.w[1]}</u></b>`)}</p>`).join("")}</div>`).join("")}<p class="hint" style="margin-top:12px">Remember: read the words around the blank before you look at the options.</p></div>`:`<p style="margin-top:16px;font-weight:600;color:var(--good)">No mistakes. You’re ready for Structure!</p>`}
+ <button class="next show" id="ag">Play again</button><button class="second" id="ch">How to play</button></div>`;
+ $("#bk").onclick=home;$("#ag").onclick=slotStart;$("#ch").onclick=slotIntro;}
+
+/* ===== Fix the Form ===== */
+const FIXB=[
+["The [*educate] of young [children] is [extremely] [important].","education|educator|educational","thing","educa|tion","After “The” and before “of”, we need a <b>noun</b>."],
+["The children [played] [*happy] in the [large] [garden].","happily|happiness|happier","adv","happi|ly","It describes <b>how</b> they played, so we need an <b>adverb</b>."],
+["Engineers [hope] to [*simple] the [design] of [electric] cars.","simplify|simplicity|simply","verb","simpl|ify","After “to”, we need a <b>verb</b>."],
+["The museum [hired] a new [*direction] to [manage] its [collection].","director|directly|directive","person","direct|or","The museum hired someone. After “a new”, we need a noun for a <b>person</b>."],
+["She [spoke] [*confident] about her [plans] for the [future].","confidently|confidence|confide","adv","confident|ly","It describes <b>how</b> she spoke, so we need an <b>adverb</b>."],
+["Teachers [care] [deeply] [about] the [*happy] of their students.","happiness|happily|happier","thing","happi|ness","After “the” and before “of”, we need a <b>noun</b>."],
+["Many [farmers] [want] to [*modern] their [equipment].","modernize|modernization|modernly","verb","modern|ize","After “to”, we need a <b>verb</b>."],
+["The [speech] was [*extreme] [long] and [boring].","extremely|extremity|extremes","adv","extreme|ly","It comes before the adjective “long” and tells <b>how</b> long, so we need an <b>adverb</b>."],
+["The [frog] was [discovered] by a [young] [*science].","scientist|scientific|scientifically","person","scient|ist","Someone discovered the frog. After “a young”, we need a noun for a <b>person</b>."],
+["The [mountain] [roads] are [*danger] in [winter].","dangerous|dangerously|endanger","adj","danger|ous","After “are”, we need an <b>adjective</b> that describes the roads."],
+["The [*develop] of the [new] [vaccine] took [several] years.","development|developer|developmental","thing","develop|ment","After “The” and before “of”, we need a <b>noun</b>."],
+["[Regular] [exercise] [can] [*strength] your heart.","strengthen|strong|strongly","verb","strength|en","After “can”, we need a <b>verb</b>."],
+["He [gave] a very [*create] [answer] to the [question].","creative|creation|creatively","adj","creat|ive","Between “very” and the noun “answer”, we need an <b>adjective</b>."],
+["The [*employ] [received] a [bonus] for her [excellent] work.","employee|employment|employable","person","employ|ee","Someone received a bonus. After “The”, we need a noun for a <b>person</b>."],
+["All [citizens] [deserve] [complete] [*equal] under the law.","equality|equally|equalize","thing","equal|ity","After the adjective “complete”, we need a <b>noun</b>."],
+["The [tourists] [walked] [*slow] through the [old] market.","slowly|slowness|slowed","adv","slow|ly","It describes <b>how</b> they walked, so we need an <b>adverb</b>."],
+["The new [phone] is [*comfort] to [hold] in one [hand].","comfortable|comfortably|comforter","adj","comfort|able","After “is”, we need an <b>adjective</b> that describes the phone."],
+["Teachers [need] to [*motivation] their [students] [every] day.","motivate|motivational|motivated","verb","motiv|ate","After “to”, we need a <b>verb</b>."],
+["Many [people] [often] [ignore] the [*important] of sleep.","importance|importantly|imported","thing","import|ance","After “the” and before “of”, we need a <b>noun</b>."],
+["The [concert] [featured] a [talented] [*music] from Spain.","musician|musical|musically","person","music|ian","The concert featured someone. After “a talented”, we need a noun for a <b>person</b>."],
+["Plastic [bags] can be [*harm] to [marine] [animals].","harmful|harmfully|harmed","adj","harm|ful","After “can be”, we need an <b>adjective</b> that describes the bags."],
+["The government [plans] to [*wide] the [main] [highway].","widen|width|widely","verb","wid|en","After “to”, we need a <b>verb</b>."],
+["The students [listened] [*careful] to the [visiting] [author].","carefully|carefulness|care","adv","careful|ly","It describes <b>how</b> they listened, so we need an <b>adverb</b>."],
+["Her [*kind] [made] everyone feel [welcome] at the [party].","kindness|kindly|kinder","thing","kind|ness","After “Her”, we need a <b>noun</b>. It is the subject of the sentence."],
+["The museum [has] a [*culture] [exhibit] about [ancient] Egypt.","cultural|culturally|cultures","adj","cultur|al","Between “a” and the noun “exhibit”, we need an <b>adjective</b>."]];
+function parseFix(s){const parts=[],re=/\[(\*?)([^\]]+)\]/g;let last=0,m,n=0,w=0;while((m=re.exec(s))){if(m.index>last)parts.push(s.slice(last,m.index));if(m[1])w=n;parts.push({t:m[2],k:n++});last=re.lastIndex}if(last<s.length)parts.push(s.slice(last));return {parts,w}}
+function fixIntro(){stop();app.innerHTML=`<div class="top"><button class="back" id="bk">${back} Word Forms</button><span class="brand">Fix the Form</span></div>
+<div class="cover banner"><img src="${IMG.fix}" alt=""><div class="ct"><div class="k" style="color:#5E9C80">WORD FORMS</div><h1><span>Fix the</span><span style="color:#5E9C80">Form</span></h1></div></div>
+<div class="card"><div class="lab" style="color:var(--mint)">HOW TO PLAY</div>
+<p class="hint" style="font-size:14px;line-height:1.55">This is the format of the <b>Written Expression</b> section of the TOEFL ITP. One of the four underlined words uses the wrong form.</p>
+<div class="how"><div><b class="n">1</b><span><b>Find the error.</b> Choose the underlined word (A, B, C or D) that is wrong.</span></div><div><b class="n">2</b><span><b>Fix it.</b> Choose the correct form of that word.</span></div><div><b class="n">3</b><span>You get the point only if both steps are correct.</span></div></div></div>
+<div class="card"><div class="lab" style="color:var(--mint)">EXAMPLE</div>
+<p class="ex">The children played <span class="exw">happy</span> in the garden.</p>
+<p class="hint" style="font-size:14px;line-height:1.55;margin-top:8px">It describes <b>how</b> they played, so it needs an adverb: <b>happi<u class="hl">ly</u></b>.</p></div>
+<button class="go" id="go">Start · 8 sentences</button>`;
+$("#bk").onclick=home;$("#go").onclick=fixStart;}
+function fixStart(){stop();st={m:"fix",i:0,ok:0,found:0,fixed:0,streak:0,bestStreak:0,missed:[],list:shuffle(FIXB).slice(0,8).map(q=>{const p=parseFix(q[0]),o=q[1].split("|"),ord=shuffle([0,1,2]);return {...p,src:q[0],o:ord.map(k=>o[k]),a:ord.indexOf(0),c:q[2],wd:q[3].split("|"),e:q[4]}})};fixQ()}
+function fixQ(){if(st.i>=st.list.length)return fixDone();const q=st.list[st.i];let step=1,stepOk=false;
+ const sentence=()=>q.parts.map(p=>typeof p==="string"?p:`<span class="ul" data-k="${p.k}">${p.t}<sup>${L[p.k]}</sup></span>`).join("");
+ app.innerHTML=`<div class="top"><button class="back" id="bk">${back} Word Forms</button><span class="brand">Fix the Form</span></div>
+ <div class="bar"><div class="prog"><i style="width:${st.i/st.list.length*100}%"></i></div><span class="pill">${st.i+1}/${st.list.length}</span><span class="pill" id="sc" style="background:var(--butter-soft)">Score ${st.ok}</span><span class="pill" id="sk" style="background:var(--mint-soft)">Streak ${st.streak}</span></div>
+ <div class="card"><div class="steps"><span class="on" id="s1">1 · Find the error</span><span id="s2">2 · Fix it</span></div>
+ <div class="sent fx" id="se">${sentence()}</div>
+ <div class="lab" style="color:var(--mint);margin-top:14px" id="ql">WHICH UNDERLINED WORD IS WRONG?</div>
+ <div class="opts g2" id="op">${q.parts.filter(p=>typeof p!=="string").map(p=>`<button data-k="${p.k}"><span class="let">${L[p.k]}</span>${p.t}</button>`).join("")}</div>
+ <div class="fb" id="fb"></div><button class="next" id="nx">Fix it</button><div class="kb" id="kb">Tip: on a keyboard, press A–D to answer.</div></div>`;
+ $("#bk").onclick=()=>{stop();fixIntro()};
+ const ul=k=>$(`.ul[data-k="${k}"]`);let lock=false;
+ const find=k=>{if(lock||step!==1)return;lock=true;stepOk=k===q.w;const bs=$$("#op button");
+  bs.forEach(b=>{b.disabled=true;if(+b.dataset.k===q.w)b.classList.add("ok");else if(+b.dataset.k===k)b.classList.add("no")});
+  ul(q.w).classList.add("bad");if(!stepOk)ul(k).classList.add("no");if(stepOk)st.found++;
+  const fb=$("#fb");fb.className="fb show "+(stepOk?"g":"b");
+  fb.innerHTML=stepOk?`<b>You found it!</b>(${L[q.w]}) <b style="display:inline">${q.parts.find(p=>p.k===q.w).t}</b> is the wrong form. Now fix it.`:`<b>Not quite.</b>The error is (${L[q.w]}) <b style="display:inline">${q.parts.find(p=>p.k===q.w).t}</b>. Now try to fix it.`;
+  $("#nx").textContent="Fix it";$("#nx").classList.add("show");$("#nx").onclick=goFix;};
+ const goFix=()=>{step=2;lock=false;$("#s1").classList.remove("on");$("#s1").classList.add("dn");$("#s2").classList.add("on");
+  $$(".ul").forEach(u=>u.classList.remove("no"));$("#fb").className="fb";$("#nx").classList.remove("show");
+  $("#ql").textContent="CHOOSE THE CORRECT FORM";
+  $("#op").className="opts";$("#op").innerHTML=q.o.map((o,k)=>`<button data-k="${k}"><span class="let">${L[k]}</span>${o}</button>`).join("");
+  $$("#op button").forEach(b=>b.onclick=()=>fix(+b.dataset.k));};
+ const fix=k=>{if(lock||step!==2)return;lock=true;const good=k===q.a,bs=$$("#op button");
+  bs[k].classList.add(good?"ok":"no");if(!good)bs[q.a].classList.add("ok");bs.forEach(b=>b.disabled=true);
+  if(good)st.fixed++;const both=good&&stepOk;
+  if(both){st.ok++;st.streak++;st.bestStreak=Math.max(st.bestStreak,st.streak)}else{st.streak=0;st.missed.push(q)}
+  $("#sc").textContent="Score "+st.ok;$("#sk").textContent="Streak "+st.streak;
+  const u=ul(q.w);u.className="ul fixed";u.innerHTML=`<s>${q.parts.find(p=>p.k===q.w).t}</s> ${q.wd[0]}<u class="hl">${q.wd[1]}</u>`;
+  const fb=$("#fb");fb.className="fb show "+(both?"g":"b");
+  fb.innerHTML=`<b>${both?"Correct! Both steps.":good?"Good fix! But remember to find the error first.":`Not quite. The correct form is ${q.o[q.a]}.`}</b><div class="clues"><div><em>Position</em><span>${q.e}</span></div><div><em>Ending</em><span><b>-${q.wd[1]}</b> is ${sufT(q.wd[1],q.wd.join(''))}</span></div></div>`;
+  $("#nx").textContent=st.i+1<st.list.length?"Next sentence":"See results";$("#nx").classList.add("show");$("#nx").onclick=()=>{st.i++;fixQ()};};
+ $$("#op button").forEach(b=>b.onclick=()=>find(+b.dataset.k));
+ $$(".ul").forEach(u=>u.onclick=()=>find(+u.dataset.k));
+ document.onkeydown=e=>{const k=L.indexOf(e.key.toUpperCase());if(e.key.length===1&&k>=0){if(step===1)find(k);else if(k<3)fix(k)}else if(e.key==="Enter"&&$("#nx.show"))$("#nx").click()};}
+function fixDone(){stop();const n=st.list.length,acc=Math.round(st.ok/n*100);
+ const g={};st.missed.forEach(q=>(g[q.c]=g[q.c]||[]).push(q));const order=Object.keys(g).sort((a,b)=>g[b].length-g[a].length);
+ const fixed=q=>q.src.replace(/\[\*[^\]]+\]/,`<b>${q.wd[0]}<u>${q.wd[1]}</u></b>`).replace(/\[([^\]]+)\]/g,"$1");
+ app.innerHTML=`<div class="top"><button class="back" id="bk">${back} Word Forms</button><span class="brand">Results</span></div>
+ <div class="card res"><div class="lab" style="color:var(--mint)">ROUND COMPLETE</div><div class="score">${st.ok}/${n}</div>
+ <p style="color:var(--ink-2);margin:0">sentences with both steps correct</p>
+ <div class="sumrow"><div><b>${st.found}/${n}</b><span>ERRORS FOUND</span></div><div><b>${st.fixed}/${n}</b><span>FORMS FIXED</span></div><div><b>${acc}%</b><span>ACCURACY</span></div></div>
+ ${order.length?`<div class="rv"><h4>REVIEW THESE</h4>${order.map(k=>`<div class="rvc" style="background:${CAT[k][2]}"><b>${CAT[k][0]}</b><em>${H(CAT[k][1])}</em>${g[k].map(q=>`<p class="rvs">${fixed(q)}</p>`).join("")}</div>`).join("")}<p class="hint" style="margin-top:12px">Remember: check each underlined word. Does its ending match its position?</p></div>`:`<p style="margin-top:16px;font-weight:600;color:var(--good)">No mistakes. You’re ready for Written Expression!</p>`}
+ <button class="next show" id="ag">Play again</button><button class="second" id="ch">How to play</button></div>`;
+ $("#bk").onclick=home;$("#ag").onclick=fixStart;$("#ch").onclick=fixIntro;}
+
+new MutationObserver(()=>window.scrollTo(0,0)).observe(app,{childList:true});
+home();
+
+</script></body></html>

@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("mova-theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>TOEFL Practice · MOVA</title>
@@ -165,6 +167,8 @@ details.ptoggle summary{cursor:pointer;font-weight:600;font-size:14px;color:var(
 .clock.timed{color:var(--bad);font-weight:700}
 .sec[data-c="lilac"] .ic{background:#ECE5F8;color:#7E5BC9}
 .sec[data-c="rose"] .ic{background:#FBE3EC;color:#C2477D}
+.sec[data-c="butter"] .ic{background:#FBF0C9;color:#B7861E}
+.chip.new{background:#F7D774;color:#1E3A5F}
 .sec[disabled]{opacity:.55;pointer-events:none}
 .vword{font-weight:800;color:var(--navy);background:var(--mustard-soft);padding:0 6px;border-radius:6px}
 </style>
@@ -191,7 +195,7 @@ details.ptoggle summary{cursor:pointer;font-weight:600;font-size:14px;color:var(
       <circle cx="40" cy="44" r="10" fill="#6FA8D6" opacity=".9"/><circle cx="196" cy="24" r="6" fill="#7FB89E"/>
     </svg>
     <h1>TOEFL Practice</h1>
-    <p>Warm-up practice for the TOEFL ITP: 100 Structure questions, 100 Written Expression, 20 reading passages, listening and academic vocabulary. Practice at your own pace or against the clock.</p>
+    <p>Warm-up practice for the TOEFL ITP: 100 Structure questions, 100 Written Expression, 20 reading passages, listening, academic vocabulary and word forms. Practice at your own pace or against the clock.</p>
     <span class="note">Practice sets with instant feedback, not a full simulation</span>
   </header>
 
@@ -372,6 +376,7 @@ SECTIONS.find((s) => s.id === "structure").n = STRUCTURE.length;
 SECTIONS.find((s) => s.id === "written").n = WRITTEN.length;
 SECTIONS.push(
   { id: "vocab", name: "Academic Vocabulary", desc: "Choose the word closest in meaning, like the vocabulary questions in Reading.", c: "lilac", n: VOCAB.length, icon: '<path d="M5 4h10a4 4 0 0 1 4 4v12H9a4 4 0 0 1-4-4z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M9 9h6M9 13h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
+  { id: "wordforms", name: "Word Forms", desc: "Recognize nouns, verbs, adjectives and adverbs by their endings, even when you don’t know the word.", c: "butter", n: 0, icon: '<rect x="2.5" y="7.5" width="11" height="9" rx="2.5" stroke="currentColor" stroke-width="2" fill="none"/><rect x="15.5" y="7.5" width="6" height="9" rx="2.5" fill="currentColor"/><path d="M5.5 12h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
   { id: "review", name: "Review my mistakes", desc: "Practice again the questions you answered incorrectly. They leave the list when you get them right.", c: "rose", n: 0, icon: '<path d="M4 12a8 8 0 1 0 3-6.2" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M4 4v4h4" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' }
 );
 /* Ritmo TOEFL ITP: Structure y Written 25 min / 40 preguntas, Reading 55 min / 50 preguntas */
@@ -416,14 +421,15 @@ function drawHome() {
   $("#sections").innerHTML = SECTIONS.map((s) => {
     const r = rec[s.id];
     const m = loadM().length;
-    const count = s.id === "reading" ? `${PASSAGES.length} passages · ${PASSAGES.reduce((a, p) => a + p.q.length, 0)} questions` : s.id === "review" ? (m ? `${m} to review` : "No mistakes saved yet") : s.id === "listening" ? `${s.n} audios` : `${s.n} questions`;
-    return `<button class="sec" data-s="${s.id}" data-c="${s.c}"><span class="ic"><svg viewBox="0 0 24 24" fill="none">${s.icon}</svg></span><span><h3>${s.name}</h3><p>${s.desc}</p><span class="meta"><span class="chip">${count}</span>${r ? `<span class="chip best">Best: ${r}%</span>` : ""}</span></span></button>`;
+    const count = s.id === "wordforms" ? "4 practice modes" : s.id === "reading" ? `${PASSAGES.length} passages · ${PASSAGES.reduce((a, p) => a + p.q.length, 0)} questions` : s.id === "review" ? (m ? `${m} to review` : "No mistakes saved yet") : s.id === "listening" ? `${s.n} audios` : `${s.n} questions`;
+    return `<button class="sec" data-s="${s.id}" data-c="${s.c}"><span class="ic"><svg viewBox="0 0 24 24" fill="none">${s.icon}</svg></span><span><h3>${s.name}</h3><p>${s.desc}</p><span class="meta"><span class="chip">${count}</span>${r ? `<span class="chip best">Best: ${r}%</span>` : ""}${s.id === "wordforms" ? `<span class="chip new">New</span>` : ""}</span></span></button>`;
   }).join("");
   $("#tip").textContent = TIPS[new Date().getDate() % TIPS.length];
 }
 $("#sections").addEventListener("click", (e) => { const b = e.target.closest(".sec"); if (!b) return; if (b.dataset.s === "review" && !loadM().length) return; open(b.dataset.s); });
 
 function open(id) {
+  if (id === "wordforms") { location.href = "juego-word-forms.html"; return; }
   st.section = id;
   if (id === "reading") { drawPicks(); show("read"); return; }
   if (id === "listening") { st.n = LISTENING.length; st.timed = false; begin(); return; }
