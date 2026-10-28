@@ -556,7 +556,7 @@ if (ul && ROUTES.learn) ul.innerHTML = [["", "home", "Home"], ["library", "book"
     if (typeof MOVA_GAMES === "undefined") return;
     const g = (f) => MOVA_GAMES.find((x) => x.file === f);
     const lu = g("juego-level-up.html"); if (lu) { lu.tag = "All stages"; lu.skill = "Placement test"; }
-    const mc = g("juego-lee-con-mochi.html"); if (mc) { mc.title = "Aprende a leer con Mochi"; mc.desc = "Un mapa de islas, una por cada vocal: sílabas, palabras, las palabras de Mochi, carrera de lectura y un cuento en cada isla."; }
+    const mc = g("juego-lee-con-mochi.html"); if (mc) { mc.title = "Aprende a leer con Mochi"; mc.desc = "Un mapa de islas, una por cada vocal: sílabas, palabras, cuentos, carrera de lectura, trazo de letras, dictado y Mochi te escucha."; }
     const wq = g("juego-word-quest.html"); if (wq && /\ba\b/.test(wq.tag || "")) wq.tag = wq.tag.replace(/\ba\b/, "to");
   }
 

@@ -139,6 +139,19 @@ h1{font-weight:800;font-size:clamp(28px,8.5vw,36px);line-height:1.08;margin:6px 
 .st-end{font-weight:800;font-size:24px}
 .st-nav{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .st-nav button:disabled{opacity:.35}
+.opts.keys{grid-template-columns:repeat(5,1fr);gap:8px}
+.key{padding:10px 0;font-size:clamp(26px,8vw,34px);border-radius:16px;box-shadow:0 4px 0 var(--line)}
+.key.hit{border-color:var(--good);background:var(--good-bg)}
+.slots.letters .slot{min-width:46px;height:58px;font-size:30px;padding:0 6px}
+.mic{width:96px;height:96px;border-radius:50%;border:0;background:var(--isl);display:grid;place-items:center;box-shadow:0 6px 0 rgba(30,58,95,.25)}
+.mic.on{animation:ring 1.2s ease-in-out infinite}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(30,58,95,.35)}100%{box-shadow:0 0 0 26px rgba(30,58,95,0)}}
+.mic-st{margin:0;font-weight:700;color:var(--muted);text-align:center}
+.go.teach{background:var(--good)}
+.t-big{font-family:'Andika',sans-serif;font-weight:700;font-size:64px;line-height:1;color:var(--isl);min-width:64px;text-align:center}
+.t-stage{display:grid;grid-template-columns:70px 1fr;align-items:center;gap:10px;margin:12px 0 10px}
+.t-pad{display:flex;justify-content:center;background:var(--tile);border:2px solid var(--line);border-radius:26px;padding:6px}
+#t-cv{touch-action:none;display:block;max-width:100%}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:20}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -207,6 +220,16 @@ h1{font-weight:800;font-size:clamp(28px,8.5vw,36px);line-height:1.08;margin:6px 
   <button class="primary" id="r-ok" hidden>¡La leí!</button>
   <button class="ghost" id="r-help" hidden>Escuchar</button>
   <div id="r-res" hidden><button class="primary" id="r-again">Correr otra vez</button></div>
+</section>
+
+<section id="s-trace" hidden>
+  <button class="back" id="t-back">← Isla</button>
+  <div class="st-head"><div><p class="kicker" style="margin:12px 0 0" id="t-isle"></p><h1 style="font-size:28px">Trazo de letras</h1></div><div class="t-big" id="t-letter"></div></div>
+  <div class="bar st-dots" id="t-dots"></div>
+  <div class="t-stage"><div id="t-mochi" class="t-mochi"></div><div class="bubble" id="t-msg"></div></div>
+  <div class="t-pad"><canvas id="t-cv"></canvas></div>
+  <div class="st-nav"><button class="ghost" id="t-demo">Mira cómo</button><button class="ghost" id="t-clear">Borrar</button></div>
+  <button class="primary" id="t-ok">¡Listo!</button>
 </section>
 
 <section id="s-story" hidden>
@@ -305,7 +328,7 @@ function tones(f,step,type,vol){if(!ac)return;const t0=ac.currentTime;f.forEach(
 const chime=()=>tones([660,880,1175],.09,"triangle"),boop=()=>tones([330,250],.12,"sine",.1),tap=()=>tones([520],.05,"sine",.07),fan=()=>tones([523,659,784,1047],.13,"triangle");
 function drum(){if(!ac)return;const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();o.type="sine";o.frequency.setValueAtTime(170,t);o.frequency.exponentialRampToValueAtTime(60,t+.25);g.gain.setValueAtTime(.5,t);g.gain.exponentialRampToValueAtTime(.001,t+.3);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+.32);}
 const later=(f,ms)=>st.t.push(setTimeout(f,ms));const clr=()=>{st.t.forEach(clearTimeout);st.t=[];};
-function show(id){["map","isle","game","end","race","story"].forEach(s=>$("#s-"+s).hidden=s!==id);window.scrollTo(0,0);}
+function show(id){["map","isle","game","end","race","story","trace"].forEach(s=>$("#s-"+s).hidden=s!==id);window.scrollTo(0,0);}
 const pic=w=>`<svg viewBox="0 0 120 112" class="pic" aria-hidden="true">${ART[w]||""}</svg>`;
 
 /* ---------- Mapa ---------- */
@@ -610,6 +633,161 @@ $("#st-back").addEventListener("click",()=>{clr();SS.reading=false;if(synth)synt
 $("#st-read").addEventListener("click",()=>{unlock();readAloud();});
 $("#st-prev").addEventListener("click",()=>{if(SS.p>0)openStory(SS.p-1);});
 $("#st-next").addEventListener("click",()=>{if($("#st-next").onclick)return;storyNext();});
+
+/* ===== Fase 3: Dictado, Trazo de letras, Mochi te escucha ===== */
+ACT_NAME.dictado="Dictado de Mochi";ACT_NAME.voice="Mochi te escucha";
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition||null;
+const plain=s=>s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-zñ ]/g,"").replace(/n\u0303/g,"ñ");
+function lev(a,b){const m=a.length,n=b.length,d=Array.from({length:m+1},(_,i)=>[i]);for(let j=1;j<=n;j++)d[0][j]=j;for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n];}
+function learnedWords(i){return shuffle(ISLANDS[i].words).concat(shuffle(ISLANDS.slice(0,i).flatMap(I=>I.words)).slice(0,3));}
+function makeDictado(i){return learnedWords(i).slice(0,6).map(([w])=>{const chars=[...w];const pool=[...new Set(ISLANDS.slice(0,i+1).map(I=>I.v).concat(ISLANDS[i].syl.map(x=>x.slice(0,-1))))].filter(c=>!chars.includes(c));const keys=shuffle([...new Set(chars)].concat(shuffle(pool).slice(0,Math.max(4,10-new Set(chars).size))));return{t:"dictado",w,chars,keys};});}
+function makeVoice(i){return learnedWords(i).slice(0,6).map(([w])=>({t:"voice",w}));}
+
+const _start=start;
+start=function(mode){mode=mode||st.mode;if(mode==="dictado"||mode==="voice"){st.mode=mode;st.total=6;unlock();clr();st.round=0;st.stars=0;st.qs=mode==="dictado"?makeDictado(st.isl):makeVoice(st.isl);$("#g-isle").textContent=ISLANDS[st.isl].name+" · "+ACT_NAME[mode];mG=mochi($("#g-mochi"),"hola");show("game");next();return;}_start(mode);};
+
+const _next=next;
+next=function(){
+ const q0=st.qs[st.round];
+ if(st.round<st.total&&q0&&(q0.t==="dictado"||q0.t==="voice")){
+  st.round++;st.first=true;st.lock=false;st.pos=0;st.fails=0;bar();st.q=q0;
+  const q=q0,task=$("#task"),opts=$("#opts"),tools=$("#tools");task.innerHTML="";opts.innerHTML="";tools.innerHTML="";
+  if(q.t==="dictado"){
+   say("Escucha la palabra y escríbela letra por letra.");
+   task.innerHTML=`<button class="pic-btn" id="pw">${pic(q.w)}</button><div class="slots letters" id="slots">${q.chars.map(()=>`<div class="slot"></div>`).join("")}</div>`;
+   $("#pw").addEventListener("click",()=>speak(q.w,.7));later(()=>speak(q.w,.7),450);
+   opts.className="opts keys";q.keys.forEach(c=>{const b=document.createElement("button");b.className="opt key";b.textContent=c;b.dataset.t=c;b.addEventListener("click",()=>typeKey(b));opts.appendChild(b);});
+   tool("Escuchar",()=>speak(q.w,.7));tool("Despacio",()=>speak(syllab(q.w),.55));
+  } else {
+   say(SR?"Toca el micrófono y lee la palabra en voz alta.":"Lee la palabra en voz alta. Tu maestra te escucha.");
+   task.innerHTML=`<div class="reading">${q.w}</div>${SR?`<button class="mic" id="mic" aria-label="Hablar">${MIC}</button><p class="mic-st" id="mic-st">Toca para hablar</p>`:""}`;
+   if(SR)$("#mic").addEventListener("click",()=>listen(q));
+   const ok=document.createElement("button");ok.className="go teach";ok.id="teach";ok.textContent="✓ La maestra lo escuchó bien";ok.hidden=!!SR;ok.addEventListener("click",()=>{if(st.lock)return;if(SR)st.first=false;win();});opts.appendChild(ok);
+   tool("Ayuda: escuchar",()=>{st.first=false;speak(q.w,.75);});
+  }
+  return;
+ }
+ _next();
+};
+function syllab(w){for(const I of ISLANDS){const f=I.words.find(x=>x[0]===w);if(f)return f[1].join(", ");}return w;}
+function typeKey(b){
+ const q=st.q;if(st.lock)return;const need=q.chars[st.pos];
+ if(b.dataset.t===need){tap();const sl=$("#slots").children[st.pos];sl.textContent=need;sl.classList.add("filled");st.pos++;b.classList.add("hit");setTimeout(()=>b.classList.remove("hit"),200);
+  if(st.pos>=q.chars.length){[...$("#slots").children].forEach(s=>s.classList.add("good"));win();}}
+ else{st.first=false;boop();b.classList.add("wrong");react(mG,false);setTimeout(()=>b.classList.remove("wrong"),420);say(`Escucha otra vez: ${q.w}.`);speak(q.w,.65);}
+}
+let rec=null;
+function listen(q){
+ if(st.lock||!SR)return;unlock();if(synth)synth.cancel();
+ try{if(rec)rec.abort();}catch(e){}
+ rec=new SR();rec.lang="es-MX";rec.interimResults=false;rec.maxAlternatives=5;
+ const mic=$("#mic"),stt=$("#mic-st");mic.classList.add("on");stt.textContent="Te escucho…";
+ let got=false;
+ rec.onresult=e=>{got=true;const alts=[...e.results[0]].map(a=>plain(a.transcript));const target=plain(q.w);
+  const ok=alts.some(a=>a.split(" ").some(x=>x===target||(target.length>3&&lev(x,target)<=1))||a.replace(/ /g,"")===target);
+  if(ok){stt.textContent=`¡Leíste «${q.w}»!`;win();}
+  else{st.fails++;st.first=false;boop();react(mG,false);stt.textContent=`Escuché «${alts[0]||"…"}». ¡Inténtalo otra vez!`;if(st.fails>=2)$("#teach").hidden=false;}};
+ rec.onerror=ev=>{stt.textContent=ev.error==="not-allowed"||ev.error==="service-not-allowed"?"Permite usar el micrófono para jugar.":"No te escuché. Toca el micrófono otra vez.";st.fails++;if(st.fails>=2||ev.error==="not-allowed")$("#teach").hidden=false;};
+ rec.onend=()=>{mic.classList.remove("on");if(!got&&stt.textContent==="Te escucho…")stt.textContent="No te escuché. Toca el micrófono otra vez.";};
+ try{rec.start();}catch(e){mic.classList.remove("on");$("#teach").hidden=false;}
+}
+const MIC=`<svg viewBox="0 0 64 64" width="56" height="56"><rect x="22" y="8" width="20" height="32" rx="10" fill="#FFFDFA" stroke="${N}" stroke-width="3"/><path d="M16 30a16 16 0 0 0 32 0M32 46v8M24 56h16" stroke="#FFFDFA" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`;
+const _win=win;
+win=function(){if(st.q&&(st.q.t==="dictado"||st.q.t==="voice")){st.lock=true;chime();react(mG,true);if(st.first)st.stars++;bar();const p=pick(PRAISE);say(`${p} ${st.q.w}`);later(()=>speak(`${p} ${st.q.w}`),300);if(st.first&&st.stars%3===0)confetti(50);later(next,2100);return;}_win();};
+
+/* ---------- Trazo de letras ---------- */
+const arc=(cx,cy,r,a0,a1,n=22)=>Array.from({length:n+1},(_,i)=>{const a=(a0+(a1-a0)*i/n)*Math.PI/180;return[cx+r*Math.cos(a),cy+r*Math.sin(a)];});
+const ln=(x0,y0,x1,y1)=>[[x0,y0],[x1,y1]];
+const GL={
+ a:[arc(48,60,19,-25,-385),ln(67,41,67,80)],
+ e:[[[31,60],[67,60]].concat(arc(49,60,18,0,-310))],
+ i:[ln(50,42,50,80),[[50,27]]],
+ o:[arc(50,60,20,-90,-450)],
+ u:[[[32,40],[32,64]].concat(arc(50,64,18,180,0,14)).concat([[68,40]]),ln(68,40,68,80)],
+ m:[ln(26,40,26,80),[[26,54]].concat(arc(38,54,12,180,360,12)).concat([[50,80]]),[[50,54]].concat(arc(62,54,12,180,360,12)).concat([[74,80]])],
+ n:[ln(32,40,32,80),[[32,56]].concat(arc(50,56,18,180,360,16)).concat([[68,80]])],
+ p:[ln(34,40,34,100),arc(51,60,17,200,520)],
+ s:[[[66,46],[57,40],[43,41],[35,48],[41,56],[58,62],[66,70],[60,78],[46,80],[33,74]]],
+ l:[ln(50,10,50,80)],
+ t:[ln(50,20,50,80),ln(36,42,64,42)],
+ d:[arc(46,60,18,-25,-385),ln(65,10,65,80)],
+ b:[ln(34,10,34,80),arc(51,61,17,200,520)],
+ r:[ln(38,40,38,80),[[38,58]].concat(arc(54,58,16,180,290,10))],
+ c:[arc(51,60,20,-40,-320)],
+ f:[arc(58,24,11,-20,-180,10).concat([[47,80]]),ln(34,44,62,44)],
+ v:[[[30,40],[50,80],[70,40]]]
+};
+const TR={list:[],ix:0,ink:[],cur:null,stars:0,first:true,demo:0};
+let cv2,c2,W2=300;
+function traceLetters(i){const I=ISLANDS[i];const cons=[...new Set(I.syl.map(s=>s.slice(0,-1)))].filter(c=>GL[c]);return [I.v].concat(shuffle(cons).slice(0,5));}
+function openTrace(){
+ clr();TR.list=traceLetters(st.isl);TR.ix=0;TR.stars=0;$("#t-isle").textContent=ISLANDS[st.isl].name;show("trace");
+ mochi($("#t-mochi"),"hola");cv2=$("#t-cv");c2=cv2.getContext("2d");sizeTrace();traceLetter();
+}
+function sizeTrace(){const w=Math.min(cv2.parentNode.clientWidth,420);W2=w;const d=devicePixelRatio||1;cv2.width=w*d;cv2.height=w*d;cv2.style.width=w+"px";cv2.style.height=w+"px";c2.setTransform(d,0,0,d,0,0);}
+const S2=v=>v/110*W2+W2*.045;
+function traceLetter(){TR.ink=[];TR.first=true;TR.done=false;cancelAnimationFrame(TR.demo);const L=TR.list[TR.ix];
+ $("#t-dots").innerHTML=TR.list.map((_,j)=>`<i class="${j<TR.ix?"done":j===TR.ix?"now":""}"></i>`).join("");
+ $("#t-letter").textContent=L;$("#t-msg").textContent="Mira cómo se hace y luego traza la letra con tu dedo.";drawTrace();speak(`La ${L}. ${L==="l"?"ele":L==="r"?"erre":L}`,.7);later(demo,700);}
+function drawTrace(hl,dot){
+ const ctx=c2,L=TR.list[TR.ix],st2=GL[L];ctx.clearRect(0,0,W2,W2);
+ ctx.strokeStyle="#EDE3D3";ctx.lineWidth=1.5;[[40],[80]].forEach(([y])=>{ctx.beginPath();ctx.setLineDash([6,8]);ctx.moveTo(10,S2(y));ctx.lineTo(W2-10,S2(y));ctx.stroke();});ctx.setLineDash([]);
+ ctx.lineCap="round";ctx.lineJoin="round";
+ st2.forEach(s=>{ctx.strokeStyle=hl||"#F1E8DA";ctx.lineWidth=W2*.11;ctx.beginPath();s.forEach(([x,y],j)=>j?ctx.lineTo(S2(x),S2(y)):ctx.moveTo(S2(x),S2(y)));if(s.length===1)ctx.lineTo(S2(s[0][0])+.1,S2(s[0][1]));ctx.stroke();
+  ctx.strokeStyle="#FFFFFF";ctx.lineWidth=2;ctx.setLineDash([4,7]);ctx.beginPath();s.forEach(([x,y],j)=>j?ctx.lineTo(S2(x),S2(y)):ctx.moveTo(S2(x),S2(y)));ctx.stroke();ctx.setLineDash([]);});
+ const used=[];if(!hl)st2.forEach((s,j)=>{let[x,y]=s[0];let moved=false;while(used.some(([u,v])=>Math.hypot(u-x,v-y)<11)){y-=12;moved=true;}used.push([x,y]);ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue("--isl").trim()||"#E8846B";ctx.beginPath();ctx.arc(S2(x),S2(y),W2*.04,0,7);ctx.fill();ctx.fillStyle="#fff";ctx.font=`700 ${W2*.045}px Poppins,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(j+1,S2(x),S2(y)+1);
+  if(s.length>1&&!moved){const[a,b]=[s[0],s[Math.min(3,s.length-1)]];const ang=Math.atan2(b[1]-a[1],b[0]-a[0]);const ax=S2(a[0])+Math.cos(ang)*W2*.09,ay=S2(a[1])+Math.sin(ang)*W2*.09;ctx.save();ctx.translate(ax,ay);ctx.rotate(ang);ctx.fillStyle=ctx.fillStyle="#1E3A5F";ctx.beginPath();ctx.moveTo(8,0);ctx.lineTo(-5,-6);ctx.lineTo(-5,6);ctx.closePath();ctx.fill();ctx.restore();}});
+ ctx.strokeStyle="#1E3A5F";ctx.lineWidth=W2*.045;TR.ink.forEach(s=>{ctx.beginPath();s.forEach(([x,y],j)=>j?ctx.lineTo(x,y):ctx.moveTo(x,y));if(s.length===1)ctx.lineTo(s[0][0]+.1,s[0][1]);ctx.stroke();});
+ if(dot){ctx.fillStyle="#F2C94C";ctx.strokeStyle="#1E3A5F";ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(dot[0],dot[1],W2*.035,0,7);ctx.fill();ctx.stroke();}
+}
+function demo(){
+ cancelAnimationFrame(TR.demo);const L=TR.list[TR.ix],pts=[];GL[L].forEach(s=>{if(s.length===1){pts.push(s[0]);return;}for(let j=0;j<s.length-1;j++){const[a,b]=[s[j],s[j+1]];const n=Math.max(2,Math.round(Math.hypot(b[0]-a[0],b[1]-a[1])/1.6));for(let k=0;k<n;k++)pts.push([a[0]+(b[0]-a[0])*k/n,a[1]+(b[1]-a[1])*k/n]);}pts.push(s[s.length-1]);pts.push(null);});
+ let i=0;const step=()=>{while(i<pts.length&&pts[i]===null)i++;if(i>=pts.length){drawTrace();return;}const p=pts[i];drawTrace(null,[S2(p[0]),S2(p[1])]);i+=1;TR.demo=requestAnimationFrame(step);};step();
+}
+function tracePt(e){const r=cv2.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];}
+function bindTrace(){
+ const c=$("#t-cv");
+ c.addEventListener("pointerdown",e=>{if(TR.done)return;cancelAnimationFrame(TR.demo);c.setPointerCapture(e.pointerId);TR.cur=[tracePt(e)];TR.ink.push(TR.cur);drawTrace();});
+ c.addEventListener("pointermove",e=>{if(!TR.cur)return;TR.cur.push(tracePt(e));drawTrace();});
+ const up=()=>{TR.cur=null;};c.addEventListener("pointerup",up);c.addEventListener("pointercancel",up);
+}
+function checkTrace(){
+ if(TR.done)return;const L=TR.list[TR.ix];const guide=[];GL[L].forEach(s=>{if(s.length===1){guide.push(s[0]);return;}for(let j=0;j<s.length-1;j++){const[a,b]=[s[j],s[j+1]];const n=Math.max(1,Math.round(Math.hypot(b[0]-a[0],b[1]-a[1])/3));for(let k=0;k<=n;k++)guide.push([a[0]+(b[0]-a[0])*k/n,a[1]+(b[1]-a[1])*k/n]);}});
+ const g=guide.map(([x,y])=>[S2(x),S2(y)]),ink=TR.ink.flat();
+ if(ink.length<5){$("#t-msg").textContent="Traza la letra con tu dedo sobre el camino.";return;}
+ const R1=W2*.085,R2=W2*.13;
+ const cover=g.filter(([x,y])=>ink.some(([a,b])=>Math.hypot(a-x,b-y)<R1)).length/g.length;
+ const inside=ink.filter(([a,b])=>g.some(([x,y])=>Math.hypot(a-x,b-y)<R2)).length/ink.length;
+ if(cover>=.82&&inside>=.8){TR.done=true;if(TR.first)TR.stars++;chime();drawTrace("#BFE6CC");$("#t-msg").textContent=pick(PRAISE)+" ¡Qué bonita letra!";speak(pick(PRAISE),.85);confetti(30);mochi($("#t-mochi"),"salta");
+  later(()=>{TR.ix++;mochi($("#t-mochi"),"hola");if(TR.ix>=TR.list.length)traceEnd();else traceLetter();},1700);}
+ else{TR.first=false;boop();$("#t-msg").textContent=cover<.82?"Te faltó un pedacito. Sigue el camino completo, empezando en el número 1.":"Trata de no salirte del camino.";react($("#t-mochi img"),false);}
+}
+function traceEnd(){
+ const s=TR.stars,T=TR.list.length;P.best["trace"+st.isl]=Math.max(P.best["trace"+st.isl]||0,s);save(P);
+ st.stars=s;st.total=T;st.mode="trace";
+ $("#e-title").textContent=s>=T-1?"¡Letras perfectas!":"¡Muy buen trabajo!";$("#e-sub").textContent=`Trazaste ${T} letras de la ${ISLANDS[st.isl].name}.`;
+ $("#e-stars").innerHTML=Array.from({length:T},(_,j)=>`<span class="${j<s?"on":""}">★</span>`).join("");$("#e-count").textContent=`${s} de ${T} estrellas`;
+ $("#e-next").hidden=true;$("#e-again").className="primary";mochi($("#e-mochi"),"salta");show("end");fan();confetti(140);speak($("#e-title").textContent,.85);
+}
+$("#t-back").addEventListener("click",()=>{clr();cancelAnimationFrame(TR.demo);openIsle(st.isl);});
+$("#t-demo").addEventListener("click",()=>{TR.ink=[];demo();});
+$("#t-clear").addEventListener("click",()=>{if(TR.done)return;TR.ink=[];drawTrace();});
+$("#t-ok").addEventListener("click",checkTrace);
+bindTrace();addEventListener("resize",()=>{if(!$("#s-trace").hidden){sizeTrace();drawTrace();}});
+$("#e-again").addEventListener("click",e=>{if(st.mode==="trace"){e.stopImmediatePropagation();openTrace();}},true);
+
+/* tarjetas nuevas */
+ICON.trace=`<svg viewBox="0 0 64 64"><rect x="6" y="8" width="52" height="48" rx="10" fill="#FFF6E8" ${k}/><path d="M18 44 Q20 18 32 18 Q42 18 40 30 Q38 40 28 40" stroke="var(--isl)" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="1 8"/><path d="M40 52 L54 18 L58 20 L46 54Z" fill="#F2C94C" ${k}/><path d="M40 52 l1 6 5-4z" fill="${N}"/></svg>`;
+ICON.dictado=`<svg viewBox="0 0 64 64"><rect x="4" y="20" width="56" height="34" rx="8" fill="#FFFDFA" ${k}/>${[[10,26],[22,26],[34,26],[46,26],[10,38],[22,38],[34,38],[46,38]].map(([x,y])=>`<rect x="${x}" y="${y}" width="9" height="8" rx="2" fill="${x===22&&y===26?"var(--isl)":"#E6DCCB"}"/>`).join("")}<rect x="18" y="48" width="28" height="3" rx="1.5" fill="#E6DCCB"/><path d="M44 4 a10 10 0 0 1 0 14M50 1 a16 16 0 0 1 0 20" stroke="${N}" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M30 8h6l6-5v18l-6-5h-6z" fill="${N}"/></svg>`;
+ICON.voice=`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="var(--isl)" opacity=".18"/><circle cx="32" cy="32" r="20" fill="var(--isl)"/><rect x="26" y="16" width="12" height="22" rx="6" fill="#FFFDFA" ${k}/><path d="M22 32a10 10 0 0 0 20 0M32 42v6M26 48h12" stroke="#FFFDFA" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
+const _renderActs=renderActs;
+renderActs=function(i){_renderActs(i);const b=k2=>P.best[k2]||0;
+ const extra=[{m:"trace",t:"Trazo de letras",d:"Escribe con tu dedo siguiendo las flechas",x:b("trace"+i)?`★ ${b("trace"+i)} de 6`:""},
+  {m:"dictado",t:"Dictado de Mochi",d:"Escucha y escribe la palabra",x:b("dictado"+i)?`★ ${b("dictado"+i)} de 6`:""},
+  {m:"voice",t:"Mochi te escucha",d:SR?"Lee en voz alta y Mochi te dice si lo hiciste bien":"Lee en voz alta para tu maestra",x:b("voice"+i)?`★ ${b("voice"+i)} de 6`:""}];
+ $("#acts").insertAdjacentHTML("beforeend",extra.map(c=>`<button class="act" data-m="${c.m}"><span class="act-ic">${ICON[c.m]}</span><span class="act-tx"><b>${c.t}</b><small>${c.d}</small>${c.x?`<em>${c.x}</em>`:""}</span></button>`).join(""));
+ $("#acts").querySelectorAll('.act[data-m="trace"],.act[data-m="dictado"],.act[data-m="voice"]').forEach(el=>el.addEventListener("click",()=>{unlock();tap();if(el.dataset.m==="trace")openTrace();else start(el.dataset.m);}));
+};
 
 renderMap();show("map");
 })();
