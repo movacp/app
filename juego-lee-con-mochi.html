@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<script src="mova-voice.js"></script>
 <style>
 :root{--page:#FBF6EE;--card:#FFFFFF;--ink:#1E3A5F;--muted:#5E6886;--line:#EDE3D3;--tile:#FFFBF5;--isl:#E8846B;--isl-soft:#FCE3DA;--good:#1E9A52;--good-bg:#DDF5E5;--bad:#E5484D;--bad-bg:#FDE3E3;--gold:#F2B632;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--page:#141a2e;--card:#1d2540;--ink:#F3F1EC;--muted:#B8BED3;--line:#2e3858;--tile:#232c4b;--good-bg:rgba(30,154,82,.22);--bad-bg:rgba(229,72,77,.22);color-scheme:dark}}
@@ -318,11 +319,11 @@ Object.values(POSES).forEach(s=>{const i=new Image();i.src=s;});
 function mochi(el,pose){el.innerHTML=`<img class="mochi idle" src="${POSES[pose]}" alt="Mochi" draggable="false" data-base="${pose}">`;return el.firstChild;}
 function react(m,ok){if(!m)return;clearTimeout(m._b);m.src=POSES[ok?"salta":"piensa"];m.className="mochi "+(ok?"happy":"sad");m._b=setTimeout(()=>{m.src=POSES[m.dataset.base];m.className="mochi idle";},1600);}
 
-/* Voz y sonidos */
+/* Voz y sonidos: tono normal, velocidad natural y la mejor voz femenina en español del dispositivo */
 const synth=("speechSynthesis" in window)?speechSynthesis:null;let voice=null;
-function pv(){if(!synth)return;const vs=synth.getVoices();voice=vs.find(v=>/es[-_]MX/i.test(v.lang))||vs.find(v=>/es[-_](US|419)/i.test(v.lang))||vs.find(v=>/^es/i.test(v.lang))||null;}
+function pv(){if(!synth)return;const vs=synth.getVoices();let b=null;try{if(window.MovaVoice)b=MovaVoice.best("es-MX","f");}catch(e){}voice=b||vs.find(v=>/es[-_]MX/i.test(v.lang))||vs.find(v=>/es[-_](US|419)/i.test(v.lang))||vs.find(v=>/^es/i.test(v.lang))||null;}
 if(synth){pv();synth.onvoiceschanged=pv;}
-function speak(t,r){if(!synth)return;try{synth.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="es-MX";u.rate=r||.8;u.pitch=1.12;if(voice)u.voice=voice;synth.speak(u);}catch(e){}}
+function speak(t,r){if(!synth)return;try{synth.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="es-MX";u.rate=Math.min(1,(r||.8)+.14);u.pitch=1;u.movaGender="f";if(voice)u.voice=voice;synth.speak(u);}catch(e){}}
 let ac=null;function unlock(){try{if(!ac){const A=window.AudioContext||window.webkitAudioContext;if(A)ac=new A();}if(ac&&ac.state==="suspended")ac.resume();}catch(e){}}
 function tones(f,step,type,vol){if(!ac)return;const t0=ac.currentTime;f.forEach((fr,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.type=type||"sine";o.frequency.value=fr;const s=t0+i*step;g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(vol||.15,s+.02);g.gain.exponentialRampToValueAtTime(.0001,s+step+.12);o.connect(g).connect(ac.destination);o.start(s);o.stop(s+step+.15);});}
 const chime=()=>tones([660,880,1175],.09,"triangle"),boop=()=>tones([330,250],.12,"sine",.1),tap=()=>tones([520],.05,"sine",.07),fan=()=>tones([523,659,784,1047],.13,"triangle");
@@ -615,7 +616,7 @@ function readAloud(){
  const step=()=>{ws.forEach(x=>x.classList.remove("hl"));if(j>=ws.length||!SS.reading){SS.reading=false;return;}const w=ws[j];w.classList.add("hl");const t=clean(w.textContent);
   const go=()=>{j++;later(step,140);};
   if(!synth){later(go,450+t.length*70);return;}
-  try{synth.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="es-MX";u.rate=.78;u.pitch=1.12;if(voice)u.voice=voice;let done=false;const fin=()=>{if(!done){done=true;go();}};u.onend=fin;u.onerror=fin;later(fin,1600+t.length*90);synth.speak(u);}catch(e){later(go,600);}
+  try{synth.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="es-MX";u.rate=.9;u.pitch=1;u.movaGender="f";if(voice)u.voice=voice;let done=false;const fin=()=>{if(!done){done=true;go();}};u.onend=fin;u.onerror=fin;later(fin,1600+t.length*90);synth.speak(u);}catch(e){later(go,600);}
  };step();
 }
 function storyNext(){
