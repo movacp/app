@@ -260,7 +260,8 @@ $("#search").addEventListener("input", render);
 /* ---------- Helpers ---------- */
 function makeUser(name){
   const p = name.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z\s]/g,"").split(/\s+/).filter(Boolean);
-  return (p.length>1 ? p[0]+"."+p[1] : (p[0]||"")).slice(0,40);
+  if(!p.length) return "";
+  return (p[0] + (p[1] ? p[1][0] : "") + ".m").slice(0,40);
 }
 function makePass(){
   const w = ["sol","luna","mar","rio","nube","flor","pino","lago","cielo","estrella","arbol","faro"];
