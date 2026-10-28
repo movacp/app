@@ -102,6 +102,43 @@ h1{font-weight:800;font-size:clamp(28px,8.5vw,36px);line-height:1.08;margin:6px 
 .end-stars{display:flex;justify-content:center;gap:2px;font-size:26px;margin:14px 0 4px;color:var(--line)}
 .end-stars .on{color:var(--gold)}
 .end-count{text-align:center;font-weight:700;margin:0}
+.acts{display:grid;gap:10px}
+.act{display:grid;grid-template-columns:64px 1fr;align-items:center;gap:12px;text-align:left;border:2px solid var(--line);background:var(--tile);border-radius:20px;padding:10px 14px 10px 10px;box-shadow:0 4px 0 var(--line)}
+.act:active{transform:translateY(3px)}
+.act.main{background:var(--isl-soft);border-color:var(--isl);box-shadow:0 4px 0 var(--isl)}
+.act-ic svg{display:block;width:64px;height:64px}
+.act-tx b{display:block;font-size:16.5px;line-height:1.2}
+.act-tx small{display:block;color:var(--muted);font-size:13px;font-weight:500;margin-top:2px}
+.act-tx em{display:inline-block;font-style:normal;font-size:12px;font-weight:700;color:#B98710;margin-top:4px}
+.best{margin:14px 0 0;text-align:center;color:var(--muted);font-weight:600;font-size:14px}
+.alien-wrap{background:radial-gradient(circle at 50% 40%,#2B3A6B 0 60%,#1E2A55 61%);border-radius:24px;padding:8px 18px}
+.alien-wrap .pic{width:140px}
+.opts.one{grid-template-columns:1fr}
+.opts.pics{grid-template-columns:repeat(3,1fr)}
+.pic-opt{padding:8px}.pic-opt svg{display:block;width:100%;height:auto}
+.reading{font-family:'Andika',sans-serif;font-weight:700;font-size:clamp(46px,14vw,64px);background:var(--isl-soft);border-radius:22px;padding:8px 28px;letter-spacing:.02em}
+.track{position:relative;height:64px;margin:16px 0 4px}
+.track-line{position:absolute;left:0;right:0;bottom:8px;height:10px;border-radius:99px;background:repeating-linear-gradient(90deg,var(--line) 0 14px,transparent 14px 22px)}
+.track-flag{position:absolute;right:-4px;bottom:14px}
+.runner{position:absolute;bottom:10px;width:44px;transition:left .25s ease}
+.r-time{text-align:center;font-weight:800;font-size:22px;font-variant-numeric:tabular-nums}
+.r-card{display:grid;place-items:center;gap:6px;min-height:210px;margin-top:10px;border-radius:26px;background:var(--isl-soft);text-align:center;padding:16px}
+.r-card.pop{animation:pop .25s}
+.r-syl{font-family:'Andika',sans-serif;font-weight:700;font-size:96px;line-height:1}
+.r-n{font-weight:700;color:var(--muted);font-size:14px}
+.r-count{font-weight:800;font-size:90px;color:var(--isl)}
+.r-hint{font-weight:600;font-size:17px;color:var(--ink);max-width:280px;line-height:1.4}
+.r-done b{display:block;font-size:24px;margin-top:6px}.r-done span{display:block;color:var(--muted);font-weight:600;margin-top:4px}
+.st-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.st-dots{margin:10px 0 0}
+.st-art{display:flex;justify-content:center;gap:6px;background:var(--isl-soft);border-radius:26px;padding:16px;margin-top:14px;min-height:170px;align-items:center}
+.st-pic{width:46%;max-width:170px;height:auto}
+.st-text{text-align:center;margin:18px 0 6px;line-height:1.5}
+.wd{border:0;background:transparent;padding:2px 4px;border-radius:10px;font-family:'Andika',sans-serif;font-weight:700;font-size:clamp(28px,8.5vw,36px);transition:background .15s,color .15s}
+.wd.hl{background:var(--isl);color:#fff}
+.st-end{font-weight:800;font-size:24px}
+.st-nav{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.st-nav button:disabled{opacity:.35}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:20}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -126,12 +163,12 @@ h1{font-weight:800;font-size:clamp(28px,8.5vw,36px);line-height:1.08;margin:6px 
     <div><p class="kicker">Bloque</p><div class="isle-letter" id="isle-letter"></div><h1 id="isle-title" style="font-size:24px;margin-top:6px"></h1></div>
     <div id="isle-mochi"></div>
   </div>
+  <p class="label">Actividades</p>
+  <div class="acts" id="acts"></div>
   <p class="label">Toca y escucha las sílabas</p>
   <div class="syls" id="isle-syl"></div>
   <p class="label">Palabras de esta isla</p>
   <div class="words" id="isle-words"></div>
-  <p class="best" id="isle-best"></p>
-  <button class="primary" id="isle-go">Comenzar</button>
 </section>
 
 <section id="s-game" hidden>
@@ -154,7 +191,32 @@ h1{font-weight:800;font-size:clamp(28px,8.5vw,36px);line-height:1.08;margin:6px 
   <p class="end-count" id="e-count"></p>
   <button class="primary" id="e-next" hidden>Ir a la siguiente isla</button>
   <button class="primary" id="e-again">Jugar otra vez</button>
+  <button class="ghost" id="e-isle">Volver a la isla</button>
   <button class="ghost" id="e-map">Volver al mapa</button>
+</section>
+
+<section id="s-race" hidden>
+  <button class="back" id="r-back">← Isla</button>
+  <p class="kicker" style="margin:14px 0 0" id="r-isle"></p>
+  <h1 style="font-size:28px">Carrera de sílabas</h1>
+  <div class="track"><div class="track-line"></div><div class="track-flag"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M5 21V4" stroke="#1E3A5F" stroke-width="2" stroke-linecap="round"/><path d="M5 4h13l-3 4 3 4H5" fill="#E8846B" stroke="#1E3A5F" stroke-width="1.6" stroke-linejoin="round"/></svg></div><img id="r-runner" class="runner" src="mochi-salta.webp" alt=""></div>
+  <div class="r-time" id="r-time">0.0 s</div>
+  <div class="r-card" id="r-card"></div>
+  <p class="best" id="r-rec"></p>
+  <button class="primary" id="r-go">¡En sus marcas!</button>
+  <button class="primary" id="r-ok" hidden>¡La leí!</button>
+  <button class="ghost" id="r-help" hidden>Escuchar</button>
+  <div id="r-res" hidden><button class="primary" id="r-again">Correr otra vez</button></div>
+</section>
+
+<section id="s-story" hidden>
+  <button class="back" id="st-back">← Isla</button>
+  <div class="st-head"><div><p class="kicker" style="margin:12px 0 0">Cuento de la isla</p><h1 id="st-title" style="font-size:28px"></h1></div><div id="st-mochi" style="width:78px"></div></div>
+  <div class="bar st-dots" id="st-dots"></div>
+  <div class="st-art" id="st-art"></div>
+  <div class="st-text" id="st-text"></div>
+  <button class="primary" id="st-read">Mochi lee</button>
+  <div class="st-nav"><button class="ghost" id="st-prev">← Anterior</button><button class="ghost" id="st-next">Siguiente →</button></div>
 </section>
 
 </div></main>
@@ -225,7 +287,7 @@ const KEY="mova-mochi-islas";
 const load=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{open:0,best:{}};}catch(e){return{open:0,best:{}};}};
 const save=p=>{try{localStorage.setItem(KEY,JSON.stringify(p));}catch(e){}};
 let P=load();
-const st={isl:0,round:0,stars:0,qs:[],q:null,first:true,lock:false,built:[],taps:0,t:[]};
+const st={mode:"isla",total:10,isl:0,round:0,stars:0,qs:[],q:null,first:true,lock:false,built:[],taps:0,t:[]};
 
 /* Mochi */
 const POSES={lee:"mochi-lee.webp",hola:"mochi-hola.webp",salta:"mochi-salta.webp",piensa:"mochi-piensa.webp"};
@@ -243,7 +305,7 @@ function tones(f,step,type,vol){if(!ac)return;const t0=ac.currentTime;f.forEach(
 const chime=()=>tones([660,880,1175],.09,"triangle"),boop=()=>tones([330,250],.12,"sine",.1),tap=()=>tones([520],.05,"sine",.07),fan=()=>tones([523,659,784,1047],.13,"triangle");
 function drum(){if(!ac)return;const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();o.type="sine";o.frequency.setValueAtTime(170,t);o.frequency.exponentialRampToValueAtTime(60,t+.25);g.gain.setValueAtTime(.5,t);g.gain.exponentialRampToValueAtTime(.001,t+.3);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+.32);}
 const later=(f,ms)=>st.t.push(setTimeout(f,ms));const clr=()=>{st.t.forEach(clearTimeout);st.t=[];};
-function show(id){["map","isle","game","end"].forEach(s=>$("#s-"+s).hidden=s!==id);window.scrollTo(0,0);}
+function show(id){["map","isle","game","end","race","story"].forEach(s=>$("#s-"+s).hidden=s!==id);window.scrollTo(0,0);}
 const pic=w=>`<svg viewBox="0 0 120 112" class="pic" aria-hidden="true">${ART[w]||""}</svg>`;
 
 /* ---------- Mapa ---------- */
@@ -289,7 +351,7 @@ function openIsle(i){
  $("#isle-syl").querySelectorAll(".syl").forEach(b=>b.addEventListener("click",()=>{tap();speak(b.dataset.s,.7);}));
  $("#isle-words").innerHTML=I.words.map(([w])=>`<button class="wcard" data-w="${w}">${pic(w)}<span>${w}</span></button>`).join("");
  $("#isle-words").querySelectorAll(".wcard").forEach(b=>b.addEventListener("click",()=>{tap();speak(b.dataset.w,.75);}));
- const best=P.best[i]||0;$("#isle-best").textContent=best?`Tu mejor resultado: ${best} de ${ROUNDS} estrellas`:"¡Gana 7 estrellas para abrir la siguiente isla!";
+ renderActs(i);
  mochi($("#isle-mochi"),"lee");
  show("isle");speak(`${I.name}. Vamos a leer con la ${I.v}.`);
 }
@@ -310,11 +372,11 @@ function makeQs(i){
 
 /* ---------- Juego ---------- */
 let mG=null;
-function start(){unlock();clr();st.round=0;st.stars=0;st.qs=makeQs(st.isl);$("#g-isle").textContent=ISLANDS[st.isl].name;mG=mochi($("#g-mochi"),"hola");show("game");next();}
-function bar(){$("#g-bar").innerHTML=Array.from({length:ROUNDS},(_,i)=>`<i class="${i<st.round-1?"done":i===st.round-1?"now":""}"></i>`).join("");$("#g-stars").textContent=`★ ${st.stars}`;}
+function start(mode){if(typeof mode==="string")st.mode=mode;st.total=st.mode==="isla"?ROUNDS:8;unlock();clr();st.round=0;st.stars=0;st.qs=st.mode==="isla"?makeQs(st.isl):st.mode==="pseudo"?makePseudo(st.isl):makeReadpic(st.isl);$("#g-isle").textContent=ISLANDS[st.isl].name+" · "+ACT_NAME[st.mode];mG=mochi($("#g-mochi"),"hola");show("game");next();}
+function bar(){$("#g-bar").innerHTML=Array.from({length:st.total},(_,i)=>`<i class="${i<st.round-1?"done":i===st.round-1?"now":""}"></i>`).join("");$("#g-stars").textContent=`★ ${st.stars}`;}
 function say(t){$("#bubble").textContent=t;}
 function next(){
- if(st.round>=ROUNDS)return end();
+ if(st.round>=st.total)return end();
  st.round++;st.first=true;st.lock=false;st.built=[];st.taps=0;bar();
  const q=st.qs[st.round-1];st.q=q;const task=$("#task"),opts=$("#opts"),tools=$("#tools");
  task.innerHTML="";opts.innerHTML="";tools.innerHTML="";opts.className="opts";
@@ -335,6 +397,16 @@ function next(){
   $("#pw").addEventListener("click",()=>speak(q.w));later(()=>speak(q.w),450);
   q.opts.forEach(o=>addOpt(o,()=>choose(o,q.ans,()=>{const g=task.querySelector(".gap");g.textContent=q.ans;g.classList.remove("gap");g.classList.add("filled");})));
   tool("Escuchar",()=>speak(q.w));
+ } else if(q.t==="pseudo"){
+  say("En mi planeta, este amigo tiene un nombre raro. Escucha y elige cómo se escribe.");
+  task.innerHTML=`<div class="alien-wrap"><svg viewBox="0 0 120 112" class="pic" aria-hidden="true">${alien(q.w)}</svg></div><button class="listen" id="hear"><span class="ic">${SPK}</span><span>Escuchar</span></button>`;
+  $("#hear").addEventListener("click",()=>speak(q.w,.7));later(()=>speak(q.w,.7),1600);
+  opts.className="opts one";q.opts.forEach(o=>addOpt(o,()=>choose(o,q.w)));
+ } else if(q.t==="readpic"){
+  say("Lee la palabra y toca su dibujo.");
+  task.innerHTML=`<div class="reading">${q.w}</div>`;
+  opts.className="opts pics";q.opts.forEach(o=>{const b=document.createElement("button");b.className="opt pic-opt";b.dataset.t=o;b.innerHTML=pic(o);b.setAttribute("aria-label","Dibujo");b.addEventListener("click",()=>choose(o,q.w));opts.appendChild(b);});
+  tool("Ayuda: escuchar",()=>{st.first=false;speak(q.w,.75);});
  } else {
   say("¿Cuántas sílabas tiene? Toca el tambor una vez por cada sílaba.");
   task.innerHTML=`<button class="pic-btn" id="pw">${pic(q.w)}</button><div class="beats" id="beats"></div><button class="drum" id="drum" aria-label="Tambor">${DRUM}</button>`;
@@ -349,7 +421,8 @@ function beats(){$("#beats").innerHTML=Array.from({length:Math.max(st.taps,1)},(
 function addOpt(t,fn,ix){const b=document.createElement("button");b.className="opt";b.textContent=t;b.dataset.t=t;b.addEventListener("click",()=>fn(b));$("#opts").appendChild(b);}
 function tool(t,fn){const b=document.createElement("button");b.textContent=t;b.addEventListener("click",fn);$("#tools").appendChild(b);}
 function choose(t,ans,after){
- if(st.lock)return;speak(t,.7);const b=[...document.querySelectorAll("#opts .opt")].find(x=>x.dataset.t===t);
+ if(st.lock)return;if(st.q.t!=="readpic")speak(t,.7);const b=[...document.querySelectorAll("#opts .opt")].find(x=>x.dataset.t===t);
+ if(st.q.t==="readpic")speak(ans,.8);
  if(t===ans){b.classList.add("right");if(after)after();win();}
  else{st.first=false;b.classList.add("wrong");boop();react(mG,false);say(pick(RETRY));later(()=>b.classList.remove("wrong"),450);}
 }
@@ -376,22 +449,25 @@ function win(){
  st.lock=true;chime();react(mG,true);if(st.first){st.stars++;}bar();
  const q=st.q,p=pick(PRAISE);
  if(q.t==="listen"){say(p);later(()=>speak(p),300);}
+ else if(q.t==="pseudo"){say(`${p} Se llama ${q.w}.`);later(()=>speak(`${p} Se llama ${q.w}`),300);}
+ else if(q.t==="readpic"){say(`${p} ${q.w}`);}
  else if(q.t==="count"){say(`${p} ${q.w} tiene ${q.ans} sílaba${q.ans>1?"s":""}.`);later(()=>speak(`${p} ${q.parts.join(", ")}. ${q.ans}`),300);}
  else{[...document.querySelectorAll("#slots .slot, .slots .slot")].forEach(s=>s.classList.add("good"));say(`${p} ${q.w}`);later(()=>speak(`${p} ${q.w}`),300);}
  if(st.first&&st.stars%5===0)confetti(50);
  later(next,2100);
 }
 function end(){
- const s=st.stars,i=st.isl;P.best[i]=Math.max(P.best[i]||0,s);
- const unlocked=s>=PASS&&i===P.open&&i<4;if(s>=PASS&&i===P.open)P.open=Math.min(i+1,5);save(P);
- const finished=s>=PASS&&i===4;
- $("#e-title").textContent=finished?"¡Terminaste todas las islas!":unlocked?"¡Abriste una isla nueva!":s>=PASS?"¡Isla superada!":"¡Muy buen intento!";
- $("#e-sub").textContent=unlocked?`Ya puedes visitar la ${ISLANDS[i+1].name}.`:s>=PASS?"Sigue practicando para ganar las 10 estrellas.":`Necesitas ${PASS} estrellas para abrir la siguiente isla. ¡Inténtalo otra vez!`;
- $("#e-stars").innerHTML=Array.from({length:ROUNDS},(_,j)=>`<span class="${j<s?"on":""}">★</span>`).join("");
- $("#e-count").textContent=`${s} de ${ROUNDS} estrellas`;
+ const s=st.stars,i=st.isl,isla=st.mode==="isla",T=st.total,pass=isla?PASS:Math.ceil(T*.7);
+ const key=isla?i:st.mode+i;P.best[key]=Math.max(P.best[key]||0,s);
+ const unlocked=isla&&s>=PASS&&i===P.open&&i<4;if(isla&&s>=PASS&&i===P.open)P.open=Math.min(i+1,5);save(P);
+ const finished=isla&&s>=PASS&&i===4;
+ $("#e-title").textContent=finished?"¡Terminaste todas las islas!":unlocked?"¡Abriste una isla nueva!":s>=pass?"¡Excelente trabajo!":"¡Muy buen intento!";
+ $("#e-sub").textContent=unlocked?`Ya puedes visitar la ${ISLANDS[i+1].name}.`:isla&&s<PASS?`Necesitas ${PASS} estrellas para abrir la siguiente isla. ¡Inténtalo otra vez!`:s>=pass?(s===T?"¡Ganaste todas las estrellas!":"Sigue practicando para ganar todas las estrellas."):"Practica un poco más y verás que lo logras.";
+ $("#e-stars").innerHTML=Array.from({length:T},(_,j)=>`<span class="${j<s?"on":""}">★</span>`).join("");
+ $("#e-count").textContent=`${s} de ${T} estrellas`;
  const nb=$("#e-next");nb.hidden=!unlocked;$("#e-again").className=unlocked?"ghost":"primary";
- mochi($("#e-mochi"),s>=PASS?"salta":"hola");show("end");fan();later(()=>speak($("#e-title").textContent+" "+$("#e-sub").textContent),400);
- if(s>=PASS)confetti(160);
+ mochi($("#e-mochi"),s>=pass?"salta":"hola");show("end");fan();later(()=>speak($("#e-title").textContent+" "+$("#e-sub").textContent),400);
+ if(s>=pass)confetti(160);
 }
 function toMap(){clr();if(synth)synth.cancel();renderMap();show("map");}
 
@@ -401,10 +477,140 @@ function sz(){const d=devicePixelRatio||1;cv.width=innerWidth*d;cv.height=innerH
 function confetti(n){if(red)return;const cols=["#E8846B","#E0B04A","#7FB89E","#6FA8D6","#9B7BEA"];for(let i=0;i<n;i++)parts.push({x:innerWidth/2+(Math.random()-.5)*140,y:innerHeight*.35,vx:(Math.random()-.5)*12,vy:-Math.random()*12-4,r:Math.random()*6+5,c:cols[i%5],rot:Math.random()*6,vr:(Math.random()-.5)*.3,l:0,s:Math.random()<.5});if(!raf)raf=requestAnimationFrame(fx);}
 function fx(){cx.clearRect(0,0,innerWidth,innerHeight);parts.forEach(p=>{p.vy+=.32;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.l++;cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.c;if(p.s){cx.beginPath();for(let i=0;i<10;i++){const a=Math.PI/5*i-Math.PI/2,rr=i%2?p.r*.45:p.r;cx.lineTo(Math.cos(a)*rr,Math.sin(a)*rr);}cx.closePath();cx.fill();}else{cx.beginPath();cx.arc(0,0,p.r/1.7,0,7);cx.fill();}cx.restore();});parts=parts.filter(p=>p.y<innerHeight+30&&p.l<240);if(parts.length)raf=requestAnimationFrame(fx);else{raf=0;cx.clearRect(0,0,innerWidth,innerHeight);}}
 
-$("#isle-go").addEventListener("click",start);$("#isle-back").addEventListener("click",toMap);
-$("#g-home").addEventListener("click",toMap);$("#e-again").addEventListener("click",start);$("#e-map").addEventListener("click",toMap);
+$("#isle-back").addEventListener("click",toMap);
+$("#g-home").addEventListener("click",toMap);$("#e-again").addEventListener("click",()=>start());$("#e-isle").addEventListener("click",()=>{clr();if(synth)synth.cancel();openIsle(st.isl);});$("#e-map").addEventListener("click",toMap);
 $("#e-next").addEventListener("click",()=>{tap();openIsle(st.isl+1);});
 $("#teacher").addEventListener("click",()=>{if(confirm("Modo maestra: ¿abrir todas las islas en este dispositivo?")){P.open=4;save(P);renderMap();}});
+/* ===== Fase 2: Palabras de Mochi, Lee y elige, Carrera de sílabas, Cuento ===== */
+const SPK=`<svg viewBox="0 0 24 24" width="26" height="26"><path d="M4 9h4l5-4v14l-5-4H4z" fill="${N}"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="${N}" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
+const ACT_NAME={isla:"Juego de la isla",pseudo:"Palabras de Mochi",readpic:"Lee y elige"};
+function seedRnd(str){let h=2166136261;for(const c of str){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}return()=>{h=Math.imul(h^(h>>>15),2246822507);h=Math.imul(h^(h>>>13),3266489909);h^=h>>>16;return(h>>>0)/4294967296;};}
+function alien(w){
+ const r=seedRnd(w),cols=["#9B7BEA","#7FB89E","#F29A5A","#6FA8D6","#F2A08A","#E0B04A","#5FC7C1"],c=cols[Math.floor(r()*cols.length)];
+ const pts=[];const n=9,cx=60,cy=62;for(let i=0;i<n;i++){const a=i/n*Math.PI*2-Math.PI/2,rad=30+r()*12;pts.push([cx+Math.cos(a)*rad*1.08,cy+Math.sin(a)*rad*.92]);}
+ let d=`M${pts[0][0]} ${pts[0][1]}`;for(let i=0;i<n;i++){const p=pts[i],q=pts[(i+1)%n];const mx=(p[0]+q[0])/2,my=(p[1]+q[1])/2;d+=` Q${p[0]} ${p[1]} ${mx} ${my}`;}d+=" Z";
+ const eyes=1+Math.floor(r()*3),ant=Math.floor(r()*3),spots=r()<.6;
+ let s=`<ellipse cx="60" cy="106" rx="34" ry="5" fill="${N}" opacity=".1"/>`;
+ for(let i=0;i<ant;i++){const x=ant===1?60:48+i*24;s+=`<path d="M${x} 34 Q${x+(i?8:-8)} 18 ${x+(i?4:-4)} 10" ${K} fill="none"/><circle cx="${x+(i?4:-4)}" cy="9" r="5" fill="#F2C94C" ${k}/>`;}
+ s+=`<path d="M44 92 v12 M76 92 v12" stroke="${N}" stroke-width="7" stroke-linecap="round"/><path d="${d}" fill="${c}" ${K}/>`;
+ if(spots)s+=[[42,78,5],[80,74,4],[72,90,3]].map(([x,y,rr])=>`<circle cx="${x}" cy="${y}" r="${rr}" fill="#FFFFFF" opacity=".35"/>`).join("");
+ const ex=eyes===1?[60]:eyes===2?[49,71]:[44,60,76];ex.forEach(x=>{s+=`<circle cx="${x}" cy="56" r="${eyes===1?11:8}" fill="#fff" ${k}/><circle cx="${x+1}" cy="57" r="${eyes===1?5:3.6}" fill="${N}"/><circle cx="${x+2.4}" cy="55" r="1.4" fill="#fff"/>`;});
+ s+=`<path d="M50 74 Q60 82 70 74" ${K} fill="none"/><ellipse cx="40" cy="70" rx="4.5" ry="3" fill="#F2A08A" opacity=".8"/><ellipse cx="80" cy="70" rx="4.5" ry="3" fill="#F2A08A" opacity=".8"/>`;
+ return s;
+}
+const REAL=new Set(ISLANDS.flatMap(I=>I.words.map(w=>w[0].normalize("NFD").replace(/[\u0300-\u036f]/g,""))).concat(["papa","mama","nana","cara","pala","sala","rama","bala","dama","lana","tapa","pata","masa","pasa","casa","lata","taza","rata","nada","sapa","pera","mesa","pelo","dedo","bebe","nene","mira","mimi","pila","lima","tina","sopa","mono","moto","loro","toro","todo","lobo","bota","boca","coco","luna","cuna","mula","duna","puma","tuna","nube","rosa","solo","sola","pepe","lili","lulu","nota","dado","peso","piso","paso","beso","mapa","cama","foca","pato","gato","oso","uva"]));
+function makePseudo(i){
+ const pool=ISLANDS[i].syl.concat(i?shuffle(ISLANDS.slice(0,i).flatMap(I=>I.syl)).slice(0,6):[]);
+ const out=[],used=new Set();let guard=0;
+ while(out.length<8&&guard++<400){
+  const a=pick(pool),b=pick(ISLANDS[i].syl),w=a+b;if(a===b||REAL.has(w)||used.has(w))continue;
+  const sw=(x)=>{const v=x.slice(-1);const alt=shuffle(CONS.map(c=>c+v)).find(z=>z!==x);return alt;};
+  const o1=sw(a)+b,o2=a+sw(b);if(o1===w||o2===w||o1===o2)continue;
+  used.add(w);out.push({t:"pseudo",w,opts:shuffle([w,o1,o2])});
+ }
+ return out;
+}
+function makeReadpic(i){
+ const learned=ISLANDS.slice(0,i+1).flatMap(I=>I.words.map(w=>w[0]));
+ const targets=shuffle(ISLANDS[i].words.map(w=>w[0])).concat(shuffle(learned)).filter((w,ix,a)=>a.indexOf(w)===ix).slice(0,8);
+ return targets.map(w=>({t:"readpic",w,opts:shuffle([w,...shuffle(Object.keys(ART).filter(x=>x!==w&&x.slice(-1)!==w.slice(-1)||x!==w&&Math.random()<.3)).slice(0,2)])}));
+}
+
+/* ---------- Tarjetas de actividades ---------- */
+const ICON={
+ isla:`<svg viewBox="0 0 64 64"><ellipse cx="32" cy="46" rx="26" ry="9" fill="#9ED3E8"/><path d="M8 42 Q10 32 32 31 Q54 32 56 42 Q44 50 32 50 Q18 50 8 42Z" fill="#F2D9A6" ${k}/><path d="M24 40 Q22 26 28 16" stroke="#9A6A3E" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M28 16 Q16 12 12 20 Q20 18 28 16 Q26 6 18 6 Q26 10 28 16 Q34 4 42 8 Q34 10 28 16 Q38 14 42 22 Q34 18 28 16Z" fill="#5E9E82" ${k}/><path d="M40 40 V20" stroke="${N}" stroke-width="2"/><path d="M40 20 h12 v9 h-12" fill="var(--isl)" ${k}/></svg>`,
+ pseudo:`<svg viewBox="0 0 120 112">${alien("mochi")}</svg>`,
+ readpic:`<svg viewBox="0 0 64 64"><rect x="8" y="10" width="48" height="44" rx="8" fill="#FFF6E8" ${k}/><rect x="14" y="16" width="36" height="22" rx="4" fill="#BFDAF1"/><circle cx="24" cy="24" r="4" fill="#F2C94C"/><path d="M14 38 L26 28 L34 34 L42 26 L50 34 V38Z" fill="#7FB89E"/><path d="M16 46 h20 M16 50 h12" stroke="${N}" stroke-width="3" stroke-linecap="round"/></svg>`,
+ race:`<svg viewBox="0 0 64 64"><rect x="27" y="4" width="10" height="7" rx="2" fill="${N}"/><circle cx="32" cy="36" r="22" fill="#FFFDFA" ${k}/><circle cx="32" cy="36" r="22" fill="none" stroke="var(--isl)" stroke-width="5"/><path d="M32 36 L32 22 M32 36 L42 42" stroke="${N}" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="36" r="3" fill="${N}"/><path d="M4 26h8M2 34h8M4 42h8" stroke="var(--isl)" stroke-width="3" stroke-linecap="round"/></svg>`,
+ story:`<svg viewBox="0 0 64 64"><path d="M32 52 C24 46 14 46 6 50 V14 C14 10 24 10 32 16Z" fill="#FFFDFA" ${k}/><path d="M32 52 C40 46 50 46 58 50 V14 C50 10 40 10 32 16Z" fill="#FFFDFA" ${k}/><path d="M32 16 V52" ${k}/><path d="M12 22 q8-3 15 0 M12 30 q8-3 15 0 M12 38 q8-3 15 0" stroke="#C9D6E4" stroke-width="2.5" fill="none"/><circle cx="45" cy="28" r="8" fill="var(--isl)" opacity=".9"/><path d="M44 2 l2 5 5 2 -5 2 -2 5 -2-5 -5-2 5-2z" fill="#F2C94C"/></svg>`
+};
+function renderActs(i){
+ const b=k2=>P.best[k2]||0,rec=(P.race||{})[i],told=(P.story||{})[i];
+ const cards=[
+  {m:"isla",t:"Juego de la isla",d:"Sílabas, palabras y el tambor",x:b(i)?`★ ${b(i)} de 10`:"Gana 7 ★ para abrir la siguiente isla",main:1},
+  {m:"pseudo",t:"Palabras de Mochi",d:"Los nombres raros de su planeta",x:b("pseudo"+i)?`★ ${b("pseudo"+i)} de 8`:""},
+  {m:"readpic",t:"Lee y elige",d:"Lee la palabra y toca su dibujo",x:b("readpic"+i)?`★ ${b("readpic"+i)} de 8`:""},
+  {m:"race",t:"Carrera de sílabas",d:"Lee rápido y rompe tu récord",x:rec?`Récord: ${rec} s`:""},
+  {m:"story",t:"Cuento de la isla",d:STORIES[i].title,x:told?"✓ Leído":""}
+ ];
+ $("#acts").innerHTML=cards.map(c=>`<button class="act${c.main?" main":""}" data-m="${c.m}"><span class="act-ic">${ICON[c.m]}</span><span class="act-tx"><b>${c.t}</b><small>${c.d}</small>${c.x?`<em>${c.x}</em>`:""}</span></button>`).join("");
+ $("#acts").querySelectorAll(".act").forEach(el=>el.addEventListener("click",()=>{unlock();tap();const m=el.dataset.m;if(m==="race")raceIntro();else if(m==="story")openStory(0);else start(m);}));
+}
+
+/* ---------- Carrera de sílabas ---------- */
+const RACE_N=20;const R={list:[],ix:0,t0:0,tm:0,on:false};
+function raceIntro(){
+ clr();R.on=false;$("#r-isle").textContent=ISLANDS[st.isl].name;
+ const rec=(P.race||{})[st.isl];
+ $("#r-card").innerHTML=`<span class="r-hint">Lee cada sílaba en voz alta y toca <b>¡La leí!</b></span>`;
+ $("#r-rec").textContent=rec?`Tu récord: ${rec} segundos`:"¡Todavía no tienes récord!";
+ $("#r-time").textContent="0.0 s";$("#r-go").hidden=false;$("#r-ok").hidden=true;$("#r-help").hidden=true;$("#r-res").hidden=true;
+ runner(0);show("race");speak("Carrera de sílabas. Lee cada sílaba en voz alta lo más rápido que puedas.");
+}
+function runner(f){$("#r-runner").style.left=`calc(${f*100}% - ${f*44}px)`;}
+function raceStart(){
+ const I=ISLANDS[st.isl],prev=st.isl?ISLANDS.slice(0,st.isl).flatMap(x=>x.syl):[];
+ R.list=[];while(R.list.length<RACE_N){const s=Math.random()<(st.isl?.7:1)?pick(I.syl):pick(prev);if(s!==R.list[R.list.length-1])R.list.push(s);}
+ R.ix=0;$("#r-go").hidden=true;$("#r-res").hidden=true;let c=3;
+ const cd=()=>{if(c>0){$("#r-card").innerHTML=`<span class="r-count">${c}</span>`;tones([440],.12,"sine",.12);c--;later(cd,700);}else{tones([880],.2,"triangle",.15);R.t0=performance.now();R.on=true;$("#r-ok").hidden=false;$("#r-help").hidden=false;showSyl();tick();}};cd();
+}
+function showSyl(){const s=R.list[R.ix];$("#r-card").innerHTML=`<span class="r-syl">${s}</span><span class="r-n">${R.ix+1} / ${RACE_N}</span>`;runner(R.ix/RACE_N);}
+function tick(){if(!R.on)return;$("#r-time").textContent=((performance.now()-R.t0)/1000).toFixed(1)+" s";R.tm=requestAnimationFrame(tick);}
+function raceOk(){if(!R.on)return;tap();R.ix++;if(R.ix>=RACE_N)return raceEnd();const c=$("#r-card");c.classList.remove("pop");void c.offsetWidth;c.classList.add("pop");showSyl();}
+function raceEnd(){
+ R.on=false;cancelAnimationFrame(R.tm);runner(1);const sec=Math.round((performance.now()-R.t0)/100)/10;
+ P.race=P.race||{};const old=P.race[st.isl];const best=!old||sec<old;if(best)P.race[st.isl]=sec;save(P);
+ const spm=Math.round(RACE_N/(sec/60));
+ $("#r-ok").hidden=true;$("#r-help").hidden=true;$("#r-time").textContent=sec.toFixed(1)+" s";
+ $("#r-card").innerHTML=`<div class="r-done"><div id="r-mochi" style="width:110px;margin:0 auto"></div><b>${best?(old?"¡Nuevo récord!":"¡Primer récord!"):"¡Carrera terminada!"}</b><span>${sec.toFixed(1)} segundos · ${spm} sílabas por minuto</span>${old&&!best?`<span>Tu récord sigue en ${old} s. ¡Tú puedes superarlo!</span>`:""}</div>`;
+ mochi($("#r-mochi"),best?"salta":"hola");$("#r-rec").textContent=`Tu récord: ${P.race[st.isl]} segundos`;$("#r-res").hidden=false;fan();if(best)confetti(140);
+ later(()=>speak(best?"¡Nuevo récord!":"¡Carrera terminada!"),300);
+}
+
+/* ---------- Cuentos ---------- */
+const STORIES=[
+ {title:"La rana",pages:[["Papá ama a mamá.",["casa"]],["Mamá da la taza a papá.",["taza"]],["La rana nada.",["rana"]],["La vaca va a la casa.",["vaca","casa"]],["¡La rana va a la cama!",["rana","cama"]]]},
+ {title:"La pera de Pepe",pages:[["Pepe pela la pera.",["pera"]],["Pepe ve la vela.",["vela"]],["Mamá bebe café.",["café"]],["Pepe ve la llave.",["llave"]],["¡Pepe se va a la cama!",["cama"]]]},
+ {title:"Mimi y la piña",pages:[["Mimi mira la piña.",["niña","piña"]],["La piña de Mimi pesa.",["piña"]],["Mimi pide la lima.",["lima"]],["Mimi va a la tina.",["tina"]],["¡Mimi ríe y ríe!",["niña"]]]},
+ {title:"Toto, mi oso",pages:[["Toto, mi oso, toma sopa.",["oso","sopa"]],["Toto mira a la foca.",["foca"]],["La foca toca la moto.",["foca","moto"]],["Toto ve a mi pato.",["pato"]],["¡Toto se ríe solo!",["oso"]]]},
+ {title:"La luna de Lulú",pages:[["Lulú mira la luna.",["luna"]],["La nube tapa la luna.",["nube","luna"]],["Lulú come una uva.",["uva"]],["La mula mira a Lulú.",["mula"]],["¡A la cuna, Lulú!",["cuna"]]]}
+];
+const SS={p:0,reading:false};
+function openStory(p){
+ clr();if(synth)synth.cancel();SS.p=p;SS.reading=false;const S=STORIES[st.isl],pg=S.pages[p];
+ $("#st-title").textContent=S.title;
+ $("#st-dots").innerHTML=S.pages.map((_,j)=>`<i class="${j<p?"done":j===p?"now":""}"></i>`).join("");
+ $("#st-art").innerHTML=pg[1].map(w=>`<svg viewBox="0 0 120 112" class="st-pic" aria-hidden="true">${ART[w]}</svg>`).join("");
+ $("#st-text").innerHTML=pg[0].split(" ").map((w,j)=>`<button class="wd" data-j="${j}">${w}</button>`).join(" ");
+ $("#st-text").querySelectorAll(".wd").forEach(b=>b.addEventListener("click",()=>{if(SS.reading)return;tap();speak(clean(b.textContent),.75);b.classList.add("hl");setTimeout(()=>b.classList.remove("hl"),700);}));
+ $("#st-read").hidden=false;$("#st-prev").hidden=false;$("#st-prev").disabled=p===0;$("#st-next").textContent=p===S.pages.length-1?"¡Terminé!":"Siguiente →";
+ mochi($("#st-mochi"),"lee");show("story");
+}
+const clean=w=>w.replace(/[¡!¿?.,]/g,"");
+function readAloud(){
+ if(SS.reading)return;SS.reading=true;const ws=[...document.querySelectorAll("#st-text .wd")];let j=0;
+ const step=()=>{ws.forEach(x=>x.classList.remove("hl"));if(j>=ws.length||!SS.reading){SS.reading=false;return;}const w=ws[j];w.classList.add("hl");const t=clean(w.textContent);
+  const go=()=>{j++;later(step,140);};
+  if(!synth){later(go,450+t.length*70);return;}
+  try{synth.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="es-MX";u.rate=.78;u.pitch=1.12;if(voice)u.voice=voice;let done=false;const fin=()=>{if(!done){done=true;go();}};u.onend=fin;u.onerror=fin;later(fin,1600+t.length*90);synth.speak(u);}catch(e){later(go,600);}
+ };step();
+}
+function storyNext(){
+ const S=STORIES[st.isl];if(SS.p<S.pages.length-1){tap();openStory(SS.p+1);return;}
+ P.story=P.story||{};P.story[st.isl]=1;save(P);SS.reading=false;
+ $("#st-text").innerHTML=`<span class="st-end">¡Leíste el cuento completo!</span>`;$("#st-art").innerHTML="";mochi($("#st-art"),"salta");$("#st-art").firstChild.style.maxWidth="150px";
+ $("#st-read").hidden=true;$("#st-prev").hidden=true;$("#st-dots").querySelectorAll("i").forEach(x=>x.className="done"); fan();confetti(160);speak("¡Muy bien! Leíste el cuento completo.");$("#st-next").textContent="Volver a la isla";$("#st-next").onclick=()=>{$("#st-next").onclick=null;openIsle(st.isl);};
+}
+$("#r-go").addEventListener("click",()=>{unlock();raceStart();});
+$("#r-ok").addEventListener("click",raceOk);
+$("#r-help").addEventListener("click",()=>{if(R.on)speak(R.list[R.ix],.7);});
+$("#r-again").addEventListener("click",()=>{unlock();raceStart();});
+$("#r-back").addEventListener("click",()=>{clr();R.on=false;openIsle(st.isl);});
+$("#st-back").addEventListener("click",()=>{clr();SS.reading=false;if(synth)synth.cancel();openIsle(st.isl);});
+$("#st-read").addEventListener("click",()=>{unlock();readAloud();});
+$("#st-prev").addEventListener("click",()=>{if(SS.p>0)openStory(SS.p-1);});
+$("#st-next").addEventListener("click",()=>{if($("#st-next").onclick)return;storyNext();});
+
 renderMap();show("map");
 })();
 </script>
