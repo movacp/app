@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel de maestra · MOVA Learning Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1F2B4D; --navy2:#2C3B66; --ink:#1F2B4D; --muted:#6B7591;
+  --bg:#F4F6FA; --card:#FFFFFF; --line:#E3E7F0;
+  --coral:#F2786B; --sky:#8EC9EE; --butter:#F6D776; --mint:#9DDCC0; --lilac:#B9A6E8;
+  --ok:#2E9E6E; --bad:#D94B3D;
+  font-family:"Poppins",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.hidden{display:none!important}
+
+/* Login */
+#login{min-height:100%;display:flex;align-items:center;justify-content:center;padding:28px 20px;
+  background:var(--navy);position:relative;overflow:hidden}
+#login .dots{position:absolute;inset:0;pointer-events:none}
+#login .dots span{position:absolute;border-radius:50%}
+.login-card{position:relative;background:#fff;border-radius:24px;padding:32px 26px 28px;width:100%;max-width:380px;
+  box-shadow:0 20px 50px rgba(10,16,40,.35)}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.brand-mark{width:42px;height:42px;border-radius:12px;background:var(--navy);color:#fff;font-weight:700;
+  display:grid;place-items:center;font-size:20px}
+.brand small{display:block;color:var(--muted);font-size:12.5px}
+.brand b{font-size:16px}
+.login-card h1{font-size:26px;margin:0 0 4px;font-weight:700}
+.login-card p.sub{margin:0 0 22px;color:var(--muted);font-size:14px}
+label.f{display:block;font-size:13px;font-weight:600;margin:14px 0 6px}
+input.in,select.in{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff;font-size:15px}
+input.in:focus,select.in:focus{border-color:var(--navy2);outline:none}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:600;font-size:15px}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:disabled{opacity:.6}
+.btn-soft{background:#EEF1F7;color:var(--ink)}
+.btn-danger{background:#FCE9E7;color:var(--bad)}
+.btn-full{width:100%;margin-top:22px}
+.msg{font-size:13.5px;margin-top:12px;min-height:1em}
+.msg.err{color:var(--bad)} .msg.ok{color:var(--ok)}
+
+/* App */
+header.top{background:var(--navy);color:#fff;padding:calc(14px + env(safe-area-inset-top)) 18px 22px;position:relative;overflow:hidden}
+header.top .row{display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative}
+header.top h1{font-size:22px;margin:16px 0 2px;font-weight:700;position:relative}
+header.top p{margin:0;color:#C9D1E6;font-size:13.5px;position:relative}
+header.top .brand small{color:#C9D1E6}
+header.top .brand-mark{background:#fff;color:var(--navy)}
+.logout{background:rgba(255,255,255,.12);color:#fff;border:0;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600}
+main{max-width:760px;margin:0 auto;padding:18px 16px 100px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:-34px;position:relative}
+.stat{background:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 6px 18px rgba(31,43,77,.08)}
+.stat b{display:block;font-size:22px}
+.stat span{font-size:12px;color:var(--muted)}
+.toolbar{display:flex;gap:10px;margin:20px 0 12px}
+.toolbar input{flex:1}
+.list{display:flex;flex-direction:column;gap:8px}
+.st{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;text-align:left;width:100%}
+.av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:var(--navy);flex:none}
+.st .mid{flex:1;min-width:0}
+.st .nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st .sub{font-size:12.5px;color:var(--muted)}
+.chip{display:inline-block;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;background:#EEF1F7}
+.chip.off{background:#FCE9E7;color:var(--bad)}
+.empty{text-align:center;padding:40px 16px;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
+.fab{position:fixed;right:18px;bottom:calc(20px + env(safe-area-inset-bottom));background:var(--coral);color:#fff;border:0;
+  border-radius:999px;padding:14px 20px;font-weight:700;box-shadow:0 10px 24px rgba(242,120,107,.45);font-size:15px}
+
+/* Sheet */
+.backdrop{position:fixed;inset:0;background:rgba(15,22,45,.45);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.sheet{background:#fff;width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;
+  padding:22px 20px calc(24px + env(safe-area-inset-bottom));animation:up .22s ease-out}
+@media(min-width:700px){.backdrop{align-items:center}.sheet{border-radius:22px}}
+@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sheet{animation:none}}
+.sheet h2{margin:0 0 4px;font-size:20px}
+.sheet .sub{color:var(--muted);font-size:13.5px;margin:0 0 6px}
+.sheet .x{float:right;border:0;background:#EEF1F7;border-radius:10px;width:36px;height:36px;font-size:18px}
+.sec{border-top:1px solid var(--line);margin-top:20px;padding-top:16px}
+.sec h3{font-size:15px;margin:0 0 8px}
+.pwrow{display:flex;gap:8px}
+.pwrow input{flex:1}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.actions .btn{flex:1}
+.cred{background:#F4F6FA;border-radius:14px;padding:14px 16px;margin-top:14px;font-size:14.5px}
+.cred div{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.cred span{color:var(--muted)}
+.prog{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.pi{display:flex;justify-content:space-between;gap:10px;background:#F7F8FB;border-radius:10px;padding:9px 12px;font-size:13.5px}
+.pi .when{color:var(--muted);font-size:12px}
+.score{font-weight:700;white-space:nowrap}
+.toggle{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:14px;font-weight:500}
+.toggle input{width:20px;height:20px}
+.toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top));transform:translateX(-50%);background:var(--navy);color:#fff;
+  padding:10px 16px;border-radius:12px;font-size:14px;z-index:40;box-shadow:0 10px 24px rgba(0,0,0,.2)}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="login">
+  <div class="dots" aria-hidden="true"></div>
+  <form class="login-card" id="loginForm" autocomplete="on">
+    <div class="brand"><div class="brand-mark">m.</div><div><b>MOVA Learning Studio</b><small>Centro Pedagógico</small></div></div>
+    <h1>Panel de maestra</h1>
+    <p class="sub">Entra con tu cuenta para administrar a tus alumnos.</p>
+    <label class="f" for="email">Correo</label>
+    <input class="in" id="email" type="email" autocomplete="username" required>
+    <label class="f" for="pass">Contraseña</label>
+    <input class="in" id="pass" type="password" autocomplete="current-password" required>
+    <button class="btn btn-primary btn-full" id="loginBtn" type="submit">Entrar</button>
+    <div class="msg err" id="loginMsg"></div>
+  </form>
+</section>
+
+<!-- APP -->
+<section id="app" class="hidden">
+  <header class="top">
+    <div class="dots" aria-hidden="true"></div>
+    <div class="row">
+      <div class="brand" style="margin:0"><div class="brand-mark">m.</div><div><b>MOVA Learning Studio</b><small>Panel de maestra</small></div></div>
+      <button class="logout" id="logoutBtn">Salir</button>
+    </div>
+    <h1>Mis alumnos</h1>
+    <p>Da de alta cuentas y revisa el avance de cada alumno.</p>
+  </header>
+  <main>
+    <div class="stats">
+      <div class="stat"><b id="sTotal">0</b><span>Alumnos</span></div>
+      <div class="stat"><b id="sWeek">0</b><span>Activos esta semana</span></div>
+      <div class="stat"><b id="sActs">0</b><span>Actividades</span></div>
+    </div>
+    <div class="toolbar">
+      <input class="in" id="search" type="search" placeholder="Buscar por nombre o usuario">
+    </div>
+    <div class="list" id="list"></div>
+  </main>
+  <button class="fab" id="addBtn">+ Agregar alumno</button>
+</section>
+
+<div id="modal"></div>
+<div id="toast" class="toast hidden"></div>
+
+<script>
+const SB_URL = "https://fclafxrkibvcjktrgznt.supabase.co";
+const SB_KEY = "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6";
+const STORE = "mova_admin_session";
+const GROUPS = ["Kids","Teens","Adultos","TOEFL","Homeschool Club","Lectoescritura","Matemáticas"];
+const COLORS = ["#F6D776","#8EC9EE","#9DDCC0","#B9A6E8","#F9B8AE"];
+const ACT_NAMES = {"word-forms":"Word Forms","toefl":"TOEFL Practice","level-up":"Level Up"};
+
+let session = null, students = [];
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* Decorative dots */
+document.querySelectorAll(".dots").forEach(box => {
+  const pal = ["#F6D776","#8EC9EE","#9DDCC0","#B9A6E8","#F2786B","#FFFFFF"];
+  for (let i = 0; i < 16; i++) {
+    const d = document.createElement("span"), size = 8 + (i * 7) % 22;
+    Object.assign(d.style, {width:size+"px",height:size+"px",left:((i*37)%100)+"%",top:((i*53)%100)+"%",
+      background:pal[i%pal.length],opacity:box.closest("header") ? .35 : .55});
+    box.appendChild(d);
+  }
+});
+
+function toast(t){const el=$("#toast");el.textContent=t;el.classList.remove("hidden");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.add("hidden"),2600);}
+
+/* ---------- Auth ---------- */
+async function authReq(grant, body){
+  const r = await fetch(`${SB_URL}/auth/v1/token?grant_type=${grant}`,{method:"POST",
+    headers:{"apikey":SB_KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});
+  const j = await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(j.error_description || j.msg || j.message || "No se pudo iniciar sesión");
+  session = {access:j.access_token, refresh:j.refresh_token, exp:Date.now() + (j.expires_in-60)*1000};
+  try{localStorage.setItem(STORE, JSON.stringify(session));}catch(e){}
+  return session;
+}
+async function ensureToken(){
+  if(session && Date.now() < session.exp) return session.access;
+  if(session?.refresh){ await authReq("refresh_token",{refresh_token:session.refresh}); return session.access; }
+  throw new Error("auth");
+}
+async function rpc(fn, args={}){
+  const token = await ensureToken();
+  const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`,{method:"POST",
+    headers:{"apikey":SB_KEY,"Authorization":"Bearer "+token,"Content-Type":"application/json"},body:JSON.stringify(args)});
+  const txt = await r.text(); let j = null; try{ j = txt ? JSON.parse(txt) : null; }catch(e){}
+  if(!r.ok){
+    const m = (j && (j.message||"")) + "";
+    if(r.status===401){ logout(); throw new Error("Tu sesión terminó. Vuelve a entrar."); }
+    if(j?.code==="23505") throw new Error("Ese usuario ya existe. Elige otro.");
+    if(j?.code==="23514") throw new Error("El usuario solo puede llevar minúsculas, números, punto o guion (3 a 40).");
+    if(m.includes("password too short")) throw new Error("La contraseña debe tener al menos 6 caracteres.");
+    if(m.includes("not authorized")) throw new Error("Esta cuenta no tiene permiso de maestra.");
+    throw new Error(m || "Algo falló. Intenta de nuevo.");
+  }
+  return j;
+}
+function logout(){ session=null; try{localStorage.removeItem(STORE);}catch(e){} $("#app").classList.add("hidden"); $("#login").classList.remove("hidden"); }
+
+$("#loginForm").addEventListener("submit", async e => {
+  e.preventDefault(); const b=$("#loginBtn"), m=$("#loginMsg"); m.textContent=""; b.disabled=true; b.textContent="Entrando…";
+  try{
+    await authReq("password",{email:$("#email").value.trim(),password:$("#pass").value});
+    const ok = await rpc("is_admin");
+    if(!ok){ logout(); throw new Error("Esta cuenta no tiene permiso de maestra."); }
+    showApp();
+  }catch(err){ m.textContent = /invalid/i.test(err.message) ? "Correo o contraseña incorrectos." : err.message; }
+  b.disabled=false; b.textContent="Entrar";
+});
+$("#logoutBtn").onclick = () => { logout(); toast("Sesión cerrada"); };
+
+/* ---------- Students ---------- */
+async function showApp(){ $("#login").classList.add("hidden"); $("#app").classList.remove("hidden"); await loadStudents(); }
+async function loadStudents(){
+  try{ students = await rpc("admin_list_students") || []; render(); }
+  catch(err){ $("#list").innerHTML = `<div class="empty"><b>No se pudo cargar la lista</b>${esc(err.message)}</div>`; }
+}
+function initials(n){ return n.split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase(); }
+function ago(d){
+  if(!d) return "Sin actividad";
+  const m = Math.round((Date.now()-new Date(d))/60000);
+  if(m<1) return "Hace un momento"; if(m<60) return `Hace ${m} min`;
+  const h = Math.round(m/60); if(h<24) return `Hace ${h} h`;
+  const days = Math.round(h/24); if(days===1) return "Ayer"; if(days<30) return `Hace ${days} días`;
+  return new Date(d).toLocaleDateString("es-MX",{day:"numeric",month:"short"});
+}
+function render(){
+  const q = $("#search").value.trim().toLowerCase();
+  const week = Date.now() - 7*864e5;
+  $("#sTotal").textContent = students.length;
+  $("#sWeek").textContent = students.filter(s => s.last_activity_at && new Date(s.last_activity_at) > week).length;
+  $("#sActs").textContent = students.reduce((a,s)=>a+Number(s.activities||0),0);
+  const rows = students.filter(s => !q || s.full_name.toLowerCase().includes(q) || s.username.includes(q));
+  if(!students.length){ $("#list").innerHTML = `<div class="empty"><b>Aún no hay alumnos</b>Toca “Agregar alumno” para crear la primera cuenta.</div>`; return; }
+  if(!rows.length){ $("#list").innerHTML = `<div class="empty"><b>Sin resultados</b>Prueba con otro nombre.</div>`; return; }
+  $("#list").innerHTML = rows.map((s,i) => `
+    <button class="st" data-id="${s.id}">
+      <div class="av" style="background:${COLORS[i%COLORS.length]}">${esc(initials(s.full_name))}</div>
+      <div class="mid"><div class="nm">${esc(s.full_name)}</div>
+        <div class="sub">@${esc(s.username)} · ${esc(ago(s.last_activity_at))}</div></div>
+      ${s.active ? (s.stage?`<span class="chip">${esc(s.stage)}</span>`:"") : `<span class="chip off">Inactivo</span>`}
+    </button>`).join("");
+  document.querySelectorAll(".st").forEach(b => b.onclick = () => openStudent(b.dataset.id));
+}
+$("#search").addEventListener("input", render);
+
+/* ---------- Helpers ---------- */
+function makeUser(name){
+  const p = name.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z\s]/g,"").split(/\s+/).filter(Boolean);
+  return (p.length>1 ? p[0]+"."+p[1] : (p[0]||"")).slice(0,40);
+}
+function makePass(){
+  const w = ["sol","luna","mar","rio","nube","flor","pino","lago","cielo","estrella","arbol","faro"];
+  return w[Math.floor(Math.random()*w.length)] + (1000+Math.floor(Math.random()*9000));
+}
+function groupOptions(sel){ return `<option value="">Sin grupo</option>` + GROUPS.map(g=>`<option ${g===sel?"selected":""}>${g}</option>`).join(""); }
+function closeModal(){ $("#modal").innerHTML=""; }
+function openModal(html){
+  $("#modal").innerHTML = `<div class="backdrop"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`;
+  $("#modal .backdrop").addEventListener("click", e => { if(e.target.classList.contains("backdrop")) closeModal(); });
+  $("#modal .x")?.addEventListener("click", closeModal);
+}
+function credBox(name,user,pass){
+  return `<div class="cred"><div><span>Alumno</span><b>${esc(name)}</b></div><div><span>Usuario</span><b>${esc(user)}</b></div>
+    <div><span>Contraseña</span><b>${esc(pass)}</b></div></div>
+    <div class="actions"><button class="btn btn-primary" id="copyCred">Copiar datos</button><button class="btn btn-soft" id="doneCred">Listo</button></div>`;
+}
+function bindCred(name,user,pass){
+  $("#copyCred").onclick = async () => {
+    const t = `MOVA Learning Studio\nAlumno: ${name}\nUsuario: ${user}\nContraseña: ${pass}\nEntra en: https://movacp.github.io/app/`;
+    try{ await navigator.clipboard.writeText(t); toast("Datos copiados"); }catch(e){ toast("No se pudo copiar"); }
+  };
+  $("#doneCred").onclick = closeModal;
+}
+
+/* ---------- Add ---------- */
+$("#addBtn").onclick = () => {
+  openModal(`<button class="x" aria-label="Cerrar">×</button><h2>Agregar alumno</h2>
+    <p class="sub">El usuario y la contraseña se generan solos; puedes cambiarlos.</p>
+    <label class="f" for="aName">Nombre completo</label><input class="in" id="aName" autocomplete="off">
+    <label class="f" for="aUser">Usuario</label><input class="in" id="aUser" autocapitalize="none" autocomplete="off">
+    <label class="f" for="aStage">Grupo</label><select class="in" id="aStage">${groupOptions("")}</select>
+    <label class="f" for="aPass">Contraseña</label>
+    <div class="pwrow"><input class="in" id="aPass" value="${makePass()}" autocomplete="off"><button class="btn btn-soft" id="aGen" type="button">Otra</button></div>
+    <button class="btn btn-primary btn-full" id="aSave">Crear cuenta</button><div class="msg err" id="aMsg"></div>`);
+  let touched = false;
+  $("#aUser").addEventListener("input", ()=> touched = true);
+  $("#aName").addEventListener("input", ()=> { if(!touched) $("#aUser").value = makeUser($("#aName").value); });
+  $("#aGen").onclick = () => $("#aPass").value = makePass();
+  $("#aName").focus();
+  $("#aSave").onclick = async () => {
+    const name=$("#aName").value.trim(), user=$("#aUser").value.trim().toLowerCase(), pass=$("#aPass").value.trim(), stage=$("#aStage").value||null;
+    const m=$("#aMsg"); m.textContent="";
+    if(name.length<3){ m.textContent="Escribe el nombre completo."; return; }
+    if(!/^[a-z0-9._-]{3,40}$/.test(user)){ m.textContent="El usuario solo puede llevar minúsculas, números, punto o guion."; return; }
+    if(pass.length<6){ m.textContent="La contraseña debe tener al menos 6 caracteres."; return; }
+    const b=$("#aSave"); b.disabled=true; b.textContent="Creando…";
+    try{
+      await rpc("admin_create_student",{p_username:user,p_full_name:name,p_stage:stage,p_password:pass});
+      openModal(`<h2>Cuenta creada</h2><p class="sub">Comparte estos datos con el alumno o su mamá.</p>${credBox(name,user,pass)}`);
+      bindCred(name,user,pass); loadStudents();
+    }catch(err){ m.textContent=err.message; b.disabled=false; b.textContent="Crear cuenta"; }
+  };
+};
+
+/* ---------- Detail ---------- */
+async function openStudent(id){
+  const s = students.find(x=>x.id===id); if(!s) return;
+  openModal(`<button class="x" aria-label="Cerrar">×</button><h2>${esc(s.full_name)}</h2>
+    <p class="sub">@${esc(s.username)} · Alta el ${new Date(s.created_at).toLocaleDateString("es-MX",{day:"numeric",month:"long"})}</p>
+    <div class="sec"><h3>Avance</h3><div class="prog" id="prog"><div class="pi">Cargando…</div></div></div>
+    <div class="sec"><h3>Datos</h3>
+      <label class="f" for="eName">Nombre completo</label><input class="in" id="eName" value="${esc(s.full_name)}">
+      <label class="f" for="eStage">Grupo</label><select class="in" id="eStage">${groupOptions(s.stage)}</select>
+      <label class="toggle"><input type="checkbox" id="eActive" ${s.active?"checked":""}> Cuenta activa</label>
+      <div class="actions"><button class="btn btn-primary" id="eSave">Guardar cambios</button></div><div class="msg" id="eMsg"></div></div>
+    <div class="sec"><h3>Contraseña</h3>
+      <p class="sub">Por seguridad no se puede ver la actual, pero puedes poner una nueva.</p>
+      <div class="pwrow"><input class="in" id="pNew" value="${makePass()}"><button class="btn btn-primary" id="pSave">Cambiar</button></div>
+      <div id="pOut"></div><div class="msg" id="pMsg"></div></div>
+    <div class="sec"><button class="btn btn-danger" id="dBtn" style="width:100%">Eliminar alumno</button><div class="msg err" id="dMsg"></div></div>`);
+
+  rpc("admin_student_progress",{p_student:id,p_limit:50}).then(rows => {
+    $("#prog").innerHTML = rows?.length ? rows.map(r => `
+      <div class="pi"><div><b>${esc(ACT_NAMES[r.activity]||r.activity)}</b>${r.item?` · ${esc(r.item)}`:""}
+        <div class="when">${new Date(r.created_at).toLocaleString("es-MX",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</div></div>
+        <div class="score">${r.total?`${r.score}/${r.total}`:(r.score??"")}</div></div>`).join("")
+      : `<div class="pi">Todavía no hay actividades registradas.</div>`;
+  }).catch(err => $("#prog").innerHTML = `<div class="pi">${esc(err.message)}</div>`);
+
+  $("#eSave").onclick = async () => {
+    const m=$("#eMsg"); m.className="msg";
+    try{ await rpc("admin_update_student",{p_student:id,p_full_name:$("#eName").value,p_stage:$("#eStage").value||null,p_active:$("#eActive").checked});
+      m.className="msg ok"; m.textContent="Cambios guardados"; loadStudents(); }
+    catch(err){ m.className="msg err"; m.textContent=err.message; }
+  };
+  $("#pSave").onclick = async () => {
+    const pass=$("#pNew").value.trim(), m=$("#pMsg"); m.className="msg";
+    if(pass.length<6){ m.className="msg err"; m.textContent="La contraseña debe tener al menos 6 caracteres."; return; }
+    try{ await rpc("admin_set_password",{p_student:id,p_password:pass});
+      $("#pOut").innerHTML = credBox(s.full_name,s.username,pass); bindCred(s.full_name,s.username,pass);
+      $("#doneCred").onclick = () => $("#pOut").innerHTML=""; }
+    catch(err){ m.className="msg err"; m.textContent=err.message; }
+  };
+  let armed=false;
+  $("#dBtn").onclick = async () => {
+    if(!armed){ armed=true; $("#dBtn").textContent="Toca otra vez para confirmar"; return; }
+    try{ await rpc("admin_delete_student",{p_student:id}); closeModal(); toast("Alumno eliminado"); loadStudents(); }
+    catch(err){ $("#dMsg").textContent=err.message; }
+  };
+}
+
+/* ---------- Start ---------- */
+(async () => {
+  try{ session = JSON.parse(localStorage.getItem(STORE)||"null"); }catch(e){}
+  if(session){ try{ await ensureToken(); if(await rpc("is_admin")) return showApp(); }catch(e){} logout(); }
+})();
+</script>
+</body>
+</html>
