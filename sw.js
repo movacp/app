@@ -1,12 +1,12 @@
 /* MOVA Learning Studio: permite abrir la app sin internet.
    Al publicar cambios, suba el número de versión para que todos reciban la actualización. */
-const VERSION = "mova-v21";
+const VERSION = "mova-v27";
 const CORE = ["./", "index.html", "studio-plus.js", "studio-games.js", "studio-lote10.js", "studio-lote11.js", "toefl-bank.js", "mova-voice.js", "manifest.json", "icon-192.png", "icon-512.png", "maskable-512.png",
   "juego-word-quest.html", "juego-mision-matematica.html", "juego-level-up.html", "juego-verb-memory.html", "juego-sentence-builder.html", "juego-locked-library.html",
   "juego-toefl-practice.html", "juego-sentence-scramble.html",
   "juego-la-tiendita.html", "juego-que-hora-es.html", "juego-detective-patrones.html",
   "juego-pizzeria-fracciones.html", "juego-lluvia-de-numeros.html",
-  "juego-la-balanza.html", "juego-la-boveda.html",
+  "juego-la-balanza.html", "juego-la-boveda.html", "juego-haunted-mansion.html", "juego-lost-in-the-museum.html", "juego-pirate-treasure-island.html", "juego-space-station-rescue.html", "juego-the-detectives-case.html", "juego-trapped-in-the-train.html",
   "juego-lee-con-mochi.html", "juego-sopa-de-letras.html", "juego-crucigrama.html"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(VERSION).then((c) => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
