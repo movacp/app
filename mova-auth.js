@@ -9,7 +9,7 @@
     "word-quest": "Word Quest", "mision-matematica": "Misión Matemática", "level-up": "Level Up",
     "verb-memory": "Verb Memory", "sentence-builder": "Sentence Builder", "locked-library": "Locked Library",
     "toefl-practice": "TOEFL Practice", "word-forms": "Word Forms", "sentence-scramble": "Sentence Scramble",
-    "lee-con-mochi": "Aprende a leer con Mochi", "sopa-de-letras": "Sopa de letras", "crucigrama": "Crucigrama"
+    "lee-con-mochi": "Aprende a leer con Mochi", "sopa-de-letras": "Sopa de letras", "crucigrama": "Crucigrama", "retos": "Retos multijugador"
   };
 
   function get(k) { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } }
@@ -417,18 +417,55 @@
     } catch (e) {}
   }
 
+
+  /* ---------- Retos multijugador (Fase 1) ---------- */
+  var RETO_GAMES = ["verb-memory", "word-quest", "sentence-scramble", "mision-matematica", "sopa-de-letras"];
+  var USERS_IC = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-6 6.5-6s5.9 2.4 6.5 6"/><circle cx="17" cy="9" r="2.6"/><path d="M16.5 14c2.7.2 4.6 2.2 5 5"/></svg>';
+  var retoCss = ".mva-mode{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--track,#EEF1F8);border-radius:999px;padding:5px;margin:14px auto 4px;max-width:420px;font-family:Poppins,'Century Gothic',system-ui,sans-serif}" +
+    ".mva-mode>*{display:flex;align-items:center;justify-content:center;gap:6px;border-radius:999px;padding:9px 8px;font-weight:700;font-size:13.5px;text-decoration:none;line-height:1.15;text-align:center}" +
+    ".mva-mode .on{background:var(--ink,#1B2A55);color:var(--card,#fff)}" +
+    ".mva-mode a{color:var(--ink,#1B2A55)}.mva-mode a:hover{background:rgba(255,255,255,.6)}" +
+    ".mva-retos{display:flex;align-items:center;gap:14px;background:#1B2A55;color:#fff;border-radius:22px;padding:16px 18px;text-decoration:none;position:relative;overflow:hidden;margin-top:6px;" +
+    "background-image:radial-gradient(circle,#FF8FB1 5px,transparent 6px),radial-gradient(circle,#F2B632 5px,transparent 6px),radial-gradient(circle,#4FD1A5 5px,transparent 6px);background-size:120px 120px;background-position:90% 10px,70% 80px,98% 60px}" +
+    ".mva-retos .ic{width:50px;height:50px;border-radius:16px;background:#F2B632;color:#1B2A55;display:grid;place-items:center;flex:none}" +
+    ".mva-retos .ic svg{width:26px;height:26px}" +
+    ".mva-retos b{display:block;font-size:18px;font-weight:700}.mva-retos span{display:block;font-size:13.5px;opacity:.85;margin-top:2px}" +
+    ".mva-retos em{margin-left:auto;font-style:normal;background:#fff;color:#1B2A55;border-radius:999px;padding:8px 14px;font-weight:700;font-size:13px;white-space:nowrap}" +
+    "@media(max-width:520px){.mva-retos em{display:none}}";
+  function retoToggle() {
+    var slug = gameSlug(); if (RETO_GAMES.indexOf(slug) < 0) return;
+    var place = function () {
+      var st = document.getElementById("s-start"); if (!st || st.querySelector(".mva-mode")) return;
+      var lead = st.querySelector(".lead"); if (!lead) return;
+      var d = document.createElement("div"); d.className = "mva-mode";
+      d.innerHTML = '<span class="on">Práctica individual</span><a href="juego-retos.html?juego=' + slug + '">' + USERS_IC + "Reto multijugador</a>";
+      lead.parentNode.insertBefore(d, lead.nextSibling);
+    };
+    place(); setInterval(place, 1200);
+  }
+  function retoBanner() {
+    if (!/^#\/games\/?$/.test(location.hash)) return;
+    var main = document.getElementById("main"); if (!main || main.querySelector(".mva-retos")) return;
+    var head = main.querySelector(".page-head"); if (!head) return;
+    var w = document.createElement("section"); w.className = "wrap";
+    w.innerHTML = '<a class="mva-retos" href="juego-retos.html"><span class="ic">' + USERS_IC + '</span><span><b>Retos MOVA</b><span>Juega en vivo contra tus compañeros desde su celular</span></span><em>Jugar</em></a>';
+    head.parentNode.insertBefore(w, head.nextSibling);
+  }
+
   /* ---------- Arranque ---------- */
   window.MovaAuth = { save: save, user: function () { return user; }, login: showLogin };
   function boot() {
     injectCss();
+    var rs = document.createElement("style"); rs.textContent = retoCss; document.head.appendChild(rs);
+    retoToggle();
     flushQueue(); checkSession();
     watchResults();
     startTracking();
     if (!gameSlug()) {
       logVisit();
       mountChip();
-      window.addEventListener("hashchange", function () { setTimeout(privacyLink, 400); });
-      setTimeout(privacyLink, 400);
+      window.addEventListener("hashchange", function () { setTimeout(privacyLink, 400); setTimeout(retoBanner, 120); setTimeout(retoBanner, 600); });
+      setTimeout(privacyLink, 400); setTimeout(retoBanner, 150); setTimeout(retoBanner, 900);
     }
   }
   document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", boot) : boot();
