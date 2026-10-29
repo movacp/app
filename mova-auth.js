@@ -419,7 +419,7 @@
 
 
   /* ---------- Retos multijugador (Fase 1) ---------- */
-  var RETO_GAMES = ["verb-memory", "word-quest", "sentence-scramble", "mision-matematica", "sopa-de-letras"];
+  var RETO_GAMES = ["verb-memory", "word-quest", "sentence-scramble", "mision-matematica", "sopa-de-letras", "que-hora-es", "word-forms", "toefl-practice"];
   var USERS_IC = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-6 6.5-6s5.9 2.4 6.5 6"/><circle cx="17" cy="9" r="2.6"/><path d="M16.5 14c2.7.2 4.6 2.2 5 5"/></svg>';
   var retoCss = ".mva-mode{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--track,#EEF1F8);border-radius:999px;padding:5px;margin:14px auto 4px;max-width:420px;font-family:Poppins,'Century Gothic',system-ui,sans-serif}" +
     ".mva-mode>*{display:flex;align-items:center;justify-content:center;gap:6px;border-radius:999px;padding:9px 8px;font-weight:700;font-size:13.5px;text-decoration:none;line-height:1.15;text-align:center}" +
@@ -434,12 +434,21 @@
     "@media(max-width:520px){.mva-retos em{display:none}}";
   function retoToggle() {
     var slug = gameSlug(); if (RETO_GAMES.indexOf(slug) < 0) return;
+    var usedH1 = false;
+    var anchor = function () {
+      var st = document.getElementById("s-start"); if (st) return st.querySelector(".lead");
+      var vh = document.getElementById("v-home"); if (vh) return vh.querySelector(".lead") || vh.querySelector(".hero");
+      var l = document.querySelector(".cover + .lead"); if (l) return l;
+      if (usedH1) return null;
+      var h = document.querySelector("h1"); if (!h) return null;
+      usedH1 = true; var n = h.nextElementSibling; return n && n.tagName === "P" ? n : h;
+    };
     var place = function () {
-      var st = document.getElementById("s-start"); if (!st || st.querySelector(".mva-mode")) return;
-      var lead = st.querySelector(".lead"); if (!lead) return;
+      var a = anchor(); if (!a || !a.parentNode) return;
+      var sib = a.nextElementSibling; if (sib && sib.classList.contains("mva-mode")) return;
       var d = document.createElement("div"); d.className = "mva-mode";
       d.innerHTML = '<span class="on">Práctica individual</span><a href="juego-retos.html?juego=' + slug + '">' + USERS_IC + "Reto multijugador</a>";
-      lead.parentNode.insertBefore(d, lead.nextSibling);
+      a.parentNode.insertBefore(d, a.nextSibling);
     };
     place(); setInterval(place, 1200);
   }
