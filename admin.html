@@ -113,7 +113,7 @@ main{max-width:760px;margin:0 auto;padding:18px 16px 100px}
 textarea.in{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font:inherit;font-size:15px;min-height:96px;resize:vertical}
 textarea.in:focus{border-color:var(--navy2);outline:none}
 #repStage{position:fixed;left:-10000px;top:0;width:794px}
-.rp{width:794px;height:1123px;background:#FBF8F3;color:#1F2B4D;font-family:Poppins,sans-serif;position:relative;overflow:hidden}
+.rp{width:794px;min-height:1123px;background:#FBF8F3;color:#1F2B4D;font-family:Poppins,sans-serif;position:relative;overflow:hidden;padding-bottom:84px;box-sizing:border-box}
 .rp-band{position:absolute;inset:0 0 auto;height:250px;background:#1F2B4D;overflow:hidden}
 .rp-band i{position:absolute;border-radius:50%}
 .rp-head{position:relative;display:flex;align-items:center;gap:14px;padding:40px 48px 0;color:#fff}
@@ -551,8 +551,9 @@ async function buildReport(s, all, y, mo, note){
   await new Promise(r=>{ const im=stage.querySelector("img"); if(im.complete) r(); else { im.onload=r; im.onerror=r; } });
   const canvas = await html2canvas(stage.firstElementChild,{scale:2,backgroundColor:"#FBF8F3",useCORS:true});
   stage.innerHTML="";
-  const pdf = new window.jspdf.jsPDF({unit:"pt",format:"a4"});
-  pdf.addImage(canvas.toDataURL("image/jpeg",0.92),"JPEG",0,0,595.28,841.89);
+  const pdf = new window.jspdf.jsPDF({unit:"pt",format:[595.28, Math.max(841.89, 595.28*canvas.height/canvas.width)]});
+  const ph=Math.max(841.89, 595.28*canvas.height/canvas.width);
+  pdf.addImage(canvas.toDataURL("image/jpeg",0.92),"JPEG",0,0,595.28,ph);
   const name=`Reporte MOVA - ${nm} - ${MESES[mo]} ${y}.pdf`;
   return new File([pdf.output("blob")], name, {type:"application/pdf"});
 }
