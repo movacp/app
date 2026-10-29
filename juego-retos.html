@@ -751,7 +751,7 @@ function soloEnd(meta, score) {
   var rec = score > best; if (rec) { try { localStorage.setItem(key, String(score)); } catch (e) {} }
   var label = settingsLabel(meta.game, meta.settings);
   try { window.MovaAuth && window.MovaAuth.save(meta.game, "Práctica individual · " + label, score, null, { mode: "solo", stage: meta.settings.stage }); } catch (e) {}
-  render(topBar(true) + '<h2>' + (rec ? "¡Nuevo récord!" : "¡Muy bien!") + '</h2><p class="lead">' + esc(GAMES[meta.game].name) + " · " + esc(label) + "</p>" +
+  render(topBar(true) + '<h2>' + (rec ? "New record!" : "Well done!") + '</h2><p class="lead">' + esc(GAMES[meta.game].name) + " · " + esc(label) + "</p>" +
     '<div class="code-card" style="margin-top:16px"><small>TU PUNTAJE</small><div class="code" style="letter-spacing:.04em;margin-left:0">' + score + '</div><span class="gm">Récord: ' + Math.max(best, score) + " pts</span></div>" +
     '<button class="primary" id="b-again">' + ico("redo", 22) + ' Otra vez</button><button class="ghost" id="b-chg">' + ico("gear", 20) + " Cambiar juego o etapa</button>");
   $("#b-back").onclick = function () { screenHome(); };
@@ -871,11 +871,12 @@ function makeGame(def, content, startAt, endAt, meta) {
   }
 }
 var liveLast = {};
+function ordEn(n) { var t = n % 100, u = n % 10; return n + (t >= 11 && t <= 13 ? "th" : u === 1 ? "st" : u === 2 ? "nd" : u === 3 ? "rd" : "th"); }
 function drawLive() {
   var box = $("#live"); if (!box) return;
   box.innerHTML = players.map(function (p) {
     var t = p.total || 0, n = Math.min(p.prog || 0, t), pct = t ? Math.round(n / t * 100) : 0;
-    return '<span class="lchip' + (p.id === me ? " me" : "") + '" data-id="' + esc(p.id) + '">' + av(p) + esc(p.id === me ? "Tú" : p.name) + " <b>" + p.score + "</b>" +
+    return '<span class="lchip' + (p.id === me ? " me" : "") + '" data-id="' + esc(p.id) + '">' + av(p) + esc(p.id === me ? "You" : p.name) + " <b>" + p.score + "</b>" +
       (p.done ? '<span class="ck">' + ico("check", 14) + "</span>" : t ? '<span class="pg">' + n + "/" + t + "</span>" : "") +
       (t ? '<span class="pb"><i style="width:' + (p.done ? 100 : pct) + '%"></i></span>' : "") + "</span>";
   }).join("");
@@ -906,19 +907,19 @@ function drawResults() {
   var allDone = act.every(function (p) { return p.done || !p.online; }) || serverNow() > endAt + 2500;
   var list = act.slice().sort(function (a, b) { return b.score - a.score || (a.ms || 1e9) - (b.ms || 1e9); });
   if (!allDone) {
-    $("#rt").textContent = "¡Terminaste!"; $("#rs").textContent = "Esperando a que los demás terminen…";
+    $("#rt").textContent = "You finished!"; $("#rs").textContent = "Waiting for the others to finish…";
     box.innerHTML = '<div class="plist">' + list.map(function (p) { return '<div class="prow' + (p.id === me ? " me" : "") + '">' + av(p) + "<span>" + esc(p.name) + "</span>" + (p.done ? '<span class="tag">Terminó</span>' : '<span class="tag">Jugando…</span>') + '<span class="sc" style="margin-left:8px">' + p.score + "</span></div>"; }).join("") + "</div>";
     $("#ract").innerHTML = ""; return;
   }
   if (box.dataset.final === String(room.round)) { actions(); return; }
   box.dataset.final = String(room.round);
   var pos = list.findIndex(function (p) { return p.id === me; });
-  $("#rt").textContent = pos === 0 ? "¡Ganaste!" : pos === 1 ? "¡Segundo lugar!" : pos === 2 ? "¡Tercer lugar!" : "¡Buen reto!";
+  $("#rt").textContent = pos === 0 ? "You won!" : pos === 1 ? "2nd place!" : pos === 2 ? "3rd place!" : "Great game!";
   $("#rs").textContent = def.name + " · " + settingsLabel(room.game, room.settings);
   if (pos === 0) { confetti(true); sfx.go(); } else if (pos > 0 && pos < 3) { confetti(false); sfx.go(); }
   var top = [list[1], list[0], list[2]], cls = ["p2", "p1", "p3"], place = [2, 1, 3];
   box.innerHTML = '<div class="podium">' + top.map(function (p, i) {
-    return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.id === me ? "Tú" : p.name) + '</b><div class="bar"><span>' + place[i] + "°</span><small>" + p.score + " pts</small></div></div>" : "<div></div>";
+    return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.id === me ? "You" : p.name) + '</b><div class="bar"><span>' + ordEn(place[i]) + "</span><small>" + p.score + " pts</small></div></div>" : "<div></div>";
   }).join("") + "</div>" +
     (list.length > 3 ? '<div class="plist">' + list.slice(3).map(function (p, i) { return '<div class="prow' + (p.id === me ? " me" : "") + '"><b style="width:24px;text-align:center">' + (i + 4) + "</b>" + av(p) + "<span>" + esc(p.name) + '</span><span class="sc">' + p.score + "</span></div>"; }).join("") + "</div>" : "") +
     '<p class="note">Reto solo por diversión: no cuenta para la calificación.</p>';
@@ -1358,7 +1359,7 @@ function parkGame(lv, meP) {
     list.sort(function (a, b) { return b.value - a.value; });
     return { pos: list.findIndex(function (p) { return p.id === me; }) + 1, n: list.length };
   }
-  function drawRank() { var r = rankOf(), el = $("#pkrank"); if (el && r.pos) el.innerHTML = '<b>' + r.pos + "°</b> de " + r.n; }
+  function drawRank() { var r = rankOf(), el = $("#pkrank"); if (el && r.pos) el.innerHTML = '<b>' + ordEn(r.pos) + "</b> of " + r.n; }
   function drawHud() {
     var c = $("#pkcoins"); if (c) c.textContent = coins.toLocaleString("es-MX");
     var v = $("#pkval"); if (v) v.textContent = "$" + PK.value(coins, items).toLocaleString("es-MX");
@@ -1467,10 +1468,10 @@ function liveResults() {
   if (liveScreen === "res" + sig) return;
   var first = liveScreen.indexOf("res" + live.round + "|") !== 0; liveScreen = "res" + sig;
   var top = [list[1], list[0], list[2]], cls = ["p2", "p1", "p3"], place = [2, 1, 3];
-  render(topBar(true) + '<div class="center" style="margin-top:6px"><span class="pkbadge">MOVA PARK</span></div><h1>' + (pos === 0 ? "¡Ganaste!" : pos === 1 ? "¡Segundo lugar!" : pos === 2 ? "¡Tercer lugar!" : "¡Buen trabajo!") + '</h1>' +
-    '<div class="podium">' + top.map(function (p, i) { return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.id === me ? "Tú" : p.name) + '</b><div class="bar"><span>' + place[i] + "°</span><small>$" + p.value.toLocaleString("es-MX") + "</small></div></div>" : "<div></div>"; }).join("") + "</div>" +
-    '<div class="pkmine"><div class="label" style="margin-top:0">Tu parque</div><div class="pkland sm">' + PK.ATTR.map(function (a) { var own = (mine.items || []).indexOf(a.id) >= 0; return '<div class="plot' + (own ? " own" : "") + '">' + (own ? PK.art(a.id) : '<span class="ghost">' + PK.art(a.id) + "</span>") + "</div>"; }).join("") + "</div>" +
-    '<div class="pkstats"><span><b>$' + (mine.value || 0).toLocaleString("es-MX") + "</b>Valor</span><span><b>" + (mine.correct || 0) + "</b>Correctas</span><span><b>" + (mine.wrong || 0) + "</b>Incorrectas</span></div></div>" +
+  render(topBar(true) + '<div class="center" style="margin-top:6px"><span class="pkbadge">MOVA PARK</span></div><h1>' + (pos === 0 ? "You won!" : pos === 1 ? "2nd place!" : pos === 2 ? "3rd place!" : "Great job!") + '</h1>' +
+    '<div class="podium">' + top.map(function (p, i) { return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.id === me ? "You" : p.name) + '</b><div class="bar"><span>' + ordEn(place[i]) + "</span><small>$" + p.value.toLocaleString("es-MX") + "</small></div></div>" : "<div></div>"; }).join("") + "</div>" +
+    '<div class="pkmine"><div class="label" style="margin-top:0">Your park</div><div class="pkland sm">' + PK.ATTR.map(function (a) { var own = (mine.items || []).indexOf(a.id) >= 0; return '<div class="plot' + (own ? " own" : "") + '">' + (own ? PK.art(a.id) : '<span class="ghost">' + PK.art(a.id) + "</span>") + "</div>"; }).join("") + "</div>" +
+    '<div class="pkstats"><span><b>$' + (mine.value || 0).toLocaleString("es-MX") + "</b>Park value</span><span><b>" + (mine.correct || 0) + "</b>Correct</span><span><b>" + (mine.wrong || 0) + "</b>Wrong</span></div></div>" +
     (list.length > 3 ? '<div class="plist">' + list.slice(3).map(function (p, i) { return '<div class="prow' + (p.id === me ? " me" : "") + '"><b style="width:24px;text-align:center">' + (i + 4) + "</b>" + av(p) + "<span>" + esc(p.name) + '</span><span class="sc">$' + p.value.toLocaleString("es-MX") + "</span></div>"; }).join("") + "</div>" : "") +
     '<p class="lead" style="margin-top:16px">Si tu maestra inicia otra ronda, entrarás en automático.</p>');
   $("#b-back").onclick = function () { lcall("live_leave", { p_code: liveCode }).catch(function () {}); liveForget(); screenHome(); };
