@@ -140,6 +140,42 @@ h2{font-weight:800;font-size:22px;text-align:center;margin:12px 0 4px}
 @keyframes lplus{0%{opacity:0;transform:translateY(8px) scale(.7)}20%{opacity:1;transform:translateY(0) scale(1.05)}75%{opacity:1}100%{opacity:0;transform:translateY(-12px)}}
 @media (prefers-reduced-motion:reduce){.lchip.bump,.lchip .plus{animation:none}}
 .opts.clocks .opt svg{width:88%;height:88%}
+.bwrap{position:relative}
+.bcall{background:var(--ink);color:#fff;border-radius:22px;padding:14px 14px 12px;text-align:center;margin-top:10px;position:relative;
+  background-image:radial-gradient(circle,#F7A8C4 3px,transparent 4px),radial-gradient(circle,#FCE38A 3px,transparent 4px),radial-gradient(circle,#7FC8A9 3px,transparent 4px);background-size:90px 90px;background-position:8px 10px,50px 60px,80px 24px}
+.bcall.fresh .bword{animation:bpop .5s cubic-bezier(.2,1.6,.4,1)}@keyframes bpop{0%{transform:scale(.5);opacity:0}100%{transform:none;opacity:1}}
+.bcnt{font-size:12px;font-weight:700;letter-spacing:1px;opacity:.75;text-transform:uppercase}
+.bword{font-weight:800;font-size:clamp(30px,9vw,42px);line-height:1.15;margin:4px 0 2px;color:#FCE38A}
+.bword.listen-only{display:flex;align-items:center;justify-content:center;gap:10px}.bword svg{width:30px;height:30px}
+.bnext{font-weight:800;font-size:22px;padding:14px 0;color:#FCE38A}
+.bre{border:0;background:rgba(255,255,255,.14);color:#fff;font:inherit;font-weight:700;font-size:13px;border-radius:999px;padding:6px 14px;display:inline-flex;align-items:center;gap:6px;margin-top:4px}.bre svg{width:16px;height:16px}
+.bhist{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:10px}.bhist span{background:var(--track);color:var(--ink);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700}
+.bcall .bhist span{background:rgba(255,255,255,.14);color:#fff}
+.bgrid{display:grid;gap:7px;margin-top:12px}.bgrid.s3{grid-template-columns:repeat(3,minmax(0,1fr))}.bgrid.s4{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.bgrid.s5{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.bgrid.shake{animation:bshake .45s}@keyframes bshake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.bcell{position:relative;aspect-ratio:1;min-width:0;border:3px solid var(--edge);background:var(--card);border-radius:16px;box-shadow:0 3px 0 var(--edge);display:grid;place-items:center;padding:4px;font:inherit;color:var(--ink);cursor:pointer;overflow:hidden}
+.bgrid.s5 .bcell{border-radius:12px;border-width:2px}
+.bcell.on{border-color:#E3C462;background:#FFF8DC;box-shadow:0 3px 0 #E3C462}
+.bcell.free{background:#EEF1F8;border-style:dashed}.bcell.free small{position:absolute;bottom:6%;font-size:10px;font-weight:800;letter-spacing:1px;color:var(--muted)}
+.bfree{width:48%;height:48%}
+.btx{font-weight:800;font-size:clamp(14px,4.6vw,20px);line-height:1.1;text-align:center;overflow-wrap:break-word;hyphens:auto;max-width:100%}
+.btx.num{font-size:clamp(24px,8vw,34px)!important}
+.bgrid.s4 .btx{font-size:clamp(12px,3.6vw,16px)}.bgrid.s5 .btx{font-size:clamp(10px,3vw,13px)}
+.btx.sm{font-size:clamp(12px,3.8vw,16px)}.bgrid.s4 .btx.sm{font-size:clamp(10px,3vw,13px)}.bgrid.s5 .btx.sm{font-size:clamp(9px,2.5vw,11px)}
+.btx.xs{font-size:clamp(10px,3.2vw,13px)}.bgrid.s5 .btx.xs{font-size:clamp(8px,2.2vw,10px)}
+.bsw{width:66%;height:66%;border-radius:50%;border:3px solid #1B2A55;box-shadow:inset 0 -4px 0 rgba(0,0,0,.12)}
+.bshp{width:74%;height:74%}
+.bchip{position:absolute;width:44%;height:44%;right:3%;bottom:3%;filter:drop-shadow(0 3px 3px rgba(27,42,85,.25));pointer-events:none}
+.bcell.drop .bchip{animation:bdrop .4s cubic-bezier(.2,1.5,.5,1)}@keyframes bdrop{0%{transform:translateY(-40px) scale(1.3);opacity:0}100%{transform:none;opacity:1}}
+.bmsg{min-height:22px;text-align:center;font-weight:700;font-size:14px;margin-top:10px;color:var(--muted)}.bmsg.bad{color:var(--bad,#D9534F)}
+.bbingo{display:block;width:100%;border:0;border-radius:999px;padding:16px;font:inherit;font-weight:800;font-size:24px;letter-spacing:2px;background:#E8846B;color:#fff;box-shadow:0 5px 0 #C9674F;margin-top:6px}
+.bbingo.won{background:#7FC8A9;box-shadow:0 5px 0 #5AA685}
+.bhint{text-align:center;color:var(--muted);font-size:12.5px;font-weight:600;margin:10px 0 0}
+.bwin{position:absolute;inset:0;display:grid;place-items:center;background:rgba(255,255,255,.55);border-radius:22px;animation:fade .3s}
+.bwin-in{background:var(--ink);color:#fff;border-radius:24px;padding:20px 22px;text-align:center;max-width:300px;box-shadow:0 10px 30px rgba(0,0,0,.25);animation:bpop .5s cubic-bezier(.2,1.6,.4,1)}
+.bwin-in b{display:block;font-size:44px;color:#FCE38A;letter-spacing:3px}.bwin-in span{font-size:14px;opacity:.9}
+.bhero span{display:grid;place-items:center;position:relative}.bhero .bchip{position:static;width:72%;height:72%;animation:bdrop .6s cubic-bezier(.2,1.5,.5,1) both}.bhero span:nth-child(2) .bchip{animation-delay:.15s}.bhero span:nth-child(3) .bchip{animation-delay:.3s}.bhero span:nth-child(4) .bchip{animation-delay:.45s}
+@keyframes fade{from{opacity:0}}
 .pkbadge{display:inline-block;background:#1B2A55;color:#FCE38A;font-weight:800;font-size:12px;letter-spacing:2px;border-radius:999px;padding:5px 12px}
 .center{text-align:center}
 .pkhero{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:14px 0 4px;background:linear-gradient(180deg,#E3F5EA,#C6EBD6);border-radius:22px;padding:14px 10px 8px}
@@ -259,6 +295,7 @@ h2{font-weight:800;font-size:22px;text-align:center;margin:12px 0 4px}
 <script src="mova-auth.js"></script>
 <script src="toefl-bank.js"></script>
 <script src="mova-park.js"></script>
+<script src="mova-bingo.js"></script>
 <script>
 (function(){
 "use strict";
@@ -1306,7 +1343,7 @@ function liveOnState() {
   var meP = lplayers.find(function (p) { return p.id === me; }) || {};
   var playing = live.status === "playing" && serverNow() < live.ends_at;
   if (playing && meP.round === live.round) {
-    if (!park || park.round !== live.round) { if (park) park.stop(); park = parkGame(live, meP); liveScreen = "play"; }
+    if (!park || park.round !== live.round) { if (park) park.stop(); park = (liveGame() === "bingo" ? bingoGame : parkGame)(live, meP); liveScreen = "play"; }
     else park.onState();
     return;
   }
@@ -1315,10 +1352,11 @@ function liveOnState() {
   liveLobby();
 }
 function liveLobby() {
-  if (liveScreen !== "lobby") {
-    liveScreen = "lobby";
-    render(topBar(true) + '<div class="center"><span class="pkbadge">MOVA LIVE</span></div><h1>MOVA Park</h1><p class="lead">Contesta bien para ganar monedas y construir el mejor parque de diversiones.</p>' +
-      '<div class="pkhero">' + ["carousel", "wheel", "coaster", "castle"].map(function (id) { return '<span>' + PK.art(id) + "</span>"; }).join("") + "</div>" +
+  if (liveScreen !== "lobby" + liveGame()) {
+    liveScreen = "lobby" + liveGame();
+    var isB = liveGame() === "bingo";
+    render(topBar(true) + '<div class="center"><span class="pkbadge">MOVA LIVE</span></div>' + (isB ? '<h1>MOVA Bingo</h1><p class="lead">Escucha cada palabra en inglés, pon tu fichita en tu tarjeta y completa la jugada para gritar BINGO!</p><div class="pkhero bhero">' + [0, 1, 2, 3].map(function (k) { return '<span>' + BG.chip + "</span>"; }).join("") + "</div>"
+        : '<h1>MOVA Park</h1><p class="lead">Contesta bien para ganar monedas y construir el mejor parque de diversiones.</p><div class="pkhero">' + ["carousel", "wheel", "coaster", "castle"].map(function (id) { return '<span>' + PK.art(id) + "</span>"; }).join("") + "</div>") +
       '<div class="wait"><span class="dots3"><i></i><i></i><i></i></span> Esperando a que tu maestra empiece</div>' +
       '<div class="label">En la sesión</div><div class="plist" id="lpl"></div>');
     $("#b-back").onclick = function () { if (confirm("¿Salir de la sesión?")) { lcall("live_leave", { p_code: liveCode }).catch(function () {}); liveForget(); screenHome(); } };
@@ -1462,6 +1500,7 @@ function parkGame(lv, meP) {
   };
 }
 function liveResults() {
+  if (liveGame() === "bingo") return bingoResults();
   var list = lplayers.filter(function (p) { return p.round === live.round; }).slice().sort(function (a, b) { return b.value - a.value || b.correct - a.correct; });
   var pos = list.findIndex(function (p) { return p.id === me; }), mine = list[pos] || { items: [], value: 0, correct: 0, wrong: 0 };
   var sig = live.round + "|" + list.map(function (p) { return p.id + ":" + p.value + ":" + (p.items || []).length; }).join(",");
@@ -1473,6 +1512,133 @@ function liveResults() {
     '<div class="pkmine"><div class="label" style="margin-top:0">Your park</div><div class="pkland sm">' + PK.ATTR.map(function (a) { var own = (mine.items || []).indexOf(a.id) >= 0; return '<div class="plot' + (own ? " own" : "") + '">' + (own ? PK.art(a.id) : '<span class="ghost">' + PK.art(a.id) + "</span>") + "</div>"; }).join("") + "</div>" +
     '<div class="pkstats"><span><b>$' + (mine.value || 0).toLocaleString("es-MX") + "</b>Park value</span><span><b>" + (mine.correct || 0) + "</b>Correct</span><span><b>" + (mine.wrong || 0) + "</b>Wrong</span></div></div>" +
     (list.length > 3 ? '<div class="plist">' + list.slice(3).map(function (p, i) { return '<div class="prow' + (p.id === me ? " me" : "") + '"><b style="width:24px;text-align:center">' + (i + 4) + "</b>" + av(p) + "<span>" + esc(p.name) + '</span><span class="sc">$' + p.value.toLocaleString("es-MX") + "</span></div>"; }).join("") + "</div>" : "") +
+    '<p class="lead" style="margin-top:16px">Si tu maestra inicia otra ronda, entrarás en automático.</p>');
+  $("#b-back").onclick = function () { lcall("live_leave", { p_code: liveCode }).catch(function () {}); liveForget(); screenHome(); };
+  if (first && pos >= 0 && pos < 3) { confetti(pos === 0); sfx.go(); }
+}
+
+/* ---------- MOVA Live · MOVA Bingo (alumno) ---------- */
+var BG = window.MOVA_BINGO;
+function liveGame() { return (live && live.settings && live.settings.game) || "park"; }
+function bingoKey(lv) { return lv.code + "|" + lv.round + "|" + lv.start_at; }
+function bingoGame(lv, meP) {
+  var s = lv.settings || {}, t = BG.topic(s.topic), size = Number(s.size) || 3, pat = s.pattern || "line", iv = (Number(s.interval) || 8) * 1000;
+  var key = bingoKey(lv), order = BG.callOrder(s, key), N = order.length, cells = BG.card(s, key, me), L = BG.lines(size, pat);
+  var marks = {}, wrongCells = {}, bad = [], wrong = 0, won = null, cool = 0, stopped = false, done = false, timers = [], raf = 0, lastN = -1, pushT = 0, lastPush = 0;
+  var round = lv.round, startAt = lv.start_at, endAt = lv.ends_at, patName = (BG.PATTERNS.find(function (p) { return p.id === pat; }) || BG.PATTERNS[0]).en;
+  cells.forEach(function (w, i) { if (w < 0) marks[i] = true; });
+  function later(f, ms) { timers.push(setTimeout(f, ms)); }
+  function called() { var el = serverNow() - startAt; return el < 0 ? 0 : Math.min(N, Math.floor(el / iv) + 1); }
+  function isCalled(wi, n) { return order.slice(0, n).indexOf(wi) >= 0; }
+  function okCell(i, n) { return cells[i] < 0 || (marks[i] && isCalled(cells[i], n)); }
+  function miss(n) { return Math.min.apply(null, L.map(function (l) { return l.filter(function (i) { return !okCell(i, n); }).length; })); }
+  function stats(n) { var c = 0; cells.forEach(function (w, i) { if (w >= 0 && marks[i] && isCalled(w, n)) c++; }); return c; }
+  function push(force) {
+    clearTimeout(pushT);
+    var go = function () {
+      lastPush = Date.now(); var n = called();
+      lcall("live_push", { p_code: liveCode, p_round: round, p_value: won != null ? 9000000 - Math.round(won / 10) : stats(n), p_coins: 0, p_correct: stats(n), p_wrong: wrong, p_items: { bingo: won, miss: miss(n), bad: bad.slice(0, 30) } }).catch(function () {});
+    };
+    if (force || Date.now() - lastPush > 1500) go(); else pushT = setTimeout(go, 1500);
+  }
+  function word(n) { return n > 0 ? t.words[order[n - 1]] : null; }
+  function drawCall(n, fresh) {
+    var box = $("#bcall"); if (!box) return;
+    var w = word(n), text = s.show === "text";
+    if (!w) { box.innerHTML = '<div class="bnext">Get ready…</div>'; return; }
+    box.innerHTML = '<div class="bcnt">Word ' + n + " of " + N + "</div>" +
+      (text ? '<div class="bword">' + esc(w.say) + "</div>" : '<div class="bword listen-only">' + ico("sound", 30) + " Listen!</div>") +
+      '<button class="bre" id="bre" aria-label="Escuchar otra vez">' + ico("sound", 18) + " Again</button>" +
+      (text && n > 1 ? '<div class="bhist">' + order.slice(Math.max(0, n - 5), n - 1).reverse().map(function (wi) { return "<span>" + esc(t.words[wi].say) + "</span>"; }).join("") + "</div>" : "");
+    $("#bre").onclick = function () { speak(w.say, "en-US"); };
+    if (fresh) { box.classList.remove("fresh"); void box.offsetWidth; box.classList.add("fresh"); speak(w.say, "en-US"); }
+  }
+  function drawCard() {
+    var g = $("#bgrid"); if (!g) return;
+    g.innerHTML = cells.map(function (wi, i) {
+      return '<button class="bcell' + (wi < 0 ? " free" : "") + (marks[i] ? " on" : "") + '" data-i="' + i + '"' + (wi < 0 ? " disabled" : "") + ">" + (wi < 0 ? BG.star + "<small>FREE</small>" : BG.tile(t.words[wi], t)) + (marks[i] && wi >= 0 ? BG.chip : "") + "</button>";
+    }).join("");
+  }
+  function frame() {
+    if (stopped) return;
+    var n = called();
+    if (n !== lastN) { var fresh = lastN >= 0 && n > lastN; lastN = n; drawCall(n, fresh || (n === 1 && lastN === 1)); push(); }
+    var el = serverNow() - startAt, bar = $("#bbar");
+    if (bar && n < N) bar.style.transform = "scaleX(" + (1 - ((el % iv) / iv)) + ")"; else if (bar) bar.style.transform = "scaleX(0)";
+    if (serverNow() >= endAt) { finish(); return; }
+    raf = requestAnimationFrame(frame);
+  }
+  function say(msg, cls) { var m = $("#bmsg"); if (!m) return; m.className = "bmsg " + (cls || ""); m.textContent = msg; clearTimeout(m._t); m._t = setTimeout(function () { m.textContent = ""; m.className = "bmsg"; }, 2600); }
+  function tryBingo() {
+    if (won != null || done) return;
+    if (Date.now() < cool) { say("Wait a moment…"); return; }
+    var n = called();
+    if (L.some(function (l) { return l.every(function (i) { return okCell(i, n); }); })) {
+      won = Math.max(1, Math.round(serverNow() - startAt)); sfx.go(); confetti(true); push(true);
+      var b = $("#bbingo"); if (b) { b.textContent = "BINGO!"; b.disabled = true; b.classList.add("won"); }
+      $("#bwrap").insertAdjacentHTML("beforeend", '<div class="bwin"><div class="bwin-in"><b>BINGO!</b><span>Great listening! Wait for the round to end to see the winners.</span></div></div>');
+      return;
+    }
+    var marked = L.some(function (l) { return l.every(function (i) { return cells[i] < 0 || marks[i]; }); });
+    sfx.bad(); var g = $("#bgrid"); if (g) { g.classList.remove("shake"); void g.offsetWidth; g.classList.add("shake"); }
+    if (marked) { wrong++; cool = Date.now() + 3000; say("Check your card! One of your words wasn't called.", "bad"); push(); }
+    else say("Not yet! Keep listening.");
+  }
+  function finish() {
+    if (done) return; done = true; cancelAnimationFrame(raf); push(true);
+    var k = liveCode + "-" + round;
+    if (!parkSaved[k]) { parkSaved[k] = 1; try { window.MovaAuth && window.MovaAuth.save("mova-bingo", "MOVA Live · MOVA Bingo", won != null ? 100 : Math.round(stats(N) / Math.max(1, cells.length) * 100), null, { mode: "live", topic: t.name, bingo: won != null, wrong: wrong }); } catch (e) {} }
+    later(function () { if (!stopped) { stopped = true; park = null; liveResults(); } }, 2500);
+  }
+  function begin() {
+    render('<div class="hud"><span class="pill" style="background:#FCE38A;color:#1B2A55">MOVA Bingo</span><span class="grow"></span><span class="pill">' + esc(patName) + "</span></div>" +
+      '<div id="bwrap" class="bwrap"><div class="bcall" id="bcall"></div><div class="tbar"><i id="bbar" style="transition:none"></i></div>' +
+      '<div class="bgrid s' + size + '" id="bgrid"></div><div class="bmsg" id="bmsg"></div>' +
+      '<button class="bbingo" id="bbingo">BINGO!</button><p class="bhint">' + esc(t.name) + (t.id === "verbs" ? " · You hear the verb, mark the past form" : "") + "</p></div>");
+    drawCard(); lastN = -1;
+    $("#bgrid").onclick = function (e) {
+      var b = e.target.closest(".bcell"); if (!b || b.disabled || done || won != null) return; unlock();
+      var i = Number(b.dataset.i), wi = cells[i];
+      if (marks[i]) { delete marks[i]; sfx.tick(); }
+      else {
+        marks[i] = true; tones([660, 880], .05, "triangle");
+        if (!isCalled(wi, called()) && !wrongCells[i]) { wrongCells[i] = 1; wrong++; bad.push(t.words[wi].show); }
+      }
+      drawCard(); var nb = $('.bcell[data-i="' + i + '"]'); if (nb && marks[i]) nb.classList.add("drop");
+      push();
+    };
+    $("#bbingo").onclick = function () { unlock(); tryBingo(); };
+    frame();
+  }
+  (function countdown() {
+    render('<div class="count"><div><div class="num" id="cd">3</div><p>MOVA Bingo · ' + esc(t.name) + '</p><p style="margin-top:6px;font-size:14px">Listen to each word and put a coin on it. Complete the pattern (' + esc(patName) + ') and tap BINGO!</p></div></div>');
+    var last = null;
+    (function cd() {
+      if (stopped) return;
+      var ms = startAt - serverNow();
+      if (ms <= 0) { begin(); return; }
+      var n = Math.min(5, Math.ceil(ms / 1000)), el = $("#cd");
+      if (el && n !== last) { last = n; el.textContent = n; el.style.background = AVC[n % AVC.length]; el.style.animation = "none"; void el.offsetWidth; el.style.animation = ""; if (n <= 3) sfx.tick(); }
+      later(cd, 100);
+    })();
+  })();
+  return { round: round, onState: function () {}, finish: finish, stop: function () { stopped = true; cancelAnimationFrame(raf); timers.forEach(clearTimeout); clearTimeout(pushT); } };
+}
+function bingoResults() {
+  var act = lplayers.filter(function (p) { return p.round === live.round; });
+  var it = function (p) { return p.items && !Array.isArray(p.items) ? p.items : {}; };
+  var win = act.filter(function (p) { return it(p).bingo != null; }).sort(function (a, b) { return it(a).bingo - it(b).bingo; });
+  var rest = act.filter(function (p) { return it(p).bingo == null; }).sort(function (a, b) { return (it(a).miss || 99) - (it(b).miss || 99); });
+  var pos = win.findIndex(function (p) { return p.id === me; }), mine = act.find(function (p) { return p.id === me; }) || {}, mi = it(mine);
+  var sig = "b" + live.round + "|" + act.map(function (p) { return p.id + ":" + it(p).bingo + ":" + p.wrong; }).join(",");
+  if (liveScreen === "res" + sig) return;
+  var first = liveScreen.indexOf("resb" + live.round + "|") !== 0; liveScreen = "res" + sig;
+  var top = [win[1], win[0], win[2]], cls = ["p2", "p1", "p3"], place = [2, 1, 3];
+  render(topBar(true) + '<div class="center" style="margin-top:6px"><span class="pkbadge">MOVA BINGO</span></div><h1>' + (pos === 0 ? "You won!" : pos === 1 ? "2nd place!" : pos === 2 ? "3rd place!" : pos > 2 ? "BINGO!" : "Great game!") + "</h1>" +
+    (win.length ? '<div class="podium">' + top.map(function (p, i) { return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.id === me ? "You" : p.name) + '</b><div class="bar"><span>' + ordEn(place[i]) + "</span><small>BINGO</small></div></div>" : "<div></div>"; }).join("") + "</div>" : '<p class="lead">Nobody got BINGO this time.</p>') +
+    '<div class="pkstats" style="margin-top:14px"><span style="background:var(--track)"><b>' + (mine.correct || 0) + '</b>Coins placed</span><span style="background:var(--track)"><b>' + (mine.wrong || 0) + '</b>Mistakes</span><span style="background:var(--track)"><b>' + (mi.bingo != null ? "Yes!" : (mi.miss != null ? mi.miss : "–")) + "</b>" + (mi.bingo != null ? "BINGO" : "Missing") + "</span></div>" +
+    ((mi.bad || []).length ? '<div class="label">Words to practice</div><div class="bhist" style="justify-content:flex-start">' + mi.bad.map(function (w) { return "<span>" + esc(w) + "</span>"; }).join("") + "</div>" : "") +
+    (win.length > 3 ? '<div class="plist">' + win.slice(3).map(function (p, i) { return '<div class="prow' + (p.id === me ? " me" : "") + '"><b style="width:30px;text-align:center">' + ordEn(i + 4) + "</b>" + av(p) + "<span>" + esc(p.name) + '</span><span class="tag">BINGO</span></div>'; }).join("") + "</div>" : "") +
     '<p class="lead" style="margin-top:16px">Si tu maestra inicia otra ronda, entrarás en automático.</p>');
   $("#b-back").onclick = function () { lcall("live_leave", { p_code: liveCode }).catch(function () {}); liveForget(); screenHome(); };
   if (first && pos >= 0 && pos < 3) { confetti(pos === 0); sfx.go(); }
