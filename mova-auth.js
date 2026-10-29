@@ -403,6 +403,20 @@
     main.appendChild(d);
   }
 
+
+  /* ---------- Visitas anónimas (sin datos personales) ---------- */
+  function logVisit() {
+    try {
+      if (sessionStorage.getItem("mova_visit")) return;
+      sessionStorage.setItem("mova_visit", "1");
+      var id = localStorage.getItem("mova_device");
+      if (!id) { id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now().toString(36) + Math.random().toString(36).slice(2, 12)); localStorage.setItem("mova_device", id); }
+      var ua = navigator.userAgent || "", plat = /android/i.test(ua) ? "android" : (/iphone|ipad|ipod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) ? "iphone" : /windows|macintosh|linux|cros/i.test(ua) ? "computadora" : "otro";
+      var inst = !!((window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone);
+      rpc("log_visit", { p_device: id, p_installed: inst, p_platform: plat, p_student: !!user }).catch(function () {});
+    } catch (e) {}
+  }
+
   /* ---------- Arranque ---------- */
   window.MovaAuth = { save: save, user: function () { return user; }, login: showLogin };
   function boot() {
@@ -411,6 +425,7 @@
     watchResults();
     startTracking();
     if (!gameSlug()) {
+      logVisit();
       mountChip();
       window.addEventListener("hashchange", function () { setTimeout(privacyLink, 400); });
       setTimeout(privacyLink, 400);

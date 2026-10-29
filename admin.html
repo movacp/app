@@ -60,6 +60,15 @@ header.top .brand-mark{background:var(--navy);box-shadow:0 0 0 2px #fff}
 .logout{background:rgba(255,255,255,.12);color:#fff;border:0;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600}
 main{max-width:760px;margin:0 auto;padding:18px 16px 100px}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:-34px;position:relative}
+.visits{background:#fff;border-radius:18px;padding:16px 16px 14px;margin-top:12px;box-shadow:0 6px 18px rgba(31,43,77,.08)}
+.visits h2{margin:0 0 2px;font-size:16px}.visits .vs{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.vbox{border-radius:14px;padding:10px 12px}.vbox b{display:block;font-size:22px;line-height:1.1}.vbox span{font-size:12px;font-weight:500}
+.vrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.vrow span{background:#F4F6FA;border-radius:999px;padding:5px 11px;font-size:12.5px}.vrow b{font-weight:700}
+.vchart{display:flex;align-items:flex-end;gap:4px;height:84px;margin-top:14px;border-bottom:1px solid var(--line);padding-bottom:2px}
+.vchart div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:3px}
+.vchart i{display:block;width:100%;max-width:22px;background:var(--lilac);border-radius:6px 6px 2px 2px;min-height:3px}
+.vchart em{font-style:normal;font-size:10px;color:var(--muted)}.vchart small{font-size:10px;font-weight:600}
 .stat{background:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 6px 18px rgba(31,43,77,.08)}
 .stat b{display:block;font-size:22px}
 .stat span{font-size:12px;color:var(--muted)}
@@ -182,6 +191,7 @@ textarea.in:focus{border-color:var(--navy2);outline:none}
       <div class="stat"><b id="sWeek">0</b><span>Activos esta semana</span></div>
       <div class="stat"><b id="sActs">0</b><span>Actividades</span></div>
     </div>
+    <div class="visits" id="visits"><h2>Visitas a la app</h2><p class="vs">Cargando…</p></div>
     <div class="toolbar">
       <input class="in" id="search" type="search" placeholder="Buscar por nombre o usuario">
     </div>
@@ -266,7 +276,21 @@ $("#loginForm").addEventListener("submit", async e => {
 $("#logoutBtn").onclick = () => { logout(); toast("Sesión cerrada"); };
 
 /* ---------- Students ---------- */
-async function showApp(){ $("#login").classList.add("hidden"); $("#app").classList.remove("hidden"); await loadStudents(); }
+async function showApp(){ $("#login").classList.add("hidden"); $("#app").classList.remove("hidden"); loadVisits(); await loadStudents(); }
+async function loadVisits(){
+  const box=$("#visits");
+  try{
+    const v = await rpc("admin_visit_stats",{p_days:14}) || {};
+    const days=[], today=new Date(); const map={}; (v.days||[]).forEach(x=>map[x.d]=x.n);
+    for(let i=13;i>=0;i--){ const d=new Date(today); d.setDate(d.getDate()-i); const k=d.toLocaleDateString("en-CA",{timeZone:"America/Monterrey"}); days.push([d.getDate(),map[k]||0]); }
+    const mx=Math.max(1,...days.map(d=>d[1]));
+    const box3=(n,l,bg)=>`<div class="vbox" style="background:${bg}"><b>${n||0}</b><span>${l}</span></div>`;
+    box.innerHTML=`<h2>Visitas a la app</h2><p class="vs">Personas distintas que la han abierto (registro anónimo). Hoy: <b>${v.today||0}</b></p>
+      <div class="vgrid">${box3(v.people,"Personas","#FDE7E3")}${box3(v.installed,"La instalaron","#DDF3EA")}${box3(v.visits,"Visitas totales","#E2F0FB")}</div>
+      <div class="vrow"><span>Público: <b>${v.public||0}</b></span><span>Alumnos MOVA: <b>${v.students||0}</b></span><span>Android: <b>${v.android||0}</b></span><span>iPhone/iPad: <b>${v.iphone||0}</b></span><span>Computadora: <b>${v.computer||0}</b></span></div>
+      <div class="vchart">${days.map(([d,n])=>`<div>${n?`<small>${n}</small>`:""}<i style="height:${Math.round(n/mx*60)}px"></i><em>${d}</em></div>`).join("")}</div>`;
+  }catch(err){ box.innerHTML=`<h2>Visitas a la app</h2><p class="vs" style="margin:0">Aún no hay datos de visitas.</p>`; }
+}
 async function loadStudents(){
   try{ students = await rpc("admin_list_students") || []; render(); }
   catch(err){ $("#list").innerHTML = `<div class="empty"><b>No se pudo cargar la lista</b>${esc(err.message)}</div>`; }
