@@ -319,30 +319,90 @@ $("#addBtn").onclick = () => {
   };
 };
 
-/* ---------- Detail ---------- */
+/* ---------- Detail (perfil del alumno) ---------- */
+const CAT = {"app-lecturas":["Lecturas","#8EC9EE"],"app-library":["Lecturas","#8EC9EE"],"app-resources":["Recursos","#F6D776"],
+  "app-games":["Juegos","#F9B8AE"],"app-flashcards":["Flashcards","#B9A6E8"],"app-wordsearch":["Sopa de letras","#9DDCC0"],
+  "app-coloring":["Para colorear","#F6D776"],"app-holidays":["Festividades","#F9B8AE"],"app-learn":["Aprende","#8EC9EE"],
+  "app-lectoescritura":["Lectoescritura","#9DDCC0"],"app-matematicas":["Matemáticas","#B9A6E8"],"app-familias":["Familias","#F6D776"],
+  "app-shop":["Tienda","#E3E7F0"],"app-mova":["MOVA","#E3E7F0"]};
+function catOf(a){ return CAT[a] || [ACT_NAMES[a] || a, "#F2786B"]; }
+function secsOf(r){
+  if(r.detail && r.detail.kind==="time") return r.detail.seconds||0;
+  if(r.detail && r.detail.seconds && /minuto/.test(r.item||"")) return r.detail.seconds;
+  return 0;
+}
+function fmtMin(s){ if(!s) return ""; const m=Math.round(s/60); if(m<1) return "<1 min"; if(m<60) return m+" min"; const h=Math.floor(m/60); return h+" h "+(m%60?(m%60)+" min":""); }
+function rowTitle(r){
+  if(/minutos? de práctica/.test(r.item||"")) return ACT_NAMES[r.activity] || r.activity;
+  return r.item || (ACT_NAMES[r.activity] || r.activity);
+}
+function rowRight(r){
+  const s = secsOf(r); if(s) return fmtMin(s);
+  if(r.item==="Nuevo récord" && r.score!=null) return "Récord: "+r.score;
+  if(r.total) return `${r.score}/${r.total}`;
+  return r.score!=null ? String(r.score) : "";
+}
+function dayLabel(d){
+  const x=new Date(d), t=new Date(); t.setHours(0,0,0,0); const y=new Date(t); y.setDate(t.getDate()-1);
+  if(x>=t) return "Hoy"; if(x>=y) return "Ayer";
+  const s=x.toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long"}); return s[0].toUpperCase()+s.slice(1);
+}
+
 async function openStudent(id){
   const s = students.find(x=>x.id===id); if(!s) return;
-  openModal(`<button class="x" aria-label="Cerrar">×</button><h2>${esc(s.full_name)}</h2>
-    <p class="sub">@${esc(s.username)} · Alta el ${new Date(s.created_at).toLocaleDateString("es-MX",{day:"numeric",month:"long"})}</p>
-    <div class="sec"><h3>Avance</h3><div class="prog" id="prog"><div class="pi">Cargando…</div></div></div>
-    <div class="sec"><h3>Datos</h3>
+  openModal(`<button class="x" aria-label="Cerrar">×</button>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
+      <div class="av" style="background:#F6D776;width:48px;height:48px;font-size:17px">${esc(initials(s.full_name))}</div>
+      <div><h2>${esc(s.full_name)}</h2><p class="sub" style="margin:0">@${esc(s.username)}${s.stage?" · "+esc(s.stage):""}</p></div></div>
+    <div id="prof"><div class="pi" style="margin-top:16px">Cargando avance…</div></div>
+    <details class="sec" style="margin-top:22px"><summary style="font-weight:600;cursor:pointer">Ajustes de la cuenta</summary>
       <label class="f" for="eName">Nombre completo</label><input class="in" id="eName" value="${esc(s.full_name)}">
       <label class="f" for="eStage">Grupo</label><select class="in" id="eStage">${groupOptions(s.stage)}</select>
       <label class="toggle"><input type="checkbox" id="eActive" ${s.active?"checked":""}> Cuenta activa</label>
-      <div class="actions"><button class="btn btn-primary" id="eSave">Guardar cambios</button></div><div class="msg" id="eMsg"></div></div>
-    <div class="sec"><h3>Contraseña</h3>
+      <div class="actions"><button class="btn btn-primary" id="eSave">Guardar cambios</button></div><div class="msg" id="eMsg"></div>
+      <h3 style="font-size:15px;margin:22px 0 4px">Contraseña</h3>
       <p class="sub">Por seguridad no se puede ver la actual, pero puedes poner una nueva.</p>
       <div class="pwrow"><input class="in" id="pNew" value="${makePass()}"><button class="btn btn-primary" id="pSave">Cambiar</button></div>
-      <div id="pOut"></div><div class="msg" id="pMsg"></div></div>
-    <div class="sec"><button class="btn btn-danger" id="dBtn" style="width:100%">Eliminar alumno</button><div class="msg err" id="dMsg"></div></div>`);
+      <div id="pOut"></div><div class="msg" id="pMsg"></div>
+      <button class="btn btn-danger" id="dBtn" style="width:100%;margin-top:22px">Eliminar alumno</button><div class="msg err" id="dMsg"></div>
+    </details>`);
 
-  rpc("admin_student_progress",{p_student:id,p_limit:50}).then(rows => {
-    $("#prog").innerHTML = rows?.length ? rows.map(r => `
-      <div class="pi"><div><b>${esc(ACT_NAMES[r.activity]||r.activity)}</b>${r.item?` · ${esc(r.item)}`:""}
+  rpc("admin_student_progress",{p_student:id,p_limit:1000}).then(raw => {
+    const seen=new Set(), rows=(raw||[]).filter(r=>{ const u=r.detail&&r.detail.uid; if(!u) return true; if(seen.has(u)) return false; seen.add(u); return true; });
+    if(!rows.length){ $("#prof").innerHTML = `<div class="empty" style="padding:28px 8px"><b>Todavía no hay actividad</b>Cuando el alumno use la app con su cuenta, aquí verás todo lo que haga.</div>`; return; }
+    const totalS = rows.reduce((a,r)=>a+secsOf(r),0);
+    const days = new Set(rows.map(r=>new Date(r.created_at).toDateString())).size;
+    const by = {};
+    rows.forEach(r=>{ const [n,c]=catOf(r.activity); by[n]=by[n]||{n,c,s:0,k:0}; by[n].s+=secsOf(r); by[n].k++; });
+    const cats = Object.values(by).sort((a,b)=>b.s-a.s||b.k-a.k), maxS = Math.max(1,...cats.map(c=>c.s));
+    const results = rows.filter(r=>r.total || r.item==="Nuevo récord");
+    let html = `<div class="stats" style="margin:16px 0 0">
+        <div class="stat"><b>${fmtMin(totalS)||"0 min"}</b><span>Tiempo total</span></div>
+        <div class="stat"><b>${rows.length}</b><span>Actividades</span></div>
+        <div class="stat"><b>${days}</b><span>${days===1?"Día activo":"Días activos"}</span></div></div>
+      <div class="sec"><h3>En qué ha trabajado</h3>${cats.map(c=>`
+        <div style="margin:10px 0"><div style="display:flex;justify-content:space-between;font-size:13.5px"><b>${esc(c.n)}</b>
+          <span style="color:var(--muted)">${c.s?fmtMin(c.s)+" · ":""}${c.k} ${c.k===1?"vez":"veces"}</span></div>
+          <div style="height:8px;background:#EEF1F7;border-radius:99px;margin-top:5px;overflow:hidden">
+          <div style="height:100%;width:${Math.max(6,Math.round(c.s/maxS*100))}%;background:${c.c};border-radius:99px"></div></div></div>`).join("")}</div>`;
+    if(results.length) html += `<div class="sec"><h3>Resultados</h3><div class="prog">${results.map(r=>`
+        <div class="pi"><div><b>${esc(ACT_NAMES[r.activity]||r.activity)}</b> · ${esc(r.item||"")}
         <div class="when">${new Date(r.created_at).toLocaleString("es-MX",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</div></div>
-        <div class="score">${r.total?`${r.score}/${r.total}`:(r.score??"")}</div></div>`).join("")
-      : `<div class="pi">Todavía no hay actividades registradas.</div>`;
-  }).catch(err => $("#prog").innerHTML = `<div class="pi">${esc(err.message)}</div>`);
+        <div class="score">${esc(rowRight(r))}</div></div>`).join("")}</div></div>`;
+    html += `<div class="sec"><h3>Historial completo</h3>`;
+    let lastDay = "";
+    rows.forEach(r=>{
+      const d = dayLabel(r.created_at);
+      if(d!==lastDay){ html += `<div style="font-size:12.5px;font-weight:600;color:var(--muted);margin:14px 0 6px">${esc(d)}</div>`; lastDay=d; }
+      const [n,c] = catOf(r.activity);
+      html += `<div class="pi" style="align-items:center;margin-bottom:6px"><div style="display:flex;gap:10px;align-items:center;min-width:0">
+        <span style="width:10px;height:10px;border-radius:50%;background:${c};flex:none"></span>
+        <div style="min-width:0"><b style="display:block;overflow:hidden;text-overflow:ellipsis">${esc(rowTitle(r))}</b>
+        <div class="when">${esc(n)} · ${new Date(r.created_at).toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit"})}</div></div></div>
+        <div class="score">${esc(rowRight(r))}</div></div>`;
+    });
+    $("#prof").innerHTML = html + `</div>`;
+  }).catch(err => $("#prof").innerHTML = `<div class="pi" style="margin-top:16px">${esc(err.message)}</div>`);
 
   $("#eSave").onclick = async () => {
     const m=$("#eMsg"); m.className="msg";
