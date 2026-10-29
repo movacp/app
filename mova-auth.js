@@ -29,9 +29,8 @@
   function save(activity, item, score, total, detail) {
     if (!user) return Promise.resolve(false);
     var row = { p_token: user.token, p_activity: activity, p_item: item || null,
-      p_score: score == null ? null : Math.round(score), p_total: total == null ? null : Math.round(total), p_detail: detail || {} };
-    row.p_detail.uid = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-    return rpc("save_progress", row, true).then(function (ok) {
+      p_score: score == null ? null : Math.round(score), p_total: total == null ? null : Math.round(total), p_detail: detail || null };
+    return rpc("save_progress", row).then(function (ok) {
       if (ok === false) { checkSession(); }
       return ok;
     }).catch(function () {
@@ -50,74 +49,25 @@
     set(K_PEND, null);
     if (!user || p.u !== user.username) return;
     var secs = Math.round(((p.end || p.start) - p.start) / 1000);
-    if (secs < 15) return;
-    save(p.a, p.i || null, null, null, { seconds: secs, kind: "time" });
+    if (secs < 20) return;
+    var min = Math.max(1, Math.round(secs / 60));
+    save(p.a, min + (min === 1 ? " minuto" : " minutos") + " de práctica", null, null, { seconds: secs });
   }
 
-  /* Rutas de la pantalla principal → tipo de actividad */
-  var ROUTE_NAMES = {
-    library: "Lectura", lecturas: "Lectura", resources: "Recurso", games: "Juego", flashcards: "Flashcards",
-    wordsearch: "Sopa de letras", coloring: "Para colorear", holidays: "Festividades", learn: "Aprende",
-    lectoescritura: "Lectoescritura", matematicas: "Matemáticas", familias: "Familias", shop: "Tienda", mova: "MOVA"
-  };
   function gameSlug() {
     var m = location.pathname.match(/juego-([a-z0-9-]+)\.html$/);
     return m ? m[1] : null;
   }
-  function screenInfo() {
-    var slug = gameSlug();
-    if (slug) return { a: slug, i: (document.title || "").split("·")[0].trim() || NAMES[slug] || slug };
-    var parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
-    var key = parts[0] || "";
-    if (!ROUTE_NAMES[key]) return null;
-    var h1 = document.querySelector("#main h1");
-    var title = h1 ? h1.textContent.replace(/\s+/g, " ").trim() : "";
-    if (!parts[1]) title = title ? "Explorando: " + title : "Explorando";
-    return { a: "app-" + key, i: (ROUTE_NAMES[key] + (title ? " · " + title : "")).slice(0, 120) };
-  }
-  var cur = null;
-  function beginScreen() {
-    flushPending(); cur = null;
-    if (!user) return;
-    var s = screenInfo(); if (!s) return;
-    cur = { a: s.a, i: s.i, u: user.username, start: Date.now(), end: Date.now() };
-    set(K_PEND, cur);
-  }
-  function tick() {
-    if (!cur) return;
-    var p = get(K_PEND);
-    if (p && p.start === cur.start) { p.end = Date.now(); set(K_PEND, p); }
-  }
-  function startTracking() {
-    setInterval(function () { if (document.visibilityState === "visible") tick(); }, 10000);
+  function startGameTracking(slug) {
+    var p = { a: slug, u: user.username, start: Date.now(), end: Date.now() };
+    set(K_PEND, p);
+    var tick = function () { var cur = get(K_PEND); if (cur && cur.start === p.start) { cur.end = Date.now(); set(K_PEND, cur); } };
+    setInterval(function () { if (document.visibilityState === "visible") tick(); }, 15000);
     document.addEventListener("visibilitychange", function () {
-      if (document.visibilityState === "hidden") tick(); else beginScreen();
+      if (document.visibilityState === "hidden") tick();
+      else { flushPending(); p.start = Date.now(); p.end = p.start; set(K_PEND, p); }
     });
     window.addEventListener("pagehide", tick);
-    window.addEventListener("pageshow", function (e) { if (e.persisted) { flushQueue(); beginScreen(); } });
-    if (!gameSlug()) window.addEventListener("hashchange", function () { tick(); setTimeout(beginScreen, 350); });
-    setTimeout(beginScreen, 350);
-  }
-
-  /* Resultados que los juegos ya guardan en el dispositivo */
-  function watchResults() {
-    var slug = gameSlug(); if (!slug) return;
-    var orig = Storage.prototype.setItem;
-    Storage.prototype.setItem = function (k, v) {
-      var before = null;
-      try { before = this.getItem(k); } catch (e) {}
-      orig.apply(this, arguments);
-      if (this !== window.localStorage || !user || v === before) return;
-      try {
-        if (k === "mova-levelup") {
-          var arr = JSON.parse(v), last = arr[arr.length - 1];
-          if (last) save("level-up", "Resultado del examen: nivel " + last.l, last.r, last.t, { level: last.l, stage: last.s, folio: last.f });
-        } else if (/^(mova-wq2-|mova-ss-|mova-mm-best-|mova-mochi-best|wf_sort_best)/.test(k)) {
-          var n = Number(String(v).replace(/[^0-9.-]/g, ""));
-          if (!isNaN(n)) save(slug, "Nuevo récord", n, null, { key: k });
-        }
-      } catch (e) {}
-    };
   }
 
   function checkSession() {
@@ -145,6 +95,8 @@
     ".mva-band i{position:absolute;border-radius:50%}" +
     ".mva-badge{position:relative;width:58px;height:58px;border-radius:18px;background:#fff;color:#1E3A5F;display:grid;place-items:center;font-weight:800;font-size:24px;" +
     "box-shadow:0 6px 0 #E8846B;margin:12px 0 18px}" +
+    ".mva-badge.logo{width:64px;height:64px;padding:4px;box-sizing:border-box;box-shadow:0 6px 0 #E8846B,0 8px 18px rgba(10,16,40,.18)}" +
+    ".mva-badge.logo img{display:block;width:100%;height:100%;border-radius:14px}" +
     ".mva-card h2{margin:0 0 4px;font-size:22px;font-weight:700;color:#1E3A5F}" +
     ".mva-card p{margin:0 0 18px;font-size:14px;color:#4A4D55;line-height:1.45}" +
     ".mva-card label{display:block;font-size:13px;font-weight:600;margin:12px 0 6px}" +
@@ -191,7 +143,7 @@
   function close() { var m = document.getElementById("mva-modal"); if (m) m.remove(); }
 
   function showLogin() {
-    var b = open('<div class="mva-badge">m.</div><h2>Hola, alumno MOVA</h2>' +
+    var b = open('<div class="mva-badge logo"><img src="icon-192.png" alt="MOVA"></div><h2>Hola, alumno MOVA</h2>' +
       "<p>Entra con el usuario y la contraseña que te dio tu maestra para guardar tu avance.</p>" +
       '<form id="mva-form" autocomplete="on"><label for="mva-u">Usuario</label>' +
       '<input id="mva-u" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" placeholder="ejemplo: luciae.m">' +
@@ -207,7 +159,7 @@
       rpc("student_login", { p_username: u, p_password: p }).then(function (r) {
         if (r && r.ok) {
           user = { token: r.token, name: r.name, stage: r.stage, username: r.username };
-          set(K_USER, user); renderChip(); close(); toast("¡Bienvenido, " + first(user.name) + "!"); flushQueue(); beginScreen();
+          set(K_USER, user); renderChip(); close(); toast("¡Bienvenido, " + first(user.name) + "!"); flushQueue();
         } else {
           var e2 = r && r.error;
           err.textContent = e2 === "locked" ? "Demasiados intentos. Espera 15 minutos e inténtalo de nuevo."
@@ -226,9 +178,7 @@
       '<button class="mva-btn" id="mva-ok">Seguir practicando</button><button class="mva-btn soft" id="mva-out">Cerrar sesión</button>');
     b.querySelector("#mva-ok").onclick = close;
     b.querySelector("#mva-out").onclick = function () {
-      var tok = user.token;
-      tick(); flushPending(); cur = null;
-      setTimeout(function () { rpc("student_logout", { p_token: tok }).catch(function () {}); }, 2500);
+      rpc("student_logout", { p_token: user.token }).catch(function () {});
       user = null; set(K_USER, null); set(K_PEND, null); renderChip(); close(); toast("Sesión cerrada");
     };
   }
@@ -246,10 +196,10 @@
   window.MovaAuth = { save: save, user: function () { return user; }, login: showLogin };
   function boot() {
     injectCss();
-    flushQueue(); checkSession();
-    watchResults();
-    startTracking();
-    if (!gameSlug()) mountChip();
+    flushPending(); flushQueue(); checkSession();
+    var slug = gameSlug();
+    if (slug && user) startGameTracking(slug);
+    if (!slug) mountChip();
   }
   document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", boot) : boot();
 })();

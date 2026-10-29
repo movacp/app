@@ -32,7 +32,8 @@ button{cursor:pointer}
   box-shadow:0 20px 50px rgba(10,16,40,.35)}
 .brand{display:flex;align-items:center;gap:10px;margin-bottom:22px}
 .brand-mark{width:42px;height:42px;border-radius:12px;background:var(--navy);color:#fff;font-weight:700;
-  display:grid;place-items:center;font-size:20px}
+  display:grid;place-items:center;font-size:20px;overflow:hidden;flex:none}
+.brand-mark img{display:block;width:100%;height:100%}
 .brand small{display:block;color:var(--muted);font-size:12.5px}
 .brand b{font-size:16px}
 .login-card h1{font-size:26px;margin:0 0 4px;font-weight:700}
@@ -55,7 +56,7 @@ header.top .row{display:flex;align-items:center;justify-content:space-between;ga
 header.top h1{font-size:22px;margin:16px 0 2px;font-weight:700;position:relative}
 header.top p{margin:0;color:#C9D1E6;font-size:13.5px;position:relative}
 header.top .brand small{color:#C9D1E6}
-header.top .brand-mark{background:#fff;color:var(--navy)}
+header.top .brand-mark{background:var(--navy);box-shadow:0 0 0 2px #fff}
 .logout{background:rgba(255,255,255,.12);color:#fff;border:0;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600}
 main{max-width:760px;margin:0 auto;padding:18px 16px 100px}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:-34px;position:relative}
@@ -112,7 +113,7 @@ main{max-width:760px;margin:0 auto;padding:18px 16px 100px}
 <section id="login">
   <div class="dots" aria-hidden="true"></div>
   <form class="login-card" id="loginForm" autocomplete="on">
-    <div class="brand"><div class="brand-mark">m.</div><div><b>MOVA Learning Studio</b><small>Centro Pedagógico</small></div></div>
+    <div class="brand"><div class="brand-mark"><img src="icon-192.png" alt="MOVA"></div><div><b>MOVA Learning Studio</b><small>Centro Pedagógico</small></div></div>
     <h1>Panel de maestra</h1>
     <p class="sub">Entra con tu cuenta para administrar a tus alumnos.</p>
     <label class="f" for="email">Correo</label>
@@ -129,7 +130,7 @@ main{max-width:760px;margin:0 auto;padding:18px 16px 100px}
   <header class="top">
     <div class="dots" aria-hidden="true"></div>
     <div class="row">
-      <div class="brand" style="margin:0"><div class="brand-mark">m.</div><div><b>MOVA Learning Studio</b><small>Panel de maestra</small></div></div>
+      <div class="brand" style="margin:0"><div class="brand-mark"><img src="icon-192.png" alt="MOVA"></div><div><b>MOVA Learning Studio</b><small>Panel de maestra</small></div></div>
       <button class="logout" id="logoutBtn">Salir</button>
     </div>
     <h1>Mis alumnos</h1>
@@ -156,11 +157,11 @@ main{max-width:760px;margin:0 auto;padding:18px 16px 100px}
 const SB_URL = "https://fclafxrkibvcjktrgznt.supabase.co";
 const SB_KEY = "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6";
 const STORE = "mova_admin_session";
-const GROUPS = ["Kids","Children","Teens","Adultos","TOEFL","Matemáticas"];
+const GROUPS = ["Kids","Children","Teens","Adultos","TOEFL","Matemáticas","Lectoescritura"];
 const COLORS = ["#F6D776","#8EC9EE","#9DDCC0","#B9A6E8","#F9B8AE"];
 const ACT_NAMES = {"word-quest":"Word Quest","mision-matematica":"Misión Matemática","level-up":"Level Up","verb-memory":"Verb Memory",
   "sentence-builder":"Sentence Builder","locked-library":"Locked Library","toefl-practice":"TOEFL Practice","word-forms":"Word Forms",
-  "sentence-scramble":"Sentence Scramble","lee-con-mochi":"Lee con Mochi","sopa-de-letras":"Sopa de letras","crucigrama":"Crucigrama"};
+  "sentence-scramble":"Sentence Scramble","lee-con-mochi":"Aprende a leer con Mochi","sopa-de-letras":"Sopa de letras","crucigrama":"Crucigrama"};
 
 let session = null, students = [];
 const $ = s => document.querySelector(s);
@@ -324,7 +325,7 @@ const CAT = {"app-lecturas":["Lecturas","#8EC9EE"],"app-library":["Lecturas","#8
   "app-games":["Juegos","#F9B8AE"],"app-flashcards":["Flashcards","#B9A6E8"],"app-wordsearch":["Sopa de letras","#9DDCC0"],
   "app-coloring":["Para colorear","#F6D776"],"app-holidays":["Festividades","#F9B8AE"],"app-learn":["Aprende","#8EC9EE"],
   "app-lectoescritura":["Lectoescritura","#9DDCC0"],"app-matematicas":["Matemáticas","#B9A6E8"],"app-familias":["Familias","#F6D776"],
-  "app-shop":["Tienda","#E3E7F0"],"app-mova":["MOVA","#E3E7F0"]};
+  "app-shop":["Tienda","#E3E7F0"],"app-mova":["MOVA","#E3E7F0"],"lee-con-mochi":["Lectoescritura","#9DDCC0"]};
 function catOf(a){ return CAT[a] || [ACT_NAMES[a] || a, "#F2786B"]; }
 function secsOf(r){
   if(r.detail && r.detail.kind==="time") return r.detail.seconds||0;
