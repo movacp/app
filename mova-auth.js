@@ -99,9 +99,20 @@
     setTimeout(beginScreen, 350);
   }
 
-  /* Resultados que los juegos ya guardan en el dispositivo */
+  /* Resultados que los juegos y la app ya guardan en el dispositivo */
+  var K_APP = "mova-learning-studio:v1";
+  function onAppStore(before, v) {
+    var a = [], b = [];
+    try { a = (JSON.parse(before || "{}") || {}).completed || []; } catch (e) {}
+    try { b = (JSON.parse(v || "{}") || {}).completed || []; } catch (e) {}
+    b.forEach(function (id) {
+      if (a.indexOf(id) >= 0) return;
+      var s = screenInfo(), ok = s && /^app-(library|lecturas)$/.test(s.a) && !/Explorando/.test(s.i);
+      save(ok ? s.a : "app-library", ok ? s.i : "Lectura · " + id, null, null, { kind: "done", id: id });
+    });
+  }
   function watchResults() {
-    var slug = gameSlug(); if (!slug) return;
+    var slug = gameSlug();
     var orig = Storage.prototype.setItem;
     Storage.prototype.setItem = function (k, v) {
       var before = null;
@@ -109,6 +120,7 @@
       orig.apply(this, arguments);
       if (this !== window.localStorage || !user || v === before) return;
       try {
+        if (!slug) { if (k === K_APP) onAppStore(before, v); return; }
         if (k === "mova-levelup") {
           var arr = JSON.parse(v), last = arr[arr.length - 1];
           if (last) save("level-up", "Resultado del examen: nivel " + last.l, last.r, last.t, { level: last.l, stage: last.s, folio: last.f });
@@ -163,6 +175,27 @@
     ".mva-priv{display:flex;justify-content:center;margin:34px 0 10px}" +
     ".mva-priv a{display:inline-flex;align-items:center;gap:8px;color:var(--muted,#6B7591);font:500 13px var(--font-ui,Poppins,system-ui,sans-serif);text-decoration:none;padding:8px 14px;border-radius:999px;border:1px solid var(--line,#DAD4CA)}" +
     ".mva-priv svg{width:15px;height:15px}" +
+    ".mva-card.wide{max-width:440px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:18px}" +
+    ".mvp-top{position:relative;display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}.mvp-top .mva-badge{margin:12px 0 0;flex:none}" +
+    ".mvp-who{padding-top:64px;min-width:0}.mvp-who span{position:absolute;top:2px;left:72px;color:#fff;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.9}" +
+    ".mvp-who h2{margin:0;font-size:20px;line-height:1.2}.mvp-who em{display:inline-block;font-style:normal;font-size:12px;font-weight:600;background:#E2F1FB;color:#1E3A5F;border-radius:999px;padding:3px 10px;margin-top:5px}" +
+    ".mvp-load,.mvp-empty{text-align:center;color:#6B7591;font-size:14px;margin:18px 0}" +
+    ".mvp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}" +
+    ".mvp-tile{border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:2px}" +
+    ".mvp-ti{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;color:#fff;margin-bottom:8px}" +
+    ".mvp-tile b{font-size:28px;line-height:1;color:#1E3A5F;font-weight:800}.mvp-tile small{font-size:12.5px;color:#4A4D55;font-weight:500}" +
+    ".mvp-level{margin-top:12px;border-radius:18px;padding:14px 16px;background:linear-gradient(135deg,#1E3A5F,#2E5482);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px}" +
+    ".mvp-lk{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;opacity:.95}.mvp-level b{display:block;text-align:right;font-size:26px;line-height:1;font-weight:800;color:#F6D776}" +
+    ".mvp-level small{display:block;text-align:right;font-size:12px;opacity:.85;margin-top:3px}.mvp-level .mvp-cta{text-align:right;max-width:190px;line-height:1.35}" +
+    ".mvp-h{display:flex;justify-content:space-between;align-items:baseline;margin:20px 0 10px;font-size:15px;color:#1E3A5F;font-weight:700}.mvp-h span{font-size:12.5px;color:#6B7591;font-weight:600}" +
+    ".mvp-badges{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}" +
+    ".mvp-b{background:#FBF8F3;border:1px solid #EFE9DF;border-radius:16px;padding:12px 6px 10px;text-align:center}" +
+    ".mvp-bi{width:46px;height:46px;border-radius:50%;margin:0 auto 7px;display:grid;place-items:center;color:#fff;box-shadow:inset 0 -3px 0 rgba(0,0,0,.12)}" +
+    ".mvp-b b{display:block;font-size:12px;color:#1E3A5F;line-height:1.2}.mvp-b small{display:block;font-size:10.5px;color:#7A7D84;line-height:1.25;margin-top:2px}" +
+    ".mvp-b.off .mvp-bi{background:#E9E5DE;color:#A9A49B;box-shadow:none}.mvp-b.off b{color:#9A968F}" +
+    ".mvp-list{background:#FBF8F3;border:1px solid #EFE9DF;border-radius:16px;padding:4px 14px}" +
+    ".mvp-list div{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;font-size:13.5px;border-bottom:1px solid #EFE9DF}.mvp-list div:last-child{border:0}" +
+    ".mvp-list span{display:flex;align-items:center;gap:8px;color:#16181D;min-width:0}.mvp-list span svg{flex:none;color:#E8846B}.mvp-list b{color:#1E3A5F}" +
     ".mva-toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translateX(-50%);z-index:2147483641;background:#1E3A5F;color:#fff;" +
     "padding:10px 16px;border-radius:12px;font:500 14px Poppins,system-ui,sans-serif;box-shadow:0 10px 24px rgba(0,0,0,.2)}";
 
@@ -178,17 +211,17 @@
     chip.innerHTML = user
       ? '<span class="mva-dot">' + esc(initials(user.name)) + '</span><span class="mva-lbl">' + esc(first(user.name)) + "</span>"
       : '<span class="mva-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span><span class="mva-lbl">Alumnos MOVA</span>';
-    chip.setAttribute("aria-label", user ? "Mi cuenta" : "Iniciar sesión de alumno MOVA");
+    chip.setAttribute("aria-label", user ? "My Progress" : "Iniciar sesión de alumno MOVA");
   }
   function dots() {
     var pal = ["#F6D776", "#8EC9EE", "#9DDCC0", "#B9A6E8", "#E8846B", "#FFFFFF"], h = "";
     for (var i = 0; i < 12; i++) { var s = 7 + (i * 7) % 16; h += '<i style="width:' + s + "px;height:" + s + "px;left:" + ((i * 29) % 100) + "%;top:" + ((i * 41) % 90) + "%;background:" + pal[i % pal.length] + ';opacity:.6"></i>'; }
     return '<div class="mva-band" aria-hidden="true">' + h + "</div>";
   }
-  function open(html) {
+  function open(html, cls) {
     close();
     var b = document.createElement("div"); b.className = "mva-back"; b.id = "mva-modal";
-    b.innerHTML = '<div class="mva-card" role="dialog" aria-modal="true">' + dots() + '<button class="mva-x" aria-label="Cerrar">×</button>' + html + "</div>";
+    b.innerHTML = '<div class="mva-card' + (cls ? " " + cls : "") + '" role="dialog" aria-modal="true">' + dots() + '<button class="mva-x" aria-label="Cerrar">×</button>' + html + "</div>";
     b.addEventListener("click", function (e) { if (e.target === b) close(); });
     document.body.appendChild(b);
     b.querySelector(".mva-x").onclick = close;
@@ -225,18 +258,131 @@
         .then(function () { go.disabled = false; go.textContent = "Entrar"; });
     };
   }
+  /* ---------- My Progress ---------- */
+  var K_PROG = "mova_progress_cache";
+  var IC = {
+    book: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 5.5v16M9 8h7M9 11.5h5"/>',
+    flame: '<path d="M12 3c1 3.2 5 5.2 5 10a5 5 0 0 1-10 0c0-2.2 1-3.8 2.2-4.8.1 2 1 3.1 2.3 3.3-.3-3.1-.6-5.6.5-8.5z"/>',
+    game: '<rect x="2.5" y="7" width="19" height="11" rx="5.5"/><path d="M7.5 10.3v4.4M5.3 12.5h4.4"/><circle cx="15.3" cy="11.3" r="1.1" fill="currentColor"/><circle cx="17.8" cy="13.8" r="1.1" fill="currentColor"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.3 2"/>',
+    trophy: '<path d="M8 4h8v5.5a4 4 0 0 1-8 0z"/><path d="M8 6.2H5.2a3 3 0 0 0 3 4.3M16 6.2h2.8a3 3 0 0 1-3 4.3M12 13.5V17M8.5 20.5h7M9.5 17h5v3.5h-5z"/>',
+    bars: '<path d="M5 20v-6M10 20V10M15 20V7M20 20V4"/>',
+    leaf: '<path d="M12 21v-8.5"/><path d="M12 12.5c0-4.2 3-7.5 7.5-7.5 0 4.3-3.1 7.5-7.5 7.5zM12 15c0-3.3-2.3-5.6-6.5-5.6 0 3.3 2.3 5.6 6.5 5.6z"/>',
+    star: '<path d="M12 3.2l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17.2l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+    lock: '<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>'
+  };
+  function ico(n, sz) { return '<svg viewBox="0 0 24 24" width="' + (sz || 20) + '" height="' + (sz || 20) + '" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + IC[n] + "</svg>"; }
+  function dayKey(d) { var x = new Date(d); return x.getFullYear() + "-" + ("0" + (x.getMonth() + 1)).slice(-2) + "-" + ("0" + x.getDate()).slice(-2); }
+  function prettySlug(a) { return NAMES[a] || String(a).replace(/-/g, " ").replace(/\b\w/g, function (c) { return c.toUpperCase(); }); }
+
+  function computeProgress(rows) {
+    rows = rows || [];
+    var reads = {}, days = {}, games = {}, gameNames = {}, plays = 0, secsWeek = 0, secsAll = 0, records = {}, lvl = null;
+    var weekAgo = Date.now() - 7 * 864e5;
+    rows.forEach(function (r) {
+      var d = r.detail || {}, secs = d.kind === "time" ? (d.seconds || 0) : 0, t = new Date(r.created_at).getTime();
+      days[dayKey(r.created_at)] = 1;
+      secsAll += secs; if (t >= weekAgo) secsWeek += secs;
+      if ((r.activity === "app-library" || r.activity === "app-lecturas") && r.item && !/Explorando/.test(r.item)) {
+        var k = r.item, e = reads[k] || (reads[k] = { s: 0, done: false, t: 0 });
+        e.s += secs; if (d.kind === "done") e.done = true; if (t > e.t) e.t = t;
+      } else if (r.activity === "level-up" && d.level && !lvl) {
+        lvl = { level: d.level, score: r.score, total: r.total, at: r.created_at };
+      } else if (!/^app-/.test(r.activity)) {
+        if (secs) { games[r.activity] = 1; plays++; if (r.item && r.item !== "Nuevo récord") gameNames[r.activity] = r.item; }
+        if (r.item === "Nuevo récord" && r.score != null) records[r.activity] = Math.max(records[r.activity] || 0, r.score);
+      }
+    });
+    var readList = Object.keys(reads).filter(function (k) { return reads[k].done || reads[k].s >= 60; })
+      .sort(function (x, y) { return reads[y].t - reads[x].t; });
+    var dayList = Object.keys(days).sort(), streak = 0, best = 0, run = 0, prev = null;
+    dayList.forEach(function (k) {
+      var t = new Date(k + "T12:00:00").getTime();
+      run = prev !== null && Math.round((t - prev) / 864e5) === 1 ? run + 1 : 1;
+      best = Math.max(best, run); prev = t;
+    });
+    var c = new Date(); c.setHours(12, 0, 0, 0);
+    if (!days[dayKey(c)]) c.setDate(c.getDate() - 1);
+    while (days[dayKey(c)]) { streak++; c.setDate(c.getDate() - 1); }
+    var recList = Object.keys(records).map(function (a) { return { name: gameNames[a] || prettySlug(a), best: records[a] }; })
+      .sort(function (x, y) { return y.best - x.best; });
+    var p = { readings: readList.length, readList: readList.slice(0, 3).map(function (k) { return k.replace(/^Lectura\s*·\s*/, ""); }),
+      streak: streak, bestStreak: best, games: Object.keys(games).length, plays: plays,
+      minWeek: Math.round(secsWeek / 60), minAll: Math.round(secsAll / 60), records: recList, level: lvl, any: rows.length > 0, days: dayList.length };
+    p.badges = [
+      ["leaf", "First Step", "Do your first activity", p.any, "#9DDCC0"],
+      ["book", "First Story", "Read 1 story", p.readings >= 1, "#8EC9EE"],
+      ["book", "Bookworm", "Read 5 stories", p.readings >= 5, "#E8846B"],
+      ["star", "Super Reader", "Read 15 stories", p.readings >= 15, "#B9A6E8"],
+      ["flame", "On Fire", "3 days in a row", p.bestStreak >= 3, "#E8846B"],
+      ["flame", "Unstoppable", "7 days in a row", p.bestStreak >= 7, "#F6D776"],
+      ["game", "Game Explorer", "Play 5 different games", p.games >= 5, "#B9A6E8"],
+      ["trophy", "Record Breaker", "Set a new record", recList.length > 0, "#F6D776"],
+      ["bars", "Level Up", "Finish the Level Up test", !!lvl, "#9DDCC0"],
+      ["clock", "Hour of Practice", "Practice 60 minutes", p.minAll >= 60, "#8EC9EE"],
+      ["star", "Busy Week", "Practice on 5 different days", p.days >= 5, "#E8846B"],
+      ["trophy", "MOVA Star", "Practice 5 hours", p.minAll >= 300, "#B9A6E8"]
+    ];
+    p.earned = p.badges.filter(function (x) { return x[3]; }).length;
+    return p;
+  }
+
+  function progressHtml(p) {
+    function tile(icon, num, label, bg, fg) {
+      return '<div class="mvp-tile" style="background:' + bg + '"><span class="mvp-ti" style="background:' + fg + '">' + ico(icon, 18) + "</span><b>" + num + "</b><small>" + label + "</small></div>";
+    }
+    var h = '<div class="mvp-grid">' +
+      tile("book", p.readings, p.readings === 1 ? "story read" : "stories read", "#E2F1FB", "#8EC9EE") +
+      tile("flame", p.streak, p.streak === 1 ? "day streak" : "day streak", "#FBE3DC", "#E8846B") +
+      tile("game", p.games, p.games === 1 ? "game played" : "games played", "#EEE8FA", "#B9A6E8") +
+      tile("clock", p.minWeek, "minutes this week", "#FDF4D6", "#E9C24F") + "</div>";
+    h += '<div class="mvp-level">' + (p.level
+      ? '<span class="mvp-lk">' + ico("bars", 18) + " Level Up</span><div><b>" + esc(p.level.level) + "</b><small>" +
+        (p.level.total ? esc(p.level.score) + " / " + esc(p.level.total) + " correct" : "Your English level") + "</small></div>"
+      : '<span class="mvp-lk">' + ico("bars", 18) + " Level Up</span><div><small class=\"mvp-cta\">Take the Level Up test to discover your English level.</small></div>") + "</div>";
+    h += '<h3 class="mvp-h">Badges <span>' + p.earned + " of " + p.badges.length + "</span></h3><div class=\"mvp-badges\">" +
+      p.badges.map(function (b) {
+        return '<div class="mvp-b' + (b[3] ? "" : " off") + '"><span class="mvp-bi" style="' + (b[3] ? "background:" + b[4] : "") + '">' + ico(b[3] ? b[0] : "lock", 22) +
+          "</span><b>" + esc(b[1]) + "</b><small>" + esc(b[2]) + "</small></div>";
+      }).join("") + "</div>";
+    if (p.records.length) {
+      h += '<h3 class="mvp-h">My records</h3><div class="mvp-list">' + p.records.slice(0, 6).map(function (r) {
+        return '<div><span>' + ico("trophy", 16) + esc(r.name) + "</span><b>" + esc(r.best) + "</b></div>";
+      }).join("") + "</div>";
+    }
+    if (p.readList.length) {
+      h += '<h3 class="mvp-h">Latest stories</h3><div class="mvp-list">' + p.readList.map(function (t) {
+        return '<div><span>' + ico("book", 16) + esc(t) + "</span></div>";
+      }).join("") + "</div>";
+    }
+    if (!p.any) h += '<p class="mvp-empty">Your progress starts today. Read a story or play a game, and it will appear here.</p>';
+    return h;
+  }
+
   function showAccount() {
-    var b = open('<div class="mva-badge">' + esc(initials(user.name)) + "</div><h2>" + esc(user.name) + "</h2>" +
-      "<p>Tu práctica en los juegos se está guardando.</p>" +
-      '<div class="mva-info"><div><span>Usuario</span><b>' + esc(user.username) + "</b></div>" +
-      (user.stage ? "<div><span>Grupo</span><b>" + esc(user.stage) + "</b></div>" : "") + "</div>" +
-      '<button class="mva-btn" id="mva-ok">Seguir practicando</button><button class="mva-btn soft" id="mva-out">Cerrar sesión</button>');
+    var b = open('<div class="mvp-top"><div class="mva-badge">' + esc(initials(user.name)) + '</div><div class="mvp-who"><span>My Progress</span><h2>' + esc(user.name) + "</h2>" +
+      (user.stage ? '<em>' + esc(user.stage) + "</em>" : "") + '</div></div><div id="mvp-body"><p class="mvp-load">Loading your progress…</p></div>' +
+      '<button class="mva-btn" id="mva-ok">Keep practicing</button><button class="mva-btn soft" id="mva-out">Log out</button>' +
+      '<p class="mva-legal">User: ' + esc(user.username) + "</p>", "wide");
+    var body = b.querySelector("#mvp-body"), cache = get(K_PROG);
+    if (cache && cache.u === user.username) body.innerHTML = progressHtml(computeProgress(cache.rows));
+    tick(); flushPending(); setTimeout(beginScreen, 50);
+    var tok = user.token, uname = user.username;
+    setTimeout(function () {
+      rpc("student_my_progress", { p_token: tok }).then(function (rows) {
+        if (!Array.isArray(rows)) throw 0;
+        set(K_PROG, { u: uname, rows: rows.slice(0, 1500) });
+        if (document.body.contains(body)) body.innerHTML = progressHtml(computeProgress(rows));
+      }).catch(function () {
+        if (!cache || cache.u !== uname) body.innerHTML = '<p class="mvp-empty">We could not load your progress right now. Check your internet and try again.</p>';
+      });
+    }, 600);
     b.querySelector("#mva-ok").onclick = close;
     b.querySelector("#mva-out").onclick = function () {
-      var tok = user.token;
+      var tok2 = user.token;
       tick(); flushPending(); cur = null;
-      setTimeout(function () { rpc("student_logout", { p_token: tok }).catch(function () {}); }, 2500);
-      user = null; set(K_USER, null); set(K_PEND, null); renderChip(); close(); toast("Sesión cerrada");
+      setTimeout(function () { rpc("student_logout", { p_token: tok2 }).catch(function () {}); }, 2500);
+      user = null; set(K_USER, null); set(K_PEND, null); set(K_PROG, null); renderChip(); close(); toast("Sesión cerrada");
     };
   }
 
