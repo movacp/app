@@ -105,6 +105,46 @@ main{max-width:760px;margin:0 auto;padding:18px 16px 100px}
 .toggle input{width:20px;height:20px}
 .toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top));transform:translateX(-50%);background:var(--navy);color:#fff;
   padding:10px 16px;border-radius:12px;font-size:14px;z-index:40;box-shadow:0 10px 24px rgba(0,0,0,.2)}
+
+/* Reporte mensual */
+.rep-wrap{position:fixed;inset:0;z-index:30;background:rgba(15,22,45,.5);display:flex;align-items:flex-end;justify-content:center}
+@media(min-width:700px){.rep-wrap{align-items:center}}
+.rep-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;background:var(--coral);color:#fff;border:0;border-radius:12px;padding:13px;font-weight:600;font-size:15px}
+textarea.in{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font:inherit;font-size:15px;min-height:96px;resize:vertical}
+textarea.in:focus{border-color:var(--navy2);outline:none}
+#repStage{position:fixed;left:-10000px;top:0;width:794px}
+.rp{width:794px;height:1123px;background:#FBF8F3;color:#1F2B4D;font-family:Poppins,sans-serif;position:relative;overflow:hidden}
+.rp-band{position:absolute;inset:0 0 auto;height:250px;background:#1F2B4D;overflow:hidden}
+.rp-band i{position:absolute;border-radius:50%}
+.rp-head{position:relative;display:flex;align-items:center;gap:14px;padding:40px 48px 0;color:#fff}
+.rp-head img{width:56px;height:56px;border-radius:14px;box-shadow:0 0 0 3px #fff}
+.rp-head b{display:block;font-size:17px}.rp-head small{font-size:13px;color:#C9D1E6}
+.rp-title{position:relative;padding:22px 48px 0;color:#fff}
+.rp-title h1{margin:0;font-size:34px;line-height:1.1;font-weight:700}
+.rp-title p{margin:6px 0 0;font-size:16px;color:#F6D776;font-weight:600}
+.rp-card{position:relative;margin:26px 48px 0;background:#fff;border-radius:22px;padding:22px 26px;display:flex;align-items:center;gap:18px;box-shadow:0 10px 30px rgba(31,43,77,.12)}
+.rp-av{width:62px;height:62px;border-radius:50%;background:#F6D776;display:grid;place-items:center;font-weight:700;font-size:22px;flex:none}
+.rp-card h2{margin:0;font-size:24px}.rp-card span{color:#6B7591;font-size:14px}
+.rp-chip{margin-left:auto;background:#EEF1F7;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600}
+.rp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 48px 0}
+.rp-stat{border-radius:18px;padding:16px 16px 14px}
+.rp-stat b{display:block;font-size:26px;line-height:1.1}.rp-stat span{font-size:12.5px;font-weight:500}
+.rp-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;margin:20px 48px 0}
+.rp-box{background:#fff;border-radius:20px;padding:18px 20px}
+.rp-box h3{margin:0 0 12px;font-size:15px}
+.rp-bar{margin:0 0 11px}.rp-bar div{display:flex;justify-content:space-between;font-size:12.5px}
+.rp-bar span{color:#6B7591}.rp-track{height:9px;background:#EEF1F7;border-radius:99px;margin-top:5px;overflow:hidden}
+.rp-track i{display:block;height:100%;border-radius:99px}
+.rp-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center;font-size:11px}
+.rp-cal em{font-style:normal;color:#6B7591;font-weight:600;font-size:10.5px}
+.rp-cal u{text-decoration:none;display:grid;place-items:center;height:26px;border-radius:8px;color:#9AA2B8}
+.rp-cal u.on{background:#9DDCC0;color:#1F2B4D;font-weight:700}
+.rp-list{margin:0;padding:0;list-style:none;font-size:13px}
+.rp-list li{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #EEF1F7}
+.rp-list li:last-child{border:0}.rp-list b{font-weight:600}
+.rp-note{margin:18px 48px 0;background:#FFF6DA;border-radius:20px;padding:18px 22px;font-size:14px;line-height:1.55}
+.rp-note h3{margin:0 0 6px;font-size:15px}
+.rp-foot{position:absolute;left:48px;right:48px;bottom:30px;display:flex;justify-content:space-between;font-size:12px;color:#6B7591;border-top:1px solid #E3E7F0;padding-top:12px}
 </style>
 </head>
 <body>
@@ -403,6 +443,8 @@ async function openStudent(id){
         <div class="score">${esc(rowRight(r))}</div></div>`;
     });
     $("#prof").innerHTML = html + `</div>`;
+    const rb=document.createElement("button"); rb.className="rep-btn"; rb.innerHTML="Reporte del mes para papás";
+    rb.onclick=()=>openReport(s, rows); $("#prof").querySelector(".stats").after(rb);
   }).catch(err => $("#prof").innerHTML = `<div class="pi" style="margin-top:16px">${esc(err.message)}</div>`);
 
   $("#eSave").onclick = async () => {
@@ -425,6 +467,94 @@ async function openStudent(id){
     try{ await rpc("admin_delete_student",{p_student:id}); closeModal(); toast("Alumno eliminado"); loadStudents(); }
     catch(err){ $("#dMsg").textContent=err.message; }
   };
+}
+
+/* ---------- Reporte mensual (PDF) ---------- */
+const MESES=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+function loadScript(src){ return new Promise((ok,bad)=>{ if(document.querySelector(`script[src="${src}"]`)) return ok(); const s=document.createElement("script"); s.src=src; s.onload=ok; s.onerror=bad; document.head.appendChild(s); }); }
+function isReading(r){ return (r.activity==="app-lecturas"||r.activity==="app-library") && r.item && !/Explorando/.test(r.item); }
+function openReport(s, rows){
+  const now=new Date(), opts=[];
+  for(let i=0;i<6;i++){ const d=new Date(now.getFullYear(), now.getMonth()-i, 1); opts.push([d.getFullYear(), d.getMonth()]); }
+  const w=document.createElement("div"); w.className="rep-wrap";
+  w.innerHTML=`<div class="sheet" role="dialog" aria-modal="true"><button class="x" aria-label="Cerrar">×</button>
+    <h2>Reporte del mes</h2><p class="sub">${esc(s.full_name)}</p>
+    <label class="f" for="rMonth">Mes</label><select class="in" id="rMonth">${opts.map(([y,m],i)=>`<option value="${y}-${m}" ${i===0?"selected":""}>${MESES[m]} ${y}</option>`).join("")}</select>
+    <label class="f" for="rNote">Comentario de la maestra (opcional)</label>
+    <textarea class="in" id="rNote" placeholder="Ejemplo: Lucía ha avanzado mucho en su lectura. Le recomiendo practicar 10 minutos diarios."></textarea>
+    <div class="actions"><button class="btn btn-primary" id="rShare">Compartir</button><button class="btn btn-soft" id="rDown">Descargar PDF</button></div>
+    <div class="msg" id="rMsg"></div></div>`;
+  document.body.appendChild(w);
+  const close=()=>w.remove();
+  w.addEventListener("click",e=>{ if(e.target===w) close(); }); w.querySelector(".x").onclick=close;
+  const go = async (share) => {
+    const m=w.querySelector("#rMsg"), [y,mo]=w.querySelector("#rMonth").value.split("-").map(Number);
+    m.className="msg"; m.textContent="Preparando el reporte…";
+    w.querySelectorAll(".actions .btn").forEach(b=>b.disabled=true);
+    try{
+      const file = await buildReport(s, rows, y, mo, w.querySelector("#rNote").value.trim());
+      if(share && navigator.canShare && navigator.canShare({files:[file]})){
+        await navigator.share({files:[file], title:file.name});
+      } else {
+        const a=document.createElement("a"); a.href=URL.createObjectURL(file); a.download=file.name; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+      }
+      m.className="msg ok"; m.textContent = share ? "Listo." : "Reporte descargado. Búscalo en Descargas.";
+    }catch(err){ if(err && err.name==="AbortError"){ m.textContent=""; } else { m.className="msg err"; m.textContent="No se pudo generar el reporte. Revisa tu internet e intenta de nuevo."; } }
+    w.querySelectorAll(".actions .btn").forEach(b=>b.disabled=false);
+  };
+  w.querySelector("#rShare").onclick=()=>go(true);
+  w.querySelector("#rDown").onclick=()=>go(false);
+  if(!(navigator.canShare)) w.querySelector("#rShare").remove();
+}
+async function buildReport(s, all, y, mo, note){
+  await Promise.all([loadScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"),
+                     loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js")]);
+  const rows = all.filter(r=>{ const d=new Date(r.created_at); return d.getFullYear()===y && d.getMonth()===mo; });
+  const totalS = rows.reduce((a,r)=>a+secsOf(r),0);
+  const activeDays = new Set(rows.map(r=>new Date(r.created_at).getDate()));
+  const readings = []; rows.filter(isReading).forEach(r=>{ const t=r.item.replace(/^Lectura · /,""); if(!readings.includes(t)) readings.push(t); });
+  const by={}; rows.forEach(r=>{ const [n,c]=catOf(r.activity); by[n]=by[n]||{n,c,s:0,k:0}; by[n].s+=secsOf(r); by[n].k++; });
+  const cats=Object.values(by).sort((a,b)=>b.s-a.s||b.k-a.k).slice(0,6), maxS=Math.max(1,...cats.map(c=>c.s));
+  const results=rows.filter(r=>r.total || r.item==="Nuevo récord").slice(0,5);
+  const first=new Date(y,mo,1), dim=new Date(y,mo+1,0).getDate(), lead=(first.getDay()+6)%7;
+  const pal=["#F6D776","#8EC9EE","#9DDCC0","#B9A6E8","#F2786B","#FFFFFF"];
+  let dots=""; for(let i=0;i<18;i++){ const z=10+(i*9)%26; dots+=`<i style="width:${z}px;height:${z}px;left:${(i*31)%100}%;top:${(i*47)%95}%;background:${pal[i%6]};opacity:.35"></i>`; }
+  let cal=["L","M","M","J","V","S","D"].map(d=>`<em>${d}</em>`).join("");
+  for(let i=0;i<lead;i++) cal+="<u></u>";
+  for(let d=1; d<=dim; d++) cal+=`<u class="${activeDays.has(d)?"on":""}">${d}</u>`;
+  const nm=s.full_name, firstName=nm.split(/\s+/)[0];
+  const stat=(v,l,bg)=>`<div class="rp-stat" style="background:${bg}"><b>${v}</b><span>${l}</span></div>`;
+  const html=`<div class="rp">
+    <div class="rp-band">${dots}</div>
+    <div class="rp-head"><img src="icon-192.png" alt=""><div><b>MOVA Learning Studio</b><small>MOVA Centro Pedagógico</small></div></div>
+    <div class="rp-title"><h1>Reporte mensual de práctica</h1><p>${MESES[mo]} ${y}</p></div>
+    <div class="rp-card"><div class="rp-av">${esc(initials(nm))}</div><div><h2>${esc(nm)}</h2><span>MOVA Learning Studio · @${esc(s.username)}</span></div>
+      ${s.stage?`<div class="rp-chip">${esc(s.stage)}</div>`:""}</div>
+    <div class="rp-stats">${stat(fmtMin(totalS)||"0 min","Tiempo de práctica","#FDE7E3")}${stat(activeDays.size,activeDays.size===1?"Día de práctica":"Días de práctica","#DDF3EA")}
+      ${stat(readings.length,readings.length===1?"Lectura":"Lecturas","#E2F0FB")}${stat(rows.length,"Actividades","#EDE7FA")}</div>
+    <div class="rp-grid">
+      <div class="rp-box"><h3>En qué trabajó</h3>${cats.length?cats.map(c=>`<div class="rp-bar"><div><b>${esc(c.n)}</b><span>${c.s?fmtMin(c.s)+" · ":""}${c.k} ${c.k===1?"vez":"veces"}</span></div>
+        <div class="rp-track"><i style="width:${Math.max(6,Math.round(c.s/maxS*100))}%;background:${c.c}"></i></div></div>`).join(""):`<p style="font-size:13px;color:#6B7591;margin:0">Sin actividad registrada este mes.</p>`}</div>
+      <div class="rp-box"><h3>Días que practicó</h3><div class="rp-cal">${cal}</div></div>
+    </div>
+    <div class="rp-grid">
+      <div class="rp-box"><h3>Lecturas del mes</h3>${readings.length?`<ul class="rp-list">${readings.slice(0,7).map(t=>`<li><b>${esc(t)}</b></li>`).join("")}${readings.length>7?`<li><span>y ${readings.length-7} más</span></li>`:""}</ul>`:`<p style="font-size:13px;color:#6B7591;margin:0">Este mes no registró lecturas.</p>`}</div>
+      <div class="rp-box"><h3>Resultados</h3>${results.length?`<ul class="rp-list">${results.map(r=>`<li><span>${esc(ACT_NAMES[r.activity]||r.activity)} · ${esc(r.item==="Nuevo récord"?"récord":r.item.replace("Resultado del examen: ",""))}</span><b>${esc(rowRight(r))}</b></li>`).join("")}</ul>`:`<p style="font-size:13px;color:#6B7591;margin:0">Sin exámenes ni récords este mes.</p>`}</div>
+    </div>
+    ${note?`<div class="rp-note"><h3>Comentario de la maestra</h3>${esc(note).replace(/\n/g,"<br>")}</div>`:""}
+    <div class="rp-foot"><span>MOVA Centro Pedagógico · Monterrey · @movacp.mx</span><span>Generado el ${new Date().toLocaleDateString("es-MX",{day:"numeric",month:"long",year:"numeric"})}</span></div>
+  </div>`;
+  let stage=document.getElementById("repStage"); if(!stage){ stage=document.createElement("div"); stage.id="repStage"; document.body.appendChild(stage); }
+  stage.innerHTML=html;
+  await document.fonts.ready;
+  await new Promise(r=>{ const im=stage.querySelector("img"); if(im.complete) r(); else { im.onload=r; im.onerror=r; } });
+  const canvas = await html2canvas(stage.firstElementChild,{scale:2,backgroundColor:"#FBF8F3",useCORS:true});
+  stage.innerHTML="";
+  const pdf = new window.jspdf.jsPDF({unit:"pt",format:"a4"});
+  pdf.addImage(canvas.toDataURL("image/jpeg",0.92),"JPEG",0,0,595.28,841.89);
+  const name=`Reporte MOVA - ${nm} - ${MESES[mo]} ${y}.pdf`;
+  return new File([pdf.output("blob")], name, {type:"application/pdf"});
 }
 
 /* ---------- Start ---------- */
