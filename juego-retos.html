@@ -1594,7 +1594,7 @@ function bingoGame(lv, meP) {
     render('<div class="hud"><span class="pill" style="background:#FCE38A;color:#1B2A55">MOVA Bingo</span><span class="grow"></span><span class="pill">' + esc(patName) + "</span></div>" +
       '<div id="bwrap" class="bwrap"><div class="bcall" id="bcall"></div><div class="tbar"><i id="bbar" style="transition:none"></i></div>' +
       '<div class="bgrid s' + size + '" id="bgrid"></div><div class="bmsg" id="bmsg"></div>' +
-      '<button class="bbingo" id="bbingo">BINGO!</button><p class="bhint">' + esc(t.name) + (t.id === "verbs" ? " · You hear the verb, mark the past form" : "") + "</p></div>");
+      '<button class="bbingo" id="bbingo">BINGO!</button><p class="bhint">' + esc(t.name) + (t.hint ? " · " + esc(t.hint) : "") + "</p></div>");
     drawCard(); lastN = -1;
     $("#bgrid").onclick = function (e) {
       var b = e.target.closest(".bcell"); if (!b || b.disabled || done || won != null) return; unlock();

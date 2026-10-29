@@ -85,6 +85,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .p1 .bar{height:130px;background:var(--gold)}.p2 .bar{height:96px;background:var(--sky)}.p3 .bar{height:74px;background:var(--pink)}
 .note{color:var(--muted);font-size:13px;text-align:center;margin-top:12px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:999px;padding:10px 18px;font-weight:600;font-size:14px;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.glab{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--coral);margin:14px 0 6px}
 .hidden{display:none!important}
 </style>
 </head>
@@ -161,7 +162,7 @@ function screenSetup(edit) {
       '<button class="choice" data-k="game" data-v="bingo" aria-pressed="' + (g === "bingo") + '">MOVA Bingo<small>escuchan y llenan su tarjeta</small></button></div>';
     if (g === "bingo") {
       fixBingo(s); var okS = BG.sizesFor(s.topic);
-      h += '<div class="label">Tema</div><div class="grid c3 cats">' + BG.TOPICS.map(function (t) { return '<button class="choice" data-k="topic" data-v="' + t.id + '" aria-pressed="' + (s.topic === t.id) + '">' + esc(t.name) + (t.sub ? "<small>" + esc(t.sub) + "</small>" : "") + "</button>"; }).join("") + "</div>" +
+      h += '<div class="label">Tema</div>' + BG.GROUPS.map(function (g) { return '<div class="glab">' + esc(g[1]) + '</div><div class="grid c3 cats">' + BG.TOPICS.filter(function (t) { return t.g === g[0]; }).map(function (t) { return '<button class="choice" data-k="topic" data-v="' + t.id + '" aria-pressed="' + (s.topic === t.id) + '">' + esc(t.name) + (t.sub ? "<small>" + esc(t.sub) + "</small>" : "") + "</button>"; }).join("") + "</div>"; }).join("") +
         '<div class="label">Tarjeta</div><div class="grid c3">' + [3, 4, 5].map(function (n) { var ok = okS.indexOf(n) >= 0; return '<button class="choice" data-k="size" data-v="' + n + '" aria-pressed="' + (Number(s.size) === n) + '"' + (ok ? "" : " disabled style=\"opacity:.4\"") + ">" + n + "×" + n + "<small>" + (ok ? (n === 3 ? "Kids" : n === 4 ? "Children" : "Teens · centro libre") : "este tema es corto") + "</small></button>"; }).join("") + "</div>" +
         '<div class="label">Jugada para ganar</div><div class="grid c3 cats">' + BG.PATTERNS.map(function (p) { return '<button class="choice" data-k="pattern" data-v="' + p.id + '" aria-pressed="' + (s.pattern === p.id) + '">' + esc(p.name) + "<small>" + esc(p.sub) + "</small></button>"; }).join("") + "</div>" +
         '<div class="label">Cómo se canta</div><div class="grid c2"><button class="choice" data-k="show" data-v="audio" aria-pressed="' + (s.show !== "text") + '">Solo escuchar<small>practican listening</small></button><button class="choice" data-k="show" data-v="text" aria-pressed="' + (s.show === "text") + '">Escuchar y leer<small>la palabra sale escrita</small></button></div>' +
