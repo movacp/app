@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MOVA Live · Panel de maestra</title>
+<meta name="theme-color" content="#1B2A55">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1B2A55;--muted:#5B6787;--card:#fff;--track:#EEF1F8;--edge:#DCE3F0;--coral:#E8846B;--sky:#8EC5E8;--mint:#7FC8A9;--gold:#FCE38A;--gold2:#E3C462;--lila:#B9A6E8;--pink:#F7A8C4;--ok:#3E9E74;--bad:#D9534F}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Poppins,"Century Gothic",system-ui,sans-serif;color:var(--ink);background:#FBF6EC;min-height:100vh;
+  background-image:radial-gradient(circle,#E8846B 5px,transparent 6px),radial-gradient(circle,#8EC5E8 5px,transparent 6px),radial-gradient(circle,#FCE38A 5px,transparent 6px),radial-gradient(circle,#7FC8A9 5px,transparent 6px);
+  background-size:140px 140px;background-position:10px 20px,80px 60px,40px 100px,110px 130px;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.wrap{max-width:860px;margin:0 auto;padding:18px 14px 40px}
+.card{background:var(--card);border-radius:28px;padding:20px 18px 24px;box-shadow:0 10px 30px rgba(27,42,85,.1),0 6px 0 var(--coral)}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.brand{display:flex;flex-direction:column;align-items:flex-start}
+.wordmark{border:2.5px solid var(--ink);border-radius:999px;padding:2px 12px;font-weight:800;letter-spacing:2px;font-size:15px}
+.tag{font-size:10.5px;font-weight:600;color:var(--muted);margin-top:2px;letter-spacing:.3px}
+.spacer{flex:1}
+.badge{background:var(--ink);color:var(--gold);font-weight:800;font-size:12px;letter-spacing:2px;border-radius:999px;padding:6px 13px}
+h1{font-weight:800;font-size:clamp(28px,7vw,40px);text-align:center;margin:14px 0 4px;line-height:1.1}
+h2{font-weight:800;font-size:20px;margin:0}
+.lead{text-align:center;color:var(--muted);font-weight:500;font-size:15px;line-height:1.5;margin:0 0 6px}
+.label{font-weight:700;font-size:15px;margin:20px 0 8px}
+.grid{display:grid;gap:8px}.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:repeat(3,1fr)}.c4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:560px){.c4{grid-template-columns:1fr 1fr}.c3.cats{grid-template-columns:1fr 1fr}}
+.choice{border:3px solid var(--edge);background:var(--card);border-radius:18px;padding:12px 10px;font:inherit;font-weight:700;font-size:15px;color:var(--ink);text-align:center;cursor:pointer;box-shadow:0 3px 0 var(--edge);line-height:1.2}
+.choice small{display:block;font-size:11.5px;font-weight:500;color:var(--muted);margin-top:3px}
+.choice[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink);box-shadow:0 3px 0 #0E1838}
+.choice[aria-pressed="true"] small{color:rgba(255,255,255,.75)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:999px;padding:15px 18px;font:inherit;font-weight:800;font-size:17px;cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--gold);color:var(--ink);box-shadow:0 5px 0 var(--gold2)}
+.btn.dark{background:var(--ink);color:#fff;box-shadow:0 5px 0 #0E1838}
+.btn.ghost{background:var(--track);color:var(--ink)}
+.btn.wa{background:#25D366;color:#fff;box-shadow:0 5px 0 #1DA851}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;margin-top:14px}.row>*{flex:1}
+.in{width:100%;border:3px solid var(--edge);border-radius:16px;padding:13px 14px;font:inherit;font-size:16px;color:var(--ink);background:var(--card)}
+.err{color:var(--bad);font-weight:600;font-size:14px;text-align:center;min-height:20px;margin-top:10px}
+.code-card{background:var(--ink);color:#fff;border-radius:24px;padding:18px;text-align:center;margin-top:14px;
+  background-image:radial-gradient(circle,#F7A8C4 4px,transparent 5px),radial-gradient(circle,#FCE38A 4px,transparent 5px),radial-gradient(circle,#7FC8A9 4px,transparent 5px);background-size:110px 110px;background-position:10px 14px,60px 70px,95px 30px}
+.code-card small{font-weight:700;letter-spacing:2px;font-size:12px;opacity:.8}
+.code{font-weight:800;font-size:clamp(56px,16vw,88px);letter-spacing:10px;line-height:1.05;margin:4px 0}
+.code-card p{margin:4px 0 0;font-size:13.5px;opacity:.88;line-height:1.45}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:10px}
+.chip{background:var(--track);border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700}
+.code-card .chip{background:rgba(255,255,255,.16);color:#fff}
+.chip.k{background:#FDE0D8}.chip.c{background:#D9EEFB}.chip.t{background:#E6DEF8}
+.plist{display:grid;gap:8px;margin-top:12px}
+.prow{display:flex;align-items:center;gap:10px;background:var(--track);border-radius:16px;padding:8px 10px;font-weight:700;font-size:15px}
+.prow.off{opacity:.5}
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#1B2A55;font-weight:800;font-size:12px;flex:none}
+.prow .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.x{border:0;background:transparent;color:var(--muted);width:30px;height:30px;border-radius:10px;cursor:pointer;font-size:18px;line-height:1}
+.x:hover{background:#fff}
+.empty{text-align:center;color:var(--muted);font-size:14px;padding:14px;border:2px dashed var(--edge);border-radius:16px;margin-top:12px}
+.hud{display:flex;align-items:center;gap:10px;margin-top:6px}
+.clock{font-weight:800;font-size:38px;font-variant-numeric:tabular-nums}
+.clock.low{color:var(--bad)}
+.tbar{height:10px;border-radius:99px;background:var(--track);overflow:hidden;margin:8px 0 4px}.tbar i{display:block;height:100%;background:var(--mint);transform-origin:left;transition:transform .5s linear}
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.stat span{background:var(--track);border-radius:16px;padding:10px 6px;text-align:center;font-size:12px;font-weight:600;color:var(--muted)}
+.stat b{display:block;font-size:22px;color:var(--ink);font-weight:800}
+table{width:100%;border-collapse:separate;border-spacing:0 6px;margin-top:8px;font-size:14px}
+th{text-align:left;font-size:11.5px;color:var(--muted);font-weight:700;padding:0 8px;letter-spacing:.3px}
+td{background:var(--track);padding:8px;font-weight:700;vertical-align:middle}
+td:first-child{border-radius:14px 0 0 14px;width:34px;text-align:center;font-weight:800}
+td:last-child{border-radius:0 14px 14px 0}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.who{display:flex;align-items:center;gap:8px;min-width:0}.who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mini{display:flex;gap:1px;flex-wrap:wrap}.mini svg{width:20px;height:20px}
+.acc{display:inline-block;min-width:44px;border-radius:999px;padding:2px 8px;font-size:12px;text-align:center}
+.acc.g{background:#D8F1E4;color:#22714F}.acc.m{background:#FFF1C9;color:#8A6A10}.acc.r{background:#FBDADA;color:#9E2D2D}
+@media(max-width:600px){.hide-sm{display:none}}
+.podium{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:end;gap:8px;margin:18px 0 6px}
+.pod{text-align:center}.pod .av{width:48px;height:48px;font-size:15px;margin:0 auto 6px;border:3px solid #fff;box-shadow:0 0 0 3px var(--ink)}
+.pod b{display:block;font-size:14px;line-height:1.2;min-height:34px}
+.pod .bar{border-radius:16px 16px 6px 6px;font-weight:800;padding:8px 4px;display:flex;flex-direction:column;align-items:center}
+.pod .bar span{font-size:26px;line-height:1}.pod .bar small{font-size:12px;margin-top:4px}
+.p1 .bar{height:130px;background:var(--gold)}.p2 .bar{height:96px;background:var(--sky)}.p3 .bar{height:74px;background:var(--pink)}
+.note{color:var(--muted);font-size:13px;text-align:center;margin-top:12px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:999px;padding:10px 18px;font-weight:600;font-size:14px;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="card" id="app"></div></div>
+<script src="mova-park.js"></script>
+<script>
+(function () {
+var SB_URL = "https://fclafxrkibvcjktrgznt.supabase.co", SB_KEY = "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6", STORE = "mova_admin_session", K_HOST = "mova_live_host";
+var PK = window.MOVA_PARK, app = document.getElementById("app"), session = null, live = null, players = [], offset = 0, poll = null, raf = 0, screen = "";
+var settings = { cats: ["vocab", "grammar"], level: "each", secs: 480 };
+function $(s, r) { return (r || document).querySelector(s); }
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+function toast(t) { var d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(function () { d.remove(); }, 2600); }
+var AVC = ["#FCE38A", "#8EC5E8", "#F7A8C4", "#7FC8A9", "#B9A6E8", "#F6B48F"];
+function avColor(id) { var h = 0; String(id).split("").forEach(function (c) { h = (h * 31 + c.charCodeAt(0)) >>> 0; }); return AVC[h % AVC.length]; }
+function ini(n) { return String(n || "?").replace(/\./g, "").split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0]; }).join("").toUpperCase(); }
+function av(p) { return '<span class="av" style="background:' + avColor(p.id) + '">' + esc(ini(p.name)) + "</span>"; }
+function stageOf(s) { s = String(s || "").toLowerCase(); if (/teen|adult|toefl/.test(s)) return "t"; if (/child/.test(s)) return "c"; return "k"; }
+var SNAME = { k: "Kids", c: "Children", t: "Teens" };
+function stageFor(p) { var lv = live && live.settings && live.settings.level; if (lv === "kids") return "k"; if (lv === "children") return "c"; if (lv === "teens") return "t"; return stageOf(p.stage); }
+function chipStage(p) { var s = stageFor(p); return '<span class="chip ' + s + '">' + SNAME[s] + "</span>"; }
+function now() { return Date.now() + offset; }
+function money(n) { return "$" + Number(n || 0).toLocaleString("es-MX"); }
+function top(t) { return '<div class="top"><a class="x" href="admin.html" aria-label="Panel de maestra" style="font-size:22px;text-decoration:none;display:grid;place-items:center">‹</a><div class="brand"><span class="wordmark">MOVA</span><span class="tag">Centro Pedagógico</span></div><span class="spacer"></span><span class="badge">MOVA LIVE</span></div>' + (t || ""); }
+function render(h) { app.innerHTML = h; }
+
+/* ---------- Sesión de maestra (Supabase Auth, compartida con el panel) ---------- */
+async function authReq(grant, body) {
+  var r = await fetch(SB_URL + "/auth/v1/token?grant_type=" + grant, { method: "POST", headers: { apikey: SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  var j = await r.json().catch(function () { return {}; });
+  if (!r.ok) throw new Error(j.error_description || j.msg || "No se pudo iniciar sesión");
+  session = { access: j.access_token, refresh: j.refresh_token, exp: Date.now() + (j.expires_in - 60) * 1000 };
+  try { localStorage.setItem(STORE, JSON.stringify(session)); } catch (e) {}
+}
+async function token() {
+  if (session && Date.now() < session.exp) return session.access;
+  if (session && session.refresh) { await authReq("refresh_token", { refresh_token: session.refresh }); return session.access; }
+  throw new Error("auth");
+}
+async function rpc(fn, args) {
+  var t = await token(), t0 = Date.now();
+  var r = await fetch(SB_URL + "/rest/v1/rpc/" + fn, { method: "POST", headers: { apikey: SB_KEY, Authorization: "Bearer " + t, "Content-Type": "application/json" }, body: JSON.stringify(args || {}) });
+  var txt = await r.text(), j = null; try { j = txt ? JSON.parse(txt) : null; } catch (e) {}
+  if (!r.ok) { if (r.status === 401) { logout(); } var m = (j && j.message) || ""; throw new Error(/not authorized/.test(m) ? "Esta cuenta no tiene permiso de maestra." : m || "Algo falló. Intenta de nuevo."); }
+  if (j && j.now) { offset = j.now - (t0 + Date.now()) / 2; }
+  if (j && j.live) { live = j.live; players = j.lplayers || []; }
+  return j;
+}
+function logout() { session = null; try { localStorage.removeItem(STORE); } catch (e) {} stop(); screenLogin(); }
+function screenLogin() {
+  screen = "login";
+  render(top('<h1>MOVA Live</h1><p class="lead">Entra con tu cuenta de maestra para crear una sesión en vivo.</p>') +
+    '<div style="max-width:380px;margin:18px auto 0" class="grid"><input class="in" id="em" type="email" autocomplete="username" placeholder="Correo"><input class="in" id="pw" type="password" autocomplete="current-password" placeholder="Contraseña"><button class="btn dark" id="go">Entrar</button><div class="err" id="err"></div></div>');
+  $("#go").onclick = async function () {
+    var b = this; b.disabled = true; $("#err").textContent = "";
+    try { await authReq("password", { email: $("#em").value.trim(), password: $("#pw").value }); if (!(await rpc("is_admin"))) throw new Error("Esta cuenta no tiene permiso de maestra."); boot2(); }
+    catch (e) { $("#err").textContent = e.message; b.disabled = false; }
+  };
+}
+
+/* ---------- Opciones ---------- */
+function screenSetup(edit) {
+  stop(); screen = "setup";
+  var s = edit ? JSON.parse(JSON.stringify(live.settings || settings)) : settings;
+  function draw() {
+    render(top('<h1>MOVA Park</h1><p class="lead">Tus alumnos contestan preguntas desde su celular, ganan monedas y construyen su parque de diversiones. Gana el parque más valioso.</p>') +
+      '<div class="label">Preguntas</div><div class="grid c3 cats">' + PK.CATS.map(function (c) { return '<button class="choice" data-k="cat" data-v="' + c.id + '" aria-pressed="' + (s.cats.indexOf(c.id) >= 0) + '">' + esc(c.name) + "<small>" + esc(c.sub) + "</small></button>"; }).join("") + "</div>" +
+      '<div class="label">Nivel</div><div class="grid c4">' + [["each", "Cada quien su nivel", "según su grupo"], ["kids", "Kids", "todos igual"], ["children", "Children", "todos igual"], ["teens", "Teens", "todos igual"]].map(function (o) { return '<button class="choice" data-k="level" data-v="' + o[0] + '" aria-pressed="' + (s.level === o[0]) + '">' + o[1] + "<small>" + o[2] + "</small></button>"; }).join("") + "</div>" +
+      '<div class="label">Duración</div><div class="grid c3">' + [300, 480, 600].map(function (v) { return '<button class="choice" data-k="secs" data-v="' + v + '" aria-pressed="' + (Number(s.secs) === v) + '">' + v / 60 + " minutos</button>"; }).join("") + "</div>" +
+      '<div class="row" style="margin-top:22px">' + (edit ? '<button class="btn ghost" id="cancel">Cancelar</button>' : "") + '<button class="btn primary" id="go">' + (edit ? "Guardar" : "Crear sesión") + '</button></div><div class="err" id="err"></div>');
+    app.onclick = function (e) {
+      var t = e.target.closest("[data-k]"); if (!t) return;
+      var k = t.dataset.k, v = t.dataset.v;
+      if (k === "cat") { var i = s.cats.indexOf(v); if (i >= 0) { if (s.cats.length > 1) s.cats.splice(i, 1); } else s.cats.push(v); }
+      else if (k === "secs") s.secs = Number(v); else s[k] = v;
+      draw();
+    };
+    if (edit) $("#cancel").onclick = function () { app.onclick = null; screenLobby(); start(); };
+    $("#go").onclick = async function () {
+      var b = this; b.disabled = true; app.onclick = null;
+      try {
+        settings = s;
+        if (edit) await rpc("live_lobby", { p_code: live.code, p_settings: s }); else { await rpc("live_create", { p_settings: s }); try { localStorage.setItem(K_HOST, live.code); } catch (e) {} }
+        screen = ""; start();
+      } catch (e) { $("#err").textContent = e.message; b.disabled = false; }
+    };
+  }
+  draw();
+}
+function catsLabel(s) { return (s.cats || []).map(function (id) { var c = PK.CATS.find(function (x) { return x.id === id; }); return c ? c.name : id; }).join(" · "); }
+function levelLabel(s) { return s.level === "kids" ? "Todos en Kids" : s.level === "children" ? "Todos en Children" : s.level === "teens" ? "Todos en Teens" : "Cada quien su nivel"; }
+
+/* ---------- Sala ---------- */
+function screenLobby() {
+  var link = "https://movacp.github.io/app/juego-retos.html?live=" + live.code;
+  if (screen !== "lobby") {
+    screen = "lobby";
+    var s = live.settings || {};
+    render(top('<h1>Sala de espera</h1><p class="lead">Pide a tus alumnos entrar a la app → Juegos → Retos MOVA → <b>Unirme con código</b>.</p>') +
+      '<div class="code-card"><small>CÓDIGO DE LA SESIÓN</small><div class="code">' + esc(live.code) + "</div><p>MOVA Park · " + Number(s.secs || 480) / 60 + " minutos</p>" +
+      '<div class="chips"><span class="chip">' + esc(catsLabel(s)) + '</span><span class="chip">' + esc(levelLabel(s)) + "</span></div></div>" +
+      '<div class="row"><a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent("¡Vamos a jugar MOVA Park! Entra aquí: " + link + " · Código: " + live.code) + '">Mandar por WhatsApp</a><button class="btn ghost" id="opts">Cambiar opciones</button></div>' +
+      '<div class="label" id="cnt">Alumnos</div><div id="pl"></div>' +
+      '<div class="row" style="margin-top:20px"><button class="btn primary" id="start">Empezar</button></div>' +
+      '<p class="note"><a href="#" id="close" style="color:var(--muted)">Cerrar sesión de juego</a></p>');
+    $("#opts").onclick = function () { screenSetup(true); };
+    $("#start").onclick = async function () { this.disabled = true; try { await rpc("live_start", { p_code: live.code }); screen = ""; tick(); } catch (e) { toast(e.message); this.disabled = false; } };
+    $("#close").onclick = function (e) { e.preventDefault(); closeRoom(); };
+    app.onclick = async function (e) { var b = e.target.closest("[data-kick]"); if (!b) return; if (!confirm("¿Sacar a este alumno de la sesión?")) return; try { await rpc("live_kick", { p_code: live.code, p_student: b.dataset.kick }); drawLobby(); } catch (er) { toast(er.message); } };
+  }
+  drawLobby();
+}
+function drawLobby() {
+  var box = $("#pl"); if (!box) return;
+  $("#cnt").textContent = "Alumnos (" + players.length + ")";
+  box.innerHTML = players.length ? '<div class="plist">' + players.map(function (p) { return '<div class="prow' + (p.online ? "" : " off") + '">' + av(p) + '<span class="nm">' + esc(p.name) + "</span>" + chipStage(p) + '<button class="x" data-kick="' + esc(p.id) + '" aria-label="Sacar">×</button></div>'; }).join("") + "</div>" : '<div class="empty">Todavía no entra nadie. Comparte el código.</div>';
+  var b = $("#start"); if (b) b.disabled = !players.length;
+}
+
+/* ---------- Partida en vivo ---------- */
+function screenPlay() {
+  if (screen !== "play" + live.round) {
+    screen = "play" + live.round;
+    render(top() + '<div class="hud"><div><h2>MOVA Park</h2><div style="color:var(--muted);font-size:13px;font-weight:600">' + esc(catsLabel(live.settings || {})) + '</div></div><span class="spacer"></span><div class="clock" id="clk">--:--</div></div>' +
+      '<div class="tbar"><i id="tb"></i></div><div class="stat"><span><b id="s1">0</b>Jugando</span><span><b id="s2">0</b>Respuestas</span><span><b id="s3">0%</b>Aciertos del grupo</span></div>' +
+      '<div id="tbl"></div><div class="row" style="margin-top:18px"><button class="btn ghost" id="end">Terminar ahora</button></div>');
+    $("#end").onclick = async function () { if (!confirm("¿Terminar la ronda para todos?")) return; try { await rpc("live_end", { p_code: live.code }); } catch (e) { toast(e.message); } };
+    app.onclick = null;
+  }
+  drawTable($("#tbl"), false);
+  var act = players.filter(function (p) { return p.round === live.round; }), c = 0, w = 0;
+  act.forEach(function (p) { c += p.correct; w += p.wrong; });
+  $("#s1").textContent = act.filter(function (p) { return p.online; }).length; $("#s2").textContent = c + w; $("#s3").textContent = c + w ? Math.round(c / (c + w) * 100) + "%" : "–";
+}
+function accCls(a) { return a >= 80 ? "g" : a >= 60 ? "m" : "r"; }
+function drawTable(box, final) {
+  if (!box) return;
+  var list = players.filter(function (p) { return p.round === live.round; }).slice().sort(function (a, b) { return b.value - a.value || b.correct - a.correct; });
+  box.innerHTML = '<table><thead><tr><th></th><th>Alumno</th><th class="hide-sm">Parque</th><th style="text-align:right">Valor</th><th style="text-align:right">✓ / ✗</th><th style="text-align:right">Aciertos</th></tr></thead><tbody>' +
+    list.map(function (p, i) {
+      var t = p.correct + p.wrong, a = t ? Math.round(p.correct / t * 100) : 0;
+      return "<tr" + (p.online || final ? "" : ' style="opacity:.5"') + "><td>" + (i + 1) + '</td><td><div class="who">' + av(p) + "<span>" + esc(p.name) + "</span>" + chipStage(p) + '</div></td><td class="hide-sm"><div class="mini">' + (p.items || []).map(function (id) { return PK.art(id); }).join("") + '</div></td><td class="n">' + money(p.value) + '</td><td class="n">' + p.correct + " / " + p.wrong + '</td><td class="n">' + (t ? '<span class="acc ' + accCls(a) + '">' + a + "%</span>" : "–") + "</td></tr>";
+    }).join("") + "</tbody></table>";
+}
+function tick() {
+  cancelAnimationFrame(raf);
+  (function f() {
+    if (!live || live.status !== "playing") return;
+    var left = Math.max(0, (live.ends_at - now()) / 1000), tot = (live.ends_at - live.start_at) / 1000, c = $("#clk"), b = $("#tb");
+    var pre = live.start_at - now();
+    if (c) { c.textContent = pre > 0 ? "Empieza en " + Math.ceil(pre / 1000) : Math.floor(left / 60) + ":" + ("0" + Math.floor(left % 60)).slice(-2); c.classList.toggle("low", left < 20 && pre <= 0); c.style.fontSize = pre > 0 ? "22px" : ""; }
+    if (b) b.style.transform = "scaleX(" + Math.min(1, left / tot) + ")";
+    if (left <= 0) { onState(); return; }
+    raf = requestAnimationFrame(f);
+  })();
+}
+
+/* ---------- Resultados ---------- */
+var finalKey = "";
+function screenResults() {
+  var list = players.filter(function (p) { return p.round === live.round; }).slice().sort(function (a, b) { return b.value - a.value || b.correct - a.correct; });
+  var key = live.round + "|" + list.map(function (p) { return p.id + p.value + p.correct; }).join(",");
+  if (screen === "res" && finalKey === key) return;
+  screen = "res"; finalKey = key;
+  var topL = [list[1], list[0], list[2]], cls = ["p2", "p1", "p3"], place = [2, 1, 3], c = 0, w = 0;
+  list.forEach(function (p) { c += p.correct; w += p.wrong; });
+  render(top('<h1>¡Terminó la ronda!</h1><p class="lead">MOVA Park · ' + esc(catsLabel(live.settings || {})) + "</p>") +
+    '<div class="podium">' + topL.map(function (p, i) { return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.name) + '</b><div class="bar"><span>' + place[i] + "°</span><small>" + money(p.value) + "</small></div></div>" : "<div></div>"; }).join("") + "</div>" +
+    '<div class="stat"><span><b>' + list.length + "</b>Alumnos</span><span><b>" + (c + w) + "</b>Respuestas</span><span><b>" + (c + w ? Math.round(c / (c + w) * 100) + "%" : "–") + '</b>Aciertos del grupo</span></div>' +
+    '<div class="label">Reporte</div><div id="tbl"></div>' +
+    '<p class="note">Los alumnos con menos de 60% de aciertos aparecen en rojo: conviene repasar con ellos.</p>' +
+    '<div class="row"><button class="btn primary" id="again">Otra ronda</button><button class="btn ghost" id="opts">Cambiar opciones</button></div>' +
+    '<p class="note"><a href="#" id="close" style="color:var(--muted)">Cerrar sesión de juego</a></p>');
+  drawTable($("#tbl"), true);
+  $("#again").onclick = async function () { this.disabled = true; try { await rpc("live_start", { p_code: live.code }); screen = ""; tick(); } catch (e) { toast(e.message); this.disabled = false; } };
+  $("#opts").onclick = function () { screenSetup(true); };
+  $("#close").onclick = function (e) { e.preventDefault(); closeRoom(); };
+}
+async function closeRoom() {
+  if (!confirm("¿Cerrar la sesión? Los alumnos saldrán del juego.")) return;
+  try { await rpc("live_close", { p_code: live.code }); } catch (e) {}
+  try { localStorage.removeItem(K_HOST); } catch (e) {}
+  stop(); live = null; players = []; screenSetup(false);
+}
+
+/* ---------- Ciclo ---------- */
+function onState() {
+  if (!live) return;
+  if (live.status === "closed") { try { localStorage.removeItem(K_HOST); } catch (e) {} stop(); screenSetup(false); return; }
+  if (live.status === "lobby") { screenLobby(); return; }
+  if (live.status === "playing" && now() < live.ends_at) { var was = screen; screenPlay(); if (was !== screen) tick(); return; }
+  screenResults();
+}
+function stop() { clearInterval(poll); poll = null; cancelAnimationFrame(raf); }
+function start() {
+  stop();
+  var go = function () { if (!live || document.visibilityState !== "visible") return; rpc("live_host_state", { p_code: live.code }).then(onState).catch(function () {}); };
+  poll = setInterval(go, 2000); onState(); go();
+}
+async function boot2() {
+  var saved = null; try { saved = localStorage.getItem(K_HOST); } catch (e) {}
+  if (saved) {
+    try { await rpc("live_host_state", { p_code: saved }); if (live && live.status !== "closed") { screen = ""; start(); return; } } catch (e) {}
+    try { localStorage.removeItem(K_HOST); } catch (e) {}
+  }
+  live = null; screenSetup(false);
+}
+document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible" && live) rpc("live_host_state", { p_code: live.code }).then(onState).catch(function () {}); });
+(async function () {
+  try { session = JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) {}
+  if (session) { try { await token(); if (await rpc("is_admin")) { boot2(); return; } } catch (e) {} }
+  session = null; screenLogin();
+})();
+})();
+</script>
+</body>
+</html>
