@@ -91,8 +91,8 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 </head>
 <body>
 <div class="wrap"><div class="card" id="app"></div></div>
-<script src="mova-park.js"></script>
-<script src="mova-bingo.js"></script>
+<script src="mova-park.js?v=40"></script>
+<script src="mova-bingo.js?v=40"></script>
 <script>
 (function () {
 var SB_URL = "https://fclafxrkibvcjktrgznt.supabase.co", SB_KEY = "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6", STORE = "mova_admin_session", K_HOST = "mova_live_host";
@@ -165,7 +165,7 @@ function screenSetup(edit) {
       h += '<div class="label">Tema</div>' + BG.GROUPS.map(function (g) { return '<div class="glab">' + esc(g[1]) + '</div><div class="grid c3 cats">' + BG.TOPICS.filter(function (t) { return t.g === g[0]; }).map(function (t) { return '<button class="choice" data-k="topic" data-v="' + t.id + '" aria-pressed="' + (s.topic === t.id) + '">' + esc(t.name) + (t.sub ? "<small>" + esc(t.sub) + "</small>" : "") + "</button>"; }).join("") + "</div>"; }).join("") +
         '<div class="label">Tarjeta</div><div class="grid c3">' + [3, 4, 5].map(function (n) { var ok = okS.indexOf(n) >= 0; return '<button class="choice" data-k="size" data-v="' + n + '" aria-pressed="' + (Number(s.size) === n) + '"' + (ok ? "" : " disabled style=\"opacity:.4\"") + ">" + n + "×" + n + "<small>" + (ok ? (n === 3 ? "Kids" : n === 4 ? "Children" : "Teens · centro libre") : "este tema es corto") + "</small></button>"; }).join("") + "</div>" +
         '<div class="label">Jugada para ganar</div><div class="grid c3 cats">' + BG.PATTERNS.map(function (p) { return '<button class="choice" data-k="pattern" data-v="' + p.id + '" aria-pressed="' + (s.pattern === p.id) + '">' + esc(p.name) + "<small>" + esc(p.sub) + "</small></button>"; }).join("") + "</div>" +
-        '<div class="label">Cómo se canta</div><div class="grid c2"><button class="choice" data-k="show" data-v="audio" aria-pressed="' + (s.show !== "text") + '">Solo escuchar<small>practican listening</small></button><button class="choice" data-k="show" data-v="text" aria-pressed="' + (s.show === "text") + '">Escuchar y leer<small>la palabra sale escrita</small></button></div>' +
+        '<div class="label">Cómo se canta</div><div class="grid c3">' + [["audio", "Only listen", "solo escuchan"], ["text", "Listen and read", "escuchan y la ven escrita"], ["read", "Only read", "solo la leen, sin sonido"]].map(function (o) { return '<button class="choice" data-k="show" data-v="' + o[0] + '" aria-pressed="' + ((s.show || "audio") === o[0]) + '">' + o[1] + "<small>" + o[2] + "</small></button>"; }).join("") + "</div>" +
         '<div class="label">Velocidad</div><div class="grid c2"><button class="choice" data-k="interval" data-v="8" aria-pressed="' + (Number(s.interval) !== 10) + '">Cada 8 segundos</button><button class="choice" data-k="interval" data-v="10" aria-pressed="' + (Number(s.interval) === 10) + '">Cada 10 segundos</button></div>' +
         '<p class="note">La app canta sola las ' + BG.topic(s.topic).words.length + ' palabras (unos ' + Math.ceil(s.secs / 60) + ' minutos). Se termina cuando 3 alumnos hacen BINGO.</p>';
     } else {
@@ -188,7 +188,7 @@ function screenSetup(edit) {
     $("#go").onclick = async function () {
       var b = this; b.disabled = true; app.onclick = null;
       try {
-        if (gameOf(s) === "bingo") fixBingo(s); else if ([300, 480, 600].indexOf(Number(s.secs)) < 0) s.secs = 480;
+        if (gameOf(s) === "bingo") { fixBingo(s); BG.pack(s); } else if ([300, 480, 600].indexOf(Number(s.secs)) < 0) s.secs = 480;
         settings = s;
         if (edit) await rpc("live_lobby", { p_code: live.code, p_settings: s }); else { await rpc("live_create", { p_settings: s }); try { localStorage.setItem(K_HOST, live.code); } catch (e) {} }
         screen = ""; start();
@@ -198,6 +198,7 @@ function screenSetup(edit) {
   draw();
 }
 function catsLabel(s) { return (s.cats || []).map(function (id) { var c = PK.CATS.find(function (x) { return x.id === id; }); return c ? c.name : id; }).join(" · "); }
+function showLabel(s) { return s.show === "text" ? "Listen and read" : s.show === "read" ? "Only read" : "Only listen"; }
 function patLabel(s) { var p = BG.PATTERNS.find(function (x) { return x.id === s.pattern; }); return p ? p.name : "Línea"; }
 function levelLabel(s) { return s.level === "kids" ? "Todos en Kids" : s.level === "children" ? "Todos en Children" : s.level === "teens" ? "Todos en Teens" : "Cada quien su nivel"; }
 
@@ -208,8 +209,8 @@ function screenLobby() {
     screen = "lobby";
     var s = live.settings || {}; if (gameOf(s) === "bingo") lobbyKey = "";
     render(top('<h1>Sala de espera</h1><p class="lead">Pide a tus alumnos entrar a la app → Juegos → Retos MOVA → <b>Unirme con código</b>.</p>') +
-      '<div class="code-card"><small>CÓDIGO DE LA SESIÓN</small><div class="code">' + esc(live.code) + "</div><p>" + (gameOf(s) === "bingo" ? "MOVA Bingo · " + esc(BG.topic(s.topic).name) : "MOVA Park · " + Number(s.secs || 480) / 60 + " minutos") + "</p>" +
-      '<div class="chips">' + (gameOf(s) === "bingo" ? '<span class="chip">Tarjeta ' + s.size + "×" + s.size + '</span><span class="chip">' + esc(patLabel(s)) + '</span><span class="chip">' + (s.show === "text" ? "Escuchar y leer" : "Solo escuchar") + "</span>" : '<span class="chip">' + esc(catsLabel(s)) + '</span><span class="chip">' + esc(levelLabel(s)) + "</span>") + "</div></div>" +
+      '<div class="code-card"><small>CÓDIGO DE LA SESIÓN</small><div class="code">' + esc(live.code) + "</div><p>" + (gameOf(s) === "bingo" ? "MOVA Bingo · " + esc(BG.resolve(s).name) : "MOVA Park · " + Number(s.secs || 480) / 60 + " minutos") + "</p>" +
+      '<div class="chips">' + (gameOf(s) === "bingo" ? '<span class="chip">Tarjeta ' + s.size + "×" + s.size + '</span><span class="chip">' + esc(patLabel(s)) + '</span><span class="chip">' + showLabel(s) + "</span>" : '<span class="chip">' + esc(catsLabel(s)) + '</span><span class="chip">' + esc(levelLabel(s)) + "</span>") + "</div></div>" +
       '<div class="row"><a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent("¡Vamos a jugar " + (gameOf(live.settings) === "bingo" ? "MOVA Bingo" : "MOVA Park") + "! Entra aquí: " + link + " · Código: " + live.code) + '">Mandar por WhatsApp</a><button class="btn ghost" id="opts">Cambiar opciones</button></div>' +
       '<div class="label" id="cnt">Alumnos</div><div id="pl"></div>' +
       '<div class="row" style="margin-top:20px"><button class="btn primary" id="start">Empezar</button></div>' +
@@ -301,12 +302,12 @@ function ordEn(n) { var t = n % 100, u = n % 10; return n + (t >= 11 && t <= 13 
 function bIt(p) { return p.items && !Array.isArray(p.items) ? p.items : {}; }
 function bSort(list) { return list.slice().sort(function (a, b) { var A = bIt(a), B = bIt(b); if (A.bingo != null || B.bingo != null) return (A.bingo == null ? 1e12 : A.bingo) - (B.bingo == null ? 1e12 : B.bingo); return (A.miss == null ? 99 : A.miss) - (B.miss == null ? 99 : B.miss) || b.correct - a.correct; }); }
 var bLastN = -1, bEnded = 0;
-function bInfo() { var st = live.settings || {}, key = live.code + "|" + live.round + "|" + live.start_at, t = BG.topic(st.topic), order = BG.callOrder(st, key), iv = (Number(st.interval) || 8) * 1000, el = now() - live.start_at, n = el < 0 ? 0 : Math.min(order.length, Math.floor(el / iv) + 1); return { st: st, t: t, order: order, iv: iv, el: el, n: n }; }
+function bInfo() { var st = live.settings || {}, key = live.code + "|" + live.round + "|" + live.start_at, t = BG.resolve(st), order = BG.callOrder(st, key), iv = (Number(st.interval) || 8) * 1000, el = now() - live.start_at, n = el < 0 ? 0 : Math.min(order.length, Math.floor(el / iv) + 1); return { st: st, t: t, order: order, iv: iv, el: el, n: n }; }
 function screenBingo() {
   var I = bInfo();
   if (screen !== "bingo" + live.round) {
     screen = "bingo" + live.round; bLastN = -1;
-    render(top() + '<div class="hud"><div><h2>MOVA Bingo</h2><div style="color:var(--muted);font-size:13px;font-weight:600">' + esc(I.t.name) + " · " + esc(patLabel(I.st)) + " · tarjeta " + I.st.size + "×" + I.st.size + '</div></div><span class="spacer"></span><button class="btn ghost" id="mute" style="width:auto;padding:10px 16px;font-size:14px">' + (muted ? "Sonido: no" : "Sonido: sí") + "</button></div>" +
+    render(top() + '<div class="hud"><div><h2>MOVA Bingo</h2><div style="color:var(--muted);font-size:13px;font-weight:600">' + esc(I.t.name) + " · " + esc(patLabel(I.st)) + " · " + esc(showLabel(I.st)) + " · tarjeta " + I.st.size + "×" + I.st.size + '</div></div><span class="spacer"></span><button class="btn ghost" id="mute" style="width:auto;padding:10px 16px;font-size:14px">' + (muted ? "Sonido: no" : "Sonido: sí") + "</button></div>" +
       '<div class="code-card" style="margin-top:12px"><small id="bc">PREPÁRENSE</small><div class="code" id="bw" style="letter-spacing:1px;font-size:clamp(34px,9vw,56px)">…</div><p id="bn"></p></div>' +
       '<div class="tbar"><i id="tb" style="transition:none"></i></div><div class="chips" id="bh" style="justify-content:flex-start"></div>' +
       '<div class="label">Alumnos</div><div id="tbl"></div><div class="row" style="margin-top:18px"><button class="btn ghost" id="end">Terminar ahora</button></div>');
@@ -332,7 +333,7 @@ function bingoTick() {
     var I = bInfo(), bw = $("#bw"), bc = $("#bc"), bn = $("#bn"), tb = $("#tb");
     if (I.n !== bLastN) {
       bLastN = I.n;
-      if (I.n > 0) { var w = I.t.words[I.order[I.n - 1]]; bw.textContent = w.say + (w.say !== w.show && !/^\d+$/.test(w.show) ? " → " + w.show : /^\d+$/.test(w.show) ? " (" + w.show + ")" : ""); bc.textContent = "PALABRA " + I.n + " DE " + I.order.length; speak(w.say);
+      if (I.n > 0) { var w = I.t.words[I.order[I.n - 1]]; bw.textContent = w.say + (w.say !== w.show && !/^\d+$/.test(w.show) ? " → " + w.show : /^\d+$/.test(w.show) ? " (" + w.show + ")" : ""); bc.textContent = "PALABRA " + I.n + " DE " + I.order.length; if (I.st.show !== "read") speak(w.say);
         $("#bh").innerHTML = I.order.slice(0, I.n - 1).reverse().map(function (wi) { return '<span class="chip">' + esc(I.t.words[wi].say) + "</span>"; }).join(""); }
     }
     var pre = live.start_at - now();
@@ -348,7 +349,7 @@ function screenBingoRes() {
   if (screen === "res" && finalKey === key) return; screen = "res"; finalKey = key;
   var topL = [wins[1], wins[0], wins[2]], cls = ["p2", "p1", "p3"], place = [2, 1, 3], cnt = {};
   list.forEach(function (p) { (bIt(p).bad || []).forEach(function (w) { cnt[w] = (cnt[w] || 0) + 1; }); });
-  var conf = Object.keys(cnt).sort(function (a, b) { return cnt[b] - cnt[a]; }).slice(0, 10), t = BG.topic((live.settings || {}).topic);
+  var conf = Object.keys(cnt).sort(function (a, b) { return cnt[b] - cnt[a]; }).slice(0, 10), t = BG.resolve(live.settings || {});
   render(top('<h1>Round over!</h1><p class="lead">MOVA Bingo · ' + esc(t.name) + "</p>") +
     (wins.length ? '<div class="podium">' + topL.map(function (p, i) { return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.name) + '</b><div class="bar"><span>' + ["", "1st", "2nd", "3rd"][place[i]] + "</span><small>BINGO</small></div></div>" : "<div></div>"; }).join("") + "</div>" : '<p class="lead" style="margin-top:14px">Nadie hizo BINGO en esta ronda.</p>') +
     (conf.length ? '<div class="label">Palabras que marcaron sin que se cantaran</div><div class="chips" style="justify-content:flex-start">' + conf.map(function (w) { return '<span class="chip" style="background:#FBDADA">' + esc(w) + (cnt[w] > 1 ? " ×" + cnt[w] : "") + "</span>"; }).join("") + '</div><p class="note" style="text-align:left">Son las que confundieron al escuchar: buen material para repasar.</p>' : "") +

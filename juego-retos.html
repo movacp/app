@@ -294,8 +294,8 @@ h2{font-weight:800;font-size:22px;text-align:center;margin:12px 0 4px}
 <main class="app"><div class="panel" id="panel"></div></main>
 <script src="mova-auth.js"></script>
 <script src="toefl-bank.js"></script>
-<script src="mova-park.js"></script>
-<script src="mova-bingo.js"></script>
+<script src="mova-park.js?v=40"></script>
+<script src="mova-bingo.js?v=40"></script>
 <script>
 (function(){
 "use strict";
@@ -1355,7 +1355,7 @@ function liveLobby() {
   if (liveScreen !== "lobby" + liveGame()) {
     liveScreen = "lobby" + liveGame();
     var isB = liveGame() === "bingo";
-    render(topBar(true) + '<div class="center"><span class="pkbadge">MOVA LIVE</span></div>' + (isB ? '<h1>MOVA Bingo</h1><p class="lead">Escucha cada palabra en inglés, pon tu fichita en tu tarjeta y completa la jugada para gritar BINGO!</p><div class="pkhero bhero">' + [0, 1, 2, 3].map(function (k) { return '<span>' + BG.chip + "</span>"; }).join("") + "</div>"
+    render(topBar(true) + '<div class="center"><span class="pkbadge">MOVA LIVE</span></div>' + (isB ? '<h1>MOVA Bingo</h1><p class="lead">' + ((live.settings || {}).show === "read" ? "Read each word" : (live.settings || {}).show === "text" ? "Listen to and read each word" : "Listen to each word") + ', put a coin on your card and complete the pattern to win. BINGO!</p><div class="pkhero bhero">' + [0, 1, 2, 3].map(function (k) { return '<span>' + BG.chip + "</span>"; }).join("") + "</div>"
         : '<h1>MOVA Park</h1><p class="lead">Contesta bien para ganar monedas y construir el mejor parque de diversiones.</p><div class="pkhero">' + ["carousel", "wheel", "coaster", "castle"].map(function (id) { return '<span>' + PK.art(id) + "</span>"; }).join("") + "</div>") +
       '<div class="wait"><span class="dots3"><i></i><i></i><i></i></span> Esperando a que tu maestra empiece</div>' +
       '<div class="label">En la sesión</div><div class="plist" id="lpl"></div>');
@@ -1522,7 +1522,7 @@ var BG = window.MOVA_BINGO;
 function liveGame() { return (live && live.settings && live.settings.game) || "park"; }
 function bingoKey(lv) { return lv.code + "|" + lv.round + "|" + lv.start_at; }
 function bingoGame(lv, meP) {
-  var s = lv.settings || {}, t = BG.topic(s.topic), size = Number(s.size) || 3, pat = s.pattern || "line", iv = (Number(s.interval) || 8) * 1000;
+  var s = lv.settings || {}, t = BG.resolve ? BG.resolve(s) : BG.topic(s.topic), size = Number(s.size) || 3, pat = s.pattern || "line", iv = (Number(s.interval) || 8) * 1000;
   var key = bingoKey(lv), order = BG.callOrder(s, key), N = order.length, cells = BG.card(s, key, me), L = BG.lines(size, pat);
   var marks = {}, wrongCells = {}, bad = [], wrong = 0, won = null, cool = 0, stopped = false, done = false, timers = [], raf = 0, lastN = -1, pushT = 0, lastPush = 0;
   var round = lv.round, startAt = lv.start_at, endAt = lv.ends_at, patName = (BG.PATTERNS.find(function (p) { return p.id === pat; }) || BG.PATTERNS[0]).en;
@@ -1544,14 +1544,14 @@ function bingoGame(lv, meP) {
   function word(n) { return n > 0 ? t.words[order[n - 1]] : null; }
   function drawCall(n, fresh) {
     var box = $("#bcall"); if (!box) return;
-    var w = word(n), text = s.show === "text";
+    var w = word(n), mode = s.show === "text" || s.show === "read" ? s.show : "audio", text = mode !== "audio", sound = mode !== "read";
     if (!w) { box.innerHTML = '<div class="bnext">Get ready…</div>'; return; }
     box.innerHTML = '<div class="bcnt">Word ' + n + " of " + N + "</div>" +
       (text ? '<div class="bword">' + esc(w.say) + "</div>" : '<div class="bword listen-only">' + ico("sound", 30) + " Listen!</div>") +
-      '<button class="bre" id="bre" aria-label="Escuchar otra vez">' + ico("sound", 18) + " Again</button>" +
+      (sound ? '<button class="bre" id="bre" aria-label="Escuchar otra vez">' + ico("sound", 18) + " Again</button>" : "") +
       (text && n > 1 ? '<div class="bhist">' + order.slice(Math.max(0, n - 5), n - 1).reverse().map(function (wi) { return "<span>" + esc(t.words[wi].say) + "</span>"; }).join("") + "</div>" : "");
-    $("#bre").onclick = function () { speak(w.say, "en-US"); };
-    if (fresh) { box.classList.remove("fresh"); void box.offsetWidth; box.classList.add("fresh"); speak(w.say, "en-US"); }
+    if (sound) $("#bre").onclick = function () { speak(w.say, "en-US"); };
+    if (fresh) { box.classList.remove("fresh"); void box.offsetWidth; box.classList.add("fresh"); if (sound) speak(w.say, "en-US"); }
   }
   function drawCard() {
     var g = $("#bgrid"); if (!g) return;
@@ -1576,13 +1576,13 @@ function bingoGame(lv, meP) {
     if (L.some(function (l) { return l.every(function (i) { return okCell(i, n); }); })) {
       won = Math.max(1, Math.round(serverNow() - startAt)); sfx.go(); confetti(true); push(true);
       var b = $("#bbingo"); if (b) { b.textContent = "BINGO!"; b.disabled = true; b.classList.add("won"); }
-      $("#bwrap").insertAdjacentHTML("beforeend", '<div class="bwin"><div class="bwin-in"><b>BINGO!</b><span>Great listening! Wait for the round to end to see the winners.</span></div></div>');
+      $("#bwrap").insertAdjacentHTML("beforeend", '<div class="bwin"><div class="bwin-in"><b>BINGO!</b><span>' + (s.show === "read" ? "Great reading!" : "Great listening!") + ' Wait for the round to end to see the winners.</span></div></div>');
       return;
     }
     var marked = L.some(function (l) { return l.every(function (i) { return cells[i] < 0 || marks[i]; }); });
     sfx.bad(); var g = $("#bgrid"); if (g) { g.classList.remove("shake"); void g.offsetWidth; g.classList.add("shake"); }
     if (marked) { wrong++; cool = Date.now() + 3000; say("Check your card! One of your words wasn't called.", "bad"); push(); }
-    else say("Not yet! Keep listening.");
+    else say(s.show === "read" ? "Not yet! Keep reading." : "Not yet! Keep listening.");
   }
   function finish() {
     if (done) return; done = true; cancelAnimationFrame(raf); push(true);
@@ -1611,7 +1611,7 @@ function bingoGame(lv, meP) {
     frame();
   }
   (function countdown() {
-    render('<div class="count"><div><div class="num" id="cd">3</div><p>MOVA Bingo · ' + esc(t.name) + '</p><p style="margin-top:6px;font-size:14px">Listen to each word and put a coin on it. Complete the pattern (' + esc(patName) + ') and tap BINGO!</p></div></div>');
+    render('<div class="count"><div><div class="num" id="cd">3</div><p>MOVA Bingo · ' + esc(t.name) + '</p><p style="margin-top:6px;font-size:14px">' + (s.show === "read" ? "Read each word" : s.show === "text" ? "Listen to and read each word" : "Listen to each word") + ' and put a coin on it. Complete the pattern (' + esc(patName) + ') and tap BINGO!</p></div></div>');
     var last = null;
     (function cd() {
       if (stopped) return;
