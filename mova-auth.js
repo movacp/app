@@ -159,6 +159,10 @@
     ".mva-x{position:absolute;top:12px;right:12px;width:34px;height:34px;border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font-size:20px;cursor:pointer;z-index:2}" +
     ".mva-info{background:#F3EFE8;border-radius:14px;padding:12px 14px;font-size:14px;margin-top:4px}" +
     ".mva-info div{display:flex;justify-content:space-between;gap:10px;padding:3px 0}.mva-info span{color:#7A7D84}" +
+    ".mva-legal{font-size:12.5px;color:#6B7591;text-align:center;margin:14px 0 0;line-height:1.4}.mva-legal a{color:#1E3A5F;font-weight:600}" +
+    ".mva-priv{display:flex;justify-content:center;margin:34px 0 10px}" +
+    ".mva-priv a{display:inline-flex;align-items:center;gap:8px;color:var(--muted,#6B7591);font:500 13px var(--font-ui,Poppins,system-ui,sans-serif);text-decoration:none;padding:8px 14px;border-radius:999px;border:1px solid var(--line,#DAD4CA)}" +
+    ".mva-priv svg{width:15px;height:15px}" +
     ".mva-toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translateX(-50%);z-index:2147483641;background:#1E3A5F;color:#fff;" +
     "padding:10px 16px;border-radius:12px;font:500 14px Poppins,system-ui,sans-serif;box-shadow:0 10px 24px rgba(0,0,0,.2)}";
 
@@ -198,7 +202,8 @@
       '<form id="mva-form" autocomplete="on"><label for="mva-u">Usuario</label>' +
       '<input id="mva-u" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" placeholder="ejemplo: luciae.m">' +
       '<label for="mva-p">Contraseña</label><input id="mva-p" type="password" autocomplete="current-password">' +
-      '<button class="mva-btn" type="submit" id="mva-go">Entrar</button><div class="mva-err" id="mva-err"></div></form>');
+      '<button class="mva-btn" type="submit" id="mva-go">Entrar</button><div class="mva-err" id="mva-err"></div></form>' +
+      '<p class="mva-legal">Al entrar, aceptas el <a href="aviso-privacidad.html">aviso de privacidad</a>.</p>');
     b.querySelector("#mva-u").focus();
     b.querySelector("#mva-form").onsubmit = function (e) {
       e.preventDefault();
@@ -244,6 +249,14 @@
     renderChip();
   }
 
+  function privacyLink() {
+    if (gameSlug() || !/^#\/?mova\/?$/.test(location.hash)) return;
+    var main = document.getElementById("main"); if (!main || main.querySelector(".mva-priv")) return;
+    var d = document.createElement("div"); d.className = "mva-priv wrap";
+    d.innerHTML = '<a href="aviso-privacidad.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="10" width="14" height="10" rx="2.5"/><path d="M8.5 10V7.5a3.5 3.5 0 0 1 7 0V10"/></svg>Aviso de privacidad</a>';
+    main.appendChild(d);
+  }
+
   /* ---------- Arranque ---------- */
   window.MovaAuth = { save: save, user: function () { return user; }, login: showLogin };
   function boot() {
@@ -251,7 +264,11 @@
     flushQueue(); checkSession();
     watchResults();
     startTracking();
-    if (!gameSlug()) mountChip();
+    if (!gameSlug()) {
+      mountChip();
+      window.addEventListener("hashchange", function () { setTimeout(privacyLink, 400); });
+      setTimeout(privacyLink, 400);
+    }
   }
   document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", boot) : boot();
 })();
