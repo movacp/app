@@ -11,7 +11,7 @@
 <style>
 :root{
   --page:#1B2A55;--card:#FFFFFF;--ink:#1B2A55;--muted:#5E6886;--track:#EEF1F8;--edge:#DCE3F0;
-  --coral:#FF8A6B;--sky:#5BC0F0;--gold:#F2B632;--mint:#4FD1A5;--pink:#FF8FB1;--lila:#B98CFF;--ok:#2FB57E;--bad:#E5484D;
+  --coral:#FF8A6B;--sky:#5BC0F0;--gold:#FCE38A;--mint:#4FD1A5;--pink:#FF8FB1;--lila:#B98CFF;--ok:#2FB57E;--bad:#E5484D;
   color-scheme:light;box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
 }
@@ -21,7 +21,7 @@
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;min-height:100%;color:var(--ink);font-family:'Poppins','Century Gothic','Avenir Next','Segoe UI',system-ui,sans-serif;
   background-color:var(--page);
-  background-image:radial-gradient(circle,#FF8FB1 6px,transparent 7px),radial-gradient(circle,#5BC0F0 6px,transparent 7px),radial-gradient(circle,#F2B632 6px,transparent 7px),radial-gradient(circle,#4FD1A5 6px,transparent 7px),radial-gradient(circle,#B98CFF 5px,transparent 6px);
+  background-image:radial-gradient(circle,#FF8FB1 6px,transparent 7px),radial-gradient(circle,#5BC0F0 6px,transparent 7px),radial-gradient(circle,#FCE38A 6px,transparent 7px),radial-gradient(circle,#4FD1A5 6px,transparent 7px),radial-gradient(circle,#B98CFF 5px,transparent 6px);
   background-size:150px 150px;background-position:0 0,75px 38px,38px 95px,112px 128px,120px 70px;-webkit-tap-highlight-color:transparent}
 button{font-family:inherit;color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible{outline:4px solid var(--gold);outline-offset:3px}
@@ -46,8 +46,8 @@ h2{font-weight:800;font-size:22px;text-align:center;margin:12px 0 4px}
 .ribbon{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:10px 0 2px}
 .chip{border-radius:999px;padding:5px 12px;font-weight:700;font-size:12.5px;color:#1B2A55;display:inline-flex;align-items:center;gap:6px}
 .chip svg{width:14px;height:14px}
-.primary{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:20px;border:0;border-radius:999px;background:var(--gold);color:#1B2A55;font-weight:800;font-size:20px;padding:15px;box-shadow:0 6px 0 #C68E14}
-.primary:active:not(:disabled){transform:translateY(4px);box-shadow:0 2px 0 #C68E14}
+.primary{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:20px;border:0;border-radius:999px;background:var(--gold);color:#1B2A55;font-weight:800;font-size:20px;padding:15px;box-shadow:0 6px 0 #E3C462}
+.primary:active:not(:disabled){transform:translateY(4px);box-shadow:0 2px 0 #E3C462}
 .primary svg{width:22px;height:22px}
 .ghost{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:12px;border:3px solid var(--ink);background:transparent;border-radius:999px;font-weight:700;font-size:16.5px;padding:12px;text-decoration:none;color:var(--ink)}
 .link{display:block;margin:14px auto 0;border:0;background:none;font-weight:600;font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
@@ -97,7 +97,7 @@ h2{font-weight:800;font-size:22px;text-align:center;margin:12px 0 4px}
 .settings{margin-top:6px;border-top:2px dashed var(--edge);padding-top:4px}
 /* Cuenta regresiva */
 .count{display:grid;place-items:center;min-height:360px;text-align:center}
-.count .num{margin:0 auto;width:170px;height:170px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:96px;color:#fff;background:var(--coral);box-shadow:0 8px 0 rgba(0,0,0,.15);animation:pulse 1s ease-in-out infinite}
+.count .num{margin:0 auto;width:170px;height:170px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:96px;color:#1B2A55;background:var(--coral);box-shadow:0 8px 0 rgba(0,0,0,.15);animation:pulse 1s ease-in-out infinite}
 .count p{font-weight:700;font-size:17px;color:var(--muted);margin:18px 0 0}
 @keyframes pulse{0%{transform:scale(.86)}30%{transform:scale(1.04)}100%{transform:scale(1)}}
 /* Juego */
@@ -142,7 +142,7 @@ h2{font-weight:800;font-size:22px;text-align:center;margin:12px 0 4px}
 .inner{position:absolute;inset:0;transition:transform .4s cubic-bezier(.3,1.2,.5,1);transform-style:preserve-3d}
 .mcard.up .inner,.mcard.done .inner{transform:rotateY(180deg)}
 .face{position:absolute;inset:0;border-radius:16px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:4px}
-.back{background-color:#22346A;background-image:radial-gradient(circle,#FF8FB1 3px,transparent 4px),radial-gradient(circle,#F2B632 3px,transparent 4px),radial-gradient(circle,#4FD1A5 3px,transparent 4px);background-size:34px 34px;background-position:4px 4px,21px 12px,12px 24px;box-shadow:0 4px 0 #101a3a}
+.back{background-color:#22346A;background-image:radial-gradient(circle,#FF8FB1 3px,transparent 4px),radial-gradient(circle,#FCE38A 3px,transparent 4px),radial-gradient(circle,#4FD1A5 3px,transparent 4px);background-size:34px 34px;background-position:4px 4px,21px 12px,12px 24px;box-shadow:0 4px 0 #101a3a}
 .back span{background:#fff;color:#1B2A55;font-weight:800;font-size:12px;letter-spacing:.06em;border-radius:8px;padding:3px 7px}
 .front{transform:rotateY(180deg);background:var(--card);border:3px solid var(--c);box-shadow:0 4px 0 var(--c)}
 .front .w{font-weight:800;font-size:clamp(14px,4vw,19px);line-height:1.1;text-align:center;word-break:break-word}
@@ -176,7 +176,7 @@ h2{font-weight:800;font-size:22px;text-align:center;margin:12px 0 4px}
 .pod .bar{border-radius:16px 16px 6px 6px;color:#1B2A55;font-weight:800;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
 .pod .bar span{font-size:26px;line-height:1}
 .pod .bar small{font-size:12px;font-weight:700;margin-top:4px}
-.pod.p1 .bar{height:128px;background:var(--gold)}.pod.p2 .bar{height:96px;background:var(--sky)}.pod.p3 .bar{height:74px;background:var(--coral)}
+.pod.p1 .bar{height:128px;background:var(--gold);animation:glow 1.6s ease-in-out infinite}@keyframes glow{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--gold) 45%,transparent)}}.pod.p2 .bar{height:96px;background:var(--sky)}.pod.p3 .bar{height:74px;background:var(--coral)}
 .note{text-align:center;font-weight:600;font-size:13px;color:var(--muted);margin:10px 0 0}
 .toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#1B2A55;color:#fff;font-weight:600;font-size:14px;border-radius:999px;padding:10px 18px;z-index:50;box-shadow:0 10px 24px rgba(0,0,0,.3);max-width:90vw;text-align:center}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:20}
@@ -218,7 +218,7 @@ var IC = {
   wa: '<path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c.3 2.3 2.2 4.2 4.5 4.5l1.2-1.2 2 1-.5 1.7c-3.8.3-8-3.9-7.7-7.7l1.7-.5 1 2z" fill="currentColor" stroke="none"/>'
 };
 function ico(n, s) { return '<svg viewBox="0 0 24 24" width="' + (s || 20) + '" height="' + (s || 20) + '" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + IC[n] + "</svg>"; }
-var AVC = ["#FF8FB1", "#5BC0F0", "#F2B632", "#4FD1A5", "#B98CFF", "#FF8A6B"];
+var AVC = ["#FF8FB1", "#5BC0F0", "#FCE38A", "#4FD1A5", "#B98CFF", "#FF8A6B"];
 function avColor(id) { var h = 0; String(id).split("").forEach(function (c) { h = (h * 31 + c.charCodeAt(0)) >>> 0; }); return AVC[h % AVC.length]; }
 function ini(n) { return String(n || "?").replace(/\./g, "").split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0]; }).join("").toUpperCase(); }
 function av(p) { return '<span class="av" style="background:' + avColor(p.id) + '">' + esc(ini(p.name)) + "</span>"; }
@@ -241,11 +241,28 @@ var sfx = { ok: function () { tones([660, 880, 1175], .08, "triangle"); }, bad: 
 var synth = ("speechSynthesis" in window) ? window.speechSynthesis : null;
 function speak(t, lang) { if (!synth) return; try { synth.cancel(); var u = new SpeechSynthesisUtterance(t); u.lang = lang || "en-US"; u.rate = .9; var v = synth.getVoices().filter(function (x) { return x.lang.indexOf(u.lang.slice(0, 2)) === 0; }); if (v.length) u.voice = v.find(function (x) { return x.lang === u.lang; }) || v[0]; synth.speak(u); } catch (e) {} }
 
-/* Confeti */
-function confetti() {
-  var c = $("#fx"), x = c.getContext("2d"); c.width = innerWidth; c.height = innerHeight;
-  var cols = AVC, ps = []; for (var i = 0; i < 130; i++) ps.push({ x: innerWidth / 2, y: innerHeight / 3, vx: (Math.random() - .5) * 13, vy: Math.random() * -12 - 3, s: 5 + Math.random() * 6, c: cols[i % cols.length], r: Math.random() * 6 });
-  var t = 0; (function f() { x.clearRect(0, 0, c.width, c.height); ps.forEach(function (p) { p.vy += .35; p.x += p.vx; p.y += p.vy; p.r += .1; x.save(); x.translate(p.x, p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-p.s / 2, -p.s / 2, p.s, p.s * .6); x.restore(); }); if (++t < 150) requestAnimationFrame(f); else x.clearRect(0, 0, c.width, c.height); })();
+/* Sprinkles de celebración */
+var SPR = ["#FF8FB1", "#5BC0F0", "#FCE38A", "#4FD1A5", "#B98CFF", "#FF8A6B", "#FFFFFF"];
+function confetti(big) {
+  var c = $("#fx"), x = c.getContext("2d"), dpr = Math.min(2, window.devicePixelRatio || 1);
+  var W = innerWidth, H = innerHeight; c.width = W * dpr; c.height = H * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
+  var ps = [], dur = big ? 5200 : 3400;
+  function sprinkle(px, py, vx, vy) { return { x: px, y: py, vx: vx, vy: vy, l: 9 + Math.random() * 9, w: 3.6 + Math.random() * 1.6, c: SPR[Math.floor(Math.random() * SPR.length)], a: Math.random() * 6.28, va: (Math.random() - .5) * .25, dot: Math.random() < .18 }; }
+  for (var i = 0; i < (big ? 120 : 70); i++) { var ang = -Math.PI / 2 + (Math.random() - .5) * 1.9, sp = 8 + Math.random() * 10; ps.push(sprinkle(W / 2 + (Math.random() - .5) * 60, H * .42, Math.cos(ang) * sp, Math.sin(ang) * sp)); }
+  var t0 = performance.now(), rainUntil = t0 + dur - 1400;
+  (function f(now) {
+    if (now < rainUntil) for (var k = 0; k < (big ? 4 : 2); k++) ps.push(sprinkle(Math.random() * W, -20, (Math.random() - .5) * 1.5, 2 + Math.random() * 3));
+    x.clearRect(0, 0, W, H);
+    ps = ps.filter(function (p) { return p.y < H + 30; });
+    ps.forEach(function (p) {
+      p.vy = Math.min(p.vy + .22, 6.5); p.vx *= .985; p.x += p.vx + Math.sin((now / 400) + p.l) * .4; p.y += p.vy; p.a += p.va;
+      x.save(); x.translate(p.x, p.y); x.rotate(p.a); x.fillStyle = p.c;
+      if (p.dot) { x.beginPath(); x.arc(0, 0, p.w * .9, 0, 6.29); x.fill(); }
+      else { var r = p.w / 2; x.beginPath(); x.moveTo(-p.l / 2 + r, -r); x.lineTo(p.l / 2 - r, -r); x.arc(p.l / 2 - r, 0, r, -Math.PI / 2, Math.PI / 2); x.lineTo(-p.l / 2 + r, r); x.arc(-p.l / 2 + r, 0, r, Math.PI / 2, Math.PI * 1.5); x.fill(); }
+      x.restore();
+    });
+    if (now - t0 < dur + 2500 && ps.length) requestAnimationFrame(f); else x.clearRect(0, 0, W, H);
+  })(t0);
 }
 
 /* ---------- Misión Matemática (mismo banco de preguntas del juego) ---------- */
@@ -639,7 +656,7 @@ function drawResults() {
   var pos = list.findIndex(function (p) { return p.id === me; });
   $("#rt").textContent = pos === 0 ? "¡Ganaste!" : pos === 1 ? "¡Segundo lugar!" : pos === 2 ? "¡Tercer lugar!" : "¡Buen reto!";
   $("#rs").textContent = def.name + " · " + settingsLabel(room.game, room.settings);
-  if (pos >= 0 && pos < 3) { confetti(); sfx.go(); }
+  if (pos === 0) { confetti(true); sfx.go(); } else if (pos > 0 && pos < 3) { confetti(false); sfx.go(); }
   var top = [list[1], list[0], list[2]], cls = ["p2", "p1", "p3"], place = [2, 1, 3];
   box.innerHTML = '<div class="podium">' + top.map(function (p, i) {
     return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.id === me ? "Tú" : p.name) + '</b><div class="bar"><span>' + place[i] + "°</span><small>" + p.score + " pts</small></div></div>" : "<div></div>";
@@ -802,7 +819,7 @@ BUILD["sopa-de-letras"] = function (s) {
     return null;
   }
   var res = null; for (var n = Math.min(d.n, pool.length); n >= 4 && !res; n--) res = build(pool.slice(0, n));
-  var HC = ["#FF8FB1", "#5BC0F0", "#F2B632", "#4FD1A5", "#B98CFF", "#FF8A6B"];
+  var HC = ["#FF8FB1", "#5BC0F0", "#FCE38A", "#4FD1A5", "#B98CFF", "#FF8A6B"];
   var words = res.placed.map(function (w, i) { w.color = HC[i % HC.length]; w.found = false; return w; }).sort(function (a, b) { return a.word.localeCompare(b.word); });
   return { mount: function (stage, api) {
     stage.innerHTML = '<div class="qmeta"><span>' + esc(tp.name) + '</span><span id="wf">0 / ' + words.length + '</span></div><div class="grid-wrap" style="--fs:min(' + (88 / N).toFixed(1) + 'vw * .55,' + Math.round(300 / N) + 'px)"><div class="wgrid" id="wg" style="grid-template-columns:repeat(' + N + ',1fr)">' +
