@@ -52,7 +52,7 @@ h2{font-weight:800;font-size:22px;text-align:center;margin:12px 0 4px}
 .ghost{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:12px;border:3px solid var(--ink);background:transparent;border-radius:999px;font-weight:700;font-size:16.5px;padding:12px;text-decoration:none;color:var(--ink)}
 .link{display:block;margin:14px auto 0;border:0;background:none;font-weight:600;font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
 .choices{display:grid;gap:10px}
-.choices.c2{grid-template-columns:1fr 1fr}.choices.c3{grid-template-columns:repeat(3,1fr)}.choices.c4{grid-template-columns:repeat(4,1fr)}
+.choices.c2{grid-template-columns:1fr 1fr}.choices.c3{grid-template-columns:repeat(3,1fr)}.choices.c4{grid-template-columns:repeat(4,1fr)}.choices.c6{grid-template-columns:repeat(6,1fr);gap:6px}.choices.c6 .choice{padding:11px 2px}
 .choice{border:2px solid var(--edge);background:var(--card);border-radius:16px;padding:11px 8px;font-weight:700;font-size:14px;line-height:1.25}
 .choice small{display:block;font-weight:500;font-size:11.5px;color:var(--muted);margin-top:2px}
 .choice[aria-pressed="true"]{background:var(--ink);color:var(--card);border-color:var(--ink)}
@@ -355,6 +355,97 @@ const GRADES = {
 };
 
 
+/* ---------- Grados extra: 5° y 6° de primaria, secundaria y prepa ---------- */
+function fmtD(x) { var v = Math.round(x * 100) / 100; return String(v).replace("-", "−"); }
+function optsN(ans, steps) {
+  var set = [fmtD(ans)];
+  shuffle(steps).forEach(function (d) { var v = fmtD(ans + d); if (set.length < 4 && set.indexOf(v) < 0) set.push(v); });
+  var k = 1; while (set.length < 4) { var v = fmtD(ans + k * 7); if (set.indexOf(v) < 0) set.push(v); k++; }
+  return shuffle(set);
+}
+function Q(html, ans, steps, prompt, say) { return { html: html, ans: fmtD(ans), options: optsN(ans, steps || [1, -1, 2, -2, 10, -10]), prompt: prompt || "Resuelve", say: say || null, small: html.length > 70 }; }
+function QS(html, ans, opts, prompt) { return { html: html, ans: ans, options: shuffle(opts), prompt: prompt || "Elige la respuesta", small: html.length > 70 }; }
+function ST(text, ans, steps) { return { story: true, html: text, ans: fmtD(ans), options: optsN(ans, steps || [1, -1, 2, -2, 10, -10]), say: text, prompt: "Lee y resuelve" }; }
+var QM = '<span class="q">?</span>';
+function sg(n) { return n < 0 ? "(" + fmtD(n) + ")" : fmtD(n); }
+function nz(a, b) { var v; do { v = rnd(a, b); } while (v === 0); return v; }
+function frac(n, d) { return "<sup>" + n + "</sup>⁄<sub>" + d + "</sub>"; }
+function fr(n, d) { return n + "/" + d; }
+var TRIPLES = [[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 15, 17], [9, 12, 15], [12, 16, 20], [7, 24, 25]];
+GRADES[5] = { label: "5°", sub: "primaria", gen: [
+  function () { var a = rnd(12, 49), b = rnd(3, 9); return arith(a, "×", b); },
+  function () { var d = rnd(6, 12), q = rnd(12, 40); return arith(d * q, "÷", d); },
+  function () { var den = pick([3, 4, 5, 6, 8]), num = rnd(2, den - 1), k = rnd(2, 9); return Q(frac(num, den) + " de " + den * k + " = " + QM, num * k, [k, -k, num, 1, -1]); },
+  function () { var a = rnd(11, 99) / 10, b = rnd(11, 99) / 10; return Q(fmtD(a) + " + " + fmtD(b) + " = " + QM, a + b, [0.1, -0.1, 1, -1, 0.2]); },
+  function () { var l = rnd(5, 20), w = rnd(3, 12); return ST("Un jardín rectangular mide " + l + " m de largo y " + w + " m de ancho. ¿Cuál es su perímetro en metros?", 2 * (l + w), [l * w - 2 * (l + w), -2, 2, l]); },
+  function () { var l = rnd(5, 15), w = rnd(3, 12); return ST("Un cuarto mide " + l + " m de largo y " + w + " m de ancho. ¿Cuál es su área en metros cuadrados?", l * w, [2 * (l + w) - l * w, l, -w, 1]); },
+  function () { var p = pick([10, 25, 50]), n = rnd(2, 20) * 20; return Q(p + "% de " + n + " = " + QM, p * n / 100, [n / 10, 5, -5, 10]); }
+] };
+GRADES[6] = { label: "6°", sub: "primaria", gen: [
+  function () { var a = rnd(11, 99) / 10, b = rnd(2, 9); return Q(fmtD(a) + " × " + b + " = " + QM, a * b, [0.1, -0.1, 1, a, -a]); },
+  function () { var den = rnd(5, 12), a = rnd(1, den - 2), b = rnd(1, den - 1 - a); return QS(frac(a, den) + " + " + frac(b, den) + " = " + QM, fr(a + b, den), [fr(a + b, den), fr(a + b, 2 * den), fr(a + b - 1, den), fr(a + b + 1, den)]); },
+  function () { var p = pick([15, 20, 25, 30, 40, 75]), n = rnd(2, 20) * 20; return Q(p + "% de " + n + " = " + QM, p * n / 100, [5, -5, 10, n / 10]); },
+  function () { var m = rnd(10, 50), x = rnd(m - 8, m + 8), y = rnd(m - 8, m + 8), z = rnd(m - 8, m + 8), w = 4 * m - x - y - z; return ST("Las calificaciones de Ana fueron " + x + ", " + y + ", " + z + " y " + w + ". ¿Cuál es el promedio?", m, [1, -1, 2, -2]); },
+  function () { var l = rnd(2, 9), w = rnd(2, 9), h = rnd(2, 9); return ST("Una caja mide " + l + " cm de largo, " + w + " cm de ancho y " + h + " cm de alto. ¿Cuál es su volumen en cm³?", l * w * h, [l + w + h - l * w * h, l * w, 2, -2]); },
+  function () { var a = rnd(2, 5), b = rnd(2, 7), k = rnd(2, 6); if (a === b) b++; return ST("En un salón, por cada " + a + " niñas hay " + b + " niños. Si hay " + a * k + " niñas, ¿cuántos niños hay?", b * k, [k, -k, a, b]); },
+  function () { var a = rnd(101, 999) / 100, p = pick([10, 100, 1000]); return Q(fmtD(a) + " × " + p.toLocaleString("es-MX") + " = " + QM, a * p, [a * p / 10 - a * p, a * p * 9, 1]); }
+] };
+GRADES[7] = { label: "1°", sub: "secundaria", gen: [
+  function () { var a = rnd(-20, 20), b = rnd(-20, 20); return Q(sg(a) + " + " + sg(b) + " = " + QM, a + b, [2 * b, -2 * b, 1, -1, -2 * a]); },
+  function () { var a = nz(-12, 12), b = nz(-12, 12); return Q(sg(a) + " × " + sg(b) + " = " + QM, a * b, [-2 * a * b, a + b, 1, -1]); },
+  function () { var a = rnd(2, 20), b = rnd(2, 9), c = rnd(2, 9); return Q(a + " + " + b + " × " + c + " = " + QM, a + b * c, [(a + b) * c - a - b * c, 1, -1, b]); },
+  function () { var b = rnd(2, 12), e = b <= 5 ? pick([2, 3]) : 2; return Q(b + "<sup>" + e + "</sup> = " + QM, Math.pow(b, e), [b * e - Math.pow(b, e), 1, -1, b]); },
+  function () { var r = rnd(3, 15); return Q("√" + r * r + " = " + QM, r, [1, -1, 2, r]); },
+  function () { var x = rnd(-9, 15), a = rnd(2, 20); return Q("x + " + a + " = " + (x + a) + "<br>x = " + QM, x, [2 * a, -2 * a, 1, -1, a]); },
+  function () { var x = rnd(2, 12), a = rnd(2, 9); return Q(a + "x = " + a * x + "<br>x = " + QM, x, [a, 1, -1, a * x - x]); }
+] };
+GRADES[8] = { label: "2°", sub: "secundaria", gen: [
+  function () { var x = nz(-9, 9), a = rnd(2, 7), b = rnd(-15, 15), c = a * x + b; return Q(a + "x " + (b < 0 ? "− " + (-b) : "+ " + b) + " = " + fmtD(c) + "<br>x = " + QM, x, [1, -1, 2, -2 * x]); },
+  function () { var b = pick([2, 3, 5, "a", "x"]), m = rnd(2, 7), n = rnd(2, 7); return Q(b + "<sup>" + m + "</sup> · " + b + "<sup>" + n + "</sup> = " + b + "<sup>?</sup>", m + n, [m * n - m - n, 1, -1, 2], "¿Qué exponente va?"); },
+  function () { var p = rnd(5, 40) * 20, d = pick([10, 20, 25, 30, 50]); return ST("Unos tenis cuestan $" + p.toLocaleString("es-MX") + " y tienen " + d + "% de descuento. ¿Cuánto pagas?", p - p * d / 100, [p * d / 100 - (p - p * d / 100), 10, -10, 20]); },
+  function () { var a = rnd(30, 80), b = rnd(30, 80); return Q("Un triángulo tiene ángulos de " + a + "° y " + b + "°.<br>El tercer ángulo mide " + QM + "°", 180 - a - b, [10, -10, 5, a + b - 180 + 90]); },
+  function () { var t = pick(TRIPLES); return Q("Catetos: " + t[0] + " y " + t[1] + "<br>Hipotenusa = " + QM, t[2], [1, -1, 2, t[0] + t[1] - t[2]], "Teorema de Pitágoras"); },
+  function () { var x = nz(-4, 4), a = rnd(2, 5), b = rnd(1, 9); return Q("Si x = " + fmtD(x) + ":<br>" + a + "x² − " + b + " = " + QM, a * x * x - b, [2 * b, -2 * b, a, 1]); },
+  function () { var a = rnd(2, 9), b = rnd(2, 9), c = rnd(2, 9); return Q(a + "(" + b + " + " + c + ") = " + QM, a * (b + c), [a * b + c - a * (b + c), 1, -1, a]); }
+] };
+GRADES[9] = { label: "3°", sub: "secundaria", gen: [
+  function () { var r = rnd(2, 15); return Q("x² = " + r * r + "<br>x = " + QM + " (positivo)", r, [1, -1, r, 2]); },
+  function () { var a = rnd(1, 9), b = rnd(1, 9); return Q("(x + " + a + ")(x + " + b + ") = x² + " + QM + "x + " + a * b, a + b, [a * b - a - b, 1, -1, 2], "¿Qué número falta?"); },
+  function () { var x = rnd(1, 12), y = rnd(1, 12); return Q("x + y = " + (x + y) + "<br>x − y = " + fmtD(x - y) + "<br>x = " + QM, x, [y - x, 1, -1, 2], "Sistema de ecuaciones"); },
+  function () { var x1 = rnd(-5, 5), y1 = rnd(-5, 5), m = nz(-4, 4), dx = rnd(1, 4); return Q("Pendiente entre (" + x1 + ", " + y1 + ") y (" + (x1 + dx) + ", " + (y1 + m * dx) + ")<br>m = " + QM, m, [-2 * m, 1, -1, dx]); },
+  function () { var m = rnd(11, 99) / 10, e = rnd(3, 6), n = Math.round(m * Math.pow(10, e)); return Q(n.toLocaleString("es-MX") + " = " + fmtD(m) + " × 10<sup>?</sup>", e, [1, -1, 2, -2], "Notación científica"); },
+  function () { var p = rnd(1, 9), q = rnd(1, 9); if (p === q) q++; return Q("x² − " + (p + q) + "x + " + p * q + " = 0<br>Raíz mayor: x = " + QM, Math.max(p, q), [Math.min(p, q) - Math.max(p, q), 1, -1, p + q - Math.max(p, q) - 1 === Math.min(p,q) ? 2 : p + q - Math.max(p, q) - 1]); },
+  function () { var t = pick(TRIPLES); return Q("Hipotenusa: " + t[2] + ", cateto: " + t[0] + "<br>Otro cateto = " + QM, t[1], [1, -1, t[2] - t[1] - t[1], 2], "Teorema de Pitágoras"); }
+] };
+GRADES[10] = { label: "1°", sub: "prepa", gen: [
+  function () { var a = nz(-5, 6), b = rnd(-9, 9), k = rnd(-4, 5); return Q("f(x) = " + a + "x " + (b < 0 ? "− " + (-b) : "+ " + b) + "<br>f(" + k + ") = " + QM, a * k + b, [2 * b, -2 * b, 1, -1, a]); },
+  function () { var a = rnd(2, 6), b = rnd(1, 9), x = a * rnd(1, 8), c = x / a + b; return Q("<sup>x</sup>⁄<sub>" + a + "</sub> + " + b + " = " + c + "<br>x = " + QM, x, [a, -a, 1, -1, b]); },
+  function () { var p = rnd(1, 9), q = rnd(1, 9); if (p === q) q++; return Q("x² − " + (p + q) + "x + " + p * q + " = 0<br>Raíz menor: x = " + QM, Math.min(p, q), [Math.max(p, q) - Math.min(p, q), 1, -1, 2]); },
+  function () { var b = pick([2, 3, 5]), e = b === 2 ? rnd(3, 8) : rnd(2, 4); return Q(b + "<sup>x</sup> = " + Math.pow(b, e) + "<br>x = " + QM, e, [1, -1, 2, b]); },
+  function () { var b = pick([2, 3, 10]), e = b === 10 ? rnd(1, 5) : rnd(2, 6); return Q("log<sub>" + b + "</sub>(" + Math.pow(b, e).toLocaleString("es-MX") + ") = " + QM, e, [1, -1, 2, b]); },
+  function () { var t = pick(TRIPLES), x = rnd(-3, 3), y = rnd(-3, 3); return Q("Distancia entre (" + x + ", " + y + ") y (" + (x + t[0]) + ", " + (y + t[1]) + ") = " + QM, t[2], [1, -1, 2, t[0] + t[1] - t[2]]); },
+  function () { var a = rnd(2, 5), m = rnd(2, 5), n = rnd(2, 4); return Q("(x<sup>" + m + "</sup>)<sup>" + n + "</sup> = x<sup>?</sup>", m * n, [m + n - m * n, 1, -1, 2], "¿Qué exponente va?"); }
+] };
+GRADES[11] = { label: "2°", sub: "prepa", gen: [
+  function () { var t = pick([["sen 30°", "1/2"], ["cos 60°", "1/2"], ["tan 45°", "1"], ["sen 90°", "1"], ["cos 0°", "1"], ["sen 0°", "0"], ["cos 90°", "0"], ["cos 30°", "√3/2"], ["sen 60°", "√3/2"], ["sen 45°", "√2/2"]]); return QS(t[0] + " = " + QM, t[1], [t[1]].concat(shuffle(["0", "1", "1/2", "√3/2", "√2/2", "2"].filter(function (o) { return o !== t[1]; })).slice(0, 3)), "Valores exactos"); },
+  function () { var a = rnd(-5, 10), d = nz(-4, 6), n = rnd(5, 20); return Q("Progresión aritmética: a₁ = " + a + ", d = " + d + "<br>a<sub>" + n + "</sub> = " + QM, a + (n - 1) * d, [d, -d, a, 1]); },
+  function () { var a = rnd(1, 5), r = pick([2, 3]), n = rnd(3, 6); return Q("Progresión geométrica: a₁ = " + a + ", r = " + r + "<br>a<sub>" + n + "</sub> = " + QM, a * Math.pow(r, n - 1), [a * Math.pow(r, n - 2) - a * Math.pow(r, n - 1), a, 1, -1]); },
+  function () { var n = rnd(3, 7), f = 1; for (var i = 2; i <= n; i++) f *= i; return Q(n + "! = " + QM, f, [f / n - f, n, 1, -1], "Factorial"); },
+  function () { var n = rnd(4, 10); return ST("¿De cuántas formas puedes elegir a 2 alumnos de un grupo de " + n + "?", n * (n - 1) / 2, [n * (n - 1) / 2, n, -1, 1]); },
+  function () { var t = pick([[180, "π"], [90, "π/2"], [360, "2π"], [45, "π/4"], [60, "π/3"], [30, "π/6"]]); return QS(t[0] + "° = " + QM + " rad", t[1], [t[1]].concat(shuffle(["π", "π/2", "2π", "π/4", "π/3", "π/6"].filter(function (o) { return o !== t[1]; })).slice(0, 3)), "Grados a radianes"); },
+  function () { var e = rnd(1, 4); return Q("log(" + fmtD(Math.pow(10, -e)).replace("−", "") + ") = " + QM, -e, [2 * e, 1, -1, e + 1]); }
+] };
+GRADES[12] = { label: "3°", sub: "prepa", gen: [
+  function () { var a = rnd(1, 5), n = rnd(2, 3), k = rnd(1, 4); return Q("f(x) = " + (a > 1 ? a : "") + "x<sup>" + n + "</sup><br>f′(" + k + ") = " + QM, a * n * Math.pow(k, n - 1), [a * Math.pow(k, n) - a * n * Math.pow(k, n - 1), a, 1, -1], "Derivada"); },
+  function () { var a = rnd(1, 5), b = rnd(-6, 6), c = rnd(-9, 9), k = rnd(-3, 4); return Q("f(x) = " + a + "x² " + (b < 0 ? "− " + (-b) : "+ " + b) + "x " + (c < 0 ? "− " + (-c) : "+ " + c) + "<br>f′(" + k + ") = " + QM, 2 * a * k + b, [a * k * k + b * k + c - (2 * a * k + b), b, 1, -1], "Derivada"); },
+  function () { var a = 2 * rnd(1, 4), k = rnd(1, 5); return Q("∫<sub>0</sub><sup>" + k + "</sup> " + a + "x dx = " + QM, a * k * k / 2, [a * k - a * k * k / 2, k, 1, -1], "Integral definida"); },
+  function () { var k = rnd(1, 4); return Q("∫<sub>0</sub><sup>" + k + "</sup> 3x² dx = " + QM, k * k * k, [3 * k * k - k * k * k, k, 1, -1], "Integral definida"); },
+  function () { var a = rnd(1, 9); return Q("lím<sub>x→" + a + "</sub> (x² − " + a * a + ") / (x − " + a + ") = " + QM, 2 * a, [-a, a, 1, -1], "Límite"); },
+  function () { var t = pick([["un número par en un dado", "1/2", ["1/2", "1/3", "1/6", "2/3"]], ["un 6 en un dado", "1/6", ["1/6", "1/2", "1/3", "5/6"]], ["dos soles al lanzar dos monedas", "1/4", ["1/4", "1/2", "1/3", "3/4"]], ["un número mayor que 4 en un dado", "1/3", ["1/3", "1/2", "1/6", "2/3"]], ["un as en una baraja de 52 cartas", "1/13", ["1/13", "1/52", "1/4", "4/13"]]]); return QS("Probabilidad de sacar " + t[0] + " = " + QM, t[1], t[2], "Probabilidad"); },
+  function () { var a = rnd(2, 6), b = rnd(1, 9); return Q("f(x) = " + a + "x + " + b + "<br>f′(x) = " + QM, a, [b, a + b - a, 1, -1], "Derivada"); }
+] };
+var GNAME = function (g) { var G = GRADES[g]; return G ? G.label + (g <= 6 ? " de primaria" : g <= 9 ? " de secundaria" : " de prepa") : ""; };
+
 
 /* ---------- Catálogo de juegos ---------- */
 var STAGES = [{ id: "kids", name: "Kids" }, { id: "children", name: "Children" }, { id: "teens", name: "Teens" }];
@@ -362,7 +453,7 @@ var GAMES = {
   "verb-memory": { name: "Verb Memory", sub: "Verbos en pares", color: "var(--sky)", secs: 120, thumb: "thumb-verb-memory.webp", rule: "Encuentra los pares de verbos. Gana quien junte más pares." },
   "word-quest": { name: "Word Quest", sub: "Vocabulario", color: "var(--mint)", secs: 90, thumb: "thumb-word-quest.webp", rule: "10 preguntas. Contesta bien y rápido para sumar más puntos." },
   "sentence-scramble": { name: "Sentence Scramble", sub: "Ordena oraciones", color: "var(--pink)", secs: 150, thumb: "thumb-sentence-scramble.webp", rule: "Ordena 6 oraciones. Cada error resta un poco de puntos." },
-  "mision-matematica": { name: "Misión Matemática", sub: "Retos de mate", color: "var(--gold)", secs: 120, thumb: "thumb-mision-matematica.webp", rule: "12 operaciones. Contesta bien y rápido para sumar más puntos." },
+  "mision-matematica": { name: "Misión Matemática", sub: "Retos de mate", color: "var(--gold)", secs: 150, thumb: "thumb-mision-matematica.webp", rule: "12 operaciones. Contesta bien y rápido para sumar más puntos." },
   "picture-race": { name: "Picture Race", sub: "Escucha y elige", color: "var(--coral)", secs: 90, thumb: "thumb-picture-race.webp", isNew: true, rule: "Toca la imagen correcta lo más rápido que puedas." },
   "spelling-bee": { name: "Spelling Bee Battle", sub: "Deletrea palabras", color: "var(--gold)", secs: 180, thumb: "thumb-spelling-bee.webp", isNew: true, rule: "Escucha la palabra y deletréala con las letras." },
   "grammar-showdown": { name: "Grammar Showdown", sub: "Duelo de gramática", color: "var(--lila)", secs: 160, thumb: "thumb-grammar-showdown.webp", isNew: true, rule: "Cada pregunta tiene su propio cronómetro. ¡Rápido!" },
@@ -380,7 +471,7 @@ function defaults(game, st) {
   if (game === "verb-memory") return { set: st === "teens" ? "hard" : "easy", form: "past" };
   if (game === "word-quest") return { stage: st, topic: wqTopics(st)[0] };
   if (game === "sentence-scramble") return { stage: st, topic: ssTopics(st)[0] };
-  if (game === "mision-matematica") return { grade: st === "kids" ? 2 : st === "children" ? 3 : 4 };
+  if (game === "mision-matematica") return { grade: st === "kids" ? 2 : st === "children" ? 4 : 8 };
   return { lang: "en", stage: st, topic: 0 };
 }
 function settingsLabel(game, s) {
@@ -389,7 +480,7 @@ function settingsLabel(game, s) {
   if (game === "verb-memory") return (s.set === "hard" ? "Challenge verbs" : "Everyday verbs") + " · " + (s.form === "part" ? "Present + Participle" : "Present + Past");
   if (game === "word-quest") return WQ[s.topic] ? WQ[s.topic].label + " · " + WQ[s.topic].level : "";
   if (game === "sentence-scramble") return SS[s.topic] ? SS[s.topic].label : "";
-  if (game === "mision-matematica") return GRADES[s.grade] ? GRADES[s.grade].label + " grado" : "";
+  if (game === "mision-matematica") return GNAME(s.grade);
   if (game === "sopa-de-letras") { var t = spTopic(s); return t ? t.name + (s.lang === "es" ? " · Español" : " · English") : ""; }
   return "";
 }
@@ -410,7 +501,8 @@ function settingsHtml(game, s) {
     var list = game === "word-quest" ? wqTopics(s.stage) : ssTopics(s.stage), src = game === "word-quest" ? WQ : SS;
     h += stg(s.stage) + '<div class="label">Tema</div><div class="topics">' + list.map(function (k) { return b("topic", k, src[k].label, src[k].level || "", s.topic === k); }).join("") + "</div>";
   } else if (game === "mision-matematica") {
-    h += '<div class="label">Grado</div>' + chs("c4", Object.keys(GRADES).map(function (g) { return b("grade", g, GRADES[g].label, "grado", String(s.grade) === g); }));
+    var grp = function (t, a, z, cls) { var ks = []; for (var g = a; g <= z; g++) ks.push(String(g)); return '<div class="label">' + t + "</div>" + chs(cls, ks.map(function (g) { return b("grade", g, GRADES[g].label, "", String(s.grade) === g); })); };
+    h += grp("Primaria", 1, 6, "c6") + grp("Secundaria", 7, 9, "c3") + grp("Preparatoria", 10, 12, "c3");
   } else {
     h += '<div class="label">Idioma</div>' + chs("c2", [b("lang", "en", "English", "", s.lang !== "es"), b("lang", "es", "Español", "", s.lang === "es")]);
     if (s.lang !== "es") h += stg(s.stage);
@@ -869,10 +961,10 @@ BUILD["mision-matematica"] = function (s) {
     var i; do { i = Math.floor(R() * gens.length); } while (gens.length > 1 && i === last); last = i;
     var q = gens[i]();
     if (!q.options) q.options = opts4(q.ans, gr >= 3 ? 10 : 3);
-    var html = q.countItem ? '<div class="em">' + Array(q.n + 1).join(q.countItem) + "</div>" : q.story ? '<div class="s">' + q.html + "</div>" : '<div class="w">' + q.html.replace(/<span class="q">\?<\/span>/, '<span style="color:var(--coral)">?</span>') + "</div>";
+    var html = q.countItem ? '<div class="em">' + Array(q.n + 1).join(q.countItem) + "</div>" : q.story || q.small ? '<div class="s">' + q.html + "</div>" : '<div class="w">' + q.html.replace(/<span class="q">\?<\/span>/, '<span style="color:var(--coral)">?</span>') + "</div>";
     qs.push({ html: '<div class="hint" style="margin:0 0 8px">' + esc(q.prompt) + "</div>" + html, options: q.options.map(String), ans: String(q.ans), say: q.say, lang: "es-MX" });
   }
-  return questionGame(qs, { title: GRADES[gr].label + " grado" });
+  return questionGame(qs, { title: GNAME(gr) });
 };
 BUILD["verb-memory"] = function (s) {
   var list = (VERBS[s.set] || VERBS.easy).filter(function (v) { return v[s.form === "part" ? 2 : 1] !== v[0]; });
