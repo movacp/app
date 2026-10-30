@@ -2097,7 +2097,7 @@ document.addEventListener("click", async (e) => {
   try { await evt.userChoice; } catch (err) {}
   window.__installEvt = null; syncInstall();
 });
-window.addEventListener("appinstalled", () => { window.__installEvt = null; syncInstall(); toast("La app quedó instalada"); });
+window.addEventListener("appinstalled", () => { window.__installEvt = null; syncInstall(); toast("The app is installed"); });
 </script>
 <script src="mova-voice.js"></script>
 <script src="studio-plus.js"></script>

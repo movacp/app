@@ -160,3 +160,56 @@
     if (k !== lastU) { var first = lastU === null; lastU = k; if (!first) { if (!location.hash || /^#\/?$/.test(location.hash)) { if (typeof router === "function") router(); } backBar(); } }
   }, 1500);
 })();
+
+/* ---------- Ventana para instalar la app (diseño nuevo) ---------- */
+(function () {
+  var KEY = "mova_install_later";
+  function standalone() { return (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true; }
+  function snoozed() { try { return Date.now() < Number(localStorage.getItem(KEY) || 0); } catch (e) { return false; } }
+  function snooze() { try { localStorage.setItem(KEY, String(Date.now() + 3 * 864e5)); } catch (e) {} }
+  var android = /Android/i.test(navigator.userAgent);
+  var ios = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  var css = ".mi-back{position:fixed;inset:0;z-index:9998;background:rgba(21,25,43,.38);display:flex;align-items:flex-end;justify-content:center;padding:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));animation:miF .25s ease}" +
+    ".mi-card{width:100%;max-width:420px;background:#fff;border-radius:28px;padding:22px 20px 18px;box-shadow:0 24px 70px rgba(54,40,120,.3);font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#15192B;animation:miU .35s cubic-bezier(.2,.9,.3,1.2)}" +
+    ".mi-top{display:flex;align-items:center;gap:14px}.mi-top img{width:58px;height:58px;border-radius:16px;box-shadow:0 6px 16px rgba(21,25,43,.15)}" +
+    ".mi-top small{display:block;font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#7B5CF0}" +
+    ".mi-top b{display:block;font-family:'Bricolage Grotesque','Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;line-height:1.1}" +
+    ".mi-card p{margin:14px 0 0;font-size:14.5px;line-height:1.5;color:#4A4E66}" +
+    ".mi-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.mi-pills span{font-size:12px;font-weight:700;padding:6px 11px;border-radius:999px}" +
+    ".mi-steps{margin:14px 0 0;padding:12px 14px;border-radius:16px;background:#F5F3FA;font-size:14px;line-height:1.55}" +
+    ".mi-btns{display:flex;gap:10px;margin-top:18px}.mi-btns button{flex:1;height:50px;border-radius:999px;font:800 15px 'Plus Jakarta Sans',sans-serif;border:0;cursor:pointer}" +
+    ".mi-go{background:#15192B;color:#fff;box-shadow:0 4px 0 #D3F36B}.mi-no{background:#F2EFF8;color:#15192B}" +
+    "@keyframes miU{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}@keyframes miF{from{opacity:0}to{opacity:1}}";
+  function show(manual) {
+    if (document.getElementById("mi-back") || standalone() || snoozed()) return;
+    if (!document.getElementById("mi-css")) { var s = document.createElement("style"); s.id = "mi-css"; s.textContent = css; document.head.appendChild(s); }
+    var steps = manual ? '<div class="mi-steps">' + (ios
+      ? "Tap <b>Share</b> at the bottom of Safari, then <b>Add to Home Screen</b>."
+      : "Tap <b>⋮</b> at the top right of Chrome, then <b>Install app</b> or <b>Add to Home screen</b>.") + "</div>" : "";
+    var b = document.createElement("div"); b.className = "mi-back"; b.id = "mi-back";
+    b.innerHTML = '<div class="mi-card" role="dialog" aria-modal="true" aria-label="Install MOVA Studio">' +
+      '<div class="mi-top"><img src="icon-192.png" alt=""><div><small>MOVA Learning Studio</small><b>Install the app</b></div></div>' +
+      "<p>Open it from your home screen, just like any app. It loads faster and works even without internet.</p>" +
+      '<div class="mi-pills"><span style="background:#ECFBC8">Readings</span><span style="background:#EEE8FF">Games</span><span style="background:#FFE6F2">Game On</span><span style="background:#FFF6D1">My Progress</span></div>' +
+      steps + '<div class="mi-btns"><button type="button" class="mi-no">Not now</button>' + (manual ? "" : '<button type="button" class="mi-go">Install</button>') + "</div></div>";
+    document.body.appendChild(b);
+    function close() { b.remove(); }
+    b.addEventListener("click", function (e) { if (e.target === b) { snooze(); close(); } });
+    b.querySelector(".mi-no").onclick = function () { snooze(); close(); };
+    var go = b.querySelector(".mi-go");
+    if (go) go.onclick = function () {
+      var evt = window.__installEvt; close();
+      if (!evt) return;
+      evt.prompt();
+      Promise.resolve(evt.userChoice).then(function (r) { if (r && r.outcome !== "accepted") snooze(); window.__installEvt = null; }).catch(function () {});
+    };
+  }
+  function tryShow() { if (window.__installEvt) setTimeout(function () { show(false); }, 1200); }
+  window.addEventListener("beforeinstallprompt", function () { setTimeout(tryShow, 0); });
+  window.addEventListener("appinstalled", function () { var b = document.getElementById("mi-back"); if (b) b.remove(); });
+  window.addEventListener("load", function () {
+    tryShow();
+    /* Si Chrome no ofrece la instalación automática, mostrar los pasos para hacerlo a mano */
+    if ((android || ios) && !standalone()) setTimeout(function () { if (!window.__installEvt && !document.getElementById("mi-back")) show(true); }, 6000);
+  });
+})();
