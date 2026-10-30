@@ -48,10 +48,10 @@ h2{font-size:15px;font-weight:700;margin:22px 0 10px}
 .bar .t{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:24px;line-height:1.05}
 .bar .t small{display:block;font-family:Poppins,sans-serif;font-size:12px;font-weight:600;color:var(--muted);margin-top:3px}
 .clock{font-variant-numeric:tabular-nums;font-weight:700;font-size:15px;background:var(--card);border:2px solid var(--edge);border-radius:999px;padding:6px 12px;flex:none}
-.board{position:relative;background:var(--card);border-radius:22px;padding:10px;box-shadow:0 6px 0 var(--edge);touch-action:none;user-select:none;-webkit-user-select:none}
+.board{position:relative;box-sizing:border-box;width:100%;max-width:100%;overflow:hidden;background:var(--card);border-radius:22px;padding:10px;box-shadow:0 6px 0 var(--edge);touch-action:none;user-select:none;-webkit-user-select:none}
 .board svg{position:absolute;inset:10px;width:calc(100% - 20px);height:calc(100% - 20px);pointer-events:none}
-.grid{position:relative;display:grid;gap:0}
-.cell{aspect-ratio:1;display:grid;place-items:center;font-weight:700;font-size:var(--fs,22px);line-height:1;color:var(--ink);border-radius:50%}
+.grid{position:relative;display:grid;gap:0;width:100%;max-width:100%;overflow:hidden}
+.cell{min-width:0;min-height:0;height:100%;overflow:hidden;display:grid;place-items:center;font-weight:700;font-size:var(--fs,22px);line-height:1;color:var(--ink);border-radius:50%}
 .cell.done{color:var(--ink)}
 .cap{fill:none;stroke-linecap:round;opacity:.42}
 .cap.live{opacity:.3;stroke:var(--ink)}
@@ -322,8 +322,8 @@ function newGame() {
   $("#g-title").innerHTML = `${tp.name}<small>${tp.level} · ${N}×${N}</small>`;
   $("#b-topics").textContent = t.btnTopics; $("#b-hint").textContent = t.hint;
   const grid = $("#grid"); grid.innerHTML = "";
-  grid.style.gridTemplateColumns = `repeat(${N},1fr)`;
-  grid.parentElement.style.setProperty("--fs", `min(${(96 / N).toFixed(1)}vw * .55, ${Math.round(300 / N)}px)`);
+  grid.style.gridTemplateColumns = `repeat(${N},minmax(0,1fr))`; 
+  const fitFont = () => { const w = grid.clientWidth || ($("#board").clientWidth - 20); grid.style.gridAutoRows = (w / N) + "px"; grid.parentElement.style.setProperty("--fs", Math.max(12, Math.min(Math.floor(w / N * .58), Math.round(300 / N))) + "px"); }; fitFont(); requestAnimationFrame(fitFont); if (!window.__wsFit) { window.__wsFit = 1; addEventListener("resize", () => { const g = $("#grid"); if (g && g.children.length) { const w = g.clientWidth; g.style.gridAutoRows = (w / N) + "px"; g.parentElement.style.setProperty("--fs", Math.max(12, Math.min(Math.floor(w / N * .58), Math.round(300 / N))) + "px"); } }); }
   for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) { const s = document.createElement("div"); s.className = "cell k" + (1 + Math.floor(Math.random() * 5)); s.textContent = st.grid[r][c]; s.dataset.r = r; s.dataset.c = c; grid.appendChild(s); }
   $("#caps").setAttribute("viewBox", `0 0 ${N} ${N}`); $("#caps").innerHTML = "";
   renderWords(); setStatus(t.find(0, st.words.length));
