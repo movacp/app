@@ -1,6 +1,6 @@
 /* MOVA · carga el tema 2026 en los juegos (tipografía, colores y botón Home) */
 (function(){ try{ if(window.__movaThemeLoader || !/juego-|mova-live/.test(location.pathname)) return; window.__movaThemeLoader = 1;
-  var s = document.createElement('script'); s.src = 'mova-theme.js?v=24'; (document.head || document.documentElement).appendChild(s); }catch(e){} })();
+  var s = document.createElement('script'); s.src = 'mova-theme.js?v=27'; (document.head || document.documentElement).appendChild(s); }catch(e){} })();
 /* MOVA Learning Studio: inicio de sesión opcional para alumnos MOVA y registro de avance.
    La app sigue abierta para todos; si el alumno entra con su cuenta, se guarda su práctica. */
 (function () {
@@ -446,6 +446,7 @@
     var slug = gameSlug(); if (RETO_GAMES.indexOf(slug) < 0) return;
     var usedH1 = false;
     var anchor = function () {
+      var mh = document.querySelector(".mv-hero"); if (mh) return mh;
       var st = document.getElementById("s-start"); if (st) return st.querySelector(".lead");
       var vh = document.getElementById("v-home"); if (vh) return vh.querySelector(".lead") || vh.querySelector(".hero");
       var l = document.querySelector(".cover + .lead"); if (l) return l;

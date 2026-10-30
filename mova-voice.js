@@ -1,6 +1,6 @@
 /* MOVA · carga el tema 2026 en los juegos (tipografía, colores y botón Home) */
 (function(){ try{ if(window.__movaThemeLoader || !/juego-|mova-live/.test(location.pathname)) return; window.__movaThemeLoader = 1;
-  var s = document.createElement('script'); s.src = 'mova-theme.js?v=24'; (document.head || document.documentElement).appendChild(s); }catch(e){} })();
+  var s = document.createElement('script'); s.src = 'mova-theme.js?v=27'; (document.head || document.documentElement).appendChild(s); }catch(e){} })();
 (function(){ if(window.__movaVoice) return; window.__movaVoice = 1;
 /* MOVA Voice · elige automáticamente la voz más natural del dispositivo para todos los juegos */
 (function(){

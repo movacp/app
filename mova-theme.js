@@ -59,6 +59,7 @@
     if(/radial-gradient/.test(cs.backgroundImage)) b.classList.add('mt-flat');
   }
   function run(){ dropPoppins(); surface(); homeButtons(); }
+  try{ var me = d.createElement('script'); me.src = 'mova-entry.js?v=27'; head.appendChild(me); }catch(e){}
   if(d.readyState === 'loading') d.addEventListener('DOMContentLoaded', run); else run();
   try{ new MutationObserver(homeButtons).observe(d.documentElement, { childList: true, subtree: true }); }catch(e){}
 })();
