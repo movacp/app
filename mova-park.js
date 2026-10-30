@@ -43,12 +43,12 @@
   function art(id) { return '<svg viewBox="0 0 100 100" aria-hidden="true">' + (ART[id] || "") + "</svg>"; }
   var coin = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#FCE38A" stroke="#E3C462" stroke-width="2"/><path d="m12 6.8 1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6-2.6-2.5 3.6-.5z" fill="#E3A93A"/></svg>';
   var CATS = [
-    { id: "vocab", name: "Vocabulario", sub: "Word Quest · Picture Race" },
-    { id: "grammar", name: "Gramática", sub: "Present, past, perfect, passive…" },
-    { id: "hora", name: "¿Qué hora es?", sub: "Kids y Children" },
-    { id: "wforms", name: "Word Forms", sub: "Children y Teens" },
-    { id: "toefl", name: "TOEFL", sub: "Teens y adultos" },
-    { id: "math", name: "Matemáticas", sub: "Según su etapa" }
+    { id: "vocab", name: "Vocabulary", sub: "Word Quest · Picture Race" },
+    { id: "grammar", name: "Grammar", sub: "Present, past, perfect, passive…" },
+    { id: "hora", name: "What time is it?", sub: "Kids & Children" },
+    { id: "wforms", name: "Word Forms", sub: "Children & Teens" },
+    { id: "toefl", name: "TOEFL", sub: "Teens & adults" },
+    { id: "math", name: "Math", sub: "by each one's level" }
   ];
   var BASE = 20;
   function income(items) { var s = BASE; (items || []).forEach(function (id) { var a = ATTR.find(function (x) { return x.id === id; }); if (a) s += a.inc; }); return s; }
