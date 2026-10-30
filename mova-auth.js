@@ -342,16 +342,16 @@
     return p;
   }
 
-  function progressHtml(p) {
+  function progressHtml(p, pageMode) {
     function tile(icon, num, label, bg, fg) {
       return '<div class="mvp-tile" style="background:' + bg + '"><span class="mvp-ti" style="background:' + fg + '">' + ico(icon, 18) + "</span><b>" + num + "</b><small>" + label + "</small></div>";
     }
-    var h = '<div class="mvp-grid">' +
+    var h = pageMode ? "" : '<div class="mvp-grid">' +
       tile("book", p.readings, p.readings === 1 ? "story read" : "stories read", "#E2F1FB", "#8EC9EE") +
       tile("flame", p.streak, p.streak === 1 ? "day streak" : "day streak", "#FBE3DC", "#E8846B") +
       tile("game", p.games, p.games === 1 ? "game played" : "games played", "#EEE8FA", "#B9A6E8") +
       tile("clock", p.minWeek, "minutes this week", "#FDF4D6", "#E9C24F") + "</div>";
-    h += '<div class="mvp-level">' + (p.level
+    if (!pageMode || !p.level) h += '<div class="mvp-level">' + (p.level
       ? '<span class="mvp-lk">' + ico("bars", 18) + " Level Up</span><div><b>" + esc(p.level.level) + "</b><small>" +
         (p.level.total ? esc(p.level.score) + " / " + esc(p.level.total) + " correct" : "Your English level") + "</small></div>"
       : '<span class="mvp-lk">' + ico("bars", 18) + " Level Up</span><div><small class=\"mvp-cta\">Take the Level Up test to discover your English level.</small></div>") + "</div>";
@@ -375,30 +375,108 @@
   }
 
   var BLOOM = '<svg class="mvp-bloom" viewBox="0 0 220 220" aria-hidden="true"><path d="M98 138 C96 156.0 90 166.0 92 178" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="89" cy="180" rx="6.2" ry="4" fill="#1A1B2E"/><path d="M122 138 C124 156.0 128 166.0 127 178" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="130" cy="180" rx="6.2" ry="4" fill="#1A1B2E"/><path d="M80 98 C62 104 50 92 48 74" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="48" cy="74" r="3.6" fill="#1A1B2E"/><path d="M142 100 C152 104 160 102 168 96" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="168" cy="96" r="3.6" fill="#1A1B2E"/><circle cx="86" cy="68" r="30" fill="#9C8BFF"/><circle cx="134" cy="68" r="30" fill="#9C8BFF"/><circle cx="86" cy="116" r="30" fill="#9C8BFF"/><circle cx="134" cy="116" r="30" fill="#9C8BFF"/><circle cx="110" cy="92" r="26" fill="#9C8BFF"/><circle cx="80" cy="62" r="7" fill="#fff" opacity=".28"/><path d="M94 106 Q110 122 126 106" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="84" cy="100" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><ellipse cx="136" cy="100" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><ellipse cx="97" cy="88" rx="4.2" ry="5.2" fill="#1A1B2E"/><ellipse cx="123" cy="88" rx="4.2" ry="5.2" fill="#1A1B2E"/><circle cx="98.4" cy="86.2" r="1.4" fill="#fff"/><circle cx="124.4" cy="86.2" r="1.4" fill="#fff"/></svg>';
+  var BLOOM_LT = '<svg viewBox="0 0 220 220" aria-hidden="true"><path d="M98 138 C96 156.0 90 166.0 92 178" stroke="#E6E2FF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="89" cy="180" rx="6.2" ry="4" fill="#E6E2FF"/><path d="M122 138 C124 156.0 128 166.0 127 178" stroke="#E6E2FF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="130" cy="180" rx="6.2" ry="4" fill="#E6E2FF"/><path d="M80 98 C62 104 50 92 48 74" stroke="#E6E2FF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="48" cy="74" r="3.6" fill="#E6E2FF"/><path d="M142 100 C152 104 160 102 168 96" stroke="#E6E2FF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="168" cy="96" r="3.6" fill="#E6E2FF"/><circle cx="86" cy="68" r="30" fill="#9C8BFF"/><circle cx="134" cy="68" r="30" fill="#9C8BFF"/><circle cx="86" cy="116" r="30" fill="#9C8BFF"/><circle cx="134" cy="116" r="30" fill="#9C8BFF"/><circle cx="110" cy="92" r="26" fill="#9C8BFF"/><circle cx="80" cy="62" r="7" fill="#fff" opacity=".28"/><path d="M93 90 q5 5 10 0" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M117 90 q5 5 10 0" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M93 104 Q110 122 127 104" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="84" cy="100" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><ellipse cx="136" cy="100" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/></svg>';
+  var PAGE_CSS = "#mvp-page{position:fixed;inset:0;z-index:2147483600;background:#F5F3FA;overflow-y:auto;-webkit-overflow-scrolling:touch;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#15192B;padding:env(safe-area-inset-top,0px) 0 calc(28px + env(safe-area-inset-bottom,0px));animation:mvpIn .28s ease}" +
+    "@keyframes mvpIn{from{opacity:0;transform:translateY(14px)}}" +
+    "#mvp-page .in{max-width:520px;margin:0 auto;padding:0 16px}" +
+    "#mvp-page .bk{display:flex;align-items:center;gap:10px;padding:18px 2px 10px}" +
+    "#mvp-page .back{width:42px;height:42px;border-radius:50%;background:#fff;border:1.6px solid #15192B;display:grid;place-items:center;flex:none;cursor:pointer;color:#15192B;padding:0}" +
+    "#mvp-page .back svg{width:18px;height:18px}" +
+    "#mvp-page .tt small{display:block;font-size:11px;color:#6A6F85;font-weight:600}" +
+    "#mvp-page .tt b{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.5px;line-height:1}" +
+    "#mvp-page .prof{background:#15192B;color:#fff;border-radius:28px;padding:18px;position:relative;overflow:hidden}" +
+    "#mvp-page .prof .row{display:flex;align-items:center;gap:10px}#mvp-page .prof .row>div{flex:1;min-width:0}" +
+    "#mvp-page .prof .big{width:58px;height:58px;border-radius:50%;background:#7B5CF0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;letter-spacing:.5px;border:3px solid #D3F36B;flex:none;box-sizing:border-box}" +
+    "#mvp-page .prof .row b{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.4px;display:block;line-height:1.1}" +
+    "#mvp-page .prof small{font-size:12px;color:#B8BCD0;font-weight:600}" +
+    "#mvp-page .prof .bl{width:92px;flex:none;margin:-14px -10px -14px -18px}#mvp-page .prof .bl svg{width:100%;height:auto;display:block}" +
+    "#mvp-page .prof .st{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}" +
+    "#mvp-page .prof .st div{background:rgba(255,255,255,.07);border-radius:16px;padding:10px;text-align:center}" +
+    "#mvp-page .prof .st b{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px;color:#D3F36B;display:block}#mvp-page .prof .st span{font-size:10.5px;color:#B8BCD0;font-weight:700;letter-spacing:.04em}" +
+    "#mvp-page .sk{background:#fff;border-radius:24px;padding:14px 16px;margin-top:10px}" +
+    "#mvp-page h4{margin:0 0 10px;font-family:'Bricolage Grotesque',sans-serif;font-size:17px;display:flex;justify-content:space-between;align-items:baseline}#mvp-page h4 span{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;color:#6A6F85;font-weight:700}" +
+    "#mvp-page .sk .r{display:grid;grid-template-columns:96px 1fr 50px;align-items:center;gap:8px;font-size:12.5px;font-weight:700;margin:9px 0}" +
+    "#mvp-page .sk .r span:last-child{text-align:right;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:14px}" +
+    "#mvp-page .sk .bar{height:9px;border-radius:9px;background:#EEECF4;overflow:hidden}#mvp-page .sk .bar i{display:block;height:100%;border-radius:9px}" +
+    "#mvp-page .sk .none{margin:2px 0 4px;font-size:13px;color:#6A6F85;line-height:1.5}" +
+    "#mvp-page .bdg{display:flex;gap:8px;margin-top:10px}#mvp-page .bdg span{flex:1;background:#fff;border-radius:18px;padding:10px 6px;text-align:center;font-size:10.5px;font-weight:700;line-height:1.3}" +
+    "#mvp-page .bdg span i{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;margin:0 auto 6px;font-style:normal;font-weight:800;font-size:13px}#mvp-page .bdg svg{width:20px;height:20px}" +
+    "#mvp-page .bdg .off{opacity:.55}" +
+    "#mvp-page .more{margin-top:14px}#mvp-page .more .mvp-h{margin:18px 2px 10px}" +
+    "#mvp-page .acts{display:flex;flex-direction:column;gap:10px;margin-top:20px}" +
+    "#mvp-page .acts button{border:0;border-radius:999px;padding:14px;font:800 15px 'Plus Jakarta Sans',sans-serif;cursor:pointer}" +
+    "#mvp-page .acts .p{background:#15192B;color:#fff;box-shadow:0 4px 0 #D3F36B}#mvp-page .acts .s{background:#fff;color:#15192B}" +
+    "#mvp-page .usr{text-align:center;font-size:12px;color:#8A8EA5;margin-top:12px}";
+  var AREAS = [["Reading", "#9C8BFF"], ["Games", "#FF9FCB"], ["Exams", "#FFD54A"], ["Math & Spanish", "#5CC9B5"]];
+  var MATH = /^(mision-matematica|la-tiendita|la-balanza|la-boveda|lluvia-de-numeros|detective-patrones|pizzeria-fracciones|que-hora-es|lee-con-mochi)$/;
+  function monthAreas(rows) {
+    var now = new Date(), m = {}, n = {};
+    (rows || []).forEach(function (r) {
+      var t = new Date(r.created_at); if (t.getFullYear() !== now.getFullYear() || t.getMonth() !== now.getMonth()) return;
+      var a = r.activity || "", d = r.detail || {}, k = null;
+      if (/^app-(library|lecturas)$/.test(a)) { if (!r.item || /Explorando/.test(r.item)) return; k = "Reading"; }
+      else if (/^(level-up|toefl-practice|word-forms)$/.test(a)) k = "Exams";
+      else if (MATH.test(a)) k = "Math & Spanish";
+      else if (!/^app-/.test(a)) k = "Games";
+      if (!k) return;
+      m[k] = (m[k] || 0) + (d.kind === "time" ? (d.seconds || 0) : 0); n[k] = (n[k] || 0) + 1;
+    });
+    var max = Math.max.apply(null, [60].concat(AREAS.map(function (x) { return m[x[0]] || 0; })));
+    var any = AREAS.some(function (x) { return n[x[0]]; });
+    if (!any) return '<p class="none">Nothing yet this month. Read a story or play a game and your progress will appear here.</p>';
+    return AREAS.map(function (x) {
+      var s = m[x[0]] || 0, mins = Math.round(s / 60);
+      return '<div class="r"><span>' + x[0] + '</span><span class="bar"><i style="width:' + (s ? Math.max(6, Math.round(s / max * 100)) : (n[x[0]] ? 6 : 0)) + "%;background:" + x[1] + '"></i></span><span>' + (mins ? mins + " min" : (n[x[0]] ? "<1 min" : "—")) + "</span></div>";
+    }).join("");
+  }
+  function pageBody(p, rows) {
+    var acts = p.readings + p.plays;
+    var earned = p.badges.filter(function (b) { return b[3] && !(p.level && b[1] === "Level Up"); }).slice(-3).reverse();
+    var chips = earned.map(function (b) { return '<span><i style="background:' + b[4] + '">' + ico(b[0], 20) + "</i>" + esc(b[1]) + "</span>"; });
+    if (p.level) chips.unshift('<span><i style="background:#E3DBFF">' + esc(p.level.level) + "</i>Level Up</span>");
+    chips = chips.slice(0, 3);
+    while (chips.length < 3) { var nx = p.badges.filter(function (b) { return !b[3]; })[chips.length - earned.length] || p.badges[chips.length]; chips.push('<span class="off"><i style="background:#ECE9F3">' + ico("lock", 18) + "</i>" + esc(nx[1]) + "</span>"); }
+    var full = progressHtml(p, true);
+    return { stats: '<div><b>' + p.streak + "</b><span>DAY STREAK</span></div><div><b>" + acts + "</b><span>ACTIVITIES</span></div><div><b>" + p.earned + "</b><span>BADGES</span></div>",
+      month: monthAreas(rows), chips: chips.join(""), more: full };
+  }
+  function closePage() { var pg = document.getElementById("mvp-page"); if (pg) { pg.remove(); document.documentElement.style.overflow = ""; } }
   function showAccount() {
-    var b = open('<div class="mvp-top">' + BLOOM + '<div class="mva-badge">' + esc(initials(user.name)) + '</div><div class="mvp-who"><span>My Progress</span><h2>' + esc(user.name) + "</h2>" +
-      (user.stage ? '<em>' + esc(user.stage) + "</em>" : "") + '</div></div><div id="mvp-body"><p class="mvp-load">Loading your progress…</p></div>' +
-      '<button class="mva-btn" id="mva-ok">Keep practicing</button><button class="mva-btn soft" id="mva-out">Log out</button>' +
-      '<p class="mva-legal">User: ' + esc(user.username) + "</p>", "wide");
-    var body = b.querySelector("#mvp-body"), cache = get(K_PROG);
-    if (cache && cache.u === user.username) body.innerHTML = progressHtml(computeProgress(cache.rows));
+    close(); closePage();
+    if (!document.getElementById("mvp-page-css")) { var st = document.createElement("style"); st.id = "mvp-page-css"; st.textContent = PAGE_CSS; document.head.appendChild(st); }
+    var pg = document.createElement("div"); pg.id = "mvp-page"; pg.setAttribute("role", "dialog"); pg.setAttribute("aria-label", "My Progress");
+    pg.innerHTML = '<div class="in"><div class="bk"><button class="back" type="button" aria-label="Back to Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><div class="tt"><small>Home</small><b>My Progress</b></div></div>' +
+      '<div class="prof"><div class="row"><span class="big">' + esc(initials(user.name)) + '</span><div><b>' + esc(user.name) + "</b><small>" + esc(user.stage || "MOVA Student") + '</small></div><span class="bl">' + BLOOM_LT + '</span></div><div class="st" id="mvp-st"><div><b>–</b><span>DAY STREAK</span></div><div><b>–</b><span>ACTIVITIES</span></div><div><b>–</b><span>BADGES</span></div></div></div>' +
+      '<div class="sk"><h4>This month <span>' + new Date().toLocaleDateString("en-US", { month: "long" }) + '</span></h4><div id="mvp-month"><p class="none">Loading your progress…</p></div></div>' +
+      '<div class="bdg" id="mvp-chips"></div><div class="more" id="mvp-body"></div>' +
+      '<div class="acts"><button class="p" type="button" id="mvp-ok">Keep practicing</button><button class="s" type="button" id="mvp-out">Log out</button></div>' +
+      '<p class="usr">User: ' + esc(user.username) + "</p></div>";
+    document.body.appendChild(pg); document.documentElement.style.overflow = "hidden";
+    function paint(rows) {
+      var d = pageBody(computeProgress(rows), rows);
+      pg.querySelector("#mvp-st").innerHTML = d.stats; pg.querySelector("#mvp-month").innerHTML = d.month;
+      pg.querySelector("#mvp-chips").innerHTML = d.chips; pg.querySelector("#mvp-body").innerHTML = d.more;
+    }
+    var cache = get(K_PROG);
+    if (cache && cache.u === user.username) paint(cache.rows);
     tick(); flushPending(); setTimeout(beginScreen, 50);
     var tok = user.token, uname = user.username;
     setTimeout(function () {
       rpc("student_my_progress", { p_token: tok }).then(function (rows) {
         if (!Array.isArray(rows)) throw 0;
         set(K_PROG, { u: uname, rows: rows.slice(0, 1500) });
-        if (document.body.contains(body)) body.innerHTML = progressHtml(computeProgress(rows));
+        if (document.body.contains(pg)) paint(rows);
       }).catch(function () {
-        if (!cache || cache.u !== uname) body.innerHTML = '<p class="mvp-empty">We could not load your progress right now. Check your internet and try again.</p>';
+        if (!cache || cache.u !== uname) pg.querySelector("#mvp-month").innerHTML = '<p class="none">We could not load your progress right now. Check your internet and try again.</p>';
       });
-    }, 600);
-    b.querySelector("#mva-ok").onclick = close;
-    b.querySelector("#mva-out").onclick = function () {
+    }, 400);
+    pg.querySelector(".back").onclick = closePage;
+    pg.querySelector("#mvp-ok").onclick = closePage;
+    pg.querySelector("#mvp-out").onclick = function () {
       var tok2 = user.token;
       tick(); flushPending(); cur = null;
       setTimeout(function () { rpc("student_logout", { p_token: tok2 }).catch(function () {}); }, 2500);
-      user = null; set(K_USER, null); set(K_PEND, null); set(K_PROG, null); renderChip(); close(); toast("Sesión cerrada");
+      user = null; set(K_USER, null); set(K_PEND, null); set(K_PROG, null); renderChip(); closePage(); toast("Sesión cerrada");
     };
   }
 
