@@ -4,7 +4,7 @@
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("mova-theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Retos multijugador · MOVA</title>
+<title>Game On · MOVA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -460,7 +460,7 @@ function optsN(ans, steps) {
   return shuffle(set);
 }
 function Q(html, ans, steps, prompt, say) { return { html: html, ans: fmtD(ans), options: optsN(ans, steps || [1, -1, 2, -2, 10, -10]), prompt: prompt || "Resuelve", say: say || null, small: html.length > 70 }; }
-function QS(html, ans, opts, prompt) { return { html: html, ans: ans, options: shuffle(opts), prompt: prompt || "Elige la respuesta", small: html.length > 70 }; }
+function QS(html, ans, opts, prompt) { return { html: html, ans: ans, options: shuffle(opts), prompt: prompt || "Pick the answer", small: html.length > 70 }; }
 function ST(text, ans, steps) { return { story: true, html: text, ans: fmtD(ans), options: optsN(ans, steps || [1, -1, 2, -2, 10, -10]), say: text, prompt: "Lee y resuelve" }; }
 var QM = '<span class="q">?</span>';
 function sg(n) { return n < 0 ? "(" + fmtD(n) + ")" : fmtD(n); }
@@ -546,17 +546,17 @@ var GNAME = function (g) { var G = GRADES[g]; return G ? G.label + (g <= 6 ? " d
 /* ---------- Catálogo de juegos ---------- */
 var STAGES = [{ id: "kids", name: "Kids" }, { id: "children", name: "Children" }, { id: "teens", name: "Teens" }];
 var GAMES = {
-  "verb-memory": { name: "Verb Memory", sub: "Verbos en pares", color: "var(--sky)", secs: 120, thumb: "thumb-verb-memory.webp", rule: "Encuentra los pares de verbos. Gana quien junte más pares." },
-  "word-quest": { name: "Word Quest", sub: "Vocabulario", color: "var(--mint)", secs: 90, thumb: "thumb-word-quest.webp", rule: "10 preguntas. Contesta bien y rápido para sumar más puntos." },
+  "verb-memory": { name: "Verb Memory", sub: "Verb pairs", color: "var(--sky)", secs: 120, thumb: "thumb-verb-memory.webp", rule: "Find the verb pairs. Whoever collects the most pairs wins." },
+  "word-quest": { name: "Word Quest", sub: "Vocabulario", color: "var(--mint)", secs: 90, thumb: "thumb-word-quest.webp", rule: "10 questions. Answer right and fast to score more points." },
   "sentence-scramble": { name: "Sentence Scramble", sub: "Ordena oraciones", color: "var(--pink)", secs: 150, thumb: "thumb-sentence-scramble.webp", rule: "Ordena 6 oraciones. Cada error resta un poco de puntos." },
   "mision-matematica": { name: "Misión Matemática", sub: "Retos de mate", color: "var(--gold)", secs: 150, thumb: "thumb-mision-matematica.webp", rule: "12 operaciones. Contesta bien y rápido para sumar más puntos." },
-  "picture-race": { name: "Picture Race", sub: "Escucha y elige", color: "var(--coral)", secs: 90, thumb: "thumb-picture-race.webp", isNew: true, rule: "Toca la imagen correcta lo más rápido que puedas." },
-  "spelling-bee": { name: "Spelling Bee Battle", sub: "Deletrea palabras", color: "var(--gold)", secs: 180, thumb: "thumb-spelling-bee.webp", isNew: true, rule: "Escucha la palabra y deletréala con las letras." },
-  "grammar-showdown": { name: "Grammar Showdown", sub: "Duelo de gramática", color: "var(--lila)", secs: 160, thumb: "thumb-grammar-showdown.webp", isNew: true, rule: "Cada pregunta tiene su propio cronómetro. ¡Rápido!" },
+  "picture-race": { name: "Picture Race", sub: "Escucha y elige", color: "var(--coral)", secs: 90, thumb: "thumb-picture-race.webp", isNew: true, rule: "Tap the right picture as fast as you can." },
+  "spelling-bee": { name: "Spelling Bee Battle", sub: "Spell words", color: "var(--gold)", secs: 180, thumb: "thumb-spelling-bee.webp", isNew: true, rule: "Listen to the word and spell it with the letters." },
+  "grammar-showdown": { name: "Grammar Showdown", sub: "Grammar duel", color: "var(--lila)", secs: 160, thumb: "thumb-grammar-showdown.webp", isNew: true, rule: "Every question has its own timer. Be quick!" },
   "que-hora-es": { name: "¿Qué hora es?", sub: "Lee el reloj", color: "var(--sky)", secs: 120, thumb: "thumb-que-hora-es.webp", isNew: true, rule: "Mira el reloj y elige la hora correcta." },
-  "word-forms": { name: "Word Forms", sub: "Forma la palabra", color: "var(--coral)", secs: 120, thumb: "wf-cover.webp", isNew: true, rule: "Elige la forma correcta de la palabra para completar la oración." },
-  "toefl-practice": { name: "TOEFL Practice", sub: "Duelo tipo examen", color: "var(--mint)", secs: 300, thumb: "thumb-toefl-practice.webp", isNew: true, rule: "10 preguntas tipo TOEFL ITP. Piensa bien: cada acierto cuenta." },
-  "sopa-de-letras": { name: "Sopa de letras", sub: "Encuentra palabras", color: "var(--lila)", secs: 180, thumb: "thumb-sopa-de-letras.webp", rule: "Toca la primera y la última letra de cada palabra." }
+  "word-forms": { name: "Word Forms", sub: "Build the word", color: "var(--coral)", secs: 120, thumb: "wf-cover.webp", isNew: true, rule: "Choose the correct form of the word to complete the sentence." },
+  "toefl-practice": { name: "TOEFL Practice", sub: "Exam-style duel", color: "var(--mint)", secs: 300, thumb: "thumb-toefl-practice.webp", isNew: true, rule: "10 preguntas tipo TOEFL ITP. Piensa bien: cada acierto cuenta." },
+  "sopa-de-letras": { name: "Word search", sub: "Find words", color: "var(--lila)", secs: 180, thumb: "thumb-sopa-de-letras.webp", rule: "Tap the first and last letter of each word." }
 };
 var ORDER = ["que-hora-es", "word-forms", "toefl-practice", "picture-race", "spelling-bee", "grammar-showdown", "verb-memory", "word-quest", "sentence-scramble", "mision-matematica", "sopa-de-letras"];
 var STAGE_ONLY = { "picture-race": 1, "spelling-bee": 1, "grammar-showdown": 1 };
@@ -606,7 +606,7 @@ function settingsHtml(game, s) {
   } else if (game === "word-forms") {
     h += '<div class="label">Etapa</div>' + chs("c2", [b("stage", "children", "Children", "happy · happily", s.stage !== "teens"), b("stage", "teens", "Teens", "construct · construction", s.stage === "teens")]);
   } else if (game === "toefl-practice") {
-    h += '<div class="label">Sección</div>' + chs("c2", [b("sec", "mix", "Mixto", "de todo un poco", !s.sec || s.sec === "mix"), b("sec", "structure", "Structure", "completa la oración", s.sec === "structure"), b("sec", "written", "Written Expression", "encuentra el error", s.sec === "written"), b("sec", "vocab", "Vocabulary", "sinónimos", s.sec === "vocab")]);
+    h += '<div class="label">Section</div>' + chs("c2", [b("sec", "mix", "Mixto", "de todo un poco", !s.sec || s.sec === "mix"), b("sec", "structure", "Structure", "completa la oración", s.sec === "structure"), b("sec", "written", "Written Expression", "encuentra el error", s.sec === "written"), b("sec", "vocab", "Vocabulary", "sinónimos", s.sec === "vocab")]);
   } else if (game === "verb-memory") {
     h += '<div class="label">Verbos</div>' + chs("c2", [b("set", "easy", "Everyday verbs", "go, eat, see…", s.set !== "hard"), b("set", "hard", "Challenge verbs", "begin, choose…", s.set === "hard")]);
     h += '<div class="label">Pares</div>' + chs("c2", [b("form", "past", "Present + Past", "go · went", s.form !== "part"), b("form", "part", "Present + Participle", "go · gone", s.form === "part")]);
@@ -656,26 +656,26 @@ function call(fn, args) {
 }
 function errText(e) {
   var k = e && e.error;
-  return k === "notfound" ? "No encontramos ese código. Revísalo e inténtalo de nuevo."
-    : k === "started" ? "Ese reto ya empezó. Pide que te esperen a la siguiente ronda."
-    : k === "full" ? "La sala ya está llena (máximo 6 jugadores)."
-    : k === "session" ? "Tu sesión terminó. Vuelve a entrar con tu cuenta."
-    : "Sin conexión. Revisa tu internet e inténtalo de nuevo.";
+  return k === "notfound" ? "We couldn’t find that code. Check it and try again."
+    : k === "started" ? "This game has already started. Ask them to wait for you in the next round."
+    : k === "full" ? "This room is full (6 players max)."
+    : k === "session" ? "Your session ended. Sign in again with your account."
+    : "No connection. Check your internet and try again.";
 }
 var panel = $("#panel");
 function render(html) { panel.innerHTML = html; window.scrollTo(0, 0); }
-function topBar(back, title) { return '<div class="top">' + (back ? '<button class="icon-btn" id="b-back" aria-label="Regresar">' + ico("back", 22) + "</button>" : '<a class="icon-btn" href="./#/games" aria-label="Volver a la app">' + ico("back", 22) + "</a>") + '<div class="brand sm"><span class="wordmark">MOVA</span><span class="tag">Centro Pedagógico</span></div><span class="spacer"></span></div>' + (title || ""); }
+function topBar(back, title) { return '<div class="top">' + (back ? '<button class="icon-btn" id="b-back" aria-label="Regresar">' + ico("back", 22) + "</button>" : '<a class="icon-btn" href="./#/games" aria-label="Back to Home">' + ico("back", 22) + "</a>") + '<div class="brand sm"><span class="wordmark">MOVA</span><span class="tag">Centro Pedagógico</span></div><span class="spacer"></span></div>' + (title || ""); }
 function isHost() { return room && me && room.host === me; }
 
 /* ---------- Pantallas ---------- */
 function screenGate() {
   stopPoll();
   render(topBar(false) +
-    '<h1>Retos MOVA</h1><p class="lead">Juega en vivo contra tus compañeros desde su propio celular.</p>' +
+    '<h1>Game On</h1><p class="lead">Play live against your classmates. It’s just for fun, so there are no grades.</p>' +
     '<div class="code-card" style="margin-top:18px"><div style="width:58px;height:58px;border-radius:18px;background:#fff;color:#1B2A55;display:grid;place-items:center;margin:4px auto 10px">' + ico("lock", 30) + '</div>' +
-    '<b style="display:block;font-size:19px">Exclusivo para alumnos MOVA</b><span style="display:block;font-size:14px;opacity:.85;margin-top:4px">Entra con el usuario y la contraseña que te dio tu maestra.</span></div>' +
-    '<button class="primary" id="b-login">Entrar con mi cuenta</button>' +
-    '<a class="ghost" href="' + WA + '" target="_blank" rel="noopener">' + ico("wa", 20) + " Quiero ser alumno MOVA</a>");
+    '<b style="display:block;font-size:19px">For MOVA students only</b><span style="display:block;font-size:14px;opacity:.85;margin-top:4px">Sign in with the username and password your teacher gave you.</span></div>' +
+    '<button class="primary" id="b-login">Sign in</button>' +
+    '<a class="ghost" href="' + WA + '" target="_blank" rel="noopener">' + ico("wa", 20) + " I want to join MOVA</a>");
   $("#b-login").onclick = function () { window.MovaAuth && window.MovaAuth.login(); };
   var w = setInterval(function () { if (user()) { clearInterval(w); start(); } }, 700);
 }
@@ -684,12 +684,12 @@ function screenHome(preGame) {
   stopPoll();
   var u = user(), first = String(u.name || "").split(/\s+/)[0];
   render(topBar(false) +
-    '<h1>Retos MOVA</h1><p class="lead">Hola, ' + esc(first) + ". Juega en vivo contra tus compañeros. Es solo por diversión: no lleva calificación.</p>" +
+    '<h1>Game On</h1><p class="lead">Hola, ' + esc(first) + ". Play live against your classmates. It’s just for fun, so there are no grades.</p>" +
     '<div class="ribbon"><span class="chip" style="background:var(--mint)">' + ico("users", 14) + ' 2 a 6 jugadores</span><span class="chip" style="background:var(--gold)">' + ico("clock", 14) + " Partidas cortas</span></div>" +
     '<div class="hero">' +
-    '<button class="big-opt" id="b-create" style="--c:var(--gold)"><span class="ic">' + ico("plus") + '</span><span><b>Crear un reto</b><span>Elige el juego y comparte el código</span></span></button>' +
-    '<button class="big-opt" id="b-solo" style="--c:var(--mint)"><span class="ic">' + ico("star") + '</span><span><b>Practicar solo</b><span>6 juegos con tu récord personal</span></span></button>' +
-    '<button class="big-opt" id="b-join" style="--c:var(--sky)"><span class="ic">' + ico("key") + '</span><span><b>Unirme con código</b><span>Escribe el código de 4 números</span></span></button>' +
+    '<button class="big-opt" id="b-create" style="--c:var(--gold)"><span class="ic">' + ico("plus") + '</span><span><b>Create a game</b><span>Pick a game and share the code</span></span></button>' +
+    '<button class="big-opt" id="b-solo" style="--c:var(--mint)"><span class="ic">' + ico("star") + '</span><span><b>Practice solo</b><span>6 games with your personal best</span></span></button>' +
+    '<button class="big-opt" id="b-join" style="--c:var(--sky)"><span class="ic">' + ico("key") + '</span><span><b>Join with a code</b><span>Type the 4-digit code</span></span></button>' +
     "</div>");
   $("#b-create").onclick = function () { unlock(); screenCreate(preGame); };
   $("#b-join").onclick = function () { unlock(); screenJoin(); };
@@ -718,7 +718,7 @@ function screenCreate(preGame) {
 }
 
 function screenJoin() {
-  render(topBar(true, '<h2>Unirme a un reto</h2><p class="lead">Escribe el código que aparece en el celular de quien creó el reto.</p>') +
+  render(topBar(true, '<h2>Unirme a un reto</h2><p class="lead">Type the code shown on the host’s phone.</p>') +
     '<div class="codebox">' + [0, 1, 2, 3].map(function (i) { return '<input inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Número ' + (i + 1) + '" data-i="' + i + '">'; }).join("") + "</div>" +
     '<button class="primary" id="b-go" disabled>' + ico("play", 22) + ' Entrar al reto</button><p class="err" id="err"></p>');
   $("#b-back").onclick = function () { screenHome(); };
@@ -787,9 +787,9 @@ function soloEnd(meta, score) {
   try { best = parseInt(localStorage.getItem(key) || "0", 10) || 0; } catch (e) {}
   var rec = score > best; if (rec) { try { localStorage.setItem(key, String(score)); } catch (e) {} }
   var label = settingsLabel(meta.game, meta.settings);
-  try { window.MovaAuth && window.MovaAuth.save(meta.game, "Práctica individual · " + label, score, null, { mode: "solo", stage: meta.settings.stage }); } catch (e) {}
+  try { window.MovaAuth && window.MovaAuth.save(meta.game, "Solo practice · " + label, score, null, { mode: "solo", stage: meta.settings.stage }); } catch (e) {}
   render(topBar(true) + '<h2>' + (rec ? "New record!" : "Well done!") + '</h2><p class="lead">' + esc(GAMES[meta.game].name) + " · " + esc(label) + "</p>" +
-    '<div class="code-card" style="margin-top:16px"><small>TU PUNTAJE</small><div class="code" style="letter-spacing:.04em;margin-left:0">' + score + '</div><span class="gm">Récord: ' + Math.max(best, score) + " pts</span></div>" +
+    '<div class="code-card" style="margin-top:16px"><small>TU PUNTAJE</small><div class="code" style="letter-spacing:.04em;margin-left:0">' + score + '</div><span class="gm">Best: ' + Math.max(best, score) + " pts</span></div>" +
     '<button class="primary" id="b-again">' + ico("redo", 22) + ' Otra vez</button><button class="ghost" id="b-chg">' + ico("gear", 20) + " Cambiar juego o etapa</button>");
   $("#b-back").onclick = function () { screenHome(); };
   $("#b-again").onclick = function () { startSolo(soloLast); };
@@ -804,13 +804,13 @@ function screenLobby() {
   var g = GAMES[room.game];
   lobbySettings = JSON.parse(JSON.stringify(room.settings || {}));
   render(topBar(true) +
-    '<h2>Sala de espera</h2><p class="lead">Comparte este código con tus compañeros.</p>' +
-    '<div class="code-card"><small>CÓDIGO DEL RETO</small><div class="code">' + esc(room.code) + '</div><span class="gm">' + esc(g.name) + "</span></div>" +
+    '<h2>Sala de espera</h2><p class="lead">Share this code with your classmates.</p>' +
+    '<div class="code-card"><small>GAME CODE</small><div class="code">' + esc(room.code) + '</div><span class="gm">' + esc(g.name) + "</span></div>" +
     '<p class="note" id="lab">' + esc(settingsLabel(room.game, room.settings)) + "</p>" +
     '<div class="plist" id="plist"></div>' +
-    (isHost() ? '<div class="settings" id="opts" hidden></div><button class="link" id="b-opts">' + "Cambiar tema u opciones</button>" +
+    (isHost() ? '<div class="settings" id="opts" hidden></div><button class="link" id="b-opts">' + "Change topic or options</button>" +
       '<button class="primary" id="b-start" disabled>' + ico("play", 22) + " Empezar</button><p class=\"note\" id=\"need\">Esperando a que se una al menos otra persona…</p>"
-      : '<div class="wait"><span class="dots3"><i></i><i></i><i></i></span> Esperando a que empiece el reto</div>') +
+      : '<div class="wait"><span class="dots3"><i></i><i></i><i></i></span> Waiting for the game to start</div>') +
     '<button class="link" id="b-leave">Salir de la sala</button>');
   $("#b-back").onclick = leave; $("#b-leave").onclick = leave;
   if (isHost()) {
@@ -826,7 +826,7 @@ function screenLobby() {
 function drawPlayers() {
   var box = $("#plist"); if (!box) return;
   box.innerHTML = players.map(function (p) {
-    return '<div class="prow' + (p.id === me ? " me" : "") + (p.online ? "" : " off") + '">' + av(p) + "<span>" + esc(p.name) + (p.id === me ? " (tú)" : "") + "</span>" + (p.id === room.host ? '<span class="tag">Creó el reto</span>' : "") + "</div>";
+    return '<div class="prow' + (p.id === me ? " me" : "") + (p.online ? "" : " off") + '">' + av(p) + "<span>" + esc(p.name) + (p.id === me ? " (you)" : "") + "</span>" + (p.id === room.host ? '<span class="tag">Host</span>' : "") + "</div>";
   }).join("");
   var b = $("#b-start"); if (b) { var n = players.filter(function (p) { return p.online; }).length; b.disabled = n < 2; var nd = $("#need"); if (nd) nd.hidden = n >= 2; }
 }
@@ -839,7 +839,7 @@ function onPollError(e) {
 }
 function onState() {
   if (!room) return;
-  if (room.status === "closed") { stopPoll(); if (G) G.stop(); G = null; forgetRoom(); toast("Quien creó el reto cerró la sala."); screenHome(); return; }
+  if (room.status === "closed") { stopPoll(); if (G) G.stop(); G = null; forgetRoom(); toast("The host closed the room."); screenHome(); return; }
   if (room.status === "playing" && room.round !== localRound) { localRound = room.round; prepareGame(); return; }
   if (room.status === "lobby" && !$("#plist") ) { screenLobby(); return; }
   if (room.status === "lobby") { drawPlayers(); var l = $("#lab"); if (l && !isHost()) l.textContent = settingsLabel(room.game, room.settings); return; }
@@ -945,7 +945,7 @@ function drawResults() {
   var list = act.slice().sort(function (a, b) { return b.score - a.score || (a.ms || 1e9) - (b.ms || 1e9); });
   if (!allDone) {
     $("#rt").textContent = "You finished!"; $("#rs").textContent = "Waiting for the others to finish…";
-    box.innerHTML = '<div class="plist">' + list.map(function (p) { return '<div class="prow' + (p.id === me ? " me" : "") + '">' + av(p) + "<span>" + esc(p.name) + "</span>" + (p.done ? '<span class="tag">Terminó</span>' : '<span class="tag">Jugando…</span>') + '<span class="sc" style="margin-left:8px">' + p.score + "</span></div>"; }).join("") + "</div>";
+    box.innerHTML = '<div class="plist">' + list.map(function (p) { return '<div class="prow' + (p.id === me ? " me" : "") + '">' + av(p) + "<span>" + esc(p.name) + "</span>" + (p.done ? '<span class="tag">Finished</span>' : '<span class="tag">Jugando…</span>') + '<span class="sc" style="margin-left:8px">' + p.score + "</span></div>"; }).join("") + "</div>";
     $("#ract").innerHTML = ""; return;
   }
   if (box.dataset.final === String(room.round)) { actions(); return; }
@@ -959,7 +959,7 @@ function drawResults() {
     return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.id === me ? "You" : p.name) + '</b><div class="bar"><span>' + ordEn(place[i]) + "</span><small>" + p.score + " pts</small></div></div>" : "<div></div>";
   }).join("") + "</div>" +
     (list.length > 3 ? '<div class="plist">' + list.slice(3).map(function (p, i) { return '<div class="prow' + (p.id === me ? " me" : "") + '"><b style="width:24px;text-align:center">' + (i + 4) + "</b>" + av(p) + "<span>" + esc(p.name) + '</span><span class="sc">' + p.score + "</span></div>"; }).join("") + "</div>" : "") +
-    '<p class="note">Reto solo por diversión: no cuenta para la calificación.</p>';
+    '<p class="note">It’s just for fun, so there are no grades.</p>';
   actions();
 }
 function actions() {
@@ -970,7 +970,7 @@ function actions() {
     $("#b-cfg").onclick = function () { call("mp_lobby", { p_code: code }).then(function () { screenLobby(); }).catch(function (e) { toast(errText(e)); }); };
     $("#b-out").onclick = leave;
   } else {
-    a.innerHTML = '<div class="wait"><span class="dots3"><i></i><i></i><i></i></span> Esperando la siguiente ronda</div><button class="link" id="b-out">Salir del reto</button>';
+    a.innerHTML = '<div class="wait"><span class="dots3"><i></i><i></i><i></i></span> Waiting for the next round</div><button class="link" id="b-out">Salir del reto</button>';
     $("#b-out").onclick = leave;
   }
 }
@@ -990,7 +990,7 @@ function questionGame(qs, opt) {
         var q = qs[i]; t0 = Date.now();
         stage.innerHTML = '<div class="qmeta"><span>' + esc(opt.title) + "</span><span>" + (i + 1) + " / " + qs.length + "</span></div>" +
           (opt.perQ ? '<div class="qbar"><i id="qb"></i></div>' : "") +
-          '<div class="prompt">' + (q.say && synth && !q.bigSay ? '<button class="say" id="say" aria-label="Escuchar">' + ico("sound") + "</button>" : "") + q.html + "</div>" +
+          '<div class="prompt">' + (q.say && synth && !q.bigSay ? '<button class="say" id="say" aria-label="Listen">' + ico("sound") + "</button>" : "") + q.html + "</div>" +
           '<div class="opts' + (q.pics ? " pics" : "") + (q.cls ? " " + q.cls : "") + (q.options.length === 3 ? " three" : "") + '">' + q.options.map(function (o) { return '<button class="opt" data-v="' + esc(o) + '"' + (q.pics ? ' aria-label="' + esc(q.label ? q.label(o) : o) + '"' : "") + ">" + (q.render ? q.render(o) : q.pics ? D2.PICS[o] : esc(o)) + "</button>"; }).join("") + "</div>";
         var sb = $("#say", stage) || $(".listen", stage);
         if (q.say && synth && sb) { sb.onclick = function () { speak(q.say, q.lang); }; if (q.autoSay) speak(q.say, q.lang); }
@@ -1097,7 +1097,7 @@ BUILD["toefl-practice"] = function (s) {
     if (!bags[k]) bags[k] = shuffle(src[k][0]);
     while (bags[k].length) { var q = src[k][1](bags[k].pop()); if (q) { qs.push(q); break; } }
   });
-  if (!qs.length) qs.push({ html: '<div class="s">No se pudo cargar el banco de preguntas. Revisa tu conexión.</div>', options: ["OK"], ans: "OK" });
+  if (!qs.length) qs.push({ html: '<div class="s">We couldn’t load the questions. Check your connection.</div>', options: ["OK"], ans: "OK" });
   return questionGame(qs, { title: "TOEFL ITP" });
 };
 
@@ -1175,7 +1175,7 @@ BUILD["word-quest"] = function (s) {
       return { html: '<div class="s">' + esc(it[0]).replace(/_{2,}/, "<u>&nbsp;</u>") + "</div>" + (it[2] ? '<div class="hint">' + esc(it[2]) + "</div>" : ""), options: shuffle(uniq), ans: it[1], say: it[0].replace(/_{2,}/, it[1]), lang: "en-US" };
     }
     var dist = shuffle(t.items.filter(function (x) { return x[1] !== it[1]; }).map(function (x) { return x[1]; })).filter(function (x, k, a) { return a.indexOf(x) === k; }).slice(0, 3);
-    return { html: (it[2] ? '<div class="sw" style="background:' + esc(it[2]) + '"></div>' : "") + '<div class="w">' + esc(it[0]) + '</div><div class="hint">¿Qué significa?</div>', options: shuffle(dist.concat(it[1])), ans: it[1], say: it[0], lang: "en-US", autoSay: true };
+    return { html: (it[2] ? '<div class="sw" style="background:' + esc(it[2]) + '"></div>' : "") + '<div class="w">' + esc(it[0]) + '</div><div class="hint">What does it mean?</div>', options: shuffle(dist.concat(it[1])), ans: it[1], say: it[0], lang: "en-US", autoSay: true };
   });
   return questionGame(qs, { title: t.label });
 };
@@ -1334,12 +1334,12 @@ function liveEnter(c) {
   liveOnState();
 }
 function liveErr(e) {
-  if (e && (e.error === "kicked" || e.error === "notfound")) { liveForget(); toast(e.error === "kicked" ? "Saliste de la sesión." : "La sesión terminó."); screenHome(); }
+  if (e && (e.error === "kicked" || e.error === "notfound")) { liveForget(); toast(e.error === "kicked" ? "You left the session." : "The session is over."); screenHome(); }
 }
 var liveScreen = "";
 function liveOnState() {
   if (!live) return;
-  if (live.status === "closed") { liveForget(); toast("La maestra cerró la sesión."); screenHome(); return; }
+  if (live.status === "closed") { liveForget(); toast("Your teacher ended the session."); screenHome(); return; }
   var meP = lplayers.find(function (p) { return p.id === me; }) || {};
   var playing = live.status === "playing" && serverNow() < live.ends_at;
   if (playing && meP.round === live.round) {
@@ -1357,9 +1357,9 @@ function liveLobby() {
     var isB = liveGame() === "bingo";
     render(topBar(true) + '<div class="center"><span class="pkbadge">MOVA LIVE</span></div>' + (isB ? '<h1>MOVA Bingo</h1><p class="lead">' + ((live.settings || {}).show === "read" ? "Read each word" : (live.settings || {}).show === "text" ? "Listen to and read each word" : "Listen to each word") + ', put a coin on your card and complete the pattern to win. BINGO!</p><div class="pkhero bhero">' + [0, 1, 2, 3].map(function (k) { return '<span>' + BG.chip + "</span>"; }).join("") + "</div>"
         : '<h1>MOVA Park</h1><p class="lead">Contesta bien para ganar monedas y construir el mejor parque de diversiones.</p><div class="pkhero">' + ["carousel", "wheel", "coaster", "castle"].map(function (id) { return '<span>' + PK.art(id) + "</span>"; }).join("") + "</div>") +
-      '<div class="wait"><span class="dots3"><i></i><i></i><i></i></span> Esperando a que tu maestra empiece</div>' +
-      '<div class="label">En la sesión</div><div class="plist" id="lpl"></div>');
-    $("#b-back").onclick = function () { if (confirm("¿Salir de la sesión?")) { lcall("live_leave", { p_code: liveCode }).catch(function () {}); liveForget(); screenHome(); } };
+      '<div class="wait"><span class="dots3"><i></i><i></i><i></i></span> Waiting for your teacher to start</div>' +
+      '<div class="label">In the session</div><div class="plist" id="lpl"></div>');
+    $("#b-back").onclick = function () { if (confirm("Leave the session?")) { lcall("live_leave", { p_code: liveCode }).catch(function () {}); liveForget(); screenHome(); } };
   }
   var box = $("#lpl"); if (box) box.innerHTML = lplayers.map(function (p) { return '<div class="prow' + (p.id === me ? " me" : "") + '">' + av(p) + "<span>" + esc(p.name) + '</span><span class="tag">' + esc(STAGE_NAME[stageOf(p)] || "") + "</span></div>"; }).join("");
 }
@@ -1423,7 +1423,7 @@ function parkGame(lv, meP) {
     if (qi >= pool.length) { R = Math.random; pool = livePool(st, cats); qi = 0; }
     var q = pool[qi++], stage = $("#pkq"); if (!stage) return;
     locked = false; t0 = Date.now();
-    stage.innerHTML = '<div class="prompt">' + (q.say && synth && !q.bigSay ? '<button class="say" id="say" aria-label="Escuchar">' + ico("sound") + "</button>" : "") + q.html + "</div>" +
+    stage.innerHTML = '<div class="prompt">' + (q.say && synth && !q.bigSay ? '<button class="say" id="say" aria-label="Listen">' + ico("sound") + "</button>" : "") + q.html + "</div>" +
       '<div class="opts' + (q.pics ? " pics" : "") + (q.cls ? " " + q.cls : "") + (q.options.length === 3 ? " three" : "") + '">' + q.options.map(function (o) { return '<button class="opt" data-v="' + esc(o) + '"' + (q.pics ? ' aria-label="' + esc(q.label ? q.label(o) : o) + '"' : "") + ">" + (q.render ? q.render(o) : q.pics ? D2.PICS[o] : esc(o)) + "</button>"; }).join("") + "</div>";
     var sb = $("#say", stage) || $(".listen", stage);
     if (q.say && synth && sb) { sb.onclick = function () { speak(q.say, q.lang); }; if (q.autoSay) speak(q.say, q.lang); }
@@ -1446,7 +1446,7 @@ function parkGame(lv, meP) {
   function shop() {
     var sh = document.createElement("div"); sh.className = "pksheet"; sh.id = "pksheet";
     function draw() {
-      sh.innerHTML = '<div class="pkpanel"><div class="pkhead"><b>Tienda del parque</b><span class="pill">' + PK.coin + '<span>' + coins.toLocaleString("es-MX") + '</span></span><button class="icon-btn" id="pkclose" aria-label="Cerrar">' + ico("x", 20) + "</button></div>" +
+      sh.innerHTML = '<div class="pkpanel"><div class="pkhead"><b>Tienda del parque</b><span class="pill">' + PK.coin + '<span>' + coins.toLocaleString("es-MX") + '</span></span><button class="icon-btn" id="pkclose" aria-label="Close">' + ico("x", 20) + "</button></div>" +
         '<div class="pklist">' + PK.ATTR.map(function (a) {
           var own = items.indexOf(a.id) >= 0, can = !own && coins >= a.price;
           return '<button class="pkitem' + (own ? " own" : "") + '" data-id="' + a.id + '"' + (can ? "" : " disabled") + '><span class="pi">' + PK.art(a.id) + '</span><span class="pt"><b>' + esc(a.name) + "</b><small>+" + a.inc + " por respuesta</small></span>" +
@@ -1474,14 +1474,14 @@ function parkGame(lv, meP) {
   function begin() {
     render('<div class="hud"><span class="pill" style="background:#FCE38A;color:#1B2A55">MOVA Park</span><span class="grow"></span><span class="pill">' + ico("clock", 16) + '<span id="tleft"></span></span><span class="pill" id="pkrank"></span></div>' +
       '<div class="tbar" id="tbar"><i></i></div>' +
-      '<div class="pkpark"><div class="pkland" id="pkland"></div><div class="pkbar"><span class="pill">' + PK.coin + '<span id="pkcoins">0</span></span><span class="pkinc">' + PK.coin + '<span id="pkinc"></span> por acierto</span><button class="pkshop" id="pkshop">Tienda<span class="n" id="pkshopn" hidden></span></button></div></div>' +
+      '<div class="pkpark"><div class="pkland" id="pkland"></div><div class="pkbar"><span class="pill">' + PK.coin + '<span id="pkcoins">0</span></span><span class="pkinc">' + PK.coin + '<span id="pkinc"></span> per correct answer</span><button class="pkshop" id="pkshop">Tienda<span class="n" id="pkshopn" hidden></span></button></div></div>' +
       '<div class="stage pkq" id="pkq"></div>');
     $("#pkshop").onclick = function () { unlock(); shop(); };
     drawPark(); drawHud(); drawRank(); frame();
     R = Math.random; pool = livePool(st, cats); qi = 0; nextQ();
   }
   (function countdown() {
-    render('<div class="count"><div><div class="num" id="cd">3</div><p>MOVA Park · ' + esc(STAGE_NAME[st]) + '</p><p style="margin-top:6px;font-size:14px">Contesta bien para ganar monedas y compra atracciones en la tienda. ¡Gana el parque más valioso!</p></div></div>');
+    render('<div class="count"><div><div class="num" id="cd">3</div><p>MOVA Park · ' + esc(STAGE_NAME[st]) + '</p><p style="margin-top:6px;font-size:14px">Answer correctly to earn coins and buy rides in the shop. The most valuable park wins!</p></div></div>');
     var last = null;
     (function cd() {
       if (stopped) return;
@@ -1512,7 +1512,7 @@ function liveResults() {
     '<div class="pkmine"><div class="label" style="margin-top:0">Your park</div><div class="pkland sm">' + PK.ATTR.map(function (a) { var own = (mine.items || []).indexOf(a.id) >= 0; return '<div class="plot' + (own ? " own" : "") + '">' + (own ? PK.art(a.id) : '<span class="ghost">' + PK.art(a.id) + "</span>") + "</div>"; }).join("") + "</div>" +
     '<div class="pkstats"><span><b>$' + (mine.value || 0).toLocaleString("es-MX") + "</b>Park value</span><span><b>" + (mine.correct || 0) + "</b>Correct</span><span><b>" + (mine.wrong || 0) + "</b>Wrong</span></div></div>" +
     (list.length > 3 ? '<div class="plist">' + list.slice(3).map(function (p, i) { return '<div class="prow' + (p.id === me ? " me" : "") + '"><b style="width:24px;text-align:center">' + (i + 4) + "</b>" + av(p) + "<span>" + esc(p.name) + '</span><span class="sc">$' + p.value.toLocaleString("es-MX") + "</span></div>"; }).join("") + "</div>" : "") +
-    '<p class="lead" style="margin-top:16px">Si tu maestra inicia otra ronda, entrarás en automático.</p>');
+    '<p class="lead" style="margin-top:16px">If your teacher starts another round, you’ll join automatically.</p>');
   $("#b-back").onclick = function () { lcall("live_leave", { p_code: liveCode }).catch(function () {}); liveForget(); screenHome(); };
   if (first && pos >= 0 && pos < 3) { confetti(pos === 0); sfx.go(); }
 }
@@ -1548,7 +1548,7 @@ function bingoGame(lv, meP) {
     if (!w) { box.innerHTML = '<div class="bnext">Get ready…</div>'; return; }
     box.innerHTML = '<div class="bcnt">Word ' + n + " of " + N + "</div>" +
       (text ? '<div class="bword">' + esc(w.say) + "</div>" : '<div class="bword listen-only">' + ico("sound", 30) + " Listen!</div>") +
-      (sound ? '<button class="bre" id="bre" aria-label="Escuchar otra vez">' + ico("sound", 18) + " Again</button>" : "") +
+      (sound ? '<button class="bre" id="bre" aria-label="Listen again">' + ico("sound", 18) + " Again</button>" : "") +
       (text && n > 1 ? '<div class="bhist">' + order.slice(Math.max(0, n - 5), n - 1).reverse().map(function (wi) { return "<span>" + esc(t.words[wi].say) + "</span>"; }).join("") + "</div>" : "");
     if (sound) $("#bre").onclick = function () { speak(w.say, "en-US"); };
     if (fresh) { box.classList.remove("fresh"); void box.offsetWidth; box.classList.add("fresh"); if (sound) speak(w.say, "en-US"); }
@@ -1639,7 +1639,7 @@ function bingoResults() {
     '<div class="pkstats" style="margin-top:14px"><span style="background:var(--track)"><b>' + (mine.correct || 0) + '</b>Coins placed</span><span style="background:var(--track)"><b>' + (mine.wrong || 0) + '</b>Mistakes</span><span style="background:var(--track)"><b>' + (mi.bingo != null ? "Yes!" : (mi.miss != null ? mi.miss : "–")) + "</b>" + (mi.bingo != null ? "BINGO" : "Missing") + "</span></div>" +
     ((mi.bad || []).length ? '<div class="label">Words to practice</div><div class="bhist" style="justify-content:flex-start">' + mi.bad.map(function (w) { return "<span>" + esc(w) + "</span>"; }).join("") + "</div>" : "") +
     (win.length > 3 ? '<div class="plist">' + win.slice(3).map(function (p, i) { return '<div class="prow' + (p.id === me ? " me" : "") + '"><b style="width:30px;text-align:center">' + ordEn(i + 4) + "</b>" + av(p) + "<span>" + esc(p.name) + '</span><span class="tag">BINGO</span></div>'; }).join("") + "</div>" : "") +
-    '<p class="lead" style="margin-top:16px">Si tu maestra inicia otra ronda, entrarás en automático.</p>');
+    '<p class="lead" style="margin-top:16px">If your teacher starts another round, you’ll join automatically.</p>');
   $("#b-back").onclick = function () { lcall("live_leave", { p_code: liveCode }).catch(function () {}); liveForget(); screenHome(); };
   if (first && pos >= 0 && pos < 3) { confetti(pos === 0); sfx.go(); }
 }

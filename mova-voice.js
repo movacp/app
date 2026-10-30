@@ -1,3 +1,6 @@
+/* MOVA · carga el tema 2026 en los juegos (tipografía, colores y botón Home) */
+(function(){ try{ if(window.__movaThemeLoader || !/juego-|mova-live/.test(location.pathname)) return; window.__movaThemeLoader = 1;
+  var s = document.createElement('script'); s.src = 'mova-theme.js?v=24'; (document.head || document.documentElement).appendChild(s); }catch(e){} })();
 (function(){ if(window.__movaVoice) return; window.__movaVoice = 1;
 /* MOVA Voice · elige automáticamente la voz más natural del dispositivo para todos los juegos */
 (function(){
@@ -80,7 +83,7 @@
     key: 'sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6',
     version: 'v1',
     /* idioma → voz por género. Para activar español, agregue aquí la letra de la voz en la función tts. */
-    voices: { en: { f: 'f', m: 'm' }, es: { f: 'k', m: 'k' } }
+    voices: { en: { f: 'f', m: 'm', kid: 'c' }, es: { f: 'd', m: 'd', kid: 'd' } }
   };
   var S = window.speechSynthesis;
   var deviceSpeak = S.speak.bind(S), deviceCancel = S.cancel.bind(S);
@@ -113,9 +116,27 @@
     if(!/\S/.test(u.text || '') || String(u.text).length > 800) return false;
     return !!CFG.voices[langOf(u)];
   }
+  /* Voces MOVA (oct 2026):
+     inglés Kids/Children → Clara (c) · inglés Teens, TOEFL y Level Up → Matilda (f) y Dean (m)
+     español (lecturas, Mochi, lectoescritura, instrucciones) → Daniela (d) */
+  var TEEN_PAGES = /(toefl-practice|level-up|word-forms|sentence-builder|verb-memory|juego-retos|mova-live)\.html/;
+  function teensNow(){
+    if(TEEN_PAGES.test(location.pathname)) return true;
+    try{
+      var m = location.hash.match(/^#\/library\/([^\/?]+)/);
+      if(m && typeof READINGS !== 'undefined'){
+        var id = decodeURIComponent(m[1]), r = READINGS.find(function(x){ return x.id === id; });
+        if(r) return r.stage === 'teens';
+      }
+      if(/^#\/(learn|structures)\b/.test(location.hash) && /teens/i.test(location.hash)) return true;
+    }catch(e){}
+    return false;
+  }
   function voiceOf(u){
-    var g = u.movaGender === 'm' ? 'm' : 'f';
-    return CFG.voices[langOf(u)][g];
+    var V = CFG.voices[langOf(u)];
+    if(u.movaGender === 'm') return V.m;
+    if(langOf(u) === 'es') return V.kid;
+    return teensNow() ? V.f : V.kid;
   }
   function speedOf(u){
     var r = Math.min(Math.max(+u.rate || 1, .85), 1.1);

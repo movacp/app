@@ -1,3 +1,6 @@
+/* MOVA · carga el tema 2026 en los juegos (tipografía, colores y botón Home) */
+(function(){ try{ if(window.__movaThemeLoader || !/juego-|mova-live/.test(location.pathname)) return; window.__movaThemeLoader = 1;
+  var s = document.createElement('script'); s.src = 'mova-theme.js?v=24'; (document.head || document.documentElement).appendChild(s); }catch(e){} })();
 /* MOVA Learning Studio: inicio de sesión opcional para alumnos MOVA y registro de avance.
    La app sigue abierta para todos; si el alumno entra con su cuenta, se guarda su práctica. */
 (function () {
@@ -365,8 +368,9 @@
     return h;
   }
 
+  var BLOOM = '<svg class="mvp-bloom" viewBox="0 0 220 220" aria-hidden="true"><path d="M98 138 C96 156.0 90 166.0 92 178" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="89" cy="180" rx="6.2" ry="4" fill="#1A1B2E"/><path d="M122 138 C124 156.0 128 166.0 127 178" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="130" cy="180" rx="6.2" ry="4" fill="#1A1B2E"/><path d="M80 98 C62 104 50 92 48 74" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="48" cy="74" r="3.6" fill="#1A1B2E"/><path d="M142 100 C152 104 160 102 168 96" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="168" cy="96" r="3.6" fill="#1A1B2E"/><circle cx="86" cy="68" r="30" fill="#9C8BFF"/><circle cx="134" cy="68" r="30" fill="#9C8BFF"/><circle cx="86" cy="116" r="30" fill="#9C8BFF"/><circle cx="134" cy="116" r="30" fill="#9C8BFF"/><circle cx="110" cy="92" r="26" fill="#9C8BFF"/><circle cx="80" cy="62" r="7" fill="#fff" opacity=".28"/><path d="M94 106 Q110 122 126 106" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="84" cy="100" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><ellipse cx="136" cy="100" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><ellipse cx="97" cy="88" rx="4.2" ry="5.2" fill="#1A1B2E"/><ellipse cx="123" cy="88" rx="4.2" ry="5.2" fill="#1A1B2E"/><circle cx="98.4" cy="86.2" r="1.4" fill="#fff"/><circle cx="124.4" cy="86.2" r="1.4" fill="#fff"/></svg>';
   function showAccount() {
-    var b = open('<div class="mvp-top"><div class="mva-badge">' + esc(initials(user.name)) + '</div><div class="mvp-who"><span>My Progress</span><h2>' + esc(user.name) + "</h2>" +
+    var b = open('<div class="mvp-top">' + BLOOM + '<div class="mva-badge">' + esc(initials(user.name)) + '</div><div class="mvp-who"><span>My Progress</span><h2>' + esc(user.name) + "</h2>" +
       (user.stage ? '<em>' + esc(user.stage) + "</em>" : "") + '</div></div><div id="mvp-body"><p class="mvp-load">Loading your progress…</p></div>' +
       '<button class="mva-btn" id="mva-ok">Keep practicing</button><button class="mva-btn soft" id="mva-out">Log out</button>' +
       '<p class="mva-legal">User: ' + esc(user.username) + "</p>", "wide");
@@ -463,7 +467,7 @@
     var main = document.getElementById("main"); if (!main || main.querySelector(".mva-retos")) return;
     var head = main.querySelector(".page-head"); if (!head) return;
     var w = document.createElement("section"); w.className = "wrap";
-    w.innerHTML = '<a class="mva-retos" href="juego-retos.html"><span class="ic">' + USERS_IC + '</span><span><b>Retos MOVA</b><span>Juega en vivo contra tus compañeros desde su celular</span></span><em>Jugar</em></a>';
+    w.innerHTML = '<a class="mva-retos" href="juego-retos.html"><span class="ic">' + USERS_IC + '</span><span><b>Game On</b><span>Play live against your classmates from your phone</span></span><em>Jugar</em></a>';
     head.parentNode.insertBefore(w, head.nextSibling);
   }
 

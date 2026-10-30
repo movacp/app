@@ -685,6 +685,7 @@ function openStory(p){
  $("#st-dots").innerHTML=S.pages.map((_,j)=>`<i class="${j<p?"done":j===p?"now":""}"></i>`).join("");
  $("#st-art").innerHTML=pg[1].map(w=>`<svg viewBox="0 0 120 112" class="st-pic" aria-hidden="true">${ART[w]}</svg>`).join("");
  $("#st-text").innerHTML=pg[0].split(" ").map((w,j)=>`<button class="wd" data-j="${j}">${w}</button>`).join(" ");
+ try{const nat=window.MovaVoice&&MovaVoice.natural;if(nat){const all=[];S.pages.forEach(q=>q[0].split(" ").forEach(w=>{const c=clean(w);if(c&&all.indexOf(c)<0)all.push(c);}));nat.prefetch(all,"es-MX",.85);}}catch(e){}
  $("#st-text").querySelectorAll(".wd").forEach(b=>b.addEventListener("click",()=>{if(SS.reading)return;tap();speak(clean(b.textContent),.75);b.classList.add("hl");setTimeout(()=>b.classList.remove("hl"),700);}));
  $("#st-read").hidden=false;$("#st-prev").hidden=false;$("#st-prev").disabled=p===0;$("#st-next").textContent=p===S.pages.length-1?"¡Terminé!":"Siguiente →";
  mochi($("#st-mochi"),"lee");show("story");
@@ -695,7 +696,7 @@ function readAloud(){
  const step=()=>{ws.forEach(x=>x.classList.remove("hl"));if(j>=ws.length||!SS.reading){SS.reading=false;return;}const w=ws[j];w.classList.add("hl");const t=clean(w.textContent);
   const go=()=>{j++;later(step,140);};
   if(!synth){later(go,450+t.length*70);return;}
-  try{synth.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="es-MX";u.rate=.78;u.pitch=1.12;if(voice)u.voice=voice;let done=false;const fin=()=>{if(!done){done=true;go();}};u.onend=fin;u.onerror=fin;later(fin,1600+t.length*90);synth.speak(u);}catch(e){later(go,600);}
+  try{synth.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="es-MX";u.rate=.78;u.pitch=1.12;if(voice)u.voice=voice;let done=false;const fin=()=>{if(!done){done=true;go();}};u.onend=fin;u.onerror=fin;u.onstart=()=>later(fin,2600+t.length*120);later(fin,11000);synth.speak(u);}catch(e){later(go,600);}
  };step();
 }
 function storyNext(){

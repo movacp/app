@@ -41,7 +41,10 @@ insertAfter("juego-que-hora-es.html", {
   description: "Resuelve cada caso: descubre qué color, figura o número sigue en el patrón."
 });
 const IMG_DIR = "";
-const photo = (src) => `<image href="${/\.webp$/.test(src) ? src : "data:image/webp;base64," + src}" x="0" y="0" width="320" height="180" preserveAspectRatio="xMidYMid slice"/>`;
+/* Imágenes en dos tamaños: 800 px para celular y 1280 px (-hd) para tablet y computadora */
+const MOVA_HD = (() => { try { return Math.min(screen.width, screen.height) >= 700 || window.innerWidth >= 900; } catch (e) { return false; } })();
+const hdSrc = (src) => (MOVA_HD && /^(thumb-|banner-|wf-cover)[\w-]*\.webp$/.test(src) && src !== "thumb-lee-con-mochi.webp" ? src.replace(/\.webp$/, "-hd.webp") : src);
+const photo = (src) => `<image href="${/\.webp$/.test(src) ? hdSrc(src) : "data:image/webp;base64," + src}" x="0" y="0" width="320" height="180" preserveAspectRatio="xMidYMid slice"/>`;
 GAME_ART["juego-la-tiendita.html"] = scene("#F3E3CC", photo(IMG_DIR + "thumb-la-tiendita.webp"));
 GAME_ART["juego-que-hora-es.html"] = scene("#BFE6F7", photo(IMG_DIR + "thumb-que-hora-es.webp"));
 GAME_ART["juego-detective-patrones.html"] = scene("#FFB3A8", photo(IMG_DIR + "thumb-detective-patrones.webp"));

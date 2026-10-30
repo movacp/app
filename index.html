@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MOVA Learning Studio</title>
 <meta name="description" content="MOVA Learning Studio: lecturas, juegos y materiales para aprender inglés, matemáticas y lectoescritura, de MOVA Centro Pedagógico.">
-<meta name="theme-color" content="#F5F3FA">
+<meta name="theme-color" content="#F3EFE8">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -1720,9 +1720,9 @@ function viewGames() {
     <section class="page-head wrap">
       <p class="kicker">Interactive Games</p>
       <h1>Play and practice</h1>
-      <p class="lead">Juegos para practicar inglés y matemáticas. Se pueden jugar cuantas veces quieras.</p>
+      <p class="lead">Games to practice English and math. Play as many times as you like.</p>
     </section>
-    <section class="wrap"><div class="section-head"><h2>MOVA games</h2></div><div class="grid cols">${MOVA_GAMES.map(movaGameCard).join("")}</div></section>
+    <section class="wrap"><div class="section-head"><h2>MOVA games</h2></div><div class="grid cols">${MOVA_GAMES.filter((g) => g.file !== "juego-level-up.html").map(movaGameCard).join("")}</div></section>
     <section class="wrap section"><div class="section-head"><h2>Quick practice</h2></div><div class="grid cols">${GAMES.map(gameCard).join("")}</div></section>`
   };
 }
