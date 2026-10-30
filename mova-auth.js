@@ -2,6 +2,12 @@
    La app sigue abierta para todos; si el alumno entra con su cuenta, se guarda su práctica. */
 (function () {
   "use strict";
+  /* Voces naturales (ElevenLabs) en todos los juegos que usan mova-auth.js */
+  try {
+    if (!window.__movaVoice && !document.querySelector('script[src*="mova-voice.js"]')) {
+      var vs = document.createElement("script"); vs.src = "mova-voice.js"; (document.head || document.documentElement).appendChild(vs);
+    }
+  } catch (e) {}
   var SB_URL = "https://fclafxrkibvcjktrgznt.supabase.co";
   var SB_KEY = "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6";
   var K_USER = "mova_student", K_PEND = "mova_pending", K_QUEUE = "mova_queue";
