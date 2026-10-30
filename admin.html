@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Panel de maestra · MOVA Learning Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --navy:#1F2B4D; --navy2:#2C3B66; --ink:#1F2B4D; --muted:#6B7591;
@@ -154,6 +154,62 @@ textarea.in:focus{border-color:var(--navy2);outline:none}
 .rp-note{margin:18px 48px 0;background:#FFF6DA;border-radius:20px;padding:18px 22px;font-size:14px;line-height:1.55}
 .rp-note h3{margin:0 0 6px;font-size:15px}
 .rp-foot{position:absolute;left:48px;right:48px;bottom:30px;display:flex;justify-content:space-between;font-size:12px;color:#6B7591;border-top:1px solid #E3E7F0;padding-top:12px}
+
+/* ===== Rediseño 2026 ===== */
+:root{--navy:#15192B;--navy2:#2B3150;--ink:#15192B;--muted:#6B6F86;--bg:#F5F3FA;--line:#E6E1F2;--coral:#FF8FC8;--sky:#8FA2FF;--butter:#FFE58A;--mint:#9BE7C4;--lilac:#B9A6FF;font-family:"Plus Jakarta Sans",system-ui,sans-serif}
+body{background:#F5F3FA}
+h1,h2,h3,.stat b,.vbox b{font-family:"Bricolage Grotesque","Plus Jakarta Sans",sans-serif;letter-spacing:-.01em}
+#login{background:linear-gradient(180deg,#EDE8FF,#F5F3FA 65%)}#login .dots{display:none}
+.login-card{background:transparent;box-shadow:none;text-align:center;padding:10px 6px}
+.lg-bloom{width:150px;height:150px;display:block;margin:0 auto 4px}
+.login-card h1{font-size:30px;font-weight:800}.login-card p.sub{font-weight:700;color:#7B5CF0;letter-spacing:.04em;text-transform:uppercase;font-size:12.5px}
+.login-card label.f{text-align:left}
+input.in,select.in,textarea.in{border-radius:16px;border-color:#E6E1F2;background:#fff}
+.btn{border-radius:999px;font-weight:800}
+.btn-primary{background:#15192B;color:#fff;box-shadow:0 4px 0 #D3F36B}
+.btn-soft{background:#F2EFF8}
+header.top{background:transparent;color:#15192B;padding-bottom:6px}header.top .dots{display:none}
+header.top .brand small{color:#6B6F86}header.top .brand b{font-family:"Bricolage Grotesque";font-size:21px}
+header.top .brand-mark{box-shadow:none;border-radius:50%}
+.logout{background:#fff;color:#15192B;border-radius:999px;box-shadow:0 2px 8px rgba(21,25,43,.06);font-weight:700}
+.logout.live{background:#D3F36B;text-decoration:none}
+.hero-b{position:relative;background:#C7B5FF;border-radius:26px;padding:18px 130px 18px 18px;min-height:132px;overflow:hidden;margin-bottom:12px}
+.hero-b h2{margin:0;font-size:22px;line-height:1.1}.hero-b p{margin:8px 0 0;font-size:13.5px;line-height:1.4}
+.hero-b img{position:absolute;right:-6px;bottom:-14px;width:130px;height:130px}
+.stats{margin-top:0}.stat{border-radius:20px;box-shadow:none}
+.stat:nth-child(1){background:#ECFBC8}.stat:nth-child(2){background:#FFE6F2}.stat:nth-child(3){background:#FFF6D1}
+.stat span{color:#3B3F57;font-weight:600}
+.visits{border-radius:22px;box-shadow:none}.vchart i{background:#B9A6FF}
+.st{border:0;border-radius:18px}.chip{background:#F2EFF8;font-weight:700}
+.fab{background:#15192B;box-shadow:0 4px 0 #D3F36B;font-weight:800}
+.sheet{border-radius:28px 28px 0 0}@media(min-width:700px){.sheet{border-radius:28px}}
+.sheet .x{border-radius:999px;background:#F2EFF8}
+.cred,.pi{background:#F5F3FA}
+.rep-btn{background:#D3F36B;color:#15192B;border-radius:999px;font-weight:800;padding:15px}
+/* Reporte mensual · diseño A */
+.rpA{width:794px;min-height:1123px;padding-bottom:70px;box-sizing:border-box;background:#F5F3FA;font-family:"Plus Jakarta Sans",sans-serif;color:#15192B;position:relative;overflow:hidden}
+.rpA .hd{height:268px;background:linear-gradient(135deg,#C7B5FF,#D9CCFF 55%,#FFC7E2);position:relative;overflow:hidden;padding:30px 48px}
+.rpA .wv{position:absolute;left:0;bottom:-1px;width:100%;height:46px}
+.rpA .brand2{display:flex;align-items:center;gap:12px}.rpA .lg{width:50px;height:50px;border-radius:14px;background:#15192B;overflow:hidden}.rpA .lg img{width:100%;height:100%;display:block}
+.rpA .brand2 b{display:block;font-size:16px}.rpA .brand2 small{font-size:12.5px;color:#3B3F57}
+.rpA .ttl{margin-top:18px}.rpA .ttl small{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:#fff;border-radius:999px;padding:5px 12px}
+.rpA .ttl h1{font-family:"Bricolage Grotesque",sans-serif;font-size:50px;line-height:.95;margin:12px 0 6px;letter-spacing:-.02em;max-width:500px}
+.rpA .bl{position:absolute;right:52px;top:26px;width:200px;height:200px}
+.rpA .who{margin:-30px 48px 0;position:relative;background:#fff;border-radius:24px;padding:18px 22px;display:flex;align-items:center;gap:16px;box-shadow:0 12px 30px rgba(54,40,120,.12)}
+.rpA .av2{width:58px;height:58px;border-radius:50%;background:#C7B5FF;display:grid;place-items:center;font-weight:800;font-size:20px;flex:none}
+.rpA .who h2{margin:0;font-family:"Bricolage Grotesque",sans-serif;font-size:24px}.rpA .who span{color:#6B6F86;font-size:13.5px}
+.rpA .who em{margin-left:auto;font-style:normal;background:#D3F36B;font-weight:800;font-size:13px;border-radius:999px;padding:7px 14px}
+.rpA .stats2{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 48px 0}.rpA .stats2 div{border-radius:20px;padding:13px 16px}.rpA .stats2 b{font-family:"Bricolage Grotesque",sans-serif;font-size:30px;display:block;line-height:1}.rpA .stats2 span{font-size:12.5px;font-weight:700;color:#3B3F57}
+.rpA .g2{display:grid;grid-template-columns:1.15fr 1fr;gap:14px;margin:14px 48px 0}
+.rpA .bx{background:#fff;border-radius:22px;padding:15px 20px}.rpA h3{font-family:"Bricolage Grotesque",sans-serif;font-size:17px;margin:0 0 12px}
+.rpA .bar{margin-bottom:9px}.rpA .bar>div:first-child{display:flex;justify-content:space-between;font-size:13px}.rpA .bar span{color:#6B6F86;font-size:12px}.rpA .tr{height:10px;border-radius:9px;background:#F2EFF8;margin-top:5px}.rpA .tr i{display:block;height:100%;border-radius:9px}
+.rpA .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}.rpA .cal em{font-style:normal;font-size:10.5px;font-weight:800;color:#9A9DB2}.rpA .cal u{width:24px;margin:0 auto;text-decoration:none;font-size:11.5px;font-weight:700;height:23px;display:grid;place-items:center;border-radius:50%}
+.rpA .cal u.on{background:#D3F36B}.rpA .cap{font-size:12px;color:#6B6F86;margin:10px 0 0;font-weight:600}
+.rpA ul{list-style:none;margin:0;padding:0}.rpA li{font-size:13px;font-weight:700;padding:5px 0;border-bottom:1px dashed #E6E1F2}.rpA li.more{color:#7B5CF0;border:0}
+.rpA .res li{display:flex;justify-content:space-between;gap:10px}.rpA .res span{font-weight:600}.rpA .res b{background:#FFE6F2;border-radius:999px;padding:2px 10px;font-size:12px;white-space:nowrap}
+.rpA .none{font-size:13px;color:#6B6F86;margin:0}
+.rpA .note{margin:14px 48px 0;background:#15192B;color:#fff;border-radius:22px;padding:16px 24px}.rpA .note h3{color:#D3F36B}.rpA .note p{margin:0;font-size:13.5px;line-height:1.55}
+.rpA .ft{position:absolute;left:48px;right:48px;bottom:26px;display:flex;justify-content:space-between;font-size:11px;color:#8A8EA5}
 </style>
 </head>
 <body>
@@ -162,14 +218,14 @@ textarea.in:focus{border-color:var(--navy2);outline:none}
 <section id="login">
   <div class="dots" aria-hidden="true"></div>
   <form class="login-card" id="loginForm" autocomplete="on">
-    <div class="brand"><div class="brand-mark"><img src="icon-192.png" alt="MOVA"></div><div><b>MOVA Learning Studio</b><small>Centro Pedagógico</small></div></div>
-    <h1>Panel de maestra</h1>
-    <p class="sub">Entra con tu cuenta para administrar a tus alumnos.</p>
-    <label class="f" for="email">Correo</label>
+    <img class="lg-bloom" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMjAgMjIwIiBhcmlhLWhpZGRlbj0idHJ1ZSI+PHBhdGggZD0iTTk4IDEzOCBDOTYgMTU2LjAgOTAgMTY2LjAgOTIgMTc4IiBzdHJva2U9IiMxQTFCMkUiIHN0cm9rZS13aWR0aD0iMi4zIiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48ZWxsaXBzZSBjeD0iODkiIGN5PSIxODAiIHJ4PSI2LjIiIHJ5PSI0IiBmaWxsPSIjMUExQjJFIi8+PHBhdGggZD0iTTEyMiAxMzggQzEyNCAxNTYuMCAxMjggMTY2LjAgMTI3IDE3OCIgc3Ryb2tlPSIjMUExQjJFIiBzdHJva2Utd2lkdGg9IjIuMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PGVsbGlwc2UgY3g9IjEzMCIgY3k9IjE4MCIgcng9IjYuMiIgcnk9IjQiIGZpbGw9IiMxQTFCMkUiLz48cGF0aCBkPSJNODAgOTggQzYyIDEwNCA1MCA5MiA0OCA3NCIgc3Ryb2tlPSIjMUExQjJFIiBzdHJva2Utd2lkdGg9IjIuMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PGNpcmNsZSBjeD0iNDgiIGN5PSI3NCIgcj0iMy42IiBmaWxsPSIjMUExQjJFIi8+PHBhdGggZD0iTTE0MiAxMDAgQzE1MiAxMDQgMTYwIDEwMiAxNjggOTYiIHN0cm9rZT0iIzFBMUIyRSIgc3Ryb2tlLXdpZHRoPSIyLjMiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxjaXJjbGUgY3g9IjE2OCIgY3k9Ijk2IiByPSIzLjYiIGZpbGw9IiMxQTFCMkUiLz48Y2lyY2xlIGN4PSI4NiIgY3k9IjY4IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9IjEzNCIgY3k9IjY4IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9Ijg2IiBjeT0iMTE2IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9IjEzNCIgY3k9IjExNiIgcj0iMzAiIGZpbGw9IiM5QzhCRkYiLz48Y2lyY2xlIGN4PSIxMTAiIGN5PSI5MiIgcj0iMjYiIGZpbGw9IiM5QzhCRkYiLz48Y2lyY2xlIGN4PSI4MCIgY3k9IjYyIiByPSI3IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMjgiLz48cGF0aCBkPSJNOTQgMTA2IFExMTAgMTIyIDEyNiAxMDYiIHN0cm9rZT0iIzFBMUIyRSIgc3Ryb2tlLXdpZHRoPSIyLjMiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxlbGxpcHNlIGN4PSI4NCIgY3k9IjEwMCIgcng9IjUiIHJ5PSIzIiBmaWxsPSIjRkY4RkMwIiBvcGFjaXR5PSIuNTUiLz48ZWxsaXBzZSBjeD0iMTM2IiBjeT0iMTAwIiByeD0iNSIgcnk9IjMiIGZpbGw9IiNGRjhGQzAiIG9wYWNpdHk9Ii41NSIvPjxlbGxpcHNlIGN4PSI5NyIgY3k9Ijg4IiByeD0iNC4yIiByeT0iNS4yIiBmaWxsPSIjMUExQjJFIi8+PGVsbGlwc2UgY3g9IjEyMyIgY3k9Ijg4IiByeD0iNC4yIiByeT0iNS4yIiBmaWxsPSIjMUExQjJFIi8+PGNpcmNsZSBjeD0iOTguNCIgY3k9Ijg2LjIiIHI9IjEuNCIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjEyNC40IiBjeT0iODYuMiIgcj0iMS40IiBmaWxsPSIjZmZmIi8+PC9zdmc+" alt="">
+    <h1>MOVA Learning Studio</h1>
+    <p class="sub">Teachers only</p>
+    <label class="f" for="email">Email</label>
     <input class="in" id="email" type="email" autocomplete="username" required>
-    <label class="f" for="pass">Contraseña</label>
+    <label class="f" for="pass">Password</label>
     <input class="in" id="pass" type="password" autocomplete="current-password" required>
-    <button class="btn btn-primary btn-full" id="loginBtn" type="submit">Entrar</button>
+    <button class="btn btn-primary btn-full" id="loginBtn" type="submit">Sign in</button>
     <div class="msg err" id="loginMsg"></div>
   </form>
 </section>
@@ -179,13 +235,12 @@ textarea.in:focus{border-color:var(--navy2);outline:none}
   <header class="top">
     <div class="dots" aria-hidden="true"></div>
     <div class="row">
-      <div class="brand" style="margin:0"><div class="brand-mark"><img src="icon-192.png" alt="MOVA"></div><div><b>MOVA Learning Studio</b><small>Panel de maestra</small></div></div>
-      <div style="display:flex;gap:6px;flex:none"><a class="logout" href="mova-live.html" style="background:#FCE38A;color:#1B2A55;text-decoration:none;font-weight:700">MOVA Live</a><button class="logout" id="logoutBtn">Salir</button></div>
+      <div class="brand" style="margin:0"><div class="brand-mark"><img src="icon-192.png" alt="MOVA"></div><div><small>Panel de maestra</small><b>Mis alumnos</b></div></div>
+      <div style="display:flex;gap:6px;flex:none"><a class="logout live" href="mova-live.html">MOVA Live</a><button class="logout" id="logoutBtn">Salir</button></div>
     </div>
-    <h1>Mis alumnos</h1>
-    <p>Da de alta cuentas y revisa el avance de cada alumno.</p>
   </header>
   <main>
+    <div class="hero-b"><div><h2 id="hTitle">Tus alumnos esta semana</h2><p id="hSub">Cargando…</p></div><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMjAgMjIwIiBhcmlhLWhpZGRlbj0idHJ1ZSI+PHBhdGggZD0iTTk4IDEzOCBDOTYgMTU2LjAgOTAgMTY2LjAgOTIgMTc4IiBzdHJva2U9IiMxQTFCMkUiIHN0cm9rZS13aWR0aD0iMi4zIiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48ZWxsaXBzZSBjeD0iODkiIGN5PSIxODAiIHJ4PSI2LjIiIHJ5PSI0IiBmaWxsPSIjMUExQjJFIi8+PHBhdGggZD0iTTEyMiAxMzggQzEyNCAxNTYuMCAxMjggMTY2LjAgMTI3IDE3OCIgc3Ryb2tlPSIjMUExQjJFIiBzdHJva2Utd2lkdGg9IjIuMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PGVsbGlwc2UgY3g9IjEzMCIgY3k9IjE4MCIgcng9IjYuMiIgcnk9IjQiIGZpbGw9IiMxQTFCMkUiLz48cGF0aCBkPSJNODAgOTggQzYyIDEwNCA1MCA5MiA0OCA3NCIgc3Ryb2tlPSIjMUExQjJFIiBzdHJva2Utd2lkdGg9IjIuMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PGNpcmNsZSBjeD0iNDgiIGN5PSI3NCIgcj0iMy42IiBmaWxsPSIjMUExQjJFIi8+PHBhdGggZD0iTTE0MiAxMDAgQzE1MiAxMDQgMTYwIDEwMiAxNjggOTYiIHN0cm9rZT0iIzFBMUIyRSIgc3Ryb2tlLXdpZHRoPSIyLjMiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxjaXJjbGUgY3g9IjE2OCIgY3k9Ijk2IiByPSIzLjYiIGZpbGw9IiMxQTFCMkUiLz48Y2lyY2xlIGN4PSI4NiIgY3k9IjY4IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9IjEzNCIgY3k9IjY4IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9Ijg2IiBjeT0iMTE2IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9IjEzNCIgY3k9IjExNiIgcj0iMzAiIGZpbGw9IiM5QzhCRkYiLz48Y2lyY2xlIGN4PSIxMTAiIGN5PSI5MiIgcj0iMjYiIGZpbGw9IiM5QzhCRkYiLz48Y2lyY2xlIGN4PSI4MCIgY3k9IjYyIiByPSI3IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMjgiLz48cGF0aCBkPSJNOTQgMTA2IFExMTAgMTIyIDEyNiAxMDYiIHN0cm9rZT0iIzFBMUIyRSIgc3Ryb2tlLXdpZHRoPSIyLjMiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxlbGxpcHNlIGN4PSI4NCIgY3k9IjEwMCIgcng9IjUiIHJ5PSIzIiBmaWxsPSIjRkY4RkMwIiBvcGFjaXR5PSIuNTUiLz48ZWxsaXBzZSBjeD0iMTM2IiBjeT0iMTAwIiByeD0iNSIgcnk9IjMiIGZpbGw9IiNGRjhGQzAiIG9wYWNpdHk9Ii41NSIvPjxlbGxpcHNlIGN4PSI5NyIgY3k9Ijg4IiByeD0iNC4yIiByeT0iNS4yIiBmaWxsPSIjMUExQjJFIi8+PGVsbGlwc2UgY3g9IjEyMyIgY3k9Ijg4IiByeD0iNC4yIiByeT0iNS4yIiBmaWxsPSIjMUExQjJFIi8+PGNpcmNsZSBjeD0iOTguNCIgY3k9Ijg2LjIiIHI9IjEuNCIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjEyNC40IiBjeT0iODYuMiIgcj0iMS40IiBmaWxsPSIjZmZmIi8+PC9zdmc+" alt=""></div>
     <div class="stats">
       <div class="stat"><b id="sTotal">0</b><span>Alumnos</span></div>
       <div class="stat"><b id="sWeek">0</b><span>Activos esta semana</span></div>
@@ -256,7 +311,7 @@ async function rpc(fn, args={}){
     if(j?.code==="23505") throw new Error("Ese usuario ya existe. Elige otro.");
     if(j?.code==="23514") throw new Error("El usuario solo puede llevar minúsculas, números, punto o guion (3 a 40).");
     if(m.includes("password too short")) throw new Error("La contraseña debe tener al menos 6 caracteres.");
-    if(m.includes("not authorized")) throw new Error("Esta cuenta no tiene permiso de maestra.");
+    if(m.includes("not authorized")) throw new Error("This account does not have teacher access.");
     throw new Error(m || "Algo falló. Intenta de nuevo.");
   }
   return j;
@@ -264,14 +319,14 @@ async function rpc(fn, args={}){
 function logout(){ session=null; try{localStorage.removeItem(STORE);}catch(e){} $("#app").classList.add("hidden"); $("#login").classList.remove("hidden"); }
 
 $("#loginForm").addEventListener("submit", async e => {
-  e.preventDefault(); const b=$("#loginBtn"), m=$("#loginMsg"); m.textContent=""; b.disabled=true; b.textContent="Entrando…";
+  e.preventDefault(); const b=$("#loginBtn"), m=$("#loginMsg"); m.textContent=""; b.disabled=true; b.textContent="Signing in…";
   try{
     await authReq("password",{email:$("#email").value.trim(),password:$("#pass").value});
     const ok = await rpc("is_admin");
     if(!ok){ logout(); throw new Error("Esta cuenta no tiene permiso de maestra."); }
     showApp();
-  }catch(err){ m.textContent = /invalid/i.test(err.message) ? "Correo o contraseña incorrectos." : err.message; }
-  b.disabled=false; b.textContent="Entrar";
+  }catch(err){ m.textContent = /invalid/i.test(err.message) ? "Wrong email or password." : err.message; }
+  b.disabled=false; b.textContent="Sign in";
 });
 $("#logoutBtn").onclick = () => { logout(); toast("Sesión cerrada"); };
 
@@ -309,6 +364,9 @@ function render(){
   const week = Date.now() - 7*864e5;
   $("#sTotal").textContent = students.length;
   $("#sWeek").textContent = students.filter(s => s.last_activity_at && new Date(s.last_activity_at) > week).length;
+  { const a=students.filter(s => s.last_activity_at && new Date(s.last_activity_at) > week).length, t=students.length;
+    $("#hTitle").textContent = a ? `Esta semana ${a} de tus ${t} alumnos practicaron` : "Esta semana aún no hay práctica";
+    $("#hSub").textContent = a ? "Toca un alumno para ver su avance y su reporte del mes." : "Cuando tus alumnos usen la app, aquí verás su avance."; }
   $("#sActs").textContent = students.reduce((a,s)=>a+Number(s.activities||0),0);
   const rows = students.filter(s => !q || s.full_name.toLowerCase().includes(q) || s.username.includes(q));
   if(!students.length){ $("#list").innerHTML = `<div class="empty"><b>Aún no hay alumnos</b>Toca “Agregar alumno” para crear la primera cuenta.</div>`; return; }
@@ -542,38 +600,39 @@ async function buildReport(s, all, y, mo, note){
   const cats=Object.values(by).sort((a,b)=>b.s-a.s||b.k-a.k).slice(0,6), maxS=Math.max(1,...cats.map(c=>c.s));
   const results=rows.filter(r=>r.total || r.item==="Nuevo récord").slice(0,5);
   const first=new Date(y,mo,1), dim=new Date(y,mo+1,0).getDate(), lead=(first.getDay()+6)%7;
-  const pal=["#F6D776","#8EC9EE","#9DDCC0","#B9A6E8","#F2786B","#FFFFFF"];
-  let dots=""; for(let i=0;i<18;i++){ const z=10+(i*9)%26; dots+=`<i style="width:${z}px;height:${z}px;left:${(i*31)%100}%;top:${(i*47)%95}%;background:${pal[i%6]};opacity:.35"></i>`; }
   let cal=["L","M","M","J","V","S","D"].map(d=>`<em>${d}</em>`).join("");
   for(let i=0;i<lead;i++) cal+="<u></u>";
   for(let d=1; d<=dim; d++) cal+=`<u class="${activeDays.has(d)?"on":""}">${d}</u>`;
+  let streak=0,run=0; for(let d=1; d<=dim; d++){ run=activeDays.has(d)?run+1:0; streak=Math.max(streak,run); }
   const nm=s.full_name, firstName=nm.split(/\s+/)[0];
-  const stat=(v,l,bg)=>`<div class="rp-stat" style="background:${bg}"><b>${v}</b><span>${l}</span></div>`;
-  const html=`<div class="rp">
-    <div class="rp-band">${dots}</div>
-    <div class="rp-head"><img src="icon-192.png" alt=""><div><b>MOVA Learning Studio</b><small>MOVA Centro Pedagógico</small></div></div>
-    <div class="rp-title"><h1>Reporte mensual de práctica</h1><p>${MESES[mo]} ${y}</p></div>
-    <div class="rp-card"><div class="rp-av">${esc(initials(nm))}</div><div><h2>${esc(nm)}</h2><span>MOVA Learning Studio · @${esc(s.username)}</span></div>
-      ${s.stage?`<div class="rp-chip">${esc(s.stage)}</div>`:""}</div>
-    <div class="rp-stats">${stat(fmtMin(totalS)||"0 min","Tiempo de práctica","#FDE7E3")}${stat(activeDays.size,activeDays.size===1?"Día de práctica":"Días de práctica","#DDF3EA")}
-      ${stat(readings.length,readings.length===1?"Lectura":"Lecturas","#E2F0FB")}${stat(rows.length,"Actividades","#EDE7FA")}</div>
-    <div class="rp-grid">
-      <div class="rp-box"><h3>En qué trabajó</h3>${cats.length?cats.map(c=>`<div class="rp-bar"><div><b>${esc(c.n)}</b><span>${c.s?fmtMin(c.s)+" · ":""}${c.k} ${c.k===1?"vez":"veces"}</span></div>
-        <div class="rp-track"><i style="width:${Math.max(6,Math.round(c.s/maxS*100))}%;background:${c.c}"></i></div></div>`).join(""):`<p style="font-size:13px;color:#6B7591;margin:0">Sin actividad registrada este mes.</p>`}</div>
-      <div class="rp-box"><h3>Días que practicó</h3><div class="rp-cal">${cal}</div></div>
+  const n=activeDays.size, head = n>=8 ? `¡Gran mes, ${firstName}!` : n>0 ? `¡Buen trabajo, ${firstName}!` : `Tu mes en MOVA, ${firstName}`;
+  const BC=["#B9A6FF","#FF8FC8","#C4EA4F","#8FA2FF","#FFD45E","#9BE7C4"];
+  const stat=(v,l,bg)=>`<div style="background:${bg}"><b>${v}</b><span>${l}</span></div>`;
+  const html=`<div class="rpA">
+    <div class="hd">
+      <div class="brand2"><div class="lg"><img src="icon-192.png" alt=""></div><div><b>MOVA Learning Studio</b><small>MOVA Centro Pedagógico</small></div></div>
+      <div class="ttl"><small>Reporte de ${MESES[mo].toLowerCase()} ${y}</small><h1>${esc(head)}</h1></div>
+      <img class="bl" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMjAgMjIwIiBhcmlhLWhpZGRlbj0idHJ1ZSI+PHBhdGggZD0iTTk4IDEzOCBDOTYgMTU2LjAgOTAgMTY2LjAgOTIgMTc4IiBzdHJva2U9IiMxQTFCMkUiIHN0cm9rZS13aWR0aD0iMi4zIiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48ZWxsaXBzZSBjeD0iODkiIGN5PSIxODAiIHJ4PSI2LjIiIHJ5PSI0IiBmaWxsPSIjMUExQjJFIi8+PHBhdGggZD0iTTEyMiAxMzggQzEyNCAxNTYuMCAxMjggMTY2LjAgMTI3IDE3OCIgc3Ryb2tlPSIjMUExQjJFIiBzdHJva2Utd2lkdGg9IjIuMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PGVsbGlwc2UgY3g9IjEzMCIgY3k9IjE4MCIgcng9IjYuMiIgcnk9IjQiIGZpbGw9IiMxQTFCMkUiLz48cGF0aCBkPSJNODAgOTggQzYyIDEwNCA1MCA5MiA0OCA3NCIgc3Ryb2tlPSIjMUExQjJFIiBzdHJva2Utd2lkdGg9IjIuMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PGNpcmNsZSBjeD0iNDgiIGN5PSI3NCIgcj0iMy42IiBmaWxsPSIjMUExQjJFIi8+PHBhdGggZD0iTTE0MiAxMDAgQzE1MiAxMDQgMTYwIDEwMiAxNjggOTYiIHN0cm9rZT0iIzFBMUIyRSIgc3Ryb2tlLXdpZHRoPSIyLjMiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxjaXJjbGUgY3g9IjE2OCIgY3k9Ijk2IiByPSIzLjYiIGZpbGw9IiMxQTFCMkUiLz48Y2lyY2xlIGN4PSI4NiIgY3k9IjY4IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9IjEzNCIgY3k9IjY4IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9Ijg2IiBjeT0iMTE2IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9IjEzNCIgY3k9IjExNiIgcj0iMzAiIGZpbGw9IiM5QzhCRkYiLz48Y2lyY2xlIGN4PSIxMTAiIGN5PSI5MiIgcj0iMjYiIGZpbGw9IiM5QzhCRkYiLz48Y2lyY2xlIGN4PSI4MCIgY3k9IjYyIiByPSI3IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMjgiLz48cGF0aCBkPSJNOTQgMTA2IFExMTAgMTIyIDEyNiAxMDYiIHN0cm9rZT0iIzFBMUIyRSIgc3Ryb2tlLXdpZHRoPSIyLjMiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxlbGxpcHNlIGN4PSI4NCIgY3k9IjEwMCIgcng9IjUiIHJ5PSIzIiBmaWxsPSIjRkY4RkMwIiBvcGFjaXR5PSIuNTUiLz48ZWxsaXBzZSBjeD0iMTM2IiBjeT0iMTAwIiByeD0iNSIgcnk9IjMiIGZpbGw9IiNGRjhGQzAiIG9wYWNpdHk9Ii41NSIvPjxlbGxpcHNlIGN4PSI5NyIgY3k9Ijg4IiByeD0iNC4yIiByeT0iNS4yIiBmaWxsPSIjMUExQjJFIi8+PGVsbGlwc2UgY3g9IjEyMyIgY3k9Ijg4IiByeD0iNC4yIiByeT0iNS4yIiBmaWxsPSIjMUExQjJFIi8+PGNpcmNsZSBjeD0iOTguNCIgY3k9Ijg2LjIiIHI9IjEuNCIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjEyNC40IiBjeT0iODYuMiIgcj0iMS40IiBmaWxsPSIjZmZmIi8+PC9zdmc+" alt="">
+      <svg class="wv" viewBox="0 0 794 46" preserveAspectRatio="none"><path d="M0 26 C 160 0 300 46 470 22 S 700 6 794 24 L794 46 L0 46Z" fill="#F5F3FA"/></svg>
     </div>
-    <div class="rp-grid">
-      <div class="rp-box"><h3>Lecturas del mes</h3>${readings.length?`<ul class="rp-list">${readings.slice(0,7).map(t=>`<li><b>${esc(t)}</b></li>`).join("")}${readings.length>7?`<li><span>y ${readings.length-7} más</span></li>`:""}</ul>`:`<p style="font-size:13px;color:#6B7591;margin:0">Este mes no registró lecturas.</p>`}</div>
-      <div class="rp-box"><h3>Resultados</h3>${results.length?`<ul class="rp-list">${results.map(r=>`<li><span>${esc(ACT_NAMES[r.activity]||r.activity)} · ${esc(r.item==="Nuevo récord"?"récord":r.item.replace("Resultado del examen: ",""))}</span><b>${esc(rowRight(r))}</b></li>`).join("")}</ul>`:`<p style="font-size:13px;color:#6B7591;margin:0">Sin exámenes ni récords este mes.</p>`}</div>
+    <div class="who"><div class="av2">${esc(initials(nm))}</div><div><h2>${esc(nm)}</h2><span>@${esc(s.username)}</span></div>${s.stage?`<em>${esc(s.stage)}</em>`:""}</div>
+    <div class="stats2">${stat(fmtMin(totalS)||"0 min","Tiempo de práctica","#ECFBC8")}${stat(n,n===1?"Día de práctica":"Días de práctica","#FFE6F2")}${stat(readings.length,readings.length===1?"Lectura":"Lecturas","#E5E9FF")}${stat(rows.length,"Actividades","#FFF6D1")}</div>
+    <div class="g2">
+      <div class="bx"><h3>En qué trabajó</h3>${cats.length?cats.map((c,i)=>`<div class="bar"><div><b>${esc(c.n)}</b><span>${c.s?fmtMin(c.s)+" · ":""}${c.k} ${c.k===1?"vez":"veces"}</span></div><div class="tr"><i style="width:${Math.max(6,Math.round(c.s/maxS*100))}%;background:${BC[i%6]}"></i></div></div>`).join(""):`<p class="none">Sin actividad registrada este mes.</p>`}</div>
+      <div class="bx"><h3>Días que practicó</h3><div class="cal">${cal}</div>${streak>=2?`<p class="cap">Su mejor racha: ${streak} días seguidos</p>`:""}</div>
     </div>
-    ${note?`<div class="rp-note"><h3>Comentario de la maestra</h3>${esc(note).replace(/\n/g,"<br>")}</div>`:""}
-    <div class="rp-foot"><span>MOVA Centro Pedagógico · Monterrey · @movacp.mx</span><span>Generado el ${new Date().toLocaleDateString("es-MX",{day:"numeric",month:"long",year:"numeric"})}</span></div>
+    <div class="g2">
+      <div class="bx"><h3>Lecturas del mes</h3>${readings.length?`<ul>${readings.slice(0,6).map(t=>`<li>${esc(t)}</li>`).join("")}${readings.length>6?`<li class="more">y ${readings.length-6} más</li>`:""}</ul>`:`<p class="none">Este mes no registró lecturas.</p>`}</div>
+      <div class="bx res"><h3>Resultados</h3>${results.length?`<ul>${results.map(r=>`<li><span>${esc(ACT_NAMES[r.activity]||r.activity)} · ${esc(r.item==="Nuevo récord"?"récord":r.item.replace("Resultado del examen: ",""))}</span><b>${esc(rowRight(r))}</b></li>`).join("")}</ul>`:`<p class="none">Sin exámenes ni récords este mes.</p>`}</div>
+    </div>
+    ${note?`<div class="note"><h3>Comentario de la maestra</h3><p>${esc(note).replace(/\n/g,"<br>")}</p></div>`:""}
+    <div class="ft"><span>MOVA Centro Pedagógico · Monterrey · @movacp.mx</span><span>Generado el ${new Date().toLocaleDateString("es-MX",{day:"numeric",month:"long",year:"numeric"})}</span></div>
   </div>`;
   let stage=document.getElementById("repStage"); if(!stage){ stage=document.createElement("div"); stage.id="repStage"; document.body.appendChild(stage); }
   stage.innerHTML=html;
   await document.fonts.ready;
-  await new Promise(r=>{ const im=stage.querySelector("img"); if(im.complete) r(); else { im.onload=r; im.onerror=r; } });
-  const canvas = await html2canvas(stage.firstElementChild,{scale:2,backgroundColor:"#FBF8F3",useCORS:true});
+  await Promise.all([...stage.querySelectorAll("img")].map(im=>new Promise(r=>{ if(im.complete) r(); else { im.onload=r; im.onerror=r; } })));
+  const canvas = await html2canvas(stage.firstElementChild,{scale:2,backgroundColor:"#F5F3FA",useCORS:true});
   stage.innerHTML="";
   const pdf = new window.jspdf.jsPDF({unit:"pt",format:[595.28, Math.max(841.89, 595.28*canvas.height/canvas.width)]});
   const ph=Math.max(841.89, 595.28*canvas.height/canvas.width);

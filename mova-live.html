@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MOVA Live · Teacher panel</title>
-<meta name="theme-color" content="#1B2A55">
+<meta name="theme-color" content="#15192B">
 <link rel="icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#1B2A55;--muted:#5B6787;--card:#fff;--track:#EEF1F8;--edge:#DCE3F0;--coral:#E8846B;--sky:#8EC5E8;--mint:#7FC8A9;--gold:#FCE38A;--gold2:#E3C462;--lila:#B9A6E8;--pink:#F7A8C4;--ok:#3E9E74;--bad:#D9534F}
 *{box-sizing:border-box}
@@ -87,6 +87,49 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:999px;padding:10px 18px;font-weight:600;font-size:14px;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.2)}
 .glab{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--coral);margin:14px 0 6px}
 .hidden{display:none!important}
+
+/* ===== Rediseño 2026 · MOVA Live ===== */
+:root{--ink:#15192B;--muted:#B8BCD4;--track:#262B42;--edge:#343A57;--gold:#D3F36B;--gold2:#A9CC3A;--lila:#C7B5FF;--pink:#FF8FC8;--mint:#9BE7C4;--sky:#8FA2FF}
+body{font-family:"Plus Jakarta Sans",system-ui,sans-serif;background:#15192B;background-image:none;color:#fff}
+h1,h2,.code,.clock,.stat b,.pod .bar span{font-family:"Bricolage Grotesque","Plus Jakarta Sans",sans-serif;letter-spacing:-.01em}
+.top .x{color:#fff;background:#262B42;border-radius:999px;width:38px;height:38px}
+.pill{border-radius:999px;font-weight:800;font-size:13px;padding:7px 14px;color:#15192B}
+.pill.lime{background:#D3F36B}.pill.pink{background:#FF8FC8}
+.card{background:transparent;box-shadow:none;padding:6px 0 18px}
+.lead,.note,.label,.empty,th{color:#B8BCD4}
+.label{color:#fff}
+.lvhero{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:10px}
+.lvhero h1{text-align:left;font-size:clamp(32px,8vw,44px);margin:8px 0 6px}.lvhero .lead{text-align:left}
+.lvhero .beat{width:185px;height:185px;flex:none;margin:-62px -18px -12px -14px}
+.choice{background:#262B42;color:#fff;border-color:#262B42;box-shadow:none}
+.choice small{color:#B8BCD4}
+.choice[aria-pressed="true"]{background:#fff;color:#15192B;border-color:#fff;box-shadow:none}
+.choice[aria-pressed="true"] small{color:#6B6F86}
+.choice[data-k="game"]{border:0;border-radius:22px;padding:16px 14px;text-align:left;font-family:"Bricolage Grotesque",sans-serif;font-size:19px;color:#15192B;min-height:84px;margin:6px;position:relative}
+.choice[data-k="game"] small{font-family:"Plus Jakarta Sans",sans-serif;font-size:12px;color:#15192B;font-weight:600;margin:0 0 6px}
+.choice[data-v="park"],.choice[data-v="park"][aria-pressed]{background:#D3F36B;outline:3px solid #D3F36B;outline-offset:3px}
+.choice[data-v="bingo"],.choice[data-v="bingo"][aria-pressed]{background:#C7B5FF;outline:3px solid #C7B5FF;outline-offset:3px}
+.choice[data-k="game"][aria-pressed="false"]{opacity:.8}
+.choice[data-k="game"][aria-pressed="true"]::after{content:"✓";position:absolute;top:10px;right:12px;width:24px;height:24px;border-radius:50%;background:#15192B;color:#fff;display:grid;place-items:center;font-size:13px}
+.btn.primary{background:#D3F36B;color:#15192B;box-shadow:none}
+.btn.dark{background:#fff;color:#15192B;box-shadow:none}
+.btn.ghost{background:#262B42;color:#fff}
+.in{background:#fff;color:#15192B;border-color:#fff}
+.code-card{background:#fff;color:#15192B;background-image:none;border-radius:26px}
+.code-card small{color:#7B5CF0;opacity:1}.code-card p{color:#6B6F86;opacity:1}
+.code-card .chip{background:#F2EFF8;color:#15192B}
+.chip{background:#262B42;color:#fff}
+.chip.k,.chip.c,.chip.t{color:#15192B}.chip.k{background:#FFE6F2}.chip.c{background:#E5E9FF}.chip.t{background:#ECFBC8}
+.prow{background:#262B42;border-radius:999px;padding:6px 10px 6px 6px}
+.x{color:#B8BCD4}.x:hover{background:#343A57}
+.empty{border-color:#343A57}
+.stat span{background:#262B42;color:#B8BCD4}.stat b{color:#fff}
+td{background:#262B42;color:#fff}
+.tbar{background:#262B42}.tbar i{background:#D3F36B}
+.p1 .bar{background:#D3F36B;color:#15192B}.p2 .bar{background:#C7B5FF;color:#15192B}.p3 .bar{background:#FF8FC8;color:#15192B}
+.pod .av{border-color:#15192B;box-shadow:0 0 0 3px #fff}
+.glab{color:#FF8FC8}
+.toast{background:#fff;color:#15192B}
 </style>
 <script src="mova-voice.js"></script>
 </head>
@@ -116,7 +159,7 @@ function stageFor(p) { var lv = live && live.settings && live.settings.level; if
 function chipStage(p) { var s = stageFor(p); return '<span class="chip ' + s + '">' + SNAME[s] + "</span>"; }
 function now() { return Date.now() + offset; }
 function money(n) { return "$" + Number(n || 0).toLocaleString("en-US"); }
-function top(t) { return '<div class="top"><a class="x" href="admin.html" aria-label="Teacher panel" style="font-size:22px;text-decoration:none;display:grid;place-items:center">‹</a><div class="brand"><span class="wordmark">MOVA</span><span class="tag">Centro Pedagógico</span></div><span class="spacer"></span><span class="badge">MOVA LIVE</span></div>' + (t || ""); }
+function top(t) { return '<div class="top"><a class="x" href="admin.html" aria-label="Teacher panel" style="font-size:22px;text-decoration:none;display:grid;place-items:center">‹</a><span class="pill lime">MOVA Live</span><span class="spacer"></span><span class="pill pink">Teacher</span></div>' + (t || ""); }
 function render(h) { app.innerHTML = h; }
 
 /* ---------- Sesión de maestra (Supabase Auth, compartida con el panel) ---------- */
@@ -159,8 +202,8 @@ function screenSetup(edit) {
   var s = JSON.parse(JSON.stringify(edit ? Object.assign({}, settings, live.settings || {}) : settings)); if (!s.cats) s.cats = ["vocab", "grammar"];
   function draw() {
     var g = gameOf(s), h = '<div class="label" style="margin-top:6px">Game</div><div class="grid c2">' +
-      '<button class="choice" data-k="game" data-v="park" aria-pressed="' + (g === "park") + '">MOVA Park<small>answer and build their park</small></button>' +
-      '<button class="choice" data-k="game" data-v="bingo" aria-pressed="' + (g === "bingo") + '">MOVA Bingo<small>listen and fill their card</small></button></div>';
+      '<button class="choice" data-k="game" data-v="park" aria-pressed="' + (g === "park") + '"><small>Coins &amp; rides</small>MOVA Park</button>' +
+      '<button class="choice" data-k="game" data-v="bingo" aria-pressed="' + (g === "bingo") + '"><small>Listen &amp; mark</small>MOVA Bingo</button></div>';
     if (g === "bingo") {
       fixBingo(s); var okS = BG.sizesFor(s.topic);
       h += '<div class="label">Topic</div>' + BG.GROUPS.map(function (g) { return '<div class="glab">' + esc(g[1]) + '</div><div class="grid c3 cats">' + BG.TOPICS.filter(function (t) { return t.g === g[0]; }).map(function (t) { return '<button class="choice" data-k="topic" data-v="' + t.id + '" aria-pressed="' + (s.topic === t.id) + '">' + esc(t.name) + (t.sub ? "<small>" + esc(t.sub) + "</small>" : "") + "</button>"; }).join("") + "</div>"; }).join("") +
@@ -174,7 +217,7 @@ function screenSetup(edit) {
         '<div class="label">Level</div><div class="grid c4">' + [["each", "Their own level", "based on their group"], ["kids", "Kids", "everyone the same"], ["children", "Children", "everyone the same"], ["teens", "Teens", "everyone the same"]].map(function (o) { return '<button class="choice" data-k="level" data-v="' + o[0] + '" aria-pressed="' + (s.level === o[0]) + '">' + o[1] + "<small>" + o[2] + "</small></button>"; }).join("") + "</div>" +
         '<div class="label">Duration</div><div class="grid c3">' + [300, 480, 600].map(function (v) { return '<button class="choice" data-k="secs" data-v="' + v + '" aria-pressed="' + (Number(s.secs) === v) + '">' + v / 60 + " minutes</button>"; }).join("") + "</div>";
     }
-    render(top('<h1>MOVA Live</h1><p class="lead">Your students play on their phones and you see everything live.</p>') + h +
+    render(top('<div class="lvhero"><div><h1>Play live<br>with your class</h1><p class="lead">Choose a game and share the code.</p></div><svg class="beat" viewBox="0 0 220 220" aria-hidden="true"><path d="M98 150 C96 168.0 90 178.0 92 190" stroke="#E6E2FF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="89" cy="192" rx="6.2" ry="4" fill="#E6E2FF"/><path d="M124 150 C126 168.0 130 178.0 129 190" stroke="#E6E2FF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="132" cy="192" rx="6.2" ry="4" fill="#E6E2FF"/><path d="M66 112 C50 114 42 104 44 88" stroke="#E6E2FF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="44" cy="88" r="3.6" fill="#E6E2FF"/><path d="M154 112 C166 112 174 106 178 96" stroke="#E6E2FF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="178" cy="96" r="3.6" fill="#E6E2FF"/><path d="M112 48 C146 46 156 78 156 106 C156 138 136 152 110 152 C84 152 64 138 64 106 C64 74 80 50 112 48z" fill="#C8EE4A"/><circle cx="88" cy="74" r="7" fill="#fff" opacity=".28"/><path d="M66 98 C56 28 164 24 154 98" stroke="#E6E2FF" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="68" cy="104" r="12" fill="#FFB8DC" stroke="#1A1B2E" stroke-width="2.2"/><circle cx="68" cy="104" r="3.4" fill="#1A1B2E"/><circle cx="152" cy="104" r="12" fill="#FFB8DC" stroke="#1A1B2E" stroke-width="2.2"/><circle cx="152" cy="104" r="3.4" fill="#1A1B2E"/><circle cx="98" cy="102" r="2.9" fill="#1A1B2E"/><path d="M117 103 q5 5 10 0" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M103 110 q0 7 7 7 q7 0 7 -7" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="86" cy="112" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><ellipse cx="134" cy="112" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><path d="M30 128 L30 108 L38 105" stroke="#E6E2FF" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="26.5" cy="128.5" rx="4.4" ry="3.4" fill="#E6E2FF"/><path d="M190 70 L190 52" stroke="#E6E2FF" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="186.5" cy="70.5" rx="4.4" ry="3.4" fill="#E6E2FF"/></svg></div>') + h +
       '<div class="row" style="margin-top:22px">' + (edit ? '<button class="btn ghost" id="cancel">Cancel</button>' : "") + '<button class="btn primary" id="go">' + (edit ? "Save" : "Create session") + '</button></div><div class="err" id="err"></div>');
     app.onclick = function (e) {
       var t = e.target.closest("[data-k]"); if (!t) return;
@@ -209,7 +252,7 @@ function screenLobby() {
   if (screen !== "lobby") {
     screen = "lobby";
     var s = live.settings || {}; if (gameOf(s) === "bingo") lobbyKey = "";
-    render(top('<h1>Waiting room</h1><p class="lead">Ask your students to open the app → Games → Retos MOVA → <b>Join with code</b>.</p>') +
+    render(top('<h1>Waiting room</h1><p class="lead">Ask your students to open the app → Game On → <b>Join with code</b>.</p>') +
       '<div class="code-card"><small>SESSION CODE</small><div class="code">' + esc(live.code) + "</div><p>" + (gameOf(s) === "bingo" ? "MOVA Bingo · " + esc(BG.resolve(s).name) : "MOVA Park · " + Number(s.secs || 480) / 60 + " minutes") + "</p>" +
       '<div class="chips">' + (gameOf(s) === "bingo" ? '<span class="chip">Card ' + s.size + "×" + s.size + '</span><span class="chip">' + esc(patLabel(s)) + '</span><span class="chip">' + showLabel(s) + "</span>" : '<span class="chip">' + esc(catsLabel(s)) + '</span><span class="chip">' + esc(levelLabel(s)) + "</span>") + "</div></div>" +
       '<div class="row"><a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent("Let's play " + (gameOf(live.settings) === "bingo" ? "MOVA Bingo" : "MOVA Park") + "! Join here: " + link + " · Code: " + live.code) + '">Send by WhatsApp</a><button class="btn ghost" id="opts">Change options</button></div>' +
