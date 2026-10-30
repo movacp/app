@@ -21,6 +21,10 @@ insertAfter("juego-sentence-builder.html", {
   file: "juego-sentence-scramble.html", title: "Sentence Scramble", color: "sky", tag: "Kids · Children · Teens", skill: "Word order",
   description: "Drag the words into the right order: present, past, passive voice, conditionals and more."
 });
+insertAfter("juego-sentence-scramble.html", {
+  file: "juego-likes-dislikes.html", title: "Likes & Dislikes", color: "coral", tag: "Kids · Children", skill: "Like / don’t like",
+  description: "I like pizza. She doesn’t like broccoli. Do you like cats? Three levels with sentences, questions and short answers."
+});
 insertAfter("juego-word-quest.html", {
   file: "juego-toefl-practice.html", title: "TOEFL Practice", color: "mustard", tag: "MOVA Teens", skill: "TOEFL ITP strategies",
   description: "Short practice sets for Structure, Written Expression, Reading and Listening, with an explanation for every answer."
@@ -188,7 +192,7 @@ GAME_ART["juego-trapped-in-the-train.html"] = scene("#2A1E16", photo(IMG_DIR + "
     "juego-locked-library.html": "thumb-locked-library.webp", "juego-toefl-practice.html": "thumb-toefl-practice.webp",
     "juego-sentence-scramble.html": "thumb-sentence-scramble.webp", "juego-mision-matematica.html": "thumb-mision-matematica.webp",
     "juego-lee-con-mochi.html": "thumb-lee-con-mochi.webp", "juego-sopa-de-letras.html": "thumb-sopa-de-letras.webp",
-    "juego-crucigrama.html": "thumb-crucigrama.webp"
+    "juego-crucigrama.html": "thumb-crucigrama.webp", "juego-likes-dislikes.html": "thumb-likes-dislikes.webp"
   };
   const art = (img) => scene("#F4ECE0", photo(IMG_DIR + img));
   const setArt = () => { if (typeof GAME_ART === "object") Object.entries(OLD).forEach(([f, img]) => { GAME_ART[f] = art(img); }); };

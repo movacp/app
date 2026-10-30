@@ -312,7 +312,7 @@ const GROUPS = ["Kids","Children","Teens","Adultos","TOEFL","Matemáticas","Lect
 const COLORS = ["#F6D776","#8EC9EE","#9DDCC0","#B9A6E8","#F9B8AE"];
 const ACT_NAMES = {"word-quest":"Word Quest","mision-matematica":"Misión Matemática","level-up":"Level Up","verb-memory":"Verb Memory",
   "sentence-builder":"Sentence Builder","locked-library":"Locked Library","toefl-practice":"TOEFL Practice","word-forms":"Word Forms",
-  "sentence-scramble":"Sentence Scramble","lee-con-mochi":"Aprende a leer con Mochi","sopa-de-letras":"Sopa de letras","crucigrama":"Crucigrama"};
+  "sentence-scramble":"Sentence Scramble","lee-con-mochi":"Aprende a leer con Mochi","sopa-de-letras":"Sopa de letras","crucigrama":"Crucigrama","likes-dislikes":"Likes & Dislikes"};
 
 let session = null, students = [];
 const $ = s => document.querySelector(s);
@@ -704,7 +704,7 @@ async function buildReport(s, all, y, mo, note){
 const TASK_CAT=[
  ["TOEFL",[["toefl-sim","TOEFL Quick Simulation"],["toefl-practice","TOEFL Practice"],["word-forms","Word Forms"],["level-up","Level Up · Placement test"]]],
  ["Lectura",[["lectura","Reading Library (one story)"]]],
- ["Juegos en inglés",[["word-quest","Word Quest"],["crucigrama","Crossword"],["sopa-de-letras","WordSearch"],["sentence-builder","Sentence Builder"],["sentence-scramble","Sentence Scramble"],["verb-memory","Verb Memory"]]],
+ ["Juegos en inglés",[["word-quest","Word Quest"],["crucigrama","Crossword"],["sopa-de-letras","WordSearch"],["sentence-builder","Sentence Builder"],["sentence-scramble","Sentence Scramble"],["likes-dislikes","Likes & Dislikes"],["verb-memory","Verb Memory"]]],
  ["Escape rooms",[["locked-library","The Locked Library"],["haunted-mansion","The Haunted Mansion"],["lost-in-the-museum","Lost in the Museum"],["pirate-treasure-island","Pirate Treasure Island"],["space-station-rescue","Space Station Rescue"],["the-detectives-case","The Detective’s Case"],["trapped-in-the-train","Trapped in the Train"]]],
  ["Español y matemáticas",[["lee-con-mochi","Aprende a leer con Mochi"],["mision-matematica","Misión Matemática"],["la-tiendita","La Tiendita"],["la-balanza","La Balanza"],["la-boveda","La Bóveda"],["lluvia-de-numeros","Lluvia de números"],["detective-patrones","Detective de patrones"],["pizzeria-fracciones","Pizzería de fracciones"],["que-hora-es","¿Qué hora es?"]]]
 ];
