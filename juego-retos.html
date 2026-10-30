@@ -1647,6 +1647,14 @@ function bingoResults() {
 function start() {
   var u = user(), pre = (location.search.match(/juego=([a-z-]+)/) || [])[1];
   if (!u) { screenGate(); return; }
+  var cq = (location.search.match(/[?&]code=(\d{4})/) || [])[1];
+  if (cq) {
+    try { history.replaceState(null, "", location.pathname); } catch (e) {}
+    screenJoin();
+    var cins = $$(".codebox input"); cq.split("").forEach(function (d, i) { if (cins[i]) cins[i].value = d; });
+    var cgo = $("#b-go"); if (cgo) { cgo.disabled = false; cgo.click(); }
+    return;
+  }
   var lq = (location.search.match(/[?&]live=(\d{4})/) || [])[1], ls = null; try { ls = sessionStorage.getItem(K_LIVE); } catch (e) {}
   if (lq || ls) {
     lcall("live_join", { p_code: lq || ls }).then(function () { liveScreen = ""; liveEnter(lq || ls); })
