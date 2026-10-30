@@ -1722,7 +1722,7 @@ function viewGames() {
       <h1>Play and practice</h1>
       <p class="lead">Games to practice English and math. Play as many times as you like.</p>
     </section>
-    <section class="wrap"><div class="section-head"><h2>MOVA games</h2></div><div class="grid cols">${MOVA_GAMES.filter((g) => g.file !== "juego-level-up.html").map(movaGameCard).join("")}</div></section>
+    <section class="wrap"><div class="section-head"><h2>MOVA games</h2></div><div class="grid cols">${MOVA_GAMES.filter((g) => !/juego-(level-up|toefl-practice)\.html/.test(g.file)).map(movaGameCard).join("")}</div></section>
     <section class="wrap section"><div class="section-head"><h2>Quick practice</h2></div><div class="grid cols">${GAMES.map(gameCard).join("")}</div></section>`
   };
 }

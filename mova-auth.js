@@ -256,7 +256,7 @@
       rpc("student_login", { p_username: u, p_password: p }).then(function (r) {
         if (r && r.ok) {
           user = { token: r.token, name: r.name, stage: r.stage, username: r.username };
-          set(K_USER, user); renderChip(); close(); toast("¡Bienvenido, " + first(user.name) + "!"); flushQueue(); beginScreen();
+          set(K_USER, user); renderChip(); close(); toast("¡Bienvenido, " + first(user.name) + "!"); flushQueue(); beginScreen(); taskShown = false; setTimeout(checkTasks, 1200);
         } else {
           var e2 = r && r.error;
           err.textContent = e2 === "locked" ? "Demasiados intentos. Espera 15 minutos e inténtalo de nuevo."
@@ -472,6 +472,46 @@
     head.parentNode.insertBefore(w, head.nextSibling);
   }
 
+
+  /* ---------- Tareas asignadas por la maestra ---------- */
+  var taskShown = false;
+  function checkTasks() {
+    if (!user || gameSlug() || taskShown) return;
+    var me = user.username;
+    rpc("student_tasks", { p_username: me }).then(function (tasks) {
+      if (!Array.isArray(tasks) || !tasks.length || !user || user.username !== me) return;
+      return rpc("student_my_progress", { p_token: user.token }).catch(function () { return []; }).then(function (rows) {
+        rows = Array.isArray(rows) ? rows : [];
+        var pend = tasks.filter(function (t) {
+          if (get("mova-task-done-" + t.id)) return false;
+          var since = new Date(t.created_at).getTime();
+          return !rows.some(function (r) { return r.detail && r.detail.kind === t.task && (!r.created_at || new Date(r.created_at).getTime() >= since); });
+        });
+        if (pend.length) showTask(pend[0]);
+      });
+    }).catch(function () {});
+  }
+  function showTask(t) {
+    if (taskShown || document.getElementById("mva-task")) return; taskShown = true;
+    var st = document.createElement("style");
+    st.textContent = "#mva-task{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 28px));z-index:2147483630;" +
+      "background:#15192B;color:#fff;border-radius:24px;padding:18px 18px 16px;box-shadow:0 18px 40px rgba(21,25,43,.35);font-family:'Plus Jakarta Sans',Poppins,system-ui,sans-serif;animation:mvtk .4s ease}" +
+      "@keyframes mvtk{from{opacity:0;transform:translate(-50%,16px)}}" +
+      "#mva-task .k{display:inline-block;background:#FF8FC8;color:#15192B;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 10px}" +
+      "#mva-task b{display:block;font-family:'Bricolage Grotesque',Poppins,sans-serif;font-size:21px;line-height:1.1;margin:10px 0 4px}" +
+      "#mva-task p{margin:0;font-size:14px;line-height:1.5;color:#C9CCE0}" +
+      "#mva-task .r{display:flex;gap:10px;margin-top:14px;align-items:center}" +
+      "#mva-task a{background:#D3F36B;color:#15192B;font-weight:800;font-size:15px;border-radius:999px;padding:11px 20px;text-decoration:none}" +
+      "#mva-task button{background:none;border:0;color:#C9CCE0;font:600 14px inherit;padding:10px;cursor:pointer}";
+    document.head.appendChild(st);
+    var d = document.createElement("div"); d.id = "mva-task";
+    d.innerHTML = '<span class="k">Assigned by your teacher</span><b>' + (t.title || "TOEFL Quick Simulation").replace(/[<>&]/g, "") + "</b>" +
+      "<p>4 parts · 25 questions · 18 minutes. Find a quiet place and use headphones for the Listening part.</p>" +
+      '<div class="r"><a href="juego-toefl-practice.html?task=' + encodeURIComponent(t.id) + '#sim">Start now</a><button type="button">Later</button></div>';
+    d.querySelector("button").onclick = function () { d.remove(); };
+    document.body.appendChild(d);
+  }
+
   /* ---------- Arranque ---------- */
   window.MovaAuth = { save: save, user: function () { return user; }, login: showLogin };
   function boot() {
@@ -486,6 +526,7 @@
       mountChip();
       window.addEventListener("hashchange", function () { setTimeout(privacyLink, 400); setTimeout(retoBanner, 120); setTimeout(retoBanner, 600); });
       setTimeout(privacyLink, 400); setTimeout(retoBanner, 150); setTimeout(retoBanner, 900);
+      setTimeout(checkTasks, 1500);
     }
   }
   document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", boot) : boot();

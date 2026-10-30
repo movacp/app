@@ -451,6 +451,7 @@ function drawHome() {
   $("#tip").textContent = TIPS[new Date().getDate() % TIPS.length];
 }
 $("#simhero").addEventListener("click", () => open("sim"));
+if (location.hash === "#sim") setTimeout(() => open("sim"), 400);
 $("#sections").addEventListener("click", (e) => { const b = e.target.closest(".sec"); if (!b) return; if (b.dataset.s === "review" && !loadM().length) return; open(b.dataset.s); });
 
 function open(id) {
@@ -583,7 +584,7 @@ function pick(btn) {
   if (ok) st.score++;
   if (it.ref) { const m = loadM(), key = refKey(it.ref), has = m.findIndex((r) => refKey(r) === key); if (!ok && has < 0) m.push(it.ref); if (ok && has >= 0) m.splice(has, 1); saveM(m); }
   const label = it.type === "we" ? `${KEYS[it.k]}: change “${it.parts[it.k]}” to “${it.fix}”.` : `Answer: ${correctVal}`;
-  st.log.push({ ok, part: it.part, q: it.type === "mc" ? it.stem.replace("___", "_____") : it.type === "we" ? it.s.replace(/[\[\]]/g, "") : it.type === "vc" ? `${it.w}: ${it.sent}` : it.q, a: it.type === "we" ? `Change “${it.parts[it.k]}” to “${it.fix}”` : correctVal });
+  st.log.push({ ok, y: it.type === "we" ? `${KEYS[+btn.dataset.v]}: “${it.parts[+btn.dataset.v]}”` : btn.dataset.v, part: it.part, q: it.type === "mc" ? it.stem.replace("___", "_____") : it.type === "we" ? it.s.replace(/[\[\]]/g, "") : it.type === "vc" ? `${it.w}: ${it.sent}` : it.q, a: it.type === "we" ? `Change “${it.parts[it.k]}” to “${it.fix}”` : correctVal });
   const script = it.type === "ls" ? `<p class="script">${esc(it.say)}</p>` : "";
   const last = st.i === st.items.length - 1;
   $("#ex").innerHTML = `<div class="explain"><b>${ok ? "Correct." : "Not quite."} ${esc(label)}</b>${esc(it.why)}${script}</div>
@@ -615,6 +616,15 @@ function finish() {
   $("#r-text").textContent = (st.timeUp ? "Time is up. " : "") + `${st.score} of ${n} correct in ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}. ${pct > prev && prev ? "New personal best! " : ""}Review the explanations below and try another set to keep improving.`;
   if (st.section === "sim") {
     const parts = {}; st.log.forEach((l) => { const p = (l.part || "").replace(/^Part \d · /, ""); parts[p] = parts[p] || [0, 0]; parts[p][1]++; if (l.ok) parts[p][0]++; });
+    try {
+      const tid = new URLSearchParams(location.search).get("task");
+      if (tid) localStorage.setItem("mova-task-done-" + tid, "1");
+      if (window.MovaAuth && MovaAuth.user()) MovaAuth.save("toefl-practice", "TOEFL Quick Simulation · " + pct + "%", st.score, n, {
+        kind: "toefl-sim", task: tid || null, pct, secs, limit: st.items.reduce((a, it) => a + SIM_PACE[it.type], 0), timeUp: !!st.timeUp,
+        passage: st.passage && st.passage.title, parts,
+        log: st.log.map((l) => ({ p: (l.part || "").replace(/^Part \d · /, ""), ok: l.ok, q: String(l.q).slice(0, 260), a: String(l.a).slice(0, 160), y: l.y ? String(l.y).slice(0, 160) : "" }))
+      });
+    } catch (e) {}
     $("#r-text").textContent = (st.timeUp ? "Time is up. " : "") + `${st.score} of ${n} correct in ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}. ` + Object.entries(parts).map(([p, v]) => `${p}: ${v[0]}/${v[1]}`).join(" · ") + ". This is a short practice simulation, not an official score.";
   }
   $("#rv").innerHTML = st.log.map((l) => `<li class="${l.ok ? "ok" : "no"}"><span class="mk">${l.ok ? "✓" : "✕"}</span><span>${esc(l.q)}<small>${esc(l.a)}</small></span></li>`).join("");
