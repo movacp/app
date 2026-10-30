@@ -4457,9 +4457,9 @@ window.viewResources = function () {
       const areas = explore.querySelector(".areas");
       areas.classList.add("pv-areas");
       areas.innerHTML =
-        `<a class="area pv-wide" href="#/library" data-c="sky"><span class="thumb" aria-hidden="true">${rl}</span><div><h3>English</h3><p>Readings by level, grammar, flashcards and games.</p><div class="cefr-row">${lv}</div></div></a>` +
+        tile("#/library", "sky", rl, "English", "Readings by level, grammar, flashcards and games.") +
+        tile("juego-level-up.html", "mint", gameThumb("juego-level-up.html"), "Level Up Placement Test", "Find your English level, from A1 to C2, and get your certificate.") +
         tile("juego-toefl-practice.html", "mustard", gameThumb("juego-toefl-practice.html"), "TOEFL Practice", "Structure, Reading and Listening, with explanations.") +
-        tile("juego-level-up.html", "mint", gameThumb("juego-level-up.html"), "Level Up", "Find your level from Pre-A1 to C2 and get your certificate.") +
         tile("#/matematicas", "coral", mat, "Math", "Fractions, signs, geometry and problems.") +
         tile("#/lectoescritura", "mint", lect, "Reading &amp; Writing", "Lectoescritura, dictado y lecturas en español.");
       const extra = tpl(`<section class="wrap section" aria-labelledby="season-h"><div class="section-head"><h2 id="season-h">This season</h2></div>${card("#/holidays", HALLO, ["Holidays", "Kids", "Children", "Teens"], "Halloween", "Spooky stories, word games and coloring pages for every level.", "See activities")}</section>
