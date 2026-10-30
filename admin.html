@@ -207,6 +207,11 @@ header.top .brand-mark{box-shadow:none;border-radius:50%}
 .rpA .cal u.on{background:#D3F36B}.rpA .cap{font-size:12px;color:#6B6F86;margin:10px 0 0;font-weight:600}
 .rpA ul{list-style:none;margin:0;padding:0}.rpA li{font-size:13px;font-weight:700;padding:5px 0;border-bottom:1px dashed #E6E1F2}.rpA li.more{color:#7B5CF0;border:0}
 .rpA .res li{display:flex;justify-content:space-between;gap:10px}.rpA .res span{font-weight:600}.rpA .res b{background:#FFE6F2;border-radius:999px;padding:2px 10px;font-size:12px;white-space:nowrap}
+.rpA .asg{margin:14px 48px 0}.rpA .asg h3{display:flex;justify-content:space-between;align-items:center}.rpA .asg h3 span{font-family:"Plus Jakarta Sans",sans-serif;font-size:12px;font-weight:800;background:#ECFBC8;border-radius:999px;padding:4px 10px}
+.rpA .asg ul{list-style:none;margin:0;padding:0}.rpA .asg li{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px dashed #E6E1F2}.rpA .asg li:first-child{border:0;padding-top:0}
+.rpA .asg i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:13px;flex:none}.rpA .asg .ok i{background:#D3F36B}.rpA .asg .pe i{background:#FFE6F2;color:#A3216A}
+.rpA .asg li span{flex:1;font-weight:700;font-size:14px}.rpA .asg small{display:block;font-weight:500;color:#6B6F86;font-size:12px}
+.rpA .asg li b{font-size:12px;border-radius:999px;padding:3px 11px;white-space:nowrap}.rpA .asg .ok b{background:#ECFBC8}.rpA .asg .pe b{background:#FFE6F2;color:#A3216A}
 .rpA .none{font-size:13px;color:#6B6F86;margin:0}
 .rpA .note{margin:14px 48px 0;background:#15192B;color:#fff;border-radius:22px;padding:16px 24px}.rpA .note h3{color:#D3F36B}.rpA .note p{margin:0;font-size:13.5px;line-height:1.55}
 .rpA .ft{position:absolute;left:48px;right:48px;bottom:26px;display:flex;justify-content:space-between;font-size:11px;color:#8A8EA5}
@@ -217,6 +222,7 @@ header.top .brand-mark{box-shadow:none;border-radius:50%}
 .tk .sub{margin:0 0 10px}
 .tk .asg{width:100%;background:#15192B;color:#fff;border:0;border-radius:999px;padding:12px 16px;font-weight:800;font-size:14.5px;box-shadow:0 4px 0 #D3F36B}
 .tk .row{display:flex;align-items:center;gap:10px;background:#fff;border-radius:16px;padding:10px 12px;margin-top:8px}
+.tk .row{flex-wrap:wrap;position:relative}.tk .row>div:first-child{flex:1 1 100%;padding-right:26px}.tk .row .pill{margin-left:0}.tk .row .see{margin-left:auto}.tk .row .rm{position:absolute;right:6px;top:6px}
 .tk .row b{display:block;font-size:14px}.tk .row small{display:block;color:#6B6F86;font-size:12px}
 .tk .pill{margin-left:auto;font-size:11.5px;font-weight:800;border-radius:999px;padding:5px 10px;white-space:nowrap}
 .tk .pend{background:#FFE6F2;color:#A3216A}.tk .done{background:#D3F36B;color:#15192B}
@@ -535,7 +541,11 @@ async function openStudent(id){
   rpc("admin_student_progress",{p_student:id,p_limit:1000}).then(raw => {
     const seen=new Set(), rows=(raw||[]).filter(r=>{ const u=r.detail&&r.detail.uid; if(!u) return true; if(seen.has(u)) return false; seen.add(u); return true; });
     if(!rows.length){ $("#prof").innerHTML = `<div class="empty" style="padding:28px 8px"><b>Todavía no hay actividad</b>Cuando el alumno use la app con su cuenta, aquí verás todo lo que haga.</div>`; return; }
-    const totalS = rows.reduce((a,r)=>a+secsOf(r),0);
+    const mTasks=tasksAll.filter(t=>{ const d=new Date(t.created_at); return d.getFullYear()===y && d.getMonth()===mo; })
+    .map(t=>({t, done:taskDoneRow(t,all)})).sort((a,b)=>new Date(a.t.created_at)-new Date(b.t.created_at));
+  const usedRows=new Set(mTasks.filter(x=>x.done).map(x=>x.done));
+  const ownRows=rows.filter(r=>!usedRows.has(r) && !mTasks.some(x=>x.done && taskMatch(x.t,r) && r.activity===x.done.activity && Math.abs(new Date(r.created_at)-new Date(x.done.created_at))<36e5));
+  const totalS = rows.reduce((a,r)=>a+secsOf(r),0);
     const days = new Set(rows.map(r=>new Date(r.created_at).toDateString())).size;
     const by = {};
     rows.forEach(r=>{ const [n,c]=catOf(r.activity); by[n]=by[n]||{n,c,s:0,k:0}; by[n].s+=secsOf(r); by[n].k++; });
@@ -632,13 +642,18 @@ function openReport(s, rows){
   if(!(navigator.canShare)) w.querySelector("#rShare").remove();
 }
 async function buildReport(s, all, y, mo, note){
+  let tasksAll=[]; try{ tasksAll=await rpc("admin_list_tasks",{p_student:String(s.id)})||[]; }catch(e){}
   await Promise.all([loadScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"),
                      loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js")]);
   const rows = all.filter(r=>{ const d=new Date(r.created_at); return d.getFullYear()===y && d.getMonth()===mo; });
+  const mTasks=tasksAll.filter(t=>{ const d=new Date(t.created_at); return d.getFullYear()===y && d.getMonth()===mo; })
+    .map(t=>({t, done:taskDoneRow(t,all)})).sort((a,b)=>new Date(a.t.created_at)-new Date(b.t.created_at));
+  const usedRows=new Set(mTasks.filter(x=>x.done).map(x=>x.done));
+  const ownRows=rows.filter(r=>!usedRows.has(r) && !mTasks.some(x=>x.done && taskMatch(x.t,r) && r.activity===x.done.activity && Math.abs(new Date(r.created_at)-new Date(x.done.created_at))<36e5));
   const totalS = rows.reduce((a,r)=>a+secsOf(r),0);
   const activeDays = new Set(rows.map(r=>new Date(r.created_at).getDate()));
   const readings = []; rows.filter(isReading).forEach(r=>{ const t=r.item.replace(/^Lectura · /,""); if(!readings.includes(t)) readings.push(t); });
-  const by={}; rows.forEach(r=>{ const [n,c]=catOf(r.activity); by[n]=by[n]||{n,c,s:0,k:0}; by[n].s+=secsOf(r); by[n].k++; });
+  const by={}; ownRows.forEach(r=>{ const [n,c]=catOf(r.activity); by[n]=by[n]||{n,c,s:0,k:0}; by[n].s+=secsOf(r); by[n].k++; });
   const cats=Object.values(by).sort((a,b)=>b.s-a.s||b.k-a.k).slice(0,6), maxS=Math.max(1,...cats.map(c=>c.s));
   const results=rows.filter(r=>r.total || r.item==="Nuevo récord").slice(0,5);
   const first=new Date(y,mo,1), dim=new Date(y,mo+1,0).getDate(), lead=(first.getDay()+6)%7;
@@ -660,9 +675,10 @@ async function buildReport(s, all, y, mo, note){
     <div class="who"><div class="av2">${esc(initials(nm))}</div><div><h2>${esc(nm)}</h2><span>@${esc(s.username)}</span></div>${s.stage?`<em>${esc(s.stage)}</em>`:""}</div>
     <div class="stats2">${stat(fmtMin(totalS)||"0 min","Tiempo de práctica","#ECFBC8")}${stat(n,n===1?"Día de práctica":"Días de práctica","#FFE6F2")}${stat(readings.length,readings.length===1?"Lectura":"Lecturas","#E5E9FF")}${stat(rows.length,"Actividades","#FFF6D1")}</div>
     <div class="g2">
-      <div class="bx"><h3>En qué trabajó</h3>${cats.length?cats.map((c,i)=>`<div class="bar"><div><b>${esc(c.n)}</b><span>${c.s?fmtMin(c.s)+" · ":""}${c.k} ${c.k===1?"vez":"veces"}</span></div><div class="tr"><i style="width:${Math.max(6,Math.round(c.s/maxS*100))}%;background:${BC[i%6]}"></i></div></div>`).join(""):`<p class="none">Sin actividad registrada este mes.</p>`}</div>
+      <div class="bx"><h3>Practicó por su cuenta</h3>${cats.length?cats.map((c,i)=>`<div class="bar"><div><b>${esc(c.n)}</b><span>${c.s?fmtMin(c.s)+" · ":""}${c.k} ${c.k===1?"vez":"veces"}</span></div><div class="tr"><i style="width:${Math.max(6,Math.round(c.s/maxS*100))}%;background:${BC[i%6]}"></i></div></div>`).join(""):`<p class="none">Sin actividad registrada este mes.</p>`}</div>
       <div class="bx"><h3>Días que practicó</h3><div class="cal">${cal}</div>${streak>=2?`<p class="cap">Su mejor racha: ${streak} días seguidos</p>`:""}</div>
     </div>
+    ${mTasks.length?`<div class="bx asg"><h3>Asignadas por la maestra <span>${mTasks.filter(x=>x.done).length} de ${mTasks.length} completadas</span></h3><ul>${mTasks.map(x=>`<li class="${x.done?"ok":"pe"}"><i>${x.done?"✓":"•"}</i><span>${esc(TASK_NAME[x.t.task]||x.t.title)}<small>Asignada el ${new Date(x.t.created_at).toLocaleDateString("es-MX",{day:"numeric",month:"short"})}${x.done?" · completada el "+new Date(x.done.created_at).toLocaleDateString("es-MX",{day:"numeric",month:"short"}):""}</small></span><b>${x.done?(x.done.total?Math.round(x.done.score/x.done.total*100)+"%":"Completada"):"Pendiente"}</b></li>`).join("")}</ul></div>`:""}
     <div class="g2">
       <div class="bx"><h3>Lecturas del mes</h3>${readings.length?`<ul>${readings.slice(0,6).map(t=>`<li>${esc(t)}</li>`).join("")}${readings.length>6?`<li class="more">y ${readings.length-6} más</li>`:""}</ul>`:`<p class="none">Este mes no registró lecturas.</p>`}</div>
       <div class="bx res"><h3>Resultados</h3>${results.length?`<ul>${results.map(r=>`<li><span>${esc(ACT_NAMES[r.activity]||r.activity)} · ${esc(r.item==="Nuevo récord"?"récord":r.item.replace("Resultado del examen: ",""))}</span><b>${esc(rowRight(r))}</b></li>`).join("")}</ul>`:`<p class="none">Sin exámenes ni récords este mes.</p>`}</div>
@@ -684,7 +700,26 @@ async function buildReport(s, all, y, mo, note){
 }
 
 
-/* ---------- Tareas (TOEFL Quick Simulation) ---------- */
+/* ---------- Tareas ---------- */
+const TASK_CAT=[
+ ["TOEFL",[["toefl-sim","TOEFL Quick Simulation"],["toefl-practice","TOEFL Practice"],["word-forms","Word Forms"],["level-up","Level Up · Placement test"]]],
+ ["Lectura",[["lectura","Reading Library (one story)"]]],
+ ["Juegos en inglés",[["word-quest","Word Quest"],["crucigrama","Crossword"],["sopa-de-letras","WordSearch"],["sentence-builder","Sentence Builder"],["sentence-scramble","Sentence Scramble"],["verb-memory","Verb Memory"]]],
+ ["Escape rooms",[["locked-library","The Locked Library"],["haunted-mansion","The Haunted Mansion"],["lost-in-the-museum","Lost in the Museum"],["pirate-treasure-island","Pirate Treasure Island"],["space-station-rescue","Space Station Rescue"],["the-detectives-case","The Detective’s Case"],["trapped-in-the-train","Trapped in the Train"]]],
+ ["Español y matemáticas",[["lee-con-mochi","Aprende a leer con Mochi"],["mision-matematica","Misión Matemática"],["la-tiendita","La Tiendita"],["la-balanza","La Balanza"],["la-boveda","La Bóveda"],["lluvia-de-numeros","Lluvia de números"],["detective-patrones","Detective de patrones"],["pizzeria-fracciones","Pizzería de fracciones"],["que-hora-es","¿Qué hora es?"]]]
+];
+const TASK_NAME=Object.fromEntries(TASK_CAT.flatMap(g=>g[1]));
+function taskMatch(t,r){
+  if(r.detail && r.detail.task!=null && String(r.detail.task)===String(t.id)) return true;
+  if(new Date(r.created_at) < new Date(t.created_at)) return false;
+  if(t.task==="toefl-sim") return !!(r.detail && r.detail.kind==="toefl-sim");
+  if(t.task==="lectura") return isReading(r);
+  if(r.activity!==t.task) return false;
+  if(t.task==="toefl-practice" && r.detail && r.detail.kind==="toefl-sim") return false;
+  return r.total!=null || secsOf(r)>=60 || !!(r.detail && r.detail.kind && r.detail.kind!=="time");
+}
+function taskDoneRow(t,rows){ const m=rows.filter(r=>taskMatch(t,r)).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at)); return m.find(r=>r.total)||m[0]||null; }
+
 const PCOL={"Listening":"#B9A6FF","Structure":"#8FA2FF","Written Expression":"#FF8FC8","Reading":"#D3F36B"};
 const PES={"Listening":"Listening","Structure":"Structure","Written Expression":"Written Expression","Reading":"Reading"};
 function fmtT(sec){ sec=Math.max(0,sec|0); return Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0"); }
@@ -694,22 +729,26 @@ async function loadTasks(s){
   let tasks=[], rows=[];
   try{ [tasks,rows]=await Promise.all([rpc("admin_list_tasks",{p_student:String(s.id)}), rpc("admin_student_progress",{p_student:s.id,p_limit:1000})]); }
   catch(e){ box.innerHTML=`<div class="tk"><h3>Tareas</h3><p class="sub">${esc(/admin_list_tasks|function/.test(e.message)?"Falta pegar el SQL de tareas en Supabase.":e.message)}</p></div>`; return; }
-  tasks=tasks||[];
+  tasks=tasks||[]; rows=rows||[];
   const seen=new Set();
-  const sims=(rows||[]).filter(r=>r.detail&&r.detail.kind==="toefl-sim").filter(r=>{const u=r.detail.uid; if(!u) return true; if(seen.has(u)) return false; seen.add(u); return true;})
+  const sims=rows.filter(r=>r.detail&&r.detail.kind==="toefl-sim").filter(r=>{const u=r.detail.uid; if(!u) return true; if(seen.has(u)) return false; seen.add(u); return true;})
     .sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
   const d=(x)=>new Date(x).toLocaleString("es-MX",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
   const tHtml=tasks.map(t=>{
-    const done=sims.find(r=>String(r.detail.task)===String(t.id)) || sims.find(r=>new Date(r.created_at)>=new Date(t.created_at));
-    return `<div class="row"><div><b>${esc(t.title)}</b><small>Asignada ${esc(d(t.created_at))}${done?" · terminada "+esc(d(done.created_at)):""}</small></div>
-      ${done?`<span class="pill done">Completada · ${Math.round(done.score/done.total*100)}%</span><button class="see" data-r="${esc(done.detail.uid||done.created_at)}">Ver reporte</button>`:`<span class="pill pend">Pendiente</span>`}
+    const done=taskDoneRow(t,rows);
+    const res=done&&done.total?` · ${Math.round(done.score/done.total*100)}%`:"";
+    const see=done&&done.detail&&done.detail.kind==="toefl-sim"?`<button class="see" data-r="${esc(done.detail.uid||done.created_at)}">Ver reporte</button>`:"";
+    return `<div class="row"><div><b>${esc(TASK_NAME[t.task]||t.title)}</b><small>Asignada ${esc(d(t.created_at))}${done?" · terminada "+esc(d(done.created_at)):""}</small></div>
+      ${done?`<span class="pill done">Completada${res}</span>${see}`:`<span class="pill pend">Pendiente</span>`}
       <button class="rm" data-t="${t.id}" aria-label="Quitar tarea">×</button></div>`;}).join("");
-  const sHtml=sims.length?`<h3 style="margin-top:16px">Simulaciones realizadas</h3>`+sims.map(r=>`<div class="row"><div><b>${r.score}/${r.total} · ${Math.round(r.score/r.total*100)}%</b><small>${esc(d(r.created_at))} · ${fmtT(r.detail.secs)} min</small></div><button class="see" style="margin-left:auto" data-r="${esc(r.detail.uid||r.created_at)}">Ver reporte</button></div>`).join(""):"";
-  box.innerHTML=`<div class="tk"><h3>Tareas</h3><p class="sub">La alumna la verá al abrir la app con su usuario.</p>
-    <button class="asg" id="asgSim">Asignar TOEFL Quick Simulation</button>${tHtml}${sHtml}</div>`;
-  $("#asgSim").onclick=async()=>{ const b=$("#asgSim"); b.disabled=true; b.textContent="Asignando…";
-    try{ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:"toefl-sim",p_title:"TOEFL Quick Simulation"}); toast("Tarea asignada a "+s.full_name.split(" ")[0]); loadTasks(s); }
-    catch(e){ toast(e.message); b.disabled=false; b.textContent="Asignar TOEFL Quick Simulation"; } };
+  const sHtml=sims.length?`<h3 style="margin-top:16px">Simulaciones TOEFL</h3>`+sims.map(r=>`<div class="row"><div><b>${r.score}/${r.total} · ${Math.round(r.score/r.total*100)}%</b><small>${esc(d(r.created_at))} · ${fmtT(r.detail.secs)} min</small></div><button class="see" style="margin-left:auto" data-r="${esc(r.detail.uid||r.created_at)}">Ver reporte</button></div>`).join(""):"";
+  const opts=TASK_CAT.map(([g,items])=>`<optgroup label="${esc(g)}">${items.map(([k,n])=>`<option value="${k}">${esc(n)}</option>`).join("")}</optgroup>`).join("");
+  box.innerHTML=`<div class="tk"><h3>Tareas</h3><p class="sub">Elige una actividad. ${esc(s.full_name.split(" ")[0])} la verá al abrir la app con su usuario.</p>
+    <select class="in" id="asgSel" style="margin-bottom:10px">${opts}</select>
+    <button class="asg" id="asgBtn">Asignar actividad</button>${tHtml||`<p class="sub" style="margin:10px 2px 0">Todavía no tiene tareas asignadas.</p>`}${sHtml}</div>`;
+  $("#asgBtn").onclick=async()=>{ const b=$("#asgBtn"), k=$("#asgSel").value; b.disabled=true; b.textContent="Asignando…";
+    try{ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:k,p_title:TASK_NAME[k]||k}); toast(`${TASK_NAME[k]} asignada a ${s.full_name.split(" ")[0]}`); loadTasks(s); }
+    catch(e){ toast(e.message); b.disabled=false; b.textContent="Asignar actividad"; } };
   box.querySelectorAll(".rm").forEach(b=>b.onclick=async()=>{ if(!confirm("¿Quitar esta tarea?")) return; try{ await rpc("admin_remove_task",{p_id:+b.dataset.t}); loadTasks(s); }catch(e){ toast(e.message); } });
   box.querySelectorAll(".see").forEach(b=>b.onclick=()=>{ const r=sims.find(x=>String(x.detail.uid||x.created_at)===b.dataset.r); if(r) openSimReport(s,r); });
 }
@@ -725,7 +764,7 @@ function simReportHtml(s,r){
     <div class="hd"><span class="k">TOEFL ITP · Quick Simulation</span><h1>${esc(first)}, ${pct>=60?"¡buen trabajo!":"aquí está tu resultado"}</h1>
       <p>${esc(s.full_name)} · ${new Date(r.created_at).toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</p></div>
     <div class="big"><div class="ring" style="background:conic-gradient(${col} ${pct*3.6}deg,#F2EFF8 0)"><span>${pct}%</span></div>
-      <div><b>${r.score} de ${r.total} correctas · ${lvl}</b><small>Tiempo: ${fmtT(D.secs)} de ${fmtT(D.limit||1080)} min${D.timeUp?" · se terminó el tiempo":""}${D.passage?`<br>Lectura: ${esc(D.passage)}`:""}</small></div></div>
+      <div><b>${r.score} de ${r.total} correctas · ${lvl}</b><small>Tiempo: ${fmtT(D.secs)} de ${fmtT(Math.round((D.limit||1080)/60)*60)} min${D.timeUp?" · se terminó el tiempo":""}${D.passage?`<br>Lectura: ${esc(D.passage)}`:""}</small></div></div>
     <div class="bx"><h3>Resultado por habilidad</h3>${parts.map(x=>`<div class="pb"><div>${esc(PES[x.p]||x.p)}<span>${x.c}/${x.t} · ${Math.round(x.v*100)}%</span></div><div class="tr"><i style="width:${Math.max(4,Math.round(x.v*100))}%;background:${PCOL[x.p]||"#B9A6FF"}"></i></div></div>`).join("")}</div>
     ${parts.length>1?`<div class="two"><div style="background:#D3F36B"><em>Fortaleza</em><b>${esc(best.p)}</b></div><div style="background:#FFE6F2"><em>Por reforzar</em><b>${esc(worst.p)}</b></div></div>`:""}
     <div class="bx"><h3>Pregunta por pregunta${wrong?` · ${wrong} por revisar`:""}</h3>${log.map((l,i)=>`<div class="q"><span class="m ${l.ok?"ok":"no"}">${l.ok?"✓":"✕"}</span><div><span class="tag" style="background:${PCOL[l.p]||"#EDE8FF"}">${esc(l.p)}</span>${i+1}. ${esc(l.q)}
@@ -753,7 +792,7 @@ function simPdfHtml(s,r,note,R){
   <img class="s2bl" src="${R.ill}" alt="">
   <img class="s2wv" src="${R.wave}" alt=""></div>
   <div class="s2who"><div class="s2av">${esc(initials(nm))}</div><div><h2>${esc(nm)}</h2><span>Simulation taken on ${esc(fecha)}</span></div>${s.stage?`<em>${esc(s.stage)}</em>`:""}</div>
-  <div class="s2st"><div style="background:#ECFBC8"><b>${r.score} / ${r.total}</b><span>Correct answers</span></div><div style="background:#FFE6F2"><b>${fmtT(D.secs)}</b><span>Time out of ${fmtT(D.limit||1080)} min</span></div><div style="background:#E5E9FF"><b>${esc(short(best.p))}</b><span>Strongest skill</span></div><div style="background:#FFF6D1"><b>${esc(short(worst.p))}</b><span>To improve</span></div></div>
+  <div class="s2st"><div style="background:#ECFBC8"><b>${r.score} / ${r.total}</b><span>Correct answers</span></div><div style="background:#FFE6F2"><b>${fmtT(D.secs)}</b><span>Time out of ${fmtT(Math.round((D.limit||1080)/60)*60)} min</span></div><div style="background:#E5E9FF"><b>${esc(short(best.p))}</b><span>Strongest skill</span></div><div style="background:#FFF6D1"><b>${esc(short(worst.p))}</b><span>To improve</span></div></div>
   <div class="s2g"><div class="s2score"><div style="position:relative;width:150px;height:150px"><img src="${R.ring}" style="width:150px;height:150px;display:block" alt=""><span style="position:absolute;inset:0;display:grid;place-items:center;font-family:'Bricolage Grotesque',sans-serif;font-size:42px;font-weight:800">${pct}%</span></div><b>${lvl}</b><small>4 parts · ${r.total} questions</small></div>
   <div class="s2bx"><h3>Results by skill</h3>${parts.map(x=>`<div class="s2bar"><div><b>${esc(x.p)}</b><span>${x.c}/${x.t} · ${Math.round(x.v*100)}%</span></div><div class="s2tr"><i style="width:${Math.max(4,Math.round(x.v*100))}%;background:${PC2[x.p]}"></i></div></div>`).join("")}</div></div>
   ${wrong.length?`<div class="s2bx s2rv"><h3>Review at home</h3><ul>${wrong.map(l=>`<li><em style="background:${PC2[l.p]||"#EDE8FF"}">${esc(l.p)}</em><span>${esc(l.q)}</span><small>${l.y?`Answered: <u>${esc(l.y)}</u> · `:""}Correct: <u>${esc(l.a)}</u></small></li>`).join("")}</ul></div>`:""}

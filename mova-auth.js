@@ -40,6 +40,12 @@
     var row = { p_token: user.token, p_activity: activity, p_item: item || null,
       p_score: score == null ? null : Math.round(score), p_total: total == null ? null : Math.round(total), p_detail: detail || {} };
     row.p_detail.uid = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    if (window.__movaTaskId && (gameSlug() ? activity === gameSlug() : /^app-(library|lecturas)$/.test(activity) && detail && detail.kind === "done")) {
+      if (score != null || (detail && detail.kind && detail.kind !== "time")) {
+        if (row.p_detail.task == null) row.p_detail.task = window.__movaTaskId;
+        window.__movaTaskMark();
+      }
+    }
     return rpc("save_progress", row, true).then(function (ok) {
       if (ok === false) { checkSession(); }
       return ok;
@@ -475,6 +481,21 @@
 
   /* ---------- Tareas asignadas por la maestra ---------- */
   var taskShown = false;
+  function taskUrl(t) {
+    var q = "?task=" + encodeURIComponent(t.id);
+    if (t.task === "toefl-sim") return "juego-toefl-practice.html" + q + "#sim";
+    if (t.task === "lectura") return "index.html" + q + "#/library";
+    return "juego-" + t.task + ".html" + q;
+  }
+  function taskRowMatch(t, r) {
+    if (r.detail && r.detail.task != null && String(r.detail.task) === String(t.id)) return true;
+    if (r.created_at && new Date(r.created_at).getTime() < new Date(t.created_at).getTime()) return false;
+    if (t.task === "toefl-sim") return !!(r.detail && r.detail.kind === "toefl-sim");
+    if (t.task === "lectura") return /^app-(library|lecturas)$/.test(r.activity) && r.item && !/Explorando/.test(r.item);
+    if (r.activity !== t.task) return false;
+    var d = r.detail || {};
+    return r.total != null || (d.kind === "time" && (d.seconds || 0) >= 60) || (!!d.kind && d.kind !== "time");
+  }
   function checkTasks() {
     if (!user || gameSlug() || taskShown) return;
     var me = user.username;
@@ -484,14 +505,16 @@
         rows = Array.isArray(rows) ? rows : [];
         var pend = tasks.filter(function (t) {
           if (get("mova-task-done-" + t.id)) return false;
-          var since = new Date(t.created_at).getTime();
-          return !rows.some(function (r) { return r.detail && r.detail.kind === t.task && (!r.created_at || new Date(r.created_at).getTime() >= since); });
+          return !rows.some(function (r) { return taskRowMatch(t, r); });
         });
-        if (pend.length) showTask(pend[0]);
+        if (pend.length) showTask(pend);
       });
     }).catch(function () {});
   }
-  function showTask(t) {
+  var TASK_SUB = { "toefl-sim": "4 parts · 25 questions · 18 minutes. Find a quiet place and use headphones for the Listening part.",
+    "level-up": "A placement test to see your English level. Take your time.", lectura: "Choose a story in the Reading Library and finish it." };
+  function showTask(list) {
+    var t = list[0];
     if (taskShown || document.getElementById("mva-task")) return; taskShown = true;
     var st = document.createElement("style");
     st.textContent = "#mva-task{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 28px));z-index:2147483630;" +
@@ -502,22 +525,32 @@
       "#mva-task p{margin:0;font-size:14px;line-height:1.5;color:#C9CCE0}" +
       "#mva-task .r{display:flex;gap:10px;margin-top:14px;align-items:center}" +
       "#mva-task a{background:#D3F36B;color:#15192B;font-weight:800;font-size:15px;border-radius:999px;padding:11px 20px;text-decoration:none}" +
-      "#mva-task button{background:none;border:0;color:#C9CCE0;font:600 14px inherit;padding:10px;cursor:pointer}";
+      "#mva-task button{background:none;border:0;color:#C9CCE0;font:600 14px inherit;padding:10px;cursor:pointer}" +
+      "#mva-task .m{margin-left:auto;font-size:12px;font-weight:700;color:#B9A6FF}";
     document.head.appendChild(st);
     var d = document.createElement("div"); d.id = "mva-task";
-    d.innerHTML = '<span class="k">Assigned by your teacher</span><b>' + (t.title || "TOEFL Quick Simulation").replace(/[<>&]/g, "") + "</b>" +
-      "<p>4 parts · 25 questions · 18 minutes. Find a quiet place and use headphones for the Listening part.</p>" +
-      '<div class="r"><a href="juego-toefl-practice.html?task=' + encodeURIComponent(t.id) + '#sim">Start now</a><button type="button">Later</button></div>';
+    d.innerHTML = '<span class="k">Assigned by your teacher</span><b>' + String(t.title || "Activity").replace(/[<>&]/g, "") + "</b>" +
+      "<p>" + (TASK_SUB[t.task] || "Your teacher assigned you this activity. Complete it when you can.") + "</p>" +
+      '<div class="r"><a href="' + taskUrl(t) + '">Start now</a><button type="button">Later</button>' +
+      (list.length > 1 ? '<span class="m">+' + (list.length - 1) + " more</span>" : "") + "</div>";
     d.querySelector("button").onclick = function () { d.remove(); };
     document.body.appendChild(d);
   }
-
+  /* Marca la tarea como hecha en este dispositivo cuando la alumna la trabaja */
+  function taskContext() {
+    var id = new URLSearchParams(location.search).get("task");
+    if (!id) return;
+    var mark = function () { set("mova-task-done-" + id, 1); };
+    if (gameSlug()) setTimeout(mark, 60000);
+    window.__movaTaskId = id; window.__movaTaskMark = mark;
+  }
   /* ---------- Arranque ---------- */
   window.MovaAuth = { save: save, user: function () { return user; }, login: showLogin };
   function boot() {
     injectCss();
     var rs = document.createElement("style"); rs.textContent = retoCss; document.head.appendChild(rs);
     retoToggle();
+    taskContext();
     flushQueue(); checkSession();
     watchResults();
     startTracking();
