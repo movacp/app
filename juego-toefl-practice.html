@@ -151,6 +151,16 @@ details.ptoggle summary{cursor:pointer;font-weight:600;font-size:14px;color:var(
 .end-actions .btn{width:100%}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
+.simhero{display:block;width:100%;margin-top:18px;padding:0;border-radius:28px;background:#15192B;color:#fff;text-align:left;overflow:hidden;box-shadow:0 14px 34px rgba(21,25,43,.18);cursor:pointer;font:inherit;border:0}
+.simhero .sh-img{display:block;aspect-ratio:16/9;background:#EDE8FF;overflow:hidden}
+.simhero .sh-img img{width:100%;height:100%;object-fit:cover;display:block}
+.simhero .sh-body{display:grid;gap:8px;padding:18px 20px 20px}
+.simhero .sh-k{justify-self:start;background:#D3F36B;color:#15192B;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:5px 12px}
+.simhero b{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-size:25px;line-height:1.05;letter-spacing:-.01em}
+.simhero .sh-p{font-size:14.5px;line-height:1.5;color:#C9CCE0}
+.simhero .sh-chips{display:flex;flex-wrap:wrap;gap:6px}.simhero .sh-chips span{font-size:12.5px;font-weight:700;background:rgba(255,255,255,.1);border-radius:999px;padding:5px 11px}
+.simhero .sh-btn{justify-self:start;margin-top:4px;background:#D3F36B;color:#15192B;font-weight:800;font-size:15px;border-radius:999px;padding:12px 20px}
+.simhero:active{transform:scale(.99)}
 .simcard{display:grid;gap:6px;margin-top:14px;padding:20px;border-radius:22px;background:var(--navy);color:var(--on-navy);text-decoration:none;box-shadow:var(--shadow)}
 .simcard b{font-size:18px}
 .simcard span{font-size:14.5px;line-height:1.55;opacity:.9}
@@ -195,9 +205,20 @@ details.ptoggle summary{cursor:pointer;font-weight:600;font-size:14px;color:var(
       <circle cx="40" cy="44" r="10" fill="#6FA8D6" opacity=".9"/><circle cx="196" cy="24" r="6" fill="#7FB89E"/>
     </svg>
     <h1>TOEFL Practice</h1>
-    <p>Warm-up practice for the TOEFL ITP: 100 Structure questions, 100 Written Expression, 20 reading passages, listening, academic vocabulary and word forms. Practice at your own pace or against the clock.</p>
+    <p>Warm-up practice for the TOEFL ITP: 120 Structure questions, 120 Written Expression, 25 reading passages, 56 listening audios, academic vocabulary and a quick timed simulation. Practice at your own pace or against the clock.</p>
     <span class="note">Practice sets with instant feedback, not a full simulation</span>
   </header>
+
+  <button class="simhero" id="simhero" type="button">
+    <span class="sh-img"><img src="thumb-toefl-sim.webp" srcset="thumb-toefl-sim.webp 800w, thumb-toefl-sim-hd.webp 1280w" sizes="(min-width:700px) 640px, 100vw" alt=""></span>
+    <span class="sh-body">
+      <span class="sh-k">New · Mixed skills</span>
+      <b>Quick TOEFL Simulation</b>
+      <span class="sh-p">A short timed test with all the skills in the same order as the TOEFL ITP.</span>
+      <span class="sh-chips"><span>4 parts</span><span>25 questions</span><span>18 minutes</span></span>
+      <span class="sh-btn">Start simulation</span>
+    </span>
+  </button>
 
   <h2 class="sec-title">Choose a section</h2>
   <div class="sections" id="sections"></div>
@@ -379,6 +400,9 @@ SECTIONS.push(
   { id: "wordforms", name: "Word Forms", desc: "Recognize nouns, verbs, adjectives and adverbs by their endings, even when you don’t know the word.", c: "butter", n: 0, icon: '<rect x="2.5" y="7.5" width="11" height="9" rx="2.5" stroke="currentColor" stroke-width="2" fill="none"/><rect x="15.5" y="7.5" width="6" height="9" rx="2.5" fill="currentColor"/><path d="M5.5 12h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
   { id: "review", name: "Review my mistakes", desc: "Practice again the questions you answered incorrectly. They leave the list when you get them right.", c: "rose", n: 0, icon: '<path d="M4 12a8 8 0 1 0 3-6.2" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M4 4v4h4" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' }
 );
+SECTIONS.unshift({ id: "sim", name: "Quick Simulation", desc: "A short timed test that mixes all the skills, in the same order as the TOEFL ITP: Listening, Structure, Written Expression and Reading.", c: "coral", n: 25, icon: '<circle cx="12" cy="13" r="8" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M12 9v4l3 2M9 2h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/>' });
+const SIM = { ls: 5, mc: 8, we: 7, rd: 1 };
+const SIM_PACE = { ls: 40, mc: 37, we: 37, rd: 66 };
 /* Ritmo TOEFL ITP: Structure y Written 25 min / 40 preguntas, Reading 55 min / 50 preguntas */
 const PACE = { structure: 37, written: 37, vocab: 30, reading: 66, review: 45 };
 const MKEY = "mova-toefl-mistakes";
@@ -418,14 +442,15 @@ const st = { section: null, items: [], i: 0, score: 0, log: [], t0: 0, clock: 0,
 
 function drawHome() {
   const rec = load();
-  $("#sections").innerHTML = SECTIONS.map((s) => {
+  $("#sections").innerHTML = SECTIONS.filter((s) => s.id !== "sim").map((s) => {
     const r = rec[s.id];
     const m = loadM().length;
-    const count = s.id === "wordforms" ? "4 practice modes" : s.id === "reading" ? `${PASSAGES.length} passages · ${PASSAGES.reduce((a, p) => a + p.q.length, 0)} questions` : s.id === "review" ? (m ? `${m} to review` : "No mistakes saved yet") : s.id === "listening" ? `${s.n} audios` : `${s.n} questions`;
-    return `<button class="sec" data-s="${s.id}" data-c="${s.c}"><span class="ic"><svg viewBox="0 0 24 24" fill="none">${s.icon}</svg></span><span><h3>${s.name}</h3><p>${s.desc}</p><span class="meta"><span class="chip">${count}</span>${r ? `<span class="chip best">Best: ${r}%</span>` : ""}${s.id === "wordforms" ? `<span class="chip new">New</span>` : ""}</span></span></button>`;
+    const count = s.id === "wordforms" ? "4 practice modes" : s.id === "reading" ? `${PASSAGES.length} passages · ${PASSAGES.reduce((a, p) => a + p.q.length, 0)} questions` : s.id === "review" ? (m ? `${m} to review` : "No mistakes saved yet") : s.id === "listening" ? `${s.n} audios` : s.id === "sim" ? "25 questions · 18 min" : `${s.n} questions`;
+    return `<button class="sec" data-s="${s.id}" data-c="${s.c}"><span class="ic"><svg viewBox="0 0 24 24" fill="none">${s.icon}</svg></span><span><h3>${s.name}</h3><p>${s.desc}</p><span class="meta"><span class="chip">${count}</span>${r ? `<span class="chip best">Best: ${r}%</span>` : ""}${s.id === "sim" ? `<span class="chip new">New</span>` : ""}</span></span></button>`;
   }).join("");
   $("#tip").textContent = TIPS[new Date().getDate() % TIPS.length];
 }
+$("#simhero").addEventListener("click", () => open("sim"));
 $("#sections").addEventListener("click", (e) => { const b = e.target.closest(".sec"); if (!b) return; if (b.dataset.s === "review" && !loadM().length) return; open(b.dataset.s); });
 
 function open(id) {
@@ -433,6 +458,7 @@ function open(id) {
   st.section = id;
   if (id === "reading") { drawPicks(); show("read"); return; }
   if (id === "listening") { st.n = LISTENING.length; st.timed = false; begin(); return; }
+  if (id === "sim") { st.timed = true; begin(); return; }
   setup(id);
 }
 function setup(id) {
@@ -466,12 +492,19 @@ function begin() {
   if (id === "written") st.items = idx(WRITTEN).map((k) => ({ ...itemFromRef({ s: id, k }), ref: { s: id, k } }));
   if (id === "vocab") st.items = idx(VOCAB).map((k) => ({ ...itemFromRef({ s: id, k }), ref: { s: id, k } }));
   if (id === "reading") st.items = st.passage.q.map((_, qi) => { const ref = { s: "reading", k: st.passage.id + "|" + qi }; return { ...itemFromRef(ref), ref }; });
-  if (id === "listening") st.items = shuffle(LISTENING.map((_, k) => k)).slice(0, 8).map((k) => ({ ...itemFromRef({ s: id, k }), ref: { s: id, k } }));
+  if (id === "listening") st.items = shuffle(LISTENING.map((_, k) => k)).slice(0, 10).map((k) => ({ ...itemFromRef({ s: id, k }), ref: { s: id, k } }));
+  if (id === "sim") {
+    const P1 = "Part 1 · Listening", P2 = "Part 2 · Structure", P3 = "Part 3 · Written Expression", P4 = "Part 4 · Reading";
+    const take = (s, arr, n, part) => shuffle(arr.map((_, k) => k)).slice(0, n).map((k) => ({ ...itemFromRef({ s, k }), ref: { s, k }, part }));
+    st.passage = PASSAGES[Math.floor(Math.random() * PASSAGES.length)];
+    st.items = [...take("listening", LISTENING, SIM.ls, P1), ...take("structure", STRUCTURE, SIM.mc, P2), ...take("written", WRITTEN, SIM.we, P3),
+      ...st.passage.q.map((_, qi) => { const ref = { s: "reading", k: st.passage.id + "|" + qi }; return { ...itemFromRef(ref), ref, part: P4 }; })];
+  }
   if (id === "review") st.items = shuffle(loadM()).slice(0, st.n || 10).map((ref) => ({ ...itemFromRef(ref), ref })).filter((x) => x.type);
   st.i = 0; st.score = 0; st.log = [];
   $("#q-title").textContent = id === "reading" ? st.passage.title : SECTIONS.find((s) => s.id === id).name;
   st.t0 = Date.now(); clearInterval(st.clock); st.timeUp = false;
-  const limit = st.timed && id !== "listening" ? st.items.length * PACE[id] : 0;
+  const limit = st.timed && id !== "listening" ? (id === "sim" ? st.items.reduce((a, it) => a + SIM_PACE[it.type], 0) : st.items.length * PACE[id]) : 0;
   const fmt = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
   $("#clock").classList.toggle("timed", !!limit);
   const tick = () => {
@@ -490,7 +523,7 @@ function choicesHTML(opts) {
 function render() {
   const it = st.items[st.i], n = st.items.length, A = $("#q-area");
   $("#prog").style.width = `${(st.i / n) * 100}%`;
-  const head = `<p class="qnum">Question ${st.i + 1} of ${n}</p>`;
+  const head = `<p class="qnum">${it.part ? esc(it.part) + " · " : ""}Question ${st.i + 1} of ${n}</p>`;
   let html = "";
   if (it.type === "mc") {
     it.shuffled = shuffle(it.o);
@@ -550,7 +583,7 @@ function pick(btn) {
   if (ok) st.score++;
   if (it.ref) { const m = loadM(), key = refKey(it.ref), has = m.findIndex((r) => refKey(r) === key); if (!ok && has < 0) m.push(it.ref); if (ok && has >= 0) m.splice(has, 1); saveM(m); }
   const label = it.type === "we" ? `${KEYS[it.k]}: change “${it.parts[it.k]}” to “${it.fix}”.` : `Answer: ${correctVal}`;
-  st.log.push({ ok, q: it.type === "mc" ? it.stem.replace("___", "_____") : it.type === "we" ? it.s.replace(/[\[\]]/g, "") : it.type === "vc" ? `${it.w}: ${it.sent}` : it.q, a: it.type === "we" ? `Change “${it.parts[it.k]}” to “${it.fix}”` : correctVal });
+  st.log.push({ ok, part: it.part, q: it.type === "mc" ? it.stem.replace("___", "_____") : it.type === "we" ? it.s.replace(/[\[\]]/g, "") : it.type === "vc" ? `${it.w}: ${it.sent}` : it.q, a: it.type === "we" ? `Change “${it.parts[it.k]}” to “${it.fix}”` : correctVal });
   const script = it.type === "ls" ? `<p class="script">${esc(it.say)}</p>` : "";
   const last = st.i === st.items.length - 1;
   $("#ex").innerHTML = `<div class="explain"><b>${ok ? "Correct." : "Not quite."} ${esc(label)}</b>${esc(it.why)}${script}</div>
@@ -563,7 +596,7 @@ function finish() {
   clearInterval(st.clock);
   if (st.timeUp) {
     const m = loadM();
-    st.items.slice(st.log.length).forEach((it) => { st.log.push({ ok: false, q: it.type === "mc" ? it.stem : it.type === "we" ? it.s.replace(/[\[\]]/g, "") : it.type === "vc" ? `${it.w}: ${it.sent}` : it.q, a: "Not answered: time ran out" }); if (it.ref && !m.some((r) => refKey(r) === refKey(it.ref))) m.push(it.ref); });
+    st.items.slice(st.log.length).forEach((it) => { st.log.push({ ok: false, part: it.part, q: it.type === "mc" ? it.stem : it.type === "we" ? it.s.replace(/[\[\]]/g, "") : it.type === "vc" ? `${it.w}: ${it.sent}` : it.q, a: "Not answered: time ran out" }); if (it.ref && !m.some((r) => refKey(r) === refKey(it.ref))) m.push(it.ref); });
     saveM(m);
   }
   const n = st.items.length, pct = Math.round((st.score / n) * 100);
@@ -580,8 +613,12 @@ function finish() {
   const secs = Math.floor((Date.now() - st.t0) / 1000);
   $("#r-title").textContent = pct >= 80 ? "Excellent work" : pct >= 50 ? "Good progress" : "Keep practicing";
   $("#r-text").textContent = (st.timeUp ? "Time is up. " : "") + `${st.score} of ${n} correct in ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}. ${pct > prev && prev ? "New personal best! " : ""}Review the explanations below and try another set to keep improving.`;
+  if (st.section === "sim") {
+    const parts = {}; st.log.forEach((l) => { const p = (l.part || "").replace(/^Part \d · /, ""); parts[p] = parts[p] || [0, 0]; parts[p][1]++; if (l.ok) parts[p][0]++; });
+    $("#r-text").textContent = (st.timeUp ? "Time is up. " : "") + `${st.score} of ${n} correct in ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}. ` + Object.entries(parts).map(([p, v]) => `${p}: ${v[0]}/${v[1]}`).join(" · ") + ". This is a short practice simulation, not an official score.";
+  }
   $("#rv").innerHTML = st.log.map((l) => `<li class="${l.ok ? "ok" : "no"}"><span class="mk">${l.ok ? "✓" : "✕"}</span><span>${esc(l.q)}<small>${esc(l.a)}</small></span></li>`).join("");
-  $("#again").textContent = st.section === "reading" ? "Read another passage" : "Practice this section again";
+  $("#again").textContent = st.section === "reading" ? "Read another passage" : st.section === "sim" ? "Take another simulation" : "Practice this section again";
 }
 $("#again").addEventListener("click", () => { if (st.section === "reading") { drawPicks(); show("read"); } else if (st.section === "review") { if (loadM().length) setup("review"); else { drawHome(); show("home"); } } else begin(); });
 $$("[data-home]").forEach((b) => b.addEventListener("click", () => { clearInterval(st.clock); if (synth) synth.cancel(); drawHome(); show("home"); }));
