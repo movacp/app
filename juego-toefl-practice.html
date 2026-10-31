@@ -182,6 +182,37 @@ details.ptoggle summary{cursor:pointer;font-weight:600;font-size:14px;color:var(
 .sec[disabled]{opacity:.55;pointer-events:none}
 .vword{font-weight:800;color:var(--navy);background:var(--mustard-soft);padding:0 6px;border-radius:6px}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style id="tp-2026">
+.sec-title{font-family:"Bricolage Grotesque",sans-serif!important;font-weight:800!important;font-size:24px!important;letter-spacing:-.015em}
+.sections{gap:10px!important}
+.sec{grid-template-columns:auto 1fr auto!important;align-items:center!important;padding:14px 12px 14px 14px!important;border:0!important;border-radius:24px!important;box-shadow:0 10px 26px -18px rgba(54,40,120,.45)!important}
+.sec .ic{width:56px!important;height:56px!important;border-radius:18px!important;align-self:start;color:#15192B!important}
+.sec .ic svg{width:26px!important;height:26px!important}
+.sec[data-c="sky"] .ic{background:#C9D2FF!important}
+.sec[data-c="coral"] .ic{background:#FFC7E2!important}
+.sec[data-c="mustard"] .ic{background:#FFE58A!important}
+.sec[data-c="mint"] .ic{background:#BDF0D8!important}
+.sec[data-c="lilac"] .ic{background:#D9CCFF!important}
+.sec[data-c="butter"] .ic{background:#FFEFB0!important}
+.sec[data-c="rose"] .ic{background:#FFD6E3!important}
+.sec h3{font-family:"Bricolage Grotesque",sans-serif!important;font-weight:800!important;font-size:18.5px!important;letter-spacing:-.01em;margin:0 0 3px!important}
+.sec p{font-size:13.5px!important}
+.sec .meta{margin-top:9px!important}
+.sec .chip{background:#F5F3FA;color:#15192B;font-weight:700}
+.sec .chip.best{background:#D3F36B;color:#15192B}
+.sec .go{width:36px;height:36px;border-radius:50%;background:#15192B;color:#fff;display:grid;place-items:center;flex:none;align-self:center}
+.sec .go svg{width:17px;height:17px}
+.sec[data-s="review"] .go{background:#F5F3FA;color:#15192B}
+.tipcard{background:#D3F36B!important;color:#15192B;border-radius:24px!important;padding:18px 20px!important}
+.tipcard b{color:#3B4320!important;font-size:11.5px!important;letter-spacing:.08em;text-transform:uppercase;font-weight:800}
+.tipcard span{color:#15192B;font-size:14.5px!important;font-weight:600}
+.simcard{background:#15192B!important;border-radius:24px!important}
+.simcard b{font-family:"Bricolage Grotesque",sans-serif!important;font-size:22px!important;letter-spacing:-.01em}
+.simcard i{background:#D3F36B!important;color:#15192B!important;box-shadow:none!important}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sec .chip{background:rgba(255,255,255,.08);color:var(--ink)}:root:not([data-theme="light"]) .sec .go{background:#D3F36B;color:#15192B}}
+:root[data-theme="dark"] .sec .chip{background:rgba(255,255,255,.08);color:var(--ink)}:root[data-theme="dark"] .sec .go{background:#D3F36B;color:#15192B}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -446,7 +477,7 @@ function drawHome() {
     const r = rec[s.id];
     const m = loadM().length;
     const count = s.id === "wordforms" ? "4 practice modes" : s.id === "reading" ? `${PASSAGES.length} passages · ${PASSAGES.reduce((a, p) => a + p.q.length, 0)} questions` : s.id === "review" ? (m ? `${m} to review` : "No mistakes saved yet") : s.id === "listening" ? `${s.n} audios` : s.id === "sim" ? "25 questions · 18 min" : `${s.n} questions`;
-    return `<button class="sec" data-s="${s.id}" data-c="${s.c}"><span class="ic"><svg viewBox="0 0 24 24" fill="none">${s.icon}</svg></span><span><h3>${s.name}</h3><p>${s.desc}</p><span class="meta"><span class="chip">${count}</span>${r ? `<span class="chip best">Best: ${r}%</span>` : ""}${s.id === "sim" ? `<span class="chip new">New</span>` : ""}</span></span></button>`;
+    return `<button class="sec" data-s="${s.id}" data-c="${s.c}"><span class="ic"><svg viewBox="0 0 24 24" fill="none">${s.icon}</svg></span><span><h3>${s.name}</h3><p>${s.desc}</p><span class="meta"><span class="chip">${count}</span>${r ? `<span class="chip best">Best: ${r}%</span>` : ""}${s.id === "sim" ? `<span class="chip new">New</span>` : ""}</span></span><span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>`;
   }).join("");
   $("#tip").textContent = TIPS[new Date().getDate() % TIPS.length];
 }
