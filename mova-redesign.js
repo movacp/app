@@ -95,6 +95,7 @@
         var more = root.querySelector(".mr-more");
         if (more) {
           var h = more.querySelector("section.hero"); if (h) h.remove();
+          [].slice.call(more.querySelectorAll('a[href^="#/library/"]')).forEach(function (l) { var c = l.closest("article, .item, li"); if (c && more.contains(c)) c.remove(); });
           [].slice.call(more.querySelectorAll("section")).forEach(function (s) { if (s.querySelector('a[href="juego-level-up.html"]') && s.querySelector('a[href="#/matematicas"]')) s.remove(); });
         }
         bindHome(root);
