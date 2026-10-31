@@ -50,6 +50,11 @@ const MOVA_HD = (() => { try { return Math.min(screen.width, screen.height) >= 7
 const hdSrc = (src) => (MOVA_HD && /^(thumb-|banner-|wf-cover)[\w-]*\.webp$/.test(src) ? src.replace(/\.webp$/, "-hd.webp") : src);
 const photo = (src) => `<image href="${/\.webp$/.test(src) ? hdSrc(src) : "data:image/webp;base64," + src}" x="0" y="0" width="320" height="180" preserveAspectRatio="xMidYMid slice"/>`;
 GAME_ART["juego-la-tiendita.html"] = scene("#F3E3CC", photo(IMG_DIR + "thumb-la-tiendita.webp"));
+GAME_ART["memory"] = scene("#EDE6FB", photo(IMG_DIR + "thumb-memory-match.webp"));
+GAME_ART["matching"] = scene("#E3E8FB", photo(IMG_DIR + "thumb-word-matching.webp"));
+GAME_ART["quiz"] = scene("#EEE6FA", photo(IMG_DIR + "thumb-vocab-quiz.webp"));
+/* Portadas ilustradas de lecturas (se van agregando por lotes) */
+const READING_COVERS = ["my-cat-pip", "lilas-busy-monday", "the-paradox-of-choice"];
 GAME_ART["juego-que-hora-es.html"] = scene("#BFE6F7", photo(IMG_DIR + "thumb-que-hora-es.webp"));
 GAME_ART["juego-detective-patrones.html"] = scene("#FFB3A8", photo(IMG_DIR + "thumb-detective-patrones.webp"));
 
@@ -798,6 +803,7 @@ if (ul && ROUTES.learn) ul.innerHTML = [["", "home", "Home"], ["library", "book"
   function applyEnglish() {
     if (typeof READINGS === "undefined" || typeof READING_ART !== "object") return;
     READINGS.forEach((r) => {
+      if (READING_COVERS.includes(r.id)) { READING_ART[r.id] = scene("#EDE6FB", photo(IMG_DIR + "thumb-r-" + r.id + ".webp")); return; }
       if (keepOwn(READING_ART[r.id])) return;
       READING_ART[r.id] = compose(r.id, r.title || "", (r.description || "") + " " + (r.text ? r.text.slice(0, 2).join(" ") : ""), r.topic || "");
     });
