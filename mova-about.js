@@ -110,6 +110,17 @@
 .lh .pills b{font:700 14px/1.1 'Bricolage Grotesque',sans-serif}
 .lh .pills small{font-size:11.5px;font-weight:600;opacity:.75;margin-top:-4px}
 .lh-sec{font:700 24px/1.1 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;color:#15192B;margin:6px 0 14px}
+.mab-fam{display:block;position:relative;overflow:hidden;border-radius:28px;padding:22px 22px 0;background:#FF8FC0;color:#15192B;text-decoration:none;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:0 18px 40px -24px rgba(21,25,43,.45)}
+.mab-fam .blob{position:absolute;right:-50px;top:-50px;width:150px;height:150px;border-radius:50%;background:#FFB8DC}
+.mab-fam .dt{position:absolute;border-radius:50%}
+.mab-fam .k{position:relative;display:inline-block;font:800 11.5px/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:8px 12px;border-radius:999px;background:#15192B;color:#D3F36B}
+.mab-fam h3{position:relative;font:700 30px/1.02 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;margin:14px 0 8px;color:#15192B}
+.mab-fam h3 em{font-style:normal;color:#fff}
+.mab-fam p{position:relative;margin:0;font-size:14.5px;line-height:1.5;color:#3A1F2E;max-width:30ch}
+.mab-fam .cta{position:relative;display:inline-flex;margin-top:16px;padding:11px 18px;border-radius:999px;background:#15192B;color:#fff;font-weight:800;font-size:14.5px}
+.mab-fam .chars{position:relative;display:flex;justify-content:flex-end;align-items:flex-end;height:126px;margin:4px -10px 0 0}
+.mab-fam .chars .char{display:block;width:130px;height:130px}
+.mab-fam .chars .char+.char{width:112px;height:112px}
 /* vitrina About Us en Home */
 .mab-vit{display:block;position:relative;overflow:hidden;border-radius:28px;padding:22px 22px 24px;background:#15192B;color:#fff;text-decoration:none;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:0 18px 40px -24px rgba(21,25,43,.6)}
 .mab-vit .ring{position:absolute;right:-60px;top:-60px;width:190px;height:190px;border-radius:50%;border:30px solid #2A2D52}
@@ -198,6 +209,7 @@
 
   var VIT = '<section class="wrap section" aria-labelledby="about-h"><div class="section-head"><h2 id="about-h">About Us</h2></div><a class="mab-vit" href="#/mova"><span class="ring"></span>' + LOGO + '<h3>Conoce MOVA</h3><p>Educación bilingüe con atención personalizada. Descubre todos nuestros programas.</p><div class="tg"><span>Inglés</span><span>Lectoescritura</span><span>Matemáticas</span><span>TOEFL</span><span>EXCI</span></div><span class="cta">See our programs →</span>' + ch("bloom") + "</a></section>";
 
+  var FAMV = '<section class="wrap section" aria-labelledby="fam-h" data-fam-img="1"><div class="section-head"><h2 id="fam-h">For families</h2></div><a class="mab-fam" href="#/familias" data-fam-img="1"><span class="blob"></span><span class="dt" style="width:12px;height:12px;background:#15192B;right:150px;top:34px"></span><span class="dt" style="width:9px;height:9px;background:#D3F36B;right:70px;top:120px"></span><span class="k">Para familias</span><h3>Aprender <em>jugando</em>, aprender <em>juntos</em></h3><p>Ideas sencillas para disfrutar la app en casa con sus hijos.</p><span class="cta">Conocer más →</span><span class="chars">' + ch("beat") + ch("bloom") + '</span></a></section>';
   var done = false;
   function install() {
     if (done) return true;
@@ -214,6 +226,7 @@
         [].slice.call(root.querySelectorAll("section")).forEach(function (s) {
           var h = s.querySelector(".section-head h2, h2");
           if (h && /Featured activities/i.test(h.textContent)) s.outerHTML = VIT;
+          else if (h && /^\s*For families\s*$/i.test(h.textContent) && !s.querySelector(".mab-fam")) s.outerHTML = FAMV;
         });
         if (!root.querySelector(".mab-vit")) { var m = root.querySelector(".mr-more") || root; m.insertAdjacentHTML("beforeend", VIT); }
       } };
