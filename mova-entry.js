@@ -18,7 +18,7 @@
     "juego-verb-memory":       {start:"#s-start", bg:PERI,   ch:"beat", extra:".legend"},
     "juego-mision-matematica": {start:"#s-start", bg:NAVY,   ch:"nova", dark:1},
     "juego-lee-con-mochi":     {start:"#s-map",   bg:BUTTER, img:"mochi-hola.webp"},
-    "juego-locked-library":    {start:"#v-start", bg:NAVY,   keep:"#cover-art", dark:1, extra:".facts"},
+    "juego-locked-library":    {start:"#v-start", bg:PERI,   img:"ll-detective.webp", extra:".facts", tag:"Escape room · Reading"},
     "juego-detective-patrones":{start:"#s-start", bg:BUTTER, tpl:1},
     "juego-haunted-mansion":   {start:"#s-start", bg:LILA,   tpl:1},
     "juego-la-balanza":        {start:"#s-start", bg:MINT,   tpl:1},
@@ -96,6 +96,17 @@
   "#v-start.mv-s .tenses>*{background:#fff!important;border:2px solid #fff!important}"+
   "#v-start.mv-s .tenses>[aria-checked=true],#v-start.mv-s .tenses>.on{border-color:#15192B!important}"+
   "body.mv-start .field input{border-radius:16px!important;background:#fff!important;border:2px solid #E6E1F2!important;color:#15192B!important}"+
+  "body.mv-ll #cover-art{display:none!important}"+
+  ".mv-ll .mv-hero{min-height:262px;padding-right:150px;background:linear-gradient(150deg,#C9D2FF 0%,#DCD3FF 60%,#EFE6FF 100%)}"+
+  ".mv-ll .mv-hero::before{content:'';position:absolute;inset:0;border-radius:28px;background-image:radial-gradient(rgba(255,255,255,.7) 2px,transparent 2.4px);background-size:24px 24px;opacity:.6}"+
+  ".mv-ll .mv-hero img.mv-ch{width:150px!important;height:auto!important;max-height:none!important;right:-6px!important;bottom:-22px!important;filter:drop-shadow(0 12px 16px rgba(21,25,43,.22))}"+
+  ".mv-ll .mv-hero .facts{display:flex!important;flex-wrap:wrap;gap:6px}"+
+  ".mv-ll .mv-hero .facts span{background:#fff!important;color:#15192B!important;border:0!important;border-radius:999px!important;padding:5px 11px!important;font-size:12.5px!important;font-weight:800!important}"+
+  "body.mv-ll .field{background:#fff;border-radius:24px;padding:16px 16px 6px;margin-top:6px}"+
+  "body.mv-ll .field label{margin:0 0 10px!important;display:block}"+
+  "body.mv-ll .field input{background:#F5F3FA!important;border-color:#F5F3FA!important}"+
+  "body.mv-ll #begin{margin-top:16px}"+
+  "body.mv-ll #resume{background:#fff!important;border:0!important;border-radius:999px!important;color:#15192B!important;font-weight:800!important}"+
   "body.mv-start.mv-ll{background:#F5F3FA!important}body.mv-start.mv-ll .field label{color:#15192B!important}"+
   "#s-map.mv-s .map{border-radius:28px!important}"+
   ".mv-s .intro{background:transparent!important;box-shadow:none!important;padding:0!important;border-radius:0!important}"+
@@ -128,6 +139,7 @@
       var lead = hero.nextElementSibling;
       if(lead && (lead.tagName === "P") && !lead.classList.contains("label")) box.appendChild(lead);
       if(c.extra){ var ex = s.querySelector(c.extra); if(ex) box.appendChild(ex); }
+      if(c.tag){ var tg = d.createElement("span"); tg.className = "tag"; tg.textContent = c.tag; box.insertBefore(tg, box.firstChild); }
       if(c.keep){ var art = s.querySelector(c.keep); if(art){ art.classList.add("mv-art"); hero.appendChild(art); } }
       else if(c.img){ hero.insertAdjacentHTML("beforeend", '<img class="mv-ch" src="' + c.img + '" alt="">'); }
       else if(c.ch){ hero.insertAdjacentHTML("beforeend", svg(c.ch)); }

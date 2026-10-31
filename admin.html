@@ -217,6 +217,20 @@ header.top .brand-mark{box-shadow:none;border-radius:50%}
 .rpA .ft{position:absolute;left:48px;right:48px;bottom:26px;display:flex;justify-content:space-between;font-size:11px;color:#8A8EA5}
 
 /* Tareas + reporte de simulación */
+.pk{margin:4px 0 12px}
+.pk-cats{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.pk-cats::-webkit-scrollbar{display:none}
+.pk-cat{flex:none;display:inline-flex;align-items:center;gap:7px;background:#fff;border:2px solid #fff;border-radius:999px;padding:8px 13px;font:inherit;font-weight:800;font-size:13px;color:#15192B;cursor:pointer;white-space:nowrap}
+.pk-cat i{width:11px;height:11px;border-radius:50%;border:1.5px solid #15192B}
+.pk-cat.on{background:#15192B;border-color:#15192B;color:#fff}.pk-cat.on i{border-color:#fff}
+.pk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
+.pk-it{position:relative;display:flex;flex-direction:column;align-items:stretch;text-align:left;background:#fff;border:2px solid #fff;border-radius:18px;padding:6px 6px 10px;font:inherit;color:#15192B;cursor:pointer;transition:transform .12s}
+.pk-it:active{transform:scale(.97)}
+.pk-img{display:block;aspect-ratio:16/9;border-radius:13px;overflow:hidden;margin-bottom:8px}.pk-img img{width:100%;height:100%;object-fit:cover;display:block}
+.pk-it b{font-size:13px;line-height:1.25;padding:0 4px;font-weight:800}
+.pk-it em{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;background:#D3F36B;border:2px solid #15192B;display:none;place-items:center;font-style:normal;font-weight:800;font-size:13px}
+.pk-it.on{border-color:#15192B;box-shadow:0 4px 0 #D3F36B}.pk-it.on em{display:grid}
+.pk-sel{margin:10px 2px 0;font-size:12.5px;color:#6B6F86}
+.tk .asg:disabled{opacity:.5;box-shadow:none}
 .tk{margin-top:16px;background:#F5F3FA;border-radius:20px;padding:14px 16px}
 .tk h3{margin:0 0 4px;font-family:"Bricolage Grotesque",sans-serif;font-size:17px}
 .tk .sub{margin:0 0 10px}
@@ -699,6 +713,27 @@ async function buildReport(s, all, y, mo, note){
 
 
 /* ---------- Tareas ---------- */
+/* Selector visual de actividades para asignar */
+const CAT_COL={"TOEFL":"#FFE58A","Lectura":"#BDF0D8","Juegos en inglés":"#C9D2FF","Escape rooms":"#C7B5FF","Español y matemáticas":"#FFC7E2"};
+const BOOK_ART="data:image/svg+xml;base64,"+btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 90"><rect width="160" height="90" fill="#DDF5EA"/><circle cx="130" cy="18" r="9" fill="#fff" opacity=".7"/><circle cx="22" cy="70" r="14" fill="#D3F36B" opacity=".7"/><path d="M48 26 Q64 20 80 28 Q96 20 112 26 L112 70 Q96 64 80 72 Q64 64 48 70Z" fill="#fff" stroke="#15192B" stroke-width="2.6" stroke-linejoin="round"/><path d="M80 28 L80 72" stroke="#15192B" stroke-width="2.6"/><path d="M56 36 L72 34 M56 44 L72 42 M88 34 L104 36 M88 42 L104 44" stroke="#B9A6FF" stroke-width="2.6" stroke-linecap="round"/></svg>');
+function taskArt(k){ if(k==="lectura") return BOOK_ART; if(k==="word-forms") return "wf-cover.webp"; return "thumb-"+k+".webp"; }
+let pickCat=0;
+function pickerHtml(){
+  return `<div class="pk"><div class="pk-cats">${TASK_CAT.map(([g],i)=>`<button type="button" class="pk-cat${i===pickCat?" on":""}" data-c="${i}"><i style="background:${CAT_COL[g]||"#EEE"}"></i>${esc(g)}</button>`).join("")}</div>
+    <div class="pk-grid">${TASK_CAT[pickCat][1].map(([k,n])=>`<button type="button" class="pk-it" data-k="${k}"><span class="pk-img" style="background:${CAT_COL[TASK_CAT[pickCat][0]]}"><img src="${taskArt(k)}" alt="" loading="lazy" onerror="this.remove()"></span><b>${esc(n)}</b><em aria-hidden="true">✓</em></button>`).join("")}</div>
+    <p class="pk-sel" id="pkSel">Toca una actividad para elegirla.</p></div>`;
+}
+function wirePicker(box){
+  const sel=box.querySelector("#asgSel"), btn=box.querySelector("#asgBtn"); if(!sel) return;
+  const pk=box.querySelector(".pk"); btn.disabled=true; btn.textContent="Elige una actividad";
+  const bind=()=>{
+    pk.querySelectorAll(".pk-cat").forEach(c=>c.onclick=()=>{ pickCat=+c.dataset.c; pk.outerHTML=pickerHtml(); wirePicker(box); });
+    pk.querySelectorAll(".pk-it").forEach(it=>it.onclick=()=>{ pk.querySelectorAll(".pk-it").forEach(x=>x.classList.toggle("on",x===it)); sel.value=it.dataset.k;
+      btn.disabled=false; btn.textContent=`Asignar: ${TASK_NAME[it.dataset.k]}`; const p=box.querySelector("#pkSel"); if(p) p.textContent=""; });
+  };
+  bind();
+}
+
 const TASK_CAT=[
  ["TOEFL",[["toefl-sim","TOEFL Quick Simulation"],["toefl-practice","TOEFL Practice"],["word-forms","Word Forms"],["level-up","Level Up · Placement test"]]],
  ["Lectura",[["lectura","Reading Library (one story)"]]],
@@ -745,8 +780,9 @@ async function loadTasks(s){
   const sHtml=sims.length?`<h3 style="margin-top:16px">Simulaciones TOEFL</h3>`+sims.map(r=>`<div class="row"><div><b>${r.score}/${r.total} · ${Math.round(r.score/r.total*100)}%</b><small>${esc(d(r.created_at))} · ${r.detail&&r.detail.secs?fmtT(r.detail.secs)+" min":"Quick Simulation"}</small></div><button class="see" style="margin-left:auto" data-r="${esc(simKey(r))}">Ver reporte</button></div>`).join(""):"";
   const opts=TASK_CAT.map(([g,items])=>`<optgroup label="${esc(g)}">${items.map(([k,n])=>`<option value="${k}">${esc(n)}</option>`).join("")}</optgroup>`).join("");
   box.innerHTML=`<div class="tk"><h3>Tareas</h3><p class="sub">Elige una actividad. ${esc(s.full_name.split(" ")[0])} la verá al abrir la app con su usuario.</p>
-    <select class="in" id="asgSel" style="margin-bottom:10px">${opts}</select>
+    <select class="in" id="asgSel" hidden>${opts}</select>${pickerHtml()}
     <button class="asg" id="asgBtn">Asignar actividad</button>${tHtml||`<p class="sub" style="margin:10px 2px 0">Todavía no tiene tareas asignadas.</p>`}${sHtml}</div>`;
+  wirePicker(box);
   $("#asgBtn").onclick=async()=>{ const b=$("#asgBtn"), k=$("#asgSel").value; b.disabled=true; b.textContent="Asignando…";
     try{ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:k,p_title:TASK_NAME[k]||k}); toast(`${TASK_NAME[k]} asignada a ${s.full_name.split(" ")[0]}`); loadTasks(s); }
     catch(e){ toast(e.message); b.disabled=false; b.textContent="Asignar actividad"; } };

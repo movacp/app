@@ -81,6 +81,8 @@ h1{font-weight:800;font-size:clamp(32px,9.5vw,44px);line-height:1.05;text-align:
 }
 .grade b{font-size:28px;font-weight:800}
 .grade span{font-size:12px;font-weight:600}
+.grade.wide b{font-size:20px}
+.glabel{grid-column:1/-1;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#6B6F86;margin:6px 2px -2px}
 .grade[aria-pressed="true"]{outline:4px solid var(--ink);outline-offset:3px}
 .grade:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(27,42,85,.16)}
 .topics{font-size:13.5px;color:var(--muted);text-align:center;margin:12px 0 0;min-height:20px}
@@ -227,7 +229,7 @@ const fmtN = n => n.toLocaleString('es-MX');
 function opts4(ans, spread){
   const set = new Set([ans]);
   const cands = shuffle([ans+1, ans-1, ans+2, ans-2, ans+10, ans-10, ans+spread, ans-spread, ans+5, ans-5]);
-  for(const c of cands){ if(set.size >= 4) break; if(c >= 0 && c !== ans) set.add(c); }
+  for(const c of cands){ if(set.size >= 4) break; if((ans < 0 || c >= 0) && c !== ans) set.add(c); }
   while(set.size < 4) set.add(ans + set.size + 3);
   return shuffle([...set]).map(String);
 }
@@ -250,7 +252,7 @@ function counting(){
 function story(text, sayText, ans, explain){ return { story:true, html:text, say:sayText||text, ans, explain, prompt:'Lee y resuelve' }; }
 
 const GRADES = {
-  1:{ label:'1°', sub:'grado', color:'#FF8FB1', secs:30, topics:'Contar, sumas y restas hasta 20, comparar números',
+  1:{ name:'1° de primaria', label:'1°', sub:'grado', color:'#FF8FB1', secs:30, topics:'Contar, sumas y restas hasta 20, comparar números',
       gen:[
         () => { const a=rnd(1,10), b=rnd(1,10); return arith(a,'+',b); },
         () => { const a=rnd(5,20), b=rnd(1,a); return arith(a,'−',b); },
@@ -259,7 +261,7 @@ const GRADES = {
         () => { const a=rnd(1,9), b=rnd(1,9); return arith(a,'+',b,'b'); },
         () => { const n=pick(NAMES), a=rnd(3,9), b=rnd(2,8); return story(`${n} tiene ${a} 🎈 y le regalan ${b} más. ¿Cuántos globos tiene ahora?`, null, a+b, `${a} + ${b} = ${a+b}`); }
       ]},
-  2:{ label:'2°', sub:'grado', color:'#5BC0F0', secs:30, topics:'Sumas y restas hasta 100, dobles y mitades, problemas',
+  2:{ name:'2° de primaria', label:'2°', sub:'grado', color:'#5BC0F0', secs:30, topics:'Sumas y restas hasta 100, dobles y mitades, problemas',
       gen:[
         () => { const a=rnd(12,68), b=rnd(11,31); return arith(a,'+',b); },
         () => { const a=rnd(30,99), b=rnd(11,a-5); return arith(a,'−',b); },
@@ -270,7 +272,7 @@ const GRADES = {
         () => { const n=pick(NAMES), a=rnd(25,60), b=rnd(10,24); return story(`${n} tenía ${a} estampas y regaló ${b}. ¿Cuántas estampas le quedan?`, null, a-b, `${a} − ${b} = ${a-b}`); },
         () => { const n=pick(NAMES), a=rnd(15,45), b=rnd(12,40); return story(`En la biblioteca hay ${a} cuentos y ${b} revistas. ¿Cuántos libros hay en total?`, null, a+b, `${a} + ${b} = ${a+b}`); }
       ]},
-  3:{ label:'3°', sub:'grado', color:'#4FD1A5', secs:25, topics:'Tablas del 2 al 6, sumas y restas hasta 1,000, divisiones sencillas',
+  3:{ name:'3° de primaria', label:'3°', sub:'grado', color:'#4FD1A5', secs:25, topics:'Tablas del 2 al 6, sumas y restas hasta 1,000, divisiones sencillas',
       gen:[
         () => { const a=rnd(2,6), b=rnd(1,10); return arith(a,'×',b); },
         () => { const a=rnd(2,6), b=rnd(2,10); return arith(a,'×',b,'b'); },
@@ -280,7 +282,7 @@ const GRADES = {
         () => { const c=rnd(3,8), p=rnd(4,9); return story(`Hay ${c} cajas con ${p} lápices cada una. ¿Cuántos lápices hay en total?`, null, c*p, `${c} × ${p} = ${c*p}`); },
         () => { const n=pick(NAMES), a=rnd(150,450), b=rnd(100,350); return story(`${n} recorrió ${a} metros en bici por la mañana y ${b} por la tarde. ¿Cuántos metros recorrió?`, null, a+b, `${a} + ${b} = ${a+b}`); }
       ]},
-  4:{ label:'4°', sub:'grado', color:'#F2B632', secs:25, topics:'Tablas hasta el 10, multiplicaciones, divisiones y fracciones',
+  4:{ name:'4° de primaria', label:'4°', sub:'grado', color:'#F2B632', secs:25, topics:'Tablas hasta el 10, multiplicaciones, divisiones y fracciones',
       gen:[
         () => { const a=rnd(6,10), b=rnd(3,10); return arith(a,'×',b); },
         () => { const a=rnd(12,48), b=rnd(2,6); return arith(a,'×',b); },
@@ -289,8 +291,65 @@ const GRADES = {
         () => { const den=pick([2,3,4,5]), k=rnd(2,9), n=den*k; return { html:`<sup>1</sup>⁄<sub>${den}</sub> de ${n}`, say:`¿Cuánto es un ${({2:'medio',3:'tercio',4:'cuarto',5:'quinto'})[den]} de ${n}?`, ans:k, explain:`${n} ÷ ${den} = ${k}`, prompt:'¿Cuánto es?' }; },
         () => { const d=rnd(3,8), q=rnd(3,9); return story(`Se reparten ${d*q} dulces entre ${d} niños en partes iguales. ¿Cuántos dulces le tocan a cada uno?`, null, q, `${d*q} ÷ ${d} = ${q}`); },
         () => { const p=rnd(12,35), c=rnd(3,6); return story(`Un boleto para el museo cuesta $${p}. ¿Cuánto pagan ${c} amigos en total?`, `Un boleto para el museo cuesta ${p} pesos. ¿Cuánto pagan ${c} amigos en total?`, p*c, `${p} × ${c} = ${p*c}`); }
+      ]},
+  5:{ label:'5°', sub:'grado', color:'#B9A6FF', secs:30, name:'5° de primaria', topics:'Multiplicaciones y divisiones grandes, fracciones equivalentes, decimales y perímetro',
+      gen:[
+        () => { const a=rnd(12,48), b=rnd(11,25); return arith(a,'×',b); },
+        () => { const d=rnd(3,9), q=rnd(21,99); return arith(d*q,'÷',d); },
+        () => { const a=rnd(1,4), b=pick([5,6,8]), k=rnd(2,4); return nq(`<sup>${a}</sup>⁄<sub>${b}</sub> = <sup><span class="q">?</span></sup>⁄<sub>${b*k}</sub>`, `Fracción equivalente: ${a} sobre ${b} es igual a qué número sobre ${b*k}`, a*k, `${a} × ${k} = ${a*k}, ${b} × ${k} = ${b*k}`, 'Fracción equivalente'); },
+        () => { const a=rnd(11,89)/10, b=rnd(11,89)/10, r=Math.round((a+b)*10)/10; return nq(`${dec(a)} + ${dec(b)} = <span class="q">?</span>`, `¿Cuánto es ${dec(a)} más ${dec(b)}?`, dec(r), `${dec(a)} + ${dec(b)} = ${dec(r)}`, 'Resuelve', decOpts(r, .1)); },
+        () => { const l=rnd(5,25), w=rnd(3,15); return story(`Un terreno rectangular mide ${l} m de largo y ${w} m de ancho. ¿Cuál es su perímetro en metros?`, null, 2*(l+w), `${l} + ${w} + ${l} + ${w} = ${2*(l+w)}`); },
+        () => { const t=pick([10,20,25,50]), n=pick([40,60,80,100,120,200]); return nq(`${t}% de ${fmtN(n)}`, `¿Cuánto es el ${t} por ciento de ${n}?`, n*t/100, `${n} × ${t} ÷ 100 = ${n*t/100}`, '¿Cuánto es?'); }
+      ]},
+  6:{ label:'6°', sub:'grado', color:'#8FA2FF', secs:30, name:'6° de primaria', topics:'Porcentajes, decimales, potencias, áreas y proporciones',
+      gen:[
+        () => { const t=pick([15,25,30,40,75]), n=pick([80,120,160,200,240,400]); return nq(`${t}% de ${fmtN(n)}`, `¿Cuánto es el ${t} por ciento de ${n}?`, n*t/100, `${n} × ${t} ÷ 100 = ${n*t/100}`, '¿Cuánto es?'); },
+        () => { const a=rnd(12,98)/10, m=pick([10,100]), r=Math.round(a*m*10)/10; return nq(`${dec(a)} × ${m} = <span class="q">?</span>`, `¿Cuánto es ${dec(a)} por ${m}?`, dec(r), `Al multiplicar por ${m} el punto se recorre ${m===10?'un lugar':'dos lugares'}: ${dec(r)}`, 'Resuelve', decOpts(r, m===10?1:10)); },
+        () => { const b=pick([2,3,4,5,10]), e=b===10?rnd(2,5):b===2?rnd(3,7):rnd(2,3); return nq(`${b}<sup>${e}</sup> = <span class="q">?</span>`, `¿Cuánto es ${b} a la ${e}?`, Math.pow(b,e), `${Array(e).fill(b).join(' × ')} = ${fmtN(Math.pow(b,e))}`, 'Potencia'); },
+        () => { const b=rnd(3,14)*2, h=rnd(3,12); return story(`Un triángulo tiene base de ${b} cm y altura de ${h} cm. ¿Cuál es su área en cm²?`, null, b*h/2, `${b} × ${h} ÷ 2 = ${b*h/2}`); },
+        () => { const k=rnd(2,6), a=rnd(2,5), c=rnd(10,40); return story(`Con ${a} kg de harina salen ${c} galletas. ¿Cuántas galletas salen con ${a*k} kg?`, null, c*k, `${a*k} ÷ ${a} = ${k}; ${c} × ${k} = ${c*k}`); },
+        () => { const a=rnd(2,9), b=rnd(2,9), c=rnd(2,9); return nq(`${a} + ${b} × ${c} = <span class="q">?</span>`, `¿Cuánto es ${a} más ${b} por ${c}?`, a+b*c, `Primero la multiplicación: ${b} × ${c} = ${b*c}; luego ${a} + ${b*c} = ${a+b*c}`, 'Jerarquía de operaciones'); }
+      ]},
+  7:{ label:'1°', sub:'secundaria', color:'#FFB86B', secs:35, name:'1° de secundaria', topics:'Números con signo, ecuaciones de un paso, jerarquía de operaciones y raíces',
+      gen:[
+        () => { const a=-rnd(2,15), b=rnd(2,15); return nq(`(${a}) + ${b} = <span class="q">?</span>`, `¿Cuánto es menos ${-a} más ${b}?`, a+b, `${a} + ${b} = ${a+b}`, 'Números con signo'); },
+        () => { const a=rnd(2,12), b=rnd(3,15); return nq(`${a} − ${a+b} = <span class="q">?</span>`, `¿Cuánto es ${a} menos ${a+b}?`, -b, `${a} − ${a+b} = ${-b}`, 'Números con signo'); },
+        () => { const x=rnd(2,20), a=rnd(3,18); return nq(`x + ${a} = ${x+a}`, `Si x más ${a} es igual a ${x+a}, ¿cuánto vale x?`, x, `x = ${x+a} − ${a} = ${x}`, '¿Cuánto vale x?'); },
+        () => { const x=rnd(2,12), a=rnd(2,9); return nq(`${a}x = ${a*x}`, `Si ${a} x es igual a ${a*x}, ¿cuánto vale x?`, x, `x = ${a*x} ÷ ${a} = ${x}`, '¿Cuánto vale x?'); },
+        () => { const r=rnd(4,15); return nq(`√${r*r} = <span class="q">?</span>`, `¿Cuál es la raíz cuadrada de ${r*r}?`, r, `${r} × ${r} = ${r*r}`, 'Raíz cuadrada'); },
+        () => { const a=rnd(2,9), b=rnd(2,6), c=rnd(2,9); return nq(`(${a} + ${c}) × ${b} = <span class="q">?</span>`, `¿Cuánto es ${a} más ${c}, todo por ${b}?`, (a+c)*b, `Primero el paréntesis: ${a+c}; luego × ${b} = ${(a+c)*b}`, 'Jerarquía de operaciones'); }
+      ]},
+  8:{ label:'2°', sub:'secundaria', color:'#FF8FC8', secs:40, name:'2° de secundaria', topics:'Ecuaciones de dos pasos, leyes de los signos, volumen y regla de tres',
+      gen:[
+        () => { const x=rnd(2,12), a=rnd(2,7), b=rnd(1,15); return nq(`${a}x + ${b} = ${a*x+b}`, `Si ${a} x más ${b} es igual a ${a*x+b}, ¿cuánto vale x?`, x, `${a}x = ${a*x+b} − ${b} = ${a*x}; x = ${a*x} ÷ ${a} = ${x}`, '¿Cuánto vale x?'); },
+        () => { const a=rnd(2,9), b=rnd(2,9); return nq(`(−${a}) × (−${b}) = <span class="q">?</span>`, `¿Cuánto es menos ${a} por menos ${b}?`, a*b, `Menos por menos da más: ${a*b}`, 'Leyes de los signos'); },
+        () => { const a=rnd(2,9), b=rnd(2,9); return nq(`(−${a}) × ${b} = <span class="q">?</span>`, `¿Cuánto es menos ${a} por ${b}?`, -a*b, `Menos por más da menos: ${-a*b}`, 'Leyes de los signos'); },
+        () => { const l=rnd(2,9); return story(`Un cubo mide ${l} cm por lado. ¿Cuál es su volumen en cm³?`, null, l*l*l, `${l} × ${l} × ${l} = ${l*l*l}`); },
+        () => { const u=rnd(12,45), a=rnd(2,5), k=rnd(2,4); return story(`Si ${a} cuadernos cuestan $${u*a}, ¿cuánto cuestan ${a*k} cuadernos?`, `Si ${a} cuadernos cuestan ${u*a} pesos, ¿cuánto cuestan ${a*k} cuadernos?`, u*a*k, `Regla de tres: ${u*a} × ${a*k} ÷ ${a} = ${u*a*k}`); },
+        () => { const x=rnd(2,9), a=rnd(2,5); return nq(`${a}(x − 2) = ${a*(x-2)}`, `Si ${a} por x menos 2 es igual a ${a*(x-2)}, ¿cuánto vale x?`, x, `x − 2 = ${x-2}; x = ${x}`, '¿Cuánto vale x?'); }
+      ]},
+  9:{ label:'3°', sub:'secundaria', color:'#5CC9B5', secs:45, name:'3° de secundaria', topics:'Ecuaciones cuadráticas, Pitágoras, sistemas de ecuaciones y expresiones algebraicas',
+      gen:[
+        () => { const r=rnd(3,13); return nq(`x² = ${r*r}, x > 0`, `Si x al cuadrado es ${r*r} y x es positivo, ¿cuánto vale x?`, r, `${r} × ${r} = ${r*r}`, '¿Cuánto vale x?'); },
+        () => { const k=rnd(1,5), t=pick([[3,4,5],[6,8,10],[5,12,13],[8,15,17]]); return story(`Un triángulo rectángulo tiene catetos de ${t[0]*k} cm y ${t[1]*k} cm. ¿Cuánto mide la hipotenusa en cm?`, null, t[2]*k, `√(${t[0]*k}² + ${t[1]*k}²) = ${t[2]*k}`); },
+        () => { const x=rnd(3,15), y=rnd(1,x-1); return nq(`x + y = ${x+y}<br>x − y = ${x-y}`, `Si x más y es ${x+y} y x menos y es ${x-y}, ¿cuánto vale x?`, x, `Sumando: 2x = ${2*x}; x = ${x}`, '¿Cuánto vale x?'); },
+        () => { const x=rnd(2,5), a=rnd(2,4), b=rnd(1,9); return nq(`${a}x² − ${b}, si x = ${x}`, `¿Cuánto vale ${a} x al cuadrado menos ${b} cuando x es ${x}?`, a*x*x-b, `${a} × ${x*x} − ${b} = ${a*x*x-b}`, 'Evalúa la expresión'); },
+        () => { const a=rnd(1,6), b=rnd(1,6); return nq(`(x + ${a})(x + ${b}) = x² + <span class="q">?</span>x + ${a*b}`, `En el producto de x más ${a} por x más ${b}, ¿cuál es el coeficiente de x?`, a+b, `${a} + ${b} = ${a+b}`, 'Producto notable'); },
+        () => { const r1=rnd(1,8), r2=rnd(1,8); return nq(`x² − ${r1+r2}x + ${r1*r2} = 0<br>Una solución es ${r1}. ¿Cuál es la otra?`, `En x al cuadrado menos ${r1+r2} x más ${r1*r2} igual a cero, una solución es ${r1}, ¿cuál es la otra?`, r2, `${r1} + ${r2} = ${r1+r2} y ${r1} × ${r2} = ${r1*r2}`, 'Ecuación cuadrática'); }
+      ]},
+  10:{ label:'Prepa', sub:'bachillerato', color:'#D3F36B', secs:50, name:'Preparatoria', topics:'Funciones, exponentes y logaritmos, trigonometría y derivadas',
+      gen:[
+        () => { const m=rnd(2,7), b=rnd(1,12), x=rnd(2,8); return nq(`f(x) = ${m}x − ${b}<br>f(${x}) = <span class="q">?</span>`, `Si f de x es ${m} x menos ${b}, ¿cuánto es f de ${x}?`, m*x-b, `${m} × ${x} − ${b} = ${m*x-b}`, 'Evalúa la función'); },
+        () => { const b=pick([2,3,5,10]), e=b===2?rnd(3,8):b===10?rnd(2,5):rnd(2,4); return nq(`log<sub>${b}</sub> ${fmtN(Math.pow(b,e))} = <span class="q">?</span>`, `¿Cuánto es el logaritmo base ${b} de ${Math.pow(b,e)}?`, e, `${b}<sup>${e}</sup> = ${fmtN(Math.pow(b,e))}`, 'Logaritmo'); },
+        () => { const b=pick([2,3,4]), e=rnd(2,b===2?7:4); return nq(`${b}<sup>x</sup> = ${fmtN(Math.pow(b,e))}`, `Si ${b} a la x es ${Math.pow(b,e)}, ¿cuánto vale x?`, e, `${b}<sup>${e}</sup> = ${fmtN(Math.pow(b,e))}`, 'Ecuación exponencial'); },
+        () => { const a=rnd(2,6), n=rnd(2,4), x=rnd(1,3); return nq(`f(x) = ${a}x<sup>${n}</sup><br>f′(${x}) = <span class="q">?</span>`, `Si f de x es ${a} x a la ${n}, ¿cuánto vale la derivada en x igual a ${x}?`, a*n*Math.pow(x,n-1), `f′(x) = ${a*n}x<sup>${n-1}</sup>; f′(${x}) = ${a*n*Math.pow(x,n-1)}`, 'Derivada'); },
+        () => { const c=pick([[30,'sen','1/2'],[60,'cos','1/2'],[45,'tan','1'],[90,'sen','1'],[0,'cos','1']]); return nq(`${c[1]} ${c[0]}° = <span class="q">?</span>`, `¿Cuánto vale ${c[1]==='sen'?'seno':c[1]==='cos'?'coseno':'tangente'} de ${c[0]} grados?`, c[2], `${c[1]} ${c[0]}° = ${c[2]}`, 'Trigonometría', shuffle([c[2], ...shuffle(['1/2','√3/2','√2/2','1','0'].filter(v => v !== c[2])).slice(0,3)])); },
+        () => { const a=rnd(2,6), d=rnd(2,5), n=rnd(4,9); return nq(`a₁ = ${a}, d = ${d}<br>a<sub>${n}</sub> = <span class="q">?</span>`, `En una progresión aritmética con primer término ${a} y diferencia ${d}, ¿cuál es el término ${n}?`, a+(n-1)*d, `a${n} = ${a} + (${n} − 1) × ${d} = ${a+(n-1)*d}`, 'Progresión aritmética'); }
       ]}
 };
+function nq(html, say, ans, explain, prompt, options){ const q = { html, say, ans, explain, prompt }; if(options) q.options = options; return q; }
+function dec(n){ return (Math.round(n*100)/100).toLocaleString('es-MX', { maximumFractionDigits: 2 }); }
+function decOpts(r, step){ const set = new Set([dec(r)]); shuffle([1,-1,2,-2,3,-3,10,-10]).forEach(k => { const v = Math.round((r + k*step)*100)/100; if(set.size < 4 && v > 0) set.add(dec(v)); }); return shuffle([...set]); }
 
 const PRAISE = ['¡Muy bien!','¡Excelente!','¡Lo lograste!','¡Genial!','¡Bravo!','¡Perfecto!'];
 const st = { grade:1, timed:true, round:0, score:0, streak:0, correct:0, q:null, locked:true, raf:0, left:0, timeouts:[] };
@@ -329,8 +388,10 @@ function show(id){ ['start','game','end'].forEach(s => $('#s-'+s).hidden = s!==i
 /* ---------- Start ---------- */
 const gradesEl = $('#grades');
 Object.entries(GRADES).forEach(([k,g]) => {
+  if (k === '1' || k === '7' || k === '10') { const l = document.createElement('div'); l.className = 'glabel'; l.textContent = k === '1' ? 'Primaria' : k === '7' ? 'Secundaria' : 'Preparatoria'; gradesEl.appendChild(l); }
   const b = document.createElement('button');
-  b.className = 'grade'; b.dataset.g = k; b.style.setProperty('--c', g.color);
+  if (k === '10') b.classList.add('wide');
+  b.className = 'grade' + (k === '10' ? ' wide' : ''); b.dataset.g = k; b.style.setProperty('--c', g.color);
   b.innerHTML = `<b>${g.label}</b><span>${g.sub}</span>`;
   b.addEventListener('click', () => { unlockAudio(); selectGrade(+k); });
   gradesEl.appendChild(b);
@@ -340,7 +401,7 @@ function selectGrade(g){
   gradesEl.querySelectorAll('.grade').forEach(b => b.setAttribute('aria-pressed', +b.dataset.g===g ? 'true':'false'));
   $('#topics').textContent = GRADES[g].topics;
   const best = getBest(g);
-  $('#best').textContent = best ? `🏆 Mejor puntaje en ${g}° grado: ${best}` : '';
+  $('#best').textContent = best ? `🏆 Mejor puntaje en ${GRADES[g].name}: ${best}` : '';
 }
 document.querySelectorAll('[data-timed]').forEach(b => b.addEventListener('click', () => {
   st.timed = b.dataset.timed === '1';

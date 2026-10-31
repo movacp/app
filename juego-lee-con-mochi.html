@@ -1023,6 +1023,10 @@ const MODE_NAME={isla:"Juego de la isla",pseudo:"Palabras de Mochi",readpic:"Lee
 function sendProgress(){try{if(!window.MovaAuth||!MovaAuth.user())return;const m=st.mode||"isla";const where=m==="mirror"?PAIRS[MP].title:ISLANDS[st.isl].name;MovaAuth.save("lee-con-mochi",(MODE_NAME[m]||m)+" · "+where,st.stars,st.total);}catch(e){}}
 const _end3=end;end=function(){_end3();sendProgress();};
 mapExtras();checkStickers();
+/* Reporte y modo maestra: solo para maestras (desde el panel o con ?maestra=1), nunca en la cuenta del alumno */
+(function(){ const T=/[?&]maestra=1/.test(location.search); if(T) return;
+ const r=document.querySelector('#map-extra [data-x="report"]'); if(r){ const row=r.parentNode; r.remove(); row.style.gridTemplateColumns="1fr"; }
+ const t=$("#teacher"); if(t) t.remove(); })();
 
 renderMap();show("map");
 })();
