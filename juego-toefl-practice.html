@@ -502,7 +502,7 @@ function begin() {
       ...st.passage.q.map((_, qi) => { const ref = { s: "reading", k: st.passage.id + "|" + qi }; return { ...itemFromRef(ref), ref, part: P4 }; })];
   }
   if (id === "review") st.items = shuffle(loadM()).slice(0, st.n || 10).map((ref) => ({ ...itemFromRef(ref), ref })).filter((x) => x.type);
-  st.i = 0; st.score = 0; st.log = [];
+  st.i = 0; st.score = 0; st.log = []; prefetchListening();
   $("#q-title").textContent = id === "reading" ? st.passage.title : SECTIONS.find((s) => s.id === id).name;
   st.t0 = Date.now(); clearInterval(st.clock); st.timeUp = false;
   const limit = st.timed && id !== "listening" ? (id === "sim" ? st.items.reduce((a, it) => a + SIM_PACE[it.type], 0) : st.items.length * PACE[id]) : 0;
@@ -559,18 +559,63 @@ function render() {
   $$(".choice", A).forEach((b) => b.addEventListener("click", () => pick(b)));
   if (it.type === "rd") window.scrollTo(0, 0);
 }
+/* ---------- Listening audio ----------
+   Los audios de Listening ya están grabados (voz Matilda) y se tocan directo desde el botón,
+   así funcionan también en iPad/iPhone. Si un audio no responde, la pregunta se muestra con el texto. */
+const TTS = { fn: "https://fclafxrkibvcjktrgznt.supabase.co/functions/v1/tts", store: "https://fclafxrkibvcjktrgznt.supabase.co/storage/v1/object/public/tts/", key: "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6" };
+const player = new Audio(); player.preload = "auto";
+const clipCache = {};
+function clipUrl(text) {
+  const t = String(text).replace(/\s+/g, " ").trim();
+  if (clipCache[t]) return clipCache[t];
+  const p = (window.crypto && crypto.subtle ? crypto.subtle.digest("SHA-256", new TextEncoder().encode("v1|en|f|0.90|" + t)) : Promise.reject("nocrypto"))
+    .then((h) => TTS.store + Array.from(new Uint8Array(h)).map((x) => x.toString(16).padStart(2, "0")).join("") + ".mp3")
+    .then((url) => fetch(url, { method: "HEAD" }).then((r) => { if (r.ok) return url; throw 0; }))
+    .catch(() => fetch(TTS.fn, { method: "POST", headers: { "Content-Type": "application/json", apikey: TTS.key, Authorization: "Bearer " + TTS.key },
+      body: JSON.stringify({ text: t, voice: "f", speed: "0.90", lang: "en" }) }).then((r) => r.ok ? r.json() : Promise.reject(r.status)).then((j) => { if (!j || !j.url) throw 0; return j.url; }));
+  clipCache[t] = p; p.catch(() => { delete clipCache[t]; });
+  return p;
+}
+function stopAudio() { try { player.onended = player.onerror = player.onplaying = null; player.pause(); } catch (e) {} if (synth) synth.cancel(); }
+function prefetchListening() { st.items.filter((x) => x.type === "ls").slice(0, 12).forEach((x) => clipUrl(x.say).catch(() => {})); }
 function wireListening(it) {
-  const btn = $("#pa"), lbl = $("#plays");
-  if (!synth) { $("#lq").classList.remove("hidden-q"); $("#lq").insertAdjacentHTML("afterbegin", `<p class="script">${esc(it.say)}</p>`); lbl.textContent = "Audio isn’t available on this device. Read the script instead."; btn.disabled = true; return; }
+  const btn = $("#pa"), lbl = $("#plays"), lq = $("#lq");
+  let ready = null;
+  clipUrl(it.say).then((u) => { ready = u; try { if (st.items[st.i] === it) { player.src = u; player.load(); } } catch (e) {} }).catch(() => {});
+  const reveal = () => { lq.classList.remove("hidden-q"); lq.style.display = "block"; };
+  const finishPlay = () => {
+    btn.classList.remove("on"); reveal();
+    lbl.textContent = it.plays >= 2 ? "No more plays. Choose your answer." : "You can play it one more time.";
+    if (it.plays >= 2) btn.disabled = true;
+  };
+  const showScript = (msg) => {
+    stopAudio(); btn.classList.remove("on"); btn.disabled = true; reveal();
+    if (!$(".script", lq)) lq.insertAdjacentHTML("afterbegin", `<p class="script">${esc(it.say)}</p>`);
+    lbl.textContent = msg;
+  };
+  if (!window.Audio && !synth) { showScript("Audio isn’t available on this device. Read the script instead."); return; }
   btn.addEventListener("click", () => {
     if (it.plays >= 2 || btn.classList.contains("on")) return;
-    it.plays++; btn.classList.add("on"); lbl.textContent = "Listening…";
-    speak(it.say, () => {
-      btn.classList.remove("on");
-      $("#lq").classList.remove("hidden-q"); $("#lq").style.display = "block";
-      lbl.textContent = it.plays >= 2 ? "No more plays. Choose your answer." : "You can play it one more time.";
-      if (it.plays >= 2) btn.disabled = true;
-    });
+    it.plays++; btn.classList.add("on");
+    let started = false, ended = false;
+    const end = () => { if (ended) return; ended = true; clearTimeout(guard); clearTimeout(longGuard); finishPlay(); };
+    const guard = setTimeout(() => { if (!started && !ended) { ended = true; showScript("The audio didn’t load. Read what the speaker says and answer."); } }, 12000);
+    const longGuard = setTimeout(() => { if (!ended) end(); }, Math.max(20000, it.say.split(" ").length * 700));
+    const deviceVoice = () => { if (!synth) return; speak(it.say, end); started = true; };
+    const playUrl = (u) => {
+      try {
+        stopAudio();
+        player.onplaying = () => { started = true; lbl.textContent = "Listening…"; };
+        player.onended = end;
+        player.onerror = () => { if (!started) deviceVoice(); };
+        if (player.src !== u) player.src = u;
+        player.currentTime = 0;
+        const pr = player.play();
+        if (pr && pr.catch) pr.catch(() => { if (!started) deviceVoice(); });
+      } catch (e) { deviceVoice(); }
+    };
+    if (ready) { lbl.textContent = "Listening…"; playUrl(ready); }
+    else { lbl.textContent = "Loading the audio…"; clipUrl(it.say).then(playUrl, deviceVoice); }
   });
 }
 function pick(btn) {
@@ -589,7 +634,7 @@ function pick(btn) {
   const last = st.i === st.items.length - 1;
   $("#ex").innerHTML = `<div class="explain"><b>${ok ? "Correct." : "Not quite."} ${esc(label)}</b>${esc(it.why)}${script}</div>
     <div class="actions"><button class="btn" id="next">${last ? "See my results" : "Next question"}</button></div>`;
-  $("#next").addEventListener("click", () => { if (synth) synth.cancel(); if (last) finish(); else { st.i++; render(); } });
+  $("#next").addEventListener("click", () => { stopAudio(); if (last) finish(); else { st.i++; render(); } });
   $("#next").focus({ preventScroll: true });
   $("#ex").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "nearest" });
 }
@@ -631,7 +676,7 @@ function finish() {
   $("#again").textContent = st.section === "reading" ? "Read another passage" : st.section === "sim" ? "Take another simulation" : "Practice this section again";
 }
 $("#again").addEventListener("click", () => { if (st.section === "reading") { drawPicks(); show("read"); } else if (st.section === "review") { if (loadM().length) setup("review"); else { drawHome(); show("home"); } } else begin(); });
-$$("[data-home]").forEach((b) => b.addEventListener("click", () => { clearInterval(st.clock); if (synth) synth.cancel(); drawHome(); show("home"); }));
+$$("[data-home]").forEach((b) => b.addEventListener("click", () => { clearInterval(st.clock); stopAudio(); if (synth) synth.cancel(); drawHome(); show("home"); }));
 
 drawHome();
 })();
