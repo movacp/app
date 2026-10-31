@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("mova-theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
-<style>html.mr-boot body{visibility:hidden!important}html.mr-boot{background:#F5F3FA!important}</style><script>document.documentElement.classList.add("mr-boot");setTimeout(function(){document.documentElement.classList.remove("mr-boot")},2500)</script>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MOVA Learning Studio</title>
 <meta name="description" content="MOVA Learning Studio: lecturas, juegos y materiales para aprender inglés, matemáticas y lectoescritura, de MOVA Centro Pedagógico.">
-<meta name="theme-color" content="#F3EFE8">
+<meta name="theme-color" content="#F5F3FA">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -1721,9 +1720,9 @@ function viewGames() {
     <section class="page-head wrap">
       <p class="kicker">Interactive Games</p>
       <h1>Play and practice</h1>
-      <p class="lead">Games to practice English and math. Play as many times as you like.</p>
+      <p class="lead">Juegos para practicar inglés y matemáticas. Se pueden jugar cuantas veces quieras.</p>
     </section>
-    <section class="wrap"><div class="section-head"><h2>MOVA games</h2></div><div class="grid cols">${MOVA_GAMES.filter((g) => !/juego-(level-up|toefl-practice)\.html/.test(g.file)).map(movaGameCard).join("")}</div></section>
+    <section class="wrap"><div class="section-head"><h2>MOVA games</h2></div><div class="grid cols">${MOVA_GAMES.map(movaGameCard).join("")}</div></section>
     <section class="wrap section"><div class="section-head"><h2>Quick practice</h2></div><div class="grid cols">${GAMES.map(gameCard).join("")}</div></section>`
   };
 }
@@ -2073,12 +2072,14 @@ if ("serviceWorker" in navigator && location.protocol === "https:") {
   let updateShown = false;
   const showUpdate = () => {
     if (updateShown || !hadController) return; updateShown = true;
-    const bar = document.createElement("div");
-    bar.setAttribute("role", "status");
-    bar.style.cssText = "position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 86px);z-index:2147483600;display:flex;align-items:center;gap:12px;width:min(92vw,440px);padding:12px 12px 12px 18px;border-radius:20px;background:#1E3A5F;color:#fff;font-family:Poppins,'Century Gothic',system-ui,sans-serif;box-shadow:0 6px 0 #E8846B,0 18px 40px rgba(30,58,95,.3)";
-    bar.innerHTML = '<span style="flex:1;font-size:14.5px;line-height:1.35"><b style="display:block;font-size:15.5px">Hay una nueva versión</b>MOVA Learning Studio se actualizó.</span><button type="button" style="border:0;border-radius:14px;background:#E8846B;color:#fff;font:700 15px Poppins,system-ui,sans-serif;padding:11px 16px;cursor:pointer">Actualizar</button>';
-    bar.querySelector("button").addEventListener("click", () => location.reload());
-    document.body.appendChild(bar);
+    const st = document.createElement("style"); st.textContent = ".mv-upd-scrim{position:fixed;inset:0;z-index:2147483599;background:rgba(14,16,30,.55);opacity:0;transition:opacity .25s ease}.mv-upd{position:fixed;left:50%;top:50%;z-index:2147483600;width:min(86vw,350px);transform:translate(-50%,-44%) scale(.96);opacity:0;transition:transform .35s cubic-bezier(.2,.9,.3,1.15),opacity .25s ease;background:#15192B;color:#fff;border-radius:24px;padding:16px 16px 16px;border:1.5px solid rgba(255,255,255,.16);box-shadow:0 20px 50px rgba(0,0,0,.4);font-family:'Plus Jakarta Sans',Poppins,system-ui,sans-serif;overflow:hidden}.mv-upd.is-in{transform:translate(-50%,-50%) scale(1);opacity:1}.mv-upd-scrim.is-in{opacity:1}.mv-upd-row{display:flex;gap:10px;align-items:center}.mv-upd-ch{flex:none;width:88px;height:88px;margin:-12px -8px -14px -12px}.mv-upd-ch svg{width:100%;height:100%;display:block}.mv-upd h3{margin:0;font-family:'Bricolage Grotesque','Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;line-height:1.15;letter-spacing:-.005em;color:#fff}.mv-upd p{margin:5px 0 0;font-size:13.5px;line-height:1.4;color:#C9CBE0}.mv-upd-go{display:block;width:100%;margin-top:14px;border:0;border-radius:999px;background:#D3F36B;color:#15192B;font:800 15px 'Plus Jakarta Sans',Poppins,sans-serif;padding:12px 16px;cursor:pointer}.mv-upd-go:active{transform:translateY(1px)}";
+    document.head.appendChild(st);
+    const scrim = document.createElement("div"); scrim.className = "mv-upd-scrim";
+    const box = document.createElement("div"); box.className = "mv-upd"; box.setAttribute("role", "dialog"); box.setAttribute("aria-label", "Hay una nueva versión de MOVA Studio");
+    box.innerHTML = "<div class=\"mv-upd-row\"><span class=\"mv-upd-ch\"><svg viewBox=\"0 0 220 220\" aria-hidden=\"true\"><path d=\"M98 150 C96 168.0 90 178.0 92 190\" stroke=\"#E6E2FF\" stroke-width=\"2.3\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><ellipse cx=\"89\" cy=\"192\" rx=\"6.2\" ry=\"4\" fill=\"#E6E2FF\"/><path d=\"M124 150 C126 168.0 130 178.0 129 190\" stroke=\"#E6E2FF\" stroke-width=\"2.3\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><ellipse cx=\"132\" cy=\"192\" rx=\"6.2\" ry=\"4\" fill=\"#E6E2FF\"/><path d=\"M66 112 C50 114 42 104 44 88\" stroke=\"#E6E2FF\" stroke-width=\"2.3\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"44\" cy=\"88\" r=\"3.6\" fill=\"#E6E2FF\"/><path d=\"M154 112 C166 112 174 106 178 96\" stroke=\"#E6E2FF\" stroke-width=\"2.3\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"178\" cy=\"96\" r=\"3.6\" fill=\"#E6E2FF\"/><path d=\"M112 48 C146 46 156 78 156 106 C156 138 136 152 110 152 C84 152 64 138 64 106 C64 74 80 50 112 48z\" fill=\"#C8EE4A\"/><circle cx=\"88\" cy=\"74\" r=\"7\" fill=\"#fff\" opacity=\".28\"/><path d=\"M66 98 C56 28 164 24 154 98\" stroke=\"#E6E2FF\" stroke-width=\"2.2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"68\" cy=\"104\" r=\"12\" fill=\"#FFB8DC\" stroke=\"#1A1B2E\" stroke-width=\"2.2\"/><circle cx=\"68\" cy=\"104\" r=\"3.4\" fill=\"#1A1B2E\"/><circle cx=\"152\" cy=\"104\" r=\"12\" fill=\"#FFB8DC\" stroke=\"#1A1B2E\" stroke-width=\"2.2\"/><circle cx=\"152\" cy=\"104\" r=\"3.4\" fill=\"#1A1B2E\"/><circle cx=\"98\" cy=\"102\" r=\"2.9\" fill=\"#1A1B2E\"/><path d=\"M117 103 q5 5 10 0\" stroke=\"#1A1B2E\" stroke-width=\"2.3\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M103 110 q0 7 7 7 q7 0 7 -7\" stroke=\"#1A1B2E\" stroke-width=\"2.3\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><ellipse cx=\"86\" cy=\"112\" rx=\"5\" ry=\"3\" fill=\"#FF8FC0\" opacity=\".55\"/><ellipse cx=\"134\" cy=\"112\" rx=\"5\" ry=\"3\" fill=\"#FF8FC0\" opacity=\".55\"/><path d=\"M30 128 L30 108 L38 105\" stroke=\"#E6E2FF\" stroke-width=\"1.9\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><ellipse cx=\"26.5\" cy=\"128.5\" rx=\"4.4\" ry=\"3.4\" fill=\"#E6E2FF\"/><path d=\"M190 70 L190 52\" stroke=\"#E6E2FF\" stroke-width=\"1.9\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><ellipse cx=\"186.5\" cy=\"70.5\" rx=\"4.4\" ry=\"3.4\" fill=\"#E6E2FF\"/></svg></span><div><h3>Hay una nueva versión de MOVA Studio</h3><p>Actualiza para ver las mejoras y el contenido más reciente.</p></div></div><button class=\"mv-upd-go\" type=\"button\">Actualizar</button>";
+    box.querySelector("button").addEventListener("click", () => location.reload());
+    document.body.appendChild(scrim); document.body.appendChild(box);
+    requestAnimationFrame(() => requestAnimationFrame(() => { scrim.classList.add("is-in"); box.classList.add("is-in"); }));
   };
   navigator.serviceWorker.addEventListener("controllerchange", showUpdate);
   window.addEventListener("load", () => {
@@ -2098,7 +2099,7 @@ document.addEventListener("click", async (e) => {
   try { await evt.userChoice; } catch (err) {}
   window.__installEvt = null; syncInstall();
 });
-window.addEventListener("appinstalled", () => { window.__installEvt = null; syncInstall(); toast("The app is installed"); });
+window.addEventListener("appinstalled", () => { window.__installEvt = null; syncInstall(); toast("La app quedó instalada"); });
 </script>
 <script src="mova-voice.js"></script>
 <script src="studio-plus.js"></script>
@@ -2113,5 +2114,4 @@ b.addEventListener("click",function(){var t=document.documentElement.dataset.the
 </script>
 <script src="mova-auth.js"></script>
 <script src="mova-redesign.js"></script>
-<script src="mova-polish.js"></script>
 </body></html>
