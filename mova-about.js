@@ -96,6 +96,20 @@
 .rh-card[data-c="lime"] .rh-badge,.rh-card[data-c="lime"] .rh-go{background:#D3F36B;color:#1A1B2E}
 .rh-card[data-c="butter"] .rh-badge{background:#FFE58A;color:#1A1B2E}.rh-card[data-c="butter"] .rh-go{background:#1A1B2E;color:#FFE58A}
 .rh-card[data-c="peri"] .rh-badge{background:#1A1B2E;color:#D3F36B}.rh-card[data-c="peri"] .rh-go{background:#1A1B2E;color:#fff}
+.lh{position:relative;overflow:hidden;border-radius:30px;padding:24px 22px 22px;background:#15192B;color:#fff;margin:4px 0 18px;font-family:'Plus Jakarta Sans',sans-serif}
+.lh .ring{position:absolute;right:-70px;top:-70px;width:210px;height:210px;border-radius:50%;border:34px solid #2A2D52}
+.lh .dt{position:absolute;border-radius:50%}
+.lh .k{position:relative;display:inline-block;font:800 11.5px/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:8px 12px;border-radius:999px;background:#D3F36B;color:#15192B}
+.lh h1{position:relative;font:700 34px/1.02 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;margin:14px 0 10px;color:#fff;max-width:13ch}
+.lh h1 em{font-style:normal;color:#D3F36B}
+.lh p{position:relative;margin:0;color:#C9C3F2;font-size:15px;line-height:1.5;max-width:32ch}
+.lh .pills{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+.lh .pills a{display:grid;gap:8px;justify-items:start;padding:12px;border-radius:18px;text-decoration:none;color:#15192B}
+.lh .pills i{display:grid;place-items:center;width:34px;height:34px;border-radius:12px;background:rgba(255,255,255,.75)}
+.lh .pills svg{width:19px;height:19px}
+.lh .pills b{font:700 14px/1.1 'Bricolage Grotesque',sans-serif}
+.lh .pills small{font-size:11.5px;font-weight:600;opacity:.75;margin-top:-4px}
+.lh-sec{font:700 24px/1.1 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;color:#15192B;margin:6px 0 14px}
 /* vitrina About Us en Home */
 .mab-vit{display:block;position:relative;overflow:hidden;border-radius:28px;padding:22px 22px 24px;background:#15192B;color:#fff;text-decoration:none;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:0 18px 40px -24px rgba(21,25,43,.6)}
 .mab-vit .ring{position:absolute;right:-60px;top:-60px;width:190px;height:190px;border-radius:50%;border:30px solid #2A2D52}
@@ -169,8 +183,13 @@
     var c = function (href, img, col, badge, title, text, chips, go) {
       return '<a class="rh-card" href="' + href + '" data-c="' + col + '"><div class="rh-art" aria-hidden="true"><img src="' + img + '.webp" srcset="' + img + '.webp 900w, ' + img + '-hd.webp 1600w" sizes="(min-width:820px) 50vw, 100vw" alt="" loading="eager"><span class="rh-badge">' + badge + '</span></div><div class="rh-body"><h2>' + title + "</h2><p>" + text + '</p><div class="chips">' + chips.map(function (x) { return '<span class="chip">' + x + "</span>"; }).join("") + '</div><span class="rh-go">' + go + "</span></div></a>";
     };
-    return '<section class="page-head wrap"><p class="kicker">Learn</p><h1>Understand it, then practice it</h1><p class="lead">Clear explanations of every grammar topic, cards to review vocabulary and math practice step by step.</p></section>' +
-      '<section class="wrap"><div class="rh-grid">' +
+    return '<section class="wrap"><div class="lh"><span class="ring"></span><span class="dt" style="width:12px;height:12px;background:#FF8FC0;right:34px;top:140px"></span><span class="dt" style="width:9px;height:9px;background:#FFE58A;right:120px;top:46px"></span>' +
+      '<span class="k">Learn</span><h1>Understand it, then <em>practice it</em></h1><p>Clear explanations of every grammar topic, cards to review vocabulary and math practice step by step.</p><div class="pills">' +
+      '<a href="#/structures" style="background:#C9D2FF"><i>' + sv('<path d="M4 6h16M4 12h10M4 18h7"/>') + '</i><b>Grammar</b><small>Structures</small></a>' +
+      '<a href="#/flashcards" style="background:#FFC7E2"><i>' + sv('<rect x="7" y="3" width="13" height="15" rx="2.5"/><path d="M4 7v11a3 3 0 0 0 3 3h9"/>') + '</i><b>Vocabulary</b><small>Flashcards</small></a>' +
+      '<a href="#/matematicas" style="background:#FFE58A"><i>' + sv('<path d="M5 7h6M8 4v6M14 7h5M5 17l5-5M10 17l-5-5M14 15h5M14 19h5"/>') + '</i><b>Math</b><small>Matemáticas</small></a>' +
+      '</div></div><h2 class="lh-sec">Choose what to study</h2></section>' +
+      '<section class="wrap" style="margin-top:-8px"><div class="rh-grid">' +
       c("#/structures", "thumb-learn-structures", "peri", "Grammar", "Structures", "Present Simple, Past Continuous, Present Perfect, Adverbs of Frequency and more, with examples and a quick check.", ["Kids &amp; Children · en español", "Teens · in English"], "Explore structures →") +
       c("#/flashcards", "thumb-learn-flashcards", "coral", "Vocabulary", "Flashcards", "Cards to review vocabulary by stage: flip, listen and practice.", ["MOVA Kids · 6–8", "MOVA Children · 9–12", "MOVA Teens · 12–17"], "Open flashcards →") +
       c("#/matematicas", "thumb-learn-math", "butter", "Matemáticas", "Matemáticas", "Práctica por tema y nivel, con explicación paso a paso de cada respuesta.", ["Primaria", "Secundaria", "Prepa"], "Empezar a practicar →") +
