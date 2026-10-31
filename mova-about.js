@@ -93,6 +93,9 @@
 .mab .fclose p{font:700 20px/1.3 'Bricolage Grotesque',sans-serif;max-width:24ch}
 .mab .fclose small{display:block;margin-top:12px;font-size:13.5px;color:#C9C3F2}.mab .fclose a{color:var(--lime);font-weight:700}
 .mab .fclose .char{position:absolute;right:-12px;bottom:-22px;width:130px;height:130px}
+.rh-card[data-c="lime"] .rh-badge,.rh-card[data-c="lime"] .rh-go{background:#D3F36B;color:#1A1B2E}
+.rh-card[data-c="butter"] .rh-badge{background:#FFE58A;color:#1A1B2E}.rh-card[data-c="butter"] .rh-go{background:#1A1B2E;color:#FFE58A}
+.rh-card[data-c="peri"] .rh-badge{background:#1A1B2E;color:#D3F36B}.rh-card[data-c="peri"] .rh-go{background:#1A1B2E;color:#fff}
 /* vitrina About Us en Home */
 .mab-vit{display:block;position:relative;overflow:hidden;border-radius:28px;padding:22px 22px 24px;background:#15192B;color:#fff;text-decoration:none;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:0 18px 40px -24px rgba(21,25,43,.6)}
 .mab-vit .ring{position:absolute;right:-60px;top:-60px;width:190px;height:190px;border-radius:50%;border:30px solid #2A2D52}
@@ -161,6 +164,19 @@
       '<div class="fclose">' + ch("mochi") + '<p>Aquí no hay calificaciones ni pendientes. Solo historias, juegos y momentos para disfrutar en familia.</p><small>Con cariño, MOVA Centro Pedagógico · <a href="https://wa.me/528123426038" target="_blank" rel="noopener">Escríbanos por WhatsApp</a></small></div></div>';
   }
 
+
+  function learnHtml() {
+    var c = function (href, img, col, badge, title, text, chips, go) {
+      return '<a class="rh-card" href="' + href + '" data-c="' + col + '"><div class="rh-art" aria-hidden="true"><img src="' + img + '.webp" srcset="' + img + '.webp 900w, ' + img + '-hd.webp 1600w" sizes="(min-width:820px) 50vw, 100vw" alt="" loading="eager"><span class="rh-badge">' + badge + '</span></div><div class="rh-body"><h2>' + title + "</h2><p>" + text + '</p><div class="chips">' + chips.map(function (x) { return '<span class="chip">' + x + "</span>"; }).join("") + '</div><span class="rh-go">' + go + "</span></div></a>";
+    };
+    return '<section class="page-head wrap"><p class="kicker">Learn</p><h1>Understand it, then practice it</h1><p class="lead">Clear explanations of every grammar topic, cards to review vocabulary and math practice step by step.</p></section>' +
+      '<section class="wrap"><div class="rh-grid">' +
+      c("#/structures", "thumb-learn-structures", "peri", "Grammar", "Structures", "Present Simple, Past Continuous, Present Perfect, Adverbs of Frequency and more, with examples and a quick check.", ["Kids &amp; Children · en español", "Teens · in English"], "Explore structures →") +
+      c("#/flashcards", "thumb-learn-flashcards", "coral", "Vocabulary", "Flashcards", "Cards to review vocabulary by stage: flip, listen and practice.", ["MOVA Kids · 6–8", "MOVA Children · 9–12", "MOVA Teens · 12–17"], "Open flashcards →") +
+      c("#/matematicas", "thumb-learn-math", "butter", "Matemáticas", "Matemáticas", "Práctica por tema y nivel, con explicación paso a paso de cada respuesta.", ["Primaria", "Secundaria", "Prepa"], "Empezar a practicar →") +
+      "</div></section>";
+  }
+
   var VIT = '<section class="wrap section" aria-labelledby="about-h"><div class="section-head"><h2 id="about-h">About Us</h2></div><a class="mab-vit" href="#/mova"><span class="ring"></span>' + LOGO + '<h3>Conoce MOVA</h3><p>Educación bilingüe con atención personalizada. Descubre todos nuestros programas.</p><div class="tg"><span>Inglés</span><span>Lectoescritura</span><span>Matemáticas</span><span>TOEFL</span><span>EXCI</span></div><span class="cta">See our programs →</span>' + ch("bloom") + "</a></section>";
 
   var done = false;
@@ -170,6 +186,7 @@
     done = true;
     ROUTES.mova = function () { return { title: "About Us", html: aboutHtml() }; };
     ROUTES.familias = function () { return { title: "For families", html: famHtml() }; };
+    ROUTES.learn = learnRoute;
     var prevHome = ROUTES[""];
     ROUTES[""] = function (p) {
       var v = prevHome(p) || { html: "" }, pm = v.mount;
@@ -183,8 +200,18 @@
       } };
     };
     var k = location.hash.replace(/^#\/?/, "").split("/")[0];
-    if ((k === "" || k === "mova" || k === "familias") && typeof router === "function") router();
+    if ((k === "" || k === "mova" || k === "familias" || k === "learn") && typeof router === "function") router();
     return true;
   }
+  function learnRoute() { return { title: "Learn", html: learnHtml() }; }
+  learnRoute.__mab = true;
+  window.addEventListener("load", function () {
+    setTimeout(function () {
+      if (typeof ROUTES === "object" && !(ROUTES.learn && ROUTES.learn.__mab)) {
+        ROUTES.learn = learnRoute;
+        if (/^#\/learn\/?$/.test(location.hash) && typeof router === "function") router();
+      }
+    }, 0);
+  });
   var tries = 0; (function loop() { if (!install() && tries++ < 80) setTimeout(loop, 50); })();
 })();
