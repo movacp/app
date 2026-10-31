@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("mova-theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
+<style>html.mr-boot body{visibility:hidden!important}html.mr-boot{background:#F5F3FA!important}</style><script>document.documentElement.classList.add("mr-boot");setTimeout(function(){document.documentElement.classList.remove("mr-boot")},2500)</script>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1720,9 +1721,9 @@ function viewGames() {
     <section class="page-head wrap">
       <p class="kicker">Interactive Games</p>
       <h1>Play and practice</h1>
-      <p class="lead">Juegos para practicar inglés y matemáticas. Se pueden jugar cuantas veces quieras.</p>
+      <p class="lead">Games to practice English and math. Play as many times as you like.</p>
     </section>
-    <section class="wrap"><div class="section-head"><h2>MOVA games</h2></div><div class="grid cols">${MOVA_GAMES.map(movaGameCard).join("")}</div></section>
+    <section class="wrap"><div class="section-head"><h2>MOVA games</h2></div><div class="grid cols">${MOVA_GAMES.filter((g) => !/juego-(level-up|toefl-practice)\.html/.test(g.file)).map(movaGameCard).join("")}</div></section>
     <section class="wrap section"><div class="section-head"><h2>Quick practice</h2></div><div class="grid cols">${GAMES.map(gameCard).join("")}</div></section>`
   };
 }
@@ -2114,4 +2115,5 @@ b.addEventListener("click",function(){var t=document.documentElement.dataset.the
 </script>
 <script src="mova-auth.js"></script>
 <script src="mova-redesign.js"></script>
+<script src="mova-polish.js"></script>
 </body></html>

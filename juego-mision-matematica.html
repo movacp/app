@@ -74,15 +74,18 @@ button:focus-visible{outline:4px solid var(--orange);outline-offset:3px}
 h1{font-weight:800;font-size:clamp(32px,9.5vw,44px);line-height:1.05;text-align:center;margin:14px 0 6px}
 .lead{text-align:center;color:var(--muted);font-weight:500;font-size:15.5px;line-height:1.5;margin:0 0 18px}
 .label{font-weight:700;font-size:15px;margin:16px 0 8px}
-.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.lvtabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#fff;border-radius:999px;padding:5px;margin:0 0 12px;box-shadow:0 8px 22px -16px rgba(21,25,43,.4)}
+.lvtabs button{border:0;background:transparent;border-radius:999px;padding:11px 4px;font:800 14.5px/1 'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E66;cursor:pointer}
+.lvtabs button[aria-pressed="true"]{background:#15192B;color:#fff}
+.grades{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .grade{
   --c:#FFC48A;border:0;border-radius:20px;padding:14px 4px 10px;background:var(--c);color:#1B2A55;
   box-shadow:0 5px 0 rgba(27,42,85,.16);display:flex;flex-direction:column;align-items:center;line-height:1.1
 }
 .grade b{font-size:28px;font-weight:800}
 .grade span{font-size:12px;font-weight:600}
-.grade.wide b{font-size:20px}
 .glabel{grid-column:1/-1;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#6B6F86;margin:6px 2px -2px}
+.grade[hidden]{display:none!important}
 .grade[aria-pressed="true"]{outline:4px solid var(--ink);outline-offset:3px}
 .grade:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(27,42,85,.16)}
 .topics{font-size:13.5px;color:var(--muted);text-align:center;margin:12px 0 0;min-height:20px}
@@ -165,6 +168,7 @@ h1{font-weight:800;font-size:clamp(32px,9.5vw,44px);line-height:1.05;text-align:
       <h1>Misión Matemática</h1>
       <p class="lead">Resuelve cada operación para llevar el cohete hasta la Luna.</p>
       <div class="label">¿En qué grado estás?</div>
+      <div class="lvtabs" id="lvtabs" role="group" aria-label="Nivel escolar"><button type="button" data-lv="pri">Primaria</button><button type="button" data-lv="sec">Secundaria</button><button type="button" data-lv="pre">Prepa</button></div>
       <div class="grades" id="grades"></div>
       <p class="topics" id="topics"></p>
       <div class="label">Modo de juego</div>
@@ -337,7 +341,7 @@ const GRADES = {
         () => { const a=rnd(1,6), b=rnd(1,6); return nq(`(x + ${a})(x + ${b}) = x² + <span class="q">?</span>x + ${a*b}`, `En el producto de x más ${a} por x más ${b}, ¿cuál es el coeficiente de x?`, a+b, `${a} + ${b} = ${a+b}`, 'Producto notable'); },
         () => { const r1=rnd(1,8), r2=rnd(1,8); return nq(`x² − ${r1+r2}x + ${r1*r2} = 0<br>Una solución es ${r1}. ¿Cuál es la otra?`, `En x al cuadrado menos ${r1+r2} x más ${r1*r2} igual a cero, una solución es ${r1}, ¿cuál es la otra?`, r2, `${r1} + ${r2} = ${r1+r2} y ${r1} × ${r2} = ${r1*r2}`, 'Ecuación cuadrática'); }
       ]},
-  10:{ label:'Prepa', sub:'bachillerato', color:'#D3F36B', secs:50, name:'Preparatoria', topics:'Funciones, exponentes y logaritmos, trigonometría y derivadas',
+  10:{ label:'1°', sub:'prepa', color:'#D3F36B', secs:50, name:'1° de prepa', topics:'Funciones, exponentes y logaritmos, trigonometría y derivadas',
       gen:[
         () => { const m=rnd(2,7), b=rnd(1,12), x=rnd(2,8); return nq(`f(x) = ${m}x − ${b}<br>f(${x}) = <span class="q">?</span>`, `Si f de x es ${m} x menos ${b}, ¿cuánto es f de ${x}?`, m*x-b, `${m} × ${x} − ${b} = ${m*x-b}`, 'Evalúa la función'); },
         () => { const b=pick([2,3,5,10]), e=b===2?rnd(3,8):b===10?rnd(2,5):rnd(2,4); return nq(`log<sub>${b}</sub> ${fmtN(Math.pow(b,e))} = <span class="q">?</span>`, `¿Cuánto es el logaritmo base ${b} de ${Math.pow(b,e)}?`, e, `${b}<sup>${e}</sup> = ${fmtN(Math.pow(b,e))}`, 'Logaritmo'); },
@@ -387,17 +391,24 @@ function show(id){ ['start','game','end'].forEach(s => $('#s-'+s).hidden = s!==i
 
 /* ---------- Start ---------- */
 const gradesEl = $('#grades');
+const LV = k => (+k <= 6 ? 'pri' : +k <= 9 ? 'sec' : 'pre');
 Object.entries(GRADES).forEach(([k,g]) => {
-  if (k === '1' || k === '7' || k === '10') { const l = document.createElement('div'); l.className = 'glabel'; l.textContent = k === '1' ? 'Primaria' : k === '7' ? 'Secundaria' : 'Preparatoria'; gradesEl.appendChild(l); }
   const b = document.createElement('button');
-  if (k === '10') b.classList.add('wide');
-  b.className = 'grade' + (k === '10' ? ' wide' : ''); b.dataset.g = k; b.style.setProperty('--c', g.color);
+  b.className = 'grade'; b.dataset.g = k; b.dataset.lv = LV(k); b.style.setProperty('--c', g.color);
   b.innerHTML = `<b>${g.label}</b><span>${g.sub}</span>`;
   b.addEventListener('click', () => { unlockAudio(); selectGrade(+k); });
   gradesEl.appendChild(b);
 });
+function showLevel(lv){
+  document.querySelectorAll('#lvtabs button').forEach(t => t.setAttribute('aria-pressed', t.dataset.lv === lv ? 'true' : 'false'));
+  gradesEl.querySelectorAll('.grade').forEach(b => { b.hidden = b.dataset.lv !== lv; });
+}
+document.querySelectorAll('#lvtabs button').forEach(t => t.addEventListener('click', () => {
+  const lv = t.dataset.lv; showLevel(lv);
+  if (LV(st.grade) !== lv) { const first = gradesEl.querySelector('.grade[data-lv="' + lv + '"]'); if (first) selectGrade(+first.dataset.g); }
+}));
 function selectGrade(g){
-  st.grade = g;
+  st.grade = g; showLevel(LV(g));
   gradesEl.querySelectorAll('.grade').forEach(b => b.setAttribute('aria-pressed', +b.dataset.g===g ? 'true':'false'));
   $('#topics').textContent = GRADES[g].topics;
   const best = getBest(g);
