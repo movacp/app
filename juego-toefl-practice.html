@@ -212,6 +212,37 @@ details.ptoggle summary{cursor:pointer;font-weight:600;font-size:14px;color:var(
 .simcard i{background:#D3F36B!important;color:#15192B!important;box-shadow:none!important}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sec .chip{background:rgba(255,255,255,.08);color:var(--ink)}:root:not([data-theme="light"]) .sec .go{background:#D3F36B;color:#15192B}}
 :root[data-theme="dark"] .sec .chip{background:rgba(255,255,255,.08);color:var(--ink)}:root[data-theme="dark"] .sec .go{background:#D3F36B;color:#15192B}
+
+.lh2{background:#15192B!important}
+.lh2 .ring{position:absolute;right:-70px;top:-70px;width:210px;height:210px;border-radius:50%;border:34px solid #2A2D52}
+.lh2 .dt{position:absolute;border-radius:50%}
+.lh2 .kk{position:relative;display:inline-block;font:800 11.5px/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:8px 12px;border-radius:999px;background:#D3F36B;color:#15192B;margin-bottom:14px}
+.lh2 h1{min-height:0!important;font-family:'Bricolage Grotesque',sans-serif!important;font-weight:700!important;max-width:none!important;color:#fff}
+.lh2 h1 em{font-style:normal;color:#D3F36B}
+.lh2 p{color:#C9C3F2!important}
+.lh2 .note{background:#2A2D52!important;color:#E6E2FF!important}
+.sections .vt{display:block;width:100%;text-align:left;padding:12px 12px 20px;border-radius:28px;background:#fff;border:1px solid #ECE8F5;box-shadow:0 14px 32px -20px rgba(21,25,43,.35);font:inherit;color:#15192B;cursor:pointer;margin:0;transition:transform .15s}
+.sections{gap:16px!important}
+.sections .vt:active{transform:translateY(1px)}
+.vt .va{display:block;position:relative;aspect-ratio:2/1;width:100%;border-radius:20px;overflow:hidden;background:#E6E2FF}
+.vt .va img{display:block;width:100%;height:100%;object-fit:cover}
+.vt .vb{display:inline-block;position:absolute;left:12px;top:12px;font:800 11.5px/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:8px 12px;border-radius:999px;background:#15192B;color:#D3F36B}
+.vt .vbody{display:grid;gap:8px;padding:16px 8px 0}
+.vt h3{margin:0;font:700 26px/1.05 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;color:#15192B}
+.vt p{margin:0;color:#4A4E66;font-size:15px;line-height:1.5}
+.vt .vch{display:flex!important;flex-wrap:wrap;gap:6px;margin-top:2px}
+.vt .vch span{font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:999px;background:#F2EFF8;color:#4A4E66}
+.vt .vch span.best{background:#D3F36B;color:#15192B}
+.vt .vgo{justify-self:start;display:inline-flex;margin-top:6px;padding:12px 20px;border-radius:999px;font-weight:800;font-size:15px;background:#15192B;color:#fff}
+.vt[data-c="coral"] .vgo,.vt[data-c="coral"] .vb{background:#FF8FC0;color:#15192B}
+.vt[data-c="mint"] .vb{background:#BDF0D8;color:#15192B}
+.vt[data-c="mustard"] .vb,.vt[data-c="butter"] .vb{background:#FFE58A;color:#15192B}
+.vt[data-c="lilac"] .vb{background:#E6E2FF;color:#15192B}
+@media(min-width:820px){.sections{display:grid;grid-template-columns:1fr 1fr;gap:16px}.sections .vt{margin:0}}
+.sections .sec.vt{display:block!important;height:auto!important;overflow:visible!important;padding:12px 12px 20px!important;border:1px solid #ECE8F5!important;border-radius:28px!important;box-shadow:0 14px 32px -20px rgba(21,25,43,.35)!important;background:#fff!important}
+.sections .sec.vt h3{color:#15192B!important;margin:0!important;font-size:26px!important}
+.sections .sec.vt p{color:#4A4E66!important;font-size:15px!important}
+@media(min-width:820px){.sections .sec.vt.vfull{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -219,23 +250,10 @@ details.ptoggle summary{cursor:pointer;font-weight:600;font-size:14px;color:var(
 
 <section id="v-home">
   <div class="top"><a class="back" href="./#/games"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>MOVA Learning Studio</a><span class="brand">MOVA · Centro Pedagógico</span></div>
-  <header class="hero">
-    <svg class="art" viewBox="0 0 220 200" aria-hidden="true">
-      <rect x="70" y="26" width="118" height="150" rx="12" fill="#F6F1E8" transform="rotate(8 129 101)"/>
-      <rect x="54" y="34" width="118" height="150" rx="12" fill="#FFFDFA" transform="rotate(-4 113 109)"/>
-      <g transform="rotate(-4 113 109)">
-        <rect x="70" y="54" width="60" height="7" rx="3.5" fill="#1E3A5F"/>
-        <rect x="70" y="70" width="84" height="5" rx="2.5" fill="#DAD4CA"/>
-        <circle cx="76" cy="96" r="6" fill="none" stroke="#1E3A5F" stroke-width="2"/><rect x="88" y="93" width="56" height="5" rx="2.5" fill="#DAD4CA"/>
-        <circle cx="76" cy="116" r="6" fill="#E0B04A"/><path d="m73 116 2.2 2.2 4-4.4" stroke="#1E3A5F" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="88" y="113" width="48" height="5" rx="2.5" fill="#DAD4CA"/>
-        <circle cx="76" cy="136" r="6" fill="none" stroke="#1E3A5F" stroke-width="2"/><rect x="88" y="133" width="60" height="5" rx="2.5" fill="#DAD4CA"/>
-        <circle cx="76" cy="156" r="6" fill="none" stroke="#1E3A5F" stroke-width="2"/><rect x="88" y="153" width="40" height="5" rx="2.5" fill="#DAD4CA"/>
-      </g>
-      <rect x="150" y="128" width="14" height="70" rx="3" fill="#E8846B" transform="rotate(32 157 163)"/>
-      <path d="m131 186 6-14 10 6z" fill="#F3CFA8" transform="rotate(0)"/>
-      <circle cx="40" cy="44" r="10" fill="#6FA8D6" opacity=".9"/><circle cx="196" cy="24" r="6" fill="#7FB89E"/>
-    </svg>
-    <h1>TOEFL Practice</h1>
+  <header class="hero lh2">
+    <span class="ring" aria-hidden="true"></span><span class="dt" style="width:12px;height:12px;background:#FF8FC0;right:34px;top:150px"></span><span class="dt" style="width:9px;height:9px;background:#FFE58A;right:120px;top:46px"></span>
+    <span class="kk">TOEFL ITP</span>
+    <h1>TOEFL <em>Practice</em></h1>
     <p>Warm-up practice for the TOEFL ITP: 120 Structure questions, 120 Written Expression, 25 reading passages, 56 listening audios, academic vocabulary and a quick timed simulation. Practice at your own pace or against the clock.</p>
     <span class="note">Practice sets with instant feedback, not a full simulation</span>
   </header>
@@ -477,6 +495,8 @@ function drawHome() {
     const r = rec[s.id];
     const m = loadM().length;
     const count = s.id === "wordforms" ? "4 practice modes" : s.id === "reading" ? `${PASSAGES.length} passages · ${PASSAGES.reduce((a, p) => a + p.q.length, 0)} questions` : s.id === "review" ? (m ? `${m} to review` : "No mistakes saved yet") : s.id === "listening" ? `${s.n} audios` : s.id === "sim" ? "25 questions · 18 min" : `${s.n} questions`;
+    const VI = { structure: ["structure", "Grammar", "Practice Structure →"], written: ["written", "Error correction", "Practice Written Expression →"], reading: ["reading", "Reading", "Choose a passage →"], listening: ["listening", "Listening", "Start listening →"], vocab: ["vocab", "Vocabulary", "Practice vocabulary →"], wordforms: ["wordforms", "Word Forms", "Open Word Forms →"] };
+    if (VI[s.id]) { const v = VI[s.id]; return `<button class="sec vt" data-s="${s.id}" data-c="${s.c}"><span class="va"><img src="thumb-tp-${v[0]}.webp" srcset="thumb-tp-${v[0]}.webp 900w, thumb-tp-${v[0]}-hd.webp 1600w" sizes="(min-width:820px) 50vw, 100vw" alt="" loading="lazy"><span class="vb">${v[1]}</span></span><span class="vbody"><h3>${s.name}</h3><p>${s.desc}</p><span class="vch"><span>${count}</span>${r ? `<span class="best">Best: ${r}%</span>` : ""}</span><span class="vgo">${v[2]}</span></span></button>`; }
     return `<button class="sec" data-s="${s.id}" data-c="${s.c}"><span class="ic"><svg viewBox="0 0 24 24" fill="none">${s.icon}</svg></span><span><h3>${s.name}</h3><p>${s.desc}</p><span class="meta"><span class="chip">${count}</span>${r ? `<span class="chip best">Best: ${r}%</span>` : ""}${s.id === "sim" ? `<span class="chip new">New</span>` : ""}</span></span><span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>`;
   }).join("");
   $("#tip").textContent = TIPS[new Date().getDate() % TIPS.length];
