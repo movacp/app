@@ -257,20 +257,22 @@ if (ul && ROUTES.learn) ul.innerHTML = [["", "home", "Home"], ["library", "book"
   const CSS = `<style>
 .rh-grid{display:grid;gap:18px}
 @media (min-width:820px){.rh-grid{grid-template-columns:1fr 1fr}}
-.rh-card{display:grid;border-radius:26px;overflow:hidden;background:var(--surface);border:1px solid var(--line);text-decoration:none;color:inherit;box-shadow:var(--shadow);transition:transform .15s ease}
+.rh-card{display:block;border-radius:28px;overflow:hidden;background:var(--surface,#fff);border:1px solid var(--line,#E4E0EE);padding:12px 12px 20px;text-decoration:none;color:inherit;box-shadow:0 14px 32px -20px rgba(21,25,43,.35);transition:transform .15s ease}
 .rh-card:hover{transform:translateY(-2px)}
 .rh-card:active{transform:translateY(1px)}
-.rh-art svg{display:block;width:100%;height:auto}
-.rh-body{display:grid;gap:8px;padding:18px 20px 20px}
-.rh-kicker{font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
-.rh-body h2{font-size:26px;line-height:1.1}
-.rh-body p{color:var(--ink-2);font-size:15px;line-height:1.5}
-.rh-body .chips{margin-top:4px}
-.rh-go{display:inline-flex;align-items:center;gap:8px;justify-self:start;margin-top:6px;padding:11px 18px;border-radius:999px;font-weight:700;font-size:15px;color:#fff}
-.rh-card[data-c="sky"] .rh-go{background:#1E3A5F}
-.rh-card[data-c="coral"] .rh-go{background:#C9654D}
-.rh-card[data-c="sky"]{border-top:6px solid var(--chalk-sky,#6FA8D6)}
-.rh-card[data-c="coral"]{border-top:6px solid var(--chalk-coral,#E8846B)}
+.rh-art{position:relative;aspect-ratio:2/1;border-radius:20px;overflow:hidden;background:#E6E2FF}
+.rh-art img{display:block;width:100%;height:100%;object-fit:cover}
+.rh-art .rh-badge{position:absolute;left:12px;top:12px;font:800 11.5px/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:8px 12px;border-radius:999px;background:#1A1B2E;color:#D3F36B}
+.rh-card[data-c="coral"] .rh-badge{background:#FF8FC0;color:#1A1B2E}
+.rh-body{display:grid;gap:8px;padding:16px 8px 0}
+.rh-kicker{display:none}
+.rh-body h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.02em;font-size:28px;line-height:1.05;color:#1A1B2E}
+.rh-body p{color:#4A4E66;font-size:15px;line-height:1.5}
+.rh-body .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.rh-body .chip{font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:999px;background:#F2EFF8;color:#4A4E66;border:0}
+.rh-go{display:inline-flex;align-items:center;gap:8px;justify-self:start;margin-top:8px;padding:12px 20px;border-radius:999px;font-weight:800;font-size:15px}
+.rh-card[data-c="sky"] .rh-go{background:#1A1B2E;color:#fff}
+.rh-card[data-c="coral"] .rh-go{background:#FF8FC0;color:#1A1B2E}
 .st-lang{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;max-width:520px}
 .st-lang button{display:grid;gap:2px;text-align:left;padding:12px 14px;border-radius:16px;border:1.5px solid var(--line);background:var(--surface);font-family:inherit;color:inherit;cursor:pointer}
 .st-lang b{font-size:14.5px}
@@ -333,7 +335,7 @@ if (ul && ROUTES.learn) ul.innerHTML = [["", "home", "Home"], ["library", "book"
       </section>
       <section class="wrap"><div class="rh-grid">
         <a class="rh-card" href="#/library/en" data-c="sky">
-          <div class="rh-art" aria-hidden="true">${ART_EN}</div>
+          <div class="rh-art" aria-hidden="true"><img src="thumb-read-en.webp" srcset="thumb-read-en.webp 900w, thumb-read-en-hd.webp 1600w" sizes="(min-width:820px) 50vw, 100vw" alt="" loading="eager"><span class="rh-badge">English</span></div>
           <div class="rh-body">
             <span class="rh-kicker">English</span>
             <h2>English Readings</h2>
@@ -343,7 +345,7 @@ if (ul && ROUTES.learn) ul.innerHTML = [["", "home", "Home"], ["library", "book"
           </div>
         </a>
         <a class="rh-card" href="#/lecturas" data-c="coral">
-          <div class="rh-art" aria-hidden="true">${ART_ES}</div>
+          <div class="rh-art" aria-hidden="true"><img src="thumb-read-es.webp" srcset="thumb-read-es.webp 900w, thumb-read-es-hd.webp 1600w" sizes="(min-width:820px) 50vw, 100vw" alt="" loading="eager"><span class="rh-badge">Español</span></div>
           <div class="rh-body">
             <span class="rh-kicker">Español</span>
             <h2>Lecturas en español</h2>
