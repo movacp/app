@@ -83,7 +83,7 @@
   }
 
   /* Rutas */
-  var NAMES = { library: "Read", learn: "Learn", games: "Play", resources: "Print & Learn", matematicas: "Math", lectoescritura: "Lectoescritura", flashcards: "Flashcards", structures: "Structures", lecturas: "Lecturas", holidays: "Holidays", familias: "For families", saved: "Saved", shop: "Shop", mova: "MOVA", exams: "Exams", coloring: "Coloring", wordsearch: "Word search" };
+  var NAMES = { library: "Read", learn: "Learn", games: "Play", resources: "Print & Learn", matematicas: "Math", lectoescritura: "Lectoescritura", flashcards: "Flashcards", structures: "Structures", lecturas: "Lecturas", holidays: "This season", familias: "For families", saved: "Saved", shop: "Shop", mova: "MOVA", exams: "Exams", coloring: "Coloring", wordsearch: "Word search" };
   function install() {
     if (typeof ROUTES !== "object" || ROUTES.__mr) return false;
     ROUTES.__mr = true;

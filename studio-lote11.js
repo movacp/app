@@ -4246,6 +4246,8 @@ Object.assign(READING_ART, {
 });
 
 /* Chip de temporada en las tarjetas */
+/* Halloween guardado: se oculta fuera de temporada (se vuelve a mostrar el próximo octubre quitando esta línea) */
+for (let i = READINGS.length - 1; i >= 0; i--) if (READINGS[i].holiday === "halloween") READINGS.splice(i, 1);
 const prevCard = window.readingCard;
 window.readingCard = function (r) {
   const h = prevCard(r);
@@ -4418,6 +4420,7 @@ window.viewResources = function () {
   v.html = v.html.replace(/(<\/section>)/, `$1<section class="wrap" style="margin-top:4px"><a class="es-banner" href="#/coloring"><span class="mark" style="background:#2A2440;color:#F5E7C5">${ico("print", 22)}</span><span><b>Coloring Pages &amp; Holidays</b><small>Dibujos para colorear y sopas de letras de Halloween para imprimir.</small></span>${ico("arrow", 20)}</a></section>`);
   return v;
 };
+window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
 })();
 
 /* ---------- Inicio reorganizado, Para familias y MOVA (lote 13) ---------- */
@@ -4496,6 +4499,332 @@ window.viewResources = function () {
 
   ROUTES.familias = () => ({ title: "For families", html: FAM_HTML });
   if (!ROUTES.holidays) ROUTES.holidays = () => ({ title: "Holidays", html: `<section class="wrap section"><div class="section-head"><h2>Holidays</h2></div>${card("#/holidays", HALLO, ["Halloween"], "Halloween", "Muy pronto: lecturas, juegos y dibujos para colorear de temporada.", "Coming soon")}</section>` });
+})();
+
+/* ---------- Temporada · Día de Muertos (noviembre 2026) ----------
+   Vitrina "This season" con el diseño nuevo: historias narradas (sin grabación),
+   vocabulario clave, comprensión lectora, sopas de letras y dibujos para colorear.
+   Halloween queda guardado en el código pero oculto hasta el próximo octubre. */
+(function () {
+  const { WS, COLOR, buildWS, cimg, printHead } = window.__MOVA_SEASON;
+  const IMG = (f) => f;
+  const DDM = {
+    hero: "banner-dia-de-muertos.webp",
+    stories: {
+      en: {
+        id: "en", lang: "en-US", es: false, title: "Grandma’s Marigold Path", level: "Children · A2", cover: "thumb-ddm-en",
+        desc: "Emma and her family build an ofrenda to remember Grandma Rosa.", narr: "Narrated story · about 2 min",
+        text: [
+          "Every year on November 1 and 2, Mexico celebrates Día de Muertos, the Day of the Dead. It is not a sad holiday. It is a happy time to remember the people we love.",
+          "Emma lives in Monterrey with her parents. This year, her family is making an ofrenda, a special altar, for Grandma Rosa.",
+          "First, they put a photo of Grandma on the table. Then Emma places bright orange flowers called cempasúchil, or marigolds. “Their color and smell help the souls find the way home,” says Dad.",
+          "Mom brings pan de muerto, a sweet bread with little bones on top. Emma adds sugar skulls with names on them, and a glass of water for the long trip.",
+          "Last, Emma puts Grandma’s favorite thing: a cup of hot chocolate. “She always made it for me,” Emma says with a smile.",
+          "At night, the family lights candles and tells funny stories about Grandma. Emma feels warm inside. Grandma is not here, but she is still in their hearts."
+        ],
+        keys: ["remember", "ofrenda", "marigolds", "souls", "sugar skulls", "candles"],
+        vocab: [["ofrenda", "A special altar to remember loved ones."], ["marigold", "A bright orange flower. In Spanish: cempasúchil."], ["soul", "The spirit of a person."], ["sugar skull", "A candy skull with a name on it."], ["candle", "It gives a soft light at night."], ["remember", "To keep someone in your mind and heart."]],
+        quiz: [
+          ["When do people celebrate the Day of the Dead?", ["*November 1 and 2", "October 31", "December 24"]],
+          ["What is an ofrenda?", ["A costume", "*A special altar", "A sweet bread"]],
+          ["Why does the family use marigolds?", ["To decorate the school", "*To help the souls find the way home", "To make tea"]],
+          ["What did Emma add for Grandma?", ["*A cup of hot chocolate", "A toy car", "A book"]],
+          ["How does Emma feel at the end?", ["Scared", "Bored", "*Warm inside"]]
+        ]
+      },
+      es: {
+        id: "es", lang: "es-MX", es: true, title: "El camino de cempasúchil", level: "3° y 4° de primaria", cover: "thumb-ddm-es",
+        desc: "Mateo y Sofi preparan la ofrenda para su abuelo Chuy.", narr: "Historia narrada · unos 2 min",
+        text: [
+          "El 1 y 2 de noviembre, en México celebramos el Día de Muertos. No es una fiesta triste: es un día para recordar con cariño a quienes ya no están.",
+          "En casa de Mateo preparan la ofrenda para su abuelo Chuy. Su mamá cubre la mesa con papel picado morado, naranja y rosa.",
+          "Mateo coloca la foto del abuelo en el centro. A su lado pone una veladora, para que la luz lo guíe, y un vaso de agua, porque el viaje es largo.",
+          "Su hermana Sofi trae flores de cempasúchil y hace un caminito de pétalos desde la puerta hasta el altar. —Así el abuelo encontrará el camino —dice.",
+          "Después ponen pan de muerto, una calaverita de azúcar con su nombre y unos tamales, su comida favorita.",
+          "En la noche, toda la familia se sienta junto a la ofrenda. Cuentan las historias graciosas del abuelo y ríen mucho. Mateo siente que su abuelo está ahí, sonriendo con ellos."
+        ],
+        keys: ["ofrenda", "papel picado", "veladora", "cempasúchil", "pan de muerto", "calaverita"],
+        vocab: [["ofrenda", "Altar para recordar a nuestros seres queridos."], ["cempasúchil", "Flor naranja que guía el camino."], ["papel picado", "Papel de colores con figuras recortadas."], ["veladora", "Vela dentro de un vaso de vidrio."], ["calaverita", "Calavera de azúcar con un nombre."], ["pan de muerto", "Pan dulce con “huesitos” encima."]],
+        quiz: [
+          ["¿Para quién es la ofrenda?", ["Para la maestra", "*Para el abuelo Chuy", "Para el perro"]],
+          ["¿Para qué ponen la veladora?", ["*Para que su luz guíe al abuelo", "Para cocinar", "Para jugar"]],
+          ["¿Qué hizo Sofi con los pétalos?", ["Una corona", "*Un caminito hasta el altar", "Los guardó"]],
+          ["¿Cuál era la comida favorita del abuelo?", ["Pozole", "*Tamales", "Tacos"]]
+        ]
+      }
+    }
+  };
+
+  /* Sopas de letras (juego y hoja para imprimir) */
+  WS.length = 0;
+  WS.push(
+    { id: "ddm-en", stage: "en", label: "English", level: "Kids · Children", lang: "en", size: 11, dirs: [[0, 1], [1, 0], [1, 1]], words: ["marigold", "ofrenda", "candle", "skull", "bread", "soul", "photo", "family", "altar"] },
+    { id: "ddm-es", stage: "es", label: "Español", level: "1° a 6°", lang: "es", size: 11, dirs: [[0, 1], [1, 0], [1, 1]], words: ["cempasúchil", "ofrenda", "veladora", "calaverita", "catrina", "altar", "flores", "recuerdo", "vela"] }
+  );
+  /* Dibujos para colorear */
+  COLOR.length = 0;
+  COLOR.push(
+    { id: "ddm-catrina", lang: "en", title: "La Catrina", desc: "A sweet Catrina with a big flowered hat and a bouquet of marigolds.", file: "color-ddm-catrina.png" },
+    { id: "ddm-sugar-skull", lang: "en", title: "Sugar Skull", desc: "A happy sugar skull framed by marigolds and candles.", file: "color-ddm-sugar-skull.png" },
+    { id: "ddm-mi-ofrenda", lang: "es", title: "Mi ofrenda", desc: "Una ofrenda con papel picado, veladoras, pan de muerto y flores.", file: "color-ddm-mi-ofrenda.png" },
+    { id: "ddm-xolo", lang: "es", title: "Xolo y el cempasúchil", desc: "Un xoloitzcuintle feliz con su corona de flores de cempasúchil.", file: "color-ddm-xolo.png" }
+  );
+  COLOR.forEach((c) => { c.svg = cimg(c.file, c.title + (c.lang === "es" ? " · dibujo para colorear" : " coloring page")); c.thumb = c.file.replace(".png", "-th.webp"); });
+
+  /* ---------- Estilos (diseño nuevo de MOVA) ---------- */
+  const css = document.createElement("style");
+  css.textContent = `
+.ddm{--d-ink:#15192B;--d-ink2:#4E5268;--d-ink3:#6A6F85;--d-paper:#F5F3FA;--d-line:#E4E0EE;--d-lime:#D3F36B;--d-pink:#FF8FC0;--d-lav:#E6E2FF;--d-purple:#7B5CF0;--d-mari:#F7931E;max-width:760px;margin:0 auto;padding:6px 16px 40px;font-family:'Plus Jakarta Sans',Poppins,system-ui,sans-serif;color:var(--d-ink)}
+.ddm h1,.ddm h2,.ddm h3,.ddm h4{font-family:'Bricolage Grotesque','Plus Jakarta Sans',sans-serif;letter-spacing:-.01em;margin:0;color:var(--d-ink)}
+.ddm a{text-decoration:none;color:inherit}
+.ddm .d-back{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:14px;color:var(--d-ink2);margin:4px 0 12px}
+.ddm .d-hero{position:relative;border-radius:30px;overflow:hidden;background:#1E1838;aspect-ratio:7/6}
+@media (min-width:640px){.ddm .d-hero{aspect-ratio:16/8}}
+.ddm .d-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:68% 50%}
+.ddm .d-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(21,25,43,0) 38%,rgba(21,25,43,.88) 100%)}
+.ddm .d-hero .tx{position:absolute;left:20px;right:20px;bottom:20px;z-index:2;color:#fff}
+.ddm .d-pill{display:inline-flex;border-radius:999px;padding:6px 12px;font-weight:700;font-size:12px;background:var(--d-lime);color:var(--d-ink)}
+.ddm .d-hero h1{font-size:40px;font-weight:800;line-height:.98;margin:12px 0 8px;color:#fff}
+.ddm .d-hero p{margin:0;font-size:14.5px;line-height:1.45;color:#E6E2FF;max-width:32ch}
+.ddm .d-sh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:30px 0 12px}
+.ddm .d-sh h2{font-size:24px;font-weight:800}.ddm .d-sh span{font-size:13px;color:var(--d-ink3);font-weight:600}
+.ddm .d-stories{display:grid;gap:14px}@media (min-width:640px){.ddm .d-stories{grid-template-columns:1fr 1fr}}
+.ddm .d-rc{display:block;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 1px 0 var(--d-line),0 10px 30px rgba(54,40,120,.08)}
+.ddm .d-rc .im{position:relative;aspect-ratio:16/9;overflow:hidden}.ddm .d-rc .im img{width:100%;height:100%;object-fit:cover;display:block}
+.ddm .d-badge{position:absolute;left:12px;top:12px;background:rgba(21,25,43,.82);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:6px 11px 6px 9px;display:flex;gap:6px;align-items:center}
+.ddm .d-rc .bd{padding:14px 18px 18px}.ddm .d-rc h3{font-size:21px;font-weight:800;line-height:1.1;margin:8px 0 6px}.ddm .d-rc p{margin:0;font-size:14px;color:var(--d-ink2);line-height:1.45}
+.ddm .d-tags{display:flex;gap:6px;flex-wrap:wrap}.ddm .d-tag{font-size:12px;font-weight:700;border-radius:999px;padding:4px 10px}
+.ddm .t-en{background:var(--d-lav);color:#3F2E9C}.ddm .t-es{background:#FFE0EE;color:#9B1F5E}.ddm .t-lv{background:#F2EFF8;color:var(--d-ink2)}.ddm .t-mari{background:#FFEAD1;color:#9A4A00}
+.ddm .d-g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}@media (min-width:640px){.ddm .d-g2.four{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.ddm .d-pc{display:block;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 1px 0 var(--d-line),0 10px 30px rgba(54,40,120,.07)}
+.ddm .d-pc .th{aspect-ratio:1/1;display:grid;place-items:center}.ddm .d-pc .th svg{width:82%;height:auto}
+.ddm .d-pc .bd{padding:11px 13px 14px}.ddm .d-pc h3{font-size:15.5px;font-weight:800;line-height:1.15;margin-top:6px}
+.ddm .d-cc .th{aspect-ratio:3/4;background:#fff;border-bottom:1.5px solid var(--d-line)}.ddm .d-cc .th img{width:88%;height:auto;display:block}
+.ddm .d-pbtn{display:inline-flex;margin-top:8px;font-size:12.5px;font-weight:800;color:var(--d-ink);background:var(--d-lime);border-radius:999px;padding:7px 12px}
+.ddm .d-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.ddm .d-links a{font-size:13px;font-weight:700;border-radius:999px;padding:8px 13px;background:#fff;box-shadow:inset 0 0 0 1.5px var(--d-line);color:var(--d-ink2)}
+.ddm .d-cover{border-radius:30px;overflow:hidden;aspect-ratio:16/10}.ddm .d-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.ddm .d-rh{margin:18px 2px 0}.ddm .d-rh h1{font-size:34px;font-weight:800;line-height:1.02;margin:10px 0 0}
+.ddm .d-player{margin:18px 0 6px;background:var(--d-ink);border-radius:26px;padding:14px 16px;display:flex;align-items:center;gap:14px;color:#fff}
+.ddm .d-play{flex:none;width:58px;height:58px;border-radius:50%;background:var(--d-lime);border:0;display:grid;place-items:center;cursor:pointer}
+.ddm .d-play svg{width:24px;height:24px}
+.ddm .d-player b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:700}
+.ddm .d-player small{display:block;color:#C9CBE0;font-size:12.5px;margin-top:2px}
+.ddm .d-wave{display:flex;align-items:center;gap:3px;height:22px;margin-top:8px}.ddm .d-wave i{width:3px;border-radius:3px;background:#5A5F7A;transition:background .25s}
+.ddm .d-wave i.on{background:var(--d-lime)}
+.ddm .d-player.playing .d-wave i{animation:ddmW 1s ease-in-out infinite}.ddm .d-player.playing .d-wave i:nth-child(odd){animation-delay:.25s}
+@keyframes ddmW{0%,100%{transform:scaleY(.6)}50%{transform:scaleY(1.5)}}
+@media (prefers-reduced-motion:reduce){.ddm .d-player.playing .d-wave i{animation:none}}
+.ddm .d-story{background:#fff;border-radius:28px;padding:22px 20px;margin-top:14px;box-shadow:0 1px 0 var(--d-line)}
+.ddm .d-story p{font-size:17px;line-height:1.75;margin:0 0 14px;color:#232740;border-radius:12px;transition:background .3s,box-shadow .3s}.ddm .d-story p:last-child{margin:0}
+.ddm .d-story p.now{background:#FBFFE9;box-shadow:0 0 0 8px #FBFFE9}
+.ddm .d-kw{background:linear-gradient(transparent 62%,#E8FBA6 62%);font-weight:700;cursor:pointer;border-radius:2px}
+.ddm .d-vg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}@media (min-width:640px){.ddm .d-vg{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ddm .d-vc{border:0;text-align:left;cursor:pointer;border-radius:22px;padding:14px 14px 15px;font:inherit;color:inherit}
+.ddm .d-vc b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:19px;font-weight:800;line-height:1.1;color:var(--d-ink)}
+.ddm .d-vc span{display:block;font-size:13px;line-height:1.4;margin-top:5px;color:var(--d-ink2)}
+.ddm .d-vc i{display:inline-flex;margin-top:9px;width:30px;height:30px;border-radius:50%;background:rgba(21,25,43,.9);align-items:center;justify-content:center}
+.ddm .d-q{background:#fff;border-radius:24px;padding:16px;margin-bottom:12px;box-shadow:0 1px 0 var(--d-line)}
+.ddm .d-q .n{font-size:12px;font-weight:800;color:var(--d-purple)}.ddm .d-q h4{margin:4px 0 12px;font-size:18px;font-weight:700;line-height:1.2}
+.ddm .d-q button{display:block;width:100%;text-align:left;border:0;background:var(--d-paper);border-radius:16px;padding:12px 14px;margin-top:8px;font:600 14.5px 'Plus Jakarta Sans',sans-serif;color:var(--d-ink);cursor:pointer}
+.ddm .d-q button.ok{background:#ECFBC8;box-shadow:inset 0 0 0 1.5px #9CCB2B}.ddm .d-q button.no{background:#FFE6F2;box-shadow:inset 0 0 0 1.5px var(--d-pink)}
+.ddm .d-q .fb{font-size:13px;font-weight:700;margin:10px 0 0}
+.ddm .d-score{background:var(--d-ink);color:#fff;border-radius:26px;padding:18px;display:flex;align-items:center;gap:14px}
+.ddm .d-score .big{font-family:'Bricolage Grotesque',sans-serif;font-size:38px;font-weight:800;color:var(--d-lime);line-height:1}.ddm .d-score p{margin:0;font-size:14px;color:#C9CBE0}
+.ddm .d-again{display:inline-flex;margin-top:14px;border:0;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1.5px var(--d-line);padding:10px 16px;font:700 14px 'Plus Jakarta Sans',sans-serif;color:var(--d-ink);cursor:pointer}
+.ddm .d-wsbox{background:#fff;border-radius:28px;padding:16px;box-shadow:0 1px 0 var(--d-line);max-width:520px}
+.ddm .d-ws{display:grid;gap:4px;touch-action:none;user-select:none;-webkit-user-select:none}
+.ddm .d-ws span{aspect-ratio:1;display:grid;place-items:center;border-radius:10px;background:var(--d-paper);font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(14px,4.3vw,20px);color:var(--d-ink);transition:background .15s}
+.ddm .d-ws span.sel{background:var(--d-lav)}.ddm .d-ws span.f0{background:#FFD9A8}.ddm .d-ws span.f1{background:#FFD0E5}.ddm .d-ws span.f2{background:#DCD4FF}.ddm .d-ws span.f3{background:#E3F8A6}.ddm .d-ws span.f4{background:#C9E6FF}
+.ddm .d-bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.ddm .d-bank span{font-weight:700;font-size:13px;border-radius:999px;padding:7px 12px;background:var(--d-paper);color:var(--d-ink2)}
+.ddm .d-bank span.got{background:var(--d-lime);color:var(--d-ink);text-decoration:line-through}
+.ddm .d-wsh{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 2px 12px}.ddm .d-wsh h1{font-size:28px;font-weight:800}
+.ddm .d-lang{display:flex;background:#fff;border-radius:999px;padding:4px;box-shadow:inset 0 0 0 1.5px var(--d-line)}.ddm .d-lang a{border-radius:999px;padding:7px 12px;font-weight:800;font-size:12.5px;color:var(--d-ink3)}.ddm .d-lang a.on{background:var(--d-ink);color:#fff}
+.ddm .d-done{display:none;margin-top:14px;background:var(--d-ink);color:#fff;border-radius:22px;padding:14px 16px;font-weight:700}.ddm .d-done.on{display:block}
+.ddm .d-note{font-size:13px;color:var(--d-ink3);margin:16px 4px 0;line-height:1.45}
+.ddm :focus-visible{outline:3px solid var(--d-purple);outline-offset:2px}
+.pv-card .art img.ddm-home{width:100%;height:100%;object-fit:cover;display:block}`;
+  document.head.appendChild(css);
+
+  const HP = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="#fff"/><rect x="16" y="14" width="5" height="7" rx="2" fill="#fff"/></svg>';
+  const SPK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#D3F36B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="#D3F36B"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>';
+  const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="#15192B"/></svg>';
+  const PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4.5" width="4" height="15" rx="1.5" fill="#15192B"/><rect x="14" y="4.5" width="4" height="15" rx="1.5" fill="#15192B"/></svg>';
+  const VC = ["#E6E2FF", "#FFE0EE", "#FFF1C2", "#ECFBC8", "#DCE4FF", "#D9F5EC"];
+  const tag = (t, c) => `<span class="d-tag ${c}">${esc(t)}</span>`;
+  const back = (href, label) => `<a class="d-back" href="${href}">${ico("back", 18)} ${label}</a>`;
+  const wsThumb = (es) => {
+    const L = es ? "VCELAADORATRINAF" : "SMARIGOLDKULLCAN", hl = es ? "#FFD54A" : "#D3F36B", tile = es ? "#FFF6FA" : "#F5F3FA";
+    let s = '<svg viewBox="0 0 120 120" aria-hidden="true">';
+    for (let i = 0; i < 16; i++) { const x = 8 + (i % 4) * 25, y = 8 + Math.floor(i / 4) * 25, on = [1, 6, 11, 13].includes(i);
+      s += `<rect x="${x}" y="${y}" width="21" height="21" rx="7" fill="${on ? hl : tile}"/><text x="${x + 10.5}" y="${y + 15.5}" text-anchor="middle" font-family="Bricolage Grotesque,sans-serif" font-weight="800" font-size="13" fill="#15192B">${L[i]}</text>`; }
+    return s + '<circle cx="111" cy="111" r="8" fill="#F7931E"/><circle cx="111" cy="111" r="3.5" fill="#FFD54A"/></svg>';
+  };
+
+  /* ---------- Vitrina ---------- */
+  function viewSeason() {
+    const st = DDM.stories;
+    const storyCard = (s) => `<a class="d-rc" href="#/holidays/story/${s.id}"><div class="im"><img src="${IMG(s.cover + ".webp")}" alt="" loading="lazy"><span class="d-badge">${HP} ${s.es ? "Historia narrada" : "Narrated story"}</span></div><div class="bd"><div class="d-tags">${tag(s.es ? "Español" : "English", s.es ? "t-es" : "t-en")}${tag(s.level, "t-lv")}${tag(s.quiz.length + (s.es ? " preguntas" : " questions"), "t-mari")}</div><h3>${esc(s.title)}</h3><p>${esc(s.desc)}</p></div></a>`;
+    const colorCard = (c) => `<a class="d-pc d-cc" href="#/coloring/${c.id}"><div class="th"><img src="${IMG(c.thumb)}" alt="" loading="lazy"></div><div class="bd"><div class="d-tags">${tag(c.lang === "es" ? "Español" : "English", c.lang === "es" ? "t-es" : "t-en")}</div><h3>${esc(c.title)}</h3><span class="d-pbtn">${c.lang === "es" ? "Imprimir" : "Print"}</span></div></a>`;
+    return {
+      title: "Día de Muertos",
+      html: `<div class="ddm">
+      <div class="d-hero"><img src="${IMG(DDM.hero)}" alt="Ofrenda de Día de Muertos con cempasúchil, veladoras y papel picado"><div class="tx"><span class="d-pill">This season · Nov 1–2</span><h1>Día de Muertos</h1><p>Historias narradas, juegos y dibujos para recordar con cariño.</p></div></div>
+      <div class="d-sh"><h2>Listen &amp; Read</h2><span>2 historias</span></div>
+      <div class="d-stories">${storyCard(st.en)}${storyCard(st.es)}</div>
+      <div class="d-sh"><h2>Play</h2><span>Sopas de letras</span></div>
+      <div class="d-g2">
+        <a class="d-pc" href="#/holidays/sopa/en"><div class="th" style="background:#2A1F4E">${wsThumb(false)}</div><div class="bd"><div class="d-tags">${tag("English", "t-en")}</div><h3>Day of the Dead WordSearch</h3></div></a>
+        <a class="d-pc" href="#/holidays/sopa/es"><div class="th" style="background:#FF8FC0">${wsThumb(true)}</div><div class="bd"><div class="d-tags">${tag("Español", "t-es")}</div><h3>Sopa de letras de Día de Muertos</h3></div></a>
+      </div>
+      <div class="d-sh"><h2>Print &amp; Color</h2><span>Tamaño carta</span></div>
+      <div class="d-g2 four">${COLOR.map(colorCard).join("")}</div>
+      <div class="d-links"><a href="#/wordsearch/ddm-en">Printable WordSearch · English</a><a href="#/wordsearch/ddm-es">Sopa de letras para imprimir</a></div>
+    </div>`
+    };
+  }
+
+  /* ---------- Historia narrada ---------- */
+  function viewStory(id) {
+    const s = DDM.stories[id];
+    if (!s) return viewNotFound("We couldn’t find that story.", "#/holidays", "This season");
+    const mark = (p) => { s.keys.forEach((k) => { p = p.replace(new RegExp("(^|[^\\wáéíóúñ])(" + k + ")(?![\\wáéíóúñ])", "i"), (m, a, w) => `${a}<span class="d-kw" data-say="${esc(w)}">${w}</span>`); }); return p; };
+    const bars = [8, 14, 10, 18, 12, 20, 9, 16, 22, 11, 15, 8, 19, 13, 17, 10, 21, 12, 9, 16, 14, 8, 18, 11].map((h) => `<i style="height:${h}px"></i>`).join("");
+    const q = s.quiz.map(([qq, opts], n) => `<div class="d-q"><span class="n">${s.es ? "Pregunta" : "Question"} ${n + 1} ${s.es ? "de" : "of"} ${s.quiz.length}</span><h4>${esc(qq)}</h4>${opts.map((o) => `<button type="button"${o[0] === "*" ? " data-ok" : ""}>${esc(o.replace(/^\*/, ""))}</button>`).join("")}<p class="fb" aria-live="polite"></p></div>`).join("");
+    return {
+      title: s.title,
+      html: `<div class="ddm" lang="${s.es ? "es" : "en"}">
+      <div class="d-cover"><img src="${IMG(s.cover + "-hd.webp")}" alt=""></div>
+      <div class="d-rh"><div class="d-tags">${tag(s.es ? "Español" : "English", s.es ? "t-es" : "t-en")}${tag(s.level, "t-lv")}${tag(s.es ? "Día de Muertos" : "Day of the Dead", "t-mari")}</div><h1>${esc(s.title)}</h1></div>
+      <div class="d-player"><button class="d-play" type="button" aria-label="${s.es ? "Escuchar la historia" : "Listen to the story"}">${PLAY}</button><div style="flex:1;min-width:0"><b>${s.es ? "Escuchar la historia" : "Listen to the story"}</b><small>${s.narr}</small><div class="d-wave" aria-hidden="true">${bars}</div></div></div>
+      <div class="d-story">${s.text.map((p) => `<p>${mark(esc(p))}</p>`).join("")}</div>
+      <div class="d-sh"><h2>${s.es ? "Vocabulario clave" : "Key vocabulary"}</h2><span>${s.es ? "Toca para escuchar" : "Tap to listen"}</span></div>
+      <div class="d-vg">${s.vocab.map(([w, d], i) => `<button type="button" class="d-vc" style="background:${VC[i % 6]}" data-say="${esc(w)}"><b>${esc(w)}</b><span>${esc(d)}</span><i>${SPK}</i></button>`).join("")}</div>
+      <div class="d-sh"><h2>${s.es ? "Comprensión lectora" : "Reading comprehension"}</h2><span>${s.quiz.length} ${s.es ? "preguntas" : "questions"}</span></div>
+      <div class="d-quiz">${q}<div class="d-score" hidden><span class="big"></span><p>${s.es ? "¡Terminaste! Puedes volver a escuchar la historia cuando quieras." : "You finished! Listen to the story again anytime."}</p></div><button type="button" class="d-again" hidden>${s.es ? "Intentar de nuevo" : "Try again"}</button></div>
+    </div>`,
+      mount(root) {
+        const S = window.speechSynthesis, paras = [...root.querySelectorAll(".d-story p")], player = root.querySelector(".d-player"), btn = root.querySelector(".d-play"), bars = [...root.querySelectorAll(".d-wave i")];
+        let on = false, idx = 0;
+        const say = (t, rate) => { if (!S) return; S.cancel(); stopUI(); const u = new SpeechSynthesisUtterance(t); u.lang = s.lang; u.rate = rate || .9; u.movaGender = "f"; S.speak(u); };
+        const progress = (i) => { paras.forEach((p, k) => p.classList.toggle("now", k === i)); const n = Math.round((i + 1) / paras.length * bars.length); bars.forEach((b, k) => b.classList.toggle("on", k < n)); };
+        function stopUI() { on = false; player.classList.remove("playing"); btn.innerHTML = PLAY; paras.forEach((p) => p.classList.remove("now")); }
+        function next() {
+          if (!on) return;
+          if (idx >= paras.length) { stopUI(); idx = 0; return; }
+          const i = idx, u = new SpeechSynthesisUtterance(s.text[i]); u.lang = s.lang; u.rate = s.es ? .9 : .88; u.movaGender = "f";
+          u.onstart = () => progress(i);
+          u.onend = () => { if (!on) return; idx = i + 1; next(); };
+          u.onerror = (e) => { if (e && e.error === "canceled") return; stopUI(); };
+          S.speak(u);
+        }
+        if (S && window.MovaVoice && window.MovaVoice.natural) window.MovaVoice.natural.prefetch(s.text, s.lang, s.es ? .9 : .88);
+        btn.addEventListener("click", () => {
+          if (!S) return;
+          if (on) { on = false; S.cancel(); stopUI(); return; }
+          S.cancel(); on = true; player.classList.add("playing"); btn.innerHTML = PAUSE; next();
+        });
+        root.querySelectorAll("[data-say]").forEach((el) => el.addEventListener("click", () => { on = false; say(el.dataset.say, .85); }));
+        const qs = [...root.querySelectorAll(".d-q")], score = root.querySelector(".d-score"), again = root.querySelector(".d-again");
+        let got = 0, done = 0;
+        qs.forEach((q) => q.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
+          if (q.dataset.d) return; q.dataset.d = "1"; done++;
+          const ok = b.hasAttribute("data-ok"); b.classList.add(ok ? "ok" : "no"); if (!ok) q.querySelector("[data-ok]").classList.add("ok"); if (ok) got++;
+          const fb = q.querySelector(".fb"); fb.textContent = ok ? (s.es ? "¡Muy bien!" : "Great job!") : (s.es ? "La respuesta correcta está en verde." : "The right answer is in green."); fb.style.color = ok ? "#3E6A0E" : "#B0246A";
+          if (done === qs.length) { score.hidden = false; score.style.display = "flex"; score.querySelector(".big").textContent = got + "/" + qs.length; again.hidden = false; }
+        })));
+        again.addEventListener("click", () => { got = 0; done = 0; qs.forEach((q) => { delete q.dataset.d; q.querySelectorAll("button").forEach((b) => b.classList.remove("ok", "no")); q.querySelector(".fb").textContent = ""; }); score.hidden = true; score.style.display = ""; again.hidden = true; qs[0].scrollIntoView({ behavior: "smooth", block: "center" }); });
+      }
+    };
+  }
+
+  /* ---------- Sopa de letras interactiva ---------- */
+  function viewSopa(lang) {
+    const ws = WS.find((x) => x.id === "ddm-" + lang), res = ws && buildWS(ws);
+    if (!res) return viewNotFound("We couldn’t find that word search.", "#/holidays", "This season");
+    const es = lang === "es", N = ws.size;
+    return {
+      title: es ? "Sopa de letras de Día de Muertos" : "Day of the Dead WordSearch",
+      html: `<div class="ddm" lang="${es ? "es" : "en"}">      <div class="d-wsh"><h1>${es ? "Día de Muertos" : "Day of the Dead"}</h1><div class="d-lang"><a href="#/holidays/sopa/en" class="${es ? "" : "on"}">EN</a><a href="#/holidays/sopa/es" class="${es ? "on" : ""}">ES</a></div></div>
+      <div class="d-wsbox"><div class="d-ws" style="grid-template-columns:repeat(${N},1fr)">${res.g.flat().map((ch, i) => `<span data-i="${i}">${ch}</span>`).join("")}</div>
+      <div class="d-bank">${res.placed.map((p) => p.w).sort().map((w) => `<span data-w="${esc(w)}">${esc(w)}</span>`).join("")}</div>
+      <div class="d-done" aria-live="polite">${es ? "¡Encontraste todas las palabras!" : "You found all the words!"}</div></div>
+      <p class="d-note">${es ? "Desliza el dedo sobre las letras para encontrar cada palabra. Al encontrarla, se pinta de color y la escuchas." : "Slide your finger over the letters to find each word. When you find it, it lights up and you hear it."}</p>
+      <div class="d-links"><a href="#/wordsearch/ddm-${lang}">${es ? "Imprimir esta sopa de letras" : "Print this WordSearch"}</a></div></div>`,
+      mount(root) {
+        const grid = root.querySelector(".d-ws"), cells = [...grid.children], found = new Set();
+        let start = null, path = [], col = 0;
+        const at = (e) => { const t = document.elementFromPoint(e.clientX, e.clientY); return t && t.dataset && t.dataset.i !== undefined && grid.contains(t) ? +t.dataset.i : null; };
+        const line = (a, b) => { const r0 = Math.floor(a / N), c0 = a % N, r1 = Math.floor(b / N), c1 = b % N; if (!(r0 === r1 || c0 === c1 || Math.abs(r1 - r0) === Math.abs(c1 - c0))) return [a]; const dr = Math.sign(r1 - r0), dc = Math.sign(c1 - c0), len = Math.max(Math.abs(r1 - r0), Math.abs(c1 - c0)), o = []; for (let i = 0; i <= len; i++) o.push((r0 + dr * i) * N + c0 + dc * i); return o; };
+        const paint = () => cells.forEach((c, i) => c.classList.toggle("sel", path.includes(i)));
+        grid.addEventListener("pointerdown", (e) => { const i = at(e); if (i === null) return; e.preventDefault(); start = i; path = [i]; paint(); try { grid.setPointerCapture(e.pointerId); } catch (err) {} });
+        grid.addEventListener("pointermove", (e) => { if (start === null) return; const i = at(e); if (i !== null) { path = line(start, i); paint(); } });
+        const end = () => {
+          if (start === null) return;
+          const key = path.join(), hit = res.placed.find((p) => !found.has(p.w) && (p.cells.join() === key || p.cells.slice().reverse().join() === key));
+          if (hit) {
+            found.add(hit.w); const c = "f" + (col++ % 5); hit.cells.forEach((i) => cells[i].classList.add(c));
+            const b = root.querySelector(`.d-bank [data-w="${hit.w}"]`); if (b) b.classList.add("got");
+            if (window.speechSynthesis) { const u = new SpeechSynthesisUtterance(hit.w); u.lang = es ? "es-MX" : "en-US"; u.rate = .85; speechSynthesis.cancel(); speechSynthesis.speak(u); }
+            if (found.size === res.placed.length) root.querySelector(".d-done").classList.add("on");
+          }
+          start = null; path = []; paint();
+        };
+        grid.addEventListener("pointerup", end); grid.addEventListener("pointercancel", end);
+        if (window.MovaVoice && window.MovaVoice.natural) window.MovaVoice.natural.prefetch(ws.words, es ? "es-MX" : "en-US", .85);
+      }
+    };
+  }
+
+  /* ---------- Dibujos y hojas para imprimir ---------- */
+  const lbl = (c) => (c.lang === "es" ? "Español" : "English");
+  function viewColoring2() {
+    const card = (c) => `<a class="d-pc d-cc" href="#/coloring/${c.id}"><div class="th"><img src="${IMG(c.thumb)}" alt="" loading="lazy"></div><div class="bd"><div class="d-tags">${tag(lbl(c), c.lang === "es" ? "t-es" : "t-en")}</div><h3>${esc(c.title)}</h3><span class="d-pbtn">${c.lang === "es" ? "Imprimir" : "Print"}</span></div></a>`;
+    return { title: "Coloring Pages", html: `<div class="ddm">      <div class="d-wsh" style="margin-top:4px"><h1>Coloring Pages</h1></div>
+      <p class="d-note" style="margin-top:0">Dibujos para colorear y sopas de letras de temporada, listos para imprimir en tamaño carta.</p>
+      <div class="d-sh"><h2>Día de Muertos</h2><span>4 dibujos</span></div>
+      <div class="d-g2 four">${COLOR.map(card).join("")}</div>
+      <div class="d-sh"><h2>WordSearch</h2><span>Con clave</span></div>
+      <div class="d-links"><a href="#/wordsearch/ddm-en">Printable WordSearch · English</a><a href="#/wordsearch/ddm-es">Sopa de letras para imprimir</a></div></div>` };
+  }
+  function viewColorPage2(id) {
+    const c = COLOR.find((x) => x.id === id);
+    if (!c) return viewNotFound("We couldn’t find that coloring page.", "#/coloring", "Coloring Pages");
+    return { title: c.title, html: printHead("#/holidays", "Día de Muertos", [lbl(c), c.lang === "es" ? "Dibujo para colorear" : "Coloring page"], c.title, c.desc) + `
+    <div class="wrap sheet-wrap"><div class="sheet color-sheet"><div class="sheet-top"><b>MOVA</b><span>Learning Studio</span></div><div class="sheet-name"><span>${c.lang === "es" ? "Nombre:" : "Name:"}</span><span>${c.lang === "es" ? "Fecha:" : "Date:"}</span></div><div class="art">${c.svg}</div></div></div>` };
+  }
+  function viewWsPrint2(id) {
+    const ws = WS.find((x) => x.id === id), res = ws && buildWS(ws);
+    if (!res) return viewNotFound("We couldn’t find that word search.", "#/coloring", "Coloring Pages");
+    const N = ws.size, keyCells = new Set(res.placed.flatMap((p) => p.cells)), es = ws.lang === "es";
+    const grid = (key) => `<div class="ws-grid" style="grid-template-columns:repeat(${N},1fr)">${res.g.flat().map((ch, i) => `<span class="${key && keyCells.has(i) ? "k" : ""}">${ch}</span>`).join("")}</div>`;
+    const t = es ? "Sopa de letras de Día de Muertos" : "Day of the Dead WordSearch";
+    return { title: t, html: printHead("#/holidays", "Día de Muertos", [ws.label, ws.level], t, es ? "Encuentra las palabras escondidas. La clave de respuestas está en la segunda hoja." : "Find the hidden words. The answer key is on the second page.") + `
+    <div class="wrap sheet-wrap"><div class="sheet ws-sheet"><div class="sheet-top"><b>MOVA</b><span>Learning Studio</span></div><div class="sheet-name"><span>${es ? "Nombre:" : "Name:"}</span><span>${es ? "Fecha:" : "Date:"}</span></div>
+      <h2 class="sheet-title">${t}</h2><p class="sheet-instr">${es ? "Encuentra y encierra las palabras del banco. Van a lo ancho, hacia abajo y en diagonal." : "Find and circle the words. They go across, down and diagonally."}</p>
+      ${grid(false)}<div class="ws-bank">${res.placed.map((p) => p.w).sort().map((w) => `<span>${esc(w)}</span>`).join("")}</div>
+      <div class="ws-key"><h3>${es ? "Clave de respuestas" : "Answer key"}</h3>${grid(true)}</div>
+      <div class="sheet-foot"><span>MOVA Centro Pedagógico</span><span>${esc(ws.label)} · ${esc(ws.level)}</span></div></div></div>` };
+  }
+
+  ROUTES.holidays = (p) => (p[0] === "story" ? viewStory(p[1]) : p[0] === "sopa" ? viewSopa(p[1]) : viewSeason());
+  ROUTES.coloring = (p) => (p[0] ? viewColorPage2(p[0]) : viewColoring2());
+  ROUTES.wordsearch = (p) => viewWsPrint2(p[0]);
+  window.addEventListener("hashchange", () => { try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {} });
+
+  /* Home: tarjeta "This season" */
+  const prevHome = window.viewHome;
+  window.viewHome = function () {
+    const v = prevHome();
+    v.html = v.html.replace(/<a class="pv-card" href="#\/holidays">[\s\S]*?<\/a>/, `<a class="pv-card" href="#/holidays"><div class="art" aria-hidden="true"><img class="ddm-home" src="${IMG(DDM.hero)}" alt=""></div><div class="tg"><span>Día de Muertos</span><span>English</span><span>Español</span></div><h3>Día de Muertos</h3><p>Historias narradas, sopas de letras y dibujos para colorear.</p><span class="cta">See activities →</span></a>`);
+    return v;
+  };
+  /* Print & Learn: acceso a dibujos de temporada */
+  const prevRes2 = window.viewResources;
+  window.viewResources = function () {
+    const v = prevRes2();
+    v.html = v.html.replace("Dibujos para colorear y sopas de letras de Halloween para imprimir.", "Dibujos para colorear y sopas de letras de Día de Muertos para imprimir.");
+    return v;
+  };
 })();
 
 /* ---------- Arranque ---------- */

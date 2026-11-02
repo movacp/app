@@ -89,24 +89,6 @@ insertAfter("juego-locked-library.html", {
   description: "Escape from the haunted mansion: answer the ghosts’ riddles, collect the keys and find the treasure."
 });
 GAME_ART["juego-haunted-mansion.html"] = scene("#2A2440", photo(IMG_DIR + "thumb-haunted-mansion.webp"));
-/* También aparece en la vitrina de temporada (sección Play de Halloween) */
-(function () {
-  const add = () => {
-    const h = document.getElementById("h-play"); if (!h) return;
-    const sec = h.closest("section"), grid = sec && sec.querySelector(".grid");
-    if (!grid || grid.querySelector("[data-hm]") || !grid.firstElementChild) return;
-    const c = grid.firstElementChild.cloneNode(true); c.setAttribute("data-hm", "1");
-    const a = c.matches("a") ? c : c.querySelector("a"); if (a) a.setAttribute("href", "juego-haunted-mansion.html");
-    const art = c.querySelector("svg"); if (art) art.outerHTML = GAME_ART["juego-haunted-mansion.html"];
-    const chips = c.querySelectorAll(".chip"); ["Halloween", "Escape room", "Kids · Children · Teens"].forEach((t, i) => { if (chips[i]) chips[i].textContent = t; });
-    const t = c.querySelector("h3, h2"); if (t) t.textContent = "The Haunted Mansion";
-    const d = [...c.querySelectorAll("p")].find((p) => !p.closest(".chips")); if (d) d.textContent = "Answer the ghosts’ riddles, collect the keys and find the treasure.";
-    grid.prepend(c);
-  };
-  new MutationObserver(add).observe(document.body, { childList: true, subtree: true });
-  add();
-})();
-
 /* ---------- Escape rooms · Lost in the Museum ---------- */
 insertAfter("juego-haunted-mansion.html", {
   file: "juego-lost-in-the-museum.html", title: "Lost in the Museum", color: "sky", tag: "Kids · Children · Teens", skill: "Escape room · Reading",
@@ -142,9 +124,9 @@ insertAfter("juego-the-detectives-case.html", {
 });
 GAME_ART["juego-trapped-in-the-train.html"] = scene("#2A1E16", photo(IMG_DIR + "thumb-trapped-in-the-train.webp"));
 
-/* ---------- Vitrina de temporada · imagen principal de Halloween ---------- */
+/* ---------- Vitrina de temporada · imagen principal (Día de Muertos, nov 2026) ---------- */
 (function () {
-  const IMG = photo(IMG_DIR + "banner-halloween.webp");
+  const IMG = photo(IMG_DIR + "banner-dia-de-muertos.webp");
   const isArt = (svg) => { const vb = (svg.getAttribute("viewBox") || "").split(/[\s,]+/).map(Number); return vb.length === 4 && vb[2] >= 200; };
   const put = () => {
     /* Página de la vitrina */
@@ -157,7 +139,6 @@ GAME_ART["juego-trapped-in-the-train.html"] = scene("#2A1E16", photo(IMG_DIR + "
     document.querySelectorAll("h2, h3").forEach((t) => {
       const txt = t.textContent.trim().toLowerCase();
       if (txt === "this season") { const sec = t.closest("section") || t.parentElement; if (sec) boxes.add(sec); }
-      if (txt === "halloween") { const card = t.closest("a, article, .card, li"); if (card && !card.closest(".hol-hero")) boxes.add(card); }
     });
     boxes.forEach((b) => {
       if (b.hasAttribute("data-hero-img")) return;
