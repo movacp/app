@@ -727,6 +727,15 @@ document.head.insertAdjacentHTML("beforeend", `<style>
 .dlv a{grid-template-columns:auto 1fr}
 .fart{display:block;width:100%;max-width:340px;height:auto;margin:0 auto 6px}
 .ftop{display:grid;place-items:center;padding:10px 0 4px}
+#f-list a.flc{grid-template-columns:1fr;align-items:stretch;gap:0;padding:12px;border-radius:24px}
+#f-list a.flc .pic{width:100%;height:auto;aspect-ratio:16/9;border-radius:18px;background:#EDE6FB}
+#f-list a.flc .pic img{width:100%;height:100%;object-fit:cover;display:block}
+.flc-body{display:block;padding:14px 6px 6px}
+.flc-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.flc-tags span{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--c2);color:inherit}
+.flc-body b{display:block;font-size:18px;line-height:1.25}
+.flc-body small{display:block;margin-top:6px;opacity:.7}
+img.fart{display:block;width:100%;max-width:560px;aspect-ratio:16/9;object-fit:cover;border-radius:22px;margin:0 auto 10px;box-shadow:0 12px 30px rgba(26,27,46,.12)}
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}
 .confetti i{position:absolute;top:-14px;width:10px;height:14px;border-radius:3px;animation:cf 1.9s ease-in forwards}
 @keyframes cf{to{transform:translateY(105vh) rotate(540deg);opacity:.9}}
@@ -782,7 +791,10 @@ const FART = {
   abejas: `<g ${S}><path d="M26 74c0-12 2-20 8-26" fill="none" stroke="#3E9B6B"/><path d="M34 48c-8-6-6-16 2-16 4 6 2 12-2 16zM34 48c8-6 16-2 14 6-6 2-12 0-14-6zM34 48c-2 8-10 12-14 6 2-6 8-8 14-6z" fill="#F7C6D6"/><circle cx="34" cy="46" r="4" fill="#F2C14E"/><ellipse cx="78" cy="38" rx="18" ry="13" fill="#F2C14E"/><path d="M70 26v24M80 25v26" stroke-width="5"/><ellipse cx="72" cy="20" rx="9" ry="7" fill="#fff" opacity=".9"/><ellipse cx="86" cy="20" rx="9" ry="7" fill="#fff" opacity=".9"/><path d="M96 38l8 0"/></g><g stroke="#1E3A5F" stroke-width="1.8" stroke-dasharray="3 4" fill="none"><path d="M40 40c10-10 18-16 22-12"/></g><circle cx="64" cy="35" r="1.8" fill="#1E3A5F"/>`,
   valentina: `<g ${S}><rect x="12" y="40" width="96" height="30" rx="4" fill="#FFFDFA"/></g><g fill="#1E3A5F"><rect x="22" y="40" width="5" height="17"/><rect x="34" y="40" width="5" height="17"/><rect x="52" y="40" width="5" height="17"/><rect x="64" y="40" width="5" height="17"/><rect x="76" y="40" width="5" height="17"/><rect x="94" y="40" width="5" height="17"/></g><g stroke="#1E3A5F" stroke-width="1.6"><path d="M24 57v13M36 57v13M48 40v30M60 57v13M72 57v13M84 57v13M96 57v13"/></g><g fill="#E8846B" stroke="#1E3A5F" stroke-width="2"><ellipse cx="34" cy="26" rx="5" ry="4"/><ellipse cx="80" cy="20" rx="5" ry="4"/></g><g stroke="#1E3A5F" stroke-width="2.2" fill="none"><path d="M39 26V10l10 3M85 20V6"/></g><circle cx="58" cy="16" r="3" fill="#6FA8D6"/><circle cx="100" cy="28" r="2.5" fill="#F2C14E"/>`
 };
-const fArt = (id, cls) => `<svg viewBox="0 0 120 80" class="${cls || ""}" aria-hidden="true">${FART[id] || ""}</svg>`;
+const FL_COVERS = ["lolo", "lluvia", "mercado", "frijol", "colibri", "abuela", "silla", "volcanes", "ballena", "huerto", "abejas", "valentina"];
+const fArt = (id, cls) => FL_COVERS.includes(id)
+  ? `<img src="thumb-r-fl-${id}.webp" srcset="thumb-r-fl-${id}.webp 800w, thumb-r-fl-${id}-hd.webp 1280w" sizes="(min-width:720px) 50vw, 100vw" class="fl-img ${cls || ""}" alt="" loading="lazy" decoding="async">`
+  : `<svg viewBox="0 0 120 80" class="${cls || ""}" aria-hidden="true">${FART[id] || ""}</svg>`;
 
 /* Ilustraciones de cada nivel de dictado */
 const DART = {
@@ -1032,7 +1044,7 @@ function viewFluidez() {
     mount(root) {
       const paint = () => {
         $$(".fgr button", root).forEach((b) => b.setAttribute("aria-pressed", +b.dataset.g === fGrade));
-        $("#f-list", root).innerHTML = FLUIDEZ.filter((f) => !fGrade || f.grade === fGrade).map((f) => `<a href="#/lectoescritura/fluidez/${f.id}" style="${styleC({ c: ["coral", "mustard", "sky", "mint", "navy", "coral"][f.grade - 1] })}"><span class="pic">${fArt(f.id)}</span><span><b>${f.title}</b><small>${f.grade}° primaria · ${wc(f.text)} palabras</small></span></a>`).join("");
+        $("#f-list", root).innerHTML = FLUIDEZ.filter((f) => !fGrade || f.grade === fGrade).map((f) => `<a class="flc" href="#/lectoescritura/fluidez/${f.id}" style="${styleC({ c: ["coral", "mustard", "sky", "mint", "navy", "coral"][f.grade - 1] })}"><span class="pic">${fArt(f.id)}</span><span class="flc-body"><span class="flc-tags"><span>${f.grade}° de primaria</span><span>${wc(f.text)} palabras</span></span><b>${f.title}</b><small>Lectura cronometrada · en voz alta</small></span></a>`).join("");
       };
       $$(".fgr button", root).forEach((b) => (b.onclick = () => { fGrade = +b.dataset.g; paint(); }));
       paint();
