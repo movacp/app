@@ -1,6 +1,6 @@
 /* MOVA · carga el tema 2026 en los juegos (tipografía, colores y botón Home) */
 (function(){ try{ if(window.__movaThemeLoader || !/juego-|mova-live/.test(location.pathname)) return; window.__movaThemeLoader = 1;
-  var s = document.createElement('script'); s.src = 'mova-theme.js?v=27'; (document.head || document.documentElement).appendChild(s); }catch(e){} })();
+  var s = document.createElement('script'); s.src = 'mova-theme.js?v=29'; (document.head || document.documentElement).appendChild(s); }catch(e){} })();
 /* MOVA Learning Studio: inicio de sesión opcional para alumnos MOVA y registro de avance.
    La app sigue abierta para todos; si el alumno entra con su cuenta, se guarda su práctica. */
 (function () {

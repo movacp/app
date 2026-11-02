@@ -60,6 +60,7 @@
   }
   function run(){ dropPoppins(); surface(); homeButtons(); }
   try{ var me = d.createElement('script'); me.src = 'mova-entry.js?v=36'; head.appendChild(me); }catch(e){}
+  try{ var mp = d.createElement('script'); mp.src = 'mova-play.js?v=2'; head.appendChild(mp); }catch(e){}
   if(d.readyState === 'loading') d.addEventListener('DOMContentLoaded', run); else run();
   try{ new MutationObserver(homeButtons).observe(d.documentElement, { childList: true, subtree: true }); }catch(e){}
 })();
