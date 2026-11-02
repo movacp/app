@@ -112,8 +112,8 @@
 
   function langOf(u){ return String(u.lang || 'en-US').slice(0,2).toLowerCase(); }
   function usable(u){
-    if(off || fails >= 3 || u.movaKeep) return false;
-    if(!/\S/.test(u.text || '') || String(u.text).length > 800) return false;
+    if(u.movaKeep) return false;
+    if(!/\S/.test(u.text || '')) return false;
     return !!CFG.voices[langOf(u)];
   }
   /* Voces MOVA (oct 2026):
@@ -134,7 +134,6 @@
   }
   function voiceOf(u){
     var V = CFG.voices[langOf(u)];
-    if(u.movaVoice && langOf(u) === 'en' && /^[cfm]$/.test(u.movaVoice)) return u.movaVoice;
     if(u.movaGender === 'm') return V.m;
     if(langOf(u) === 'es') return V.kid;
     return teensNow() ? V.f : V.kid;
@@ -163,10 +162,10 @@
   }
   /* máximo 3 audios nuevos generándose a la vez */
   var active = 0, waiting = [];
-  function limited(job){
+  function limited(job, quiet){
     return new Promise(function(ok, bad){
       function run(){ active++; job().then(ok, bad).then(function(){ active--; if(waiting.length) waiting.shift()(); }); }
-      if(active < 3) run(); else waiting.push(run);
+      if(active < 3) run(); else if(quiet) waiting.push(run); else waiting.unshift(run);
     });
   }
   function urlFor(text, voice, speed, lang, quiet){
@@ -184,7 +183,7 @@
               body: JSON.stringify({ text: text, voice: voice, speed: speed, lang: lang })
             }).then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
               .then(function(j){ if(!j || !j.url) throw 'nourl'; remember(h); return j.url; });
-          });
+          }, quiet);
         });
     });
     urls[id] = p;
@@ -201,34 +200,68 @@
     return new Promise(function(ok, bad){ var t = setTimeout(function(){ bad('timeout'); }, ms); p.then(function(v){ clearTimeout(t); ok(v); }, function(e){ clearTimeout(t); bad(e); }); });
   }
 
+  /* Divide textos largos (lecturas completas) en partes para que siempre suenen con la voz MOVA */
+  function chunks(t){
+    var parts = t.match(/[^.!?…;:]+[.!?…;:]+["”»)]*\s*|[^.!?…;:]+$/g) || [t], out = [], cur = '';
+    parts.forEach(function(p){
+      while(p.length > 380){ var cut = p.lastIndexOf(' ', 380); if(cut < 100) cut = 380; if(cur){ out.push(cur); cur = ''; } out.push(p.slice(0, cut)); p = p.slice(cut); }
+      if((cur + p).length > 380 && cur){ out.push(cur); cur = ''; }
+      cur += p;
+    });
+    if(cur.trim()) out.push(cur);
+    return out.map(clean).filter(function(x){ return /\S/.test(x); });
+  }
+  var waitTap = null;
+  document.addEventListener('pointerdown', function(){ if(waitTap){ var f = waitTap; waitTap = null; f(); } }, true);
   function next(){
     if(playing || !queue.length) return;
     var item = queue.shift(), my = gen; playing = item;
     var u = item.u;
     function done(){ if(my !== gen) return; playing = null; next(); }
+    function finish(){ if(my !== gen) return; if(item.last !== false) fire(u, 'end'); done(); }
     function fallback(){
       if(my !== gen) return;
-      u.addEventListener('end', done); u.addEventListener('error', done);
-      item.device = true; deviceSpeak(u);
+      if(!item.retried && item.args){
+        item.retried = true;
+        delete urls[item.args.id];
+        item.url = urlFor.apply(null, item.args.a);
+        item.url.catch(function(){});
+        playing = null; queue.unshift(item); next(); return;
+      }
+      /* Sin internet: única excepción, para que el ejercicio no se quede mudo */
+      if(navigator.onLine === false && item.last !== false){
+        u.addEventListener('end', done); u.addEventListener('error', done);
+        item.device = true; deviceSpeak(u); return;
+      }
+      finish();
     }
     if(!item.url){ fallback(); return; }
-    withTimeout(item.url, 9000).then(function(src){
+    withTimeout(item.url, item.retried ? 20000 : 15000).then(function(src){
       if(my !== gen) return;
-      audio.onended = function(){ if(my !== gen) return; fire(u, 'end'); done(); };
+      audio.onended = function(){ if(my !== gen) return; finish(); };
       audio.onerror = function(){ if(my !== gen) return; audio.onended = audio.onerror = null; fallback(); };
       audio.src = src; audio.playbackRate = 1;
       var p = audio.play();
-      fire(u, 'start');
-      if(p && p.catch) p.catch(function(){ if(my !== gen) return; audio.onended = audio.onerror = null; fallback(); });
+      if(item.first !== false) fire(u, 'start');
+      if(p && p.catch) p.catch(function(err){
+        if(my !== gen) return;
+        if(err && err.name === 'NotAllowedError'){ waitTap = function(){ if(my !== gen) return; var q = audio.play(); if(q && q.catch) q.catch(function(){ audio.onended = audio.onerror = null; finish(); }); }; return; }
+        audio.onended = audio.onerror = null; fallback();
+      });
     }, function(){ fallback(); });
   }
 
   S.speak = function(u){
     try{
       if(usable(u)){
-        var text = clean(u.text), item = { u: u, url: urlFor(text, voiceOf(u), speedOf(u), langOf(u)) };
-        item.url.catch(function(){});
-        queue.push(item); next(); return;
+        var v = voiceOf(u), sp = speedOf(u), lg = langOf(u), cs = chunks(clean(u.text));
+        cs.forEach(function(t, i){
+          var id = CFG.version + '|' + lg + '|' + v + '|' + sp + '|' + t;
+          var item = { u: u, url: urlFor(t, v, sp, lg), args: { id: id, a: [t, v, sp, lg] }, first: i === 0, last: i === cs.length - 1 };
+          item.url.catch(function(){});
+          queue.push(item);
+        });
+        next(); return;
       }
     }catch(e){}
     if(!/\S/.test(u.text || '')) unlock();
@@ -239,7 +272,8 @@
     var was = playing, rest = queue; gen++; queue = []; playing = null;
     try{ audio.onended = audio.onerror = null; audio.pause(); }catch(e){}
     if(was && !was.device) fire(was.u, 'error', { error: 'interrupted' });
-    rest.forEach(function(it){ fire(it.u, 'error', { error: 'canceled' }); });
+    var seen = was ? [was.u] : [];
+    rest.forEach(function(it){ if(seen.indexOf(it.u) < 0){ seen.push(it.u); fire(it.u, 'error', { error: 'canceled' }); } });
     return deviceCancel();
   };
   window.MovaVoice = window.MovaVoice || {};
