@@ -11,6 +11,12 @@
       var vs = document.createElement("script"); vs.src = "mova-voice.js"; (document.head || document.documentElement).appendChild(vs);
     }
   } catch (e) {}
+  /* Online now, Play live, aviso de reto y personajes */
+  try {
+    if (!window.MovaOnline && !document.querySelector('script[src*="mova-online.js"]')) {
+      var os = document.createElement("script"); os.src = "mova-online.js?v=48"; (document.head || document.documentElement).appendChild(os);
+    }
+  } catch (e) {}
   var SB_URL = "https://fclafxrkibvcjktrgznt.supabase.co";
   var SB_KEY = "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6";
   var K_USER = "mova_student", K_PEND = "mova_pending", K_QUEUE = "mova_queue";
@@ -476,6 +482,7 @@
       var tok2 = user.token;
       tick(); flushPending(); cur = null;
       setTimeout(function () { rpc("student_logout", { p_token: tok2 }).catch(function () {}); }, 2500);
+      try { if (window.MovaOnline) MovaOnline.leave(); } catch (e) {}
       user = null; set(K_USER, null); set(K_PEND, null); set(K_PROG, null); renderChip(); closePage(); toast("Sesión cerrada");
     };
   }

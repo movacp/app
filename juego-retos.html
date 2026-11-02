@@ -397,7 +397,17 @@ function ico(n, s) { return '<svg viewBox="0 0 24 24" width="' + (s || 20) + '" 
 var AVC = ["#FF8FB1", "#5BC0F0", "#FCE38A", "#4FD1A5", "#B98CFF", "#FF8A6B"];
 function avColor(id) { var h = 0; String(id).split("").forEach(function (c) { h = (h * 31 + c.charCodeAt(0)) >>> 0; }); return AVC[h % AVC.length]; }
 function ini(n) { return String(n || "?").replace(/\./g, "").split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0]; }).join("").toUpperCase(); }
-function av(p) { return '<span class="av" style="background:' + avColor(p.id) + '">' + esc(ini(p.name)) + "</span>"; }
+function avIdx(p) {
+  var O = window.MovaOnline; if (!O) return null;
+  if (p.id === me && O.myAvatar() != null) return O.myAvatar();
+  var f = String(p.name || "").split(/\s+/)[0].toLowerCase(), hit = O.list().filter(function (x) { return String(x.name || "").toLowerCase() === f; });
+  return hit.length === 1 ? hit[0].avatar : null;
+}
+function av(p) {
+  var i = avIdx(p);
+  if (i != null) { var a = window.MovaOnline.avatars[i]; return '<span class="av mo-face" style="background:' + a.bg + ';padding:0">' + window.MovaOnline.svg(i) + "</span>"; }
+  return '<span class="av" style="background:' + avColor(p.id) + '">' + esc(ini(p.name)) + "</span>";
+}
 function toast(t) { var d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(function () { d.remove(); }, 2600); }
 function rpc(fn, args) {
   return fetch(SB_URL + "/rest/v1/rpc/" + fn, { method: "POST", headers: { "apikey": SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify(args || {}) })
@@ -757,14 +767,100 @@ function screenHome(preGame) {
       '<div class="go-chips"><span>' + ico("users", 14) + ' 2 a 6 jugadores</span><span>' + ico("clock", 14) + ' Partidas cortas</span></div></div>' +
       '<span class="go-ch">' + GO_BEAT + '</span></div>' +
     '<div class="go-opts">' +
+      '<button class="go-opt" id="b-live" style="--c:#ECFBC8"><span class="t">' + ico("users") + '</span><span><b>Play live</b><small id="b-live-n">' + liveCount() + '</small></span><span class="ar">' + arrow + '</span></button>' +
       '<button class="go-opt main" id="b-create"><span class="t">' + ico("plus") + '</span><span><b>Create a game</b><small>Pick a game and share the code</small></span><span class="ar">' + arrow + '</span></button>' +
       '<button class="go-opt" id="b-join" style="--c:#E6DEFF"><span class="t">' + ico("key") + '</span><span><b>Join with a code</b><small>Type the 4-digit code</small></span><span class="ar">' + arrow + '</span></button>' +
       '<button class="go-opt" id="b-solo" style="--c:#FFE6F2"><span class="t">' + ico("star") + '</span><span><b>Practice solo</b><small>6 games with your personal best</small></span><span class="ar">' + arrow + '</span></button>' +
     "</div>");
+  $("#b-live").onclick = function () { unlock(); screenLive(); };
   $("#b-create").onclick = function () { unlock(); screenCreate(preGame); };
   $("#b-join").onclick = function () { unlock(); screenJoin(); };
   $("#b-solo").onclick = function () { unlock(); screenSolo(preGame); };
 }
+
+/* ---------- Play live: Online now ---------- */
+function liveCount() {
+  var O = window.MovaOnline, n = O ? O.list().length : 0;
+  return n ? n + (n === 1 ? " classmate online now" : " classmates online now") : "Challenge a classmate who’s online";
+}
+function liveCss() {
+  if (document.getElementById("pl-css")) return;
+  var st = document.createElement("style"); st.id = "pl-css";
+  st.textContent = ".pl-h{display:flex;align-items:center;gap:8px;margin:6px 2px 12px;font-family:'Bricolage Grotesque',sans-serif;font-size:19px;font-weight:800;color:#15192B}" +
+    ".pl-h i{width:9px;height:9px;border-radius:50%;background:#7BE495;box-shadow:0 0 0 4px rgba(123,228,149,.25)}.pl-h em{font-style:normal;margin-left:auto;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:#6A6F85}" +
+    ".pl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px}" +
+    ".pl-card{background:#fff;border-radius:24px;padding:14px 10px 12px;text-align:center;box-shadow:0 10px 26px -18px rgba(54,40,120,.5)}" +
+    ".pl-card .mo-face{width:74px;height:74px;margin:0 auto}.pl-card b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;margin-top:8px;color:#15192B}" +
+    ".pl-card small{display:block;font-size:12px;font-weight:600;color:#6A6F85;margin-top:1px}" +
+    ".pl-card button{margin-top:10px;width:100%;border:0;border-radius:999px;background:#15192B;color:#D3F36B;font:800 13.5px 'Plus Jakarta Sans',sans-serif;padding:10px;cursor:pointer}" +
+    ".pl-empty{background:#fff;border-radius:26px;padding:22px 18px;text-align:center;box-shadow:0 10px 26px -18px rgba(54,40,120,.5)}.pl-empty .mo-face{width:90px;height:90px;margin:0 auto 8px}" +
+    ".pl-empty b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:19px;font-weight:800;color:#15192B}.pl-empty p{margin:6px 0 0;color:#6A6F85;font-size:14px;line-height:1.5}" +
+    ".pl-me{display:flex;align-items:center;gap:12px;margin-top:16px;background:#fff;border:0;border-radius:20px;padding:10px 14px 10px 10px;width:100%;text-align:left;font:inherit;color:#15192B;cursor:pointer}" +
+    ".pl-me .mo-face{width:44px;height:44px}.pl-me b{display:block;font-size:14.5px}.pl-me small{display:block;font-size:12.5px;color:#6A6F85;font-weight:600}.pl-me span.x{margin-left:auto;font-weight:800;font-size:13px}" +
+    ".pl-vs{display:flex;align-items:center;justify-content:center;gap:14px;margin:4px 0 16px}.pl-vs .mo-face{width:64px;height:64px;box-shadow:0 0 0 3px #fff}.pl-vs em{font-style:normal;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;color:#FF6FB5}";
+  document.head.appendChild(st);
+}
+function liveListHtml() {
+  var O = window.MovaOnline, list = O ? O.list() : [];
+  if (!O || O.off()) return '<div class="pl-empty">' + (O ? O.face(0) : "") + "<b>Play live is almost ready</b><p>Ask your teacher to turn it on. Meanwhile, create a game and share the code.</p></div>";
+  if (!list.length) return '<div class="pl-empty">' + O.face(0) + "<b>No one is online right now</b><p>Create a game and share the code, or check back in a little while.</p></div>";
+  return '<div class="pl-grid">' + list.map(function (p) {
+    return '<div class="pl-card">' + O.face(p.avatar) + "<b>" + esc(p.name) + "</b><small>" + esc(O.stageLabel(p.stage)) + '</small><button type="button" data-pid="' + esc(p.pid) + '">Challenge</button></div>';
+  }).join("") + "</div>";
+}
+function screenLive() {
+  stopPoll(); liveCss();
+  var O = window.MovaOnline, n = O ? O.list().length : 0, mine = O && O.myAvatar() != null ? O.myAvatar() : 1;
+  render(topBar(true, '<h2>Play live</h2><p class="lead">with your classmates</p>') +
+    '<div id="pl-root"><div class="pl-h"><i></i>Online now<em id="pl-n">' + (n ? n : "") + "</em></div>" +
+    '<div id="pl-list">' + liveListHtml() + "</div>" +
+    (O ? '<button class="pl-me" id="pl-me" type="button">' + O.face(mine) + '<span><b>Choose your character</b><small>This is how classmates see you</small></span><span class="x">Edit</span></button>' : "") +
+    '<button class="link" id="pl-create">Create a game with a code</button></div>');
+  $("#b-back").onclick = function () { screenHome(); };
+  $("#pl-create").onclick = function () { screenCreate(); };
+  var me2 = $("#pl-me"); if (me2) me2.onclick = function () { O.choose(); };
+  $("#pl-list").onclick = function (e) {
+    var b = e.target.closest("[data-pid]"); if (!b) return;
+    var t = O.list().filter(function (x) { return x.pid === b.dataset.pid; })[0];
+    if (t) { unlock(); screenChallenge(t); }
+  };
+  if (O) O.ping(true);
+}
+function screenChallenge(t) {
+  liveCss(); stopPoll();
+  var O = window.MovaOnline, game = ORDER[0], st = stageOf(user()), mine = O.myAvatar() != null ? O.myAvatar() : 1;
+  render(topBar(true, '<h2>Challenge ' + esc(t.name) + '</h2><p class="lead">Pick a game. ' + esc(t.name) + " gets a notification right away.</p>") +
+    '<div class="pl-vs">' + O.face(mine) + "<em>VS</em>" + O.face(t.avatar) + "</div>" +
+    '<div class="games" id="games">' + ORDER.map(function (k) { var g = GAMES[k]; return '<button class="game" data-g="' + k + '" aria-pressed="' + (k === game) + '">' + (g.isNew ? '<span class="new">Nuevo</span>' : "") + '<img src="' + g.thumb + '" alt="" loading="lazy"><div><b>' + g.name + "</b><small>" + g.sub + "</small></div></button>"; }).join("") + "</div>" +
+    '<button class="primary" id="b-send">' + ico("play", 22) + ' Send challenge</button><p class="err" id="err"></p>');
+  $("#b-back").onclick = function () { screenLive(); };
+  $("#games").onclick = function (e) { var b = e.target.closest("[data-g]"); if (!b) return; game = b.dataset.g; $$(".game").forEach(function (x) { x.setAttribute("aria-pressed", x === b); }); };
+  $("#b-send").onclick = function () {
+    var btn = this; btn.disabled = true; $("#err").textContent = "";
+    call("mp_create", { p_game: game, p_settings: defaults(game, st) }).then(function () {
+      code = room.code; saveRoom();
+      return O.invite(t.pid, game, GAMES[game].name, room.code).then(function (r) {
+        if (r && r.ok === false) throw r;
+        screenLobby(); toast("Challenge sent to " + t.name + "!");
+      });
+    }).catch(function (e) {
+      btn.disabled = false;
+      $("#err").textContent = e && e.error === "offline" ? t.name + " just went offline. Try another classmate." : e && e.error === "slow" ? "Wait a moment before sending another challenge." : errText(e);
+      if (code && room && room.status === "lobby") { screenLobby(); }
+    });
+  };
+}
+window.addEventListener("mova:online", function () {
+  var n = window.MovaOnline ? window.MovaOnline.list().length : 0;
+  var l = $("#pl-list"); if (l) { l.innerHTML = liveListHtml(); var c = $("#pl-n"); if (c) c.textContent = n ? n : ""; }
+  var h = $("#b-live-n"); if (h) h.textContent = liveCount();
+});
+window.addEventListener("mova:answer", function (e) {
+  var a = e.detail || {}, nm = a.name || "Your classmate";
+  if (a.status === "accepted") toast(nm + " is joining the game!");
+  else if (a.status === "declined") toast(nm + " can’t play right now. Try again later.");
+  else if (a.status === "expired") toast(nm + " didn’t answer. You can challenge someone else.");
+});
 
 function screenCreate(preGame) {
   var game = GAMES[preGame] ? preGame : ORDER[0], st = stageOf(user()), s = defaults(game, st);
@@ -1731,6 +1827,7 @@ function start() {
       .catch(function () { liveForget(); screenHome(pre); });
     return;
   }
+  if (/[?&]play=live/.test(location.search)) { try { history.replaceState(null, "", location.pathname); } catch (e) {} screenLive(); return; }
   var soloQ = (location.search.match(/solo=([a-z-]+)/) || [])[1];
   if (soloQ && GAMES[soloQ]) { screenSolo(soloQ); return; }
   var saved = null; try { saved = sessionStorage.getItem(K_ROOM); } catch (e) {}
