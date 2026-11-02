@@ -298,7 +298,7 @@ body{background:#F5F3FA!important;background-image:none!important;font-family:"P
 .lu-asg{display:grid;gap:2px;margin-top:10px;background:#D3F36B;border-radius:22px;padding:14px 16px;text-align:left}
 .lu-asg small{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#3B4320}
 .lu-asg b{font-family:"Bricolage Grotesque",sans-serif;font-size:19px}.lu-asg span{font-size:13px;color:#3B4320;font-weight:600}
-.dlb{background:#fff!important;border-radius:999px!important;font-weight:800!important}.dlb.dk{background:#15192B!important;color:#fff}
+.dlb{background:#fff!important;border-radius:999px!important;font-weight:800!important}.dlb.dk{background:#15192B!important;color:#fff}.dlb.par{grid-column:1/-1;background:#D3F36B!important;color:#15192B}
 .lu-box{background:#fff!important;border-left:0!important;border-radius:22px!important}
 .lu-box>b{font-family:"Bricolage Grotesque",sans-serif;font-size:17px!important}
 .lu-box.can li svg{color:#15192B!important;background:#D3F36B;border-radius:50%;padding:3px}
@@ -675,6 +675,7 @@ const IC = {
   book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 5c3-1.5 6-1.5 9 1 3-2.5 6-2.5 9-1v14c-3-1.5-6-1.5-9 1-3-2.5-6-2.5-9-1z"/><path d="M12 6v14"/></svg>',
   cards: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="7" y="3" width="13" height="16" rx="2"/><path d="M4 7v12a2 2 0 0 0 2 2h10"/></svg>',
   rule: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h10M4 18h13"/></svg>',
+  fam: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"/><circle cx="17" cy="9" r="2.3"/><path d="M2.5 20c0-3.6 2.5-6 5.5-6s5.5 2.4 5.5 6M13.5 20c.3-2.8 1.7-4.5 3.5-4.5s3.2 1.7 3.5 4.5"/></svg>',
   play: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="7" width="18" height="11" rx="5"/><path d="M8 10.5v4M6 12.5h4M15.5 11.5h.01M17.5 13.5h.01" stroke-linecap="round"/></svg>'
 };
 
@@ -876,7 +877,7 @@ function reveal(level) {
     <h3 class="lu-head">${I.head}</h3>
     <div class="lu-skills">${skills.map(([k, p], i) => `<div class="sk"><span>${k}</span><i><b style="width:${p}%;background:${["#8FA2FF", "#FFD66B", "#FF8FC8", "#B9A6FF"][i % 4]}"></b></i><em>${p}%</em></div>`).join("")}</div>
     <div class="lu-asg"><small>Assigned MOVA level</small><b>${esc(asg)}</b>${extra ? `<span>${extra}</span>` : ""}</div>
-    <div class="dl"><button class="dlb dk" id="dl-pdf">${IC.doc} PDF certificate</button><button class="dlb" id="dl-story">${IC.phone} Instagram Story</button></div>
+    <div class="dl"><button class="dlb dk" id="dl-pdf">${IC.doc} PDF certificate</button><button class="dlb" id="dl-story">${IC.phone} Instagram Story</button>${st.stage !== "adults" ? `<button class="dlb par" id="dl-parents">${IC.fam} Reporte para padres · PDF</button>` : ""}</div>
     ${progress}
     <div class="lu-box can"><b>What you can already do</b><ul>${I.can.map((c) => `<li>${IC.check}<span>${c}</span></li>`).join("")}</ul></div>
     <div class="lu-box next"><b>Your next challenge</b><p>${I.next}</p></div>
@@ -893,6 +894,10 @@ function reveal(level) {
   const data = { level, I, name, today, folio, skills, asg, stage: STAGE[st.stage][0] };
   $("#dl-pdf").addEventListener("click", () => printResult(data));
   $("#dl-story").addEventListener("click", () => storyImage(data));
+  const todayEs = now.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
+  const rep = Object.entries(st.skill).filter(([, v]) => v[1]).map(([k, v]) => [k, v[0], v[1]]);
+  const pd = Object.assign({}, data, { todayEs, rep, right, total, stageKey: st.stage });
+  if ($("#dl-parents")) $("#dl-parents").addEventListener("click", () => parentReport(pd));
 }
 function certHTML(d) {
   const dots = [["#E8846B", 8, 18, 5], ["#5BC0F0", 74, 10, 3.5], ["#F7D774", 70, 52, 2.5], ["#4FD1A5", 12, 150, 3], ["#A98BE8", 76, 178, 5], ["#F47FB0", 6, 98, 2.5], ["#F7D774", 5, 196, 3.5], ["#5BC0F0", 80, 120, 2.5]];
@@ -1033,6 +1038,186 @@ async function printResult(d) {
     const data = new Uint8Array(await jb.arrayBuffer());
     const pdf = pdfFromJpeg({ data, w: cv.width, h: cv.height }, 792, 612);
     await saveFile(pdf, `Level-Up-Result-${d.name.replace(/\s+/g, "-")}.pdf`, "Level Up Result");
+  } finally { if (btn) { btn.disabled = false; btn.innerHTML = old; } }
+}
+
+/* ---------- Reporte para padres (PDF carta vertical, 2 páginas, español) ---------- */
+const LVES = {
+  "Pre-A1": { band: "Primeros pasos", what: "{n} se encuentra en la etapa inicial de adquisición del idioma. Reconoce vocabulario básico y expresiones de uso frecuente cuando se le presentan con apoyo visual y a un ritmo pausado. En esta etapa, la exposición constante y el aprendizaje a través del juego son fundamentales para consolidar sus bases.", can: ["Identifica vocabulario básico: colores, números, animales y objetos del aula.", "Comprende saludos e instrucciones sencillas expresadas a un ritmo pausado.", "Se presenta y responde preguntas personales muy básicas."], next: "Presentarse en inglés y construir sus primeras oraciones completas." },
+  A1: { band: "Principiante", what: "{n} comprende y utiliza expresiones cotidianas y frases sencillas relacionadas con su entorno inmediato. Logra comunicarse de manera básica cuando su interlocutor habla con claridad. El trabajo ahora se centra en ampliar su vocabulario y en desarrollar mayor seguridad al expresarse.", can: ["Se presenta y describe a su familia, sus gustos y su rutina diaria.", "Comprende instrucciones y preguntas sencillas sobre temas conocidos.", "Lee textos breves e identifica la información principal."], next: "Narrar acciones en pasado y compartir sus propias experiencias." },
+  A2: { band: "Elemental", what: "{n} se comunica de manera funcional en situaciones cotidianas y comprende textos breves sobre temas familiares. Describe su entorno y sus experiencias con estructuras sencillas y adecuadas. Se encuentra en un momento ideal para desarrollar fluidez y expresar ideas propias con mayor detalle.", can: ["Narra experiencias pasadas y habla de sus planes futuros.", "Se desenvuelve en situaciones de rutina, como ordenar comida o pedir indicaciones.", "Comprende textos breves, avisos y mensajes claros."], next: "Expresar opiniones, justificar sus ideas y comprender conversaciones más extensas." },
+  B1: { band: "Intermedio", what: "{n} es un usuario independiente del idioma. Comprende las ideas principales de textos y conversaciones claras, y se desenvuelve con soltura en la mayoría de las situaciones cotidianas. El siguiente paso es fortalecer la precisión y la producción oral y escrita.", can: ["Expresa experiencias, opiniones y planes con sus propias palabras.", "Comprende las ideas principales de textos, videos y conversaciones claras.", "Resuelve con autonomía la mayoría de las situaciones de la vida diaria."], next: "Ganar fluidez y precisión, y comprender textos más complejos y variados." },
+  B2: { band: "Intermedio alto", what: "{n} se expresa con fluidez y naturalidad, comprende textos extensos y participa en conversaciones con hablantes nativos sin dificultad significativa. Su desempeño refleja un dominio sólido de las estructuras del idioma, con oportunidad de perfeccionar la precisión y el vocabulario académico.", can: ["Mantiene conversaciones fluidas con hablantes nativos.", "Argumenta y defiende sus puntos de vista sobre temas diversos.", "Comprende textos extensos, noticias y material audiovisual variado."], next: "Perfeccionar su precisión gramatical y ampliar su vocabulario académico." },
+  C1: { band: "Avanzado", what: "{n} demuestra un dominio avanzado del idioma, que le permite desenvolverse con flexibilidad en contextos sociales, académicos y profesionales. Comprende textos complejos, incluidos los significados implícitos, y se expresa con claridad y buena estructura.", can: ["Utiliza el idioma con flexibilidad en contextos sociales, académicos y profesionales.", "Comprende textos extensos y complejos, incluidos los significados implícitos.", "Se expresa con fluidez, estructura clara y vocabulario preciso."], next: "Pulir los matices del idioma y alcanzar la precisión de un usuario experto." },
+  C2: { band: "Dominio", what: "{n} presenta un dominio del idioma comparable al de un usuario experto. Comprende prácticamente todo lo que lee y escucha, y se expresa con espontaneidad, precisión y riqueza de matices.", can: ["Comprende prácticamente todo lo que lee y escucha.", "Se expresa con espontaneidad, precisión y riqueza de matices.", "Aborda con solvencia temas académicos y profesionales complejos."], next: "Mantener y enriquecer su nivel mediante la lectura, la escritura y la conversación constantes." }
+};
+const SCALE_ES = { "Pre-A1": "Palabras y frases muy básicas", A1: "Expresiones cotidianas", A2: "Situaciones de rutina", B1: "Usuario independiente", B2: "Fluidez y naturalidad", C1: "Contextos exigentes", C2: "Usuario experto" };
+const SK_ES = {
+  g: ["Gramática", ["Aplica las estructuras gramaticales de su nivel con precisión y consistencia.", "Domina la mayoría de las estructuras de su nivel; algunas están en proceso de consolidación.", "Requiere reforzar las estructuras gramaticales de su nivel para ganar precisión."]],
+  v: ["Vocabulario", ["Cuenta con un vocabulario amplio y adecuado para su nivel.", "Maneja el vocabulario esencial; la lectura frecuente favorecerá su ampliación.", "Es recomendable ampliar su vocabulario para apoyar la comprensión y la expresión."]],
+  r: ["Lectura", ["Comprende con claridad las ideas generales y los detalles de lo que lee.", "Identifica la idea general; conviene fortalecer la comprensión de detalles.", "Requiere práctica de lectura constante para fortalecer su comprensión."]],
+  l: ["Comprensión auditiva", ["Comprende con facilidad el inglés hablado en contextos de su nivel.", "Comprende la información principal; mayor exposición auditiva le dará seguridad.", "La exposición diaria al idioma hablado fortalecerá su comprensión auditiva."]]
+};
+const TAG_ES = [["Fortaleza", "#D3F36B"], ["Buen avance", "#C9D2FF"], ["En desarrollo", "#FFC7E2"]];
+function homeTips(stage, level) {
+  if (stage === "kids" || stage === "children") return [
+    ["Inglés en la rutina", "Dediquen de 10 a 15 minutos diarios a una canción, un cuento o un juego en inglés."],
+    ["Lean juntos", "Usen las lecturas del MOVA Studio y pídanle que les cuente con sus palabras qué pasó."],
+    ["Celebren el esfuerzo", "Reconozcan cada palabra nueva: la confianza es la clave para animarse a hablar."],
+    ["Pantallas en inglés", "Elijan caricaturas o videos que ya conoce, pero con el audio en inglés."]];
+  return [
+    ["Inglés en lo que le gusta", "Series, música, podcasts y videojuegos en inglés, con subtítulos también en inglés."],
+    ["Lectura constante", "Unos 20 minutos al día de lecturas de su interés en el MOVA Studio o en libros graduados."],
+    ["Hablar sin miedo", "Anímenle a participar aunque se equivoque: el error es parte natural del aprendizaje."],
+    HIGH.includes(level) ? ["Opinión en inglés", "Conversen sobre noticias o documentales en inglés e invítenle a dar su punto de vista."] : ["Metas cortas", "Fijen objetivos semanales, como terminar una lectura o aprender 20 palabras nuevas."]];
+}
+async function reportPages(d) {
+  await luFonts();
+  const MM = 8, W = Math.round(215.9 * MM), H = Math.round(279.4 * MM), PT = 0.3528 * MM;
+  const m = (v) => v * MM, BR = "'Bricolage Grotesque', 'Plus Jakarta Sans', sans-serif", PJ = "'Plus Jakarta Sans', Poppins, sans-serif";
+  const f = (w, pt, fam) => `${w} ${Math.round(pt * PT)}px ${fam === "b" ? BR : PJ}`, sp = (em, pt) => Math.round(em * pt * PT) + "px";
+  const E = LVES[d.level], first = d.name.split(" ")[0], L = m(18), R = W - m(18), CW = R - L;
+  const INK = "#15192B", MUT = "#6A6F85", BODY = "#3B3F57", LIME = "#D3F36B", LAV = "#7B5CF0";
+  const page = () => { const cv = document.createElement("canvas"); cv.width = W; cv.height = H; const x = luCtx(cv); x.fillStyle = "#FFFFFF"; x.fillRect(0, 0, W, H); return [cv, x]; };
+  const para = (x, t, X, Y, w, font, col, lh) => { const ls = x.wrap(t, w, font); ls.forEach((l, i) => x.T(l, X, Y + i * lh, font, col)); return ls.length * lh; };
+  const foot = (x, n) => {
+    x.fillStyle = "#ECE6FA"; x.fillRect(L, H - m(17), CW, m(.3));
+    x.T("MOVA Centro Pedagógico · Av. Constituyentes de N.L. #111, Col. Lindavista · 812 342 6038 · @movacp.mx", L, H - m(11), f(600, 7.5), MUT);
+    x.T(`${n} / 2`, R, H - m(11), f(800, 7.5), INK, "right");
+  };
+  const dots = (x, X0, Y0, rows, cols, col) => { for (let r = 0; r < rows; r++) for (let k = 0; k < cols; k++) { x.fillStyle = col; x.beginPath(); x.arc(X0 - k * m(6), Y0 + r * m(6), m(1.1), 0, 7); x.fill(); } };
+
+  /* ---- Página 1 ---- */
+  const [c1, x] = page();
+  x.fillStyle = INK; x.fillRect(0, 0, W, m(46));
+  x.strokeStyle = "rgba(185,166,255,.16)"; x.lineWidth = m(10); x.beginPath(); x.arc(W - m(6), m(2), m(30), 0, 7); x.stroke();
+  x.T("MOVA", L, m(22), f(800, 24, "b"), "#FFFFFF", "left", sp(.08, 24));
+  x.T("CENTRO PEDAGÓGICO", L, m(28.5), f(700, 7), "#AEB3CC", "left", sp(.16, 7));
+  x.fillStyle = LIME; x.rr(L, m(32), m(70), m(7.5), m(3.75)); x.fill();
+  x.T("REPORTE PARA PADRES DE FAMILIA", L + m(35), m(37.2), f(800, 7), INK, "center", sp(.14, 7));
+  [["Fecha", d.todayEs], ["Folio", d.folio], ["Programa", d.stage]].forEach(([k, v], i) => { const yy = m(19) + i * m(7); const w = x.T(v, R, yy, f(800, 9.5), "#FFFFFF", "right"); x.T(k + "   ", R - w, yy, f(600, 9.5), "#AEB3CC", "right"); });
+  let y = m(58);
+  x.T("RESULTADO DEL EXAMEN DE UBICACIÓN LEVEL UP", L, y, f(800, 8.5), LAV, "left", sp(.18, 8.5));
+  y += m(13);
+  const nl = x.wrap(d.name, CW, f(800, 30, "b"));
+  nl.slice(0, 2).forEach((l, i) => x.T(l, L, y + i * m(11.5), f(800, 30, "b"), INK, "left", "-1px"));
+  y += (Math.min(nl.length, 2) - 1) * m(11.5) + m(5);
+  x.fillStyle = LIME; x.rr(L, y, m(40), m(1.4), m(.7)); x.fill();
+  y += m(8);
+  // tarjeta de nivel
+  const CH = m(52);
+  x.fillStyle = INK; x.rr(L, y, CW, CH, m(6)); x.fill();
+  x.save(); x.rr(L, y, CW, CH, m(6)); x.clip(); x.strokeStyle = "rgba(211,243,107,.10)"; x.lineWidth = m(8); x.beginPath(); x.arc(L + m(10), y + CH + m(6), m(26), 0, 7); x.stroke(); x.restore();
+  const PX = L + m(10);
+  x.T("NIVEL ESTIMADO · MARCO COMÚN EUROPEO", PX, y + m(12), f(800, 7.5), "#AEB3CC", "left", sp(.16, 7.5));
+  const big = fitFont(x, d.level, m(62), Math.round(72 * PT), BR);
+  x.T(d.level, PX - m(1), y + m(12) + big * .88, `800 ${big}px ${BR}`, LIME, "left", "-2px");
+  x.T(E.band, PX, y + CH - m(7.5), f(800, 15, "b"), "#FFFFFF");
+  // escalera 7 niveles
+  const LX = L + m(84), LW = R - m(9) - LX, LH = m(30), LY = y + m(9), gap = m(1.6), bw = (LW - 6 * gap) / 7, li = ORDER.indexOf(d.level);
+  ORDER.forEach((lv, i) => { const bh = LH * (.3 + i * .7 / 6), bx = LX + i * (bw + gap), by = LY + LH - bh, on = i === li, pass = i < li;
+    x.fillStyle = on ? LIME : pass ? "rgba(211,243,107,.45)" : "rgba(255,255,255,.10)"; x.rr(bx, by, bw, bh, m(1.8)); x.fill();
+    if (on) { x.strokeStyle = "#FFFFFF"; x.lineWidth = m(.6); x.rr(bx - m(.6), by - m(.6), bw + m(1.2), bh + m(1.2), m(2.2)); x.stroke(); }
+    x.T(lv, bx + bw / 2, LY + LH + m(5.5), f(800, lv.length > 2 ? 6 : 7.5, "b"), on ? LIME : "#AEB3CC", "center"); });
+  y += CH + m(10);
+  x.T("Valoración del nivel", L, y, f(800, 13, "b"), INK);
+  y += m(7);
+  y += para(x, E.what.replace("{n}", first), L, y, CW, f(500, 10), BODY, m(5.2));
+  y += m(6);
+  x.T("Desempeño por habilidad", L, y, f(800, 13, "b"), INK);
+  x.T(`${d.right} de ${d.total} respuestas correctas`, R, y, f(700, 9), MUT, "right");
+  y += m(6);
+  d.rep.forEach(([k, ok, tot], i) => { const p = Math.round(ok / tot * 100), t = p >= 80 ? 0 : p >= 60 ? 1 : 2, RH = m(17.5), Y = y + i * (RH + m(2.2));
+    x.fillStyle = "#F7F5FC"; x.rr(L, Y, CW, RH, m(4)); x.fill();
+    x.T(SK_ES[k][0], L + m(6), Y + m(7.4), f(800, 11, "b"), INK);
+    const tw = x.T(TAG_ES[t][0].toUpperCase(), 0, -100, f(800, 6.5), INK, "left", sp(.12, 6.5));
+    x.fillStyle = TAG_ES[t][1]; x.rr(L + m(6), Y + m(9.8), tw + m(5), m(5.2), m(2.6)); x.fill();
+    x.T(TAG_ES[t][0].toUpperCase(), L + m(8.5), Y + m(13.5), f(800, 6.5), INK, "left", sp(.12, 6.5));
+    const BX = L + m(50), BW2 = m(40);
+    x.fillStyle = "#E4E0F0"; x.rr(BX, Y + m(7.5), BW2, m(3), m(1.5)); x.fill();
+    x.fillStyle = INK; x.rr(BX, Y + m(7.5), Math.max(m(3), BW2 * p / 100), m(3), m(1.5)); x.fill();
+    x.T(`${ok} de ${tot}`, BX, Y + m(14.5), f(600, 7.5), MUT);
+    x.T(p + "%", BX + BW2 + m(14), Y + m(11.6), f(800, 15, "b"), INK, "right");
+    const CX = BX + BW2 + m(20), cl = x.wrap(SK_ES[k][1][t], R - m(6) - CX, f(500, 8.5)); cl.forEach((l, j) => x.T(l, CX, Y + RH / 2 - (cl.length - 1) * m(2.1) + m(1.2) + j * m(4.2), f(500, 8.5), BODY)); });
+  foot(x, 1);
+
+  /* ---- Página 2 ---- */
+  const [c2, z] = page();
+  z.fillStyle = INK; z.fillRect(0, 0, W, m(26));
+  z.T("MOVA", L, m(16), f(800, 17, "b"), "#FFFFFF", "left", sp(.08, 17));
+  const nw = z.T(d.name, R - m(22), m(15.5), f(800, 10.5), "#FFFFFF", "right");
+  z.fillStyle = LIME; z.rr(R - m(19), m(9.5), m(19), m(8), m(4)); z.fill();
+  z.T(d.level, R - m(9.5), m(15.4), f(800, d.level.length > 2 ? 8 : 10, "b"), INK, "center");
+  y = m(39);
+  z.T(`Competencias que ${first} demuestra en inglés`, L, y, f(800, 14, "b"), INK); y += m(9);
+  E.can.forEach((t) => { z.fillStyle = LIME; z.beginPath(); z.arc(L + m(2.4), y - m(1.5), m(2.4), 0, 7); z.fill();
+    z.strokeStyle = INK; z.lineWidth = m(.55); z.lineCap = "round"; z.lineJoin = "round"; z.beginPath(); z.moveTo(L + m(1.3), y - m(1.5)); z.lineTo(L + m(2.1), y - m(.6)); z.lineTo(L + m(3.6), y - m(2.5)); z.stroke();
+    y += para(z, t, L + m(8), y, CW - m(8), f(500, 10.5), BODY, m(5.6)) + m(2.4); });
+  y += m(3);
+  // siguiente reto + grupo asignado
+  const BH = m(27), half = (CW - m(5)) / 2;
+  z.fillStyle = "#F1FBD2"; z.rr(L, y, half, BH, m(5)); z.fill();
+  z.T("SU SIGUIENTE RETO", L + m(6), y + m(9), f(800, 7.5), "#5E7A12", "left", sp(.16, 7.5));
+  para(z, E.next, L + m(6), y + m(15), half - m(12), f(600, 10), INK, m(5.2));
+  const GX = L + half + m(5);
+  z.fillStyle = "#F1EDFF"; z.rr(GX, y, half, BH, m(5)); z.fill();
+  z.T("NIVEL MOVA RECOMENDADO", GX + m(6), y + m(9), f(800, 7.5), LAV, "left", sp(.16, 7.5));
+  z.T(d.asg, GX + m(6), y + m(16), f(800, 14, "b"), INK);
+  para(z, "Sujeto a confirmación en la evaluación diagnóstica.", GX + m(6), y + m(22.5), half - m(12), f(500, 8.5), MUT, m(4.4));
+  y += BH + m(11);
+  z.T("Cómo apoyar en casa", L, y, f(800, 14, "b"), INK); y += m(6);
+  const tips = homeTips(d.stageKey, d.level), TW = (CW - m(5)) / 2, TH = m(25);
+  tips.forEach(([h, t], i) => { const X = L + (i % 2) * (TW + m(5)), Y = y + Math.floor(i / 2) * (TH + m(4));
+    z.strokeStyle = "#E4E0F0"; z.lineWidth = m(.4); z.rr(X, Y, TW, TH, m(5)); z.stroke();
+    z.fillStyle = [LIME, "#C9D2FF", "#FFE58A", "#FFC7E2"][i]; z.beginPath(); z.arc(X + m(9), Y + m(8.5), m(4.2), 0, 7); z.fill();
+    z.T(String(i + 1), X + m(9), Y + m(10.6), f(800, 11, "b"), INK, "center");
+    z.T(h, X + m(16), Y + m(10), f(800, 10.5, "b"), INK);
+    para(z, t, X + m(6), Y + m(17.5), TW - m(12), f(500, 9), BODY, m(4.7)); });
+  y += 2 * TH + m(4) + m(8);
+  z.fillStyle = "#F7F5FC"; z.rr(L, y, CW, m(16), m(4)); z.fill();
+  z.fillStyle = LIME; z.beginPath(); z.arc(L + m(8), y + m(8), m(3.2), 0, 7); z.fill();
+  z.strokeStyle = INK; z.lineWidth = m(.5); z.beginPath(); z.arc(L + m(8), y + m(8), m(1.8), -1.6, 3.4); z.stroke(); z.beginPath(); z.moveTo(L + m(8), y + m(6.2)); z.lineTo(L + m(8), y + m(8)); z.lineTo(L + m(9.2), y + m(8.8)); z.stroke();
+  const pw1 = z.T("Avance: ", L + m(15), y + m(6.8), f(800, 9.5), INK);
+  z.wrap("Los programas de MOVA incluyen evaluaciones periódicas para dar seguimiento al progreso de cada alumno.", CW - m(21) - pw1, f(500, 9.5)).forEach((l, j) => z.T(l, L + m(15) + pw1, y + m(6.8) + j * m(4.8), f(500, 9.5), BODY));
+  y += m(16) + m(8);
+  // siguiente paso + firma
+  const NH = Math.min(m(52), H - m(26) - y);
+  z.fillStyle = INK; z.rr(L, y, CW, NH, m(6)); z.fill();
+  const NX = L + m(8), NW = CW * .58;
+  z.T("EL SIGUIENTE PASO", NX, y + m(10), f(800, 7.5), LIME, "left", sp(.16, 7.5));
+  z.T("Confirmar su nivel en MOVA", NX, y + m(19), f(800, 13, "b"), "#FFFFFF");
+  para(z, `Level Up mide gramática, vocabulario, lectura y comprensión auditiva. En la evaluación diagnóstica también valoramos speaking y writing para ubicar a ${first} en el grupo ideal.`, NX, y + m(26.5), NW, f(500, 8.8), "#C9CCE0", m(4.7));
+  z.T("Agenden por WhatsApp: 812 342 6038", NX, y + NH - m(7), f(800, 9), LIME);
+  const SX = L + CW * .7, SWd = R - m(8) - SX, SY = y + NH - m(17);
+  if (SIGNATURE) { const si = await loadImg(SIGNATURE); if (si) { const sh = m(20), sw3 = sh * si.width / si.height; z.save(); z.filter = "invert(1)"; z.drawImage(si, SX + (SWd - sw3) / 2, SY - sh + m(2), sw3, sh); z.restore(); } }
+  z.fillStyle = "rgba(255,255,255,.5)"; z.fillRect(SX, SY, SWd, m(.35));
+  z.T("Miss Karla Rodríguez", SX + SWd / 2, SY + m(5.5), f(800, 9), "#FFFFFF", "center");
+  z.T("Dirección académica", SX + SWd / 2, SY + m(10), f(600, 7.5), "#AEB3CC", "center");
+  foot(z, 2);
+  return [c1, c2];
+}
+function pdfPages(imgs, pw, ph) {
+  const enc = new TextEncoder(), parts = [], offs = []; let len = 0;
+  const add = (p) => { const b = typeof p === "string" ? enc.encode(p) : p; parts.push(b); len += b.length; };
+  const obj = (n, body) => { offs[n] = len; add(`${n} 0 obj\n`); body.forEach(add); add("\nendobj\n"); };
+  add("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n");
+  const n = imgs.length, kids = imgs.map((_, i) => `${3 + i * 3} 0 R`).join(" ");
+  obj(1, ["<< /Type /Catalog /Pages 2 0 R >>"]);
+  obj(2, [`<< /Type /Pages /Kids [${kids}] /Count ${n} >>`]);
+  imgs.forEach((im, i) => { const b = 3 + i * 3, content = `q ${pw} 0 0 ${ph} 0 0 cm /Im0 Do Q`;
+    obj(b, [`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pw} ${ph}] /Resources << /XObject << /Im0 ${b + 1} 0 R >> >> /Contents ${b + 2} 0 R >>`]);
+    obj(b + 1, [`<< /Type /XObject /Subtype /Image /Width ${im.w} /Height ${im.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.data.length} >>\nstream\n`, im.data, "\nendstream"]);
+    obj(b + 2, [`<< /Length ${content.length} >>\nstream\n${content}\nendstream`]); });
+  const total = 3 + n * 3, xref = len;
+  add(`xref\n0 ${total}\n0000000000 65535 f \n${Array.from({ length: total - 1 }, (_, i) => String(offs[i + 1]).padStart(10, "0") + " 00000 n \n").join("")}trailer\n<< /Size ${total} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
+  return new Blob(parts, { type: "application/pdf" });
+}
+async function parentReport(d) {
+  const btn = $("#dl-parents"), old = btn ? btn.innerHTML : ""; if (btn) { btn.disabled = true; btn.textContent = "Preparando reporte…"; }
+  try {
+    const cvs = await reportPages(d), imgs = [];
+    for (const cv of cvs) { const jb = await new Promise((r) => cv.toBlob(r, "image/jpeg", 0.92)); imgs.push({ data: new Uint8Array(await jb.arrayBuffer()), w: cv.width, h: cv.height }); }
+    await saveFile(pdfPages(imgs, 612, 792), `Reporte-Padres-${d.name.replace(/\s+/g, "-")}.pdf`, "Reporte para padres · Level Up");
   } finally { if (btn) { btn.disabled = false; btn.innerHTML = old; } }
 }
 
