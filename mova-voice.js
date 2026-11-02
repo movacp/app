@@ -134,6 +134,7 @@
   }
   function voiceOf(u){
     var V = CFG.voices[langOf(u)];
+    if(u.movaVoice && langOf(u) === 'en' && /^[cfm]$/.test(u.movaVoice)) return u.movaVoice;
     if(u.movaGender === 'm') return V.m;
     if(langOf(u) === 'es') return V.kid;
     return teensNow() ? V.f : V.kid;
