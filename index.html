@@ -1459,13 +1459,6 @@ function viewHome() {
       <div class="areas">${areas.map((a) => `<a class="area" href="${a.href}" data-c="${a.c}"><span class="thumb" aria-hidden="true">${AREA_ART[a.href] || ""}</span><h3>${a.title}</h3><p>${a.text}</p></a>`).join("")}</div>
     </section>
 
-    <section class="wrap section" aria-label="Your progress">
-      <div class="progress-strip">
-        <div><strong>${done}/${READINGS.length}</strong><p>readings completed</p></div>
-        <div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}" aria-label="Reading progress"><i style="width:${pct}%"></i></div>
-        <a href="#/saved">Saved items (${savedTotal()})</a>
-      </div>
-    </section>
 
     <section class="wrap section" aria-labelledby="feat-h">
       <div class="section-head"><h2 id="feat-h">Featured activities</h2><a href="#/games">All games</a></div>
