@@ -4647,6 +4647,8 @@ window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
 
   const HP = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="#fff"/><rect x="16" y="14" width="5" height="7" rx="2" fill="#fff"/></svg>';
   const SPK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#D3F36B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="#D3F36B"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>';
+  const ddmWord = (w) => "ddm-es-w-" + String(w).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z]+/g, "-").replace(/^-|-$/g, "") + ".mp3";
+  const ddmPlay = (src) => { try { if (window.__ddmAu) window.__ddmAu.pause(); } catch (e) {} const a = new Audio(src); window.__ddmAu = a; return a; };
   const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="#15192B"/></svg>';
   const PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4.5" width="4" height="15" rx="1.5" fill="#15192B"/><rect x="14" y="4.5" width="4" height="15" rx="1.5" fill="#15192B"/></svg>';
   const VC = ["#E6E2FF", "#FFE0EE", "#FFF1C2", "#ECFBC8", "#DCE4FF", "#D9F5EC"];
@@ -4705,23 +4707,36 @@ window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
       mount(root) {
         const S = window.speechSynthesis, paras = [...root.querySelectorAll(".d-story p")], player = root.querySelector(".d-player"), btn = root.querySelector(".d-play"), bars = [...root.querySelectorAll(".d-wave i")];
         let on = false, idx = 0;
-        const say = (t, rate) => { if (!S) return; S.cancel(); stopUI(); const u = new SpeechSynthesisUtterance(t); u.lang = s.lang; u.rate = rate || .9; u.movaGender = "f"; S.speak(u); };
+        /* Español: voz de Samanta pregrabada (mp3); inglés: voz de la app */
+        let au = null;
+        const halt = () => { if (au) { au.onended = au.onerror = null; try { au.pause(); } catch (e) {} au = null; } if (S) S.cancel(); };
+        const tts = (t, rate) => { if (!S) return null; const u = new SpeechSynthesisUtterance(t); u.lang = s.lang; u.rate = rate || .9; u.movaGender = "f"; S.speak(u); return u; };
+        const say = (t, rate) => { halt(); stopUI(); if (s.es) { au = ddmPlay(ddmWord(t)); au.onerror = () => { au = null; tts(t, rate); }; au.play().catch(() => {}); return; } tts(t, rate); };
         const progress = (i) => { paras.forEach((p, k) => p.classList.toggle("now", k === i)); const n = Math.round((i + 1) / paras.length * bars.length); bars.forEach((b, k) => b.classList.toggle("on", k < n)); };
         function stopUI() { on = false; player.classList.remove("playing"); btn.innerHTML = PLAY; paras.forEach((p) => p.classList.remove("now")); }
         function next() {
           if (!on) return;
           if (idx >= paras.length) { stopUI(); idx = 0; return; }
-          const i = idx, u = new SpeechSynthesisUtterance(s.text[i]); u.lang = s.lang; u.rate = s.es ? .9 : .88; u.movaGender = "f";
+          const i = idx;
+          if (s.es) {
+            au = ddmPlay("ddm-es-p" + (i + 1) + ".mp3");
+            au.onplay = () => progress(i);
+            au.onended = () => { if (!on) return; idx = i + 1; next(); };
+            au.onerror = () => { au = null; if (!on) return; const v = tts(s.text[i], .9); if (!v) return stopUI(); v.onstart = () => progress(i); v.onend = () => { if (!on) return; idx = i + 1; next(); }; };
+            au.play().catch(() => { if (au) au.onerror(); });
+            return;
+          }
+          const u = new SpeechSynthesisUtterance(s.text[i]); u.lang = s.lang; u.rate = .88; u.movaGender = "f";
           u.onstart = () => progress(i);
           u.onend = () => { if (!on) return; idx = i + 1; next(); };
           u.onerror = (e) => { if (e && e.error === "canceled") return; stopUI(); };
           S.speak(u);
         }
-        if (S && window.MovaVoice && window.MovaVoice.natural) window.MovaVoice.natural.prefetch(s.text, s.lang, s.es ? .9 : .88);
+        if (!s.es && S && window.MovaVoice && window.MovaVoice.natural) window.MovaVoice.natural.prefetch(s.text, s.lang, .88);
         btn.addEventListener("click", () => {
-          if (!S) return;
-          if (on) { on = false; S.cancel(); stopUI(); return; }
-          S.cancel(); on = true; player.classList.add("playing"); btn.innerHTML = PAUSE; next();
+          if (!S && !s.es) return;
+          if (on) { on = false; halt(); stopUI(); return; }
+          halt(); on = true; player.classList.add("playing"); btn.innerHTML = PAUSE; next();
         });
         root.querySelectorAll("[data-say]").forEach((el) => el.addEventListener("click", () => { on = false; say(el.dataset.say, .85); }));
         const qs = [...root.querySelectorAll(".d-q")], score = root.querySelector(".d-score"), again = root.querySelector(".d-again");
@@ -4764,7 +4779,7 @@ window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
           if (hit) {
             found.add(hit.w); const c = "f" + (col++ % 5); hit.cells.forEach((i) => cells[i].classList.add(c));
             const b = root.querySelector(`.d-bank [data-w="${hit.w}"]`); if (b) b.classList.add("got");
-            if (window.speechSynthesis) { const u = new SpeechSynthesisUtterance(hit.w); u.lang = es ? "es-MX" : "en-US"; u.rate = .85; speechSynthesis.cancel(); speechSynthesis.speak(u); }
+            if (es) { const a = ddmPlay(ddmWord(hit.w)); a.onerror = () => { if (window.speechSynthesis) { const u = new SpeechSynthesisUtterance(hit.w); u.lang = "es-MX"; u.rate = .85; u.movaGender = "f"; speechSynthesis.cancel(); speechSynthesis.speak(u); } }; a.play().catch(() => {}); } else if (window.speechSynthesis) { const u = new SpeechSynthesisUtterance(hit.w); u.lang = "en-US"; u.rate = .85; speechSynthesis.cancel(); speechSynthesis.speak(u); }
             if (found.size === res.placed.length) root.querySelector(".d-done").classList.add("on");
           }
           start = null; path = []; paint();
@@ -4809,7 +4824,7 @@ window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
   ROUTES.holidays = (p) => (p[0] === "story" ? viewStory(p[1]) : p[0] === "sopa" ? viewSopa(p[1]) : viewSeason());
   ROUTES.coloring = (p) => (p[0] ? viewColorPage2(p[0]) : viewColoring2());
   ROUTES.wordsearch = (p) => viewWsPrint2(p[0]);
-  window.addEventListener("hashchange", () => { try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {} });
+  window.addEventListener("hashchange", () => { try { if (window.speechSynthesis) speechSynthesis.cancel(); if (window.__ddmAu) window.__ddmAu.pause(); } catch (e) {} });
 
   /* Home: tarjeta "This season" */
   const prevHome = window.viewHome;
