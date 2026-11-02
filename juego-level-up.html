@@ -298,7 +298,7 @@ body{background:#F5F3FA!important;background-image:none!important;font-family:"P
 .lu-asg{display:grid;gap:2px;margin-top:10px;background:#D3F36B;border-radius:22px;padding:14px 16px;text-align:left}
 .lu-asg small{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#3B4320}
 .lu-asg b{font-family:"Bricolage Grotesque",sans-serif;font-size:19px}.lu-asg span{font-size:13px;color:#3B4320;font-weight:600}
-.dlb{background:#fff!important;border-radius:999px!important;font-weight:800!important}.dlb.dk{background:#15192B!important;color:#fff}.dlb.par{grid-column:1/-1;background:#D3F36B!important;color:#15192B}
+.dlb{background:#fff!important;border-radius:999px!important;font-weight:800!important}.dlb.dk{background:#15192B!important;color:#fff}.cnote{font-size:12.5px;opacity:.65;margin:6px 4px 0}.dlb.par{grid-column:1/-1;background:#D3F36B!important;color:#15192B}
 .lu-box{background:#fff!important;border-left:0!important;border-radius:22px!important}
 .lu-box>b{font-family:"Bricolage Grotesque",sans-serif;font-size:17px!important}
 .lu-box.can li svg{color:#15192B!important;background:#D3F36B;border-radius:50%;padding:3px}
@@ -344,6 +344,9 @@ body{background:#F5F3FA!important;background-image:none!important;font-family:"P
       <button data-s="teens" aria-pressed="false"><b>MOVA Teens</b><small>12 to 17 years old</small></button>
       <button data-s="adults" aria-pressed="false"><b>Adults</b><small>18 and older</small></button>
     </div>
+    <label class="label" for="contact" id="contact-l">Parent’s WhatsApp <span style="opacity:.6;font-weight:600">(optional)</span></label>
+    <input class="field" id="contact" type="tel" inputmode="tel" autocomplete="tel" placeholder="81 1234 5678" maxlength="20">
+    <p class="cnote" id="contact-n">We’ll use it only to share the results and next steps.</p>
     <div class="facts" id="facts"><div><b>4</b><small>skills</small></div><div><b>A1–C2</b><small>CEFR scale</small></div><div><b>Adaptive</b><small>questions</small></div></div>
     <button class="primary" id="go" disabled>Continue</button>
     <p class="last" id="last"></p>
@@ -689,11 +692,12 @@ function show(id) { ["start", "intro", "test", "between", "result"].forEach((s) 
 /* Inicio */
 const nameOk = () => $("#name").value.trim().split(/\s+/).filter(Boolean).length >= 2;
 const canGo = () => { $("#go").disabled = !(st.stage && nameOk()); };
-$("#who").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; st.stage = b.dataset.s; $("#who").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b)); canGo(); });
+$("#who").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; st.stage = b.dataset.s; $("#who").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b)); $("#contact-l").firstChild.textContent = st.stage === "adults" ? "Your WhatsApp " : "Parent’s WhatsApp "; canGo(); });
 $("#name").addEventListener("input", canGo);
 (() => { const h = hist(); if (h.length) { const l = h[h.length - 1]; $("#last").textContent = `Last result: ${l.n} · ${l.l} · ${new Date(l.d).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}`; } })();
 $("#go").addEventListener("click", () => {
   st.name = $("#name").value.trim().replace(/\s+/g, " ");
+  st.contact = ($("#contact").value || "").trim();
   $("#rule-time").textContent = isT() ? "It takes 60 to 90 minutes, with up to 100 questions." : "It takes 15 to 35 minutes, with 18 to 42 questions.";
   show("intro");
 });
@@ -891,6 +895,11 @@ function reveal(level) {
   chime(); confetti();
   $("#restart").addEventListener("click", () => location.reload());
   $("#go-lib").addEventListener("click", () => { try { localStorage.setItem("mova-lib-preset", JSON.stringify({ stage: libStage, level: libLevel })); } catch (e) {} });
+  try { let u = null; try { u = JSON.parse(localStorage.getItem("mova_student") || "null"); } catch (e) {}
+    fetch("https://fclafxrkibvcjktrgznt.supabase.co/rest/v1/rpc/levelup_submit", { method: "POST", keepalive: true,
+      headers: { apikey: "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6", "Content-Type": "application/json" },
+      body: JSON.stringify({ p_name: st.name, p_stage: st.stage, p_level: level, p_folio: folio, p_correct: right, p_total: total,
+        p_skills: st.skill, p_contact: st.contact || null, p_username: (u && u.username) || null }) }).catch(() => {}); } catch (e) {}
   const data = { level, I, name, today, folio, skills, asg, stage: STAGE[st.stage][0] };
   $("#dl-pdf").addEventListener("click", () => printResult(data));
   $("#dl-story").addEventListener("click", () => storyImage(data));
