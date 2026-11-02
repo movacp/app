@@ -73,7 +73,8 @@ td:first-child{border-radius:14px 0 0 14px;width:34px;text-align:center;font-wei
 td:last-child{border-radius:0 14px 14px 0}
 td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .who{display:flex;align-items:center;gap:8px;min-width:0}.who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mini{display:flex;gap:1px;flex-wrap:wrap}.mini svg{width:20px;height:20px}
+.mini{display:flex;gap:1px;flex-wrap:wrap}.mini svg{width:20px;height:20px}.mini img{width:24px;height:24px;object-fit:contain}
+.lvl{display:inline-flex;gap:3px}.lvl span{font-size:11px;font-weight:800;border-radius:999px;padding:3px 7px;background:var(--track);color:#9a9db0}.lvl span.on{background:#D3F36B;color:#15192B}.lvl span.cur{box-shadow:inset 0 0 0 2px #15192B}
 .acc{display:inline-block;min-width:44px;border-radius:999px;padding:2px 8px;font-size:12px;text-align:center}
 .acc.g{background:#D8F1E4;color:#22714F}.acc.m{background:#FFF1C9;color:#8A6A10}.acc.r{background:#FBDADA;color:#9E2D2D}
 @media(max-width:600px){.hide-sm{display:none}table{font-size:13px}td{padding:7px 6px}.av{width:30px;height:30px;font-size:11px}}
@@ -135,7 +136,7 @@ td{background:#262B42;color:#fff}
 </head>
 <body>
 <div class="wrap"><div class="card" id="app"></div></div>
-<script src="mova-park.js?v=42"></script>
+<script src="mova-park.js?v=55"></script>
 <script src="mova-bingo.js?v=42"></script>
 <script>
 (function () {
@@ -288,15 +289,19 @@ function screenPlay() {
   act.forEach(function (p) { c += p.correct; w += p.wrong; });
   $("#s1").textContent = act.filter(function (p) { return p.online; }).length; $("#s2").textContent = c + w; $("#s3").textContent = c + w ? Math.round(c / (c + w) * 100) + "%" : "–";
 }
+function lvCell(p) {
+  var L = PK.lvOf(p.items), st = stageFor(p), T = PK.TIERS[st] || PK.TIERS.children;
+  return '<div class="lvl">' + T.map(function (n, i) { return '<span class="' + (L && i <= L.max ? "on" : "") + (L && i === L.cur ? " cur" : "") + '">' + n + "</span>"; }).join("") + "</div>";
+}
 function accCls(a) { return a >= 80 ? "g" : a >= 60 ? "m" : "r"; }
 function drawTable(box, final) {
   if (!box) return;
   var list = players.filter(function (p) { return p.round === live.round; }).slice().sort(function (a, b) { return b.value - a.value || b.correct - a.correct; });
   box.style.overflowX = "auto";
-  box.innerHTML = '<table><thead><tr><th></th><th>Student</th><th class="hide-sm">Park</th><th style="text-align:right">Value</th><th style="text-align:right">✓ / ✗</th><th style="text-align:right">Accuracy</th></tr></thead><tbody>' +
+  box.innerHTML = '<table><thead><tr><th></th><th>Student</th><th>Level</th><th class="hide-sm">Park</th><th style="text-align:right">Value</th><th style="text-align:right">✓ / ✗</th><th style="text-align:right">Accuracy</th></tr></thead><tbody>' +
     list.map(function (p, i) {
       var t = p.correct + p.wrong, a = t ? Math.round(p.correct / t * 100) : 0;
-      return "<tr" + (p.online || final ? "" : ' style="opacity:.5"') + "><td>" + (i + 1) + '</td><td><div class="who">' + av(p) + "<span>" + esc(p.name) + '</span><span class="hide-sm">' + chipStage(p) + '</span></div></td><td class="hide-sm"><div class="mini">' + (p.items || []).map(function (id) { return PK.art(id); }).join("") + '</div></td><td class="n">' + money(p.value) + '</td><td class="n">' + p.correct + " / " + p.wrong + '</td><td class="n">' + (t ? '<span class="acc ' + accCls(a) + '">' + a + "%</span>" : "–") + "</td></tr>";
+      return "<tr" + (p.online || final ? "" : ' style="opacity:.5"') + "><td>" + (i + 1) + '</td><td><div class="who">' + av(p) + "<span>" + esc(p.name) + '</span><span class="hide-sm">' + chipStage(p) + '</span></div></td><td>' + lvCell(p) + '</td><td class="hide-sm"><div class="mini">' + PK.own(p.items).map(function (id) { return PK.art(id); }).join("") + '</div></td><td class="n">' + money(p.value) + '</td><td class="n">' + p.correct + " / " + p.wrong + '</td><td class="n">' + (t ? '<span class="acc ' + accCls(a) + '">' + a + "%</span>" : "–") + "</td></tr>";
     }).join("") + "</tbody></table>";
 }
 function tick() {
@@ -325,7 +330,7 @@ function screenResults() {
     '<div class="podium">' + topL.map(function (p, i) { return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.name) + '</b><div class="bar"><span>' + ["", "1st", "2nd", "3rd"][place[i]] + "</span><small>" + money(p.value) + "</small></div></div>" : "<div></div>"; }).join("") + "</div>" +
     '<div class="stat"><span><b>' + list.length + "</b>Students</span><span><b>" + (c + w) + "</b>Answers</span><span><b>" + (c + w ? Math.round(c / (c + w) * 100) + "%" : "–") + '</b>Class accuracy</span></div>' +
     '<div class="label">Report</div><div id="tbl"></div>' +
-    '<p class="note">Students below 60% accuracy are shown in red: a good idea to review with them.</p>' +
+    '<p class="note">Level shows how far each student climbed inside their stage. Lime = levels reached · outlined = where they finished.</p><p class="note">Students below 60% accuracy are shown in red: a good idea to review with them.</p>' +
     '<div class="row"><button class="btn primary" id="again">Play again</button><button class="btn ghost" id="opts">Change options</button></div>' +
     '<p class="note"><a href="#" id="close" style="color:var(--muted)">Close game session</a></p>');
   drawTable($("#tbl"), true);

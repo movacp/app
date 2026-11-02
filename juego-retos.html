@@ -286,6 +286,48 @@ h2{font-weight:800;font-size:22px;text-align:center;margin:12px 0 4px}
 .toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#1B2A55;color:#fff;font-weight:600;font-size:14px;border-radius:999px;padding:10px 18px;z-index:50;box-shadow:0 10px 24px rgba(0,0,0,.3);max-width:90vw;text-align:center}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:20}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+/* MOVA Park · mapa a pantalla completa */
+body.pk-full .app{padding:0!important}
+body.pk-full .panel{max-width:560px!important}
+.pkx{margin:0 auto}
+.pkworld{position:relative}
+.pkworld .pk-map{border-radius:0 0 4px 4px}
+.pkhud{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);right:12px;display:flex;gap:6px;z-index:400}
+.pkhud .pill,.pkdock .pill{background:rgba(255,255,255,.95)!important;color:#15192B!important;box-shadow:0 6px 16px -8px rgba(21,25,43,.45);font-weight:800}
+.pkdock{position:absolute;left:10px;right:10px;bottom:38px;display:flex;align-items:center;gap:8px;z-index:400}
+.pkdock .pkc{font-size:16px!important;padding:8px 14px 8px 8px!important}
+.pkdock .pkinc{background:rgba(21,25,43,.78);color:#fff;border-radius:999px;padding:6px 11px;font-size:12px;font-weight:800;opacity:1}
+.pkdock .pkshop{background:#15192B;box-shadow:0 4px 0 #D3F36B}
+.pkqc{position:relative;z-index:450;margin-top:-26px;background:#fff;border-radius:28px 28px 0 0;padding:14px 14px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -14px 30px -18px rgba(21,25,43,.45);min-height:300px}
+.pkqc .tbar{margin-top:0}
+.pkqc .pkq{margin-top:12px}
+.pkqc .prompt{padding:14px 12px}
+.pkqc .opts{margin-top:10px;gap:8px}
+.pkqc .opt{min-height:54px;padding:10px 8px}
+.pkqc .opts.pics .opt{height:clamp(78px,11.5vh,104px);min-height:0;padding:6px;aspect-ratio:auto!important}
+.pkqc .opts.pics .opt svg{height:100%;width:auto;max-width:100%}
+.pkqc .prompt .listen{padding-top:4px;padding-bottom:4px}
+.pkhero2{margin:14px 0 4px}
+.pkworld{height:calc(100vh - 274px);height:calc(100dvh - 274px);min-height:300px}
+#pkland{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#pkland::-webkit-scrollbar{display:none}
+.pkworld .pk-map{padding-bottom:64px;border-radius:0}
+.pkhud{left:12px;align-items:center}
+.pkl{margin-right:auto;background:#15192B;color:#fff;border-radius:999px;padding:5px 6px 5px 12px;display:inline-flex;align-items:center;gap:7px;font-weight:800;font-size:12.5px;box-shadow:0 6px 16px -8px rgba(21,25,43,.55)}
+.pkl em{font-style:normal;background:#D3F36B;color:#15192B;border-radius:999px;padding:3px 9px;font:800 14px/1 'Bricolage Grotesque',sans-serif}
+.pkdots{display:flex;gap:3px;padding-right:4px}.pkdots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3)}.pkdots i.on{background:#D3F36B}
+.pktabs{position:absolute;top:calc(env(safe-area-inset-top,0px) + 56px);left:50%;transform:translateX(-50%);z-index:400;display:flex;gap:3px;background:rgba(255,255,255,.94);padding:4px;border-radius:999px;box-shadow:0 6px 16px -8px rgba(21,25,43,.45)}
+.pktabs button{border:0;background:transparent;font:700 12px 'Plus Jakarta Sans',sans-serif;color:#5b5f73;padding:6px 10px;border-radius:999px;white-space:nowrap;cursor:pointer;position:relative}
+.pktabs button small{font-size:10.5px;opacity:.75;margin-left:4px}
+.pktabs button.can::after{content:"";position:absolute;top:3px;right:4px;width:7px;height:7px;border-radius:50%;background:#9DBB2F;box-shadow:0 0 0 2px #fff}
+.pktabs button:focus-visible{outline:2px solid #15192B}
+.pktabs button.on{background:#15192B;color:#fff}.pkworld .pk-ztag{display:none}
+.pklvup{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 104px);transform:translateX(-50%);z-index:420;background:#D3F36B;color:#15192B;border-radius:18px;padding:10px 16px;font:800 15px/1.25 'Bricolage Grotesque',sans-serif;text-align:center;box-shadow:0 10px 26px rgba(21,25,43,.3);white-space:nowrap;animation:pklv 2.6s ease both;pointer-events:none}
+.pklvup.down{background:#fff}
+.pklvup small{display:block;font:700 11.5px 'Plus Jakarta Sans',sans-serif;opacity:.75;margin-top:2px}
+@keyframes pklv{0%{opacity:0;transform:translate(-50%,-10px) scale(.9)}10%{opacity:1;transform:translate(-50%,0) scale(1)}85%{opacity:1}100%{opacity:0}}
+.pkmine .pk-map{margin-top:8px}
 </style>
 <link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
 
@@ -359,7 +401,7 @@ a.icon-btn.home-pill{width:auto!important;padding:0 16px 0 10px;gap:6px;display:
 <main class="app"><div class="panel" id="panel"></div></main>
 <script src="mova-auth.js"></script>
 <script src="toefl-bank.js"></script>
-<script src="mova-park.js?v=42"></script>
+<script src="mova-park.js?v=55"></script>
 <script src="mova-bingo.js?v=42"></script>
 <script>
 (function(){
@@ -1063,7 +1105,7 @@ function makeGame(def, content, startAt, endAt, meta) {
       })();
     },
     onPlayers: function () { drawLive(); },
-    stop: function () { stopped = true; cancelAnimationFrame(raf); timers.forEach(clearTimeout); clearTimeout(pushT); if (synth) try { synth.cancel(); } catch (e) {} },
+    stop: function () { document.body.classList.remove("pk-full"); stopped = true; cancelAnimationFrame(raf); timers.forEach(clearTimeout); clearTimeout(pushT); if (synth) try { synth.cancel(); } catch (e) {} },
     score: function () { return score; }
   };
   function begin() {
@@ -1522,7 +1564,7 @@ function liveLobby() {
     liveScreen = "lobby" + liveGame();
     var isB = liveGame() === "bingo";
     render(topBar(true) + '<div class="center"><span class="pkbadge">MOVA LIVE</span></div>' + (isB ? '<h1>MOVA Bingo</h1><p class="lead">' + ((live.settings || {}).show === "read" ? "Read each word" : (live.settings || {}).show === "text" ? "Listen to and read each word" : "Listen to each word") + ', put a coin on your card and complete the pattern to win. BINGO!</p><div class="pkhero bhero">' + [0, 1, 2, 3].map(function (k) { return '<span>' + BG.chip + "</span>"; }).join("") + "</div>"
-        : '<h1>MOVA Park</h1><p class="lead">Contesta bien para ganar monedas y construir el mejor parque de diversiones.</p><div class="pkhero">' + ["carousel", "wheel", "coaster", "castle"].map(function (id) { return '<span>' + PK.art(id) + "</span>"; }).join("") + "</div>") +
+        : '<h1>MOVA Park</h1><p class="lead">Contesta bien para ganar monedas y construir el mejor parque de diversiones.</p><div class="pkhero2">' + PK.scene(["popcorn", "cotton", "icecream", "prizes", "ducks", "rings", "teacups", "carousel", "wheel"], { small: true, noLots: true }) + "</div>") +
       '<div class="wait"><span class="dots3"><i></i><i></i><i></i></span> Waiting for your teacher to start</div>' +
       '<div class="label">In the session</div><div class="plist" id="lpl"></div>');
     $("#b-back").onclick = function () { if (confirm("Leave the session?")) { lcall("live_leave", { p_code: liveCode }).catch(function () {}); liveForget(); screenHome(); } };
@@ -1548,14 +1590,43 @@ function livePool(stage, cats) {
   return shuffle(out);
 }
 
+/* Banco adaptativo: 3 niveles dentro de la etapa del alumno (sin repetir preguntas) */
+function liveTiers(stage, cats) {
+  var T = [[], [], []], seen = {};
+  function g(game, s) { try { var r = BUILD[game](s); return (r && r.qs) || []; } catch (e) { return []; } }
+  function add(t, qs) { (qs || []).forEach(function (q) { var k = q.html + "|" + q.ans; if (!seen[k]) { seen[k] = 1; T[t].push(q); } }); }
+  function many(t, game, s, n) { for (var i = 0; i < (n || 3); i++) add(t, g(game, s)); }
+  function tierOf(level) { var i = LV.indexOf(level); if (stage === "teens") return i <= 4 ? 0 : i <= 6 ? 1 : 2; return i <= 2 ? 0 : i <= 4 ? 1 : 2; }
+  var tops = wqTopics(stage);
+  cats.forEach(function (c) {
+    if (c === "vocab" || c === "grammar") {
+      tops.forEach(function (k) { var t = WQ[k], sent = t.type === "sentence"; if ((c === "vocab") !== sent) many(tierOf(t.level), "word-quest", { stage: stage, topic: k }, 3); });
+      if (c === "vocab") many(0, "picture-race", { stage: stage }, 3);
+      if (c === "grammar") many(stage === "kids" ? 0 : 1, "grammar-showdown", { stage: stage }, 4);
+    }
+    if (c === "hora") many(0, "que-hora-es", { stage: stage === "teens" ? "children" : stage, lang: "en" }, 3);
+    if (c === "wforms" && stage !== "kids") many(stage === "teens" ? 2 : 1, "word-forms", { stage: stage }, 4);
+    if (c === "toefl" && stage === "teens") many(2, "toefl-practice", { sec: "mix" }, 4);
+    if (c === "math") { var gr = stage === "kids" ? [1, 2, 3] : stage === "children" ? [3, 4, 5] : [6, 7, 8]; gr.forEach(function (n, t) { many(t, "mision-matematica", { grade: n }, 2); }); }
+  });
+  if (!T[0].length && !T[1].length && !T[2].length) many(0, "grammar-showdown", { stage: stage }, 3);
+  return T.map(shuffle);
+}
+
 function parkGame(lv, meP) {
   var st = liveStage(), cats = (lv.settings && lv.settings.cats && lv.settings.cats.length) ? lv.settings.cats : ["vocab", "grammar"];
-  var coins = 0, items = [], correct = 0, wrong = 0, streak = 0, pool = [], qi = 0, locked = false, stopped = false, done = false;
+  var coins = 0, items = [], correct = 0, wrong = 0, streak = 0, locked = false, stopped = false, done = false;
+  var tier = 0, maxTier = 0, up = 0, down = 0, tiers = null, tqi = [0, 0, 0], noLv = false;
   var timers = [], raf = 0, lastPush = 0, pushT = 0, round = lv.round, startAt = lv.start_at, endAt = lv.ends_at, t0 = 0;
   function later(f, ms) { timers.push(setTimeout(f, ms)); }
   function push(force) {
     clearTimeout(pushT);
-    var go = function () { lastPush = Date.now(); lcall("live_push", { p_code: liveCode, p_round: round, p_value: PK.value(coins, items), p_coins: coins, p_correct: correct, p_wrong: wrong, p_items: items }).then(function () { if (!stopped) drawRank(); }).catch(function () {}); };
+    var go = function () {
+      lastPush = Date.now();
+      var send = function (its) { return lcall("live_push", { p_code: liveCode, p_round: round, p_value: PK.value(coins, items), p_coins: coins, p_correct: correct, p_wrong: wrong, p_items: its }); };
+      (noLv ? send(items) : send(items.concat([PK.lvTag(maxTier, tier)])).catch(function () { noLv = true; return send(items); }))
+        .then(function () { if (!stopped) drawRank(); }).catch(function () {});
+    };
     if (force || Date.now() - lastPush > 1200) go(); else pushT = setTimeout(go, 1200);
   }
   function rankOf() {
@@ -1567,14 +1638,25 @@ function parkGame(lv, meP) {
   function drawHud() {
     var c = $("#pkcoins"); if (c) c.textContent = coins.toLocaleString("es-MX");
     var v = $("#pkval"); if (v) v.textContent = "$" + PK.value(coins, items).toLocaleString("es-MX");
-    var inc = $("#pkinc"); if (inc) inc.textContent = "+" + PK.income(items) + (streak >= 3 ? " ×1.5" : "");
+    var inc = $("#pkinc"); if (inc) inc.textContent = Math.round(PK.income(items) * PK.TMULT[tier]);
+    var lvl = $("#pklvl"); if (lvl) lvl.innerHTML = "Level <em>" + PK.tierName(st, tier) + '</em><span class="pkdots">' + [0, 1, 2].map(function (k) { return '<i class="' + (k < up ? "on" : "") + '"></i>'; }).join("") + "</span>";
+    PK.ZONES.forEach(function (Z, z) { var t = $("#pktab" + z); if (!t) return; var n = PK.ATTR.filter(function (a) { return a.zone === z; }), b = n.filter(function (a) { return items.indexOf(a.id) >= 0; }).length, can = n.some(function (a) { return items.indexOf(a.id) < 0 && a.price <= coins; }); t.innerHTML = Z.short + "<small>" + b + "/" + n.length + "</small>"; t.classList.toggle("can", can); });
     var aff = PK.ATTR.filter(function (a) { return items.indexOf(a.id) < 0 && a.price <= coins; }).length, b = $("#pkshopn");
     if (b) { b.textContent = aff; b.hidden = !aff; }
     var sb = $("#pkshop"); if (sb) sb.classList.toggle("glow", aff > 0);
+    $$(".pk-lot", $("#pkland") || document).forEach(function (l) { var a = PK.ATTR.find(function (x) { return x.id === l.dataset.id; }); var can = a && coins >= a.price; if (l.classList.contains("can") !== !!can) { l.classList.toggle("can", !!can); l.firstChild.innerHTML = can ? "Build" : PK.coin.replace(/width="18" height="18"/, 'width="14" height="14"') + a.price.toLocaleString("es-MX"); } });
   }
   function drawPark(newId) {
     var box = $("#pkland"); if (!box) return;
-    box.innerHTML = PK.ATTR.map(function (a, k) { var own = items.indexOf(a.id) >= 0; return '<div class="plot' + (own ? " own" : "") + (a.id === newId ? " pop" : "") + '">' + (own ? PK.art(a.id) : '<span class="ghost">' + PK.art(a.id) + "</span>") + "</div>"; }).join("");
+    var y = box.scrollTop; box.innerHTML = PK.scene(items, { tap: true, coins: coins, newId: newId, id: "pkmap" }); box.scrollTop = y;
+    if (newId) PK.burst($("#pkmap"), newId);
+  }
+  function buy(id) {
+    var a = PK.ATTR.find(function (x) { return x.id === id; }); if (!a || done || coins < a.price || items.indexOf(a.id) >= 0) return false;
+    coins -= a.price; items.push(a.id); tones([523, 659, 784, 1047, 1319], .07, "triangle");
+    drawPark(a.id); drawHud(); push(true);
+    if (items.length === PK.ATTR.length) toast("¡Construiste todo el parque! Sigue juntando monedas.");
+    return true;
   }
   function frame() {
     if (stopped) return;
@@ -1584,10 +1666,23 @@ function parkGame(lv, meP) {
     if (left <= 0) { finish(); return; }
     raf = requestAnimationFrame(frame);
   }
+  function pickQ() {
+    for (var pass = 0; pass < 2; pass++) {
+      if (!tiers) { R = Math.random; tiers = liveTiers(st, cats); tqi = [0, 0, 0]; }
+      var order = tier === 0 ? [0, 1, 2] : tier === 1 ? [1, 0, 2] : [2, 1, 0];
+      for (var k = 0; k < 3; k++) { var t = order[k]; if (tqi[t] < tiers[t].length) return tiers[t][tqi[t]++]; }
+      tiers = null; /* ya se usaron todas: se arma un banco nuevo */
+    }
+    return null;
+  }
+  function lvToast(t, isDown) {
+    var w = $("#pkworld"); if (!w) return; var old = $(".pklvup", w); if (old) old.remove();
+    var d = document.createElement("div"); d.className = "pklvup" + (isDown ? " down" : ""); d.innerHTML = t;
+    w.appendChild(d); later(function () { d.remove(); }, 2600);
+  }
   function nextQ() {
     if (stopped || done) return;
-    if (qi >= pool.length) { R = Math.random; pool = livePool(st, cats); qi = 0; }
-    var q = pool[qi++], stage = $("#pkq"); if (!stage) return;
+    var q = pickQ(), stage = $("#pkq"); if (!stage || !q) return;
     locked = false; t0 = Date.now();
     stage.innerHTML = '<div class="prompt">' + (q.say && synth && !q.bigSay ? '<button class="say" id="say" aria-label="Listen">' + ico("sound") + "</button>" : "") + q.html + "</div>" +
       '<div class="opts' + (q.pics ? " pics" : "") + (q.cls ? " " + q.cls : "") + (q.options.length === 3 ? " three" : "") + '">' + q.options.map(function (o) { return '<button class="opt" data-v="' + esc(o) + '"' + (q.pics ? ' aria-label="' + esc(q.label ? q.label(o) : o) + '"' : "") + ">" + (q.render ? q.render(o) : q.pics ? D2.PICS[o] : esc(o)) + "</button>"; }).join("") + "</div>";
@@ -1597,12 +1692,14 @@ function parkGame(lv, meP) {
       var b = e.target.closest(".opt"); if (!b || locked || done) return; locked = true;
       var ok = String(b.dataset.v) === String(q.ans);
       if (ok) {
-        correct++; streak++;
-        var gain = Math.round(PK.income(items) * (streak >= 3 ? 1.5 : 1)); coins += gain;
-        b.classList.add("ok"); sfx.ok(); floatCoin("+" + gain, b);
+        correct++; streak++; down = 0;
+        var m = PK.TMULT[tier], gain = Math.round(PK.income(items) * m); coins += gain;
+        b.classList.add("ok"); sfx.ok(); floatCoin("+" + gain, b); PK.rain($("#pkmap"), items, m);
+        if (++up >= 3) { up = 0; if (tier < 2) { tier++; maxTier = Math.max(maxTier, tier); lvToast("⬆ Level up! You’re now at " + PK.tierName(st, tier) + "<small>Harder questions · ×" + PK.TMULT[tier] + " coins</small>"); } }
         drawHud(); push(); later(nextQ, 550);
       } else {
-        wrong++; streak = 0; b.classList.add("bad"); sfx.bad();
+        wrong++; streak = 0; up = 0; b.classList.add("bad"); sfx.bad();
+        if (++down >= 2) { down = 0; if (tier > 0) { tier--; lvToast("Back to " + PK.tierName(st, tier) + "<small>You’ve got this. Keep going!</small>", true); } }
         $$(".opt", stage).forEach(function (x) { if (String(x.dataset.v) === String(q.ans)) x.classList.add("ok"); });
         drawHud(); push(); later(nextQ, 1500);
       }
@@ -1623,9 +1720,7 @@ function parkGame(lv, meP) {
         if (e.target === sh) { sh.remove(); return; }
         var b = e.target.closest(".pkitem"); if (!b || b.disabled || done) return;
         var a = PK.ATTR.find(function (x) { return x.id === b.dataset.id; }); if (!a || coins < a.price || items.indexOf(a.id) >= 0) return;
-        coins -= a.price; items.push(a.id); tones([523, 659, 784, 1047, 1319], .07, "triangle");
-        drawPark(a.id); drawHud(); push(true); sh.remove();
-        if (items.length === PK.ATTR.length) toast("¡Construiste todo el parque! Sigue juntando monedas.");
+        sh.remove(); buy(a.id);
       };
     }
     draw(); document.body.appendChild(sh);
@@ -1634,17 +1729,27 @@ function parkGame(lv, meP) {
     if (done) return; done = true; cancelAnimationFrame(raf); push(true);
     var sh = $("#pksheet"); if (sh) sh.remove();
     var key = liveCode + "-" + round;
-    if (!parkSaved[key]) { parkSaved[key] = 1; try { window.MovaAuth && window.MovaAuth.save("mova-park", "MOVA Live · MOVA Park", PK.value(coins, items), null, { mode: "live", correct: correct, wrong: wrong, attractions: items.length }); } catch (e) {} }
-    later(function () { if (!stopped) { stopped = true; park = null; liveResults(); } }, 2500);
+    if (!parkSaved[key]) { parkSaved[key] = 1; try { window.MovaAuth && window.MovaAuth.save("mova-park", "MOVA Live · MOVA Park", PK.value(coins, items), null, { mode: "live", correct: correct, wrong: wrong, attractions: items.length, level: PK.tierName(st, maxTier) }); } catch (e) {} }
+    later(function () { if (!stopped) { stopped = true; park = null; document.body.classList.remove("pk-full"); liveResults(); } }, 2500);
   }
   function begin() {
-    render('<div class="hud"><span class="pill" style="background:#FCE38A;color:#1B2A55">MOVA Park</span><span class="grow"></span><span class="pill">' + ico("clock", 16) + '<span id="tleft"></span></span><span class="pill" id="pkrank"></span></div>' +
-      '<div class="tbar" id="tbar"><i></i></div>' +
-      '<div class="pkpark"><div class="pkland" id="pkland"></div><div class="pkbar"><span class="pill">' + PK.coin + '<span id="pkcoins">0</span></span><span class="pkinc">' + PK.coin + '<span id="pkinc"></span> per correct answer</span><button class="pkshop" id="pkshop">Tienda<span class="n" id="pkshopn" hidden></span></button></div></div>' +
-      '<div class="stage pkq" id="pkq"></div>');
+    document.body.classList.add("pk-full");
+    render('<div class="pkx"><div class="pkworld" id="pkworld"><div id="pkland"></div>' +
+      '<div class="pkhud"><span class="pkl" id="pklvl"></span><span class="pill pkt">' + ico("clock", 16) + '<span id="tleft"></span></span><span class="pill" id="pkrank"></span></div>' +
+      '<div class="pktabs">' + PK.ZONES.map(function (Z, z) { return '<button type="button" id="pktab' + z + '" data-z="' + z + '"></button>'; }).join("") + "</div>" +
+      '<div class="pkdock"><span class="pill pkc">' + PK.coin + '<span id="pkcoins">0</span></span><span class="pkinc">+<span id="pkinc"></span> per answer</span><button class="pkshop" id="pkshop">Shop<span class="n" id="pkshopn" hidden></span></button></div></div>' +
+      '<div class="pkqc"><div class="tbar" id="tbar"><i></i></div><div class="stage pkq" id="pkq"></div></div></div>');
     $("#pkshop").onclick = function () { unlock(); shop(); };
+    $("#pkland").onclick = function (e) { var l = e.target.closest && e.target.closest(".pk-lot.can"); if (l) { unlock(); buy(l.dataset.id); } };
+    $(".pktabs").onclick = function (e) { var b = e.target.closest("button"); if (!b) return; var land = $("#pkland"), zEl = $("#pkmap-z" + b.dataset.z); if (land && zEl) land.scrollTo({ top: zEl.offsetTop - 70, behavior: "smooth" }); };
     drawPark(); drawHud(); drawRank(); frame();
-    R = Math.random; pool = livePool(st, cats); qi = 0; nextQ();
+    var land = $("#pkland");
+    if (land) {
+      land.scrollTop = land.scrollHeight;
+      var onScroll = function () { var mid = land.scrollTop + land.clientHeight * .45, act = 0, best = -1; PK.ZONES.forEach(function (Z, z) { var e = $("#pkmap-z" + z); if (e && e.offsetTop <= mid && e.offsetTop > best) { best = e.offsetTop; act = z; } }); $$(".pktabs button").forEach(function (t) { t.classList.toggle("on", +t.dataset.z === act); }); };
+      land.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+    }
+    nextQ();
   }
   (function countdown() {
     render('<div class="count"><div><div class="num" id="cd">3</div><p>MOVA Park · ' + esc(STAGE_NAME[st]) + '</p><p style="margin-top:6px;font-size:14px">Answer correctly to earn coins and buy rides in the shop. The most valuable park wins!</p></div></div>');
@@ -1662,7 +1767,7 @@ function parkGame(lv, meP) {
     round: round,
     onState: function () { drawRank(); },
     finish: finish,
-    stop: function () { stopped = true; cancelAnimationFrame(raf); timers.forEach(clearTimeout); clearTimeout(pushT); var sh = $("#pksheet"); if (sh) sh.remove(); }
+    stop: function () { document.body.classList.remove("pk-full"); stopped = true; cancelAnimationFrame(raf); timers.forEach(clearTimeout); clearTimeout(pushT); var sh = $("#pksheet"); if (sh) sh.remove(); }
   };
 }
 function liveResults() {
@@ -1672,11 +1777,11 @@ function liveResults() {
   var sig = live.round + "|" + list.map(function (p) { return p.id + ":" + p.value + ":" + (p.items || []).length; }).join(",");
   if (liveScreen === "res" + sig) return;
   var first = liveScreen.indexOf("res" + live.round + "|") !== 0; liveScreen = "res" + sig;
-  var top = [list[1], list[0], list[2]], cls = ["p2", "p1", "p3"], place = [2, 1, 3];
+  var top = [list[1], list[0], list[2]], cls = ["p2", "p1", "p3"], place = [2, 1, 3], st0 = liveStage();
   render(topBar(true) + '<div class="center" style="margin-top:6px"><span class="pkbadge">MOVA PARK</span></div><h1>' + (pos === 0 ? "You won!" : pos === 1 ? "2nd place!" : pos === 2 ? "3rd place!" : "Great job!") + '</h1>' +
     '<div class="podium">' + top.map(function (p, i) { return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.id === me ? "You" : p.name) + '</b><div class="bar"><span>' + ordEn(place[i]) + "</span><small>$" + p.value.toLocaleString("es-MX") + "</small></div></div>" : "<div></div>"; }).join("") + "</div>" +
-    '<div class="pkmine"><div class="label" style="margin-top:0">Your park</div><div class="pkland sm">' + PK.ATTR.map(function (a) { var own = (mine.items || []).indexOf(a.id) >= 0; return '<div class="plot' + (own ? " own" : "") + '">' + (own ? PK.art(a.id) : '<span class="ghost">' + PK.art(a.id) + "</span>") + "</div>"; }).join("") + "</div>" +
-    '<div class="pkstats"><span><b>$' + (mine.value || 0).toLocaleString("es-MX") + "</b>Park value</span><span><b>" + (mine.correct || 0) + "</b>Correct</span><span><b>" + (mine.wrong || 0) + "</b>Wrong</span></div></div>" +
+    '<div class="pkmine"><div class="label" style="margin-top:0">Your park</div>' + PK.scene(mine.items || [], { small: true }) +
+    '<div class="pkstats"><span><b>$' + (mine.value || 0).toLocaleString("es-MX") + "</b>Park value</span><span><b>" + (mine.correct || 0) + "</b>Correct</span><span><b>" + (mine.wrong || 0) + "</b>Wrong</span>" + (PK.lvOf(mine.items) ? "<span><b>" + PK.tierName(st0, PK.lvOf(mine.items).max) + "</b>Top level</span>" : "") + "</div></div>" +
     (list.length > 3 ? '<div class="plist">' + list.slice(3).map(function (p, i) { return '<div class="prow' + (p.id === me ? " me" : "") + '"><b style="width:24px;text-align:center">' + (i + 4) + "</b>" + av(p) + "<span>" + esc(p.name) + '</span><span class="sc">$' + p.value.toLocaleString("es-MX") + "</span></div>"; }).join("") + "</div>" : "") +
     '<p class="lead" style="margin-top:16px">If your teacher starts another round, you’ll join automatically.</p>');
   $("#b-back").onclick = function () { lcall("live_leave", { p_code: liveCode }).catch(function () {}); liveForget(); screenHome(); };
