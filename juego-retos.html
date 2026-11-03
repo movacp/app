@@ -401,7 +401,7 @@ a.icon-btn.home-pill{width:auto!important;padding:0 16px 0 10px;gap:6px;display:
 <main class="app"><div class="panel" id="panel"></div></main>
 <script src="mova-auth.js"></script>
 <script src="toefl-bank.js"></script>
-<script src="mova-park.js?v=56"></script>
+<script src="mova-park.js?v=58"></script>
 <script src="mova-bingo.js?v=42"></script>
 <script>
 (function(){
@@ -1070,7 +1070,7 @@ function prepareGame() {
     var stEnd = room.start_at + GAMES["sugar-town"].secs * 1000;
     if (serverNow() > stEnd) { screenResults(); return; }
     var sc = (room.settings && room.settings.cats && room.settings.cats.length) ? room.settings.cats : ["vocab", "grammar"];
-    G = parkGame(null, null, { mode: "room", stage: stageOf(user()), cats: sc, round: room.round, startAt: room.start_at, endAt: stEnd });
+    G = parkGame(null, null, { mode: "room", stage: sugarStage(), cats: sc, round: room.round, startAt: room.start_at, endAt: stEnd });
     return;
   }
   R = mulberry((room.seed ^ (room.round * 2654435761)) >>> 0);
@@ -1548,10 +1548,10 @@ function lcall(fn, args) {
 }
 function liveStop() { clearInterval(livePoll); livePoll = null; }
 function liveForget() { try { sessionStorage.removeItem(K_LIVE); } catch (e) {} liveCode = null; live = null; liveStop(); if (park) { park.stop(); park = null; } }
-function liveStage() {
+function liveStage(park) {
   var lv = (live && live.settings && live.settings.level) || "each";
   if (lv === "kids" || lv === "children" || lv === "teens") return lv;
-  return stageOf(user());
+  return park ? sugarStage() : stageOf(user());
 }
 function liveEnter(c) {
   liveCode = c; try { sessionStorage.setItem(K_LIVE, c); } catch (e) {}
@@ -1612,8 +1612,8 @@ function livePool(stage, cats) {
 function liveTiers(stage, cats) {
   var T = [[], [], []], seen = {};
   function g(game, s) { try { var r = BUILD[game](s); return (r && r.qs) || []; } catch (e) { return []; } }
-  function add(t, qs) { (qs || []).forEach(function (q) { var k = q.html + "|" + q.ans; if (!seen[k]) { seen[k] = 1; T[t].push(q); } }); }
-  function many(t, game, s, n) { for (var i = 0; i < (n || 3); i++) add(t, g(game, s)); }
+  function add(t, qs) { (qs || []).forEach(function (q) { var k = qKey(q); if (!seen[k]) { seen[k] = 1; q._k = k; T[t].push(q); } }); }
+  function many(t, game, s, n) { for (var i = 0; i < (n || 3) * 3; i++) add(t, g(game, s)); }
   function tierOf(level) { var i = LV.indexOf(level); if (stage === "teens") return i <= 4 ? 0 : i <= 6 ? 1 : 2; return i <= 2 ? 0 : i <= 4 ? 1 : 2; }
   var tops = wqTopics(stage);
   cats.forEach(function (c) {
@@ -1628,13 +1628,30 @@ function liveTiers(stage, cats) {
     if (c === "math") { var gr = stage === "kids" ? [1, 2, 3] : stage === "children" ? [3, 4, 5] : [6, 7, 8]; gr.forEach(function (n, t) { many(t, "mision-matematica", { grade: n }, 2); }); }
   });
   if (!T[0].length && !T[1].length && !T[2].length) many(0, "grammar-showdown", { stage: stage }, 3);
-  return T.map(shuffle);
+  /* Primero las preguntas que el alumno no ha visto; las ya vistas al final, de la más antigua a la más reciente */
+  var H = qSeenLoad();
+  return T.map(function (t) {
+    var fresh = shuffle(t.filter(function (q) { return !H[q._k]; })), old = t.filter(function (q) { return H[q._k]; });
+    old.sort(function (a, b) { return H[a._k] - H[b._k]; });
+    return fresh.concat(old);
+  });
+}
+/* Clave de una pregunta por su texto visible (sin HTML) para no repetirla aunque cambien las opciones */
+function qKey(q) { var t = String(q.html || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().toLowerCase(); return (t || String(q.say || "")) + "|" + String(q.ans).toLowerCase(); }
+/* Historial de preguntas vistas por alumno (este dispositivo), para que no se repitan entre partidas */
+function qSeenKey() { var u = user() || {}; return "mova-qseen:" + String(u.name || "me").toLowerCase().replace(/\s+/g, "-"); }
+var qSeenMem = null;
+function qSeenLoad() { if (qSeenMem) return qSeenMem; var d = null; try { d = JSON.parse(localStorage.getItem(qSeenKey()) || "null"); } catch (e) {} qSeenMem = d && typeof d === "object" ? d : {}; return qSeenMem; }
+function qSeenMark(q) {
+  if (!q || !q._k) return; var H = qSeenLoad(); H[q._k] = Date.now();
+  var ks = Object.keys(H); if (ks.length > 900) { ks.sort(function (a, b) { return H[a] - H[b]; }); ks.slice(0, ks.length - 700).forEach(function (k) { delete H[k]; }); }
+  try { localStorage.setItem(qSeenKey(), JSON.stringify(H)); } catch (e) {}
 }
 
 function parkGame(lv, meP, opt) {
   opt = opt || {};
   var mode = opt.mode || "live", SOLO = mode === "solo", ROOM = mode === "room";
-  var st = opt.stage || liveStage(), cats = opt.cats || ((lv.settings && lv.settings.cats && lv.settings.cats.length) ? lv.settings.cats : ["vocab", "grammar"]);
+  var st = opt.stage || liveStage(true), cats = opt.cats || ((lv.settings && lv.settings.cats && lv.settings.cats.length) ? lv.settings.cats : ["vocab", "grammar"]);
   var sv = SOLO ? sugarLoad() : null;
   var coins = sv ? sv.coins : 0, items = sv ? sv.items.slice() : [], correct = 0, wrong = 0, streak = 0, locked = false, stopped = false, done = false;
   var tier = sv ? sv.tier : 0, maxTier = sv ? sv.maxTier : 0, up = 0, down = 0, tiers = null, tqi = [0, 0, 0], noLv = false;
@@ -1703,7 +1720,7 @@ function parkGame(lv, meP, opt) {
     for (var pass = 0; pass < 2; pass++) {
       if (!tiers) { R = Math.random; tiers = liveTiers(st, cats); tqi = [0, 0, 0]; }
       var order = tier === 0 ? [0, 1, 2] : tier === 1 ? [1, 0, 2] : [2, 1, 0];
-      for (var k = 0; k < 3; k++) { var t = order[k]; if (tqi[t] < tiers[t].length) return tiers[t][tqi[t]++]; }
+      for (var k = 0; k < 3; k++) { var t = order[k]; if (tqi[t] < tiers[t].length) { var q = tiers[t][tqi[t]++]; qSeenMark(q); return q; } }
       tiers = null; /* ya se usaron todas: se arma un banco nuevo */
     }
     return null;
@@ -1820,6 +1837,16 @@ function parkGame(lv, meP, opt) {
 /* ---------- Sugar Town · menú y modo Solo (parque guardado) ---------- */
 var sugarFromApp = false;
 function sugarKey() { var u = user() || {}; return "mova-sugar-town:" + String(u.name || "me").toLowerCase().replace(/\s+/g, "-"); }
+/* Nivel de Sugar Town: el que eligió el alumno; si no, su etapa en MOVA */
+function sugarLvKey() { return "mova-sugar-level:" + sugarKey().split(":")[1]; }
+function sugarStage() {
+  var v = ""; try { v = localStorage.getItem(sugarLvKey()) || ""; } catch (e) {}
+  if (STAGE_NAME[v]) return v;
+  var s = String((user() || {}).stage || "").toLowerCase();
+  if (/teen|adult|toefl/.test(s)) return "teens"; if (/child/.test(s)) return "children"; if (/kid/.test(s)) return "kids";
+  return "children";
+}
+function sugarSetStage(v) { if (STAGE_NAME[v]) try { localStorage.setItem(sugarLvKey(), v); } catch (e) {} }
 function sugarLoad() {
   var d = null; try { d = JSON.parse(localStorage.getItem(sugarKey()) || "null"); } catch (e) {}
   d = d || {};
@@ -1841,6 +1868,8 @@ function sugarCss() {
     ".st-opts .go-opt.main{background:linear-gradient(90deg,#FF8FC8,#FFB86B)!important;color:#3A1F4A!important}" +
     ".st-mine{margin-top:16px;background:#fff;border-radius:24px;padding:12px;box-shadow:0 10px 26px -18px rgba(54,40,120,.5)}.st-mine .pk-map{border-radius:16px;overflow:hidden}" +
     ".st-mine h3{margin:2px 4px 8px;font:800 17px 'Bricolage Grotesque',sans-serif;color:#15192B;display:flex;align-items:center;gap:8px}.st-mine h3 em{margin-left:auto;font:800 13px 'Plus Jakarta Sans',sans-serif;font-style:normal;color:#7A2A63;background:#FFE6F2;border-radius:999px;padding:4px 10px}" +
+    ".st-lvl{display:flex;align-items:center;justify-content:center;gap:6px;margin:12px auto 2px;flex-wrap:wrap}.st-lvl>span{font:800 12px 'Plus Jakarta Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#7A2A63;margin-right:4px}" +
+    ".st-lvl button{border:2px solid #F3C3DE;background:#fff;color:#16274A;border-radius:999px;padding:7px 14px;font:800 14px 'Bricolage Grotesque','Plus Jakarta Sans',sans-serif;cursor:pointer}.st-lvl button.on{background:#16274A;border-color:#16274A;color:#fff}" +
     ".st-alt{display:block;margin:10px auto 0;background:none;border:0;font:700 14px 'Plus Jakarta Sans',sans-serif;color:#7A2A63;text-decoration:underline;cursor:pointer}" +
     ".pkbadge.st{background:#FF6FB5;color:#fff}.st-lg{display:block;width:min(78%,330px);height:auto;margin:6px auto 2px;filter:drop-shadow(0 8px 12px rgba(122,22,80,.3))}" +
     ".pkexit{border:0;cursor:pointer;font:800 13px 'Plus Jakarta Sans',sans-serif;background:#FF6FB5!important;color:#fff!important}" +
@@ -1854,6 +1883,7 @@ function screenSugar() {
   render(topBar(true) +
     '<div class="st-hero"><span class="st-k">New · Build your park</span><img class="st-lgimg" src="st-logo.webp" alt="Sugar Town"></div>' +
     '<p class="lead st-lead">Answer in English, earn coins and build the sweetest amusement park in town.</p>' +
+    '<div class="st-lvl" id="st-lvl"><span>My level</span>' + STAGES.map(function (x) { return '<button type="button" data-v="' + x.id + '"' + (x.id === sugarStage() ? ' class="on"' : "") + ">" + x.name + "</button>"; }).join("") + "</div>" +
     '<div class="go-opts st-opts">' +
       '<button class="go-opt" id="st-solo" style="--c:#FFE6F2"><span class="t">' + ico("star") + "</span><span><b>" + (n || sv.coins ? "Keep building" : "Play solo") + "</b><small>" + (n ? n + "/" + N + " rides · $" + val.toLocaleString("es-MX") : "Your park is saved, play at your own pace") + '</small></span><span class="ar">' + arrow + "</span></button>" +
       '<button class="go-opt main" id="st-ch"><span class="t">' + ico("users") + '</span><span><b>Challenge a friend</b><small>3-minute race · share the code</small></span><span class="ar">' + arrow + "</span></button>" +
@@ -1864,6 +1894,7 @@ function screenSugar() {
     (n ? '<div class="st-mine"><h3>My park<em>$' + val.toLocaleString("es-MX") + "</em></h3>" + PK.scene(sv.items, { small: true }) + "</div>" : ""));
   $("#b-back").onclick = function () { if (sugarFromApp) location.href = "./#/games"; else screenHome(); };
   $("#st-solo").onclick = function () { unlock(); sugarSolo(); };
+  $("#st-lvl").onclick = function (e) { var b = e.target.closest("button"); if (!b) return; sugarSetStage(b.dataset.v); $$("#st-lvl button").forEach(function (x) { x.classList.toggle("on", x === b); }); };
   $("#st-live").onclick = function () { unlock(); screenJoin(); };
   $("#st-online").onclick = function () { unlock(); screenLive(); };
   $("#st-ch").onclick = function () {
@@ -1875,7 +1906,7 @@ function screenSugar() {
 function sugarSolo() {
   stopPoll(); if (G) { G.stop(); G = null; }
   sugarBase = sugarLoad();
-  G = parkGame(null, null, { mode: "solo", stage: stageOf(user()), cats: ["vocab", "grammar"] });
+  G = parkGame(null, null, { mode: "solo", stage: sugarStage(), cats: ["vocab", "grammar"] });
 }
 function sugarSoloEnd(r) {
   sugarCss();

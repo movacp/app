@@ -1,6 +1,6 @@
 /* Sugar Town · 3 zonas, 18 atracciones, visitantes y niveles adaptativos (alumno y maestra) */
 (function () {
-  var VER = "2";
+  var VER = "3";
   /* Zonas: imagen de fondo (4:5) y lotes [centro x, centro y, ancho, alto] en % de la zona.
      El orden de los lotes es: fila de abajo (cerca de la entrada) primero, izquierda y luego derecha. */
   var ZONES = [
