@@ -124,7 +124,7 @@ img{-webkit-user-drag:none;max-width:100%}
 <section class="scr on" id="home">
   <div class="layer" style="overflow-y:auto">
     <div class="hud"><button class="ib" onclick="goBack()" aria-label="Volver">←</button><div class="sp"></div><button class="ib" id="sndBtn" onclick="toggleSnd()">🔊</button></div>
-    <img class="cov" src="craftland/cl-cover.webp" alt="CraftLand">
+    <img class="cov" src="cl-cover.webp" alt="CraftLand">
     <div class="hcard">
       <h2>¡Hola, <span id="hName">explorer</span>!</h2>
       <div style="font-size:14px;margin-top:4px;opacity:.75">Elige tu nivel y tu personaje</div>
@@ -142,18 +142,18 @@ img{-webkit-user-drag:none;max-width:100%}
   <div class="layer">
     <div class="hud">
       <button class="ib" onclick="show('home')">←</button>
-      <div class="pill"><img src="craftland/cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
-      <div class="pill"><img src="craftland/cl-r-star.webp" alt=""><span class="cStars">0</span></div>
+      <div class="pill"><img src="cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
+      <div class="pill"><img src="cl-r-star.webp" alt=""><span class="cStars">0</span></div>
       <div class="sp"></div>
       <button class="ib" onclick="openHouse()" title="Mi casa">🏠</button>
     </div>
     <div class="map"><div class="mapw" id="mapw">
-      <img class="bgm" src="craftland/cl-island.webp" alt="Isla">
-      <div class="zone" style="left:24%;top:44%" onclick="openMine()"><img src="craftland/cl-pip.webp" alt=""><span>The Mine</span></div>
-      <div class="zone" style="left:52%;top:28%;animation-delay:.4s" onclick="openWorkshop()"><img src="craftland/cl-juno.webp" alt=""><span>Workshop</span></div>
-      <div class="zone lock" style="left:78%;top:38%;animation-delay:.8s" onclick="soon('Captain Rex','cl-rex')"><img src="craftland/cl-rex.webp" alt=""><span>Build Zone</span></div>
-      <div class="zone" style="left:44%;top:60%;animation-delay:.2s" onclick="openShop()"><img src="craftland/cl-luna.webp" alt=""><span>Luna's Shop</span></div>
-      <div class="zone lock" style="left:76%;top:70%;animation-delay:.6s" onclick="soon('Glitch','cl-glitch')"><img src="craftland/cl-glitch.webp" alt=""><span>The Obby</span></div>
+      <img class="bgm" src="cl-island.webp" alt="Isla">
+      <div class="zone" style="left:24%;top:44%" onclick="openMine()"><img src="cl-pip.webp" alt=""><span>The Mine</span></div>
+      <div class="zone" style="left:52%;top:28%;animation-delay:.4s" onclick="openWorkshop()"><img src="cl-juno.webp" alt=""><span>Workshop</span></div>
+      <div class="zone lock" style="left:78%;top:38%;animation-delay:.8s" onclick="soon('Captain Rex','cl-rex')"><img src="cl-rex.webp" alt=""><span>Build Zone</span></div>
+      <div class="zone" style="left:44%;top:60%;animation-delay:.2s" onclick="openShop()"><img src="cl-luna.webp" alt=""><span>Luna's Shop</span></div>
+      <div class="zone lock" style="left:76%;top:70%;animation-delay:.6s" onclick="soon('Glitch','cl-glitch')"><img src="cl-glitch.webp" alt=""><span>The Obby</span></div>
     </div></div>
     <div class="inv" id="inv1"></div>
   </div>
@@ -161,21 +161,21 @@ img{-webkit-user-drag:none;max-width:100%}
 
 <!-- MINE -->
 <section class="scr" id="mine">
-  <div class="bgimg" style="background-image:url(craftland/cl-mine.webp)"></div>
+  <div class="bgimg" style="background-image:url(cl-mine.webp)"></div>
   <div class="layer">
     <div class="hud">
       <button class="ib" onclick="leaveMine()">←</button>
-      <div class="pill"><img src="craftland/cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
-      <div class="pill"><img src="craftland/cl-r-bolt.webp" alt=""><span id="mStreak">0</span></div>
+      <div class="pill"><img src="cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
+      <div class="pill"><img src="cl-r-bolt.webp" alt=""><span id="mStreak">0</span></div>
       <div class="sp"></div>
       <div class="pill" id="mCount" style="padding-left:10px">0/10</div>
     </div>
     <div class="prog"><i id="mProg"></i></div>
     <div class="blockzone" id="blockzone">
-      <img class="pip" src="craftland/cl-pip.webp" alt="Pip">
+      <img class="pip" src="cl-pip.webp" alt="Pip">
       <div class="bubble" id="pipSay" style="left:clamp(70px,20vw,120px);bottom:clamp(80px,22vw,130px)">Tap the block!</div>
       <div class="block" id="block" onclick="tapBlock()">
-        <img class="b" id="blockImg" src="craftland/cl-b-stone.webp" alt="">
+        <img class="b" id="blockImg" src="cl-b-stone.webp" alt="">
         <svg class="crack" id="crack" viewBox="0 0 100 100"><path class="p1" d="M50 8 L44 30 L56 42 L46 60"/><path class="p2" d="M56 42 L80 50 L88 70 M46 60 L24 74"/><path class="p3" d="M44 30 L18 26 M46 60 L60 92"/></svg>
       </div>
       <div class="combo" id="combo">x2!</div>
@@ -190,16 +190,16 @@ img{-webkit-user-drag:none;max-width:100%}
 
 <!-- WORKSHOP -->
 <section class="scr" id="workshop">
-  <div class="bgimg" style="background-image:url(craftland/cl-workshop.webp)"></div>
+  <div class="bgimg" style="background-image:url(cl-workshop.webp)"></div>
   <div class="layer">
     <div class="hud">
       <button class="ib" onclick="show('island')">←</button>
       <div class="pill" style="padding-left:12px">🔨 Workshop</div>
       <div class="sp"></div>
-      <div class="pill"><img src="craftland/cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
+      <div class="pill"><img src="cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
     </div>
     <div class="qbox" style="display:flex;align-items:center;gap:10px;text-align:left">
-      <img src="craftland/cl-juno.webp" style="width:58px" alt=""><div><b>Chef Juno:</b> <span id="junoSay">Pick something to craft. Read the recipe!</span></div>
+      <img src="cl-juno.webp" style="width:58px" alt=""><div><b>Chef Juno:</b> <span id="junoSay">Pick something to craft. Read the recipe!</span></div>
     </div>
     <div class="recipes" id="recipes" style="flex:1"></div>
     <div class="inv" id="inv3"></div>
@@ -216,7 +216,7 @@ img{-webkit-user-drag:none;max-width:100%}
       <button class="ib" onclick="openWorkshop()" title="Taller">🔨</button>
     </div>
     <div style="text-align:center;color:var(--navy);font-weight:700;font-size:14px;padding:0 12px">Arrastra tus objetos para acomodarlos</div>
-    <div class="room"><div id="roomIn"><img class="bgr" src="craftland/cl-house.webp" alt=""></div></div>
+    <div class="room"><div id="roomIn"><img class="bgr" src="cl-house.webp" alt=""></div></div>
     <div class="inv" id="inv4"></div>
   </div>
 </section>
@@ -228,10 +228,10 @@ img{-webkit-user-drag:none;max-width:100%}
       <button class="ib" onclick="show('island')">←</button>
       <div class="pill" style="padding-left:12px">👗 Luna's Shop</div>
       <div class="sp"></div>
-      <div class="pill"><img src="craftland/cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
+      <div class="pill"><img src="cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
     </div>
     <div class="qbox" style="display:flex;align-items:center;gap:10px;text-align:left">
-      <img src="craftland/cl-luna.webp" style="width:58px" alt=""><div><b>Luna:</b> <span id="lunaSay">Answer my question and unlock a new look!</span></div>
+      <img src="cl-luna.webp" style="width:58px" alt=""><div><b>Luna:</b> <span id="lunaSay">Answer my question and unlock a new look!</span></div>
     </div>
     <div class="recipes" id="shopList" style="flex:1"></div>
   </div>
@@ -323,7 +323,7 @@ const LUNA = {
 </script>
 <script>
 /* ===================== ESTADO ===================== */
-const IMG = n => 'craftland/' + n + '.webp';
+const IMG = n => '' + n + '.webp';
 const MATS = { wood:'cl-b-wood', stone:'cl-b-stone', dirt:'cl-b-dirt', grass:'cl-b-grass', coal:'cl-b-coal', iron:'cl-b-iron', gold:'cl-b-gold', ice:'cl-b-ice', amethyst:'cl-b-amethyst', ruby:'cl-b-ruby', diamond:'cl-b-diamond' };
 const MAT_COL = { wood:'#B07A44', stone:'#8C8C8C', dirt:'#7A5233', grass:'#6CC04A', coal:'#333', iron:'#D9C2A6', gold:'#F5C531', ice:'#9EDCF5', amethyst:'#A66BDC', ruby:'#E0384B', diamond:'#4FE3E0' };
 const RARITY = [['stone',22],['wood',22],['dirt',12],['grass',10],['coal',11],['iron',9],['ice',5],['gold',4],['amethyst',2],['ruby',2],['diamond',1]];
