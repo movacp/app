@@ -24,7 +24,7 @@
     "word-quest": "Word Quest", "mision-matematica": "Misión Matemática", "level-up": "Level Up",
     "verb-memory": "Verb Memory", "sentence-builder": "Sentence Builder", "locked-library": "Locked Library",
     "toefl-practice": "TOEFL Practice", "word-forms": "Word Forms", "sentence-scramble": "Sentence Scramble",
-    "lee-con-mochi": "Aprende a leer con Mochi", "sopa-de-letras": "Sopa de letras", "crucigrama": "Crucigrama", "retos": "Retos multijugador"
+    "lee-con-mochi": "Aprende a leer con Mochi", "sopa-de-letras": "Sopa de letras", "crucigrama": "Crucigrama", "retos": "Retos multijugador", "craftland": "CraftLand"
   };
 
   function get(k) { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } }

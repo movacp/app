@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16274A">
+<title>CraftLand · MOVA Learning Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<script src="mova-auth.js"></script>
+<style>
+:root{--bg:#F5F3FA;--lime:#D3F36B;--lila:#C7B5FF;--navy:#16274A;--ok:#3DBE6B;--bad:#F2545B;--gold:#FFC93C}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--navy);font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--navy);overflow:hidden;user-select:none}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+h1,h2,h3,.ttl{font-family:'Bricolage Grotesque',sans-serif;margin:0}
+img{-webkit-user-drag:none;max-width:100%}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.scr.on{display:flex;animation:fadein .3s}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.bgimg{position:absolute;inset:0;background-size:cover;background-position:center;z-index:0}
+.bgimg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,39,74,.25),rgba(22,39,74,.05) 30%,rgba(22,39,74,.35))}
+.layer{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;min-height:0}
+/* HUD */
+.hud{display:flex;align-items:center;gap:8px;padding:10px 12px}
+.pill{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.95);border:3px solid var(--navy);border-radius:999px;padding:3px 10px 3px 4px;font-weight:800;font-size:15px;box-shadow:0 3px 0 var(--navy)}
+.pill img{width:26px;height:26px;object-fit:contain}
+.ib{width:44px;height:44px;border-radius:14px;border:3px solid var(--navy);background:#fff;box-shadow:0 3px 0 var(--navy);font-size:20px;font-weight:800;display:grid;place-items:center;cursor:pointer;color:var(--navy);flex:none}
+.ib:active,.btn:active{transform:translateY(3px);box-shadow:0 0 0 var(--navy)}
+.sp{flex:1}
+.btn{border:3px solid var(--navy);border-radius:16px;padding:13px 18px;font:800 17px 'Plus Jakarta Sans',sans-serif;background:var(--lime);color:var(--navy);box-shadow:0 4px 0 var(--navy);cursor:pointer}
+.btn.w{background:#fff}.btn.l{background:var(--lila)}
+.btn:disabled{opacity:.45}
+/* home */
+#home{background:radial-gradient(circle at 50% 30%,#2b4580,#16274A 70%)}
+#home .cov{width:min(92vw,520px);margin:8px auto 0;border-radius:22px;border:4px solid #fff;box-shadow:0 8px 0 rgba(0,0,0,.25)}
+.hcard{background:#fff;border:3px solid var(--navy);border-radius:22px;margin:14px auto;width:min(92vw,520px);padding:16px;box-shadow:0 5px 0 rgba(0,0,0,.3)}
+.stg{display:flex;gap:8px;margin:10px 0 14px}
+.stg button{flex:1;padding:10px 4px;border-radius:14px;border:3px solid var(--navy);background:#fff;font:800 15px 'Plus Jakarta Sans';color:var(--navy);cursor:pointer}
+.stg button.sel{background:var(--lila);box-shadow:inset 0 -4px 0 rgba(0,0,0,.12)}
+.avrow{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none}
+.avrow img{width:62px;height:62px;object-fit:contain;border:3px solid #ddd;border-radius:14px;background:var(--bg);flex:none;cursor:pointer;padding:3px}
+.avrow img.sel{border-color:var(--navy);background:var(--lime)}
+/* island */
+.map{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.mapw{position:relative;width:min(100vw,100vh*1.1,700px);aspect-ratio:1}
+.mapw>img.bgm{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 12px 18px rgba(0,0,0,.35))}
+.zone{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;cursor:pointer;animation:bob 2.4s ease-in-out infinite}
+.zone img{width:clamp(54px,14vw,96px);filter:drop-shadow(0 4px 0 rgba(0,0,0,.25))}
+.zone span{margin-top:-6px;background:#fff;border:3px solid var(--navy);border-radius:10px;padding:2px 8px;font:800 13px 'Plus Jakarta Sans';white-space:nowrap;box-shadow:0 3px 0 var(--navy)}
+.zone.lock{filter:grayscale(1) brightness(.85)}
+.zone.lock span::before{content:"🔒 "}
+@keyframes bob{50%{transform:translate(-50%,-56%)}}
+.island-me{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);display:flex;align-items:flex-end;gap:6px}
+/* mine */
+.qbox{background:#fff;border:3px solid var(--navy);border-radius:20px;margin:0 12px;padding:12px 14px;box-shadow:0 5px 0 var(--navy);text-align:center;position:relative}
+.qbox .q{font:800 clamp(18px,5vw,24px) 'Bricolage Grotesque';line-height:1.2}
+.qbox .em{font-size:52px;line-height:1.1}
+.qbox .hint{font-size:13px;opacity:.7;margin-top:2px}
+.say{border:none;background:var(--lila);border-radius:10px;padding:4px 10px;font:800 13px 'Plus Jakarta Sans';cursor:pointer;margin-top:6px;color:var(--navy)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px;}
+.opt{border:3px solid var(--navy);border-radius:16px;background:#fff;box-shadow:0 4px 0 var(--navy);padding:12px 6px;font:800 clamp(15px,4.4vw,19px) 'Plus Jakarta Sans';cursor:pointer;color:var(--navy);min-height:58px}
+.opt.big{font-size:40px;padding:6px}
+.opt.ok{background:var(--ok);color:#fff}
+.opt.bad{background:var(--bad);color:#fff;animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.blockzone{flex:1;min-height:120px;display:flex;align-items:center;justify-content:center;position:relative}
+.block{width:clamp(110px,32vw,170px);aspect-ratio:1;position:relative;cursor:pointer;transition:transform .1s}
+.block img.b{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 0 rgba(0,0,0,.3))}
+.block.hit{animation:hit .18s}
+@keyframes hit{50%{transform:scale(.9) rotate(-4deg)}}
+.crack{position:absolute;inset:12%;pointer-events:none}
+.crack path{stroke:#1b1b1b;stroke-width:4;fill:none;stroke-linecap:round;opacity:0}
+.crack.c1 path.p1,.crack.c2 path.p1,.crack.c2 path.p2,.crack.c3 path{opacity:.75}
+.shard{position:fixed;width:16px;height:16px;z-index:50;pointer-events:none;border:2px solid rgba(0,0,0,.35)}
+.fly{position:fixed;z-index:60;width:48px;height:48px;pointer-events:none;transition:all .75s cubic-bezier(.5,-.3,.6,1)}
+.pip{position:absolute;left:4px;bottom:0;width:clamp(80px,22vw,130px)}
+.bubble{position:absolute;background:#fff;border:3px solid var(--navy);border-radius:14px;padding:6px 10px;font:800 14px 'Plus Jakarta Sans';box-shadow:0 3px 0 var(--navy);max-width:180px}
+.combo{position:absolute;right:12px;top:4px;background:var(--gold);border:3px solid var(--navy);border-radius:12px;padding:3px 10px;font:800 16px 'Bricolage Grotesque';box-shadow:0 3px 0 var(--navy);transform:rotate(4deg);display:none}
+.combo.on{display:block;animation:pop .3s}
+@keyframes pop{0%{transform:scale(.3) rotate(4deg)}70%{transform:scale(1.2) rotate(4deg)}}
+/* inventory bar */
+.inv{display:flex;gap:6px;overflow-x:auto;padding:8px 12px;background:rgba(22,39,74,.85);scrollbar-width:none;min-height:62px}
+.slot{flex:none;width:50px;height:50px;border-radius:12px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.35);position:relative;display:grid;place-items:center}
+.slot img{width:38px;height:38px;object-fit:contain}
+.slot b{position:absolute;right:2px;bottom:0;color:#fff;font-size:13px;text-shadow:0 1px 2px #000}
+/* workshop */
+.recipes{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:10px 12px;overflow-y:auto}
+.rc{background:#fff;border:3px solid var(--navy);border-radius:16px;padding:8px;box-shadow:0 4px 0 var(--navy);text-align:center;cursor:pointer;position:relative}
+.rc img.it{width:64px;height:64px;object-fit:contain}
+.rc .nm{font:800 15px 'Bricolage Grotesque'}
+.rc .cost{display:flex;justify-content:center;gap:4px;flex-wrap:wrap;margin-top:4px;font-size:12px;font-weight:800}
+.rc .cost span{display:flex;align-items:center;gap:1px;background:var(--bg);border-radius:8px;padding:1px 5px}
+.rc .cost span.no{background:#ffe0e1;color:var(--bad)}
+.rc .cost img{width:18px;height:18px}
+.rc.made::after{content:"✓";position:absolute;top:4px;right:6px;background:var(--ok);color:#fff;border-radius:50%;width:22px;height:22px;font-size:14px;display:grid;place-items:center}
+/* house */
+.room{position:relative;flex:1;min-height:0;margin:0 8px;display:flex;align-items:center;justify-content:center}
+#roomIn{position:relative;height:100%;max-width:100%;aspect-ratio:1}
+#roomIn>img.bgr{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.furn{position:absolute;width:clamp(60px,18vw,110px);transform:translate(-50%,-50%);cursor:grab;touch-action:none;filter:drop-shadow(0 6px 3px rgba(0,0,0,.3))}
+.furn.drag{cursor:grabbing;transform:translate(-50%,-50%) scale(1.1);z-index:9}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(22,39,74,.7);display:none;align-items:center;justify-content:center;z-index:80;padding:16px}
+.modal.on{display:flex;animation:fadein .2s}
+.mcard{background:#fff;border:4px solid var(--navy);border-radius:24px;padding:18px;max-width:420px;width:100%;text-align:center;box-shadow:0 6px 0 rgba(0,0,0,.3);max-height:90vh;overflow-y:auto}
+.mcard img.hero{width:130px;height:130px;object-fit:contain}
+.mcard p{margin:8px 0 14px;font-size:16px}
+.recipeTxt{background:var(--bg);border-radius:14px;padding:10px;text-align:left;font-size:16px;line-height:1.5;margin:10px 0}
+.toast{position:fixed;left:50%;top:18%;transform:translateX(-50%);background:var(--lime);border:3px solid var(--navy);border-radius:16px;padding:8px 16px;font:800 18px 'Bricolage Grotesque';z-index:90;box-shadow:0 4px 0 var(--navy);animation:pop .3s;pointer-events:none;text-align:center}
+.confetti{position:fixed;width:10px;height:14px;z-index:95;pointer-events:none;top:-20px}
+.wordbank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0}
+.wordbank button{border:3px solid var(--navy);border-radius:12px;background:#fff;padding:8px 12px;font:800 16px 'Plus Jakarta Sans';box-shadow:0 3px 0 var(--navy);cursor:pointer;color:var(--navy)}
+.wordbank button.used{opacity:.25;pointer-events:none}
+.built{min-height:48px;border:3px dashed var(--lila);border-radius:14px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;font:800 16px 'Plus Jakarta Sans'}
+.built span{background:var(--lime);border-radius:10px;padding:4px 10px;cursor:pointer}
+.prog{height:12px;background:rgba(255,255,255,.3);border-radius:8px;margin:0 12px;overflow:hidden;border:2px solid var(--navy)}
+.prog i{display:block;height:100%;background:var(--lime);width:0;transition:width .4s}
+</style>
+</head>
+<body>
+<div id="app">
+<!-- HOME -->
+<section class="scr on" id="home">
+  <div class="layer" style="overflow-y:auto">
+    <div class="hud"><button class="ib" onclick="goBack()" aria-label="Volver">←</button><div class="sp"></div><button class="ib" id="sndBtn" onclick="toggleSnd()">🔊</button></div>
+    <img class="cov" src="craftland/cl-cover.webp" alt="CraftLand">
+    <div class="hcard">
+      <h2>¡Hola, <span id="hName">explorer</span>!</h2>
+      <div style="font-size:14px;margin-top:4px;opacity:.75">Elige tu nivel y tu personaje</div>
+      <div class="stg" id="stgBox">
+        <button data-s="kids">Kids</button><button data-s="children">Children</button><button data-s="teens">Teens</button>
+      </div>
+      <div class="avrow" id="avRow"></div>
+      <button class="btn" style="width:100%;margin-top:8px;font-size:20px" onclick="enterIsland()">▶ Play · Mi isla</button>
+    </div>
+  </div>
+</section>
+
+<!-- ISLAND -->
+<section class="scr" id="island" style="background:linear-gradient(#bfe6f7,#e4f4fb)">
+  <div class="layer">
+    <div class="hud">
+      <button class="ib" onclick="show('home')">←</button>
+      <div class="pill"><img src="craftland/cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
+      <div class="pill"><img src="craftland/cl-r-star.webp" alt=""><span class="cStars">0</span></div>
+      <div class="sp"></div>
+      <button class="ib" onclick="openHouse()" title="Mi casa">🏠</button>
+    </div>
+    <div class="map"><div class="mapw" id="mapw">
+      <img class="bgm" src="craftland/cl-island.webp" alt="Isla">
+      <div class="zone" style="left:24%;top:44%" onclick="openMine()"><img src="craftland/cl-pip.webp" alt=""><span>The Mine</span></div>
+      <div class="zone" style="left:52%;top:28%;animation-delay:.4s" onclick="openWorkshop()"><img src="craftland/cl-juno.webp" alt=""><span>Workshop</span></div>
+      <div class="zone lock" style="left:78%;top:38%;animation-delay:.8s" onclick="soon('Captain Rex','cl-rex')"><img src="craftland/cl-rex.webp" alt=""><span>Build Zone</span></div>
+      <div class="zone" style="left:44%;top:60%;animation-delay:.2s" onclick="openShop()"><img src="craftland/cl-luna.webp" alt=""><span>Luna's Shop</span></div>
+      <div class="zone lock" style="left:76%;top:70%;animation-delay:.6s" onclick="soon('Glitch','cl-glitch')"><img src="craftland/cl-glitch.webp" alt=""><span>The Obby</span></div>
+    </div></div>
+    <div class="inv" id="inv1"></div>
+  </div>
+</section>
+
+<!-- MINE -->
+<section class="scr" id="mine">
+  <div class="bgimg" style="background-image:url(craftland/cl-mine.webp)"></div>
+  <div class="layer">
+    <div class="hud">
+      <button class="ib" onclick="leaveMine()">←</button>
+      <div class="pill"><img src="craftland/cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
+      <div class="pill"><img src="craftland/cl-r-bolt.webp" alt=""><span id="mStreak">0</span></div>
+      <div class="sp"></div>
+      <div class="pill" id="mCount" style="padding-left:10px">0/10</div>
+    </div>
+    <div class="prog"><i id="mProg"></i></div>
+    <div class="blockzone" id="blockzone">
+      <img class="pip" src="craftland/cl-pip.webp" alt="Pip">
+      <div class="bubble" id="pipSay" style="left:clamp(70px,20vw,120px);bottom:clamp(80px,22vw,130px)">Tap the block!</div>
+      <div class="block" id="block" onclick="tapBlock()">
+        <img class="b" id="blockImg" src="craftland/cl-b-stone.webp" alt="">
+        <svg class="crack" id="crack" viewBox="0 0 100 100"><path class="p1" d="M50 8 L44 30 L56 42 L46 60"/><path class="p2" d="M56 42 L80 50 L88 70 M46 60 L24 74"/><path class="p3" d="M44 30 L18 26 M46 60 L60 92"/></svg>
+      </div>
+      <div class="combo" id="combo">x2!</div>
+    </div>
+    <div id="qWrap" style="display:none">
+      <div class="qbox" id="qbox"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    <div class="inv" id="inv2"></div>
+  </div>
+</section>
+
+<!-- WORKSHOP -->
+<section class="scr" id="workshop">
+  <div class="bgimg" style="background-image:url(craftland/cl-workshop.webp)"></div>
+  <div class="layer">
+    <div class="hud">
+      <button class="ib" onclick="show('island')">←</button>
+      <div class="pill" style="padding-left:12px">🔨 Workshop</div>
+      <div class="sp"></div>
+      <div class="pill"><img src="craftland/cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
+    </div>
+    <div class="qbox" style="display:flex;align-items:center;gap:10px;text-align:left">
+      <img src="craftland/cl-juno.webp" style="width:58px" alt=""><div><b>Chef Juno:</b> <span id="junoSay">Pick something to craft. Read the recipe!</span></div>
+    </div>
+    <div class="recipes" id="recipes" style="flex:1"></div>
+    <div class="inv" id="inv3"></div>
+  </div>
+</section>
+
+<!-- HOUSE -->
+<section class="scr" id="house" style="background:#EADCC8">
+  <div class="layer">
+    <div class="hud">
+      <button class="ib" onclick="show('island')">←</button>
+      <div class="pill" style="padding-left:12px">🏠 My house</div>
+      <div class="sp"></div>
+      <button class="ib" onclick="openWorkshop()" title="Taller">🔨</button>
+    </div>
+    <div style="text-align:center;color:var(--navy);font-weight:700;font-size:14px;padding:0 12px">Arrastra tus objetos para acomodarlos</div>
+    <div class="room"><div id="roomIn"><img class="bgr" src="craftland/cl-house.webp" alt=""></div></div>
+    <div class="inv" id="inv4"></div>
+  </div>
+</section>
+
+<!-- SHOP -->
+<section class="scr" id="shop" style="background:linear-gradient(#f3eaff,#F5F3FA)">
+  <div class="layer">
+    <div class="hud">
+      <button class="ib" onclick="show('island')">←</button>
+      <div class="pill" style="padding-left:12px">👗 Luna's Shop</div>
+      <div class="sp"></div>
+      <div class="pill"><img src="craftland/cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
+    </div>
+    <div class="qbox" style="display:flex;align-items:center;gap:10px;text-align:left">
+      <img src="craftland/cl-luna.webp" style="width:58px" alt=""><div><b>Luna:</b> <span id="lunaSay">Answer my question and unlock a new look!</span></div>
+    </div>
+    <div class="recipes" id="shopList" style="flex:1"></div>
+  </div>
+</section>
+</div>
+
+<div class="modal" id="modal"><div class="mcard" id="mcard"></div></div>
+<script>
+/* ===================== BANCO DE PREGUNTAS ===================== */
+// KIDS: palabra ↔ dibujo. Cada palabra genera 2 tipos de pregunta (ver→elegir palabra, oír/leer→elegir dibujo)
+const KW = {
+ animals:[['dog','🐶'],['cat','🐱'],['fish','🐟'],['bird','🐦'],['cow','🐮'],['pig','🐷'],['horse','🐴'],['duck','🦆'],['frog','🐸'],['lion','🦁'],['monkey','🐵'],['rabbit','🐰'],['bear','🐻'],['snake','🐍'],['elephant','🐘'],['turtle','🐢'],['bee','🐝'],['spider','🕷️'],['sheep','🐑'],['chicken','🐔']],
+ food:[['apple','🍎'],['banana','🍌'],['bread','🍞'],['milk','🥛'],['egg','🥚'],['cake','🍰'],['pizza','🍕'],['cheese','🧀'],['carrot','🥕'],['orange','🍊'],['grapes','🍇'],['ice cream','🍦'],['cookie','🍪'],['water','💧'],['corn','🌽'],['strawberry','🍓'],['juice','🧃'],['sandwich','🥪']],
+ colors:[['red','🟥'],['blue','🟦'],['green','🟩'],['yellow','🟨'],['orange','🟧'],['purple','🟪'],['black','⬛'],['white','⬜'],['brown','🟫']],
+ things:[['ball','⚽'],['book','📘'],['pencil','✏️'],['chair','🪑'],['bed','🛏️'],['door','🚪'],['car','🚗'],['bus','🚌'],['house','🏠'],['tree','🌳'],['flower','🌸'],['sun','☀️'],['moon','🌙'],['star','⭐'],['rain','🌧️'],['hat','👒'],['shoes','👟'],['shirt','👕'],['bag','🎒'],['clock','⏰'],['key','🔑'],['boat','⛵'],['kite','🪁'],['drum','🥁'],['phone','📱'],['cup','🥤']],
+ body:[['eye','👁️'],['ear','👂'],['nose','👃'],['mouth','👄'],['hand','✋'],['foot','🦶'],['tooth','🦷']],
+ numbers:[['one','1️⃣'],['two','2️⃣'],['three','3️⃣'],['four','4️⃣'],['five','5️⃣'],['six','6️⃣'],['seven','7️⃣'],['eight','8️⃣'],['nine','9️⃣'],['ten','🔟']],
+ actions:[['run','🏃'],['swim','🏊'],['sleep','😴'],['eat','😋'],['sing','🎤'],['read','📖'],['dance','💃'],['jump','🤸'],['cry','😢'],['laugh','😂']]
+};
+function kidsBank(){const out=[];for(const cat in KW){const L=KW[cat];L.forEach(([w,e],i)=>{
+  out.push({id:'k1'+cat+i,type:'pic',em:e,q:'What is it?',a:w,pool:L.map(x=>x[0]),say:w});
+  out.push({id:'k2'+cat+i,type:'word',q:w,a:e,pool:L.map(x=>x[1]),say:w,big:true,hint:'Find the picture'});
+ });}return out;}
+
+// CHILDREN: frases cortas, completar
+const CH = [
+['I ___ a sister.','have',['has','am','is']],['She ___ ten years old.','is',['are','am','have']],['They ___ playing soccer.','are',['is','am','be']],
+['There ___ three cats.','are',['is','am','be']],['There ___ a book on the table.','is',['are','am','be']],['He ___ to school by bus.','goes',['go','going','gos']],
+['We ___ pizza on Fridays.','eat',['eats','eating','ate']],['My dad ___ coffee every morning.','drinks',['drink','drinking','drunk']],['___ you like bananas?','Do',['Does','Are','Is']],
+['___ she play the piano?','Does',['Do','Is','Are']],['I don\'t ___ spiders.','like',['likes','liking','liked']],['The cat is ___ the box.','in',['at','of','for']],
+['The lamp is ___ the table.','on',['in','at','of']],['The ball is ___ the bed.','under',['on','of','at']],['I get up ___ 7 o\'clock.','at',['in','on','of']],
+['My birthday is ___ May.','in',['at','on','of']],['We have English ___ Monday.','on',['in','at','of']],['This is ___ apple.','an',['a','the','some']],
+['That is ___ dog.','a',['an','some','any']],['Look! It ___ raining.','is',['are','am','be']],['I can ___ a bike.','ride',['rides','riding','rode']],
+['Can you ___?','swim',['swims','swimming','swam']],['These are my ___.','books',['book','bookes','a book']],['Two ___ are in the garden.','children',['childs','child','childrens']],
+['How many ___ do you have?','pets',['pet','pet\'s','a pet']],['Her hair is long ___ brown.','and',['but','or','so']],['I like apples ___ I don\'t like pears.','but',['and','or','so']],
+['___ is your name?','What',['Where','Who','When']],['___ do you live?','Where',['What','Who','How']],['___ old are you?','How',['What','Who','Where']],
+['___ is your teacher?','Who',['What','Where','When']],['It\'s cold. Put on your ___.','jacket',['shorts','sandals','sunglasses']],['I am hungry. I want a ___.','sandwich',['pencil','chair','shoe']],
+['I brush my ___ every night.','teeth',['hair cut','feet','book']],['A cow gives us ___.','milk',['eggs','honey','bread']],['Fish live in the ___.','water',['sky','tree','desert']],
+['The opposite of big is ___.','small',['tall','long','fast']],['The opposite of hot is ___.','cold',['warm','wet','new']],['The opposite of happy is ___.','sad',['angry','fun','glad']],
+['Monday, Tuesday, ___.','Wednesday',['Thursday','Sunday','Friday']],['January, February, ___.','March',['April','May','June']],['Spring, summer, ___, winter.','autumn',['spring','rain','snow']],
+['I ___ my homework yesterday.','did',['do','does','doing']],['She ___ to the park last Sunday.','went',['go','goes','going']],['We ___ a movie last night.','watched',['watch','watches','watching']],
+['Is this your pen? Yes, it ___.','is',['are','isn\'t','does']],['Are they your friends? No, they ___.','aren\'t',['isn\'t','don\'t','not']],['He is ___ than me.','taller',['tall','tallest','more tall']],
+['An elephant is ___ than a mouse.','bigger',['big','biggest','more big']],['My room is ___ the kitchen and the bathroom.','between',['under','in','on']],['The dog is ___ the door.','behind',['between','into','of']],
+['Please ___ the window. It\'s cold.','close',['open','eat','sing']],['I ___ breakfast at 8 a.m.','have',['has','am','do']],['She always ___ her bed.','makes',['make','do','does']],
+['They ___ TV right now.','are watching',['watch','watches','is watching']],['Listen! The baby ___.','is crying',['cry','cries','crying']],['Whose bag is this? It\'s ___.','mine',['me','my','I']],
+['We need ___ eggs for the cake.','some',['a','an','any']],['There isn\'t ___ milk.','any',['some','a','an']],['I\'m ___ the bus. Wait for me!','on',['in','at','under']]
+];
+function childBank(){return CH.map((c,i)=>({id:'c'+i,type:'fill',q:c[0],a:c[1],opts:[c[1],...c[2]]}));}
+
+// TEENS: gramática y vocabulario
+const TE = [
+['I ___ in Mexico City since 2020.','have lived',['live','lived','am living']],['She ___ her keys. She can\'t open the door.','has lost',['lost','loses','is losing']],
+['When I arrived, they ___ dinner.','were having',['had','have had','are having']],['If it rains, we ___ at home.','will stay',['would stay','stayed','stay will']],
+['If I ___ rich, I would travel the world.','were',['am','will be','be']],['If she had studied, she ___ the exam.','would have passed',['will pass','passed','would pass']],
+['The bridge ___ in 1990.','was built',['built','was build','is building']],['English ___ all over the world.','is spoken',['speaks','is speaking','spoken']],
+['The cake ___ by my grandma.','was made',['made','was make','is making']],['You ___ wear a helmet. It\'s the law.','must',['might','could','would']],
+['You ___ eat so much sugar. It\'s bad for you.','shouldn\'t',['mustn\'t to','don\'t should','not should']],['She ___ be at home; her car is outside.','must',['can\'t','mustn\'t','shouldn\'t']],
+['This is the ___ movie I have ever seen.','best',['better','good','most good']],['Today is ___ than yesterday.','hotter',['hoter','more hot','hottest']],
+['He is not as tall ___ his brother.','as',['than','that','like']],['I\'m looking forward ___ you.','to seeing',['to see','seeing','see']],
+['She gave ___ smoking last year.','up',['out','off','in']],['Can you look ___ my dog this weekend?','after',['for','up','out']],
+['Please turn ___ the lights when you leave.','off',['up','out','over']],['I ran ___ my teacher at the mall.','into',['over','up','off']],
+['He asked me where I ___.','lived',['live','do I live','did I live']],['She said that she ___ tired.','was',['is','were','be']],
+['I wish I ___ speak French.','could',['can','will','would can']],['By next year, I ___ my studies.','will have finished',['finish','will finish ago','have finished']],
+['The man ___ lives next door is a doctor.','who',['which','whose','where']],['That\'s the house ___ I was born.','where',['which','who','what']],
+['The girl ___ bike was stolen called the police.','whose',['who','which','who\'s']],['I\'m used to ___ up early.','getting',['get','got','gets']],
+['I used to ___ soccer every day.','play',['playing','played','plays']],['Neither my sister ___ I like coffee.','nor',['or','and','but']],
+['___ it was raining, we went out.','Although',['Because','So','Despite']],['___ the rain, we went out.','Despite',['Although','Even','However']],
+['I don\'t know ___ he will come.','whether',['that','what','which']],['It\'s time we ___ home.','went',['go','going','will go']],
+['She suggested ___ a taxi.','taking',['to take','take','took']],['I\'ve been waiting ___ two hours.','for',['since','during','from']],
+['I\'ve been here ___ 8 a.m.','since',['for','during','ago']],['How long ___ you been studying English?','have',['are','do','did']],
+['They ___ already left when we got there.','had',['have','has','were']],['Let me ___ you a hand.','give',['to give','giving','gave']],
+['Synonym of "huge":','enormous',['tiny','quick','fragile']],['Synonym of "begin":','start',['finish','stop','avoid']],
+['Opposite of "generous":','selfish',['kind','brave','honest']],['Opposite of "ancient":','modern',['old','historic','classic']],
+['"Make" or "do"? ___ your homework.','Do',['Make','Take','Have']],['"Make" or "do"? ___ a mistake.','Make',['Do','Take','Get']],
+['Have you ___ been to Paris?','ever',['yet','already','still']],['I haven\'t finished ___.','yet',['already','ever','still']],
+['There are ___ people at the party than last year.','fewer',['less','little','few']],['There is ___ traffic today.','less',['fewer','few','many']],
+['The news ___ good today.','is',['are','were','have']],['Everybody ___ the answer.','knows',['know','are knowing','knowing']],
+['If you heat ice, it ___.','melts',['would melt','melted','will melted']],['Unless you hurry, you ___ the bus.','will miss',['miss','would miss','missed']],
+['She\'s the person ___ helped me.','that',['which','whose','whom she']],['You\'d better ___ now.','leave',['to leave','leaving','left']]
+];
+function teenBank(){return TE.map((c,i)=>({id:'t'+i,type:'fill',q:c[0],a:c[1],opts:[c[1],...c[2]]}));}
+
+// LUNA: ropa, colores, números (por etapa)
+const LUNA = {
+ kids:[['👕','shirt',['hat','sock','dress']],['👗','dress',['shirt','boots','cap']],['🧢','cap',['scarf','skirt','shoe']],['🧦','socks',['gloves','pants','hat']],['👖','jeans',['dress','shirt','coat']],['🧣','scarf',['shoes','cap','skirt']],['🧤','gloves',['socks','hat','jeans']],['🥾','boots',['gloves','dress','scarf']],['🟪','purple',['pink','blue','green']],['🟧','orange',['red','yellow','brown']],['🔢 7','seven',['six','eight','four']],['🔢 12','twelve',['twenty','two','eleven']]],
+ children:[['It\'s sunny. Wear your ___.','sunglasses',['gloves','scarf','boots']],['It\'s snowing. Wear your ___.','coat',['shorts','sandals','t-shirt']],['How much is it? $15 = ___ dollars','fifteen',['fifty','five','sixteen']],['Red + yellow = ___','orange',['green','purple','pink']],['Blue + yellow = ___','green',['orange','brown','purple']],['Can I try ___ these jeans?','on',['in','at','up']],['These shoes are too ___. I need a bigger size.','small',['big','long','cheap']],['$30 = ___ dollars','thirty',['thirteen','three','forty']]],
+ teens:[['These jeans don\'t ___ me. They\'re too tight.','fit',['suit','match','wear']],['That color really ___ you!','suits',['fits','wears','dresses']],['I\'d like to ___ these shoes for a bigger size.','exchange',['change on','return to','swap of']],['It\'s on sale: 50% ___.','off',['out','down','less']],['How much ___ these sneakers?','are',['is','does','do']],['Could I pay ___ card?','by',['with the','in','on']],['The sweater is made ___ wool.','of',['by','from to','with of']],['I can\'t ___ it. It\'s too expensive.','afford',['buy off','pay','spend']]]
+};
+</script>
+<script>
+/* ===================== ESTADO ===================== */
+const IMG = n => 'craftland/' + n + '.webp';
+const MATS = { wood:'cl-b-wood', stone:'cl-b-stone', dirt:'cl-b-dirt', grass:'cl-b-grass', coal:'cl-b-coal', iron:'cl-b-iron', gold:'cl-b-gold', ice:'cl-b-ice', amethyst:'cl-b-amethyst', ruby:'cl-b-ruby', diamond:'cl-b-diamond' };
+const MAT_COL = { wood:'#B07A44', stone:'#8C8C8C', dirt:'#7A5233', grass:'#6CC04A', coal:'#333', iron:'#D9C2A6', gold:'#F5C531', ice:'#9EDCF5', amethyst:'#A66BDC', ruby:'#E0384B', diamond:'#4FE3E0' };
+const RARITY = [['stone',22],['wood',22],['dirt',12],['grass',10],['coal',11],['iron',9],['ice',5],['gold',4],['amethyst',2],['ruby',2],['diamond',1]];
+const RARE = ['gold','amethyst','ruby','diamond'];
+const ITEMS = [
+ {k:'chair',img:'cl-i-chair',cost:{wood:3}},
+ {k:'table',img:'cl-i-table',cost:{wood:4,iron:1}},
+ {k:'bed',img:'cl-i-bed',cost:{wood:3,grass:2}},
+ {k:'lamp',img:'cl-i-lamp',cost:{iron:1,coal:2}},
+ {k:'door',img:'cl-i-door',cost:{wood:4,iron:1}},
+ {k:'bookshelf',img:'cl-i-bookshelf',cost:{wood:5,coal:1}},
+ {k:'bucket',img:'cl-i-bucket',cost:{iron:3}},
+ {k:'pickaxe',img:'cl-i-pickaxe',cost:{wood:2,stone:3}},
+ {k:'chest',img:'cl-i-chest',cost:{wood:6,iron:2}},
+ {k:'backpack',img:'cl-i-backpack',cost:{grass:3,iron:1}},
+ {k:'boat',img:'cl-i-boat',cost:{wood:5,ice:1}},
+ {k:'sword',img:'cl-i-sword',cost:{wood:1,iron:2,diamond:1}}
+];
+const FW={chair:14,table:20,bed:32,lamp:8,door:13,bookshelf:20,bucket:8,pickaxe:11,chest:15,backpack:10,boat:30,sword:10};
+const AVS = Array.from({length:12},(_,i)=>({id:'cl-av'+(i+1),price:i<3?0:20+Math.floor(i/3)*10}));
+
+const U = (window.MovaAuth && MovaAuth.user && MovaAuth.user()) || null;
+const KEY = 'mova-craftland-' + (U ? U.username : 'guest');
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || null }catch(e){ return null } }
+let S = load() || { stage:null, av:'cl-av1', coins:0, stars:0, inv:{wood:2,stone:2}, made:[], room:{}, owned:['cl-av1','cl-av2','cl-av3'], used:{}, best:0, rounds:0 };
+function guessStage(){ const s=((U&&U.stage)||'').toLowerCase(); if(/teen/.test(s)) return 'teens'; if(/child|kid ?2|junior/.test(s)) return 'children'; if(/kid|baby|pre/.test(s)) return 'kids'; return 'children'; }
+if(!S.stage) S.stage = guessStage();
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)) }catch(e){} }
+
+/* ===================== SONIDOS (Web Audio, sin costo) ===================== */
+let AC=null, SND = localStorage.getItem('cl-snd')!=='0';
+function ac(){ if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)() }catch(e){} } if(AC&&AC.state==='suspended') AC.resume(); return AC }
+function tone(f,d,t='square',v=.08,delay=0,slide){ const a=ac(); if(!a||!SND) return; const o=a.createOscillator(),g=a.createGain(),s=a.currentTime+delay; o.type=t; o.frequency.setValueAtTime(f,s); if(slide) o.frequency.exponentialRampToValueAtTime(slide,s+d); g.gain.setValueAtTime(v,s); g.gain.exponentialRampToValueAtTime(.001,s+d); o.connect(g).connect(a.destination); o.start(s); o.stop(s+d+.02) }
+function noise(d,v=.15){ const a=ac(); if(!a||!SND) return; const b=a.createBuffer(1,a.sampleRate*d,a.sampleRate),x=b.getChannelData(0); for(let i=0;i<x.length;i++) x[i]=(Math.random()*2-1)*(1-i/x.length); const s=a.createBufferSource(),g=a.createGain(),f=a.createBiquadFilter(); f.type='lowpass'; f.frequency.value=900; s.buffer=b; g.gain.value=v; s.connect(f).connect(g).connect(a.destination); s.start() }
+const sfx = {
+ click(){ tone(660,.06,'square',.05) },
+ ok(){ tone(523,.09,'square',.07); tone(659,.09,'square',.07,.08); tone(784,.16,'square',.07,.16) },
+ no(){ tone(180,.25,'sawtooth',.06,0,110) },
+ hit(){ noise(.08,.18); tone(120,.06,'square',.06) },
+ brk(){ noise(.28,.25); tone(200,.2,'triangle',.08,0,60) },
+ coin(){ tone(988,.07,'square',.06); tone(1319,.18,'square',.06,.07) },
+ craft(){ [880,1175,1568,2093].forEach((f,i)=>tone(f,.12,'triangle',.06,i*.06)) },
+ win(){ [523,659,784,1047,784,1047].forEach((f,i)=>tone(f,.16,'square',.07,i*.12)) },
+ rare(){ [1047,1319,1568,2093,2637].forEach((f,i)=>tone(f,.1,'triangle',.07,i*.05)) }
+};
+function toggleSnd(){ SND=!SND; localStorage.setItem('cl-snd',SND?'1':'0'); document.getElementById('sndBtn').textContent=SND?'🔊':'🔇'; sfx.click() }
+/* voz del navegador (gratis). Si existe la voz MOVA la usa. */
+function speak(t){ try{ if(window.MovaVoice&&MovaVoice.say){ MovaVoice.say(t); return } }catch(e){} try{ const u=new SpeechSynthesisUtterance(t); u.lang='en-US'; u.rate=.85; speechSynthesis.cancel(); speechSynthesis.speak(u) }catch(e){} }
+
+/* ===================== UTILIDADES ===================== */
+const $ = id => document.getElementById(id);
+const shuf = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]} return a };
+const pick = a => a[Math.random()*a.length|0];
+function weighted(list){ let t=list.reduce((s,x)=>s+x[1],0), r=Math.random()*t; for(const [k,w] of list){ if((r-=w)<0) return k } return list[0][0] }
+function show(id){ document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id)); refresh(); }
+function toast(t,ms=1400){ const d=document.createElement('div'); d.className='toast'; d.innerHTML=t; document.body.appendChild(d); setTimeout(()=>d.remove(),ms) }
+function modal(html){ $('mcard').innerHTML=html; $('modal').classList.add('on') }
+function closeModal(){ $('modal').classList.remove('on') }
+function confetti(n=40){ const c=['#D3F36B','#C7B5FF','#FFC93C','#4FE3E0','#FF8FC8']; for(let i=0;i<n;i++){ const d=document.createElement('div'); d.className='confetti'; d.style.left=Math.random()*100+'vw'; d.style.background=pick(c); document.body.appendChild(d); const dur=1200+Math.random()*1400; d.animate([{transform:'translateY(0) rotate(0)'},{transform:`translateY(110vh) rotate(${Math.random()*720}deg)`}],{duration:dur,easing:'ease-in'}); setTimeout(()=>d.remove(),dur) } }
+function refresh(){
+  document.querySelectorAll('.cCoins').forEach(e=>e.textContent=S.coins);
+  document.querySelectorAll('.cStars').forEach(e=>e.textContent=S.stars);
+  ['inv1','inv2','inv3','inv4'].forEach(id=>{ const el=$(id); if(!el) return;
+    const keys=Object.keys(MATS).filter(k=>S.inv[k]>0);
+    el.innerHTML = keys.length ? keys.map(k=>`<div class="slot" data-m="${k}"><img src="${IMG(MATS[k])}" alt="${k}"><b>${S.inv[k]}</b></div>`).join('')
+      : '<div style="color:#fff;font-weight:700;font-size:14px;align-self:center;padding:0 6px">Tu inventario está vacío. ¡Ve a la mina! ⛏️</div>';
+  });
+}
+
+/* ===================== MAZO SIN REPETIR ===================== */
+function bankFor(stage){ return stage==='kids'?kidsBank():stage==='teens'?teenBank():childBank() }
+function drawQ(){
+  const bank=bankFor(S.stage), used=S.used[S.stage]||[];
+  let pool=bank.filter(q=>!used.includes(q.id));
+  if(pool.length<4){ S.used[S.stage]=[]; pool=bank; }   // se acabó el mazo: se rebaraja
+  const q=pick(pool); (S.used[S.stage]=S.used[S.stage]||[]).push(q.id); save();
+  if(q.type==='pic'||q.type==='word'){ const others=shuf(q.pool.filter(x=>x!==q.a)).slice(0,3); q.opts=shuf([q.a,...others]); }
+  else q.opts=shuf(q.opts);
+  return q;
+}
+
+/* ===================== HOME ===================== */
+function goBack(){ if(history.length>1) history.back(); else location.href='index.html#/games' }
+function renderHome(){
+  $('hName').textContent = U ? U.name.split(' ')[0] : 'explorer';
+  document.querySelectorAll('#stgBox button').forEach(b=>{ b.classList.toggle('sel',b.dataset.s===S.stage); b.onclick=()=>{ S.stage=b.dataset.s; save(); sfx.click(); renderHome() } });
+  $('avRow').innerHTML = S.owned.map(a=>`<img src="${IMG(a)}" class="${a===S.av?'sel':''}" data-a="${a}" alt="">`).join('');
+  $('avRow').querySelectorAll('img').forEach(i=>i.onclick=()=>{ S.av=i.dataset.a; save(); sfx.click(); renderHome() });
+  $('sndBtn').textContent=SND?'🔊':'🔇';
+}
+function enterIsland(){ sfx.ok(); show('island'); if(!S.seenIntro){ S.seenIntro=1; save(); modal(`<img class="hero" src="${IMG('cl-pip')}"><h2>Welcome to CraftLand!</h2><p>Esta es <b>tu isla</b>. Mina bloques en <b>The Mine</b> respondiendo en inglés, lleva los materiales al <b>Workshop</b> y decora <b>tu casa</b>.</p><button class="btn" onclick="closeModal()">Let's go!</button>`) } }
+function soon(who,img){ sfx.click(); modal(`<img class="hero" src="${IMG(img)}"><h2>${who}</h2><p>Esta zona se abre muy pronto. 🚧<br>Mientras, ¡junta materiales en la mina!</p><button class="btn" onclick="closeModal()">OK</button>`) }
+/* ===================== LA MINA ===================== */
+const NUMW=['zero','one','two','three','four','five','six','seven','eight','nine','ten'];
+let R=null, busy=false;
+function openMine(){ sfx.click(); R={n:0,total:10,correct:0,streak:0,best:0,got:{}}; show('mine'); nextBlock(true) }
+function leaveMine(){ if(R&&R.n>0&&R.n<R.total){ if(!confirm('¿Salir de la mina? Tus materiales ya están guardados.')) return } R=null; show('island') }
+function nextBlock(first){
+  R.mat = Math.random()<.12 ? 'chest' : weighted(RARITY);
+  $('blockImg').src = R.mat==='chest' ? IMG('cl-r-chest') : IMG(MATS[R.mat]);
+  $('crack').setAttribute('class','crack'); $('block').style.visibility='visible';
+  $('pipSay').textContent = R.mat==='chest' ? 'A mystery chest! 🎁' : RARE.includes(R.mat) ? 'Wow, a rare block! ✨' : pick(['Let\'s mine!','You can do it!','Answer to break it!','Go go go!']);
+  if(RARE.includes(R.mat)||R.mat==='chest') sfx.rare();
+  newQ();
+}
+function newQ(){
+  busy=false; const q=R.q=drawQ();
+  let h='';
+  if(q.type==='pic') h=`<div class="em">${q.em}</div><div class="q">${q.q}</div>`;
+  else if(q.type==='word') h=`<div class="q">${q.q}</div><div class="hint">${q.hint}</div><button class="say" onclick="speak('${q.say.replace(/'/g,"\\'")}')">🔊 Listen</button>`;
+  else h=`<div class="q">${q.q.replace('___','<span style="background:var(--lime);border-radius:8px;padding:0 10px">___</span>')}</div>`;
+  $('qbox').innerHTML=h; $('qWrap').style.display='block';
+  $('opts').innerHTML=q.opts.map((o,i)=>`<button class="opt${q.big?' big':''}" data-i="${i}">${o}</button>`).join('');
+  $('opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(b));
+  if(q.type==='word') setTimeout(()=>speak(q.say),250);
+  $('mCount').textContent=(R.n+1)+'/'+R.total; $('mProg').style.width=(R.n/R.total*100)+'%'; $('mStreak').textContent=R.streak;
+}
+function answer(btn){
+  if(busy) return; busy=true; ac();
+  const q=R.q, ok=btn.textContent===q.a;
+  R.n++;
+  if(ok){
+    btn.classList.add('ok'); sfx.ok(); R.correct++; R.streak++; R.best=Math.max(R.best,R.streak);
+    if(S.stage==='kids'&&q.say) setTimeout(()=>speak(q.say),300);
+    const mult = R.streak>=6?3:R.streak>=3?2:1;
+    if(mult>1){ $('combo').textContent=`🔥 x${mult} combo!`; $('combo').classList.remove('on'); void $('combo').offsetWidth; $('combo').classList.add('on') }
+    $('pipSay').textContent = pick(['Great!','Awesome!','Nice one!','Perfect!','You rock!']);
+    $('mStreak').textContent=R.streak;
+    breakBlock(mult);
+  } else {
+    btn.classList.add('bad'); sfx.no(); R.streak=0; $('combo').classList.remove('on'); $('mStreak').textContent=0;
+    $('opts').querySelectorAll('.opt').forEach(b=>{ if(b.textContent===q.a) b.classList.add('ok') });
+    $('pipSay').textContent = 'Oops! It\'s "'+q.a+'"';
+    if(S.stage==='kids'&&q.say) speak(q.say);
+    $('block').classList.remove('hit'); void $('block').offsetWidth; $('block').classList.add('hit');
+    setTimeout(()=>{ if(R.n>=R.total) endRound(); else newQ() },1700);
+  }
+}
+function breakBlock(mult){
+  const cr=$('crack'), bl=$('block');
+  [1,2,3].forEach(i=>setTimeout(()=>{ sfx.hit(); cr.setAttribute('class','crack c'+i); bl.classList.remove('hit'); void bl.offsetWidth; bl.classList.add('hit') },i*170));
+  setTimeout(()=>{
+    sfx.brk(); const r=bl.getBoundingClientRect(), col=R.mat==='chest'?'#C88A3A':MAT_COL[R.mat];
+    for(let i=0;i<14;i++){ const s=document.createElement('div'); s.className='shard'; s.style.background=col; s.style.left=(r.left+r.width/2)+'px'; s.style.top=(r.top+r.height/2)+'px'; document.body.appendChild(s);
+      const a=Math.random()*Math.PI*2, d=60+Math.random()*90; s.animate([{transform:'translate(-50%,-50%) rotate(0)',opacity:1},{transform:`translate(${Math.cos(a)*d}px,${Math.sin(a)*d+40}px) rotate(${Math.random()*540}deg) scale(.4)`,opacity:0}],{duration:650,easing:'cubic-bezier(.2,.7,.4,1)'}); setTimeout(()=>s.remove(),660) }
+    bl.style.visibility='hidden';
+    let mat=R.mat, qty=S.made.includes('pickaxe')?2:1, coins=mult;
+    if(mat==='chest'){ mat=pick(RARE.concat(['iron','iron','gold'])); qty=1; coins+=5+(Math.random()*6|0); toast(`🎁 Mystery chest!<br>+${coins} coins + ${mat}`,1800); confetti(25) }
+    else if(RARE.includes(mat)) toast(`✨ Rare: ${mat}!`);
+    S.inv[mat]=(S.inv[mat]||0)+qty; R.got[mat]=(R.got[mat]||0)+qty; S.coins+=coins; save();
+    flyTo(IMG(MATS[mat]), r, 'inv2', mat); setTimeout(()=>{ sfx.coin() },500);
+    $('pip').src=IMG('cl-pip-yay');
+    setTimeout(()=>{ refresh(); document.querySelector('.pip').src=IMG('cl-pip'); if(R.n>=R.total) endRound(); else nextBlock() },1100);
+  },640);
+}
+function flyTo(src,from,invId,mat){
+  const f=document.createElement('img'); f.className='fly'; f.src=src; f.style.left=(from.left+from.width/2-24)+'px'; f.style.top=(from.top+from.height/2-24)+'px'; document.body.appendChild(f);
+  const slot=document.querySelector(`#${invId} .slot[data-m="${mat}"]`)||$(invId), t=slot.getBoundingClientRect();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ f.style.left=(t.left+t.width/2-24)+'px'; f.style.top=(t.top+t.height/2-24)+'px'; f.style.transform='scale(.6) rotate(360deg)'; f.style.opacity='.8' }));
+  setTimeout(()=>f.remove(),800);
+}
+function endRound(){
+  $('qWrap').style.display='none'; $('mProg').style.width='100%';
+  const st = R.correct>=9?3:R.correct>=7?2:R.correct>=4?1:0;
+  S.stars+=st; S.rounds++; S.best=Math.max(S.best,R.correct); save(); refresh();
+  try{ window.MovaAuth&&MovaAuth.save('craftland','CraftLand · The Mine ('+S.stage+')',R.correct,R.total,{kind:'round',zone:'mine',stage:S.stage,stars:st,streak:R.best}) }catch(e){}
+  sfx.win(); if(st>=2) confetti(50);
+  const got=Object.keys(R.got).map(k=>`<span class="pill" style="display:inline-flex;margin:3px"><img src="${IMG(MATS[k])}">${R.got[k]}</span>`).join('')||'—';
+  modal(`<img class="hero" src="${IMG(st>=2?'cl-pip-yay':'cl-pip')}"><h2>${st>=3?'Amazing!':st>=2?'Great job!':st>=1?'Good work!':'Keep trying!'}</h2>
+   <div style="font-size:34px;margin:4px 0">${'⭐'.repeat(st)}${'☆'.repeat(3-st)}</div>
+   <p><b>${R.correct}/${R.total}</b> correct · best streak <b>${R.best}</b></p><div style="margin-bottom:12px">${got}</div>
+   <div style="display:flex;gap:8px"><button class="btn w" style="flex:1" onclick="closeModal();openMine()">⛏️ Again</button><button class="btn" style="flex:1" onclick="closeModal();openWorkshop()">🔨 Craft</button></div>`);
+}
+
+/* ===================== TALLER ===================== */
+function canMake(it){ return Object.keys(it.cost).every(m=>(S.inv[m]||0)>=it.cost[m]) }
+function openWorkshop(){ sfx.click(); show('workshop'); renderRecipes() }
+function renderRecipes(){
+  $('recipes').innerHTML = ITEMS.map(it=>`<div class="rc ${S.made.includes(it.k)?'made':''}" onclick="tryCraft('${it.k}')"><img class="it" src="${IMG(it.img)}" alt=""><div class="nm">${it.k}</div>
+    <div class="cost">${Object.keys(it.cost).map(m=>`<span class="${(S.inv[m]||0)>=it.cost[m]?'':'no'}"><img src="${IMG(MATS[m])}">${S.inv[m]||0}/${it.cost[m]}</span>`).join('')}</div></div>`).join('');
+}
+function listEn(cost){ const p=Object.keys(cost).map(m=>`${NUMW[cost[m]]} ${cost[m]>1?'pieces':'piece'} of ${m}`); return p.length>1?p.slice(0,-1).join(', ')+' and '+p[p.length-1]:p[0] }
+function recipeQ(it){
+  const mats=Object.keys(it.cost), m=pick(mats), n=it.cost[m], others=Object.keys(MATS).filter(x=>!mats.includes(x));
+  const nums=shuf([n,...shuf([1,2,3,4,5,6,7].filter(x=>x!==n)).slice(0,3)]);
+  if(S.stage==='kids') return { text:`<div style="text-align:center;font-size:20px">${mats.map(k=>`<div><img src="${IMG(MATS[k])}" style="width:40px;vertical-align:middle"> <b>${k}</b> × ${it.cost[k]}</div>`).join('')}</div>`,
+     say:mats.map(k=>NUMW[it.cost[k]]+' '+k).join(', '), q:`How many <b>${m}</b>? <img src="${IMG(MATS[m])}" style="width:30px;vertical-align:middle">`, a:String(n), opts:nums.map(String) };
+  if(S.stage==='children'){
+    const t=`To make a <b>${it.k}</b>, you need ${listEn(it.cost)}.`;
+    return Math.random()<.5 ? { text:t, say:t.replace(/<[^>]+>/g,''), q:`How many pieces of ${m} do you need?`, a:NUMW[n], opts:nums.map(x=>NUMW[x]) }
+      : { text:t, say:t.replace(/<[^>]+>/g,''), q:`What do you need to make a ${it.k}?`, a:m, opts:shuf([m,...shuf(others).slice(0,3)]) };
+  }
+  const t=`First, collect ${listEn(it.cost)}. Then, place them carefully on the crafting table and combine them to build a sturdy <b>${it.k}</b>. Don't forget: if you are missing a material, you won't be able to finish it.`;
+  if(mats.length>=2){ const no=pick(others); return { text:t, say:t.replace(/<[^>]+>/g,''), q:`Which material is <u>NOT</u> needed for the ${it.k}?`, a:no, opts:shuf([no,...mats.slice(0,3)]) } }
+  return { text:t, say:t.replace(/<[^>]+>/g,''), q:`According to the recipe, how many pieces of ${m} are required?`, a:NUMW[n], opts:nums.map(x=>NUMW[x]) };
+}
+let CQ=null;
+function tryCraft(k){
+  const it=ITEMS.find(x=>x.k===k); sfx.click();
+  if(S.made.includes(k)){ modal(`<img class="hero" src="${IMG(it.img)}"><h2>${k}</h2><p>¡Ya lo tienes en tu casa! 🏠</p><div style="display:flex;gap:8px"><button class="btn w" style="flex:1" onclick="closeModal()">OK</button><button class="btn" style="flex:1" onclick="closeModal();openHouse()">See my house</button></div>`); return }
+  if(!canMake(it)){ const miss=Object.keys(it.cost).filter(m=>(S.inv[m]||0)<it.cost[m]).map(m=>`<span class="pill" style="display:inline-flex;margin:3px"><img src="${IMG(MATS[m])}">${it.cost[m]-(S.inv[m]||0)} more</span>`).join('');
+    $('junoSay').textContent='You need more materials!'; modal(`<img class="hero" src="${IMG('cl-juno')}"><h2>Not enough materials</h2><p>Para el <b>${k}</b> te falta:</p><div style="margin-bottom:14px">${miss}</div><button class="btn" onclick="closeModal();openMine()">⛏️ Go to the mine</button>`); return }
+  CQ={it, ...recipeQ(it)};
+  modal(`<img src="${IMG(it.img)}" style="width:90px"><h2>Recipe: ${k}</h2><div class="recipeTxt">${CQ.text}</div><button class="say" onclick="speak(CQ.say)">🔊 Listen</button>
+   <p style="margin-top:12px"><b>${CQ.q}</b></p><div class="opts" style="margin:0" id="cOpts">${shuf(CQ.opts).map(o=>`<button class="opt">${o}</button>`).join('')}</div>`);
+  if(S.stage==='kids') setTimeout(()=>speak(CQ.say),300);
+  $('cOpts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(b.textContent===CQ.a){ b.classList.add('ok'); sfx.ok(); setTimeout(()=>craft(CQ.it),500) }
+    else { b.classList.add('bad'); sfx.no(); b.disabled=true; }
+  });
+}
+function craft(it){
+  Object.keys(it.cost).forEach(m=>S.inv[m]-=it.cost[m]); S.made.push(it.k); S.coins+=5;
+  S.room[it.k]={x:25+Math.random()*50,y:55+Math.random()*25}; save(); sfx.craft(); confetti(40);
+  try{ window.MovaAuth&&MovaAuth.save('craftland','CraftLand · Crafted: '+it.k,1,1,{kind:'craft',item:it.k,stage:S.stage}) }catch(e){}
+  $('junoSay').textContent='You made a '+it.k+'! It\'s in your house.';
+  modal(`<img class="hero" src="${IMG('cl-juno-yay')}"><h2>You made a ${it.k}!</h2><img src="${IMG(it.img)}" style="width:90px"><p>+5 coins · Ya está en tu casa.</p>
+   ${it.k==='pickaxe'?'<p><b>⛏️ Bonus:</b> ahora cada bloque te da 2 materiales.</p>':''}
+   <div style="display:flex;gap:8px"><button class="btn w" style="flex:1" onclick="closeModal();renderRecipes();refresh()">Keep crafting</button><button class="btn" style="flex:1" onclick="closeModal();openHouse()">🏠 My house</button></div>`);
+  if(S.made.length===ITEMS.length) setTimeout(()=>toast('🏆 ¡Crafteaste todo! Eres Master Crafter',2500),800);
+}
+
+/* ===================== MI CASA ===================== */
+function openHouse(){ sfx.click(); show('house'); renderRoom() }
+function renderRoom(){
+  const room=$('roomIn'); room.querySelectorAll('.furn,.me,.empty').forEach(e=>e.remove());
+  if(!S.made.length){ const d=document.createElement('div'); d.className='empty'; d.style.cssText='position:absolute;inset:auto 10% 40% 10%;background:#fff;border:3px solid var(--navy);border-radius:16px;padding:12px;text-align:center;font-weight:800;z-index:2'; d.innerHTML='Tu casa está vacía. Craftea muebles en el Workshop 🔨'; room.appendChild(d) }
+  S.made.forEach(k=>{ const it=ITEMS.find(x=>x.k===k), p=S.room[k]||{x:50,y:60}, im=document.createElement('img');
+    im.src=IMG(it.img); im.className='furn'; im.style.left=p.x+'%'; im.style.top=p.y+'%'; im.style.zIndex=Math.round(p.y); im.style.width=(FW[k]||14)+'%'; im.dataset.k=k; room.appendChild(im); drag(im,room) });
+  const me=document.createElement('img'); me.src=IMG(S.av); me.className='furn me'; me.style.cssText+=`left:${(S.room._me||{x:50}).x}%;top:${(S.room._me||{y:62}).y}%;width:15%`; me.dataset.k='_me'; room.appendChild(me); drag(me,room);
+}
+function drag(el,room){
+  el.addEventListener('pointerdown',e=>{ e.preventDefault(); el.setPointerCapture(e.pointerId); el.classList.add('drag'); sfx.click();
+    const mv=ev=>{ const r=room.getBoundingClientRect(); const x=Math.max(5,Math.min(95,(ev.clientX-r.left)/r.width*100)), y=Math.max(8,Math.min(95,(ev.clientY-r.top)/r.height*100)); el.style.left=x+'%'; el.style.top=y+'%'; el.style.zIndex=Math.round(y); S.room[el.dataset.k]={x,y} };
+    const up=()=>{ el.classList.remove('drag'); el.removeEventListener('pointermove',mv); el.removeEventListener('pointerup',up); save() };
+    el.addEventListener('pointermove',mv); el.addEventListener('pointerup',up);
+  });
+}
+
+/* ===================== TIENDA DE LUNA ===================== */
+function openShop(){ sfx.click(); show('shop'); renderShop() }
+function renderShop(){
+  $('shopList').innerHTML = AVS.map(a=>{ const own=S.owned.includes(a.id);
+    return `<div class="rc ${a.id===S.av?'made':''}" onclick="shopTap('${a.id}')"><img class="it" src="${IMG(a.id)}" style="width:80px;height:80px"><div class="nm">${own?(a.id===S.av?'Wearing':'Use'):'Unlock'}</div>
+    ${own?'':`<div class="cost"><span class="${S.coins>=a.price?'':'no'}"><img src="${IMG('cl-r-coin')}">${a.price}</span></div>`}</div>` }).join('');
+}
+function shopTap(id){
+  const a=AVS.find(x=>x.id===id); sfx.click();
+  if(S.owned.includes(id)){ S.av=id; save(); renderShop(); $('lunaSay').textContent='Looking good! ✨'; return }
+  if(S.coins<a.price){ $('lunaSay').textContent=`You need ${a.price-S.coins} more coins. Go mining!`; sfx.no(); return }
+  const L=LUNA[S.stage], c=pick(L), q={q:c[0],a:c[1],opts:shuf([c[1],...c[2]])};
+  modal(`<img class="hero" src="${IMG('cl-luna')}"><h2>Luna's question</h2><p style="font-size:${S.stage==='kids'?'44px':'19px'};font-weight:800">${q.q}</p><div class="opts" style="margin:0" id="lOpts">${q.opts.map(o=>`<button class="opt">${o}</button>`).join('')}</div>`);
+  if(S.stage==='kids') setTimeout(()=>speak('What is it?'),200);
+  $('lOpts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(b.textContent===q.a){ b.classList.add('ok'); sfx.ok(); S.coins-=a.price; S.owned.push(id); S.av=id; save();
+      setTimeout(()=>{ closeModal(); sfx.coin(); confetti(30); toast('New look unlocked! ✨'); renderShop(); refresh() },600) }
+    else { b.classList.add('bad'); sfx.no(); b.disabled=true }
+  });
+}
+
+/* ===================== ARRANQUE ===================== */
+document.querySelector('.pip').id='pip';
+$('modal').addEventListener('click',e=>{ if(e.target.id==='modal') closeModal() });
+renderHome(); refresh();
+['cl-pip-yay','cl-juno-yay','cl-r-chest','cl-mine','cl-workshop','cl-house','cl-island'].forEach(n=>{ const i=new Image(); i.src=IMG(n) });
+</script>
+</body>
+</html>
