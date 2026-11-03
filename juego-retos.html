@@ -287,7 +287,7 @@ h2{font-weight:800;font-size:22px;text-align:center;margin:12px 0 4px}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:20}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 
-/* MOVA Park · mapa a pantalla completa */
+/* Sugar Town · mapa a pantalla completa */
 body.pk-full .app{padding:0!important}
 body.pk-full .panel{max-width:560px!important}
 .pkx{margin:0 auto}
@@ -401,7 +401,7 @@ a.icon-btn.home-pill{width:auto!important;padding:0 16px 0 10px;gap:6px;display:
 <main class="app"><div class="panel" id="panel"></div></main>
 <script src="mova-auth.js"></script>
 <script src="toefl-bank.js"></script>
-<script src="mova-park.js?v=55"></script>
+<script src="mova-park.js?v=56"></script>
 <script src="mova-bingo.js?v=42"></script>
 <script>
 (function(){
@@ -663,6 +663,7 @@ var GNAME = function (g) { var G = GRADES[g]; return G ? G.label + (g <= 6 ? " d
 /* ---------- Catálogo de juegos ---------- */
 var STAGES = [{ id: "kids", name: "Kids" }, { id: "children", name: "Children" }, { id: "teens", name: "Teens" }];
 var GAMES = {
+  "sugar-town": { name: "Sugar Town", sub: "Build your park", color: "#FFC6E4", secs: 180, thumb: "st-thumb.webp", isNew: true, rule: "Answer right to earn coins and build rides. The most valuable park wins!" },
   "verb-memory": { name: "Verb Memory", sub: "Verb pairs", color: "var(--sky)", secs: 120, thumb: "thumb-verb-memory.webp", rule: "Find the verb pairs. Whoever collects the most pairs wins." },
   "word-quest": { name: "Word Quest", sub: "Vocabulario", color: "var(--mint)", secs: 90, thumb: "thumb-word-quest.webp", rule: "10 questions. Answer right and fast to score more points." },
   "sentence-scramble": { name: "Sentence Scramble", sub: "Ordena oraciones", color: "var(--pink)", secs: 150, thumb: "thumb-sentence-scramble.webp", rule: "Ordena 6 oraciones. Cada error resta un poco de puntos." },
@@ -675,7 +676,7 @@ var GAMES = {
   "toefl-practice": { name: "TOEFL Practice", sub: "Exam-style duel", color: "var(--mint)", secs: 300, thumb: "thumb-toefl-practice.webp", isNew: true, rule: "10 preguntas tipo TOEFL ITP. Piensa bien: cada acierto cuenta." },
   "sopa-de-letras": { name: "Word search", sub: "Find words", color: "var(--lila)", secs: 180, thumb: "thumb-sopa-de-letras.webp", rule: "Tap the first and last letter of each word." }
 };
-var ORDER = ["que-hora-es", "word-forms", "toefl-practice", "picture-race", "spelling-bee", "grammar-showdown", "verb-memory", "word-quest", "sentence-scramble", "mision-matematica", "sopa-de-letras"];
+var ORDER = ["sugar-town", "que-hora-es", "word-forms", "toefl-practice", "picture-race", "spelling-bee", "grammar-showdown", "verb-memory", "word-quest", "sentence-scramble", "mision-matematica", "sopa-de-letras"];
 var STAGE_ONLY = { "picture-race": 1, "spelling-bee": 1, "grammar-showdown": 1 };
 var TOEFL_SEC = { mix: "Mixto", structure: "Structure", written: "Written Expression", vocab: "Vocabulary" };
 var STAGE_NAME = { kids: "MOVA Kids", children: "MOVA Children", teens: "MOVA Teens" };
@@ -684,6 +685,7 @@ function stageOf(u) { var s = String((u && u.stage) || "").toLowerCase(); if (/t
 function wqTopics(st) { return Object.keys(WQ).filter(function (k) { return WQ[k].stage === st; }).sort(function (a, b) { return LV.indexOf(WQ[a].level) - LV.indexOf(WQ[b].level); }); }
 function ssTopics(st) { return Object.keys(SS).filter(function (k) { return SS[k].stage === st; }); }
 function defaults(game, st) {
+  if (game === "sugar-town") return { cats: ["vocab", "grammar"] };
   if (STAGE_ONLY[game]) return { stage: st };
   if (game === "que-hora-es") return { stage: st === "kids" ? "kids" : "children", lang: "es" };
   if (game === "word-forms") return { stage: st === "teens" ? "teens" : "children" };
@@ -696,6 +698,7 @@ function defaults(game, st) {
 }
 function settingsLabel(game, s) {
   s = s || {};
+  if (game === "sugar-town") { var c = (s.cats || []).join(","); return "3 minutes · " + (c === "vocab" ? "Vocabulary" : c === "grammar" ? "Grammar" : "Vocabulary + grammar") + " · everyone at their own level"; }
   if (STAGE_ONLY[game]) return STAGE_NAME[s.stage] || STAGE_NAME.kids;
   if (game === "que-hora-es") return (s.stage === "children" ? "MOVA Children" : "MOVA Kids") + (s.lang === "en" ? " · English" : " · Español");
   if (game === "word-forms") return s.stage === "teens" ? "MOVA Teens" : "MOVA Children";
@@ -715,7 +718,10 @@ function settingsHtml(game, s) {
   function chs(cls, items) { return '<div class="choices ' + cls + '">' + items.join("") + "</div>"; }
   function b(key, val, label, small, on) { return '<button class="choice" data-k="' + key + '" data-v="' + esc(val) + '" aria-pressed="' + (on ? "true" : "false") + '">' + esc(label) + (small ? "<small>" + esc(small) + "</small>" : "") + "</button>"; }
   function stg(cur) { return '<div class="label">Etapa</div>' + chs("c3", STAGES.map(function (x) { return b("stage", x.id, x.name, "", cur === x.id); })); }
-  if (STAGE_ONLY[game]) {
+  if (game === "sugar-town") {
+    var cj = (s.cats || []).join(",");
+    h += '<div class="label">Questions</div>' + chs("c3", [b("mix", "vocab,grammar", "Mixed", "vocab + grammar", cj !== "vocab" && cj !== "grammar"), b("mix", "vocab", "Vocabulary", "", cj === "vocab"), b("mix", "grammar", "Grammar", "", cj === "grammar")]) + '<p class="note">Everyone answers at their own level.</p>';
+  } else if (STAGE_ONLY[game]) {
     h += stg(s.stage || "kids");
   } else if (game === "que-hora-es") {
     h += '<div class="label">Etapa</div>' + chs("c2", [b("stage", "kids", "Kids", "en punto y media", s.stage !== "children"), b("stage", "children", "Children", "cuartos y minutos", s.stage === "children")]);
@@ -747,6 +753,7 @@ function bindSettings(root, game, s, onChange) {
     var k = t.dataset.k, v = t.dataset.v;
     if (k === "grade" || k === "topic" && game === "sopa-de-letras") v = Number(v);
     s[k] = v;
+    if (k === "mix") { s.cats = String(v).split(","); delete s.mix; }
     if (k === "stage") { s.topic = game === "word-quest" ? wqTopics(v)[0] : game === "sentence-scramble" ? ssTopics(v)[0] : 0; }
     if (k === "lang") s.topic = 0;
     root.innerHTML = settingsHtml(game, s);
@@ -813,11 +820,13 @@ function screenHome(preGame) {
       '<button class="go-opt main" id="b-create"><span class="t">' + ico("plus") + '</span><span><b>Create a game</b><small>Pick a game and share the code</small></span><span class="ar">' + arrow + '</span></button>' +
       '<button class="go-opt" id="b-join" style="--c:#E6DEFF"><span class="t">' + ico("key") + '</span><span><b>Join with a code</b><small>Type the 4-digit code</small></span><span class="ar">' + arrow + '</span></button>' +
       '<button class="go-opt" id="b-solo" style="--c:#FFE6F2"><span class="t">' + ico("star") + '</span><span><b>Practice solo</b><small>6 games with your personal best</small></span><span class="ar">' + arrow + '</span></button>' +
+      '<button class="go-opt st-go" id="b-sugar" style="--c:#FFC6E4"><span class="t">' + ico("star") + '</span><span><b>Sugar Town</b><small>Build your park · solo, challenge or live</small></span><span class="ar">' + arrow + '</span></button>' +
     "</div>");
   $("#b-live").onclick = function () { unlock(); screenLive(); };
   $("#b-create").onclick = function () { unlock(); screenCreate(preGame); };
   $("#b-join").onclick = function () { unlock(); screenJoin(); };
   $("#b-solo").onclick = function () { unlock(); screenSolo(preGame); };
+  $("#b-sugar").onclick = function () { unlock(); sugarFromApp = false; screenSugar(); };
 }
 
 /* ---------- Play live: Online now ---------- */
@@ -1057,6 +1066,13 @@ function onState() {
 /* ---------- Partida ---------- */
 function prepareGame() {
   stopPoll(); if (G) G.stop();
+  if (room.game === "sugar-town") {
+    var stEnd = room.start_at + GAMES["sugar-town"].secs * 1000;
+    if (serverNow() > stEnd) { screenResults(); return; }
+    var sc = (room.settings && room.settings.cats && room.settings.cats.length) ? room.settings.cats : ["vocab", "grammar"];
+    G = parkGame(null, null, { mode: "room", stage: stageOf(user()), cats: sc, round: room.round, startAt: room.start_at, endAt: stEnd });
+    return;
+  }
   R = mulberry((room.seed ^ (room.round * 2654435761)) >>> 0);
   var def = GAMES[room.game], content = BUILD[room.game](room.settings || {});
   R = Math.random;
@@ -1147,13 +1163,14 @@ function screenResults() {
 }
 function drawResults() {
   var box = $("#res"); if (!box || !room) return;
-  var def = GAMES[room.game], endAt = room.start_at + def.secs * 1000;
+  var def = GAMES[room.game], endAt = room.start_at + def.secs * 1000, isST = room.game === "sugar-town";
+  var fmt = function (v) { return isST ? "$" + Number(v || 0).toLocaleString("es-MX") : (v || 0) + " pts"; };
   var act = players.filter(function (p) { return p.round === room.round; });
   var allDone = act.every(function (p) { return p.done || !p.online; }) || serverNow() > endAt + 2500;
   var list = act.slice().sort(function (a, b) { return b.score - a.score || (a.ms || 1e9) - (b.ms || 1e9); });
   if (!allDone) {
     $("#rt").textContent = "You finished!"; $("#rs").textContent = "Waiting for the others to finish…";
-    box.innerHTML = '<div class="plist">' + list.map(function (p) { return '<div class="prow' + (p.id === me ? " me" : "") + '">' + av(p) + "<span>" + esc(p.name) + "</span>" + (p.done ? '<span class="tag">Finished</span>' : '<span class="tag">Jugando…</span>') + '<span class="sc" style="margin-left:8px">' + p.score + "</span></div>"; }).join("") + "</div>";
+    box.innerHTML = '<div class="plist">' + list.map(function (p) { return '<div class="prow' + (p.id === me ? " me" : "") + '">' + av(p) + "<span>" + esc(p.name) + "</span>" + (p.done ? '<span class="tag">Finished</span>' : '<span class="tag">Jugando…</span>') + '<span class="sc" style="margin-left:8px">' + (isST ? fmt(p.score) : p.score) + "</span></div>"; }).join("") + "</div>";
     $("#ract").innerHTML = ""; return;
   }
   if (box.dataset.final === String(room.round)) { actions(); return; }
@@ -1164,9 +1181,9 @@ function drawResults() {
   if (pos === 0) { confetti(true); sfx.go(); } else if (pos > 0 && pos < 3) { confetti(false); sfx.go(); }
   var top = [list[1], list[0], list[2]], cls = ["p2", "p1", "p3"], place = [2, 1, 3];
   box.innerHTML = '<div class="podium">' + top.map(function (p, i) {
-    return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.id === me ? "You" : p.name) + '</b><div class="bar"><span>' + ordEn(place[i]) + "</span><small>" + p.score + " pts</small></div></div>" : "<div></div>";
+    return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.id === me ? "You" : p.name) + '</b><div class="bar"><span>' + ordEn(place[i]) + "</span><small>" + fmt(p.score) + "</small></div></div>" : "<div></div>";
   }).join("") + "</div>" +
-    (list.length > 3 ? '<div class="plist">' + list.slice(3).map(function (p, i) { return '<div class="prow' + (p.id === me ? " me" : "") + '"><b style="width:24px;text-align:center">' + (i + 4) + "</b>" + av(p) + "<span>" + esc(p.name) + '</span><span class="sc">' + p.score + "</span></div>"; }).join("") + "</div>" : "") +
+    (list.length > 3 ? '<div class="plist">' + list.slice(3).map(function (p, i) { return '<div class="prow' + (p.id === me ? " me" : "") + '"><b style="width:24px;text-align:center">' + (i + 4) + "</b>" + av(p) + "<span>" + esc(p.name) + '</span><span class="sc">' + (isST ? fmt(p.score) : p.score) + "</span></div>"; }).join("") + "</div>" : "") +
     '<p class="note">It’s just for fun, so there are no grades.</p>';
   actions();
 }
@@ -1523,7 +1540,7 @@ BUILD["sopa-de-letras"] = function (s) {
 };
 
 /* ---------- Arranque ---------- */
-/* ---------- MOVA Live · MOVA Park (alumno) ---------- */
+/* ---------- MOVA Live · Sugar Town (alumno) ---------- */
 var PK = window.MOVA_PARK, K_LIVE = "mova_live_room";
 var live = null, lplayers = [], liveCode = null, livePoll = null, park = null, parkSaved = {};
 function lcall(fn, args) {
@@ -1560,11 +1577,12 @@ function liveOnState() {
   liveLobby();
 }
 function liveLobby() {
+  sugarCss();
   if (liveScreen !== "lobby" + liveGame()) {
     liveScreen = "lobby" + liveGame();
     var isB = liveGame() === "bingo";
     render(topBar(true) + '<div class="center"><span class="pkbadge">MOVA LIVE</span></div>' + (isB ? '<h1>MOVA Bingo</h1><p class="lead">' + ((live.settings || {}).show === "read" ? "Read each word" : (live.settings || {}).show === "text" ? "Listen to and read each word" : "Listen to each word") + ', put a coin on your card and complete the pattern to win. BINGO!</p><div class="pkhero bhero">' + [0, 1, 2, 3].map(function (k) { return '<span>' + BG.chip + "</span>"; }).join("") + "</div>"
-        : '<h1>MOVA Park</h1><p class="lead">Contesta bien para ganar monedas y construir el mejor parque de diversiones.</p><div class="pkhero2">' + PK.scene(["popcorn", "cotton", "icecream", "prizes", "ducks", "rings", "teacups", "carousel", "wheel"], { small: true, noLots: true }) + "</div>") +
+        : '<div class="center"><img class="st-lg" src="st-logo.webp" alt="Sugar Town"></div><p class="lead">Contesta bien para ganar monedas y construir el parque de diversiones más dulce.</p><div class="pkhero2">' + PK.scene(["popcorn", "cotton", "icecream", "prizes", "ducks", "rings", "teacups", "carousel", "wheel"], { small: true, noLots: true }) + "</div>") +
       '<div class="wait"><span class="dots3"><i></i><i></i><i></i></span> Waiting for your teacher to start</div>' +
       '<div class="label">In the session</div><div class="plist" id="lpl"></div>');
     $("#b-back").onclick = function () { if (confirm("Leave the session?")) { lcall("live_leave", { p_code: liveCode }).catch(function () {}); liveForget(); screenHome(); } };
@@ -1613,14 +1631,24 @@ function liveTiers(stage, cats) {
   return T.map(shuffle);
 }
 
-function parkGame(lv, meP) {
-  var st = liveStage(), cats = (lv.settings && lv.settings.cats && lv.settings.cats.length) ? lv.settings.cats : ["vocab", "grammar"];
-  var coins = 0, items = [], correct = 0, wrong = 0, streak = 0, locked = false, stopped = false, done = false;
-  var tier = 0, maxTier = 0, up = 0, down = 0, tiers = null, tqi = [0, 0, 0], noLv = false;
-  var timers = [], raf = 0, lastPush = 0, pushT = 0, round = lv.round, startAt = lv.start_at, endAt = lv.ends_at, t0 = 0;
+function parkGame(lv, meP, opt) {
+  opt = opt || {};
+  var mode = opt.mode || "live", SOLO = mode === "solo", ROOM = mode === "room";
+  var st = opt.stage || liveStage(), cats = opt.cats || ((lv.settings && lv.settings.cats && lv.settings.cats.length) ? lv.settings.cats : ["vocab", "grammar"]);
+  var sv = SOLO ? sugarLoad() : null;
+  var coins = sv ? sv.coins : 0, items = sv ? sv.items.slice() : [], correct = 0, wrong = 0, streak = 0, locked = false, stopped = false, done = false;
+  var tier = sv ? sv.tier : 0, maxTier = sv ? sv.maxTier : 0, up = 0, down = 0, tiers = null, tqi = [0, 0, 0], noLv = false;
+  var timers = [], raf = 0, lastPush = 0, pushT = 0, t0 = 0;
+  var round = opt.round != null ? opt.round : lv ? lv.round : 0, startAt = opt.startAt || (lv ? lv.start_at : serverNow() + 3200), endAt = opt.endAt || (lv ? lv.ends_at : Infinity);
   function later(f, ms) { timers.push(setTimeout(f, ms)); }
   function push(force) {
+    if (SOLO) { sugarSave({ coins: coins, items: items, tier: tier, maxTier: maxTier, dc: correct, dw: wrong }); return; }
     clearTimeout(pushT);
+    if (ROOM) {
+      var goR = function () { lastPush = Date.now(); call("mp_score", { p_code: code, p_round: round, p_score: PK.value(coins, items), p_done: done, p_ms: Math.round(serverNow() - startAt), p_prog: correct, p_total: 0 }).then(function () { if (!stopped) drawRank(); }).catch(function () {}); };
+      if (force || Date.now() - lastPush > 1200) goR(); else pushT = setTimeout(goR, 1200);
+      return;
+    }
     var go = function () {
       lastPush = Date.now();
       var send = function (its) { return lcall("live_push", { p_code: liveCode, p_round: round, p_value: PK.value(coins, items), p_coins: coins, p_correct: correct, p_wrong: wrong, p_items: its }); };
@@ -1630,11 +1658,16 @@ function parkGame(lv, meP) {
     if (force || Date.now() - lastPush > 1200) go(); else pushT = setTimeout(go, 1200);
   }
   function rankOf() {
-    var list = lplayers.filter(function (p) { return p.round === round; }).map(function (p) { return p.id === me ? { id: me, value: PK.value(coins, items) } : p; });
+    var list = ROOM ? players.filter(function (p) { return p.round === round; }).map(function (p) { return { id: p.id, value: p.id === me ? PK.value(coins, items) : (p.score || 0) }; })
+      : lplayers.filter(function (p) { return p.round === round; }).map(function (p) { return p.id === me ? { id: me, value: PK.value(coins, items) } : p; });
     list.sort(function (a, b) { return b.value - a.value; });
     return { pos: list.findIndex(function (p) { return p.id === me; }) + 1, n: list.length };
   }
-  function drawRank() { var r = rankOf(), el = $("#pkrank"); if (el && r.pos) el.innerHTML = '<b>' + ordEn(r.pos) + "</b> of " + r.n; }
+  function drawRank() {
+    var el = $("#pkrank"); if (!el) return;
+    if (SOLO) { el.textContent = PK.own(items).length + "/" + PK.ATTR.length + " rides"; return; }
+    var r = rankOf(); if (r.pos) el.innerHTML = '<b>' + ordEn(r.pos) + "</b> of " + r.n;
+  }
   function drawHud() {
     var c = $("#pkcoins"); if (c) c.textContent = coins.toLocaleString("es-MX");
     var v = $("#pkval"); if (v) v.textContent = "$" + PK.value(coins, items).toLocaleString("es-MX");
@@ -1654,12 +1687,12 @@ function parkGame(lv, meP) {
   function buy(id) {
     var a = PK.ATTR.find(function (x) { return x.id === id; }); if (!a || done || coins < a.price || items.indexOf(a.id) >= 0) return false;
     coins -= a.price; items.push(a.id); tones([523, 659, 784, 1047, 1319], .07, "triangle");
-    drawPark(a.id); drawHud(); push(true);
-    if (items.length === PK.ATTR.length) toast("¡Construiste todo el parque! Sigue juntando monedas.");
+    drawPark(a.id); drawHud(); drawRank(); push(true);
+    if (items.length === PK.ATTR.length) { toast("You built the whole park! Sugar Town is complete."); confetti(true); }
     return true;
   }
   function frame() {
-    if (stopped) return;
+    if (stopped || SOLO) return;
     var left = Math.max(0, (endAt - serverNow()) / 1000), tl = $("#tleft"), bar = $("#tbar");
     if (tl) tl.textContent = Math.floor(left / 60) + ":" + ("0" + Math.floor(left % 60)).slice(-2);
     if (bar) { bar.firstChild.style.transform = "scaleX(" + Math.max(0, left / ((endAt - startAt) / 1000)) + ")"; bar.classList.toggle("low", left < 20); }
@@ -1709,10 +1742,10 @@ function parkGame(lv, meP) {
   function shop() {
     var sh = document.createElement("div"); sh.className = "pksheet"; sh.id = "pksheet";
     function draw() {
-      sh.innerHTML = '<div class="pkpanel"><div class="pkhead"><b>Tienda del parque</b><span class="pill">' + PK.coin + '<span>' + coins.toLocaleString("es-MX") + '</span></span><button class="icon-btn" id="pkclose" aria-label="Close">' + ico("x", 20) + "</button></div>" +
+      sh.innerHTML = '<div class="pkpanel"><div class="pkhead"><b>Park shop</b><span class="pill">' + PK.coin + '<span>' + coins.toLocaleString("es-MX") + '</span></span><button class="icon-btn" id="pkclose" aria-label="Close">' + ico("x", 20) + "</button></div>" +
         '<div class="pklist">' + PK.ATTR.map(function (a) {
           var own = items.indexOf(a.id) >= 0, can = !own && coins >= a.price;
-          return '<button class="pkitem' + (own ? " own" : "") + '" data-id="' + a.id + '"' + (can ? "" : " disabled") + '><span class="pi">' + PK.art(a.id) + '</span><span class="pt"><b>' + esc(a.name) + "</b><small>+" + a.inc + " por respuesta</small></span>" +
+          return '<button class="pkitem' + (own ? " own" : "") + '" data-id="' + a.id + '"' + (can ? "" : " disabled") + '><span class="pi">' + PK.art(a.id) + '</span><span class="pt"><b>' + esc(a.name) + "</b><small>+" + a.inc + " per answer</small></span>" +
             '<span class="pp">' + (own ? ico("check", 18) : PK.coin + a.price.toLocaleString("es-MX")) + "</span></button>";
         }).join("") + "</div></div>";
       $("#pkclose", sh).onclick = function () { sh.remove(); };
@@ -1728,18 +1761,28 @@ function parkGame(lv, meP) {
   function finish() {
     if (done) return; done = true; cancelAnimationFrame(raf); push(true);
     var sh = $("#pksheet"); if (sh) sh.remove();
+    if (SOLO) {
+      stopped = true; timers.forEach(clearTimeout); document.body.classList.remove("pk-full"); G = null;
+      sugarSoloEnd({ coins: coins, items: items, correct: correct, wrong: wrong, tier: maxTier, st: st }); return;
+    }
+    if (ROOM) {
+      try { window.MovaAuth && window.MovaAuth.save("sugar-town", "Sugar Town · Challenge", PK.value(coins, items), null, { mode: "challenge", correct: correct, wrong: wrong, attractions: PK.own(items).length, level: PK.tierName(st, maxTier) }); } catch (e) {}
+      later(function () { if (!stopped) { document.body.classList.remove("pk-full"); screenResults(); } }, 1600); return;
+    }
     var key = liveCode + "-" + round;
-    if (!parkSaved[key]) { parkSaved[key] = 1; try { window.MovaAuth && window.MovaAuth.save("mova-park", "MOVA Live · MOVA Park", PK.value(coins, items), null, { mode: "live", correct: correct, wrong: wrong, attractions: items.length, level: PK.tierName(st, maxTier) }); } catch (e) {} }
+    if (!parkSaved[key]) { parkSaved[key] = 1; try { window.MovaAuth && window.MovaAuth.save("mova-park", "Sugar Town · Live", PK.value(coins, items), null, { mode: "live", correct: correct, wrong: wrong, attractions: items.length, level: PK.tierName(st, maxTier) }); } catch (e) {} }
     later(function () { if (!stopped) { stopped = true; park = null; document.body.classList.remove("pk-full"); liveResults(); } }, 2500);
   }
   function begin() {
     document.body.classList.add("pk-full");
     render('<div class="pkx"><div class="pkworld" id="pkworld"><div id="pkland"></div>' +
-      '<div class="pkhud"><span class="pkl" id="pklvl"></span><span class="pill pkt">' + ico("clock", 16) + '<span id="tleft"></span></span><span class="pill" id="pkrank"></span></div>' +
+      '<div class="pkhud"><span class="pkl" id="pklvl"></span>' + (SOLO ? "" : '<span class="pill pkt">' + ico("clock", 16) + '<span id="tleft"></span></span>') + '<span class="pill" id="pkrank"></span>' + (SOLO ? '<button class="pill pkexit" id="pkexit" type="button">' + ico("check", 16) + "Save</button>" : "") + "</div>" +
       '<div class="pktabs">' + PK.ZONES.map(function (Z, z) { return '<button type="button" id="pktab' + z + '" data-z="' + z + '"></button>'; }).join("") + "</div>" +
       '<div class="pkdock"><span class="pill pkc">' + PK.coin + '<span id="pkcoins">0</span></span><span class="pkinc">+<span id="pkinc"></span> per answer</span><button class="pkshop" id="pkshop">Shop<span class="n" id="pkshopn" hidden></span></button></div></div>' +
-      '<div class="pkqc"><div class="tbar" id="tbar"><i></i></div><div class="stage pkq" id="pkq"></div></div></div>');
+      '<div class="pkqc">' + (SOLO ? "" : '<div class="tbar" id="tbar"><i></i></div>') + '<div class="stage pkq" id="pkq"></div></div></div>');
     $("#pkshop").onclick = function () { unlock(); shop(); };
+    if (SOLO) $("#pkexit").onclick = function () { unlock(); finish(); };
+    if (ROOM) startPoll(2000);
     $("#pkland").onclick = function (e) { var l = e.target.closest && e.target.closest(".pk-lot.can"); if (l) { unlock(); buy(l.dataset.id); } };
     $(".pktabs").onclick = function (e) { var b = e.target.closest("button"); if (!b) return; var land = $("#pkland"), zEl = $("#pkmap-z" + b.dataset.z); if (land && zEl) land.scrollTo({ top: zEl.offsetTop - 70, behavior: "smooth" }); };
     drawPark(); drawHud(); drawRank(); frame();
@@ -1752,7 +1795,7 @@ function parkGame(lv, meP) {
     nextQ();
   }
   (function countdown() {
-    render('<div class="count"><div><div class="num" id="cd">3</div><p>MOVA Park · ' + esc(STAGE_NAME[st]) + '</p><p style="margin-top:6px;font-size:14px">Answer correctly to earn coins and buy rides in the shop. The most valuable park wins!</p></div></div>');
+    render('<div class="count"><div><div class="num" id="cd">3</div><p>Sugar Town · ' + esc(STAGE_NAME[st]) + '</p><p style="margin-top:6px;font-size:14px">' + (SOLO ? "Answer correctly to earn coins and build rides. Your park is saved, so you can keep building next time." : "Answer correctly to earn coins and buy rides in the shop. The most valuable park wins!") + "</p></div></div>");
     var last = null;
     (function cd() {
       if (stopped) return;
@@ -1766,19 +1809,98 @@ function parkGame(lv, meP) {
   return {
     round: round,
     onState: function () { drawRank(); },
+    onPlayers: function () { drawRank(); },
+    countdown: function () {},
+    score: function () { return PK.value(coins, items); },
     finish: finish,
     stop: function () { document.body.classList.remove("pk-full"); stopped = true; cancelAnimationFrame(raf); timers.forEach(clearTimeout); clearTimeout(pushT); var sh = $("#pksheet"); if (sh) sh.remove(); }
   };
 }
+
+/* ---------- Sugar Town · menú y modo Solo (parque guardado) ---------- */
+var sugarFromApp = false;
+function sugarKey() { var u = user() || {}; return "mova-sugar-town:" + String(u.name || "me").toLowerCase().replace(/\s+/g, "-"); }
+function sugarLoad() {
+  var d = null; try { d = JSON.parse(localStorage.getItem(sugarKey()) || "null"); } catch (e) {}
+  d = d || {};
+  return { coins: Math.max(0, +d.coins || 0), items: PK.own(d.items || []), tier: Math.min(2, Math.max(0, +d.tier || 0)), maxTier: Math.min(2, Math.max(0, +d.maxTier || 0)), correct: +d.correct || 0, wrong: +d.wrong || 0, best: +d.best || 0 };
+}
+var sugarBase = null;
+function sugarSave(x) {
+  var b = sugarBase || sugarLoad(), v = PK.value(x.coins, x.items);
+  var d = { coins: x.coins, items: PK.own(x.items), tier: x.tier, maxTier: Math.max(x.maxTier, b.maxTier), correct: b.correct + (x.dc || 0), wrong: b.wrong + (x.dw || 0), best: Math.max(b.best, v), t: Date.now() };
+  try { localStorage.setItem(sugarKey(), JSON.stringify(d)); } catch (e) {}
+}
+function sugarCss() {
+  if (document.getElementById("st-css")) return;
+  var c = document.createElement("style"); c.id = "st-css";
+  c.textContent = ".st-hero{position:relative;aspect-ratio:16/9;border-radius:28px;overflow:hidden;background:#FFDDEE url(st-cover.webp) center/cover;box-shadow:0 5px 0 #FF8FC8;margin:6px 0 12px}" +
+    ".st-hero .st-lgimg{position:absolute;left:20%;top:50%;width:60%;height:auto;transform:translateY(-58%);filter:drop-shadow(0 10px 14px rgba(122,22,80,.35)) drop-shadow(0 2px 2px rgba(122,22,80,.25))}" +
+    ".st-k{position:absolute;left:12px;top:12px;background:#D3F36B;color:#16274A;border-radius:999px;padding:5px 11px;font:800 11px 'Plus Jakarta Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase}" +
+    ".st-lead{text-align:center;margin:0 6px 4px}" +
+    ".st-opts .go-opt.main{background:linear-gradient(90deg,#FF8FC8,#FFB86B)!important;color:#3A1F4A!important}" +
+    ".st-mine{margin-top:16px;background:#fff;border-radius:24px;padding:12px;box-shadow:0 10px 26px -18px rgba(54,40,120,.5)}.st-mine .pk-map{border-radius:16px;overflow:hidden}" +
+    ".st-mine h3{margin:2px 4px 8px;font:800 17px 'Bricolage Grotesque',sans-serif;color:#15192B;display:flex;align-items:center;gap:8px}.st-mine h3 em{margin-left:auto;font:800 13px 'Plus Jakarta Sans',sans-serif;font-style:normal;color:#7A2A63;background:#FFE6F2;border-radius:999px;padding:4px 10px}" +
+    ".st-alt{display:block;margin:10px auto 0;background:none;border:0;font:700 14px 'Plus Jakarta Sans',sans-serif;color:#7A2A63;text-decoration:underline;cursor:pointer}" +
+    ".pkbadge.st{background:#FF6FB5;color:#fff}.st-lg{display:block;width:min(78%,330px);height:auto;margin:6px auto 2px;filter:drop-shadow(0 8px 12px rgba(122,22,80,.3))}" +
+    ".pkexit{border:0;cursor:pointer;font:800 13px 'Plus Jakarta Sans',sans-serif;background:#FF6FB5!important;color:#fff!important}" +
+    ".st-go{position:relative}.st-go .t{background:#FFE6F2!important}";
+  document.head.appendChild(c);
+}
+function screenSugar() {
+  stopPoll(); if (G) { G.stop(); G = null; } sugarCss();
+  var sv = sugarLoad(), n = sv.items.length, val = PK.value(sv.coins, sv.items), N = PK.ATTR.length;
+  var arrow = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  render(topBar(true) +
+    '<div class="st-hero"><span class="st-k">New · Build your park</span><img class="st-lgimg" src="st-logo.webp" alt="Sugar Town"></div>' +
+    '<p class="lead st-lead">Answer in English, earn coins and build the sweetest amusement park in town.</p>' +
+    '<div class="go-opts st-opts">' +
+      '<button class="go-opt" id="st-solo" style="--c:#FFE6F2"><span class="t">' + ico("star") + "</span><span><b>" + (n || sv.coins ? "Keep building" : "Play solo") + "</b><small>" + (n ? n + "/" + N + " rides · $" + val.toLocaleString("es-MX") : "Your park is saved, play at your own pace") + '</small></span><span class="ar">' + arrow + "</span></button>" +
+      '<button class="go-opt main" id="st-ch"><span class="t">' + ico("users") + '</span><span><b>Challenge a friend</b><small>3-minute race · share the code</small></span><span class="ar">' + arrow + "</span></button>" +
+      '<button class="go-opt" id="st-live" style="--c:#E6DEFF"><span class="t">' + ico("key") + '</span><span><b>Live with your class</b><small>Type your teacher’s code</small></span><span class="ar">' + arrow + "</span></button>" +
+    "</div>" +
+    '<button class="st-alt" id="st-online">Challenge a classmate who’s online</button>' +
+    '<p class="err" id="err"></p>' +
+    (n ? '<div class="st-mine"><h3>My park<em>$' + val.toLocaleString("es-MX") + "</em></h3>" + PK.scene(sv.items, { small: true }) + "</div>" : ""));
+  $("#b-back").onclick = function () { if (sugarFromApp) location.href = "./#/games"; else screenHome(); };
+  $("#st-solo").onclick = function () { unlock(); sugarSolo(); };
+  $("#st-live").onclick = function () { unlock(); screenJoin(); };
+  $("#st-online").onclick = function () { unlock(); screenLive(); };
+  $("#st-ch").onclick = function () {
+    var btn = this; btn.disabled = true; $("#err").textContent = ""; unlock();
+    call("mp_create", { p_game: "sugar-town", p_settings: defaults("sugar-town") }).then(function () { code = room.code; saveRoom(); screenLobby(); })
+      .catch(function (e) { btn.disabled = false; $("#err").textContent = errText(e); });
+  };
+}
+function sugarSolo() {
+  stopPoll(); if (G) { G.stop(); G = null; }
+  sugarBase = sugarLoad();
+  G = parkGame(null, null, { mode: "solo", stage: stageOf(user()), cats: ["vocab", "grammar"] });
+}
+function sugarSoloEnd(r) {
+  sugarCss();
+  var v = PK.value(r.coins, r.items), n = PK.own(r.items).length, N = PK.ATTR.length;
+  if (r.correct + r.wrong > 0) { try { window.MovaAuth && window.MovaAuth.save("sugar-town", "Sugar Town · Solo", v, null, { mode: "solo", correct: r.correct, wrong: r.wrong, attractions: n, level: PK.tierName(r.st, r.tier) }); } catch (e) {} }
+  sugarBase = null;
+  render(topBar(true) + '<div class="center" style="margin-top:6px"><span class="pkbadge st">SUGAR TOWN</span></div><h1>' + (n === N ? "Your park is complete!" : "Park saved!") + "</h1>" +
+    '<p class="lead">' + (n === N ? "You built every ride in Sugar Town. Amazing!" : "Come back any time to keep building.") + "</p>" +
+    '<div class="pkmine">' + PK.scene(r.items, { small: true }) +
+    '<div class="pkstats"><span><b>$' + v.toLocaleString("es-MX") + "</b>Park value</span><span><b>" + n + "/" + N + "</b>Rides</span><span><b>" + r.correct + "</b>Correct</span><span><b>" + r.wrong + "</b>Wrong</span></div></div>" +
+    '<button class="primary" id="b-again">' + ico("play", 22) + ' Keep building</button><button class="ghost" id="b-menu">Sugar Town menu</button>');
+  $("#b-back").onclick = screenSugar; $("#b-menu").onclick = screenSugar;
+  $("#b-again").onclick = function () { unlock(); sugarSolo(); };
+  if (r.correct > 0) { confetti(n === N); sfx.go(); }
+}
 function liveResults() {
   if (liveGame() === "bingo") return bingoResults();
+  sugarCss();
   var list = lplayers.filter(function (p) { return p.round === live.round; }).slice().sort(function (a, b) { return b.value - a.value || b.correct - a.correct; });
   var pos = list.findIndex(function (p) { return p.id === me; }), mine = list[pos] || { items: [], value: 0, correct: 0, wrong: 0 };
   var sig = live.round + "|" + list.map(function (p) { return p.id + ":" + p.value + ":" + (p.items || []).length; }).join(",");
   if (liveScreen === "res" + sig) return;
   var first = liveScreen.indexOf("res" + live.round + "|") !== 0; liveScreen = "res" + sig;
   var top = [list[1], list[0], list[2]], cls = ["p2", "p1", "p3"], place = [2, 1, 3], st0 = liveStage();
-  render(topBar(true) + '<div class="center" style="margin-top:6px"><span class="pkbadge">MOVA PARK</span></div><h1>' + (pos === 0 ? "You won!" : pos === 1 ? "2nd place!" : pos === 2 ? "3rd place!" : "Great job!") + '</h1>' +
+  render(topBar(true) + '<div class="center" style="margin-top:6px"><span class="pkbadge st">SUGAR TOWN</span></div><h1>' + (pos === 0 ? "You won!" : pos === 1 ? "2nd place!" : pos === 2 ? "3rd place!" : "Great job!") + '</h1>' +
     '<div class="podium">' + top.map(function (p, i) { return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.id === me ? "You" : p.name) + '</b><div class="bar"><span>' + ordEn(place[i]) + "</span><small>$" + p.value.toLocaleString("es-MX") + "</small></div></div>" : "<div></div>"; }).join("") + "</div>" +
     '<div class="pkmine"><div class="label" style="margin-top:0">Your park</div>' + PK.scene(mine.items || [], { small: true }) +
     '<div class="pkstats"><span><b>$' + (mine.value || 0).toLocaleString("es-MX") + "</b>Park value</span><span><b>" + (mine.correct || 0) + "</b>Correct</span><span><b>" + (mine.wrong || 0) + "</b>Wrong</span>" + (PK.lvOf(mine.items) ? "<span><b>" + PK.tierName(st0, PK.lvOf(mine.items).max) + "</b>Top level</span>" : "") + "</div></div>" +
@@ -1932,6 +2054,7 @@ function start() {
       .catch(function () { liveForget(); screenHome(pre); });
     return;
   }
+  if (pre === "sugar-town") { sugarFromApp = true; try { history.replaceState(null, "", location.pathname); } catch (e) {} screenSugar(); return; }
   if (/[?&]play=live/.test(location.search)) { try { history.replaceState(null, "", location.pathname); } catch (e) {} screenLive(); return; }
   var soloQ = (location.search.match(/solo=([a-z-]+)/) || [])[1];
   if (soloQ && GAMES[soloQ]) { screenSolo(soloQ); return; }

@@ -1,4 +1,4 @@
-/* MOVA Park · 3 zonas, 18 atracciones, visitantes y niveles adaptativos (alumno y maestra) */
+/* Sugar Town · 3 zonas, 18 atracciones, visitantes y niveles adaptativos (alumno y maestra) */
 (function () {
   var VER = "2";
   /* Zonas: imagen de fondo (4:5) y lotes [centro x, centro y, ancho, alto] en % de la zona.

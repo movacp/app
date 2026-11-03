@@ -964,6 +964,7 @@ const QUIZ_BANK = [
 /* Juegos completos de MOVA (cada uno es su propio archivo). */
 const MOVA_GAMES = [
   { file: "juego-craftland.html", title: "CraftLand", color: "lime", tag: "Kids · Children · Teens", skill: "Vocabulary, grammar and reading", description: "Mine blocks by answering in English, craft furniture from recipes and decorate your own island.", art: ["mine", "craft", "build"] },
+  { file: "juego-sugar-town.html", title: "Sugar Town", color: "pink", tag: "Kids · Children · Teens", skill: "Vocabulary and grammar", description: "Answer in English, earn coins and build the sweetest amusement park in town. Play solo, challenge a friend or play live with your class.", art: ["park", "coins", "rides"] },
   { file: "juego-word-quest.html", title: "Word Quest", color: "coral", tag: "Ages 6–9", skill: "Vocabulary and listening", description: "Listen, look, and tap the right word: animals, food, colors, and numbers.", art: ["listen", "look", "tap"] },
   { file: "juego-mision-matematica.html", title: "Misión Matemática", color: "sky", tag: "1° a 4° de primaria", skill: "Matemáticas", description: "Resuelve operaciones y lleva el cohete hasta la Luna.", art: ["3 + 4", "= 7"] },
   { file: "juego-verb-memory.html", title: "Verb Memory", color: "mustard", tag: "A2", skill: "Irregular verbs", description: "Find the present, past, and participle of each verb. Play alone or in pairs.", art: ["go", "went", "gone"] },
@@ -1237,7 +1238,8 @@ const card = (x, y, w, h, fill = "#FFFDFA", rot = 0, stroke = "") =>
   `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="${fill}" ${stroke ? `stroke="${stroke}" stroke-width="3"` : ""} transform="rotate(${rot} ${x + w / 2} ${y + h / 2})"/>`;
 
 const GAME_ART = {
-  "juego-craftland.html": `<img src="craftland/cl-cover.webp" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`,
+  "juego-craftland.html": `<img src="cl-cover.webp" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`,
+  "juego-sugar-town.html": `<img src="st-thumb.webp" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`,
   memory: scene("#F7DDD4", [
     ["back", 34, 22], ["cat", 96, 22], ["back", 158, 22], ["star", 220, 22],
     ["apple", 34, 98], ["back", 96, 98], ["cat", 158, 98, "#7FB89E"], ["back", 220, 98]
