@@ -401,7 +401,8 @@ a.icon-btn.home-pill{width:auto!important;padding:0 16px 0 10px;gap:6px;display:
 <main class="app"><div class="panel" id="panel"></div></main>
 <script src="mova-auth.js"></script>
 <script src="toefl-bank.js"></script>
-<script src="mova-park.js?v=58"></script>
+<script src="mova-park.js?v=60"></script>
+<script src="mova-sugar.js?v=60"></script>
 <script src="mova-bingo.js?v=42"></script>
 <script>
 (function(){
@@ -1653,6 +1654,7 @@ function parkGame(lv, meP, opt) {
   var mode = opt.mode || "live", SOLO = mode === "solo", ROOM = mode === "room";
   var st = opt.stage || liveStage(true), cats = opt.cats || ((lv.settings && lv.settings.cats && lv.settings.cats.length) ? lv.settings.cats : ["vocab", "grammar"]);
   var sv = SOLO ? sugarLoad() : null;
+  var SG = window.MOVA_SUGAR || null; if (SG) { if (SOLO) SG.load(sugarKey()); else SG.session(); }
   var coins = sv ? sv.coins : 0, items = sv ? sv.items.slice() : [], correct = 0, wrong = 0, streak = 0, locked = false, stopped = false, done = false;
   var tier = sv ? sv.tier : 0, maxTier = sv ? sv.maxTier : 0, up = 0, down = 0, tiers = null, tqi = [0, 0, 0], noLv = false;
   var timers = [], raf = 0, lastPush = 0, pushT = 0, t0 = 0;
@@ -1682,27 +1684,30 @@ function parkGame(lv, meP, opt) {
   }
   function drawRank() {
     var el = $("#pkrank"); if (!el) return;
-    if (SOLO) { el.textContent = PK.own(items).length + "/" + PK.ATTR.length + " rides"; return; }
-    var r = rankOf(); if (r.pos) el.innerHTML = '<b>' + ordEn(r.pos) + "</b> of " + r.n;
+    if (SOLO) { el.innerHTML = SG ? '<span class="pkstar">' + SG.star + "<b>" + SG.ratingTxt() + "</b></span> · " + PK.own(items).length + "/" + PK.ATTR.length : PK.own(items).length + "/" + PK.ATTR.length + " rides"; return; }
+    var r = rankOf(); if (r.pos) el.innerHTML = (SG ? '<span class="pkstar">' + SG.star + "<b>" + SG.ratingTxt() + "</b></span> · " : "") + '<b>' + ordEn(r.pos) + "</b> of " + r.n;
   }
   function drawHud() {
     var c = $("#pkcoins"); if (c) c.textContent = coins.toLocaleString("es-MX");
     var v = $("#pkval"); if (v) v.textContent = "$" + PK.value(coins, items).toLocaleString("es-MX");
-    var inc = $("#pkinc"); if (inc) inc.textContent = Math.round(PK.income(items) * PK.TMULT[tier]);
+    var inc = $("#pkinc"); if (inc) inc.textContent = SG ? SG.gain(items, PK.TMULT[tier]) : Math.round(PK.income(items) * PK.TMULT[tier]);
     var lvl = $("#pklvl"); if (lvl) lvl.innerHTML = "Level <em>" + PK.tierName(st, tier) + '</em><span class="pkdots">' + [0, 1, 2].map(function (k) { return '<i class="' + (k < up ? "on" : "") + '"></i>'; }).join("") + "</span>";
     PK.ZONES.forEach(function (Z, z) { var t = $("#pktab" + z); if (!t) return; var n = PK.ATTR.filter(function (a) { return a.zone === z; }), b = n.filter(function (a) { return items.indexOf(a.id) >= 0; }).length, can = n.some(function (a) { return items.indexOf(a.id) < 0 && a.price <= coins; }); t.innerHTML = Z.short + "<small>" + b + "/" + n.length + "</small>"; t.classList.toggle("can", can); });
-    var aff = PK.ATTR.filter(function (a) { return items.indexOf(a.id) < 0 && a.price <= coins; }).length, b = $("#pkshopn");
+    var aff = PK.ATTR.filter(function (a) { return items.indexOf(a.id) < 0 && a.price <= coins && !(SG && SG.lockedAttr(a)); }).length, b = $("#pkshopn");
     if (b) { b.textContent = aff; b.hidden = !aff; }
     var sb = $("#pkshop"); if (sb) sb.classList.toggle("glow", aff > 0);
     $$(".pk-lot", $("#pkland") || document).forEach(function (l) { var a = PK.ATTR.find(function (x) { return x.id === l.dataset.id; }); var can = a && coins >= a.price; if (l.classList.contains("can") !== !!can) { l.classList.toggle("can", !!can); l.firstChild.innerHTML = can ? "Build" : PK.coin.replace(/width="18" height="18"/, 'width="14" height="14"') + a.price.toLocaleString("es-MX"); } });
+    if (SG) SG.decorate($("#pkland"));
   }
   function drawPark(newId) {
     var box = $("#pkland"); if (!box) return;
-    var y = box.scrollTop; box.innerHTML = PK.scene(items, { tap: true, coins: coins, newId: newId, id: "pkmap" }); box.scrollTop = y;
+    var y = box.scrollTop; box.innerHTML = PK.scene(items, { tap: true, coins: coins, newId: newId, id: "pkmap" }); if (SG) SG.decorate(box); box.scrollTop = y;
     if (newId) PK.burst($("#pkmap"), newId);
   }
   function buy(id) {
-    var a = PK.ATTR.find(function (x) { return x.id === id; }); if (!a || done || coins < a.price || items.indexOf(a.id) >= 0) return false;
+    var a = PK.ATTR.find(function (x) { return x.id === id; }); if (!a || done || items.indexOf(a.id) >= 0) return false;
+    if (SG && SG.lockedAttr(a)) { var st0 = SG.state(), g = SG.gateText(a.zone); lvToast(PK.ZONES[a.zone].name + " opens soon<small>Needs " + g + " · you have " + SG.ratingTxt() + "★ and " + st0.served + "</small>", true); return false; }
+    if (coins < a.price) return false;
     coins -= a.price; items.push(a.id); tones([523, 659, 784, 1047, 1319], .07, "triangle");
     drawPark(a.id); drawHud(); drawRank(); push(true);
     if (items.length === PK.ATTR.length) { toast("You built the whole park! Sugar Town is complete."); confetti(true); }
@@ -1732,6 +1737,7 @@ function parkGame(lv, meP, opt) {
   }
   function nextQ() {
     if (stopped || done) return;
+    if (SG && SG.wantOrder(items) && $("#pkq")) { orderTurn(); return; }
     var q = pickQ(), stage = $("#pkq"); if (!stage || !q) return;
     locked = false; t0 = Date.now();
     stage.innerHTML = '<div class="prompt">' + (q.say && synth && !q.bigSay ? '<button class="say" id="say" aria-label="Listen">' + ico("sound") + "</button>" : "") + q.html + "</div>" +
@@ -1743,8 +1749,8 @@ function parkGame(lv, meP, opt) {
       var ok = String(b.dataset.v) === String(q.ans);
       if (ok) {
         correct++; streak++; down = 0;
-        var m = PK.TMULT[tier], gain = Math.round(PK.income(items) * m); coins += gain;
-        b.classList.add("ok"); sfx.ok(); floatCoin("+" + gain, b); PK.rain($("#pkmap"), items, m);
+        var m = PK.TMULT[tier], gain = SG ? SG.gain(items, m) : Math.round(PK.income(items) * m); coins += gain;
+        b.classList.add("ok"); sfx.ok(); floatCoin("+" + gain, b); if (!SG) PK.rain($("#pkmap"), items, m);
         if (++up >= 3) { up = 0; if (tier < 2) { tier++; maxTier = Math.max(maxTier, tier); lvToast("⬆ Level up! You’re now at " + PK.tierName(st, tier) + "<small>Harder questions · ×" + PK.TMULT[tier] + " coins</small>"); } }
         drawHud(); push(); later(nextQ, 550);
       } else {
@@ -1755,14 +1761,24 @@ function parkGame(lv, meP, opt) {
       }
     };
   }
+  function orderTurn() {
+    var open1 = SG.zoneOpen(1), open2 = SG.zoneOpen(2);
+    SG.serve($("#pkq"), { items: items, stage: st, tier: tier, map: $("#pkmap"), onDone: function (r) {
+      if (stopped || done) return;
+      coins += (r.pay || 0) + (r.tip || 0); drawHud(); drawRank(); push();
+      if (!open1 && SG.zoneOpen(1) || !open2 && SG.zoneOpen(2)) { var z = !open1 && SG.zoneOpen(1) ? 1 : 2; drawPark(); lvToast(PK.ZONES[z].name + " is open!<small>Your visitors love your park</small>"); if (typeof confetti === "function") confetti(false); }
+      else if (r.review) { var w = $("#pkworld"); if (w) { var o = $(".pkrv", w); if (o) o.remove(); var d = document.createElement("div"); d.className = "pkrv"; d.innerHTML = SG.stars(r.review.s) + "“" + esc(r.review.t) + "”"; w.appendChild(d); later(function () { d.remove(); }, 3000); } }
+      later(nextQ, 350);
+    } });
+  }
   function floatCoin(t, el) { var f = document.createElement("div"); f.className = "pkfloat"; f.innerHTML = PK.coin + t; el.appendChild(f); setTimeout(function () { f.remove(); }, 1000); }
   function shop() {
     var sh = document.createElement("div"); sh.className = "pksheet"; sh.id = "pksheet";
     function draw() {
       sh.innerHTML = '<div class="pkpanel"><div class="pkhead"><b>Park shop</b><span class="pill">' + PK.coin + '<span>' + coins.toLocaleString("es-MX") + '</span></span><button class="icon-btn" id="pkclose" aria-label="Close">' + ico("x", 20) + "</button></div>" +
         '<div class="pklist">' + PK.ATTR.map(function (a) {
-          var own = items.indexOf(a.id) >= 0, can = !own && coins >= a.price;
-          return '<button class="pkitem' + (own ? " own" : "") + '" data-id="' + a.id + '"' + (can ? "" : " disabled") + '><span class="pi">' + PK.art(a.id) + '</span><span class="pt"><b>' + esc(a.name) + "</b><small>+" + a.inc + " per answer</small></span>" +
+          var own = items.indexOf(a.id) >= 0, lk = !own && SG && SG.lockedAttr(a), can = !own && !lk && coins >= a.price;
+          return '<button class="pkitem' + (own ? " own" : "") + '" data-id="' + a.id + '"' + (can ? "" : " disabled") + '><span class="pi">' + PK.art(a.id) + '</span><span class="pt"><b>' + esc(a.name) + "</b><small>" + (lk ? "Opens at " + SG.gateText(a.zone) : SG ? (a.zone === 0 ? "New food for your visitors" : "Visitors pay 6% more") : "+" + a.inc + " per answer") + "</small></span>" +
             '<span class="pp">' + (own ? ico("check", 18) : PK.coin + a.price.toLocaleString("es-MX")) + "</span></button>";
         }).join("") + "</div></div>";
       $("#pkclose", sh).onclick = function () { sh.remove(); };
@@ -1800,7 +1816,7 @@ function parkGame(lv, meP, opt) {
     $("#pkshop").onclick = function () { unlock(); shop(); };
     if (SOLO) $("#pkexit").onclick = function () { unlock(); finish(); };
     if (ROOM) startPoll(2000);
-    $("#pkland").onclick = function (e) { var l = e.target.closest && e.target.closest(".pk-lot.can"); if (l) { unlock(); buy(l.dataset.id); } };
+    $("#pkland").onclick = function (e) { var l = e.target.closest && e.target.closest(".pk-lot.can, .pk-lot.so-lock"); if (l) { unlock(); buy(l.dataset.id); } };
     $(".pktabs").onclick = function (e) { var b = e.target.closest("button"); if (!b) return; var land = $("#pkland"), zEl = $("#pkmap-z" + b.dataset.z); if (land && zEl) land.scrollTo({ top: zEl.offsetTop - 70, behavior: "smooth" }); };
     drawPark(); drawHud(); drawRank(); frame();
     var land = $("#pkland");
@@ -1812,7 +1828,7 @@ function parkGame(lv, meP, opt) {
     nextQ();
   }
   (function countdown() {
-    render('<div class="count"><div><div class="num" id="cd">3</div><p>Sugar Town · ' + esc(STAGE_NAME[st]) + '</p><p style="margin-top:6px;font-size:14px">' + (SOLO ? "Answer correctly to earn coins and build rides. Your park is saved, so you can keep building next time." : "Answer correctly to earn coins and buy rides in the shop. The most valuable park wins!") + "</p></div></div>");
+    render('<div class="count"><div><div class="num" id="cd">3</div><p>Sugar Town · ' + esc(STAGE_NAME[st]) + '</p><p style="margin-top:6px;font-size:14px">' + (SOLO ? "Answer questions and serve your visitors to earn coins. Happy visitors give you stars to open new zones. Your park is saved." : "Answer questions and serve your visitors to earn coins. Buy rides and build the most valuable park to win!") + "</p></div></div>");
     var last = null;
     (function cd() {
       if (stopped) return;
@@ -1857,6 +1873,7 @@ function sugarSave(x) {
   var b = sugarBase || sugarLoad(), v = PK.value(x.coins, x.items);
   var d = { coins: x.coins, items: PK.own(x.items), tier: x.tier, maxTier: Math.max(x.maxTier, b.maxTier), correct: b.correct + (x.dc || 0), wrong: b.wrong + (x.dw || 0), best: Math.max(b.best, v), t: Date.now() };
   try { localStorage.setItem(sugarKey(), JSON.stringify(d)); } catch (e) {}
+  try { window.MOVA_SUGAR && window.MOVA_SUGAR.later(); } catch (e) {}
 }
 function sugarCss() {
   if (document.getElementById("st-css")) return;
@@ -1878,6 +1895,7 @@ function sugarCss() {
 }
 function screenSugar() {
   stopPoll(); if (G) { G.stop(); G = null; } sugarCss();
+  var SG = window.MOVA_SUGAR; if (SG) { SG.load(sugarKey()); SG.pull(screenSugar); }
   var sv = sugarLoad(), n = sv.items.length, val = PK.value(sv.coins, sv.items), N = PK.ATTR.length;
   var arrow = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
   render(topBar(true) +
@@ -1891,7 +1909,7 @@ function screenSugar() {
     "</div>" +
     '<button class="st-alt" id="st-online">Challenge a classmate who’s online</button>' +
     '<p class="err" id="err"></p>' +
-    (n ? '<div class="st-mine"><h3>My park<em>$' + val.toLocaleString("es-MX") + "</em></h3>" + PK.scene(sv.items, { small: true }) + "</div>" : ""));
+    (n ? '<div class="st-mine"><h3>My park' + (SG && SG.state().served ? '<span class="pkstar" style="font:800 13px \'Plus Jakarta Sans\',sans-serif;color:#7A2A63">' + SG.star + SG.ratingTxt() + "</span>" : "") + "<em>$" + val.toLocaleString("es-MX") + "</em></h3>" + PK.scene(sv.items, { small: true }) + "</div>" : ""));
   $("#b-back").onclick = function () { if (sugarFromApp) location.href = "./#/games"; else screenHome(); };
   $("#st-solo").onclick = function () { unlock(); sugarSolo(); };
   $("#st-lvl").onclick = function (e) { var b = e.target.closest("button"); if (!b) return; sugarSetStage(b.dataset.v); $$("#st-lvl button").forEach(function (x) { x.classList.toggle("on", x === b); }); };
@@ -1913,10 +1931,11 @@ function sugarSoloEnd(r) {
   var v = PK.value(r.coins, r.items), n = PK.own(r.items).length, N = PK.ATTR.length;
   if (r.correct + r.wrong > 0) { try { window.MovaAuth && window.MovaAuth.save("sugar-town", "Sugar Town · Solo", v, null, { mode: "solo", correct: r.correct, wrong: r.wrong, attractions: n, level: PK.tierName(r.st, r.tier) }); } catch (e) {} }
   sugarBase = null;
+  try { window.MOVA_SUGAR && window.MOVA_SUGAR.push(true); } catch (e) {}
   render(topBar(true) + '<div class="center" style="margin-top:6px"><span class="pkbadge st">SUGAR TOWN</span></div><h1>' + (n === N ? "Your park is complete!" : "Park saved!") + "</h1>" +
     '<p class="lead">' + (n === N ? "You built every ride in Sugar Town. Amazing!" : "Come back any time to keep building.") + "</p>" +
     '<div class="pkmine">' + PK.scene(r.items, { small: true }) +
-    '<div class="pkstats"><span><b>$' + v.toLocaleString("es-MX") + "</b>Park value</span><span><b>" + n + "/" + N + "</b>Rides</span><span><b>" + r.correct + "</b>Correct</span><span><b>" + r.wrong + "</b>Wrong</span></div></div>" +
+    '<div class="pkstats"><span><b>$' + v.toLocaleString("es-MX") + "</b>Park value</span><span><b>" + n + "/" + N + "</b>Rides</span><span><b>" + r.correct + "</b>Correct</span><span><b>" + r.wrong + "</b>Wrong</span>" + (window.MOVA_SUGAR ? "<span><b>" + window.MOVA_SUGAR.state().served + "</b>Visitors served</span><span><b>" + window.MOVA_SUGAR.ratingTxt() + "★</b>Rating</span>" : "") + "</div></div>" +
     '<button class="primary" id="b-again">' + ico("play", 22) + ' Keep building</button><button class="ghost" id="b-menu">Sugar Town menu</button>');
   $("#b-back").onclick = screenSugar; $("#b-menu").onclick = screenSugar;
   $("#b-again").onclick = function () { unlock(); sugarSolo(); };
