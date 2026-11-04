@@ -165,55 +165,126 @@
   }, 1500);
 })();
 
-/* ---------- Ventana para instalar la app (diseño nuevo) ---------- */
+/* ---------- Ventana para instalar la app (heymova.mx) ---------- */
 (function () {
-  var KEY = "mova_install_later";
+  var KEY = "mova_install_later", SESS = "mova_install_seen";
+  var UA = navigator.userAgent || "";
   function standalone() { return (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true; }
   function snoozed() { try { return Date.now() < Number(localStorage.getItem(KEY) || 0); } catch (e) { return false; } }
-  function snooze() { try { localStorage.setItem(KEY, String(Date.now() + 3 * 864e5)); } catch (e) {} }
-  var android = /Android/i.test(navigator.userAgent);
-  var ios = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  var css = ".mi-back{position:fixed;inset:0;z-index:9998;background:rgba(21,25,43,.38);display:flex;align-items:flex-end;justify-content:center;padding:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));animation:miF .25s ease}" +
-    ".mi-card{width:100%;max-width:420px;background:#fff;border-radius:28px;padding:22px 20px 18px;box-shadow:0 24px 70px rgba(54,40,120,.3);font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#15192B;animation:miU .35s cubic-bezier(.2,.9,.3,1.2)}" +
-    ".mi-top{display:flex;align-items:center;gap:14px}.mi-top img{width:58px;height:58px;border-radius:16px;box-shadow:0 6px 16px rgba(21,25,43,.15)}" +
-    ".mi-top small{display:block;font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#7B5CF0}" +
-    ".mi-top b{display:block;font-family:'Bricolage Grotesque','Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;line-height:1.1}" +
-    ".mi-card p{margin:14px 0 0;font-size:14.5px;line-height:1.5;color:#4A4E66}" +
-    ".mi-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.mi-pills span{font-size:12px;font-weight:700;padding:6px 11px;border-radius:999px}" +
-    ".mi-steps{margin:14px 0 0;padding:12px 14px;border-radius:16px;background:#F5F3FA;font-size:14px;line-height:1.55}" +
-    ".mi-btns{display:flex;gap:10px;margin-top:18px}.mi-btns button{flex:1;height:50px;border-radius:999px;font:800 15px 'Plus Jakarta Sans',sans-serif;border:0;cursor:pointer}" +
-    ".mi-go{background:#15192B;color:#fff;box-shadow:0 4px 0 #D3F36B}.mi-no{background:#F2EFF8;color:#15192B}" +
-    "@keyframes miU{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}@keyframes miF{from{opacity:0}to{opacity:1}}";
-  function show(manual) {
-    if (document.getElementById("mi-back") || standalone() || snoozed()) return;
+  function snooze(days) { try { localStorage.setItem(KEY, String(Date.now() + (days || 3) * 864e5)); } catch (e) {} }
+  var ipad = /iPad/.test(UA) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var ios = /iPhone|iPod/.test(UA) || ipad;
+  var android = /Android/i.test(UA);
+  var inapp = /Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly|BytedanceWebview|Line\/|Snapchat|Pinterest|LinkedInApp/i.test(UA);
+  var iosOther = ios && /CriOS|FxiOS|EdgiOS|OPiOS|GSA\//.test(UA), iosChrome = ios && /CriOS/.test(UA);
+  var BLOOM = "<svg viewBox=\"0 0 220 220\" aria-hidden=\"true\"><path d=\"M98 138 C96 156.0 90 166.0 92 178\" stroke=\"#1A1B2E\" stroke-width=\"2.3\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><ellipse cx=\"89\" cy=\"180\" rx=\"6.2\" ry=\"4\" fill=\"#1A1B2E\"/><path d=\"M122 138 C124 156.0 128 166.0 127 178\" stroke=\"#1A1B2E\" stroke-width=\"2.3\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><ellipse cx=\"130\" cy=\"180\" rx=\"6.2\" ry=\"4\" fill=\"#1A1B2E\"/><path d=\"M80 98 C62 104 50 92 48 74\" stroke=\"#1A1B2E\" stroke-width=\"2.3\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"48\" cy=\"74\" r=\"3.6\" fill=\"#1A1B2E\"/><path d=\"M142 100 C152 104 160 102 168 96\" stroke=\"#1A1B2E\" stroke-width=\"2.3\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"168\" cy=\"96\" r=\"3.6\" fill=\"#1A1B2E\"/><circle cx=\"86\" cy=\"68\" r=\"30\" fill=\"#9C8BFF\"/><circle cx=\"134\" cy=\"68\" r=\"30\" fill=\"#9C8BFF\"/><circle cx=\"86\" cy=\"116\" r=\"30\" fill=\"#9C8BFF\"/><circle cx=\"134\" cy=\"116\" r=\"30\" fill=\"#9C8BFF\"/><circle cx=\"110\" cy=\"92\" r=\"26\" fill=\"#9C8BFF\"/><circle cx=\"80\" cy=\"62\" r=\"7\" fill=\"#fff\" opacity=\".28\"/><path d=\"M87 84 h20 q0 12 -10 12 q-10 0 -10 -12z\" fill=\"#1A1B2E\"/><path d=\"M92 87 q3 -1.6 6 0\" stroke=\"#fff\" stroke-width=\"1.6\" stroke-linecap=\"round\" fill=\"none\" opacity=\".6\"/><path d=\"M113 84 h20 q0 12 -10 12 q-10 0 -10 -12z\" fill=\"#1A1B2E\"/><path d=\"M118 87 q3 -1.6 6 0\" stroke=\"#fff\" stroke-width=\"1.6\" stroke-linecap=\"round\" fill=\"none\" opacity=\".6\"/><path d=\"M107 85 q3 -4 6 0\" stroke=\"#1A1B2E\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M94 106 Q110 122 126 106\" stroke=\"#1A1B2E\" stroke-width=\"2.3\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><ellipse cx=\"84\" cy=\"100\" rx=\"5\" ry=\"3\" fill=\"#FF8FC0\" opacity=\".55\"/><ellipse cx=\"136\" cy=\"100\" rx=\"5\" ry=\"3\" fill=\"#FF8FC0\" opacity=\".55\"/></svg>";
+  var I = {
+    share: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5"/><path d="M8 10.5H6.5A1.5 1.5 0 0 0 5 12v7.5A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V12a1.5 1.5 0 0 0-1.5-1.5H16"/></svg>',
+    dots: '<svg viewBox="0 0 24 24" width="26" height="26" fill="#fff"><circle cx="12" cy="5" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="19" r="2.2"/></svg>',
+    hdots: '<svg viewBox="0 0 24 24" width="26" height="26" fill="#fff"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#15192B" stroke-width="2.2" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M12 8v8M8 12h8"/></svg>',
+    down: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#15192B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></svg>',
+    globe: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#3D35C6" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.8 5.6 3.8 9s-1.2 6.4-3.8 9c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3z"/></svg>',
+    check: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#15192B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>'
+  };
+  var css = ".mi-back{position:fixed;inset:0;z-index:9998;background:rgba(21,25,43,.42);display:flex;align-items:flex-end;justify-content:center;padding:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));animation:miF .25s ease}" +
+    ".mi-card{position:relative;width:100%;max-width:420px;background:#fff;border-radius:30px;overflow:hidden;box-shadow:0 24px 70px rgba(54,40,120,.32);font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#15192B;animation:miU .4s cubic-bezier(.2,.9,.3,1.2)}" +
+    ".mi-hero{position:relative;background:#D7F36A;padding:18px 20px 16px;min-height:96px}" +
+    ".mi-hero .mi-brand{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;color:#15192B}.mi-hero .mi-brand img{width:30px;height:30px;border-radius:9px}" +
+    ".mi-hero h3{margin:10px 0 0;font:800 25px/1.08 'Bricolage Grotesque','Plus Jakarta Sans',sans-serif;letter-spacing:-.02em;max-width:68%}" +
+    ".mi-ch{position:absolute;right:10px;top:6px;width:104px;height:104px;animation:miBob 1.8s ease-in-out infinite alternate}.mi-ch svg{width:100%;height:100%}" +
+    ".mi-x{position:absolute;right:10px;top:10px;width:34px;height:34px;border:0;border-radius:50%;background:rgba(255,255,255,.75);display:grid;place-items:center;cursor:pointer;z-index:2;font-size:20px;line-height:1;color:#15192B}" +
+    ".mi-body{padding:16px 18px 18px}.mi-body>p{margin:0 0 12px;font-size:14.5px;line-height:1.5;color:#4A4E66}" +
+    ".mi-st{display:flex;align-items:center;gap:12px;background:#F5F3FA;border-radius:20px;padding:11px 12px;margin-top:8px}" +
+    ".mi-n{flex:none;width:32px;height:32px;border-radius:50%;background:#15192B;color:#D7F36A;display:grid;place-items:center;font:800 15px 'Bricolage Grotesque',sans-serif}" +
+    ".mi-st div{flex:1;min-width:0}.mi-st b{display:block;font-size:15px;line-height:1.25}.mi-st small{display:block;font-size:12.5px;line-height:1.35;color:#6B6F86;margin-top:1px}" +
+    ".mi-ic{flex:none;width:44px;height:44px;border-radius:14px;background:#2F80FF;display:grid;place-items:center;box-shadow:0 0 0 4px #DDE9FF}" +
+    ".mi-ic.soft{background:#EEEAFE;box-shadow:none}" +
+    ".mi-chip{flex:none;display:inline-flex;align-items:center;gap:6px;border:2.5px solid #D7F36A;border-radius:14px;padding:8px 10px;font-size:13px;font-weight:700;background:#fff;white-space:nowrap}" +
+    ".mi-url{display:flex;align-items:center;gap:8px;margin-top:10px;background:#F5F3FA;border-radius:999px;padding:6px 6px 6px 14px;font-weight:800;font-size:15px}.mi-url span{flex:1}" +
+    ".mi-copy{border:0;border-radius:999px;background:#15192B;color:#fff;font:800 13px 'Plus Jakarta Sans',sans-serif;padding:9px 14px;cursor:pointer}" +
+    ".mi-btns{display:flex;gap:10px;margin-top:16px}.mi-btns button{flex:1;height:52px;border-radius:999px;font:800 15.5px 'Plus Jakarta Sans',sans-serif;border:0;cursor:pointer}" +
+    ".mi-go{background:#15192B;color:#fff;box-shadow:0 4px 0 #D7F36A}.mi-no{background:#F2EFF8;color:#15192B}" +
+    ".mi-ok{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px;font-weight:700;color:#4A4E66}.mi-ok i{flex:none;width:24px;height:24px;border-radius:50%;background:#D7F36A;display:grid;place-items:center}" +
+    "@keyframes miU{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}@keyframes miF{from{opacity:0}to{opacity:1}}@keyframes miBob{to{transform:translateY(-4px) rotate(3deg)}}";
+  function step(n, t, s, right) { return '<div class="mi-st"><span class="mi-n">' + n + "</span><div><b>" + t + "</b>" + (s ? "<small>" + s + "</small>" : "") + "</div>" + (right || "") + "</div>"; }
+  function content(kind) {
+    if (kind === "inapp") return {
+      t: "Ábrela en tu navegador",
+      p: "Desde " + (/Instagram/i.test(UA) ? "Instagram" : /FBAN|FBAV|FB_IAB/i.test(UA) ? "Facebook" : /TikTok|musical_ly|Bytedance/i.test(UA) ? "TikTok" : "esta app") + " no se puede instalar. Ábrela en " + (ios ? "Safari" : "Chrome") + " y ahí te mostramos cómo.",
+      s: step(1, "Toca " + (ios ? "···" : "⋮") + " arriba a la derecha", "", '<span class="mi-ic">' + (ios ? I.hdots : I.dots) + "</span>") +
+         step(2, ios ? "«Abrir en el navegador externo»" : "«Abrir en Chrome»", ios ? "En algunas versiones dice «Abrir en Safari»." : "En algunas versiones dice «Abrir en el navegador»."),
+      extra: '<div class="mi-url"><span>heymova.mx</span><button type="button" class="mi-copy">Copiar</button></div>',
+      go: null
+    };
+    if (kind === "prompt") return {
+      t: "Instala MOVA en tu " + (/(tablet|SM-T|Tab)/i.test(UA) ? "tablet" : "celular"),
+      p: "Ábrela desde tu pantalla de inicio como cualquier app. Carga más rápido y guarda tu avance.",
+      s: "", extra: '<div class="mi-ok"><i>' + I.check + "</i>Lecturas, juegos, Game On y My Progress</div>", go: "Instalar"
+    };
+    if (kind === "android") return {
+      t: "Instala MOVA en 2 pasos",
+      p: "Así la abres desde tu pantalla de inicio como cualquier app.",
+      s: step(1, "Toca el menú ⋮", "Los tres puntitos, arriba a la derecha.", '<span class="mi-ic">' + I.dots + "</span>") +
+         step(2, "«Instalar app»", "O «Agregar a la pantalla principal».", '<span class="mi-chip">' + I.down + "Instalar</span>"),
+      go: null
+    };
+    if (kind === "iosother") return {
+      t: "Ábrela en Safari",
+      p: "En iPhone y iPad, MOVA se instala desde Safari. Copia el enlace y pégalo en Safari.",
+      s: "", extra: '<div class="mi-url"><span>heymova.mx</span><button type="button" class="mi-copy">Copiar</button></div>', go: null
+    };
+    return {
+      t: "Instala MOVA en 3 pasos",
+      p: "Así la abres desde tu pantalla de inicio como cualquier app.",
+      s: step(1, "Toca Compartir", iosChrome ? "Arriba a la derecha, junto a la dirección." : ipad ? "Arriba a la derecha. Si no lo ves, toca ··· primero." : "Abajo en la barra. Si no lo ves, toca ··· primero.", '<span class="mi-ic">' + I.share + "</span>") +
+         step(2, "«Agregar a inicio»", "Desliza el menú hacia abajo hasta encontrarlo.", '<span class="mi-chip">' + I.plus + "Agregar</span>") +
+         step(3, "Toca «Agregar»", "Arriba a la derecha. ¡Listo!"),
+      go: null
+    };
+  }
+  function show(kind) {
+    if (document.getElementById("mi-back") || standalone()) return;
     if (!document.getElementById("mi-css")) { var s = document.createElement("style"); s.id = "mi-css"; s.textContent = css; document.head.appendChild(s); }
-    var steps = manual ? '<div class="mi-steps">' + (ios
-      ? "Tap <b>Share</b> at the bottom of Safari, then <b>Add to Home Screen</b>."
-      : "Tap <b>⋮</b> at the top right of Chrome, then <b>Install app</b> or <b>Add to Home screen</b>.") + "</div>" : "";
+    var c = content(kind);
     var b = document.createElement("div"); b.className = "mi-back"; b.id = "mi-back";
-    b.innerHTML = '<div class="mi-card" role="dialog" aria-modal="true" aria-label="Install MOVA Studio">' +
-      '<div class="mi-top"><img src="icon-192.png" alt=""><div><small>MOVA Learning Studio</small><b>Install the app</b></div></div>' +
-      "<p>Open it from your home screen, just like any app. It loads faster and works even without internet.</p>" +
-      '<div class="mi-pills"><span style="background:#ECFBC8">Readings</span><span style="background:#EEE8FF">Games</span><span style="background:#FFE6F2">Game On</span><span style="background:#FFF6D1">My Progress</span></div>' +
-      steps + '<div class="mi-btns"><button type="button" class="mi-no">Not now</button>' + (manual ? "" : '<button type="button" class="mi-go">Install</button>') + "</div></div>";
+    b.innerHTML = '<div class="mi-card" role="dialog" aria-modal="true" aria-label="Instalar MOVA">' +
+      '<div class="mi-hero"><div class="mi-brand"><img src="icon-192.png" alt="">MOVA Learning Studio</div><h3>' + c.t + '</h3><div class="mi-ch">' + BLOOM + "</div></div>" +
+      '<div class="mi-body"><p>' + c.p + "</p>" + c.s + (c.extra || "") +
+      '<div class="mi-btns"><button type="button" class="mi-no">' + (c.go ? "Ahora no" : "Entendido") + "</button>" + (c.go ? '<button type="button" class="mi-go">' + c.go + "</button>" : "") + "</div></div></div>";
     document.body.appendChild(b);
+    try { sessionStorage.setItem(SESS, "1"); } catch (e) {}
     function close() { b.remove(); }
-    b.addEventListener("click", function (e) { if (e.target === b) { snooze(); close(); } });
-    b.querySelector(".mi-no").onclick = function () { snooze(); close(); };
+    b.addEventListener("click", function (e) { if (e.target === b) { snooze(kind === "inapp" ? .02 : 3); close(); } });
+    b.querySelector(".mi-no").onclick = function () { snooze(kind === "inapp" ? .02 : 3); close(); };
+    var cp = b.querySelector(".mi-copy");
+    if (cp) cp.onclick = function () {
+      var url = "https://heymova.mx", btn = this;
+      var ok = function () { btn.textContent = "¡Copiado!"; };
+      try { navigator.clipboard.writeText(url).then(ok, function () { prompt("Copia este enlace:", url); }); } catch (e) { prompt("Copia este enlace:", url); }
+    };
     var go = b.querySelector(".mi-go");
     if (go) go.onclick = function () {
       var evt = window.__installEvt; close();
       if (!evt) return;
       evt.prompt();
-      Promise.resolve(evt.userChoice).then(function (r) { if (r && r.outcome !== "accepted") snooze(); window.__installEvt = null; }).catch(function () {});
+      Promise.resolve(evt.userChoice).then(function (r) { if (r && r.outcome !== "accepted") snooze(3); window.__installEvt = null; }).catch(function () {});
     };
   }
-  function tryShow() { if (window.__installEvt) setTimeout(function () { show(false); }, 1200); }
-  window.addEventListener("beforeinstallprompt", function () { setTimeout(tryShow, 0); });
+  window.MOVA_INSTALL = function () { var k = inapp ? "inapp" : window.__installEvt ? "prompt" : ios ? (iosOther && !iosChrome ? "iosother" : "ios") : "android"; try { localStorage.removeItem(KEY); } catch (e) {} show(k); };
+  function seen() { try { return sessionStorage.getItem(SESS) === "1"; } catch (e) { return false; } }
+  function auto() {
+    if (standalone() || seen() || document.getElementById("mi-back")) return;
+    if (inapp) return show("inapp");
+    if (snoozed()) return;
+    if (window.__installEvt) return show("prompt");
+    if (ios) return show(iosOther && !iosChrome ? "iosother" : "ios");
+    if (android) return show("android");
+  }
+  window.addEventListener("beforeinstallprompt", function () { setTimeout(function () { if (!document.getElementById("mi-back") && !standalone() && !snoozed() && !seen()) show("prompt"); }, 1500); });
   window.addEventListener("appinstalled", function () { var b = document.getElementById("mi-back"); if (b) b.remove(); });
   window.addEventListener("load", function () {
-    tryShow();
-    /* Si Chrome no ofrece la instalación automática, mostrar los pasos para hacerlo a mano */
-    if ((android || ios) && !standalone()) setTimeout(function () { if (!window.__installEvt && !document.getElementById("mi-back")) show(true); }, 6000);
+    /* En Android esperamos un poco a que Chrome ofrezca la instalación automática */
+    setTimeout(auto, inapp || ios ? 1800 : 4500);
   });
 })();
