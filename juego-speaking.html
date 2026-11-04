@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Speaking Lab · MOVA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<script src="mova-voice.js"></script>
+<style>
+:root{--bg:#F5F3FA;--ink:#15192B;--navy:#1A1B2E;--navy2:#2C3060;--muted:#6A6F85;--line:#ECE9F3;--lime:#D3F36B;--lilac:#E6E2FF;--peri:#C9D2FF;--pink:#FF8FC0;--pinkSoft:#FFE1EE;--butter:#FFE58A;--mint:#BDF0D8;
+  color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{min-height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+:focus-visible{outline:3px solid #8FA2FF;outline-offset:3px;border-radius:14px}
+.wrap{max-width:600px;margin:0 auto;padding:18px 16px 48px}
+.top{display:flex;align-items:center;gap:10px;margin:2px 0 14px}
+.home{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.6px solid var(--ink);border-radius:999px;padding:8px 14px;font-weight:800;font-size:14px;text-decoration:none;color:var(--ink)}
+.home svg{width:16px;height:16px}
+.brand{margin-left:auto;font-size:12px;font-weight:700;color:var(--muted)}
+[hidden]{display:none!important}
+
+/* cover */
+.cover{position:relative;overflow:hidden;background:var(--navy);color:#fff;border-radius:30px;padding:24px 22px 22px;min-height:260px}
+.cover .ring{position:absolute;right:-70px;top:-70px;width:230px;height:230px;border-radius:50%;border:36px solid var(--navy2)}
+.cover .k{position:relative;display:inline-block;background:var(--lime);color:var(--navy);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:800}
+.cover h1{position:relative;font-family:"Bricolage Grotesque",sans-serif;font-size:46px;line-height:.92;letter-spacing:-.02em;margin:14px 0 10px;max-width:240px}
+.cover p{position:relative;margin:0;font-size:14px;line-height:1.55;color:#C9C3F2;max-width:58%}
+.cover .mic{position:absolute;right:6px;bottom:-6px;width:190px;height:220px}
+@media (max-width:420px){.cover .mic{width:140px;height:168px;right:-12px}.cover h1{font-size:40px}}
+
+/* how */
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 4px}
+.how div{background:#fff;border-radius:20px;padding:12px 10px;text-align:center}
+.how b{display:grid;place-items:center;width:30px;height:30px;margin:0 auto 6px;border-radius:50%;font-family:"Bricolage Grotesque",sans-serif;font-size:15px}
+.how span{display:block;font-size:12.5px;line-height:1.35;font-weight:700}
+.how small{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;font-weight:600}
+
+h2.sec{font-family:"Bricolage Grotesque",sans-serif;font-size:21px;letter-spacing:-.01em;margin:24px 4px 10px}
+.stages{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stg{border-radius:20px;padding:12px 10px;text-align:left;border:2px solid transparent;background:#fff;transition:transform .15s}
+.stg:active{transform:scale(.97)}
+.stg b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:17px}
+.stg small{display:block;font-size:12px;color:var(--muted);font-weight:700;margin-top:2px}
+.stg.on{border-color:var(--ink)}
+.stg[data-s="kids"]{background:#ECFBC8}.stg[data-s="children"]{background:var(--lilac)}.stg[data-s="teens"]{background:#FFE6F2}
+.lvnote{font-size:13px;color:var(--muted);line-height:1.5;margin:12px 4px 10px}
+.levels{display:grid;grid-template-columns:repeat(auto-fill,minmax(122px,1fr));gap:8px}
+.lv{position:relative;background:#fff;border-radius:18px;padding:12px 12px 11px;text-align:left;border:2px solid transparent}
+.lv b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:20px;line-height:1}
+.lv small{display:block;font-size:11.5px;color:var(--muted);font-weight:700;margin-top:5px}
+.lv .st{display:flex;gap:2px;margin-top:7px;height:12px}
+.lv .st svg{width:12px;height:12px}
+.lv.adv{background:transparent;border:2px dashed #CFC9E2}
+.lv.adv small{color:#8A7FB8}
+.lv.on{border:2px solid var(--ink);background:#fff}
+.go{display:block;width:100%;margin-top:18px;background:var(--ink);color:#fff;border-radius:999px;padding:16px;font-weight:800;font-size:17px;box-shadow:0 5px 0 var(--lime)}
+.go:active{transform:translateY(3px);box-shadow:0 2px 0 var(--lime)}
+.go:disabled{opacity:.4}
+.warn{background:#FFF6D1;border-radius:20px;padding:14px 16px;font-size:13.5px;line-height:1.5;margin-top:14px}
+.warn b{display:block;font-size:14px;margin-bottom:2px}
+
+/* practice */
+.bar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.track{flex:1;height:10px;border-radius:9px;background:#E6E1F2;overflow:hidden}.track i{display:block;height:100%;background:var(--ink);border-radius:9px;transition:width .35s}
+.pts{background:var(--lime);border-radius:999px;padding:6px 12px;font-weight:800;font-size:13px;white-space:nowrap}
+.card{background:#fff;border-radius:30px;padding:20px 18px 22px;box-shadow:0 16px 36px -18px rgba(54,40,120,.25)}
+.qhead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.qn{font-size:13px;font-weight:800;color:var(--muted)}
+.tagl{font-size:12px;font-weight:800;padding:5px 10px;border-radius:999px;background:var(--lilac)}
+.sent{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:30px;line-height:1.28;letter-spacing:-.01em;margin:18px 0 6px;display:flex;flex-wrap:wrap;gap:4px 9px}
+.sent.md{font-size:25px}.sent.sm{font-size:21px}
+.w{border-radius:10px;padding:1px 5px;margin:0 -5px;transition:background .25s,color .25s;cursor:pointer}
+.w.ok{background:#E4F8B0}
+.w.miss{background:var(--pinkSoft);color:#B0306B;text-decoration:underline dotted 2px;text-underline-offset:5px}
+.hint{font-size:13px;color:var(--muted);margin:6px 0 0;line-height:1.5}
+.heard{margin-top:14px;background:var(--bg);border-radius:16px;padding:10px 14px;font-size:14px;line-height:1.5}
+.heard small{display:block;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:2px}
+.controls{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:22px}
+.round{display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:var(--lilac)}
+.round svg{width:24px;height:24px}
+.round:disabled{opacity:.35}
+.cap{display:block;text-align:center;font-size:12px;font-weight:800;color:var(--muted);margin-top:6px}
+.recwrap{position:relative;display:grid;place-items:center}
+.rec{position:relative;z-index:1;display:grid;place-items:center;width:96px;height:96px;border-radius:50%;background:var(--ink);color:var(--lime);box-shadow:0 6px 0 var(--lime)}
+.rec svg{width:38px;height:38px}
+.rec:active{transform:translateY(3px);box-shadow:0 3px 0 var(--lime)}
+.rec.live{background:var(--pink);color:var(--ink);box-shadow:0 6px 0 var(--ink)}
+.recwrap .halo{position:absolute;width:96px;height:96px;border-radius:50%;background:var(--pink);opacity:0}
+.rec.live+.halo{animation:halo 1.3s ease-out infinite}
+@keyframes halo{0%{transform:scale(1);opacity:.45}100%{transform:scale(1.7);opacity:0}}
+.wave{display:flex;align-items:center;justify-content:center;gap:4px;height:30px;margin-top:14px}
+.wave i{display:block;width:5px;height:6px;border-radius:4px;background:#D9D4EA}
+.wave.live i{background:var(--ink);animation:wv .9s ease-in-out infinite}
+.wave.live i:nth-child(2n){animation-delay:.15s}.wave.live i:nth-child(3n){animation-delay:.3s}.wave.live i:nth-child(4n){animation-delay:.45s}
+@keyframes wv{0%,100%{height:6px}50%{height:28px}}
+.result{display:flex;align-items:center;gap:14px;margin-top:16px;background:var(--bg);border-radius:20px;padding:12px 14px}
+.result .big{white-space:nowrap;font-family:"Bricolage Grotesque",sans-serif;font-size:34px;font-weight:800;line-height:1}
+.result .big small{font-size:15px;color:var(--muted)}
+.result p{margin:2px 0 0;font-size:13.5px;line-height:1.4;font-weight:600}
+.stars{display:flex;gap:3px}.stars svg{width:20px;height:20px}
+.next{display:flex;gap:10px;margin-top:16px}
+.btn{flex:1;border-radius:999px;padding:14px;font-weight:800;font-size:15px;background:#fff;border:2px solid var(--ink)}
+.btn.dk{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn:disabled{opacity:.35}
+
+/* final */
+.final{position:relative;overflow:hidden;background:var(--navy);color:#fff;border-radius:30px;padding:26px 22px 24px;text-align:center}
+.final .ring{position:absolute;left:-60px;bottom:-80px;width:220px;height:220px;border-radius:50%;border:34px solid var(--navy2)}
+.final .badge{position:relative;display:inline-block;background:var(--lime);color:var(--navy);border-radius:999px;padding:7px 14px;font-weight:800;font-size:13px}
+.final h1{position:relative;font-family:"Bricolage Grotesque",sans-serif;font-size:66px;line-height:1;margin:16px 0 4px;letter-spacing:-.03em}
+.final h1 small{font-size:22px;color:#C9C3F2;letter-spacing:0}
+.final p{position:relative;margin:0 auto;color:#C9C3F2;font-size:14.5px;line-height:1.5;max-width:34ch}
+.final .meter{position:relative;height:12px;border-radius:9px;background:var(--navy2);margin:18px 10px 4px;overflow:hidden}
+.final .meter i{display:block;height:100%;border-radius:9px;background:var(--lime);width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.sum{display:grid;gap:8px;margin-top:14px}
+.sum .row{display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:12px 14px}
+.sum .row p{flex:1;margin:0;font-size:14px;line-height:1.4;font-weight:600}
+.sum .row b{font-family:"Bricolage Grotesque",sans-serif;font-size:18px;white-space:nowrap}
+.chipsw{display:flex;flex-wrap:wrap;gap:8px}
+.chipsw button{background:var(--pinkSoft);color:#9C2A5E;border-radius:999px;padding:8px 13px;font-weight:800;font-size:14px;display:inline-flex;align-items:center;gap:6px}
+.chipsw svg{width:14px;height:14px}
+.saved{text-align:center;font-size:13px;color:var(--muted);font-weight:700;margin-top:14px;line-height:1.5}
+.saved button{color:var(--ink);text-decoration:underline;font-weight:800}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top"><a class="home" href="./#/learn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>Learn</a><span class="brand">MOVA Speaking Lab</span></div>
+
+  <!-- START -->
+  <section id="s-start">
+    <div class="cover">
+      <span class="ring"></span>
+      <span class="k">Read aloud</span>
+      <h1>Speaking Lab</h1>
+      <p>Read each sentence out loud. The app listens, shows which words came through clearly and gives you points for accuracy and fluency.</p>
+      <svg class="mic" viewBox="0 0 190 220" aria-hidden="true">
+        <circle cx="152" cy="34" r="7" fill="#FFE58A"/><circle cx="22" cy="60" r="6" fill="#FF8FC0"/><circle cx="170" cy="150" r="5" fill="#BDF0D8"/>
+        <path d="M30 98a28 28 0 0 1 0-40M18 110a46 46 0 0 1 0-64" fill="none" stroke="#C9D2FF" stroke-width="7" stroke-linecap="round"/>
+        <path d="M160 98a28 28 0 0 0 0-40M172 110a46 46 0 0 0 0-64" fill="none" stroke="#FF8FC0" stroke-width="7" stroke-linecap="round"/>
+        <rect x="64" y="14" width="62" height="104" rx="31" fill="#D3F36B"/>
+        <path d="M76 44h38M76 58h38M76 72h38M76 86h38" stroke="#1A1B2E" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+        <path d="M52 86v6a43 43 0 0 0 86 0v-6" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+        <rect x="90" y="134" width="10" height="44" rx="5" fill="#fff"/>
+        <path d="M58 196q37-22 74 0" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="how">
+      <div><b style="background:var(--peri)">1</b><span>Listen first</span><small>Escucha el modelo</small></div>
+      <div><b style="background:var(--lime)">2</b><span>Tap the mic and read</span><small>Lee en voz alta</small></div>
+      <div><b style="background:var(--pink)">3</b><span>Check your words</span><small>Revisa y repite</small></div>
+    </div>
+
+    <h2 class="sec">Choose your stage</h2>
+    <div class="stages" role="radiogroup" aria-label="Stage">
+      <button class="stg" data-s="kids" role="radio"><b>Kids</b><small>Ages 6–8</small></button>
+      <button class="stg" data-s="children" role="radio"><b>Children</b><small>Ages 9–12</small></button>
+      <button class="stg" data-s="teens" role="radio"><b>Teens</b><small>Ages 12–17</small></button>
+    </div>
+    <p class="lvnote" id="lvnote"></p>
+    <div class="levels" id="levels" role="radiogroup" aria-label="Level"></div>
+    <button class="go" id="go" disabled>Start practice</button>
+    <div class="warn" id="nosup" hidden><b>Speaking needs microphone access</b>Abre la app en Chrome (Android o computadora) o en Safari (iPhone) y permite el uso del micrófono cuando te lo pida.</div>
+  </section>
+
+  <!-- PRACTICE -->
+  <section id="s-play" hidden>
+    <div class="bar"><div class="track"><i id="prog"></i></div><span class="pts" id="ptsTop">0 pts</span></div>
+    <div class="card">
+      <div class="qhead"><span class="qn" id="qn"></span><span class="tagl" id="tagl"></span></div>
+      <div class="sent" id="sent" aria-live="polite"></div>
+      <p class="hint" id="hint">Tap the microphone and read the sentence at a natural speed.</p>
+      <div class="heard" id="heard" hidden><small>We heard</small><span id="heardTxt"></span></div>
+
+      <div class="controls">
+        <div><button class="round" id="listen" aria-label="Listen to the sentence"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button><span class="cap">Listen</span></div>
+        <div><div class="recwrap"><button class="rec" id="rec" aria-label="Start recording"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></button><span class="halo"></span></div><span class="cap" id="recCap">Read</span></div>
+        <div><button class="round" id="slow" aria-label="Listen slowly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15c0-4 3.5-7 8-7s8 3 8 7H3z"/><path d="M19 15h2M7 15v2M15 15v2"/></svg></button><span class="cap">Slow</span></div>
+      </div>
+      <div class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+      <div id="resBox" hidden>
+        <div class="result"><div class="big" id="sPts"></div><div><div class="stars" id="sStars"></div><p id="sMsg"></p></div></div>
+        <div class="next"><button class="btn" id="again">Try again</button><button class="btn dk" id="next">Next sentence</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL -->
+  <section id="s-end" hidden>
+    <div class="final">
+      <span class="ring"></span>
+      <span class="badge" id="fBadge"></span>
+      <h1 id="fScore"></h1>
+      <p id="fMsg"></p>
+      <div class="meter"><i id="fMeter"></i></div>
+    </div>
+    <h2 class="sec">Your sentences</h2>
+    <div class="sum" id="fSum"></div>
+    <div id="fWordsBox"><h2 class="sec">Words to practice</h2><p class="lvnote" style="margin-top:-4px">Tap a word to hear it, then say it out loud.</p><div class="chipsw" id="fWords"></div></div>
+    <div class="next" style="margin-top:22px"><button class="btn" id="other">Change level</button><button class="btn dk" id="replay">Practice again</button></div>
+    <p class="saved" id="fSaved"></p>
+  </section>
+</main>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s);};
+var STAR='<svg viewBox="0 0 24 24"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" fill="FILL" stroke="#15192B" stroke-width="1.4" stroke-linejoin="round"/></svg>';
+function stars(n){var h="";for(var i=0;i<3;i++)h+=STAR.replace("FILL",i<n?"#FFE58A":"#fff");return h;}
+
+/* Etapas MOVA y niveles recomendados. adv = nivel avanzado dentro de la etapa */
+var STAGES={
+  kids:{name:"MOVA Kids",note:"Recommended: Pre-A1 to A1+. A2 is for advanced Kids.",wpm:50,
+    levels:[["Pre-A1","Starter"],["A1","Beginner"],["A1+","Beginner plus"],["A2","Advanced",1]]},
+  children:{name:"MOVA Children",note:"Recommended: A1 to B1. B1+ is for advanced Children.",wpm:70,
+    levels:[["A1","Beginner"],["A1+","Beginner plus"],["A2","Elementary"],["A2+","Elementary plus"],["B1","Intermediate"],["B1+","Advanced",1]]},
+  teens:{name:"MOVA Teens",note:"Recommended: A1 to B2. C1 is for advanced Teens.",wpm:90,
+    levels:[["A1","Beginner"],["A1+","Beginner plus"],["A2","Elementary"],["A2+","Elementary plus"],["B1","Intermediate"],["B1+","Intermediate plus"],["B2","Upper intermediate"],["C1","Advanced",1]]}
+};
+
+var BANK={
+ kids:{
+  "Pre-A1":["I like red apples.","This is my dog.","The cat is small.","I can jump.","Look at the big sun.","My bag is blue.","I have two hands.","Good morning, teacher."],
+  "A1":["My sister has a pink bike.","We play soccer at the park.","There is a frog in the pond.","I brush my teeth every morning.","The bird is singing in the tree.","Can you see the yellow bus?","My grandma makes yummy cookies.","We have art class on Monday."],
+  "A1+":["I am wearing my new rain boots today.","The little puppy is sleeping under the table.","We are going to the zoo on Saturday.","My best friend likes dinosaurs and robots.","There are three ducks swimming in the lake.","Please put your crayons back in the box.","The moon is very bright tonight.","I help my mom water the plants."],
+  "A2":["Yesterday we built a sandcastle at the beach.","My brother is taller than me, but I run faster.","When it rains, we play board games inside.","The firefighters came quickly and helped everyone.","I would like a glass of orange juice, please.","Our class planted sunflowers in the school garden.","Last night I read a story about a brave knight.","Penguins can't fly, but they are great swimmers."]
+ },
+ children:{
+  "A1":["My favorite subject is science.","We eat tacos on Friday nights.","My cousin lives in Saltillo.","I walk my dog after school.","There are thirty students in my class.","She plays the guitar very well.","What time does the movie start?","I usually go to bed at nine."],
+  "A1+":["My dad is cooking pancakes for breakfast.","We are making a poster for the science fair.","Do you want to come to my birthday party?","The library is next to the supermarket.","I don't like spicy food very much.","Our teacher reads us a story every Friday.","My little brother is afraid of the dark.","How many books do you have at home?"],
+  "A2":["Last summer we visited my grandparents in Veracruz.","Mexico City is bigger than Guadalajara.","I didn't finish my homework because I was tired.","We are going to bake a chocolate cake tomorrow.","My mom asked me to clean my room before dinner.","The museum was closed, so we went to the park.","She has a lot of friends at her new school.","You should wear a jacket because it's cold outside."],
+  "A2+":["I have already finished my science project.","If it rains tomorrow, we will stay at home.","The movie was more exciting than the book.","We were playing outside when it started to rain.","My brother has never been on an airplane.","Could you help me carry these boxes, please?","I'm going to join the swimming team next month.","The baby was crying because she was hungry."],
+  "B1":["I've been learning to play the piano for two years.","If I had more free time, I would build a tree house.","The bridge was built more than a hundred years ago.","My friend told me that the test would be easy.","Although it was late, we kept working on our project.","Recycling helps us reduce the amount of trash in the ocean.","The girl who found the fossil wants to be a scientist.","Volunteers are cleaning the beach this weekend."],
+  "B1+":["By the time we arrived, the concert had already started.","I'm really looking forward to visiting the space museum.","If we hadn't left early, we would have missed the bus.","Our coach encouraged us to keep practicing after we lost.","The new playground, which opened last week, is always crowded.","She asked me whether I had ever tried skateboarding.","Healthy habits are easier to build when you start young.","We were supposed to meet at noon, but the train was delayed."]
+ },
+ teens:{
+  "A1":["I'm fifteen and I live in Monterrey.","I listen to music every day.","My phone is in my backpack.","We have soccer practice on Tuesdays.","She wants a new pair of sneakers.","What's your favorite video game?","My older brother works at a coffee shop.","I don't like waking up early."],
+  "A1+":["I'm saving money to buy new headphones.","Are you coming to the game on Saturday?","My friends and I are planning a movie night.","There isn't any milk left in the fridge.","He usually takes the bus to school.","Can you send me the photos from the party?","I'm not very good at math, but I like it.","Our school has a really big gym."],
+  "A2":["I started a new series last night and couldn't stop watching.","My cousin is the funniest person in our family.","We should leave now if we want to get good seats.","I've never tried skydiving, but I'd love to.","She lost her phone at the mall last weekend.","Are you going to sign up for the talent show?","It's easier to study with music in the background.","My parents let me stay out until ten on weekends."],
+  "A2+":["I've been to three concerts this year.","If you don't charge your phone, it will die soon.","The game was canceled because of the storm.","I was taking a selfie when I dropped my phone.","You don't have to bring anything except your ID.","She's been my best friend since kindergarten.","We could split the bill if you want.","My coach says I need to work on my endurance."],
+  "B1":["I wish I had more time to practice the guitar.","The app that I downloaded keeps crashing.","If I were a teacher, I'd let students choose their projects.","Social media can be useful, but it can also be distracting.","We'd better hurry, or we'll miss the beginning of the movie.","My sister has been studying for her finals all week.","I'm thinking about applying for a summer job at the aquarium.","The documentary was so interesting that I watched it twice."],
+  "B1+":["I'd rather work in a team than on my own.","By the end of the year, I'll have saved enough for a laptop.","He apologized for being late, which surprised everyone.","If I had studied harder, I would have passed the test.","It's worth learning a second language, even if it takes time.","The concert was postponed due to bad weather.","I'm used to getting up early because of swim practice.","She suggested that we meet at the library instead."],
+  "B2":["Had I known about the traffic, I would have left much earlier.","The company is said to be developing a new kind of battery.","Not only did she finish the race, but she also beat her personal record.","I can't help wondering what life will be like in fifty years.","The more you practice speaking, the more confident you become.","Despite the rain, thousands of fans lined up outside the stadium.","Students are required to submit their essays by Friday at midnight.","It's high time we started taking climate change seriously."],
+  "C1":["Rarely have I seen such a compelling argument in favor of renewable energy.","Her research sheds light on how sleep affects long-term memory.","Were the city to invest in public transportation, traffic would ease considerably.","The novel's ambiguous ending has sparked heated debate among readers.","It remains to be seen whether the new policy will have the intended effect.","Critics argue that the proposal overlooks the needs of rural communities.","Little did they know that the experiment would change their careers.","Striking a balance between ambition and well-being is easier said than done."]
+ }
+};
+var PER=5, PER_MAX=100, TRIES=3;
+
+/* ---------- normalización y comparación ---------- */
+var ONES=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"],
+    TENS=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
+function num2w(n){n=+n;if(n<20)return ONES[n];if(n<100)return TENS[Math.floor(n/10)]+(n%10?" "+ONES[n%10]:"");if(n<1000)return ONES[Math.floor(n/100)]+" hundred"+(n%100?" "+num2w(n%100):"");return String(n);}
+var CONTR={"i'm":"i am","you're":"you are","we're":"we are","they're":"they are","he's":"he is","she's":"she is","it's":"it is","that's":"that is","there's":"there is","what's":"what is",
+ "i've":"i have","you've":"you have","we've":"we have","they've":"they have","i'd":"i would","you'd":"you would","we'd":"we would","he'd":"he would","she'd":"she would","they'd":"they would",
+ "i'll":"i will","you'll":"you will","we'll":"we will","she'll":"she will","he'll":"he will","they'll":"they will","don't":"do not","doesn't":"does not","didn't":"did not","can't":"can not","cannot":"can not",
+ "couldn't":"could not","won't":"will not","isn't":"is not","aren't":"are not","wasn't":"was not","weren't":"were not","hasn't":"has not","haven't":"have not","hadn't":"had not","shouldn't":"should not","wouldn't":"would not"};
+var HOMO=[["two","to","too"],["for","four"],["there","their","they're"],["right","write"],["here","hear"],["one","won"],["eight","ate"],["see","sea"],["by","buy","bye"],["new","knew"],["know","no"],["blue","blew"],["son","sun"],["week","weak"],["whether","weather"],["meet","meat"],["hour","our"],["red","read"],["piece","peace"],["mail","male"],["tail","tale"],["night","knight"],["its","it's"],["your","you're"],["then","than"],["mom","mum"],["ok","okay"],["gonna","going"]];
+var HMAP={};HOMO.forEach(function(g,i){g.forEach(function(w){HMAP[w]="h"+i;});});
+function toks(s){
+  s=String(s).toLowerCase().replace(/[’‘]/g,"'").replace(/-/g," ").replace(/(\d+)(st|nd|rd|th)\b/g,"$1").replace(/\d+/g,function(d){return " "+num2w(d)+" ";});
+  var out=[];s.replace(/[^a-z' ]/g," ").split(/\s+/).forEach(function(w){w=w.replace(/^'+|'+$/g,"");if(!w)return;(CONTR[w]||w).split(" ").forEach(function(x){out.push(x);});});
+  return out;
+}
+function lev(a,b){if(Math.abs(a.length-b.length)>1)return 9;var d=[],i,j;for(i=0;i<=a.length;i++){d[i]=[i];}for(j=1;j<=b.length;j++)d[0][j]=j;
+  for(i=1;i<=a.length;i++)for(j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length];}
+function same(a,b){if(a===b)return true;if(HMAP[a]&&HMAP[a]===HMAP[b])return true;
+  if(a.replace(/s$/,"")===b.replace(/s$/,""))return a.length>3;
+  return a.length>=6&&lev(a,b)<=1;}
+/* palabras del texto (para mostrar) y sus tokens normalizados */
+function displayWords(text){
+  return text.split(/\s+/).map(function(w){return {w:w,t:toks(w)};});
+}
+/* alinea tokens objetivo vs. escuchados (LCS) y devuelve set de índices de token reconocidos */
+function align(target,heard){
+  var n=target.length,m=heard.length,L=[],i,j;
+  for(i=0;i<=n;i++){L[i]=new Array(m+1).fill(0);}
+  for(i=n-1;i>=0;i--)for(j=m-1;j>=0;j--)L[i][j]=same(target[i],heard[j])?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+  var hit={};i=0;j=0;while(i<n&&j<m){if(same(target[i],heard[j])){hit[i]=1;i++;j++;}else if(L[i+1][j]>=L[i][j+1])i++;else j++;}
+  return hit;
+}
+
+/* ---------- estado ---------- */
+var LS="mova_speaking_v1";
+function store(){try{return JSON.parse(localStorage.getItem(LS)||"{}");}catch(e){return {};}}
+function saveStore(o){try{localStorage.setItem(LS,JSON.stringify(o));}catch(e){}}
+var st={stage:null,level:null,set:[],i:0,res:[],cur:null,tries:0};
+
+/* ---------- reconocimiento ---------- */
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition, rec=null, listening=false, t0=0, t1=0, finalAlts=null;
+if(!SR){$("#nosup").hidden=false;}
+
+/* ---------- pantalla inicial ---------- */
+function renderLevels(){
+  var s=STAGES[st.stage], best=store().best||{};
+  $("#lvnote").textContent=s.note;
+  $("#levels").innerHTML=s.levels.map(function(l){
+    var b=best[st.stage+"|"+l[0]], n=b?(b>=450?3:b>=350?2:1):0;
+    return '<button class="lv'+(l[2]?" adv":"")+(st.level===l[0]?" on":"")+'" data-l="'+l[0]+'" role="radio" aria-checked="'+(st.level===l[0])+'"><b>'+l[0]+'</b><small>'+l[1]+'</small><span class="st">'+(b?stars(n):"")+'</span></button>';
+  }).join("");
+  [].forEach.call(document.querySelectorAll(".lv"),function(b){b.onclick=function(){st.level=b.dataset.l;renderLevels();$("#go").disabled=!SR;};});
+}
+function pickStage(k){
+  st.stage=k;
+  var s=STAGES[k]; if(!s.levels.some(function(l){return l[0]===st.level;})) st.level=null;
+  [].forEach.call(document.querySelectorAll(".stg"),function(b){var on=b.dataset.s===k;b.classList.toggle("on",on);b.setAttribute("aria-checked",on);});
+  renderLevels(); $("#go").disabled=!st.level||!SR;
+}
+[].forEach.call(document.querySelectorAll(".stg"),function(b){b.onclick=function(){pickStage(b.dataset.s);};});
+(function initStage(){
+  var mem=store(), u=null; try{u=window.MovaAuth&&MovaAuth.user();}catch(e){}
+  var k=mem.stage; if(!k&&u&&u.stage){var s=String(u.stage).toLowerCase();k=/kid/.test(s)?"kids":/child/.test(s)?"children":/teen/.test(s)?"teens":null;}
+  st.level=mem.level||null; pickStage(k||"children");
+})();
+
+/* ---------- práctica ---------- */
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=a[i];a[i]=a[j];a[j]=x;}return a;}
+function show(id){["#s-start","#s-play","#s-end"].forEach(function(s){$(s).hidden=s!==id;});window.scrollTo(0,0);}
+function start(){
+  var m=store();m.stage=st.stage;m.level=st.level;saveStore(m);
+  st.set=shuffle(BANK[st.stage][st.level]).slice(0,PER);st.i=0;st.res=[];show("#s-play");load();
+}
+$("#go").onclick=start;
+function total(){return st.res.reduce(function(a,r){return a+r.pts;},0);}
+function load(){
+  var text=st.set[st.i];
+  st.cur={text:text,words:displayWords(text),best:null};st.tries=0;
+  $("#qn").textContent="Sentence "+(st.i+1)+" of "+PER;
+  $("#tagl").textContent=STAGES[st.stage].name.replace("MOVA ","")+" · "+st.level;
+  $("#prog").style.width=(st.i/PER*100)+"%";
+  $("#ptsTop").textContent=total()+" pts";
+  var len=text.length;$("#sent").className="sent"+(len>70?" sm":len>42?" md":"");
+  paint({});
+  $("#heard").hidden=true;$("#resBox").hidden=true;
+  $("#hint").hidden=false;$("#hint").textContent="Tap the microphone and read the sentence at a natural speed.";
+  $("#recCap").textContent="Read";
+}
+/* pinta palabras: map índice-de-palabra → "ok"/"miss" */
+function paint(state){
+  $("#sent").innerHTML=st.cur.words.map(function(w,i){return '<span class="w'+(state[i]?" "+state[i]:"")+'" data-i="'+i+'">'+w.w.replace(/</g,"&lt;")+"</span>";}).join("");
+  [].forEach.call($("#sent").querySelectorAll(".w"),function(el){el.onclick=function(){say(st.cur.words[+el.dataset.i].w.replace(/[^A-Za-z'’-]/g,""),.8);};});
+}
+/* evalúa un texto escuchado */
+function evaluate(heardText){
+  var flat=[],owner=[];
+  st.cur.words.forEach(function(w,wi){w.t.forEach(function(t){flat.push(t);owner.push(wi);});});
+  var hit=align(flat,toks(heardText)), okW={};
+  st.cur.words.forEach(function(w,wi){okW[wi]=w.t.length?1:0;});
+  flat.forEach(function(t,ti){if(!hit[ti])okW[owner[ti]]=0;});
+  var n=st.cur.words.filter(function(w){return w.t.length;}).length, k=0, state={};
+  st.cur.words.forEach(function(w,wi){if(!w.t.length)return; if(okW[wi]){k++;state[wi]="ok";}else state[wi]="miss";});
+  return {acc:n?k/n:0,state:state,heard:heardText};
+}
+function score(ev,secs){
+  var nWords=st.cur.words.length, target=STAGES[st.stage].wpm*(st.level==="C1"?1.1:1);
+  var flu=ev.acc;
+  if(secs>0.6){var wpm=nWords/(secs/60);flu=Math.max(0,Math.min(1,wpm/target));}
+  var pts=Math.round(ev.acc*80+(ev.acc>=.5?flu*20:0));
+  return Math.min(PER_MAX,pts);
+}
+function msgFor(p){return p>=90?"Excellent! Clear and fluent.":p>=70?"Great reading! Check the pink words.":p>=40?"Good try. Listen again and repeat the pink words.":"Let's try again. Listen first, then read slowly and clearly.";}
+function starsFor(p){return p>=90?3:p>=70?2:p>=40?1:0;}
+
+function setLive(on){
+  listening=on;$("#rec").classList.toggle("live",on);$("#wave").classList.toggle("live",on);
+  $("#rec").setAttribute("aria-label",on?"Stop recording":"Start recording");$("#recCap").textContent=on?"Listening…":"Read";
+  $("#listen").disabled=on;$("#slow").disabled=on;
+}
+function record(){
+  if(!SR)return;
+  if(listening){try{rec.stop();}catch(e){}return;}
+  try{speechSynthesis.cancel();}catch(e){}
+  rec=new SR();rec.lang="en-US";rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=4;
+  t0=0;t1=0;finalAlts=null;var gotAny=false;
+  rec.onstart=function(){setLive(true);$("#hint").textContent="Read now…";paint({});};
+  rec.onspeechstart=function(){t0=performance.now();};
+  rec.onresult=function(e){
+    gotAny=true;var r=e.results[e.results.length-1];
+    if(!t0)t0=performance.now();t1=performance.now();
+    var txt="";for(var i=0;i<e.results.length;i++)txt+=e.results[i][0].transcript+" ";
+    var ev=evaluate(txt), live={};Object.keys(ev.state).forEach(function(k){if(ev.state[k]==="ok")live[k]="ok";});paint(live);
+    if(r.isFinal){finalAlts=[];for(var a=0;a<r.length;a++)finalAlts.push(r[a].transcript);
+      if(e.results.length>1){var pre="";for(var q=0;q<e.results.length-1;q++)pre+=e.results[q][0].transcript+" ";finalAlts=finalAlts.map(function(x){return pre+x;});}}
+  };
+  rec.onerror=function(e){
+    setLive(false);
+    var m={"not-allowed":"Allow microphone access to practice speaking. / Permite el uso del micrófono.","service-not-allowed":"Speaking is not available in this browser. Try Chrome or Safari.","no-speech":"We didn't hear anything. Tap the mic and read a little louder.","audio-capture":"No microphone found. Check your device."}[e.error];
+    if(m){$("#hint").hidden=false;$("#hint").textContent=m;}
+  };
+  rec.onend=function(){
+    setLive(false);
+    if(!finalAlts||!finalAlts.length){if(!gotAny){/* sin resultado: el mensaje lo pone onerror */}return;}
+    var secs=t0&&t1?(t1-t0)/1000:0, best=null;
+    finalAlts.forEach(function(alt){var ev=evaluate(alt);ev.pts=score(ev,secs);if(!best||ev.pts>best.pts)best=ev;});
+    st.tries++;
+    if(!st.cur.best||best.pts>=st.cur.best.pts)st.cur.best=best;
+    showResult(best);
+  };
+  try{rec.start();}catch(e){setLive(false);}
+}
+$("#rec").onclick=record;
+
+function showResult(ev){
+  paint(ev.state);
+  $("#heard").hidden=false;$("#heardTxt").textContent=ev.heard.trim()||"—";
+  $("#hint").hidden=true;
+  var b=st.cur.best;
+  $("#sPts").innerHTML=ev.pts+"<small> / "+PER_MAX+"</small>";
+  $("#sStars").innerHTML=stars(starsFor(ev.pts));
+  var extra=(st.tries>1&&b.pts>ev.pts)?" Your best try counts: "+b.pts+" pts.":"";
+  $("#sMsg").textContent=msgFor(ev.pts)+extra;
+  $("#resBox").hidden=false;
+  var left=TRIES-st.tries;$("#again").disabled=left<=0||b.pts>=PER_MAX;
+  $("#again").textContent=left>0?"Try again ("+left+")":"No tries left";
+  $("#next").textContent=st.i===PER-1?"See my score":"Next sentence";
+}
+$("#again").onclick=function(){$("#resBox").hidden=true;$("#heard").hidden=true;$("#hint").hidden=false;$("#hint").textContent="Listen again if you need it, then tap the mic.";paint({});};
+$("#next").onclick=function(){
+  var b=st.cur.best;st.res.push({text:st.cur.text,pts:b?b.pts:0,state:b?b.state:{},words:st.cur.words});
+  st.i++;if(st.i<PER)load();else finish();
+};
+
+/* ---------- voz de modelo (navegador, gratis) ---------- */
+function say(t,rate){
+  try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=rate||(st.stage==="kids"?.85:.95);speechSynthesis.speak(u);}catch(e){}
+}
+$("#listen").onclick=function(){say(st.cur.text);};
+$("#slow").onclick=function(){say(st.cur.text,.65);};
+
+/* ---------- resultado final ---------- */
+function finish(){
+  show("#s-end");
+  var tot=total(),max=PER*PER_MAX,pct=tot/max;
+  var badge=pct>=.9?"Star Speaker":pct>=.7?"Great Reader":pct>=.45?"Rising Voice":"Keep Practicing";
+  $("#fBadge").textContent=badge;
+  $("#fScore").innerHTML=tot+"<small> / "+max+" points</small>";
+  $("#fMsg").textContent=pct>=.9?"Outstanding reading. Your words were clear and your pace was natural.":pct>=.7?"Very good work. A little more practice with the pink words and you'll reach the top.":pct>=.45?"You're making progress. Listen to the model, then read again more slowly.":"Every try makes your English stronger. Listen first and read one more time.";
+  setTimeout(function(){$("#fMeter").style.width=Math.round(pct*100)+"%";},80);
+  $("#fSum").innerHTML=st.res.map(function(r){return '<div class="row"><div class="stars">'+stars(starsFor(r.pts))+'</div><p>'+r.text.replace(/</g,"&lt;")+'</p><b>'+r.pts+'</b></div>';}).join("");
+  var miss=[];st.res.forEach(function(r){r.words.forEach(function(w,i){if(r.state[i]==="miss"){var c=w.w.replace(/[^A-Za-z'’-]/g,"");if(c&&miss.indexOf(c.toLowerCase())<0)miss.push(c.toLowerCase());}});});
+  $("#fWordsBox").hidden=!miss.length;
+  $("#fWords").innerHTML=miss.slice(0,16).map(function(w){return '<button data-w="'+w+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/></svg>'+w+"</button>";}).join("");
+  [].forEach.call($("#fWords").querySelectorAll("button"),function(b){b.onclick=function(){say(b.dataset.w,.8);};});
+  var m=store();m.best=m.best||{};var key=st.stage+"|"+st.level;if(!m.best[key]||tot>m.best[key])m.best[key]=tot;
+  m.history=(m.history||[]).concat([{d:Date.now(),s:st.stage,l:st.level,p:tot}]).slice(-60);saveStore(m);
+  var u=null;try{u=window.MovaAuth&&MovaAuth.user();}catch(e){}
+  if(u){
+    try{MovaAuth.save("speaking","Speaking Lab · "+STAGES[st.stage].name.replace("MOVA ","")+" "+st.level,tot,max,
+      {kind:"score",stage:st.stage,level:st.level,accuracy:Math.round(st.res.reduce(function(a,r){var n=r.words.length,k=Object.keys(r.state).filter(function(x){return r.state[x]==="ok";}).length;return a+(n?k/n:0);},0)/PER*100),words_to_practice:miss.slice(0,10),badge:badge});}catch(e){}
+    $("#fSaved").textContent="Saved to your progress for your monthly report.";
+  } else {
+    $("#fSaved").innerHTML='Your points are saved on this device. <button id="lg">Sign in</button> to add them to your monthly report.';
+    var lg=$("#lg");if(lg)lg.onclick=function(){try{MovaAuth.login();}catch(e){}};
+  }
+}
+$("#replay").onclick=start;
+$("#other").onclick=function(){show("#s-start");renderLevels();};
+})();
+</script>
+<script src="mova-auth.js"></script>
+</body>
+</html>
