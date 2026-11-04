@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
 <script src="mova-auth.js"></script>
 <style>
+
 :root{--bg:#F5F3FA;--lime:#D3F36B;--lila:#C7B5FF;--navy:#16274A;--ok:#3DBE6B;--bad:#F2545B;--gold:#FFC93C}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:var(--navy);font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--navy);overflow:hidden;user-select:none}
@@ -116,6 +117,87 @@ img{-webkit-user-drag:none;max-width:100%}
 .built span{background:var(--lime);border-radius:10px;padding:4px 10px;cursor:pointer}
 .prog{height:12px;background:rgba(255,255,255,.3);border-radius:8px;margin:0 12px;overflow:hidden;border:2px solid var(--navy)}
 .prog i{display:block;height:100%;background:var(--lime);width:0;transition:width .4s}
+
+/* ===== v54 ===== */
+.ib img{width:30px;height:30px;object-fit:contain}
+.ib{position:relative}
+.ib .badge{position:absolute;top:-7px;right:-7px;background:var(--bad);color:#fff;border:2px solid var(--navy);border-radius:999px;min-width:22px;height:22px;font:800 12px 'Plus Jakarta Sans';display:grid;place-items:center;padding:0 4px}
+.zone.lock span::before{content:"";display:inline-block;width:14px;height:14px;background:url(cl-u-padlock.webp) center/contain no-repeat;vertical-align:-2px;margin-right:4px}
+.zone .need{margin-top:3px;background:var(--gold);border:2px solid var(--navy);border-radius:8px;padding:0 6px;font:800 11px 'Plus Jakarta Sans';white-space:nowrap}
+.zone.new span{background:var(--lime)}
+.zone.new::after{content:"NEW";position:absolute;top:-6px;right:-14px;background:var(--bad);color:#fff;border:2px solid var(--navy);border-radius:8px;font:800 10px 'Plus Jakarta Sans';padding:1px 5px;transform:rotate(8deg)}
+.ttlpill{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.95);border:3px solid var(--navy);border-radius:999px;padding:2px 12px 2px 3px;font:800 15px 'Bricolage Grotesque';box-shadow:0 3px 0 var(--navy)}
+.ttlpill img{width:30px;height:30px;object-fit:contain;border-radius:50%;background:var(--bg)}
+.cloud{font-size:12px;font-weight:700;margin-top:8px;display:flex;align-items:center;gap:6px;justify-content:center;opacity:.8}
+.cloud .dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.cloud a{color:var(--navy);font-weight:800}
+/* tabs */
+.tabs{display:flex;gap:6px;padding:8px 12px 0}
+.tabs button{flex:1;border:3px solid var(--navy);border-radius:14px;background:#fff;padding:7px 4px;font:800 14px 'Plus Jakarta Sans';color:var(--navy);box-shadow:0 3px 0 var(--navy);display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer}
+.tabs button img{width:16px;height:16px}
+.tabs button.sel{background:var(--lime)}
+.tabs button.lk{background:#e7e5ee;color:#8a8aa0}
+.rc .tap{position:absolute;top:6px;left:6px;width:26px;height:26px;border-radius:50%;border:2px solid var(--navy);background:var(--lila);display:grid;place-items:center;font-size:12px}
+/* build zone */
+.bzhead{display:flex;align-items:center;gap:10px;text-align:left}
+.spaces{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px;overflow-y:auto}
+.space{background:#fff;border:3px solid var(--navy);border-radius:20px;box-shadow:0 5px 0 var(--navy);padding:10px;text-align:center;cursor:pointer}
+.space img.th{width:100%;aspect-ratio:1;object-fit:contain}
+.space h3{font-size:20px;margin:2px 0}
+.mini{height:10px;background:var(--bg);border-radius:8px;overflow:hidden;border:2px solid var(--navy);margin:6px 4px 2px}
+.mini i{display:block;height:100%;background:var(--ok)}
+.space small{font-weight:800;font-size:12px;opacity:.7}
+/* room */
+.roombar{display:flex;align-items:center;justify-content:center;gap:8px;padding:4px 12px;font-weight:700;font-size:13px}
+.word{position:absolute;transform:translate(-50%,-100%);background:#fff;border:3px solid var(--navy);border-radius:12px;padding:3px 10px;font:800 15px 'Bricolage Grotesque';z-index:120;white-space:nowrap;box-shadow:0 3px 0 var(--navy);pointer-events:none;animation:pop .25s}
+.furn.flat{filter:none}
+/* pets */
+#pet{background:radial-gradient(circle at 50% 40%,#fff6e8,#ffe2c9 60%,#f8c9a8)}
+.petstage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.petstage .bed{position:absolute;bottom:14%;width:min(58vw,300px);opacity:.95}
+.petstage .me{position:relative;width:min(52vw,250px);z-index:2;animation:breathe 2.6s ease-in-out infinite;transform-origin:50% 100%;cursor:pointer;filter:drop-shadow(0 10px 6px rgba(0,0,0,.18))}
+.petstage .me.hop{animation:hop .6s}
+@keyframes breathe{50%{transform:scale(var(--s,1)) scaleY(1.03)}0%,100%{transform:scale(var(--s,1))}}
+@keyframes hop{0%{transform:scale(var(--s,1))}30%{transform:scale(var(--s,1)) translateY(-28px)}60%{transform:scale(var(--s,1))}80%{transform:scale(var(--s,1)) translateY(-8px)}}
+.petcard{background:#fff;border:3px solid var(--navy);border-radius:20px;margin:0 12px;padding:10px 14px;box-shadow:0 5px 0 var(--navy)}
+.petcard .row{display:flex;align-items:center;gap:8px}
+.petcard h2{font-size:24px}
+.lvl{background:var(--lila);border:2px solid var(--navy);border-radius:10px;padding:1px 8px;font:800 13px 'Plus Jakarta Sans'}
+.hearts{display:flex;gap:3px;margin-top:6px}
+.hearts img{width:24px;height:24px;object-fit:contain}
+.hearts img.off{filter:grayscale(1) opacity(.3)}
+.care{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px}
+.care button{border:3px solid var(--navy);border-radius:16px;background:#fff;box-shadow:0 4px 0 var(--navy);padding:6px 2px;font:800 13px 'Plus Jakarta Sans';color:var(--navy);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+.care button img{width:46px;height:46px;object-fit:contain}
+.care button:disabled{opacity:.4}
+.today{font-size:12px;font-weight:700;opacity:.7;margin-top:4px}
+.petgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px 12px;overflow-y:auto}
+.pg{background:#fff;border:3px solid var(--navy);border-radius:18px;box-shadow:0 4px 0 var(--navy);padding:6px;text-align:center;cursor:pointer;position:relative}
+.pg img{width:100%;aspect-ratio:1;object-fit:contain}
+.pg b{font:800 14px 'Bricolage Grotesque';display:block}
+.pg .cost{font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:2px}
+.pg .cost img{width:16px;height:16px}
+.pg.lk img.p{filter:brightness(0) opacity(.25)}
+.pg.sel{background:var(--lime)}
+.heartfx{position:fixed;width:30px;height:30px;z-index:70;pointer-events:none}
+.namein{width:100%;border:3px solid var(--navy);border-radius:14px;padding:12px;font:800 20px 'Bricolage Grotesque';text-align:center;color:var(--navy);margin:6px 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:12px}
+.chips button{border:2px solid var(--navy);border-radius:999px;background:var(--bg);padding:4px 10px;font:800 13px 'Plus Jakarta Sans';color:var(--navy);cursor:pointer}
+/* missions */
+.ms{display:flex;align-items:center;gap:10px;background:var(--bg);border-radius:16px;padding:8px;margin:8px 0;text-align:left}
+.ms>img{width:52px;height:60px;object-fit:contain;flex:none}
+.ms .tx{flex:1;font-weight:800;font-size:15px;line-height:1.25}
+.ms .tx small{display:block;font-weight:700;font-size:12px;opacity:.65;margin-top:2px}
+.ms .bar{height:8px;background:#fff;border-radius:6px;overflow:hidden;border:2px solid var(--navy);margin-top:5px}
+.ms .bar i{display:block;height:100%;background:var(--ok)}
+.ms .cl{border:3px solid var(--navy);border-radius:12px;background:var(--lime);font:800 13px 'Plus Jakarta Sans';padding:6px 8px;box-shadow:0 3px 0 var(--navy);cursor:pointer;color:var(--navy);display:flex;align-items:center;gap:3px}
+.ms .cl img{width:18px;height:18px}
+.ms .cl:disabled{background:#fff;opacity:.5;box-shadow:none}
+.ms .done{font:800 13px 'Plus Jakarta Sans';color:var(--ok)}
+.steps{display:flex;gap:6px;justify-content:center;margin:10px 0 0}
+.steps i{width:8px;height:8px;border-radius:50%;background:#d8d4e6}
+.steps i.on{background:var(--navy);width:20px;border-radius:6px}
+.tag{display:inline-block;background:var(--gold);border:2px solid var(--navy);border-radius:8px;padding:0 6px;font:800 11px 'Plus Jakarta Sans';margin-top:4px}
 </style>
 </head>
 <body>
@@ -124,7 +206,7 @@ img{-webkit-user-drag:none;max-width:100%}
 <section class="scr on" id="home">
   <div class="layer" style="overflow-y:auto">
     <div class="hud"><button class="ib" onclick="goBack()" aria-label="Volver">←</button><div class="sp"></div><button class="ib" id="sndBtn" onclick="toggleSnd()">🔊</button></div>
-    <img class="cov" src="craftland/cl-cover.webp" alt="CraftLand">
+    <img class="cov" src="cl-cover.webp" alt="CraftLand">
     <div class="hcard">
       <h2>¡Hola, <span id="hName">explorer</span>!</h2>
       <div style="font-size:14px;margin-top:4px;opacity:.75">Elige tu nivel y tu personaje</div>
@@ -133,6 +215,7 @@ img{-webkit-user-drag:none;max-width:100%}
       </div>
       <div class="avrow" id="avRow"></div>
       <button class="btn" style="width:100%;margin-top:8px;font-size:20px" onclick="enterIsland()">▶ Play · Mi isla</button>
+      <div class="cloud" id="cloudInfo"></div>
     </div>
   </div>
 </section>
@@ -142,18 +225,20 @@ img{-webkit-user-drag:none;max-width:100%}
   <div class="layer">
     <div class="hud">
       <button class="ib" onclick="show('home')">←</button>
-      <div class="pill"><img src="craftland/cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
-      <div class="pill"><img src="craftland/cl-r-star.webp" alt=""><span class="cStars">0</span></div>
+      <div class="pill"><img src="cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
+      <div class="pill"><img src="cl-r-star.webp" alt=""><span class="cStars">0</span></div>
       <div class="sp"></div>
-      <button class="ib" onclick="openHouse()" title="Mi casa">🏠</button>
+      <button class="ib" onclick="openMissions()" title="Misiones"><img src="cl-u-gift.webp" alt=""><span class="badge" id="msBadge" style="display:none">0</span></button>
+      <button class="ib" onclick="openPet()" title="Mi mascota"><img id="petBtnImg" src="cl-u-heart.webp" alt=""></button>
+      <button class="ib" onclick="openRoom('house')" title="Mi casa"><img src="cl-i-bed.webp" alt=""></button>
     </div>
     <div class="map"><div class="mapw" id="mapw">
-      <img class="bgm" src="craftland/cl-island.webp" alt="Isla">
-      <div class="zone" style="left:24%;top:44%" onclick="openMine()"><img src="craftland/cl-pip.webp" alt=""><span>The Mine</span></div>
-      <div class="zone" style="left:52%;top:28%;animation-delay:.4s" onclick="openWorkshop()"><img src="craftland/cl-juno.webp" alt=""><span>Workshop</span></div>
-      <div class="zone lock" style="left:78%;top:38%;animation-delay:.8s" onclick="soon('Captain Rex','cl-rex')"><img src="craftland/cl-rex.webp" alt=""><span>Build Zone</span></div>
-      <div class="zone" style="left:44%;top:60%;animation-delay:.2s" onclick="openShop()"><img src="craftland/cl-luna.webp" alt=""><span>Luna's Shop</span></div>
-      <div class="zone lock" style="left:76%;top:70%;animation-delay:.6s" onclick="soon('Glitch','cl-glitch')"><img src="craftland/cl-glitch.webp" alt=""><span>The Obby</span></div>
+      <img class="bgm" src="cl-island.webp" alt="Isla">
+      <div class="zone" style="left:24%;top:44%" onclick="openMine()"><img src="cl-pip.webp" alt=""><span>The Mine</span></div>
+      <div class="zone" style="left:52%;top:28%;animation-delay:.4s" onclick="openCraft('house')"><img src="cl-juno.webp" alt=""><span>Workshop</span></div>
+      <div class="zone" id="zBuild" style="left:78%;top:38%;animation-delay:.8s" onclick="openBuild()"><img src="cl-rex.webp" alt=""><span>Build Zone</span></div>
+      <div class="zone" style="left:44%;top:60%;animation-delay:.2s" onclick="openShop()"><img src="cl-luna.webp" alt=""><span>Luna's Shop</span></div>
+      <div class="zone lock" style="left:76%;top:70%;animation-delay:.6s" onclick="soon('Glitch','cl-glitch')"><img src="cl-glitch.webp" alt=""><span>The Obby</span></div>
     </div></div>
     <div class="inv" id="inv1"></div>
   </div>
@@ -161,21 +246,21 @@ img{-webkit-user-drag:none;max-width:100%}
 
 <!-- MINE -->
 <section class="scr" id="mine">
-  <div class="bgimg" style="background-image:url(craftland/cl-mine.webp)"></div>
+  <div class="bgimg" style="background-image:url(cl-mine.webp)"></div>
   <div class="layer">
     <div class="hud">
       <button class="ib" onclick="leaveMine()">←</button>
-      <div class="pill"><img src="craftland/cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
-      <div class="pill"><img src="craftland/cl-r-bolt.webp" alt=""><span id="mStreak">0</span></div>
+      <div class="pill"><img src="cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
+      <div class="pill"><img src="cl-r-bolt.webp" alt=""><span id="mStreak">0</span></div>
       <div class="sp"></div>
       <div class="pill" id="mCount" style="padding-left:10px">0/10</div>
     </div>
     <div class="prog"><i id="mProg"></i></div>
     <div class="blockzone" id="blockzone">
-      <img class="pip" src="craftland/cl-pip.webp" alt="Pip">
+      <img class="pip" id="pip" src="cl-pip.webp" alt="Pip">
       <div class="bubble" id="pipSay" style="left:clamp(70px,20vw,120px);bottom:clamp(80px,22vw,130px)">Tap the block!</div>
-      <div class="block" id="block" onclick="tapBlock()">
-        <img class="b" id="blockImg" src="craftland/cl-b-stone.webp" alt="">
+      <div class="block" id="block">
+        <img class="b" id="blockImg" src="cl-b-stone.webp" alt="">
         <svg class="crack" id="crack" viewBox="0 0 100 100"><path class="p1" d="M50 8 L44 30 L56 42 L46 60"/><path class="p2" d="M56 42 L80 50 L88 70 M46 60 L24 74"/><path class="p3" d="M44 30 L18 26 M46 60 L60 92"/></svg>
       </div>
       <div class="combo" id="combo">x2!</div>
@@ -188,36 +273,64 @@ img{-webkit-user-drag:none;max-width:100%}
   </div>
 </section>
 
-<!-- WORKSHOP -->
+<!-- CRAFT (Workshop / Blueprints) -->
 <section class="scr" id="workshop">
-  <div class="bgimg" style="background-image:url(craftland/cl-workshop.webp)"></div>
+  <div class="bgimg" style="background-image:url(cl-workshop.webp)"></div>
   <div class="layer">
     <div class="hud">
-      <button class="ib" onclick="show('island')">←</button>
-      <div class="pill" style="padding-left:12px">🔨 Workshop</div>
+      <button class="ib" onclick="craftBack()">←</button>
+      <div class="ttlpill" id="wTitle"></div>
       <div class="sp"></div>
-      <div class="pill"><img src="craftland/cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
+      <div class="pill"><img src="cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
     </div>
     <div class="qbox" style="display:flex;align-items:center;gap:10px;text-align:left">
-      <img src="craftland/cl-juno.webp" style="width:58px" alt=""><div><b>Chef Juno:</b> <span id="junoSay">Pick something to craft. Read the recipe!</span></div>
+      <img id="wWhoImg" src="cl-juno.webp" style="width:58px" alt=""><div><b id="wWho">Chef Juno:</b> <span id="junoSay">Pick something to craft. Read the recipe!</span></div>
     </div>
+    <div class="tabs" id="wTabs"></div>
     <div class="recipes" id="recipes" style="flex:1"></div>
     <div class="inv" id="inv3"></div>
   </div>
 </section>
 
-<!-- HOUSE -->
-<section class="scr" id="house" style="background:#EADCC8">
+<!-- BUILD ZONE -->
+<section class="scr" id="build" style="background:linear-gradient(#fff3d6,#F5F3FA)">
   <div class="layer">
     <div class="hud">
       <button class="ib" onclick="show('island')">←</button>
-      <div class="pill" style="padding-left:12px">🏠 My house</div>
+      <div class="ttlpill"><img src="cl-rex.webp" alt="">Build Zone</div>
       <div class="sp"></div>
-      <button class="ib" onclick="openWorkshop()" title="Taller">🔨</button>
+      <div class="pill"><img src="cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
     </div>
-    <div style="text-align:center;color:var(--navy);font-weight:700;font-size:14px;padding:0 12px">Arrastra tus objetos para acomodarlos</div>
-    <div class="room"><div id="roomIn"><img class="bgr" src="craftland/cl-house.webp" alt=""></div></div>
+    <div class="qbox bzhead"><img src="cl-rex.webp" style="width:58px" alt=""><div><b>Captain Rex:</b> <span id="rexSay">Choose a place to build. Read my blueprints!</span></div></div>
+    <div class="spaces" id="spaces"></div>
+  </div>
+</section>
+
+<!-- ROOM -->
+<section class="scr" id="house" style="background:#EADCC8">
+  <div class="layer">
+    <div class="hud">
+      <button class="ib" onclick="roomBack()">←</button>
+      <div class="ttlpill" id="rTitle"></div>
+      <div class="sp"></div>
+      <button class="ib" id="rCraftBtn" onclick="openCraft(CUR)" title="Craft"><img src="cl-i-pickaxe.webp" alt=""></button>
+    </div>
+    <div class="roombar" id="rHint">Arrastra para acomodar · Toca para escuchar en inglés</div>
+    <div class="room"><div id="roomIn"><img class="bgr" id="roomBg" src="cl-house.webp" alt=""></div></div>
     <div class="inv" id="inv4"></div>
+  </div>
+</section>
+
+<!-- PET -->
+<section class="scr" id="pet">
+  <div class="layer">
+    <div class="hud">
+      <button class="ib" onclick="show('island')">←</button>
+      <div class="ttlpill"><img src="cl-u-heart.webp" alt="">My pet</div>
+      <div class="sp"></div>
+      <button class="ib" onclick="petPicker()" title="Mis mascotas"><img src="cl-pet-bunny.webp" alt=""></button>
+    </div>
+    <div id="petBody" style="flex:1;display:flex;flex-direction:column;min-height:0"></div>
   </div>
 </section>
 
@@ -226,12 +339,12 @@ img{-webkit-user-drag:none;max-width:100%}
   <div class="layer">
     <div class="hud">
       <button class="ib" onclick="show('island')">←</button>
-      <div class="pill" style="padding-left:12px">👗 Luna's Shop</div>
+      <div class="ttlpill"><img src="cl-luna.webp" alt="">Luna's Shop</div>
       <div class="sp"></div>
-      <div class="pill"><img src="craftland/cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
+      <div class="pill"><img src="cl-r-coin.webp" alt=""><span class="cCoins">0</span></div>
     </div>
     <div class="qbox" style="display:flex;align-items:center;gap:10px;text-align:left">
-      <img src="craftland/cl-luna.webp" style="width:58px" alt=""><div><b>Luna:</b> <span id="lunaSay">Answer my question and unlock a new look!</span></div>
+      <img src="cl-luna.webp" style="width:58px" alt=""><div><b>Luna:</b> <span id="lunaSay">Answer my question and unlock a new look!</span></div>
     </div>
     <div class="recipes" id="shopList" style="flex:1"></div>
   </div>
@@ -322,38 +435,109 @@ const LUNA = {
 };
 </script>
 <script>
-/* ===================== ESTADO ===================== */
-const IMG = n => 'craftland/' + n + '.webp';
+/* ===================== DATOS ===================== */
+const IMG = n => n + '.webp';
 const MATS = { wood:'cl-b-wood', stone:'cl-b-stone', dirt:'cl-b-dirt', grass:'cl-b-grass', coal:'cl-b-coal', iron:'cl-b-iron', gold:'cl-b-gold', ice:'cl-b-ice', amethyst:'cl-b-amethyst', ruby:'cl-b-ruby', diamond:'cl-b-diamond' };
 const MAT_COL = { wood:'#B07A44', stone:'#8C8C8C', dirt:'#7A5233', grass:'#6CC04A', coal:'#333', iron:'#D9C2A6', gold:'#F5C531', ice:'#9EDCF5', amethyst:'#A66BDC', ruby:'#E0384B', diamond:'#4FE3E0' };
 const RARITY = [['stone',22],['wood',22],['dirt',12],['grass',10],['coal',11],['iron',9],['ice',5],['gold',4],['amethyst',2],['ruby',2],['diamond',1]];
 const RARE = ['gold','amethyst','ruby','diamond'];
+const UNLOCK_BZ = 6;
+// [clave, nombre en inglés, costo, ancho %, tipo] tipo: f = va en el piso (tapete), w = en la pared
+function I(room,k,n,cost,w,t){ return {k,n,room,img:'cl-i-'+k,cost,w,t:t||''} }
 const ITEMS = [
- {k:'chair',img:'cl-i-chair',cost:{wood:3}},
- {k:'table',img:'cl-i-table',cost:{wood:4,iron:1}},
- {k:'bed',img:'cl-i-bed',cost:{wood:3,grass:2}},
- {k:'lamp',img:'cl-i-lamp',cost:{iron:1,coal:2}},
- {k:'door',img:'cl-i-door',cost:{wood:4,iron:1}},
- {k:'bookshelf',img:'cl-i-bookshelf',cost:{wood:5,coal:1}},
- {k:'bucket',img:'cl-i-bucket',cost:{iron:3}},
- {k:'pickaxe',img:'cl-i-pickaxe',cost:{wood:2,stone:3}},
- {k:'chest',img:'cl-i-chest',cost:{wood:6,iron:2}},
- {k:'backpack',img:'cl-i-backpack',cost:{grass:3,iron:1}},
- {k:'boat',img:'cl-i-boat',cost:{wood:5,ice:1}},
- {k:'sword',img:'cl-i-sword',cost:{wood:1,iron:2,diamond:1}}
+ // Recámara (originales)
+ I('house','chair','chair',{wood:3},14), I('house','table','table',{wood:4,iron:1},20), I('house','bed','bed',{wood:3,grass:2},32),
+ I('house','lamp','lamp',{iron:1,coal:2},8), I('house','door','door',{wood:4,iron:1},13), I('house','bookshelf','bookshelf',{wood:5,coal:1},20),
+ I('house','bucket','bucket',{iron:3},8), I('house','pickaxe','pickaxe',{wood:2,stone:3},11), I('house','chest','chest',{wood:6,iron:2},15),
+ I('house','backpack','backpack',{grass:3,iron:1},10), I('house','boat','boat',{wood:5,ice:1},30), I('house','sword','sword',{wood:1,iron:2,diamond:1},10),
+ // Recámara (nuevos)
+ I('house','wardrobe','wardrobe',{wood:6,iron:1},19), I('house','desk','desk',{wood:4,stone:1},22), I('house','nightstand','nightstand',{wood:3},11),
+ I('house','bunk-bed','bunk bed',{wood:6,grass:2},28), I('house','armchair','armchair',{wood:2,grass:3},16), I('house','beanbag','beanbag chair',{grass:4},14),
+ I('house','fluffy-rug','rug',{grass:3,dirt:1},28,'f'), I('house','toy-box','toy box',{wood:4,coal:1},15), I('house','teddy','teddy bear',{grass:2,dirt:2},10),
+ I('house','plant','plant',{dirt:2,grass:2},10), I('house','fish-tank','fish tank',{ice:2,stone:2},17), I('house','guitar','guitar',{wood:3,iron:1},9),
+ I('house','globe','globe',{stone:2,iron:2},9), I('house','telescope','telescope',{iron:3,ice:1},12), I('house','mirror','mirror',{ice:2,wood:2},9),
+ I('house','picture','picture',{wood:2,gold:1},12,'w'),
+ // Cocina
+ I('kitchen','refrigerator','refrigerator',{iron:4,ice:2},15), I('kitchen','stove','stove',{iron:3,coal:3},16), I('kitchen','sink','sink',{stone:3,iron:2},18),
+ I('kitchen','cupboard','cupboard',{wood:5,iron:1},17), I('kitchen','fruit-bowl','fruit bowl',{wood:1,grass:3},10), I('kitchen','toaster','toaster',{iron:2,coal:1},9),
+ I('kitchen','teapot','teapot',{stone:2,amethyst:1},9), I('kitchen','cake','birthday cake',{grass:2,ruby:1},10), I('kitchen','microwave','microwave',{iron:3,stone:1},13),
+ I('kitchen','blender','blender',{ice:1,iron:2},7), I('kitchen','pot','cooking pot',{iron:3},10), I('kitchen','pan','frying pan',{iron:2,coal:1},11),
+ I('kitchen','cookie-jar','cookie jar',{ice:2,dirt:1},8), I('kitchen','trash-can','trash can',{iron:2,grass:1},12), I('kitchen','clock','clock',{gold:1,stone:2},10,'w'),
+ I('kitchen','round-rug','round rug',{grass:3,dirt:1},28,'f'),
+ // Jardín
+ I('garden','tree','tree',{dirt:2,grass:3,wood:2},22), I('garden','flower-pot','flower pot',{dirt:2,grass:1},10), I('garden','bench','bench',{wood:4,iron:1},20),
+ I('garden','fountain','fountain',{stone:5,ice:2},22), I('garden','swing','swing',{wood:4,iron:1},22), I('garden','veg-patch','vegetable patch',{dirt:4,grass:2},22,'f'),
+ I('garden','watering-can','watering can',{iron:2,ice:1},10), I('garden','birdhouse','birdhouse',{wood:3,coal:1},11), I('garden','doghouse','doghouse',{wood:5,ruby:1},18),
+ I('garden','slide','slide',{iron:3,gold:1},22), I('garden','sandbox','sandbox',{wood:3,dirt:3},20,'f'), I('garden','picnic-table','picnic table',{wood:6},22),
+ I('garden','lamp-post','lamp post',{iron:2,coal:2},8), I('garden','pond','pond',{stone:3,ice:3},24,'f'), I('garden','wheelbarrow','wheelbarrow',{iron:2,wood:2},15),
+ I('garden','trampoline','trampoline',{iron:3,amethyst:1},22)
 ];
-const FW={chair:14,table:20,bed:32,lamp:8,door:13,bookshelf:20,bucket:8,pickaxe:11,chest:15,backpack:10,boat:30,sword:10};
-const AVS = Array.from({length:12},(_,i)=>({id:'cl-av'+(i+1),price:i<3?0:20+Math.floor(i/3)*10}));
+ITEMS.forEach(it=>{ if(it.room==='kitchen') it.w=Math.round(it.w*1.3) });
+const ROOMS = {
+ house:  { name:'My bedroom', bg:'cl-house', col:'#EADCC8', who:'cl-juno', whoName:'Chef Juno', icon:'cl-i-bed' },
+ kitchen:{ name:'My kitchen', bg:'cl-bg-kitchen', col:'#DCEFE6', who:'cl-rex', whoName:'Captain Rex', icon:'cl-i-stove' },
+ garden: { name:'My garden', bg:'cl-bg-garden', col:'#D7EEF8', who:'cl-rex', whoName:'Captain Rex', icon:'cl-i-tree' }
+};
+// Personajes: 1-3 gratis, 4-12 originales, 13-24 nueva colección (algunos son premio)
+const AVS = Array.from({length:24},(_,i)=>{ const n=i+1; let price=n<=3?0:n<=12?20+Math.floor(i/3)*10:[40,40,40,40,0,0,0,60,90,70,70,100][n-13];
+  const reward={17:'kitchen',18:'garden',19:'build'}[n]||null; return {id:'cl-av'+n, price, reward} });
+const REWARD_TXT = { kitchen:'Craft 4 kitchen items', garden:'Craft 4 garden items', build:'Open the Build Zone' };
+const PETS = [
+ ['puppy','puppy',0],['kitten','kitten',0],['bunny','bunny',0],['guinea-pig','guinea pig',0],['hamster','hamster',0],['turtle','turtle',0],
+ ['hedgehog','hedgehog',3],['parrot','parrot',5],['penguin','penguin',8],['axolotl','axolotl',10],['unicorn','unicorn',15],['dragon','dragon',20]
+].map(([k,n,stars])=>({k,n,stars,img:'cl-pet-'+k}));
+const PET_NAMES = ['Coco','Luna','Max','Bolt','Peanut','Sunny','Mochi','Rocky','Bubbles','Nala'];
+const HERB = ['bunny','guinea-pig','hamster','turtle','parrot','hedgehog'];
+const PET_XP = 5, PET_DAY = 6;
+const BEDS = [{id:'cl-pc-pet-bed',lvl:2},{id:'cl-pc-pet-bed-teal',lvl:3},{id:'cl-pc-pet-bed-blue',lvl:4}];
 
+/* ===================== ESTADO ===================== */
 const U = (window.MovaAuth && MovaAuth.user && MovaAuth.user()) || null;
 const KEY = 'mova-craftland-' + (U ? U.username : 'guest');
 function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || null }catch(e){ return null } }
-let S = load() || { stage:null, av:'cl-av1', coins:0, stars:0, inv:{wood:2,stone:2}, made:[], room:{}, owned:['cl-av1','cl-av2','cl-av3'], used:{}, best:0, rounds:0 };
+function blank(){ return { stage:null, av:'cl-av1', coins:0, stars:0, inv:{wood:2,stone:2}, made:[], room:{}, owned:['cl-av1','cl-av2','cl-av3'], used:{}, best:0, rounds:0 } }
+function migrate(s){
+  s = Object.assign(blank(), s||{});
+  s.pets = s.pets || { owned:[], active:null, data:{} };
+  s.day = s.day || {};
+  s.bz = s.bz || 0; s.v = 54; s.ts = s.ts || 0;
+  return s;
+}
+let S = migrate(load());
 function guessStage(){ const s=((U&&U.stage)||'').toLowerCase(); if(/teen/.test(s)) return 'teens'; if(/child|kid ?2|junior/.test(s)) return 'children'; if(/kid|baby|pre/.test(s)) return 'kids'; return 'children'; }
 if(!S.stage) S.stage = guessStage();
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)) }catch(e){} }
+function save(){ S.ts = Date.now(); try{ localStorage.setItem(KEY, JSON.stringify(S)) }catch(e){} Cloud.later() }
 
-/* ===================== SONIDOS (Web Audio, sin costo) ===================== */
+/* ===================== NUBE (Supabase) ===================== */
+const SB_URL = 'https://fclafxrkibvcjktrgznt.supabase.co', SB_KEY = 'sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6';
+const Cloud = {
+  ok:false, t:null, busy:false,
+  rpc(fn,args,keep){ return fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',keepalive:!!keep,headers:{apikey:SB_KEY,'Content-Type':'application/json'},body:JSON.stringify(args)}).then(r=>r.ok?r.json():null) },
+  pull(){
+    if(!U||!U.token) return Promise.resolve();
+    return this.rpc('cl_load',{p_token:U.token,p_username:U.username}).then(r=>{
+      if(!r||r.ok===false) return;
+      this.ok=true;
+      if(r.data && (r.ts||0) > (S.ts||0)){ S = migrate(r.data); try{ localStorage.setItem(KEY, JSON.stringify(S)) }catch(e){} rerender(); toast('Tu isla se cargó de la nube',1600) }
+      else if((S.ts||0) > (r.ts||0)) this.push();
+      cloudInfo();
+    }).catch(()=>{});
+  },
+  later(){ if(!U||!U.token) return; clearTimeout(this.t); this.t=setTimeout(()=>this.push(),2500) },
+  push(keep){
+    if(!U||!U.token) return; clearTimeout(this.t);
+    return this.rpc('cl_save',{p_token:U.token,p_username:U.username,p_data:S,p_ts:S.ts||Date.now()},keep).then(r=>{ if(r&&r.ok){ this.ok=true; cloudInfo() } }).catch(()=>{});
+  }
+};
+addEventListener('pagehide',()=>Cloud.push(true));
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden') Cloud.push(true) });
+function cloudInfo(){
+  const el=$('cloudInfo'); if(!el) return;
+  el.innerHTML = U ? `<span class="dot"></span>${Cloud.ok?'Tu isla se guarda en tu cuenta MOVA':'Guardando tu isla en tu cuenta MOVA…'}`
+    : `Para no perder tu isla, <a href="#" onclick="event.preventDefault();window.MovaAuth&&MovaAuth.login&&MovaAuth.login()">entra con tu cuenta MOVA</a>`;
+}
+
+/* ===================== SONIDOS ===================== */
 let AC=null, SND = localStorage.getItem('cl-snd')!=='0';
 function ac(){ if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)() }catch(e){} } if(AC&&AC.state==='suspended') AC.resume(); return AC }
 function tone(f,d,t='square',v=.08,delay=0,slide){ const a=ac(); if(!a||!SND) return; const o=a.createOscillator(),g=a.createGain(),s=a.currentTime+delay; o.type=t; o.frequency.setValueAtTime(f,s); if(slide) o.frequency.exponentialRampToValueAtTime(slide,s+d); g.gain.setValueAtTime(v,s); g.gain.exponentialRampToValueAtTime(.001,s+d); o.connect(g).connect(a.destination); o.start(s); o.stop(s+d+.02) }
@@ -367,18 +551,21 @@ const sfx = {
  coin(){ tone(988,.07,'square',.06); tone(1319,.18,'square',.06,.07) },
  craft(){ [880,1175,1568,2093].forEach((f,i)=>tone(f,.12,'triangle',.06,i*.06)) },
  win(){ [523,659,784,1047,784,1047].forEach((f,i)=>tone(f,.16,'square',.07,i*.12)) },
- rare(){ [1047,1319,1568,2093,2637].forEach((f,i)=>tone(f,.1,'triangle',.07,i*.05)) }
+ rare(){ [1047,1319,1568,2093,2637].forEach((f,i)=>tone(f,.1,'triangle',.07,i*.05)) },
+ pop(){ tone(700,.05,'sine',.08,0,1200) },
+ yum(){ [600,800,1000].forEach((f,i)=>tone(f,.08,'sine',.08,i*.07)) }
 };
-function toggleSnd(){ SND=!SND; localStorage.setItem('cl-snd',SND?'1':'0'); document.getElementById('sndBtn').textContent=SND?'🔊':'🔇'; sfx.click() }
-/* voz del navegador (gratis). Si existe la voz MOVA la usa. */
+function toggleSnd(){ SND=!SND; localStorage.setItem('cl-snd',SND?'1':'0'); $('sndBtn').textContent=SND?'🔊':'🔇'; sfx.click() }
 function speak(t){ try{ if(window.MovaVoice&&MovaVoice.say){ MovaVoice.say(t); return } }catch(e){} try{ const u=new SpeechSynthesisUtterance(t); u.lang='en-US'; u.rate=.85; speechSynthesis.cancel(); speechSynthesis.speak(u) }catch(e){} }
+const art = w => /^[aeiou]/i.test(w)?'an':'a';
 
 /* ===================== UTILIDADES ===================== */
 const $ = id => document.getElementById(id);
 const shuf = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]} return a };
 const pick = a => a[Math.random()*a.length|0];
 function weighted(list){ let t=list.reduce((s,x)=>s+x[1],0), r=Math.random()*t; for(const [k,w] of list){ if((r-=w)<0) return k } return list[0][0] }
-function show(id){ document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id)); refresh(); }
+let SCREEN='home';
+function show(id){ SCREEN=id; document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id)); refresh(); if(id==='island') renderIsland() }
 function toast(t,ms=1400){ const d=document.createElement('div'); d.className='toast'; d.innerHTML=t; document.body.appendChild(d); setTimeout(()=>d.remove(),ms) }
 function modal(html){ $('mcard').innerHTML=html; $('modal').classList.add('on') }
 function closeModal(){ $('modal').classList.remove('on') }
@@ -389,53 +576,125 @@ function refresh(){
   ['inv1','inv2','inv3','inv4'].forEach(id=>{ const el=$(id); if(!el) return;
     const keys=Object.keys(MATS).filter(k=>S.inv[k]>0);
     el.innerHTML = keys.length ? keys.map(k=>`<div class="slot" data-m="${k}"><img src="${IMG(MATS[k])}" alt="${k}"><b>${S.inv[k]}</b></div>`).join('')
-      : '<div style="color:#fff;font-weight:700;font-size:14px;align-self:center;padding:0 6px">Tu inventario está vacío. ¡Ve a la mina! ⛏️</div>';
+      : '<div style="color:#fff;font-weight:700;font-size:14px;align-self:center;padding:0 6px">Tu inventario está vacío. Ve a <b>The Mine</b> para juntar materiales.</div>';
   });
+  missionBadge();
 }
+function rerender(){ refresh(); renderHome(); if(SCREEN==='island') renderIsland(); if(SCREEN==='workshop') renderRecipes(); if(SCREEN==='house') renderRoom(); if(SCREEN==='pet') renderPet(); if(SCREEN==='shop') renderShop(); if(SCREEN==='build') renderBuild() }
+const madeIn = r => S.made.filter(k=>{ const it=ITEMS.find(x=>x.k===k); return it&&it.room===r }).length;
+const totalIn = r => ITEMS.filter(x=>x.room===r).length;
 
 /* ===================== MAZO SIN REPETIR ===================== */
 function bankFor(stage){ return stage==='kids'?kidsBank():stage==='teens'?teenBank():childBank() }
 function drawQ(){
   const bank=bankFor(S.stage), used=S.used[S.stage]||[];
   let pool=bank.filter(q=>!used.includes(q.id));
-  if(pool.length<4){ S.used[S.stage]=[]; pool=bank; }   // se acabó el mazo: se rebaraja
+  if(pool.length<4){ S.used[S.stage]=[]; pool=bank; }
   const q=pick(pool); (S.used[S.stage]=S.used[S.stage]||[]).push(q.id); save();
   if(q.type==='pic'||q.type==='word'){ const others=shuf(q.pool.filter(x=>x!==q.a)).slice(0,3); q.opts=shuf([q.a,...others]); }
   else q.opts=shuf(q.opts);
   return q;
 }
+function qHtml(q){
+  if(q.type==='pic') return `<div class="em">${q.em}</div><div class="q">${q.q}</div>`;
+  if(q.type==='word') return `<div class="q">${q.q}</div><div class="hint">${q.hint}</div><button class="say" onclick="speak('${q.say.replace(/'/g,"\\'")}')">🔊 Listen</button>`;
+  return `<div class="q">${q.q.replace('___','<span style="background:var(--lime);border-radius:8px;padding:0 10px">___</span>')}</div>`;
+}
 
-/* ===================== HOME ===================== */
+/* ===================== MISIONES DIARIAS ===================== */
+const MS_POOL = {
+ mine:[ {id:'r1',who:'cl-pip',t:'Mine 1 round in The Mine.',es:'Juega 1 ronda en la mina',k:'rounds',g:1},
+        {id:'r2',who:'cl-pip',t:'Mine 2 rounds in The Mine.',es:'Juega 2 rondas en la mina',k:'rounds',g:2},
+        {id:'s3',who:'cl-pip',t:'Win 3 stars in The Mine.',es:'Gana 3 estrellas en la mina',k:'stars',g:3},
+        {id:'c15',who:'cl-pip',t:'Answer 15 questions correctly.',es:'Contesta bien 15 preguntas',k:'correct',g:15} ],
+ craft:[ {id:'k1',who:'cl-juno',t:'Juno needs your help! Craft 1 new item.',es:'Fabrica 1 objeto nuevo',k:'craft',g:1},
+         {id:'k2',who:'cl-rex',t:'Rex is building! Craft 2 new items.',es:'Fabrica 2 objetos nuevos',k:'craft',g:2},
+         {id:'rr',who:'cl-pip',t:'Find a rare block in The Mine.',es:'Encuentra un bloque raro',k:'rare',g:1} ],
+ pet:[ {id:'p2',who:'cl-luna',t:'Take care of your pet 2 times.',es:'Cuida a tu mascota 2 veces',k:'pet',g:2},
+       {id:'p4',who:'cl-luna',t:'Your pet is hungry! Take care of it 4 times.',es:'Cuida a tu mascota 4 veces',k:'pet',g:4} ]
+};
+function dayKey(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate() }
+function hash(s){ let h=7; for(const c of s) h=(h*31+c.charCodeAt(0))>>>0; return h }
+function today(){
+  const k=dayKey();
+  if(S.day.k!==k){ const h=hash(k+(U?U.username:'g')); S.day={ k, rounds:0, stars:0, correct:0, craft:0, rare:0, pet:0, petxp:0, claimed:[], bonus:false,
+    list:[MS_POOL.mine[h%4].id, MS_POOL.craft[(h>>3)%3].id, MS_POOL.pet[(h>>6)%2].id] }; }
+  return S.day;
+}
+function msById(id){ for(const g in MS_POOL){ const m=MS_POOL[g].find(x=>x.id===id); if(m) return m } }
+function track(k,n=1){ const d=today(); d[k]=(d[k]||0)+n; save(); missionBadge() }
+function missionBadge(){ const d=today(), b=$('msBadge'); if(!b) return; const ready=d.list.filter(id=>{ const m=msById(id); return d[m.k]>=m.g && !d.claimed.includes(id) }).length; b.style.display=ready?'grid':'none'; b.textContent=ready }
+function openMissions(){
+  sfx.click(); const d=today();
+  const rows=d.list.map(id=>{ const m=msById(id), v=Math.min(d[m.k]||0,m.g), done=v>=m.g, got=d.claimed.includes(id);
+    return `<div class="ms"><img src="${IMG(m.who)}" alt=""><div class="tx">${m.t}<small>${m.es}</small><div class="bar"><i style="width:${v/m.g*100}%"></i></div></div>
+      ${got?'<span class="done">✓</span>':`<button class="cl" ${done?'':'disabled'} onclick="claimMs('${id}')"><img src="${IMG('cl-r-coin')}">15</button>`}</div>` }).join('');
+  const all=d.claimed.length===3;
+  modal(`<img class="hero" src="${IMG('cl-u-gift')}" style="width:96px;height:96px"><h2>Daily missions</h2><div style="font-size:13px;font-weight:700;opacity:.7">Misiones de hoy · se renuevan cada día</div>${rows}
+   <div class="ms" style="background:${all&&!d.bonus?'var(--lime)':'#fff8e1'}"><img src="${IMG('cl-u-gem')}" alt="" style="width:46px"><div class="tx">Complete all 3 missions<small>Premio especial: material raro + 25 monedas + 1 estrella</small></div>
+   ${d.bonus?'<span class="done">✓</span>':`<button class="cl" ${all?'':'disabled'} onclick="claimBonus()">Open</button>`}</div>
+   <button class="btn" style="width:100%;margin-top:6px" onclick="closeModal()">OK</button>`);
+}
+function claimMs(id){ const d=today(); if(d.claimed.includes(id)) return; d.claimed.push(id); S.coins+=15; save(); sfx.coin(); refresh(); openMissions() }
+function claimBonus(){ const d=today(); if(d.bonus) return; d.bonus=true; const m=pick(['gold','amethyst','ruby','diamond']); S.inv[m]=(S.inv[m]||0)+1; S.coins+=25; S.stars+=1; save(); refresh(); sfx.win(); confetti(60);
+  modal(`<img class="hero" src="${IMG('cl-u-gift')}"><h2>Amazing!</h2><p>You completed all your missions today.</p><div style="margin-bottom:14px"><span class="pill" style="display:inline-flex;margin:3px"><img src="${IMG(MATS[m])}">1 ${m}</span><span class="pill" style="display:inline-flex;margin:3px"><img src="${IMG('cl-r-coin')}">25</span><span class="pill" style="display:inline-flex;margin:3px"><img src="${IMG('cl-r-star')}">1</span></div><button class="btn" onclick="closeModal()">Great!</button>`) }
+
+/* ===================== HOME / ISLA ===================== */
 function goBack(){ if(history.length>1) history.back(); else location.href='index.html#/games' }
 function renderHome(){
   $('hName').textContent = U ? U.name.split(' ')[0] : 'explorer';
   document.querySelectorAll('#stgBox button').forEach(b=>{ b.classList.toggle('sel',b.dataset.s===S.stage); b.onclick=()=>{ S.stage=b.dataset.s; save(); sfx.click(); renderHome() } });
   $('avRow').innerHTML = S.owned.map(a=>`<img src="${IMG(a)}" class="${a===S.av?'sel':''}" data-a="${a}" alt="">`).join('');
   $('avRow').querySelectorAll('img').forEach(i=>i.onclick=()=>{ S.av=i.dataset.a; save(); sfx.click(); renderHome() });
-  $('sndBtn').textContent=SND?'🔊':'🔇';
+  $('sndBtn').textContent=SND?'🔊':'🔇'; cloudInfo();
 }
-function enterIsland(){ sfx.ok(); show('island'); if(!S.seenIntro){ S.seenIntro=1; save(); modal(`<img class="hero" src="${IMG('cl-pip')}"><h2>Welcome to CraftLand!</h2><p>Esta es <b>tu isla</b>. Mina bloques en <b>The Mine</b> respondiendo en inglés, lleva los materiales al <b>Workshop</b> y decora <b>tu casa</b>.</p><button class="btn" onclick="closeModal()">Let's go!</button>`) } }
-function soon(who,img){ sfx.click(); modal(`<img class="hero" src="${IMG(img)}"><h2>${who}</h2><p>Esta zona se abre muy pronto. 🚧<br>Mientras, ¡junta materiales en la mina!</p><button class="btn" onclick="closeModal()">OK</button>`) }
+function renderIsland(){
+  const z=$('zBuild'); if(!z) return; const n=S.made.length, open=n>=UNLOCK_BZ;
+  z.classList.toggle('lock',!open); z.classList.toggle('new',open&&!S.bzSeen);
+  const old=z.querySelector('.need'); if(old) old.remove();
+  if(!open){ const d=document.createElement('div'); d.className='need'; d.textContent=`Craft ${UNLOCK_BZ} items · ${n}/${UNLOCK_BZ}`; z.appendChild(d) }
+  const p=S.pets.active; $('petBtnImg').src = p ? IMG('cl-pet-'+p) : IMG('cl-u-heart');
+  missionBadge();
+}
+function enterIsland(){ sfx.ok(); show('island'); if(!S.seenIntro2){ tutorial(0) } else checkRewards() }
+const TUT = [
+ ['cl-pip','Welcome to CraftLand!','Esta es <b>tu isla</b>. En <b>The Mine</b> contestas en inglés para romper bloques y juntar materiales.'],
+ ['cl-juno','Craft and decorate','Con tus materiales, <b>Juno</b> te ayuda a fabricar muebles en el <b>Workshop</b>. Lee la receta en inglés y decora <b>tu recámara</b>.'],
+ ['cl-rex','The Build Zone','Cuando fabriques <b>6 objetos</b>, <b>Captain Rex</b> abre la <b>cocina</b> y el <b>jardín</b>. ¡Hay muchísimo por construir!'],
+ ['cl-pet-puppy','Your own pet','Adopta una mascota, ponle nombre y cuídala contestando preguntas. Cada día hay <b>misiones nuevas</b> con premios.']
+];
+function tutorial(i){ const t=TUT[i]; if(!t){ S.seenIntro=1; S.seenIntro2=1; save(); closeModal(); return }
+  modal(`<img class="hero" src="${IMG(t[0])}"><h2>${t[1]}</h2><p>${t[2]}</p><button class="btn" style="width:100%" onclick="sfx.click();tutorial(${i+1})">${i<TUT.length-1?'Next':'Let\'s go!'}</button><div class="steps">${TUT.map((_,j)=>`<i class="${j===i?'on':''}"></i>`).join('')}</div>`) }
+function soon(who,img){ sfx.click(); modal(`<img class="hero" src="${IMG(img)}"><h2>${who}</h2><p>Esta zona se abre muy pronto.<br>Mientras, ¡junta materiales en la mina!</p><button class="btn" onclick="closeModal()">OK</button>`) }
+
+/* ===================== PREMIOS (personajes especiales) ===================== */
+function checkRewards(){
+  const give=[];
+  if(S.made.length>=UNLOCK_BZ && !S.owned.includes('cl-av19')) give.push('cl-av19');
+  if(madeIn('kitchen')>=4 && !S.owned.includes('cl-av17')) give.push('cl-av17');
+  if(madeIn('garden')>=4 && !S.owned.includes('cl-av18')) give.push('cl-av18');
+  if(!give.length) return false;
+  give.forEach(a=>S.owned.push(a)); save();
+  setTimeout(()=>{ sfx.win(); confetti(40); modal(`<img class="hero" src="${IMG(give[0])}" style="height:150px"><h2>New look unlocked!</h2><p>Ganaste un personaje especial. Lo encuentras en <b>Luna's Shop</b>.</p><button class="btn" onclick="closeModal()">Cool!</button>`) },400);
+  return true;
+}
+
 /* ===================== LA MINA ===================== */
 const NUMW=['zero','one','two','three','four','five','six','seven','eight','nine','ten'];
 let R=null, busy=false;
 function openMine(){ sfx.click(); R={n:0,total:10,correct:0,streak:0,best:0,got:{}}; show('mine'); nextBlock(true) }
 function leaveMine(){ if(R&&R.n>0&&R.n<R.total){ if(!confirm('¿Salir de la mina? Tus materiales ya están guardados.')) return } R=null; show('island') }
-function nextBlock(first){
+function nextBlock(){
   R.mat = Math.random()<.12 ? 'chest' : weighted(RARITY);
   $('blockImg').src = R.mat==='chest' ? IMG('cl-r-chest') : IMG(MATS[R.mat]);
   $('crack').setAttribute('class','crack'); $('block').style.visibility='visible';
-  $('pipSay').textContent = R.mat==='chest' ? 'A mystery chest! 🎁' : RARE.includes(R.mat) ? 'Wow, a rare block! ✨' : pick(['Let\'s mine!','You can do it!','Answer to break it!','Go go go!']);
+  $('pipSay').textContent = R.mat==='chest' ? 'A mystery chest!' : RARE.includes(R.mat) ? 'Wow, a rare block!' : pick(['Let\'s mine!','You can do it!','Answer to break it!','Go go go!']);
   if(RARE.includes(R.mat)||R.mat==='chest') sfx.rare();
   newQ();
 }
 function newQ(){
   busy=false; const q=R.q=drawQ();
-  let h='';
-  if(q.type==='pic') h=`<div class="em">${q.em}</div><div class="q">${q.q}</div>`;
-  else if(q.type==='word') h=`<div class="q">${q.q}</div><div class="hint">${q.hint}</div><button class="say" onclick="speak('${q.say.replace(/'/g,"\\'")}')">🔊 Listen</button>`;
-  else h=`<div class="q">${q.q.replace('___','<span style="background:var(--lime);border-radius:8px;padding:0 10px">___</span>')}</div>`;
-  $('qbox').innerHTML=h; $('qWrap').style.display='block';
+  $('qbox').innerHTML=qHtml(q); $('qWrap').style.display='block';
   $('opts').innerHTML=q.opts.map((o,i)=>`<button class="opt${q.big?' big':''}" data-i="${i}">${o}</button>`).join('');
   $('opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(b));
   if(q.type==='word') setTimeout(()=>speak(q.say),250);
@@ -446,10 +705,10 @@ function answer(btn){
   const q=R.q, ok=btn.textContent===q.a;
   R.n++;
   if(ok){
-    btn.classList.add('ok'); sfx.ok(); R.correct++; R.streak++; R.best=Math.max(R.best,R.streak);
+    btn.classList.add('ok'); sfx.ok(); R.correct++; R.streak++; R.best=Math.max(R.best,R.streak); track('correct');
     if(S.stage==='kids'&&q.say) setTimeout(()=>speak(q.say),300);
     const mult = R.streak>=6?3:R.streak>=3?2:1;
-    if(mult>1){ $('combo').textContent=`🔥 x${mult} combo!`; $('combo').classList.remove('on'); void $('combo').offsetWidth; $('combo').classList.add('on') }
+    if(mult>1){ $('combo').textContent=`x${mult} combo!`; $('combo').classList.remove('on'); void $('combo').offsetWidth; $('combo').classList.add('on') }
     $('pipSay').textContent = pick(['Great!','Awesome!','Nice one!','Perfect!','You rock!']);
     $('mStreak').textContent=R.streak;
     breakBlock(mult);
@@ -471,12 +730,12 @@ function breakBlock(mult){
       const a=Math.random()*Math.PI*2, d=60+Math.random()*90; s.animate([{transform:'translate(-50%,-50%) rotate(0)',opacity:1},{transform:`translate(${Math.cos(a)*d}px,${Math.sin(a)*d+40}px) rotate(${Math.random()*540}deg) scale(.4)`,opacity:0}],{duration:650,easing:'cubic-bezier(.2,.7,.4,1)'}); setTimeout(()=>s.remove(),660) }
     bl.style.visibility='hidden';
     let mat=R.mat, qty=S.made.includes('pickaxe')?2:1, coins=mult;
-    if(mat==='chest'){ mat=pick(RARE.concat(['iron','iron','gold'])); qty=1; coins+=5+(Math.random()*6|0); toast(`🎁 Mystery chest!<br>+${coins} coins + ${mat}`,1800); confetti(25) }
-    else if(RARE.includes(mat)) toast(`✨ Rare: ${mat}!`);
+    if(mat==='chest'){ mat=pick(RARE.concat(['iron','iron','gold'])); qty=1; coins+=5+(Math.random()*6|0); toast(`Mystery chest!<br>+${coins} coins + ${mat}`,1800); confetti(25); track('rare') }
+    else if(RARE.includes(mat)){ toast(`Rare: ${mat}!`); track('rare') }
     S.inv[mat]=(S.inv[mat]||0)+qty; R.got[mat]=(R.got[mat]||0)+qty; S.coins+=coins; save();
     flyTo(IMG(MATS[mat]), r, 'inv2', mat); setTimeout(()=>{ sfx.coin() },500);
     $('pip').src=IMG('cl-pip-yay');
-    setTimeout(()=>{ refresh(); document.querySelector('.pip').src=IMG('cl-pip'); if(R.n>=R.total) endRound(); else nextBlock() },1100);
+    setTimeout(()=>{ refresh(); $('pip').src=IMG('cl-pip'); if(R.n>=R.total) endRound(); else nextBlock() },1100);
   },640);
 }
 function flyTo(src,from,invId,mat){
@@ -488,46 +747,58 @@ function flyTo(src,from,invId,mat){
 function endRound(){
   $('qWrap').style.display='none'; $('mProg').style.width='100%';
   const st = R.correct>=9?3:R.correct>=7?2:R.correct>=4?1:0;
-  S.stars+=st; S.rounds++; S.best=Math.max(S.best,R.correct); save(); refresh();
+  S.stars+=st; S.rounds++; S.best=Math.max(S.best,R.correct); track('rounds'); track('stars',st); refresh();
   try{ window.MovaAuth&&MovaAuth.save('craftland','CraftLand · The Mine ('+S.stage+')',R.correct,R.total,{kind:'round',zone:'mine',stage:S.stage,stars:st,streak:R.best}) }catch(e){}
   sfx.win(); if(st>=2) confetti(50);
   const got=Object.keys(R.got).map(k=>`<span class="pill" style="display:inline-flex;margin:3px"><img src="${IMG(MATS[k])}">${R.got[k]}</span>`).join('')||'—';
   modal(`<img class="hero" src="${IMG(st>=2?'cl-pip-yay':'cl-pip')}"><h2>${st>=3?'Amazing!':st>=2?'Great job!':st>=1?'Good work!':'Keep trying!'}</h2>
-   <div style="font-size:34px;margin:4px 0">${'⭐'.repeat(st)}${'☆'.repeat(3-st)}</div>
+   <div style="display:flex;justify-content:center;gap:4px;margin:4px 0">${[0,1,2].map(i=>`<img src="${IMG('cl-r-star')}" style="width:40px;${i<st?'':'filter:grayscale(1) opacity(.3)'}">`).join('')}</div>
    <p><b>${R.correct}/${R.total}</b> correct · best streak <b>${R.best}</b></p><div style="margin-bottom:12px">${got}</div>
-   <div style="display:flex;gap:8px"><button class="btn w" style="flex:1" onclick="closeModal();openMine()">⛏️ Again</button><button class="btn" style="flex:1" onclick="closeModal();openWorkshop()">🔨 Craft</button></div>`);
+   <div style="display:flex;gap:8px"><button class="btn w" style="flex:1" onclick="closeModal();openMine()">Again</button><button class="btn" style="flex:1" onclick="closeModal();openCraft('house')">Craft</button></div>`);
 }
 
-/* ===================== TALLER ===================== */
+/* ===================== TALLER / PLANOS ===================== */
+let CROOM='house', CFROM='island';
 function canMake(it){ return Object.keys(it.cost).every(m=>(S.inv[m]||0)>=it.cost[m]) }
-function openWorkshop(){ sfx.click(); show('workshop'); renderRecipes() }
+function openCraft(room){ sfx.click(); if(room!=='house'&&S.made.length<UNLOCK_BZ) room='house'; CFROM=SCREEN==='house'?'house':SCREEN==='build'?'build':'island'; CROOM=room; show('workshop'); renderRecipes() }
+function craftBack(){ if(CFROM==='house') openRoom(CROOM); else if(CFROM==='build') openBuild(); else show('island') }
 function renderRecipes(){
-  $('recipes').innerHTML = ITEMS.map(it=>`<div class="rc ${S.made.includes(it.k)?'made':''}" onclick="tryCraft('${it.k}')"><img class="it" src="${IMG(it.img)}" alt=""><div class="nm">${it.k}</div>
+  const R0=ROOMS[CROOM], open=S.made.length>=UNLOCK_BZ;
+  $('wTitle').innerHTML=`<img src="${IMG(R0.who)}" alt="">${CROOM==='house'?'Workshop':'Blueprints'}`;
+  $('wWhoImg').src=IMG(R0.who); $('wWho').textContent=R0.whoName+':';
+  $('junoSay').textContent = CROOM==='house' ? 'Pick something to craft. Read the recipe!' : 'Pick a blueprint. Read it carefully!';
+  $('wTabs').innerHTML = Object.keys(ROOMS).map(r=>{ const lk=r!=='house'&&!open; return `<button class="${r===CROOM?'sel':''} ${lk?'lk':''}" data-r="${r}">${lk?`<img src="${IMG('cl-u-padlock')}">`:''}${r==='house'?'Bedroom':r==='kitchen'?'Kitchen':'Garden'} <small>${madeIn(r)}/${totalIn(r)}</small></button>` }).join('');
+  $('wTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{ const r=b.dataset.r; if(r!=='house'&&!open){ sfx.no(); toast(`Craft ${UNLOCK_BZ} items to open it · ${S.made.length}/${UNLOCK_BZ}`); return } sfx.click(); CROOM=r; renderRecipes() });
+  const list=ITEMS.filter(it=>it.room===CROOM).sort((a,b)=>(S.made.includes(a.k)-S.made.includes(b.k))||(canMake(b)-canMake(a)));
+  $('recipes').innerHTML = list.map(it=>`<div class="rc ${S.made.includes(it.k)?'made':''}" onclick="tryCraft('${it.k}')"><img class="it" src="${IMG(it.img)}" alt=""><div class="nm">${it.n}</div>
     <div class="cost">${Object.keys(it.cost).map(m=>`<span class="${(S.inv[m]||0)>=it.cost[m]?'':'no'}"><img src="${IMG(MATS[m])}">${S.inv[m]||0}/${it.cost[m]}</span>`).join('')}</div></div>`).join('');
+  refresh();
 }
 function listEn(cost){ const p=Object.keys(cost).map(m=>`${NUMW[cost[m]]} ${cost[m]>1?'pieces':'piece'} of ${m}`); return p.length>1?p.slice(0,-1).join(', ')+' and '+p[p.length-1]:p[0] }
 function recipeQ(it){
-  const mats=Object.keys(it.cost), m=pick(mats), n=it.cost[m], others=Object.keys(MATS).filter(x=>!mats.includes(x));
+  const mats=Object.keys(it.cost), m=pick(mats), n=it.cost[m], others=Object.keys(MATS).filter(x=>!mats.includes(x)), nm=it.n;
   const nums=shuf([n,...shuf([1,2,3,4,5,6,7].filter(x=>x!==n)).slice(0,3)]);
   if(S.stage==='kids') return { text:`<div style="text-align:center;font-size:20px">${mats.map(k=>`<div><img src="${IMG(MATS[k])}" style="width:40px;vertical-align:middle"> <b>${k}</b> × ${it.cost[k]}</div>`).join('')}</div>`,
      say:mats.map(k=>NUMW[it.cost[k]]+' '+k).join(', '), q:`How many <b>${m}</b>? <img src="${IMG(MATS[m])}" style="width:30px;vertical-align:middle">`, a:String(n), opts:nums.map(String) };
   if(S.stage==='children'){
-    const t=`To make a <b>${it.k}</b>, you need ${listEn(it.cost)}.`;
+    const t=`To make ${art(nm)} <b>${nm}</b>, you need ${listEn(it.cost)}.`;
     return Math.random()<.5 ? { text:t, say:t.replace(/<[^>]+>/g,''), q:`How many pieces of ${m} do you need?`, a:NUMW[n], opts:nums.map(x=>NUMW[x]) }
-      : { text:t, say:t.replace(/<[^>]+>/g,''), q:`What do you need to make a ${it.k}?`, a:m, opts:shuf([m,...shuf(others).slice(0,3)]) };
+      : { text:t, say:t.replace(/<[^>]+>/g,''), q:`What do you need to make ${art(nm)} ${nm}?`, a:m, opts:shuf([m,...shuf(others).slice(0,3)]) };
   }
-  const t=`First, collect ${listEn(it.cost)}. Then, place them carefully on the crafting table and combine them to build a sturdy <b>${it.k}</b>. Don't forget: if you are missing a material, you won't be able to finish it.`;
-  if(mats.length>=2){ const no=pick(others); return { text:t, say:t.replace(/<[^>]+>/g,''), q:`Which material is <u>NOT</u> needed for the ${it.k}?`, a:no, opts:shuf([no,...mats.slice(0,3)]) } }
-  return { text:t, say:t.replace(/<[^>]+>/g,''), q:`According to the recipe, how many pieces of ${m} are required?`, a:NUMW[n], opts:nums.map(x=>NUMW[x]) };
+  const t = it.room==='house'
+    ? `First, collect ${listEn(it.cost)}. Then, place them carefully on the crafting table and combine them to build a sturdy <b>${nm}</b>. Don't forget: if you are missing a material, you won't be able to finish it.`
+    : `Captain Rex's blueprint: to build ${art(nm)} <b>${nm}</b> for your ${it.room}, you will need ${listEn(it.cost)}. Measure twice and build once, because a missing material means the job is not finished.`;
+  if(mats.length>=2){ const no=pick(others); return { text:t, say:t.replace(/<[^>]+>/g,''), q:`Which material is <u>NOT</u> needed for the ${nm}?`, a:no, opts:shuf([no,...mats.slice(0,3)]) } }
+  return { text:t, say:t.replace(/<[^>]+>/g,''), q:`According to the ${it.room==='house'?'recipe':'blueprint'}, how many pieces of ${m} are required?`, a:NUMW[n], opts:nums.map(x=>NUMW[x]) };
 }
 let CQ=null;
 function tryCraft(k){
-  const it=ITEMS.find(x=>x.k===k); sfx.click();
-  if(S.made.includes(k)){ modal(`<img class="hero" src="${IMG(it.img)}"><h2>${k}</h2><p>¡Ya lo tienes en tu casa! 🏠</p><div style="display:flex;gap:8px"><button class="btn w" style="flex:1" onclick="closeModal()">OK</button><button class="btn" style="flex:1" onclick="closeModal();openHouse()">See my house</button></div>`); return }
+  const it=ITEMS.find(x=>x.k===k), R0=ROOMS[it.room]; sfx.click(); speak(it.n);
+  if(S.made.includes(k)){ modal(`<img class="hero" src="${IMG(it.img)}"><h2>${it.n}</h2><p>¡Ya lo tienes! Está en <b>${R0.name.toLowerCase()}</b>.</p><div style="display:flex;gap:8px"><button class="btn w" style="flex:1" onclick="closeModal()">OK</button><button class="btn" style="flex:1" onclick="closeModal();openRoom('${it.room}')">Go there</button></div>`); return }
   if(!canMake(it)){ const miss=Object.keys(it.cost).filter(m=>(S.inv[m]||0)<it.cost[m]).map(m=>`<span class="pill" style="display:inline-flex;margin:3px"><img src="${IMG(MATS[m])}">${it.cost[m]-(S.inv[m]||0)} more</span>`).join('');
-    $('junoSay').textContent='You need more materials!'; modal(`<img class="hero" src="${IMG('cl-juno')}"><h2>Not enough materials</h2><p>Para el <b>${k}</b> te falta:</p><div style="margin-bottom:14px">${miss}</div><button class="btn" onclick="closeModal();openMine()">⛏️ Go to the mine</button>`); return }
+    $('junoSay').textContent='You need more materials!'; modal(`<img class="hero" src="${IMG(R0.who)}"><h2>Not enough materials</h2><p>Para <b>${it.n}</b> te falta:</p><div style="margin-bottom:14px">${miss}</div><button class="btn" onclick="closeModal();openMine()">Go to the mine</button>`); return }
   CQ={it, ...recipeQ(it)};
-  modal(`<img src="${IMG(it.img)}" style="width:90px"><h2>Recipe: ${k}</h2><div class="recipeTxt">${CQ.text}</div><button class="say" onclick="speak(CQ.say)">🔊 Listen</button>
+  modal(`<img src="${IMG(it.img)}" style="width:90px"><h2>${it.room==='house'?'Recipe':'Blueprint'}: ${it.n}</h2><div class="recipeTxt">${CQ.text}</div><button class="say" onclick="speak(CQ.say)">🔊 Listen</button>
    <p style="margin-top:12px"><b>${CQ.q}</b></p><div class="opts" style="margin:0" id="cOpts">${shuf(CQ.opts).map(o=>`<button class="opt">${o}</button>`).join('')}</div>`);
   if(S.stage==='kids') setTimeout(()=>speak(CQ.say),300);
   $('cOpts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
@@ -536,59 +807,187 @@ function tryCraft(k){
   });
 }
 function craft(it){
+  const before=S.made.length;
   Object.keys(it.cost).forEach(m=>S.inv[m]-=it.cost[m]); S.made.push(it.k); S.coins+=5;
-  S.room[it.k]={x:25+Math.random()*50,y:55+Math.random()*25}; save(); sfx.craft(); confetti(40);
-  try{ window.MovaAuth&&MovaAuth.save('craftland','CraftLand · Crafted: '+it.k,1,1,{kind:'craft',item:it.k,stage:S.stage}) }catch(e){}
-  $('junoSay').textContent='You made a '+it.k+'! It\'s in your house.';
-  modal(`<img class="hero" src="${IMG('cl-juno-yay')}"><h2>You made a ${it.k}!</h2><img src="${IMG(it.img)}" style="width:90px"><p>+5 coins · Ya está en tu casa.</p>
-   ${it.k==='pickaxe'?'<p><b>⛏️ Bonus:</b> ahora cada bloque te da 2 materiales.</p>':''}
-   <div style="display:flex;gap:8px"><button class="btn w" style="flex:1" onclick="closeModal();renderRecipes();refresh()">Keep crafting</button><button class="btn" style="flex:1" onclick="closeModal();openHouse()">🏠 My house</button></div>`);
-  if(S.made.length===ITEMS.length) setTimeout(()=>toast('🏆 ¡Crafteaste todo! Eres Master Crafter',2500),800);
+  S.room[it.k]={x:25+Math.random()*50,y:it.t==='w'?30:55+Math.random()*25}; track('craft'); sfx.craft(); confetti(40);
+  try{ window.MovaAuth&&MovaAuth.save('craftland','CraftLand · Crafted: '+it.n,1,1,{kind:'craft',item:it.k,room:it.room,stage:S.stage}) }catch(e){}
+  $('junoSay').textContent=`You made ${art(it.n)} ${it.n}!`;
+  const R0=ROOMS[it.room];
+  if(before<UNLOCK_BZ && S.made.length>=UNLOCK_BZ){ unlockBuild(); return }
+  modal(`<img class="hero" src="${IMG(R0.who==='cl-juno'?'cl-juno-yay':'cl-rex')}"><h2>You made ${art(it.n)} ${it.n}!</h2><img src="${IMG(it.img)}" style="width:90px"><p>+5 coins · Ya está en <b>${R0.name.toLowerCase()}</b>.</p>
+   ${it.k==='pickaxe'?'<p><b>Bonus:</b> ahora cada bloque te da 2 materiales.</p>':''}
+   <div style="display:flex;gap:8px"><button class="btn w" style="flex:1" onclick="closeModal();renderRecipes();checkRewards()">Keep crafting</button><button class="btn" style="flex:1" onclick="closeModal();openRoom('${it.room}');checkRewards()">Go see it</button></div>`);
+  if(madeIn(it.room)===totalIn(it.room)) setTimeout(()=>{ toast(`<img src="${IMG('cl-u-trophy')}" style="width:40px;vertical-align:middle"> ¡Completaste ${R0.name.toLowerCase()}!`,2600); S.stars+=3; save(); refresh() },900);
+}
+function unlockBuild(){
+  save(); sfx.win(); confetti(80);
+  modal(`<div style="display:flex;justify-content:center;align-items:flex-end;gap:6px"><img src="${IMG('cl-rex')}" style="height:140px"><img src="${IMG('cl-u-key')}" style="height:70px"></div>
+   <h2>The Build Zone is open!</h2><p><b>Captain Rex:</b> Great work, builder! Now you can build a <b>kitchen</b> and a <b>garden</b>.</p>
+   <button class="btn" style="width:100%" onclick="closeModal();openBuild();checkRewards()">Let's build!</button>`);
 }
 
-/* ===================== MI CASA ===================== */
-function openHouse(){ sfx.click(); show('house'); renderRoom() }
-function renderRoom(){
-  const room=$('roomIn'); room.querySelectorAll('.furn,.me,.empty').forEach(e=>e.remove());
-  if(!S.made.length){ const d=document.createElement('div'); d.className='empty'; d.style.cssText='position:absolute;inset:auto 10% 40% 10%;background:#fff;border:3px solid var(--navy);border-radius:16px;padding:12px;text-align:center;font-weight:800;z-index:2'; d.innerHTML='Tu casa está vacía. Craftea muebles en el Workshop 🔨'; room.appendChild(d) }
-  S.made.forEach(k=>{ const it=ITEMS.find(x=>x.k===k), p=S.room[k]||{x:50,y:60}, im=document.createElement('img');
-    im.src=IMG(it.img); im.className='furn'; im.style.left=p.x+'%'; im.style.top=p.y+'%'; im.style.zIndex=Math.round(p.y); im.style.width=(FW[k]||14)+'%'; im.dataset.k=k; room.appendChild(im); drag(im,room) });
-  const me=document.createElement('img'); me.src=IMG(S.av); me.className='furn me'; me.style.cssText+=`left:${(S.room._me||{x:50}).x}%;top:${(S.room._me||{y:62}).y}%;width:15%`; me.dataset.k='_me'; room.appendChild(me); drag(me,room);
+/* ===================== BUILD ZONE ===================== */
+function openBuild(){
+  sfx.click();
+  if(S.made.length<UNLOCK_BZ){ modal(`<img class="hero" src="${IMG('cl-rex')}"><h2>Captain Rex</h2><p>The Build Zone opens when you craft <b>${UNLOCK_BZ} items</b>.<br>Fabrica ${UNLOCK_BZ} objetos en el Workshop para abrirla.</p>
+    <div class="mini" style="height:16px"><i style="width:${S.made.length/UNLOCK_BZ*100}%"></i></div><p style="margin-top:4px"><b>${S.made.length}/${UNLOCK_BZ}</b></p><button class="btn" onclick="closeModal();openCraft('house')">Go to the Workshop</button>`); return }
+  if(!S.bzSeen){ S.bzSeen=1; save() }
+  show('build'); renderBuild();
 }
-function drag(el,room){
-  el.addEventListener('pointerdown',e=>{ e.preventDefault(); el.setPointerCapture(e.pointerId); el.classList.add('drag'); sfx.click();
-    const mv=ev=>{ const r=room.getBoundingClientRect(); const x=Math.max(5,Math.min(95,(ev.clientX-r.left)/r.width*100)), y=Math.max(8,Math.min(95,(ev.clientY-r.top)/r.height*100)); el.style.left=x+'%'; el.style.top=y+'%'; el.style.zIndex=Math.round(y); S.room[el.dataset.k]={x,y} };
-    const up=()=>{ el.classList.remove('drag'); el.removeEventListener('pointermove',mv); el.removeEventListener('pointerup',up); save() };
+function renderBuild(){
+  $('spaces').innerHTML = ['kitchen','garden'].map(r=>{ const R0=ROOMS[r], n=madeIn(r), t=totalIn(r);
+    return `<div class="space" onclick="openRoom('${r}')"><img class="th" src="${IMG(R0.bg)}" alt=""><h3>${r==='kitchen'?'Kitchen':'Garden'}</h3><div class="mini"><i style="width:${n/t*100}%"></i></div><small>${n}/${t} built</small></div>` }).join('')
+   + `<div class="space" style="grid-column:span 2;display:flex;align-items:center;gap:10px;text-align:left" onclick="openRoom('house')"><img src="${IMG('cl-house')}" style="width:70px" alt=""><div><h3>My bedroom</h3><small>${madeIn('house')}/${totalIn('house')} crafted</small></div></div>`;
+}
+
+/* ===================== HABITACIONES ===================== */
+let CUR='house';
+function openRoom(r){ sfx.click(); if(r!=='house'&&S.made.length<UNLOCK_BZ){ openBuild(); return } CUR=r; show('house'); renderRoom() }
+function roomBack(){ if(CUR==='house') show('island'); else openBuild() }
+function renderRoom(){
+  const R0=ROOMS[CUR], room=$('roomIn');
+  $('house').style.background=R0.col; $('roomBg').src=IMG(R0.bg);
+  $('rTitle').innerHTML=`<img src="${IMG(R0.icon)}" alt="">${R0.name}`;
+  room.querySelectorAll('.furn,.empty').forEach(e=>e.remove());
+  const mine=S.made.filter(k=>{ const it=ITEMS.find(x=>x.k===k); return it&&it.room===CUR });
+  if(!mine.length){ const d=document.createElement('div'); d.className='empty'; d.style.cssText='position:absolute;inset:auto 10% 40% 10%;background:#fff;border:3px solid var(--navy);border-radius:16px;padding:12px;text-align:center;font-weight:800;z-index:200';
+    d.innerHTML = CUR==='house'?'Tu recámara está vacía. Fabrica muebles en el Workshop.':'Todavía no hay nada aquí. Abre los planos de Captain Rex para construir.'; room.appendChild(d) }
+  const add=(src,key,w,label,cls)=>{ const h=hash(key), p=S.room[key]||(key.startsWith('_me')?{x:80,y:80}:{x:22+h%56,y:cls==='wall'?30:52+(h>>5)%30}), im=document.createElement('img'); im.src=src; im.className='furn'+(cls?' '+cls:''); im.style.left=p.x+'%'; im.style.top=p.y+'%';
+    im.style.zIndex = cls==='flat'?1:cls==='wall'?2:Math.round(p.y)+10; im.style.width=w+'%'; im.dataset.k=key; im.dataset.say=label||''; room.appendChild(im); drag(im,room,cls) };
+  mine.forEach(k=>{ const it=ITEMS.find(x=>x.k===k); add(IMG(it.img),k,it.w,it.n,it.t==='f'?'flat':it.t==='w'?'wall':'') });
+  if(CUR==='house'){ const p=S.pets.active, d=p&&S.pets.data[p];
+    if(d&&d.bed) add(IMG(d.bed),'_bed',18,'pet bed','flat');
+    if(p){ const P=PETS.find(x=>x.k===p); add(IMG(P.img),'_pet',11+Math.min(d.lvl||1,5),d.name+', the '+P.n,'') } }
+  const mk='_me'+(CUR==='house'?'':'_'+CUR); add(IMG(S.av),mk,15,'',''); 
+  refresh();
+}
+function drag(el,room,cls){
+  el.addEventListener('pointerdown',e=>{ e.preventDefault(); el.setPointerCapture(e.pointerId); el.classList.add('drag');
+    const sx=e.clientX, sy=e.clientY; let moved=false;
+    const mv=ev=>{ if(Math.abs(ev.clientX-sx)+Math.abs(ev.clientY-sy)>6) moved=true; if(!moved) return;
+      const r=room.getBoundingClientRect(); const x=Math.max(5,Math.min(95,(ev.clientX-r.left)/r.width*100)), y=Math.max(8,Math.min(95,(ev.clientY-r.top)/r.height*100));
+      el.style.left=x+'%'; el.style.top=y+'%'; if(!cls) el.style.zIndex=Math.round(y)+10; S.room[el.dataset.k]={x,y} };
+    const up=()=>{ el.classList.remove('drag'); el.removeEventListener('pointermove',mv); el.removeEventListener('pointerup',up);
+      if(moved){ sfx.click(); save() } else if(el.dataset.say){ sayWord(el) } };
     el.addEventListener('pointermove',mv); el.addEventListener('pointerup',up);
   });
+}
+function sayWord(el){
+  const w=el.dataset.say, room=$('roomIn'); sfx.pop();
+  const isName=w.includes(', the '); speak(isName?w:art(w)+' '+w);
+  room.querySelectorAll('.word').forEach(x=>x.remove());
+  const b=document.createElement('div'); b.className='word'; b.textContent=isName?w:art(w)+' '+w; b.style.left=el.style.left;
+  b.style.top=`calc(${el.style.top} - ${el.offsetHeight/2+6}px)`; room.appendChild(b); setTimeout(()=>b.remove(),1600);
+}
+
+/* ===================== MASCOTAS ===================== */
+function openPet(){ sfx.click(); show('pet'); renderPet() }
+function petLvl(d){ return 1+Math.floor((d.xp||0)/PET_XP) }
+function renderPet(){
+  const box=$('petBody'), p=S.pets.active;
+  if(!p){ box.innerHTML=`<div class="qbox" style="display:flex;align-items:center;gap:10px;text-align:left;margin-top:4px"><img src="${IMG('cl-luna')}" style="width:54px" alt=""><div><b>Luna:</b> Choose a pet! Tap one to adopt it.<div style="font-size:12px;opacity:.7;font-weight:700">Elige tu mascota. Algunas se desbloquean con estrellas.</div></div></div><div class="petgrid">${petCards()}</div>`; bindPetCards(); return }
+  const P=PETS.find(x=>x.k===p), d=S.pets.data[p], lvl=petLvl(d), xpIn=(d.xp||0)%PET_XP, td=today(), left=Math.max(0,PET_DAY-(td.petxp||0));
+  const snack = p==='puppy'?['cl-pc-bone','Bone']:HERB.includes(p)?['cl-pc-carrot','Carrot']:['cl-pc-treats','Treat'];
+  const toy = p==='kitten'?'cl-pc-yarn':'cl-pc-ball';
+  box.innerHTML = `<div class="petstage">${d.bed?`<img class="bed" src="${IMG(d.bed)}" alt="">`:''}<img class="me" id="petMe" src="${IMG(P.img)}" style="--s:${.8+Math.min(lvl,5)*.06}" alt=""></div>
+   <div class="petcard"><div class="row"><h2>${d.name}</h2><span class="lvl">Level ${lvl}</span><div class="sp"></div><b style="font-size:13px;opacity:.7">${P.n}</b></div>
+    <div class="hearts">${Array.from({length:PET_XP},(_,i)=>`<img src="${IMG('cl-u-heart')}" class="${i<xpIn?'':'off'}">`).join('')}</div>
+    <div class="today">${left?`Hoy puedes cuidarlo ${left} ${left===1?'vez':'veces'} más`:`${d.name} está feliz. Vuelve mañana para cuidarlo otra vez.`}</div></div>
+   <div class="care">
+    <button onclick="care('feed')" ${left?'':'disabled'}><img src="${IMG('cl-pc-food-bowl')}">Feed</button>
+    <button onclick="care('water')" ${left?'':'disabled'}><img src="${IMG('cl-pc-water-bowl')}">Water</button>
+    <button onclick="care('play')" ${left?'':'disabled'}><img src="${IMG(toy)}">Play</button>
+    <button onclick="care('snack')" ${left?'':'disabled'}><img src="${IMG(snack[0])}">${snack[1]}</button></div>`;
+  $('petMe').onclick=()=>{ sfx.pop(); speak(d.name+'! '+(lvl>=3?'I love you!':'Hello!')); hop() };
+}
+function hop(){ const m=$('petMe'); if(!m) return; m.classList.remove('hop'); void m.offsetWidth; m.classList.add('hop') }
+function petCards(){
+  return PETS.map(P=>{ const own=S.pets.owned.includes(P.k), lk=!own&&S.stars<P.stars;
+    return `<div class="pg ${lk?'lk':''} ${S.pets.active===P.k?'sel':''}" data-p="${P.k}"><img class="p" src="${IMG(P.img)}" alt=""><b>${own?S.pets.data[P.k].name:P.n}</b>
+     ${own?`<div class="cost">Level ${petLvl(S.pets.data[P.k])}</div>`:P.stars?`<div class="cost"><img src="${IMG(lk?'cl-u-padlock':'cl-r-star')}">${P.stars}</div>`:'<div class="cost">Free</div>'}</div>` }).join('');
+}
+function bindPetCards(){ document.querySelectorAll('.pg').forEach(c=>c.onclick=()=>petTap(c.dataset.p)) }
+function petPicker(){ sfx.click(); modal(`<h2>My pets</h2><div style="font-size:13px;font-weight:700;opacity:.7">Toca una mascota para cambiar o adoptar</div><div class="petgrid" style="padding:10px 0">${petCards()}</div><button class="btn w" onclick="closeModal()">Close</button>`); bindPetCards() }
+function petTap(k){
+  const P=PETS.find(x=>x.k===k); sfx.click(); speak(P.n);
+  if(S.pets.owned.includes(k)){ S.pets.active=k; save(); closeModal(); renderPet(); return }
+  if(S.stars<P.stars){ sfx.no(); toast(`You need ${P.stars} stars · ${S.stars}/${P.stars}`,1800); return }
+  const sug=shuf(PET_NAMES).slice(0,5);
+  modal(`<img class="hero" src="${IMG(P.img)}"><h2>Adopt a ${P.n}!</h2><p style="margin:4px 0">What's your pet's name?</p>
+   <input class="namein" id="petName" maxlength="14" placeholder="Name" value=""><div class="chips">${sug.map(n=>`<button onclick="$('petName').value='${n}'">${n}</button>`).join('')}</div>
+   <button class="btn" style="width:100%" onclick="adopt('${k}')">Adopt</button>`);
+  setTimeout(()=>{ try{ $('petName').focus() }catch(e){} },200);
+}
+function adopt(k){
+  const P=PETS.find(x=>x.k===k); let name=($('petName').value||'').trim().replace(/[<>"'`]/g,'').slice(0,14); if(!name) name=pick(PET_NAMES);
+  name=name.charAt(0).toUpperCase()+name.slice(1);
+  S.pets.owned.push(k); S.pets.data[k]={name,xp:0,bed:null,since:Date.now()}; S.pets.active=k; save(); track('pet');
+  closeModal(); sfx.win(); confetti(60); renderPet(); renderIsland(); speak(`Hello, ${name}!`);
+  setTimeout(()=>toast(`Welcome home, ${name}!`,1800),300);
+}
+function care(kind){
+  const p=S.pets.active, d=S.pets.data[p], td=today(); if((td.petxp||0)>=PET_DAY||$('modal').classList.contains('on')||PBUSY) return;
+  sfx.click(); const q=drawQ();
+  const ask={feed:'Answer to feed your pet!',water:'Answer to give water!',play:'Answer to play!',snack:'Answer to give a snack!'}[kind];
+  modal(`<div style="font-weight:800;font-size:14px;opacity:.7;margin-bottom:6px">${ask}</div><div class="qbox" style="margin:0 0 10px;box-shadow:none">${qHtml(q)}</div><div class="opts" style="margin:0" id="pOpts">${q.opts.map(o=>`<button class="opt${q.big?' big':''}">${o}</button>`).join('')}</div>`);
+  if(q.type==='word') setTimeout(()=>speak(q.say),250);
+  $('pOpts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(b.textContent===q.a){ b.classList.add('ok'); sfx.ok(); track('correct'); setTimeout(()=>{ closeModal(); petReward(kind) },500) }
+    else { b.classList.add('bad'); sfx.no(); $('pOpts').querySelectorAll('.opt').forEach(x=>{ x.disabled=true; if(x.textContent===q.a) x.classList.add('ok') });
+      setTimeout(()=>{ closeModal(); toast(`It's "${q.a}". Try again!`,1600) },1300) }
+  });
+}
+let PBUSY=false;
+function petReward(kind){
+  PBUSY=true; setTimeout(()=>PBUSY=false,1500);
+  const p=S.pets.active, d=S.pets.data[p], before=petLvl(d), td=today();
+  const src={feed:'cl-pc-food-bowl',water:'cl-pc-water-bowl',play:p==='kitten'?'cl-pc-yarn':'cl-pc-ball',snack:p==='puppy'?'cl-pc-bone':HERB.includes(p)?'cl-pc-carrot':'cl-pc-treats'}[kind];
+  const me=$('petMe'), r=me.getBoundingClientRect();
+  const f=document.createElement('img'); f.className='fly'; f.src=IMG(src); f.style.width=f.style.height='70px'; f.style.left=(innerWidth/2-35)+'px'; f.style.top=(innerHeight-120)+'px'; document.body.appendChild(f);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ f.style.left=(r.left+r.width/2-35)+'px'; f.style.top=(r.top+r.height*.6-35)+'px' }));
+  setTimeout(()=>{ f.remove(); sfx.yum(); hop(); hearts(r);
+    d.xp=(d.xp||0)+1; td.petxp=(td.petxp||0)+1; S.coins+=1; track('pet');
+    speak(pick(kind==='play'?['Yay!','So fun!','Again!']:['Yum!','Thank you!','Delicious!']));
+    const after=petLvl(d); save(); renderPet();
+    if(after>before) setTimeout(()=>levelUp(after),500);
+  },800);
+}
+function hearts(r){ for(let i=0;i<6;i++){ const h=document.createElement('img'); h.className='heartfx'; h.src=IMG('cl-u-heart'); h.style.left=(r.left+r.width/2-15)+'px'; h.style.top=(r.top+r.height/2)+'px'; document.body.appendChild(h);
+  const dx=(Math.random()-.5)*160, dy=-80-Math.random()*90; h.animate([{transform:'translate(0,0) scale(.4)',opacity:1},{transform:`translate(${dx}px,${dy}px) scale(1)`,opacity:0}],{duration:900+Math.random()*300,easing:'ease-out'}); setTimeout(()=>h.remove(),1250) } }
+function levelUp(l){
+  const p=S.pets.active, d=S.pets.data[p], P=PETS.find(x=>x.k===p), bed=BEDS.find(b=>b.lvl===l);
+  if(bed){ d.bed=bed.id; S.room._bed=S.room._bed||{x:62,y:72} } S.stars+=1; save(); sfx.win(); confetti(60);
+  modal(`<img class="hero" src="${IMG(P.img)}"><h2>${d.name} is level ${l}!</h2><p>${d.name} grew a little bigger. +1 star</p>
+   ${bed?`<img src="${IMG(bed.id)}" style="width:110px"><p style="margin-top:0"><b>New:</b> a pet bed! Ya está en tu recámara.</p>`:''}
+   <button class="btn" onclick="closeModal();renderPet()">Yay!</button>`);
 }
 
 /* ===================== TIENDA DE LUNA ===================== */
 function openShop(){ sfx.click(); show('shop'); renderShop() }
 function renderShop(){
   $('shopList').innerHTML = AVS.map(a=>{ const own=S.owned.includes(a.id);
-    return `<div class="rc ${a.id===S.av?'made':''}" onclick="shopTap('${a.id}')"><img class="it" src="${IMG(a.id)}" style="width:80px;height:80px"><div class="nm">${own?(a.id===S.av?'Wearing':'Use'):'Unlock'}</div>
-    ${own?'':`<div class="cost"><span class="${S.coins>=a.price?'':'no'}"><img src="${IMG('cl-r-coin')}">${a.price}</span></div>`}</div>` }).join('');
+    return `<div class="rc ${a.id===S.av?'made':''}" onclick="shopTap('${a.id}')"><img class="it" src="${IMG(a.id)}" style="width:80px;height:96px"><div class="nm">${own?(a.id===S.av?'Wearing':'Use'):a.reward?'Reward':'Unlock'}</div>
+    ${own?'':a.reward?`<div class="tag">${REWARD_TXT[a.reward]}</div>`:`<div class="cost"><span class="${S.coins>=a.price?'':'no'}"><img src="${IMG('cl-r-coin')}">${a.price}</span></div>`}</div>` }).join('');
 }
 function shopTap(id){
   const a=AVS.find(x=>x.id===id); sfx.click();
-  if(S.owned.includes(id)){ S.av=id; save(); renderShop(); $('lunaSay').textContent='Looking good! ✨'; return }
+  if(S.owned.includes(id)){ S.av=id; save(); renderShop(); $('lunaSay').textContent='Looking good!'; return }
+  if(a.reward){ $('lunaSay').textContent=REWARD_TXT[a.reward]+' to get this look!'; return }
   if(S.coins<a.price){ $('lunaSay').textContent=`You need ${a.price-S.coins} more coins. Go mining!`; sfx.no(); return }
   const L=LUNA[S.stage], c=pick(L), q={q:c[0],a:c[1],opts:shuf([c[1],...c[2]])};
   modal(`<img class="hero" src="${IMG('cl-luna')}"><h2>Luna's question</h2><p style="font-size:${S.stage==='kids'?'44px':'19px'};font-weight:800">${q.q}</p><div class="opts" style="margin:0" id="lOpts">${q.opts.map(o=>`<button class="opt">${o}</button>`).join('')}</div>`);
   if(S.stage==='kids') setTimeout(()=>speak('What is it?'),200);
   $('lOpts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
     if(b.textContent===q.a){ b.classList.add('ok'); sfx.ok(); S.coins-=a.price; S.owned.push(id); S.av=id; save();
-      setTimeout(()=>{ closeModal(); sfx.coin(); confetti(30); toast('New look unlocked! ✨'); renderShop(); refresh() },600) }
+      setTimeout(()=>{ closeModal(); sfx.coin(); confetti(30); toast('New look unlocked!'); renderShop(); refresh() },600) }
     else { b.classList.add('bad'); sfx.no(); b.disabled=true }
   });
 }
 
 /* ===================== ARRANQUE ===================== */
-document.querySelector('.pip').id='pip';
 $('modal').addEventListener('click',e=>{ if(e.target.id==='modal') closeModal() });
-renderHome(); refresh();
-['cl-pip-yay','cl-juno-yay','cl-r-chest','cl-mine','cl-workshop','cl-house','cl-island'].forEach(n=>{ const i=new Image(); i.src=IMG(n) });
+today(); renderHome(); refresh(); Cloud.pull();
+['cl-pip-yay','cl-juno-yay','cl-r-chest','cl-mine','cl-workshop','cl-house','cl-island','cl-bg-kitchen','cl-bg-garden','cl-u-heart','cl-u-gift'].forEach(n=>{ const i=new Image(); i.src=IMG(n) });
 </script>
 </body>
 </html>
