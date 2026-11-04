@@ -400,7 +400,7 @@ const GROUPS = ["Kids","Children","Teens","Adultos","TOEFL","Matemáticas","Lect
 const COLORS = ["#F6D776","#8EC9EE","#9DDCC0","#B9A6E8","#F9B8AE"];
 const ACT_NAMES = {"word-quest":"Word Quest","mision-matematica":"Misión Matemática","level-up":"Level Up","verb-memory":"Verb Memory",
   "sentence-builder":"Sentence Builder","locked-library":"Locked Library","toefl-practice":"TOEFL Practice","word-forms":"Word Forms",
-  "sentence-scramble":"Sentence Scramble","lee-con-mochi":"Aprende a leer con Mochi","sopa-de-letras":"Sopa de letras","crucigrama":"Crucigrama","likes-dislikes":"Likes & Dislikes","speaking":"Speaking Lab"};
+  "sentence-scramble":"Sentence Scramble","lee-con-mochi":"Aprende a leer con Mochi","sopa-de-letras":"Sopa de letras","crucigrama":"Crucigrama","likes-dislikes":"Likes & Dislikes","speaking":"Speaking Lab","ruta":"My Path"};
 
 let session = null, students = [];
 const $ = s => document.querySelector(s);
@@ -989,7 +989,7 @@ const CAT = {"app-lecturas":["Lecturas","#8EC9EE"],"app-library":["Lecturas","#8
   "app-games":["Juegos","#F9B8AE"],"app-flashcards":["Flashcards","#B9A6E8"],"app-wordsearch":["Sopa de letras","#9DDCC0"],
   "app-coloring":["Para colorear","#F6D776"],"app-holidays":["Festividades","#F9B8AE"],"app-learn":["Aprende","#8EC9EE"],
   "app-lectoescritura":["Lectoescritura","#9DDCC0"],"app-matematicas":["Matemáticas","#B9A6E8"],"app-familias":["Familias","#F6D776"],
-  "app-shop":["Tienda","#E3E7F0"],"app-mova":["MOVA","#E3E7F0"],"lee-con-mochi":["Lectoescritura","#9DDCC0"],"speaking":["Speaking","#FF8FC8"]};
+  "app-shop":["Tienda","#E3E7F0"],"app-mova":["MOVA","#E3E7F0"],"lee-con-mochi":["Lectoescritura","#9DDCC0"],"speaking":["Speaking","#FF8FC8"],"ruta":["Grammar","#C9D2FF"]};
 function catOf(a){ return CAT[a] || [ACT_NAMES[a] || a, "#F2786B"]; }
 function secsOf(r){
   if(r.detail && r.detail.kind==="time") return r.detail.seconds||0;

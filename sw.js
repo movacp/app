@@ -4,7 +4,7 @@ const VERSION = "mova-v63";
 const CORE = ["./", "index.html", "studio-plus.js", "studio-games.js", "studio-lote10.js", "studio-lote11.js", "toefl-bank.js", "mova-voice.js", "mova-auth.js", "mova-redesign.js", "mova-polish.js", "mova-secciones.js", "mova-play.js", "mova-about.js", "mova-theme.js", "mova-entry.js", "mova-online.js", "manifest.json", "icon-192.png", "icon-512.png", "maskable-512.png",
   "juego-word-quest.html", "juego-mision-matematica.html", "juego-level-up.html", "juego-verb-memory.html", "juego-sentence-builder.html", "juego-locked-library.html",
   "juego-toefl-practice.html", "juego-sentence-scramble.html", "juego-likes-dislikes.html", "juego-word-forms.html",
-  "juego-lee-con-mochi.html", "juego-sopa-de-letras.html", "juego-crucigrama.html", "juego-craftland.html", "cl-cover.webp", "cl-island.webp", "juego-sugar-town.html", "juego-retos.html", "juego-speaking.html", "mova-park.js", "mova-sugar.js", "st-cover.webp", "st-logo.webp", "aviso-privacidad.html",
+  "juego-lee-con-mochi.html", "juego-sopa-de-letras.html", "juego-crucigrama.html", "juego-craftland.html", "cl-cover.webp", "cl-island.webp", "juego-sugar-town.html", "juego-retos.html", "juego-speaking.html", "ruta.html", "ruta-data.js", "mova-park.js", "mova-sugar.js", "st-cover.webp", "st-logo.webp", "aviso-privacidad.html",
   "mochi-hola.webp", "mochi-lee.webp", "mochi-piensa.webp", "mochi-salta.webp",
   "wf-cover.webp", "wf-sorter.webp", "wf-detective.webp", "wf-slot.webp", "wf-fix.webp"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(VERSION).then((c) => c.addAll(CORE)).then(() => self.skipWaiting())); });

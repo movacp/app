@@ -133,6 +133,13 @@
 .mab-vit .tg span{font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;background:#2A2D52;color:#E6E2FF}
 .mab-vit .cta{display:inline-flex;margin-top:16px;padding:11px 18px;border-radius:999px;background:#D3F36B;color:#15192B;font-weight:800;font-size:14.5px;position:relative}
 .mab-vit .char{position:absolute;right:-18px;bottom:-22px;width:160px;height:160px}
+.pc{position:relative;display:block;margin:16px 0 4px;background:#fff;color:#15192B;border-radius:24px;padding:16px;text-decoration:none}
+.pc-new{position:absolute;top:-10px;right:14px;background:#FF8FC0;color:#15192B;font:800 11px/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.06em;padding:6px 10px;border-radius:999px}
+.pc-top{display:flex;align-items:center;gap:14px}.pc-ring{width:62px;height:62px;flex:none}
+.pc-top small{display:block;font-size:11.5px;font-weight:800;color:#6A6F85;letter-spacing:.04em}.pc-top b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:21px;line-height:1.15;margin-top:2px}
+.pc-next{display:flex;align-items:center;gap:12px;margin-top:12px;background:#F5F3FA;border-radius:16px;padding:11px 12px;font-size:13.5px;font-weight:700;line-height:1.35}
+.pc-next i{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#15192B;color:#D3F36B;flex:none}.pc-next i svg{width:14px;height:14px}
+.pc-go{display:block;text-align:right;margin-top:10px;font-size:13px;font-weight:800;text-decoration:underline}
 .rh-card.sp-card .rh-art{background:#1A1B2E}.rh-card.sp-card .rh-art svg{display:block;width:100%;height:100%}
 .rh-card.sp-card .rh-badge{background:#FF8FC0;color:#1A1B2E}
 .rh-card.sp-card .sp-tag{position:absolute;right:12px;top:12px;font:800 11.5px/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.06em;padding:8px 12px;border-radius:999px;background:#D3F36B;color:#1A1B2E}
@@ -200,12 +207,31 @@
   }
 
 
+
+  /* Tarjeta "My path" en Learn: lee el avance guardado por ruta.html */
+  function pathCard() {
+    var o = {}; try { o = JSON.parse(localStorage.getItem("mova_ruta_v1") || "{}"); } catch (e) {}
+    var P = window.MOVA_PATH, st = o.stage || "children", lv = o.level, names = { kids: "Kids", children: "Children", teens: "Teens" };
+    var label = "Choose your stage and level", sub = "Grammar, vocabulary, practice and a final check for every level.", pct = 0, href = "ruta.html";
+    if (P && P[st]) {
+      if (!lv || !P[st][lv]) lv = Object.keys(P[st]).filter(function (k) { return P[st][k].topics.some(function (t) { return t.exp; }); })[0];
+      var L = P[st][lv], ready = L.topics.filter(function (t) { return t.exp; }), done = ready.filter(function (t) { return o.done && o.done[t.id]; });
+      var nxt = ready.filter(function (t) { return !(o.done && o.done[t.id]); })[0];
+      pct = ready.length ? Math.round(done.length / ready.length * 100) : 0;
+      label = lv + " · " + L.name; href = "ruta.html#/lv/" + st + "/" + encodeURIComponent(lv);
+      sub = nxt ? "Up next · " + nxt.t : (ready.length ? "Level complete · Take the level check" : "Coming soon");
+      var top = "MY PATH · MOVA " + names[st].toUpperCase();
+    }
+    var C = 163, ring = '<svg class="pc-ring" viewBox="0 0 62 62" aria-hidden="true"><circle cx="31" cy="31" r="26" fill="none" stroke="#ECE9F3" stroke-width="8"/><circle cx="31" cy="31" r="26" fill="none" stroke="#15192B" stroke-width="8" stroke-linecap="round" stroke-dasharray="' + Math.round(C * pct / 100) + ' ' + C + '" transform="rotate(-90 31 31)"/><text x="31" y="36" text-anchor="middle" font-family="Bricolage Grotesque,sans-serif" font-weight="800" font-size="15" fill="#15192B">' + pct + '%</text></svg>';
+    return '<a class="pc" href="' + href + '"><span class="pc-new">NEW</span><span class="pc-top">' + ring + '<span><small>' + (top || "MY PATH") + '</small><b>' + label + '</b></span></span><span class="pc-next"><i><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i><span>' + sub + '</span></span><span class="pc-go">Open my path</span></a>';
+  }
+
   function learnHtml() {
     var c = function (href, img, col, badge, title, text, chips, go) {
       return '<a class="rh-card" href="' + href + '" data-c="' + col + '"><div class="rh-art" aria-hidden="true"><img src="' + img + '.webp" srcset="' + img + '.webp 900w, ' + img + '-hd.webp 1600w" sizes="(min-width:820px) 50vw, 100vw" alt="" loading="eager"><span class="rh-badge">' + badge + '</span></div><div class="rh-body"><h2>' + title + "</h2><p>" + text + '</p><div class="chips">' + chips.map(function (x) { return '<span class="chip">' + x + "</span>"; }).join("") + '</div><span class="rh-go">' + go + "</span></div></a>";
     };
     return '<section class="wrap"><div class="lh"><span class="ring"></span><span class="dt" style="width:12px;height:12px;background:#FF8FC0;right:34px;top:140px"></span><span class="dt" style="width:9px;height:9px;background:#FFE58A;right:120px;top:46px"></span>' +
-      '<span class="k">Learn</span><h1>Understand it, then <em>practice it</em></h1><p>Clear explanations of every grammar topic, cards to review vocabulary and math practice step by step.</p><div class="pills">' +
+      '<span class="k">Learn</span><h1>Understand it, then <em>practice it</em></h1><p>Clear explanations of every grammar topic, cards to review vocabulary and math practice step by step.</p>' + pathCard() + '<div class="pills">' +
       '<a href="#/structures" style="background:#C9D2FF"><i>' + sv('<path d="M4 6h16M4 12h10M4 18h7"/>') + '</i><b>Grammar</b><small>Structures</small></a>' +
       '<a href="#/flashcards" style="background:#FFC7E2"><i>' + sv('<rect x="7" y="3" width="13" height="15" rx="2.5"/><path d="M4 7v11a3 3 0 0 0 3 3h9"/>') + '</i><b>Vocabulary</b><small>Flashcards</small></a>' +
       '<a href="#/matematicas" style="background:#FFE58A"><i>' + sv('<path d="M5 7h6M8 4v6M14 7h5M5 17l5-5M10 17l-5-5M14 15h5M14 19h5"/>') + '</i><b>Math</b><small>Matemáticas</small></a>' +

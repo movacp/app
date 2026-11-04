@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My path · MOVA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<script src="mova-voice.js"></script>
+<script src="ruta-data.js"></script>
+<style>
+:root{--bg:#F5F3FA;--ink:#15192B;--navy:#1A1B2E;--navy2:#2C3060;--muted:#6A6F85;--line:#ECE9F3;--lime:#D3F36B;--lav:#E6E2FF;--peri:#C9D2FF;--pink:#FF8FC0;--pinkSoft:#FFE1EE;--butter:#FFE58A;--mint:#BDF0D8;--okSoft:#E4F8B0;
+  color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;text-align:inherit}
+a{color:inherit}
+:focus-visible{outline:3px solid #8FA2FF;outline-offset:3px;border-radius:14px}
+h1,h2,h3,.bg{font-family:"Bricolage Grotesque",sans-serif;letter-spacing:-.01em}
+.wrap{max-width:620px;margin:0 auto;padding:16px 16px 48px}
+.back{display:inline-flex;align-items:center;gap:10px;margin:2px 0 14px;text-decoration:none}
+.back i{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:1.6px solid var(--ink);background:#fff}
+.back i svg{width:18px;height:18px}
+.back small{display:block;font-size:12px;color:var(--muted);font-weight:700}.back b{font-family:"Bricolage Grotesque";font-size:19px}
+.sub{margin:0 4px 16px;color:var(--muted);font-size:14px;line-height:1.55}
+h1.t{font-size:32px;margin:2px 4px 4px}
+[hidden]{display:none!important}
+
+/* stages */
+.stg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.stg button{border-radius:18px;padding:11px 10px;border:2px solid transparent}
+.stg b{display:block;font-family:"Bricolage Grotesque";font-size:16px}.stg small{font-size:11.5px;font-weight:700;color:var(--muted)}
+.stg .on{border-color:var(--ink)}
+.stg [data-s=kids]{background:#ECFBC8}.stg [data-s=children]{background:var(--lav)}.stg [data-s=teens]{background:#FFE6F2}
+
+/* route */
+.route{position:relative;padding-left:34px}
+.route:before{content:"";position:absolute;left:15px;top:22px;bottom:34px;width:4px;border-radius:4px;background:repeating-linear-gradient(var(--ink) 0 8px,transparent 8px 14px);opacity:.22}
+.lv{position:relative;display:flex;align-items:center;gap:12px;width:100%;background:#fff;border-radius:22px;padding:14px 16px;margin-bottom:10px}
+.lv .dot{position:absolute;left:-30px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:3px solid var(--bg);background:#fff;box-shadow:inset 0 0 0 2px #D9D4EA}
+.lv .dot svg{width:13px;height:13px}
+.lv .code{font-family:"Bricolage Grotesque";font-weight:800;font-size:22px;width:54px;flex:none}
+.lv .tx{flex:1;min-width:0;font-size:14px;font-weight:800;line-height:1.3}.lv .tx small{display:block;color:var(--muted);font-size:12px;font-weight:700}
+.bar{display:block;height:7px;border-radius:7px;background:var(--line);margin-top:7px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ink);border-radius:7px}
+.lv.done .dot{background:var(--ink);color:var(--lime);box-shadow:none}
+.lv.cur{background:var(--ink);color:#fff}.lv.cur .tx small{color:#C9C3F2}.lv.cur .dot{background:var(--lime);box-shadow:0 0 0 6px rgba(211,243,107,.35)}.lv.cur .bar{background:var(--navy2)}.lv.cur .bar i{background:var(--lime)}
+.lv .tag{flex:none;font-size:11px;font-weight:800;padding:5px 9px;border-radius:999px;background:var(--lime);color:var(--ink)}
+.lv.adv{background:transparent;border:2px dashed #CFC9E2}.lv.adv .dot{background:var(--bg);box-shadow:inset 0 0 0 2px #CFC9E2}
+.lv .soon{flex:none;font-size:11px;font-weight:800;color:#8A7FB8}
+.badgesBtn{display:flex;align-items:center;gap:12px;width:100%;background:var(--navy);color:#fff;border-radius:22px;padding:14px 16px;margin-top:8px}
+.badgesBtn .mini{display:flex}.badgesBtn .mini span{width:30px;height:30px;margin-right:-8px;border-radius:50%;border:2px solid var(--navy);overflow:hidden;background:var(--navy2)}
+.badgesBtn .mini img,.badgesBtn .mini svg{width:100%;height:100%;display:block}
+.badgesBtn p{margin:0 0 0 10px;flex:1;font-weight:800;font-size:14.5px}.badgesBtn p small{display:block;color:#C9C3F2;font-size:12px;font-weight:700}
+.badgesBtn>svg{width:18px;height:18px;color:var(--lime)}
+
+/* level */
+.lvh{position:relative;overflow:hidden;border-radius:28px;padding:18px 18px 16px;background:var(--lav)}
+.lvh .blob{position:absolute;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.45)}
+.lvh small{position:relative;font-size:12px;font-weight:800;letter-spacing:.06em}
+.lvh h1{position:relative;font-size:44px;margin:4px 0 0;line-height:1}.lvh p{position:relative;margin:2px 0 0;font-size:14px;font-weight:700}
+.lvh .bar{position:relative;height:9px;background:rgba(255,255,255,.75);margin-top:12px}.lvh .cnt{position:relative;display:flex;justify-content:space-between;font-size:12px;font-weight:800;margin-top:6px}
+.lvh[data-s=kids]{background:#E3F8B5}.lvh[data-s=teens]{background:#FFD9EA}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:16px -16px 14px;padding:0 16px 4px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;padding:9px 14px;border-radius:999px;font-weight:800;font-size:13.5px;background:#fff}
+.tabs .on{background:var(--ink);color:#fff}
+.u{display:flex;align-items:center;gap:12px;width:100%;background:#fff;border-radius:20px;padding:13px 14px;margin-bottom:8px;border:2px solid transparent}
+.u .n{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;font-family:"Bricolage Grotesque";font-weight:800;flex:none;background:var(--bg);color:var(--muted)}
+.u .n svg{width:16px;height:16px}
+.u .tx{flex:1;min-width:0;font-weight:800;font-size:14.5px;line-height:1.3}.u .tx small{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-top:2px}
+.u .st{flex:none;font-size:11px;font-weight:800;padding:5px 9px;border-radius:999px;white-space:nowrap}
+.u.ok .n{background:var(--ink);color:var(--lime)}
+.u.next{border-color:var(--ink)}.u.next .n{background:var(--lime);color:var(--ink)}
+.u.soon{opacity:.6;cursor:default}
+.stars{display:inline-flex;gap:2px}.stars svg{width:15px;height:15px}
+.panel{background:#fff;border-radius:22px;padding:16px;margin-bottom:10px}
+.panel h3{margin:0 0 4px;font-size:19px}.panel p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.5}
+.lk{display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:12px 14px;margin-bottom:8px;text-decoration:none}
+.lk span.ic{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;flex:none}
+.lk span.ic svg{width:18px;height:18px}
+.lk b{flex:1;font-size:14.5px}.lk b small{display:block;font-size:12px;color:var(--muted);font-weight:700}
+.lk>svg{width:16px;height:16px;color:var(--muted)}
+.empty{background:#fff;border-radius:22px;padding:22px 18px;text-align:center;color:var(--muted);font-size:14px;line-height:1.55}
+.empty b{display:block;color:var(--ink);font-family:"Bricolage Grotesque";font-size:19px;margin-bottom:4px}
+
+/* lesson */
+.steps{display:flex;gap:6px;margin-bottom:12px}.steps i{flex:1;height:7px;border-radius:7px;background:#E2DDEF}.steps i.on{background:var(--ink)}
+.card{background:#fff;border-radius:28px;padding:20px 18px 20px;box-shadow:0 16px 36px -20px rgba(54,40,120,.25)}
+.kicker{font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--muted)}
+.card h2{font-size:28px;margin:6px 0 12px;line-height:1.1}
+.exp{margin:0;padding:0;list-style:none}
+.exp li{position:relative;padding:10px 12px 10px 38px;background:var(--bg);border-radius:14px;margin-bottom:7px;font-size:15px;line-height:1.5}
+.exp li:before{content:"";position:absolute;left:14px;top:17px;width:10px;height:10px;border-radius:3px;background:var(--lime);box-shadow:0 0 0 2px var(--ink)}
+.exp b{font-weight:800}
+.exs{margin-top:14px}
+.ex{display:flex;align-items:flex-start;gap:10px;padding:11px 2px;border-top:1px solid var(--line)}
+.ex:first-child{border-top:0}
+.ex button{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--lav)}.ex button svg{width:16px;height:16px}
+.ex p{margin:0;font-size:16px;font-weight:700;line-height:1.4}.ex p small{display:block;font-size:13px;color:var(--muted);font-weight:600}
+.cta{display:block;width:100%;margin-top:18px;background:var(--ink);color:#fff;border-radius:999px;padding:15px;font-weight:800;font-size:16px;text-align:center;box-shadow:0 5px 0 var(--lime)}
+.cta:active{transform:translateY(3px);box-shadow:0 2px 0 var(--lime)}
+.cta:disabled{opacity:.35}
+.cta.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);box-shadow:none}
+.row2{display:flex;gap:10px}.row2 .cta{flex:1}
+/* builder */
+.slot{min-height:64px;border-radius:18px;border:2px dashed #CFC9E2;padding:10px;display:flex;flex-wrap:wrap;gap:7px;align-content:flex-start;margin:12px 0}
+.slot.good{border:2px solid #8BC34A;background:#F3FCE0}.slot.bad{border:2px solid var(--pink);background:#FFF2F7}
+.pool{display:flex;flex-wrap:wrap;gap:7px;min-height:44px}
+.chip{padding:9px 13px;border-radius:12px;background:var(--lav);font-weight:800;font-size:16px;box-shadow:0 3px 0 #C3BBEA}
+.slot .chip{background:#fff;box-shadow:0 0 0 1.5px var(--ink)}
+.fb{margin-top:12px;border-radius:16px;padding:11px 14px;font-size:14px;line-height:1.5;font-weight:600}
+.fb.good{background:var(--okSoft)}.fb.bad{background:var(--pinkSoft)}
+.fb b{display:block;font-weight:800}
+/* quiz */
+.qtext{font-family:"Bricolage Grotesque";font-weight:700;font-size:24px;line-height:1.3;margin:8px 0 16px}
+.opt{display:block;width:100%;background:var(--bg);border-radius:16px;padding:14px 16px;margin-bottom:8px;font-weight:800;font-size:16px;border:2px solid transparent}
+.opt.good{background:var(--okSoft);border-color:#8BC34A}.opt.bad{background:var(--pinkSoft);border-color:var(--pink)}
+.opt:disabled{cursor:default}
+/* result */
+.res{position:relative;overflow:hidden;background:var(--navy);color:#fff;border-radius:28px;padding:24px 20px;text-align:center}
+.res .ring{position:absolute;left:-60px;bottom:-80px;width:210px;height:210px;border-radius:50%;border:32px solid var(--navy2)}
+.res .k{position:relative;display:inline-block;background:var(--lime);color:var(--navy);border-radius:999px;padding:6px 12px;font-weight:800;font-size:12px}
+.res h2{position:relative;font-size:56px;margin:14px 0 2px;line-height:1}.res h2 small{font-size:20px;color:#C9C3F2}
+.res p{position:relative;margin:6px auto 0;color:#C9C3F2;font-size:14.5px;line-height:1.5;max-width:32ch}
+.res .stars{position:relative;margin-top:12px}.res .stars svg{width:30px;height:30px}
+.newb{display:flex;align-items:center;gap:14px;background:#fff;border-radius:22px;padding:14px;margin-top:12px}
+.newb .bimg{width:64px;height:64px;flex:none}
+.newb p{margin:0;font-size:13px;color:var(--muted);font-weight:700}.newb p b{display:block;color:var(--ink);font-family:"Bricolage Grotesque";font-size:18px}
+.saved{text-align:center;font-size:13px;color:var(--muted);font-weight:700;margin-top:12px}
+.saved button{text-decoration:underline;font-weight:800;color:var(--ink)}
+/* flashcards */
+.fc{perspective:900px;height:210px;margin:6px 0 12px}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+.fc.flip .in{transform:rotateY(180deg)}
+.fc .f,.fc .b{position:absolute;inset:0;border-radius:24px;display:grid;place-items:center;text-align:center;padding:18px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.fc .f{background:var(--lav)}.fc .b{background:var(--lime);transform:rotateY(180deg)}
+.fc b{font-family:"Bricolage Grotesque";font-size:34px;line-height:1.1}.fc small{display:block;font-size:12px;font-weight:800;color:var(--muted);margin-top:8px}
+.fcnav{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.fcnav span{font-weight:800;font-size:13px;color:var(--muted)}
+.round{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:#fff;border:2px solid var(--ink)}.round svg{width:18px;height:18px}
+/* badges */
+.bgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.bd{background:#fff;border-radius:22px;padding:16px 12px;text-align:center}
+.bd .bimg{width:92px;height:92px;margin:0 auto 8px}
+.bd b{display:block;font-family:"Bricolage Grotesque";font-size:16px}.bd small{display:block;font-size:12px;color:var(--muted);font-weight:700;line-height:1.4;margin-top:3px}
+.bd.off .bimg{filter:grayscale(1);opacity:.35}
+.bimg img,.bimg svg{width:100%;height:100%;display:block;object-fit:contain}
+/* print */
+#sheet{display:none}
+@media print{
+  body{background:#fff}.wrap{display:none!important}#sheet{display:block!important}
+  @page{margin:16mm}
+}
+.sheet{font-family:"Plus Jakarta Sans",sans-serif;color:#15192B}
+.sheet .hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #15192B;padding-bottom:8px;margin-bottom:14px}
+.sheet .hd b{font-family:"Bricolage Grotesque";font-size:24px}.sheet .hd span{font-size:12px;font-weight:700}
+.sheet .nm{display:flex;gap:20px;font-size:13px;font-weight:700;margin-bottom:16px}.sheet .nm span{flex:1;border-bottom:1.5px solid #15192B;padding-bottom:16px}
+.sheet h3{font-family:"Bricolage Grotesque";font-size:17px;margin:16px 0 8px;background:#E6E2FF;padding:6px 10px;border-radius:8px}
+.sheet ol{margin:0;padding-left:22px}.sheet li{margin-bottom:14px;font-size:14px;line-height:1.5}
+.sheet .ln{display:block;border-bottom:1px solid #999;height:24px}
+.sheet .ops{display:flex;gap:18px;flex-wrap:wrap;margin-top:3px;font-weight:600}
+.sheet .key{page-break-before:always}
+.sheet .tip{font-size:12.5px;line-height:1.5;margin:0 0 4px}
+.prow{display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:12px 14px;margin-bottom:8px}
+.prow b{flex:1;font-size:14.5px}.prow b small{display:block;font-size:12px;color:var(--muted);font-weight:700}
+.prow button{flex:none;background:var(--ink);color:#fff;border-radius:999px;padding:8px 14px;font-weight:800;font-size:13px}
+.keyt{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13.5px;margin:0 4px 12px}
+.keyt input{width:18px;height:18px;accent-color:#15192B}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap" id="app"></main>
+<div id="sheet"></div>
+<script>
+(function(){
+"use strict";
+var D=window.MOVA_PATH, app=document.getElementById("app");
+var STG={kids:{name:"Kids",ages:"Ages 6–8",lang:"es"},children:{name:"Children",ages:"Ages 9–12",lang:"es"},teens:{name:"Teens",ages:"Ages 12–17",lang:"en"}};
+var ORDER=["kids","children","teens"];
+function sv(p,w){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(w||2.4)+'" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';}
+var IC={back:sv('<path d="M15 5l-7 7 7 7"/>',2.6),check:sv('<path d="M5 12l5 5 9-10"/>',3),chev:sv('<path d="M9 6l6 6-6 6"/>',2.6),spk:sv('<path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/>'),
+ lock:sv('<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',2.2),play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
+ game:sv('<rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3M16 12h.01M18 14h.01"/>',2),mic:sv('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',2),
+ mix:sv('<path d="M4 7h11M4 12h16M4 17h8"/><circle cx="18" cy="7" r="2"/><circle cx="15" cy="17" r="2"/>',2),prev:sv('<path d="M15 5l-7 7 7 7"/>',2.6),print:sv('<path d="M7 9V3h10v6M7 17H4v-6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6h-3"/><rect x="7" y="14" width="10" height="7"/>',2)};
+var STAR='<svg viewBox="0 0 24 24"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" fill="F" stroke="#15192B" stroke-width="1.4" stroke-linejoin="round"/></svg>';
+function stars(n){var h="";for(var i=0;i<3;i++)h+=STAR.replace("F",i<n?"#FFE58A":"#fff");return '<span class="stars">'+h+"</span>";}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=a[i];a[i]=a[j];a[j]=x;}return a;}
+function say(t,r){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t.replace(/"/g,""));u.lang="en-US";u.rate=r||.9;speechSynthesis.speak(u);}catch(e){}}
+
+/* ---------- progreso ---------- */
+var KEY="mova_ruta_v1";
+function S(){try{var o=JSON.parse(localStorage.getItem(KEY)||"{}");o.done=o.done||{};o.vocab=o.vocab||{};o.checks=o.checks||{};o.badges=o.badges||{};o.built=o.built||0;return o;}catch(e){return {done:{},vocab:{},checks:{},badges:{},built:0};}}
+function W(o){try{localStorage.setItem(KEY,JSON.stringify(o));}catch(e){}}
+function user(){try{return window.MovaAuth&&MovaAuth.user();}catch(e){return null;}}
+function saveCloud(title,score,total,extra){if(!user())return false;try{MovaAuth.save("ruta",title,score,total,extra);return true;}catch(e){return false;}}
+
+function ready(t){return !!t.exp;}
+function lvStats(st,code){var L=D[st][code],o=S(),r=L.topics.filter(ready),d=r.filter(function(t){return o.done[t.id];});return {ready:r.length,done:d.length,total:L.topics.length,pct:r.length?Math.round(d.length/r.length*100):0};}
+function nextTopic(st,code){var o=S();return D[st][code].topics.filter(ready).filter(function(t){return !o.done[t.id];})[0]||null;}
+
+/* ---------- insignias ---------- */
+var BADGES=[
+ ["first-step","First Step","Complete your first topic","#D3F36B"],
+ ["perfect-score","Perfect Score","Get 6 out of 6 in a quiz","#FFE58A"],
+ ["grammar-explorer","Grammar Explorer","Complete 5 topics","#C9D2FF"],
+ ["grammar-builder","Grammar Builder","Complete 15 topics","#FF8FC0"],
+ ["sentence-pro","Sentence Pro","Build 20 sentences on the first try","#BDF0D8"],
+ ["word-collector","Word Collector","Master 2 vocabulary sets","#FFC7A8"],
+ ["level-up","Level Up","Pass a level check","#E6E2FF"],
+ ["stage-star","Stage Star","Pass 3 level checks","#FFD84D"]];
+function bArt(id){
+  var b=BADGES.filter(function(x){return x[0]===id;})[0],c=b?b[3]:"#ddd";
+  var fb='<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="'+c+'" stroke="#15192B" stroke-width="4"/><circle cx="50" cy="50" r="34" fill="#fff" stroke="#15192B" stroke-width="3"/><path d="M50 30l6 12.5 13.5 2-9.8 9.5 2.3 13.5L50 61l-12 6.5 2.3-13.5-9.8-9.5 13.5-2z" fill="'+c+'" stroke="#15192B" stroke-width="3" stroke-linejoin="round"/></svg>';
+  return '<span class="bimg"><img src="badge-'+id+'.webp" alt="" onerror="this.outerHTML=this.dataset.fb" data-fb=\''+fb+'\'></span>';
+}
+function award(o,id){if(o.badges[id])return null;o.badges[id]=Date.now();return id;}
+function checkBadges(o,quizScore){
+  var n=Object.keys(o.done).length,got=[];
+  [n>=1&&"first-step",quizScore===6&&"perfect-score",n>=5&&"grammar-explorer",n>=15&&"grammar-builder",o.built>=20&&"sentence-pro",
+   Object.keys(o.vocab).filter(function(k){return o.vocab[k]>=8;}).length>=2&&"word-collector",
+   Object.keys(o.checks).filter(function(k){return o.checks[k]>=75;}).length>=1&&"level-up",
+   Object.keys(o.checks).filter(function(k){return o.checks[k]>=75;}).length>=3&&"stage-star"].forEach(function(id){if(id){var a=award(o,id);if(a)got.push(a);}});
+  return got;
+}
+function newBadgesHtml(ids){return ids.map(function(id){var b=BADGES.filter(function(x){return x[0]===id;})[0];return '<div class="newb">'+bArt(id)+'<p>New badge<b>'+b[1]+'</b>'+b[2]+'</p></div>';}).join("");}
+
+/* ---------- rutas ---------- */
+function go(h){location.hash=h;}
+window.addEventListener("hashchange",route);
+function back(href,label){return '<a class="back" href="'+href+'"><i>'+IC.back+'</i><span><small>Back to</small><b>'+label+'</b></span></a>';}
+function curStage(){
+  var o=S();if(o.stage)return o.stage;var u=user();
+  if(u&&u.stage){var s=String(u.stage).toLowerCase();if(/kid/.test(s))return "kids";if(/child/.test(s))return "children";if(/teen/.test(s))return "teens";}
+  return "children";
+}
+function curLevel(st){var o=S();if(o.stage===st&&o.level&&D[st][o.level])return o.level;var k=Object.keys(D[st]);for(var i=0;i<k.length;i++){if(D[st][k[i]].topics.some(ready))return k[i];}return k[0];}
+function route(){
+  try{window.speechSynthesis&&speechSynthesis.cancel();}catch(e){}
+  var h=location.hash.replace(/^#\/?/,"").split("/").map(decodeURIComponent);
+  window.scrollTo(0,0);
+  if(h[0]==="lv"&&D[h[1]]&&D[h[1]][h[2]])return level(h[1],h[2],h[3]||"grammar");
+  if(h[0]==="t")return topic(h[1],h[2],h[3]);
+  if(h[0]==="check")return check(h[1],h[2]);
+  if(h[0]==="vocab")return vocab(h[1],h[2],+h[3]);
+  if(h[0]==="mix")return mix(h[1],h[2]);
+  if(h[0]==="badges")return badges();
+  home(h[0]==="stage"&&D[h[1]]?h[1]:curStage());
+}
+
+/* ---------- inicio: My path ---------- */
+function home(st){
+  var o=S(),cur=curLevel(st),lv=D[st];
+  var html=back("./#/learn","Learn")+'<h1 class="t">My path</h1><p class="sub">'+(STG[st].lang==="es"?"Tu etapa y tu nivel, paso a paso. Cada nivel tiene gramática, vocabulario, práctica, hojas para imprimir y un examen final.":"Your stage and level, step by step. Each level has grammar, vocabulary, practice, worksheets and a final check.")+'</p>';
+  html+='<div class="stg" role="radiogroup">'+ORDER.map(function(k){return '<button data-s="'+k+'" class="'+(k===st?"on":"")+'" role="radio" aria-checked="'+(k===st)+'"><b>'+STG[k].name+'</b><small>'+STG[k].ages+'</small></button>';}).join("")+"</div>";
+  html+='<div class="route">'+Object.keys(lv).map(function(code){
+    var L=lv[code],s=lvStats(st,code),passed=(o.checks[st+"|"+code]||0)>=75,isCur=code===cur;
+    var cls="lv"+(passed?" done":"")+(isCur?" cur":"")+(L.adv&&!isCur?" adv":"");
+    var info=s.ready?(passed?"Completed · Check "+o.checks[st+"|"+code]+"%":s.done+" of "+s.ready+" topics"):s.total+" topics";
+    var right=isCur?'<span class="tag">You are here</span>':(!s.ready?'<span class="soon">COMING SOON</span>':(L.adv?'<span class="soon">ADVANCED</span>':""));
+    return '<button class="'+cls+'" data-l="'+code+'"><span class="dot">'+(passed?IC.check:"")+'</span><span class="code">'+code+'</span><span class="tx">'+L.name+'<small>'+info+'</small>'+(s.ready&&!passed?'<span class="bar"><i style="width:'+s.pct+'%"></i></span>':"")+'</span>'+right+'</button>';
+  }).join("")+"</div>";
+  var nb=Object.keys(o.badges).length;
+  html+='<button class="badgesBtn" id="bb"><span class="mini">'+BADGES.slice(0,4).map(function(b){return '<span>'+bArt(b[0])+'</span>';}).join("")+'</span><p>My badges<small>'+nb+' of '+BADGES.length+' earned</small></p>'+IC.chev+'</button>';
+  app.innerHTML=html;
+  app.querySelectorAll(".stg button").forEach(function(b){b.onclick=function(){var m=S();m.stage=b.dataset.s;m.level=null;W(m);go("stage/"+b.dataset.s);};});
+  app.querySelectorAll(".lv").forEach(function(b){b.onclick=function(){var m=S();m.stage=st;m.level=b.dataset.l;W(m);go("lv/"+st+"/"+encodeURIComponent(b.dataset.l));};});
+  document.getElementById("bb").onclick=function(){go("badges");};
+}
+
+/* ---------- página del nivel ---------- */
+var GAMES={kids:[["juego-word-quest.html","Word Quest","Vocabulary and grammar"],["juego-sentence-scramble.html","Sentence Scramble","Order the words"],["juego-verb-memory.html","Verb Memory","Match the verbs"],["juego-likes-dislikes.html","Likes & Dislikes","I like / I don't like"],["juego-sopa-de-letras.html","Word Search","Find the words"],["juego-speaking.html","Speaking Lab","Read aloud",1]],
+ children:[["juego-sentence-builder.html","Sentence Builder","Build sentences"],["juego-sentence-scramble.html","Sentence Scramble","Order the words"],["juego-word-quest.html","Word Quest","Vocabulary and grammar"],["juego-word-forms.html","Word Forms","Nouns, verbs, adjectives"],["juego-verb-memory.html","Verb Memory","Irregular verbs"],["juego-level-up.html","Level Up","Mixed skills"],["juego-speaking.html","Speaking Lab","Read aloud",1]],
+ teens:[["juego-level-up.html","Level Up","Mixed skills"],["juego-word-forms.html","Word Forms","Nouns, verbs, adjectives"],["juego-sentence-builder.html","Sentence Builder","Build sentences"],["juego-word-quest.html","Word Quest","Vocabulary and grammar"],["juego-toefl-practice.html","TOEFL Practice","Exam training"],["juego-speaking.html","Speaking Lab","Read aloud",1]]};
+function level(st,code,tab){
+  var o=S();o.stage=st;o.level=code;W(o);
+  var L=D[st][code],s=lvStats(st,code),es=STG[st].lang==="es";
+  var tabs=[["grammar","Grammar"],["vocabulary","Vocabulary"],["practice","Practice"],["worksheets","Worksheets"],["check","Check"]];
+  var html=back("#/stage/"+st,"My path")+'<div class="lvh" data-s="'+st+'"><span class="blob"></span><small>MOVA '+STG[st].name.toUpperCase()+'</small><h1>'+code+'</h1><p>'+L.name+'</p><span class="bar"><i style="width:'+s.pct+'%"></i></span><div class="cnt"><span>'+s.done+' of '+(s.ready||s.total)+' topics</span><span>'+s.pct+'%</span></div></div>';
+  html+='<div class="tabs" role="tablist">'+tabs.map(function(t){return '<button role="tab" data-t="'+t[0]+'" class="'+(t[0]===tab?"on":"")+'" aria-selected="'+(t[0]===tab)+'">'+t[1]+"</button>";}).join("")+"</div><div id='tb'></div>";
+  app.innerHTML=html;
+  app.querySelectorAll(".tabs button").forEach(function(b){b.onclick=function(){history.replaceState(null,"","#/lv/"+st+"/"+encodeURIComponent(code)+"/"+b.dataset.t);level(st,code,b.dataset.t);};});
+  var tb=document.getElementById("tb"),nt=nextTopic(st,code);
+  if(!s.ready){tb.innerHTML='<div class="empty"><b>Coming soon</b>'+(es?"Estamos preparando los temas de este nivel. Mientras tanto, revisa el temario:":"We're preparing this level. Here is the syllabus:")+"</div>"+L.topics.map(function(t,i){return '<div class="u soon"><span class="n">'+(i+1)+'</span><span class="tx">'+esc(t.t)+'<small>'+esc(t.s)+'</small></span></div>';}).join("");return;}
+  if(tab==="grammar"){
+    tb.innerHTML=L.topics.map(function(t,i){
+      var d=o.done[t.id],isN=nt&&nt.id===t.id;
+      if(!ready(t))return '<div class="u soon"><span class="n">'+(i+1)+'</span><span class="tx">'+esc(t.t)+'<small>'+esc(t.s)+'</small></span><span class="st" style="background:var(--bg)">Soon</span></div>';
+      return '<button class="u'+(d?" ok":"")+(isN?" next":"")+'" data-id="'+t.id+'"><span class="n">'+(d?IC.check:(i+1))+'</span><span class="tx">'+esc(t.t)+'<small>'+esc(t.s)+'</small></span>'+(d?stars(d.stars):(isN?'<span class="st" style="background:var(--butter)">Up next</span>':""))+'</button>';
+    }).join("");
+    tb.querySelectorAll("button.u").forEach(function(b){b.onclick=function(){go("t/"+b.dataset.id);};});
+  } else if(tab==="vocabulary"){
+    tb.innerHTML=L.vocab.length?L.vocab.map(function(v,i){var sc=o.vocab[st+"|"+code+"|"+i];return '<button class="u'+(sc>=8?" ok":"")+'" data-i="'+i+'"><span class="n">'+(sc>=8?IC.check:(i+1))+'</span><span class="tx">'+esc(v.n)+'<small>'+v.w.length+' words · flashcards and quiz</small></span>'+(sc!=null?'<span class="st" style="background:'+(sc>=8?"var(--okSoft)":"var(--butter)")+'">'+sc+'/10</span>':"")+"</button>";}).join(""):'<div class="empty"><b>Coming soon</b>'+(es?"El vocabulario de este nivel está en preparación.":"Vocabulary for this level is on the way.")+"</div>";
+    tb.querySelectorAll("button.u").forEach(function(b){b.onclick=function(){go("vocab/"+st+"/"+encodeURIComponent(code)+"/"+b.dataset.i);};});
+  } else if(tab==="practice"){
+    tb.innerHTML='<button class="lk" id="mx" style="width:100%"><span class="ic" style="background:var(--lime)">'+IC.mix+'</span><b>Mixed review<small>'+(es?"10 preguntas de los temas de este nivel":"10 questions from this level's topics")+'</small></b>'+IC.chev+'</button><h3 style="font-family:Bricolage Grotesque;margin:18px 4px 10px">'+(es?"Juegos recomendados":"Recommended games")+'</h3>'+
+      GAMES[st].map(function(g){return '<a class="lk" href="'+g[0]+'"><span class="ic" style="background:'+(g[3]?"var(--pink)":"var(--lav)")+'">'+(g[3]?IC.mic:IC.game)+'</span><b>'+g[1]+'<small>'+g[2]+'</small></b>'+IC.chev+'</a>';}).join("");
+    document.getElementById("mx").onclick=function(){go("mix/"+st+"/"+encodeURIComponent(code));};
+  } else if(tab==="worksheets"){
+    tb.innerHTML='<label class="keyt"><input type="checkbox" id="wk" checked> '+(es?"Incluir hoja de respuestas":"Include answer key")+'</label>'+L.topics.filter(ready).map(function(t){return '<div class="prow"><b>'+esc(t.t)+'<small>'+(es?"Ordenar oraciones y opción múltiple":"Unscramble and multiple choice")+'</small></b><button data-id="'+t.id+'">'+(es?"Imprimir":"Print")+'</button></div>';}).join("");
+    tb.querySelectorAll(".prow button").forEach(function(b){b.onclick=function(){printSheet(st,code,b.dataset.id,document.getElementById("wk").checked);};});
+  } else {
+    var pc=o.checks[st+"|"+code],locked=s.done<s.ready;
+    tb.innerHTML='<div class="res" style="text-align:left"><span class="ring"></span><span class="k">LEVEL CHECK · '+code+'</span><h2 style="font-size:28px;margin-top:12px">'+(pc!=null?"Best score: "+pc+"%":"12 questions")+'</h2><p style="margin:6px 0 0">'+(locked?(es?"Se desbloquea al terminar los "+s.ready+" temas del nivel. Llevas "+s.done+".":"Unlocks when you finish all "+s.ready+" topics. You've done "+s.done+"."):(es?"Preguntas de todos los temas del nivel. Con 75% o más apruebas el nivel.":"Questions from every topic in this level. Score 75% or more to pass."))+'</p></div><button class="cta" id="ck" '+(locked?"disabled":"")+'>'+(locked?"Locked":"Start level check")+'</button>';
+    document.getElementById("ck").onclick=function(){go("check/"+st+"/"+encodeURIComponent(code));};
+  }
+}
+function findTopic(id){for(var st in D)for(var code in D[st]){var ts=D[st][code].topics;for(var i=0;i<ts.length;i++)if(ts[i].id===id)return {st:st,code:code,t:ts[i],i:i};}return null;}
+
+/* ---------- tema: explicación → construir → quiz ---------- */
+function topic(id){
+  var f=findTopic(id);if(!f||!ready(f.t))return go("");
+  var t=f.t,es=STG[f.st].lang==="es",step=0,builtOk=0,qi=0,score=0,qs=null,bi=0;
+  var lvlHref="#/lv/"+f.st+"/"+encodeURIComponent(f.code);
+  function steps(n){return '<div class="steps">'+[0,1,2].map(function(i){return '<i class="'+(i<=n?"on":"")+'"></i>';}).join("")+"</div>";}
+  function head(){return back(lvlHref,STG[f.st].name+" · "+f.code);}
+  function learn(){
+    app.innerHTML=head()+steps(0)+'<div class="card"><span class="kicker">'+(es?"1 · APRENDE":"1 · LEARN")+'</span><h2>'+esc(t.t)+'</h2><ul class="exp">'+t.exp.map(function(x){return "<li>"+x+"</li>";}).join("")+'</ul><div class="exs">'+t.ex.map(function(x,i){return '<div class="ex"><button data-i="'+i+'" aria-label="Listen">'+IC.spk+'</button><p>'+esc(x[0])+(x[1]?"<small>"+esc(x[1])+"</small>":"")+'</p></div>';}).join("")+'</div><button class="cta" id="nx">'+(es?"Practicar":"Practice")+'</button></div>';
+    app.querySelectorAll(".ex button").forEach(function(b){b.onclick=function(){say(t.ex[+b.dataset.i][0]);};});
+    document.getElementById("nx").onclick=function(){bi=0;build();};
+  }
+  function build(){
+    var target=t.b[bi],words=target.split(" "),pool=shuffle(words.map(function(w,i){return {w:w,i:i};})),picked=[],tries=0;
+    if(pool.map(function(p){return p.w;}).join(" ")===target)pool.reverse();
+    function draw(state){
+      app.innerHTML=head()+steps(1)+'<div class="card"><span class="kicker">'+(es?"2 · CONSTRUYE LA ORACIÓN":"2 · BUILD THE SENTENCE")+' · '+(bi+1)+'/'+t.b.length+'</span><h2 style="font-size:20px">'+(es?"Toca las palabras en orden.":"Tap the words in order.")+'</h2><div class="slot '+(state||"")+'" id="sl">'+picked.map(function(p,k){return '<button class="chip" data-k="'+k+'">'+esc(p.w)+"</button>";}).join("")+'</div><div class="pool">'+pool.map(function(p,k){return '<button class="chip" data-p="'+k+'">'+esc(p.w)+"</button>";}).join("")+'</div><div id="fbb"></div><div class="row2"><button class="cta ghost" id="rs">'+(es?"Borrar":"Clear")+'</button><button class="cta" id="ok" '+(pool.length?"disabled":"")+'>'+(es?"Revisar":"Check")+'</button></div></div>';
+      app.querySelectorAll("[data-p]").forEach(function(b){b.onclick=function(){picked.push(pool.splice(+b.dataset.p,1)[0]);draw();};});
+      app.querySelectorAll("[data-k]").forEach(function(b){b.onclick=function(){pool.push(picked.splice(+b.dataset.k,1)[0]);draw();};});
+      document.getElementById("rs").onclick=function(){pool=pool.concat(picked);picked=[];draw();};
+      document.getElementById("ok").onclick=function(){
+        var ans=picked.map(function(p){return p.w;}).join(" ");tries++;
+        if(ans===target){
+          if(tries===1)builtOk++;say(target);draw("good");
+          document.getElementById("fbb").innerHTML='<div class="fb good"><b>'+(es?"¡Muy bien!":"Correct!")+'</b>'+esc(target)+"</div>";
+          var ok=document.getElementById("ok");ok.disabled=false;ok.textContent=bi<t.b.length-1?(es?"Siguiente":"Next"):(es?"Ir al quiz":"Go to quiz");document.getElementById("rs").hidden=true;
+          ok.onclick=function(){bi++;if(bi<t.b.length)build();else{qs=shuffle(t.q).map(function(q){var o=q[1].map(function(x,i){return {x:x,ok:i===q[2]};});return {q:q[0],o:shuffle(o),why:q[3]};});qi=0;score=0;quiz();}};
+        } else {
+          draw("bad");document.getElementById("fbb").innerHTML='<div class="fb bad"><b>'+(es?"Casi. Inténtalo otra vez.":"Almost. Try again.")+'</b>'+(tries>=2?(es?"Respuesta: ":"Answer: ")+esc(target):(es?"Revisa el orden de las palabras.":"Check the word order."))+"</div>";
+        }
+      };
+    }
+    draw();
+  }
+  function quiz(){
+    var q=qs[qi];
+    app.innerHTML=head()+steps(2)+'<div class="card"><span class="kicker">'+(es?"3 · QUIZ":"3 · QUIZ")+' · '+(qi+1)+'/'+qs.length+'</span><div class="qtext">'+esc(q.q)+'</div>'+q.o.map(function(o,i){return '<button class="opt" data-i="'+i+'">'+esc(o.x)+"</button>";}).join("")+'<div id="fbq"></div></div>';
+    app.querySelectorAll(".opt").forEach(function(b){b.onclick=function(){
+      var o=q.o[+b.dataset.i];app.querySelectorAll(".opt").forEach(function(x,i){x.disabled=true;if(q.o[i].ok)x.classList.add("good");});
+      if(o.ok)score++;else b.classList.add("bad");
+      document.getElementById("fbq").innerHTML='<div class="fb '+(o.ok?"good":"bad")+'"><b>'+(o.ok?(es?"¡Correcto!":"Correct!"):(es?"No exactamente.":"Not quite."))+'</b>'+esc(q.why)+'</div><button class="cta" id="qn">'+(qi<qs.length-1?(es?"Siguiente":"Next"):(es?"Ver resultado":"See my result"))+'</button>';
+      document.getElementById("qn").onclick=function(){qi++;if(qi<qs.length)quiz();else done();};
+    };});
+  }
+  function done(){
+    var st=score>=6?3:score>=4?2:1,o=S(),prev=o.done[t.id];
+    if(!prev||score>prev.score)o.done[t.id]={score:score,stars:st,d:Date.now()};
+    o.built+=builtOk;var nb=checkBadges(o,score);W(o);
+    var saved=saveCloud("My path · "+STG[f.st].name+" "+f.code+" · "+t.t,score,6,{kind:"score",stage:f.st,level:f.code,topic:t.t,sentences_first_try:builtOk});
+    var nt=nextTopic(f.st,f.code);
+    app.innerHTML=head()+'<div class="res"><span class="ring"></span><span class="k">'+esc(t.t)+'</span><h2>'+score+'<small> / 6</small></h2>'+stars(st)+'<p>'+(score>=6?(es?"¡Perfecto! Dominas este tema.":"Perfect! You've mastered this topic."):score>=4?(es?"¡Muy bien! Un repaso más y será perfecto.":"Great work! One more review and it'll be perfect."):(es?"Buen intento. Vuelve a leer la explicación y repite el quiz.":"Good try. Read the explanation again and retake the quiz."))+'</p></div>'+newBadgesHtml(nb)+
+      '<div class="row2" style="margin-top:6px"><button class="cta ghost" id="again">'+(es?"Repetir":"Try again")+'</button><button class="cta" id="nt">'+(nt?(es?"Siguiente tema":"Next topic"):(es?"Ir al nivel":"Back to level"))+'</button></div><p class="saved" id="sv"></p>';
+    document.getElementById("again").onclick=function(){topic(id);};
+    document.getElementById("nt").onclick=function(){if(nt)go("t/"+nt.id);else location.hash=lvlHref.slice(1);};
+    savedNote(saved,es);
+  }
+  learn();
+}
+function savedNote(saved,es){var el=document.getElementById("sv");if(!el)return;
+  if(saved)el.textContent=es?"Guardado en tu avance y en tu reporte mensual.":"Saved to your progress and monthly report.";
+  else{el.innerHTML=(es?"Tu avance se guardó en este dispositivo. ":"Saved on this device. ")+'<button id="lg">'+(es?"Inicia sesión":"Sign in")+"</button>"+(es?" para que llegue a tu reporte mensual.":" to add it to your monthly report.");document.getElementById("lg").onclick=function(){try{MovaAuth.login();}catch(e){}};}
+}
+
+/* ---------- quiz genérico (mixto y examen de nivel) ---------- */
+function pool(st,code,onlyDone){var o=S(),out=[];D[st][code].topics.filter(ready).forEach(function(t){if(onlyDone&&!o.done[t.id])return;t.q.forEach(function(q){out.push({q:q[0],o:shuffle(q[1].map(function(x,i){return {x:x,ok:i===q[2]};})),why:q[3],t:t.t});});});return out;}
+function runQuiz(opts){
+  var qs=opts.qs,qi=0,score=0,es=opts.es;
+  function one(){var q=qs[qi];
+    app.innerHTML=back(opts.backHref,opts.backLabel)+'<div class="steps">'+qs.map(function(_,i){return '<i class="'+(i<=qi?"on":"")+'"></i>';}).join("")+'</div><div class="card"><span class="kicker">'+opts.kicker+' · '+(qi+1)+'/'+qs.length+'</span><div class="qtext">'+esc(q.q)+'</div>'+q.o.map(function(o,i){return '<button class="opt" data-i="'+i+'">'+esc(o.x)+"</button>";}).join("")+'<div id="fbq"></div></div>';
+    app.querySelectorAll(".opt").forEach(function(b){b.onclick=function(){var o=q.o[+b.dataset.i];app.querySelectorAll(".opt").forEach(function(x,i){x.disabled=true;if(q.o[i].ok)x.classList.add("good");});if(o.ok)score++;else b.classList.add("bad");
+      document.getElementById("fbq").innerHTML='<div class="fb '+(o.ok?"good":"bad")+'"><b>'+(o.ok?(es?"¡Correcto!":"Correct!"):(es?"No exactamente.":"Not quite."))+"</b>"+esc(q.why)+'</div><button class="cta" id="qn">'+(qi<qs.length-1?(es?"Siguiente":"Next"):(es?"Ver resultado":"See my result"))+"</button>";
+      document.getElementById("qn").onclick=function(){qi++;if(qi<qs.length)one();else opts.done(score,qs.length);};};});
+  }
+  one();
+}
+function mix(st,code){
+  var es=STG[st].lang==="es",p=pool(st,code,true);if(p.length<10)p=pool(st,code,false);
+  runQuiz({qs:shuffle(p).slice(0,10),es:es,kicker:"MIXED REVIEW",backHref:"#/lv/"+st+"/"+encodeURIComponent(code)+"/practice",backLabel:STG[st].name+" · "+code,done:function(sc,n){
+    var saved=saveCloud("My path · "+STG[st].name+" "+code+" · Mixed review",sc,n,{kind:"score",stage:st,level:code});
+    var o=S(),nb=checkBadges(o,null);W(o);
+    app.innerHTML=back("#/lv/"+st+"/"+encodeURIComponent(code)+"/practice",STG[st].name+" · "+code)+'<div class="res"><span class="ring"></span><span class="k">MIXED REVIEW</span><h2>'+sc+'<small> / '+n+'</small></h2>'+stars(sc>=9?3:sc>=7?2:1)+'</div>'+newBadgesHtml(nb)+'<button class="cta" onclick="location.reload()">'+(es?"Otra ronda":"Another round")+'</button><p class="saved" id="sv"></p>';savedNote(saved,es);}});
+}
+function check(st,code){
+  var es=STG[st].lang==="es",s=lvStats(st,code);if(s.done<s.ready)return go("lv/"+st+"/"+encodeURIComponent(code)+"/check");
+  var p=pool(st,code,false),by={},qs=[];shuffle(p).forEach(function(q){by[q.t]=by[q.t]||[];by[q.t].push(q);});
+  var keys=Object.keys(by),k=0;while(qs.length<12&&keys.length){var t=keys[k%keys.length];if(by[t].length)qs.push(by[t].shift());k++;if(k>200)break;}
+  runQuiz({qs:shuffle(qs),es:es,kicker:"LEVEL CHECK · "+code,backHref:"#/lv/"+st+"/"+encodeURIComponent(code)+"/check",backLabel:STG[st].name+" · "+code,done:function(sc,n){
+    var pct=Math.round(sc/n*100),o=S(),kk=st+"|"+code;if(o.checks[kk]==null||pct>o.checks[kk])o.checks[kk]=pct;var nb=checkBadges(o,null);W(o);
+    var saved=saveCloud("My path · Level check · "+STG[st].name+" "+code,sc,n,{kind:"score",stage:st,level:code,check:true,passed:pct>=75});
+    var lv=Object.keys(D[st]),nxt=lv[lv.indexOf(code)+1];
+    app.innerHTML=back("#/stage/"+st,"My path")+'<div class="res"><span class="ring"></span><span class="k">LEVEL CHECK · '+code+'</span><h2>'+pct+'<small>%</small></h2>'+stars(pct>=90?3:pct>=75?2:1)+'<p>'+(pct>=75?(es?"¡Aprobaste el nivel "+code+"!"+(nxt?" Ya puedes avanzar a "+nxt+".":""):"You passed "+code+"!"+(nxt?" You're ready for "+nxt+".":"")):(es?"Te faltó poco. Repasa los temas con menos estrellas y vuelve a intentarlo.":"Almost there. Review the topics with fewer stars and try again."))+'</p></div>'+newBadgesHtml(nb)+(pct>=75&&nxt?'<button class="cta" id="nl">'+(es?"Ir a ":"Go to ")+nxt+"</button>":'<button class="cta" id="nl">'+(es?"Volver al nivel":"Back to level")+"</button>")+'<p class="saved" id="sv"></p>';
+    document.getElementById("nl").onclick=function(){if(pct>=75&&nxt){var m=S();m.level=nxt;W(m);go("lv/"+st+"/"+encodeURIComponent(nxt));}else go("lv/"+st+"/"+encodeURIComponent(code));};savedNote(saved,es);}});
+}
+
+/* ---------- vocabulario ---------- */
+function vocab(st,code,i){
+  var V=D[st][code].vocab[i],es=STG[st].lang==="es";if(!V)return go("lv/"+st+"/"+encodeURIComponent(code)+"/vocabulary");
+  var k=0,bh="#/lv/"+st+"/"+encodeURIComponent(code)+"/vocabulary",bl=STG[st].name+" · "+code;
+  function card(){
+    var w=V.w[k];
+    app.innerHTML=back(bh,bl)+'<div class="card"><span class="kicker">'+esc(V.n.toUpperCase())+' · '+(k+1)+'/'+V.w.length+'</span><div class="fc" id="fc"><div class="in"><div class="f"><div><b>'+esc(w[0])+'</b><small>'+(es?"Toca para ver el significado":"Tap to see the meaning")+'</small></div></div><div class="b"><div><b>'+esc(w[1])+'</b></div></div></div></div><div class="fcnav"><button class="round" id="pv" aria-label="Previous">'+IC.prev+'</button><button class="round" id="sp" aria-label="Listen">'+IC.spk+'</button><button class="round" id="nx" aria-label="Next">'+IC.chev+'</button></div><button class="cta" id="qz">'+(es?"Hacer el quiz":"Take the quiz")+'</button></div>';
+    document.getElementById("fc").onclick=function(){this.classList.toggle("flip");};
+    document.getElementById("sp").onclick=function(){say(w[0],.85);};
+    document.getElementById("pv").onclick=function(){k=(k+V.w.length-1)%V.w.length;card();};
+    document.getElementById("nx").onclick=function(){k=(k+1)%V.w.length;card();};
+    document.getElementById("qz").onclick=quizV;
+  }
+  function quizV(){
+    var qs=shuffle(V.w).map(function(w){var others=shuffle(V.w.filter(function(x){return x!==w;})).slice(0,3).map(function(x){return {x:x[1],ok:false};});return {q:(es?"¿Qué significa “":"What does “")+w[0]+(es?"”?":"” mean?"),o:shuffle(others.concat([{x:w[1],ok:true}])),why:w[0]+" = "+w[1]};});
+    runQuiz({qs:qs,es:es,kicker:V.n.toUpperCase(),backHref:bh,backLabel:bl,done:function(sc,n){
+      var o=S(),kk=st+"|"+code+"|"+i;if(o.vocab[kk]==null||sc>o.vocab[kk])o.vocab[kk]=sc;var nb=checkBadges(o,null);W(o);
+      var saved=saveCloud("My path · "+STG[st].name+" "+code+" · Vocabulary: "+V.n,sc,n,{kind:"score",stage:st,level:code});
+      app.innerHTML=back(bh,bl)+'<div class="res"><span class="ring"></span><span class="k">'+esc(V.n.toUpperCase())+'</span><h2>'+sc+'<small> / '+n+'</small></h2>'+stars(sc>=10?3:sc>=8?2:1)+'</div>'+newBadgesHtml(nb)+'<button class="cta" id="bk">'+(es?"Volver al vocabulario":"Back to vocabulary")+'</button><p class="saved" id="sv"></p>';
+      document.getElementById("bk").onclick=function(){location.hash=bh.slice(1);};savedNote(saved,es);}});
+  }
+  card();
+}
+
+/* ---------- insignias ---------- */
+function badges(){
+  var o=S();
+  app.innerHTML=back("#/","My path")+'<h1 class="t">My badges</h1><p class="sub">'+Object.keys(o.badges).length+" of "+BADGES.length+' earned. Keep learning to unlock them all.</p><div class="bgrid">'+BADGES.map(function(b){return '<div class="bd'+(o.badges[b[0]]?"":" off")+'">'+bArt(b[0])+'<b>'+b[1]+'</b><small>'+b[2]+"</small></div>";}).join("")+"</div>";
+}
+
+/* ---------- hojas imprimibles ---------- */
+function printSheet(st,code,id,key){
+  var f=findTopic(id),t=f.t,es=STG[st].lang==="es";
+  var un=t.b.map(function(s){var w=s.split(" "),sh=shuffle(w);if(sh.join(" ")===s)sh.reverse();return {s:s,sh:sh.join("  /  ")};});
+  var mc=t.q.map(function(q){var o=shuffle(q[1].map(function(x,i){return {x:x,ok:i===q[2]};}));return {q:q[0],o:o};});
+  var L="abcd";
+  var h='<div class="sheet"><div class="hd"><b>'+esc(t.t)+'</b><span>MOVA Learning Studio · '+STG[st].name+" · "+code+'</span></div><div class="nm"><span>Name:</span><span style="flex:.5">Date:</span></div>'+
+   '<p class="tip">'+t.exp.join(" · ")+'</p>'+
+   '<h3>A. '+(es?"Ordena las palabras y escribe la oración.":"Unscramble the words and write the sentence.")+'</h3><ol>'+un.map(function(u){return "<li>"+esc(u.sh)+'<span class="ln"></span></li>';}).join("")+'</ol>'+
+   '<h3>B. '+(es?"Encierra la respuesta correcta.":"Circle the correct answer.")+'</h3><ol>'+mc.map(function(m){return "<li>"+esc(m.q)+'<div class="ops">'+m.o.map(function(o,i){return L[i]+") "+esc(o.x);}).join("<span></span>")+"</div></li>";}).join("")+"</ol>";
+  if(key)h+='<div class="key"><div class="hd"><b>'+(es?"Respuestas":"Answer key")+'</b><span>'+esc(t.t)+'</span></div><h3>A</h3><ol>'+un.map(function(u){return "<li>"+esc(u.s)+"</li>";}).join("")+'</ol><h3>B</h3><ol>'+mc.map(function(m){var c=0;m.o.forEach(function(o,i){if(o.ok)c=i;});return "<li>"+L[c]+") "+esc(m.o[c].x)+"</li>";}).join("")+"</ol></div>";
+  document.getElementById("sheet").innerHTML=h+"</div>";
+  setTimeout(function(){window.print();},120);
+}
+
+route();
+})();
+</script>
+<script src="mova-auth.js"></script>
+</body>
+</html>
