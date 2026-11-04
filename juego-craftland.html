@@ -497,7 +497,20 @@ const KEY = 'mova-craftland-' + (U ? U.username : 'guest');
 function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || null }catch(e){ return null } }
 function blank(){ return { stage:null, av:'cl-av1', coins:0, stars:0, inv:{wood:2,stone:2}, made:[], room:{}, owned:['cl-av1','cl-av2','cl-av3'], used:{}, best:0, rounds:0 } }
 function migrate(s){
-  s = Object.assign(blank(), s||{});
+  if(typeof s==='string'){ try{ s=JSON.parse(s) }catch(e){ s=null } }
+  if(!s||typeof s!=='object'||Array.isArray(s)) s={};
+  s = Object.assign(blank(), s);
+  const B=blank();
+  if(!['kids','children','teens'].includes(s.stage)) s.stage=null;
+  if(!Array.isArray(s.owned)) s.owned=B.owned; s.owned=s.owned.filter(a=>typeof a==='string'&&/^cl-av\d+$/.test(a));
+  B.owned.forEach(a=>{ if(!s.owned.includes(a)) s.owned.unshift(a) });
+  if(!s.owned.includes(s.av)) s.av='cl-av1';
+  if(!Array.isArray(s.made)) s.made=[];
+  ['inv','room','used'].forEach(k=>{ if(!s[k]||typeof s[k]!=='object'||Array.isArray(s[k])) s[k]={} });
+  s.coins=+s.coins||0; s.stars=+s.stars||0;
+  if(!s.pets||typeof s.pets!=='object') s.pets=null;
+  if(s.pets&&(!Array.isArray(s.pets.owned)||!s.pets.data)) s.pets=null;
+  if(!s.day||typeof s.day!=='object') s.day={};
   s.pets = s.pets || { owned:[], active:null, data:{} };
   s.day = s.day || {};
   s.bz = s.bz || 0; s.v = 54; s.ts = s.ts || 0;
@@ -580,7 +593,8 @@ function refresh(){
   });
   missionBadge();
 }
-function rerender(){ refresh(); renderHome(); if(SCREEN==='island') renderIsland(); if(SCREEN==='workshop') renderRecipes(); if(SCREEN==='house') renderRoom(); if(SCREEN==='pet') renderPet(); if(SCREEN==='shop') renderShop(); if(SCREEN==='build') renderBuild() }
+function rerender(){ try{ rerender0() }catch(e){ console.error('CraftLand',e) } }
+function rerender0(){ refresh(); renderHome(); if(SCREEN==='island') renderIsland(); if(SCREEN==='workshop') renderRecipes(); if(SCREEN==='house') renderRoom(); if(SCREEN==='pet') renderPet(); if(SCREEN==='shop') renderShop(); if(SCREEN==='build') renderBuild() }
 const madeIn = r => S.made.filter(k=>{ const it=ITEMS.find(x=>x.k===k); return it&&it.room===r }).length;
 const totalIn = r => ITEMS.filter(x=>x.room===r).length;
 
@@ -618,7 +632,8 @@ function hash(s){ let h=7; for(const c of s) h=(h*31+c.charCodeAt(0))>>>0; retur
 function today(){
   const k=dayKey();
   if(S.day.k!==k){ const h=hash(k+(U?U.username:'g')); S.day={ k, rounds:0, stars:0, correct:0, craft:0, rare:0, pet:0, petxp:0, claimed:[], bonus:false,
-    list:[MS_POOL.mine[h%4].id, MS_POOL.craft[(h>>3)%3].id, MS_POOL.pet[(h>>6)%2].id] }; }
+    list:[MS_POOL.mine[h%4].id, MS_POOL.craft[(h>>>3)%3].id, MS_POOL.pet[(h>>>6)%2].id] }; }
+  if(!Array.isArray(S.day.list)||S.day.list.some(id=>!msById(id))) S.day.list=['r1','k1','p2'];
   return S.day;
 }
 function msById(id){ for(const g in MS_POOL){ const m=MS_POOL[g].find(x=>x.id===id); if(m) return m } }
@@ -642,7 +657,8 @@ function claimBonus(){ const d=today(); if(d.bonus) return; d.bonus=true; const 
 /* ===================== HOME / ISLA ===================== */
 function goBack(){ if(history.length>1) history.back(); else location.href='index.html#/games' }
 function renderHome(){
-  $('hName').textContent = U ? U.name.split(' ')[0] : 'explorer';
+  if(!S.stage) S.stage=guessStage();
+  try{ $('hName').textContent = (U&&U.name ? String(U.name).trim().split(' ')[0] : '') || 'explorer'; }catch(e){}
   document.querySelectorAll('#stgBox button').forEach(b=>{ b.classList.toggle('sel',b.dataset.s===S.stage); b.onclick=()=>{ S.stage=b.dataset.s; save(); sfx.click(); renderHome() } });
   $('avRow').innerHTML = S.owned.map(a=>`<img src="${IMG(a)}" class="${a===S.av?'sel':''}" data-a="${a}" alt="">`).join('');
   $('avRow').querySelectorAll('img').forEach(i=>i.onclick=()=>{ S.av=i.dataset.a; save(); sfx.click(); renderHome() });
@@ -986,7 +1002,9 @@ function shopTap(id){
 
 /* ===================== ARRANQUE ===================== */
 $('modal').addEventListener('click',e=>{ if(e.target.id==='modal') closeModal() });
-today(); renderHome(); refresh(); Cloud.pull();
+[today,renderHome,refresh].forEach(f=>{ try{ f() }catch(e){ console.error('CraftLand',e) } });
+try{ Cloud.pull() }catch(e){}
+window.addEventListener('error',e=>{ try{ if(!$('avRow').children.length){ S=migrate(null); renderHome() } }catch(x){} });
 ['cl-pip-yay','cl-juno-yay','cl-r-chest','cl-mine','cl-workshop','cl-house','cl-island','cl-bg-kitchen','cl-bg-garden','cl-u-heart','cl-u-gift'].forEach(n=>{ const i=new Image(); i.src=IMG(n) });
 </script>
 </body>
