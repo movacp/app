@@ -55,7 +55,7 @@
         '<div class="mp-hx"><span class="mp-k">MOVA Play</span><h1>Play &amp; practice</h1><p>English, math and reading games. Choose a section and start playing.</p></div>' +
         '<span class="mp-c1">' + CH.nova + '</span><span class="mp-c2">' + CH.echo + "</span></div>" +
       '<a class="mva-retos mp-live" href="juego-retos.html" data-mr="1"><span class="ic">' + ic("users", 26) + '</span><span><b>Game On!</b><span>Play live with your classmates</span></span><em>Play</em></a>' +
-      '<a class="mp-craft" href="juego-craftland.html"><img src="craftland/cl-cover.webp" alt="" loading="lazy">' +
+      '<a class="mp-craft" href="juego-craftland.html"><img src="cl-cover.webp" alt="" loading="lazy">' +
         '<span class="cr-tx"><span class="mp-k">New · Kids · Children · Teens</span><b>CraftLand</b><span>Mine blocks, craft furniture and build your own island in English.</span><span class="cr-go">Play now ' + ic("arrow", 18) + "</span></span></a>" +
       '<div class="mp-tabs" role="tablist">' + tabs.map(function (t) {
         return '<button type="button" role="tab" class="mp-tab" data-t="' + t[0] + '" aria-selected="' + (t[0] === tab) + '"><i style="background:' + t[3] + '">' + ic(t[4], 19) + "</i><b>" + t[1] + "</b><small>" + t[2] + "</small></button>";
