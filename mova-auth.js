@@ -43,6 +43,7 @@
 
   /* ---------- Avance ---------- */
   function save(activity, item, score, total, detail) {
+    if (/[?&]pickmode=1/.test(location.search)) return Promise.resolve(false);
     if (!user) return Promise.resolve(false);
     var row = { p_token: user.token, p_activity: activity, p_item: item || null,
       p_score: score == null ? null : Math.round(score), p_total: total == null ? null : Math.round(total), p_detail: detail || {} };
@@ -579,18 +580,22 @@
 
   /* ---------- Tareas asignadas por la maestra ---------- */
   var taskShown = false;
+  /* La tarea puede traer las opciones elegidas por la maestra: "crucigrama~<opciones>" */
+  function taskKey(t) { return String(t.task || "").split("~")[0]; }
   function taskUrl(t) {
-    var q = "?task=" + encodeURIComponent(t.id);
-    if (t.task === "toefl-sim") return "juego-toefl-practice.html" + q + "#sim";
-    if (t.task === "lectura") return "index.html" + q + "#/library";
-    return "juego-" + t.task + ".html" + q;
+    var q = "?task=" + encodeURIComponent(t.id), parts = String(t.task || "").split("~"), k = parts[0];
+    if (parts[1]) q += "&pick=" + encodeURIComponent(parts[1]);
+    if (k === "toefl-sim") return "juego-toefl-practice.html" + q + "#sim";
+    if (k === "lectura") return "index.html" + q + "#/library";
+    return "juego-" + k + ".html" + q;
   }
   function taskRowMatch(t, r) {
     if (r.detail && r.detail.task != null && String(r.detail.task) === String(t.id)) return true;
     if (r.created_at && new Date(r.created_at).getTime() < new Date(t.created_at).getTime()) return false;
-    if (t.task === "toefl-sim") return !!(r.detail && r.detail.kind === "toefl-sim");
-    if (t.task === "lectura") return /^app-(library|lecturas)$/.test(r.activity) && r.item && !/Explorando/.test(r.item);
-    if (r.activity !== t.task) return false;
+    var tk = taskKey(t);
+    if (tk === "toefl-sim") return !!(r.detail && r.detail.kind === "toefl-sim");
+    if (tk === "lectura") return /^app-(library|lecturas)$/.test(r.activity) && r.item && !/Explorando/.test(r.item);
+    if (r.activity !== tk) return false;
     var d = r.detail || {};
     return r.total != null || (d.kind === "time" && (d.seconds || 0) >= 60) || (!!d.kind && d.kind !== "time");
   }
@@ -628,7 +633,7 @@
     document.head.appendChild(st);
     var d = document.createElement("div"); d.id = "mva-task";
     d.innerHTML = '<span class="k">Assigned by your teacher</span><b>' + String(t.title || "Activity").replace(/[<>&]/g, "") + "</b>" +
-      "<p>" + (TASK_SUB[t.task] || "Your teacher assigned you this activity. Complete it when you can.") + "</p>" +
+      "<p>" + (TASK_SUB[taskKey(t)] || "Your teacher assigned you this activity. Complete it when you can.") + "</p>" +
       '<div class="r"><a href="' + taskUrl(t) + '">Start now</a><button type="button">Later</button>' +
       (list.length > 1 ? '<span class="m">+' + (list.length - 1) + " more</span>" : "") + "</div>";
     d.querySelector("button").onclick = function () { d.remove(); };
@@ -645,6 +650,10 @@
   /* ---------- Arranque ---------- */
   window.MovaAuth = { save: save, user: function () { return user; }, login: showLogin };
   function boot() {
+    /* Opciones de tareas: vista previa de la maestra o tarea del alumno */
+    if (gameSlug() && /[?&](pick|pickmode)=/.test(location.search) && !window.__movaTaskLoaded) { window.__movaTaskLoaded = 1; var ts = document.createElement("script"); ts.src = "mova-task.js?v=65"; document.head.appendChild(ts); }
+    /* En la vista previa del panel de maestras no se registra nada */
+    if (/[?&]pickmode=1/.test(location.search)) return;
     injectCss();
     var rs = document.createElement("style"); rs.textContent = retoCss; document.head.appendChild(rs);
     retoToggle();

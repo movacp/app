@@ -64,3 +64,5 @@
   if(d.readyState === 'loading') d.addEventListener('DOMContentLoaded', run); else run();
   try{ new MutationObserver(homeButtons).observe(d.documentElement, { childList: true, subtree: true }); }catch(e){}
 })();
+/* Opciones de tareas elegidas por la maestra (también en juegos que no cargan mova-auth.js) */
+(function(){ try{ if(!/[?&](pick|pickmode)=/.test(location.search) || window.__movaTaskLoaded) return; window.__movaTaskLoaded = 1; var s = document.createElement('script'); s.src = 'mova-task.js?v=65'; (document.head || document.documentElement).appendChild(s); }catch(e){} })();

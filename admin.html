@@ -218,6 +218,15 @@ header.top .brand-mark{box-shadow:none;border-radius:50%}
 
 /* Tareas + reporte de simulación */
 .pk{margin:4px 0 12px}
+.pkc{margin-top:12px;background:#fff;border-radius:22px;padding:14px;box-shadow:0 4px 18px rgba(21,25,43,.06)}
+.pkc h4{margin:0;font:800 16px/1.2 'Bricolage Grotesque','Plus Jakarta Sans',sans-serif;color:#15192B}
+.pkc p{margin:6px 0 10px;font-size:13px;line-height:1.45;color:#5B5F78}
+.pkc .ph{position:relative;border-radius:22px;overflow:hidden;border:6px solid #15192B;background:#F5F3FA;height:560px;max-width:400px;margin:0 auto}
+.pkc iframe{display:block;width:100%;height:100%;border:0}
+.pkc .sum{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px;font-size:12.5px;font-weight:700;color:#5B5F78}
+.pkc .sum span{background:#EEE8FF;color:#15192B;border-radius:999px;padding:5px 10px}
+.pkc .sum span.none{background:#F2EFF8;color:#6B6F86}
+.pkc .rs{border:0;background:none;color:#7B5CF0;font:800 13px 'Plus Jakarta Sans',sans-serif;text-decoration:underline;cursor:pointer;margin-left:auto;padding:4px}
 .pk-cats{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.pk-cats::-webkit-scrollbar{display:none}
 .pk-cat{flex:none;display:inline-flex;align-items:center;gap:7px;background:#fff;border:2px solid #fff;border-radius:999px;padding:8px 13px;font:inherit;font-weight:800;font-size:13px;color:#15192B;cursor:pointer;white-space:nowrap}
 .pk-cat i{width:11px;height:11px;border-radius:50%;border:1.5px solid #15192B}
@@ -424,20 +433,29 @@ async function authReq(grant, body){
   const r = await fetch(`${SB_URL}/auth/v1/token?grant_type=${grant}`,{method:"POST",
     headers:{"apikey":SB_KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});
   const j = await r.json().catch(()=>({}));
-  if(!r.ok) throw new Error(j.error_description || j.msg || j.message || "No se pudo iniciar sesión");
+  if(!r.ok){ const er=new Error(j.error_description || j.msg || j.message || "No se pudo iniciar sesión"); er.status=r.status; throw er; }
   session = {access:j.access_token, refresh:j.refresh_token, exp:Date.now() + (j.expires_in-60)*1000};
   try{localStorage.setItem(STORE, JSON.stringify(session));}catch(e){}
   return session;
 }
+/* La sesión de maestra se queda abierta: se renueva sola y solo se cierra con "Salir" */
+let refreshing=null;
+async function refreshNow(){
+  if(!session?.refresh){ const e=new Error("auth"); e.status=401; throw e; }
+  if(!refreshing) refreshing=authReq("refresh_token",{refresh_token:session.refresh}).finally(()=>{ refreshing=null; });
+  await refreshing; return session.access;
+}
 async function ensureToken(){
   if(session && Date.now() < session.exp) return session.access;
-  if(session?.refresh){ await authReq("refresh_token",{refresh_token:session.refresh}); return session.access; }
-  throw new Error("auth");
+  return refreshNow();
 }
-async function rpc(fn, args={}){
-  const token = await ensureToken();
+function authDead(e){ return e && (e.status===400 || e.status===401 || e.message==="auth"); }
+async function rpc(fn, args={}, retried){
+  let token;
+  try{ token = await ensureToken(); }catch(e){ if(authDead(e)){ logout(); throw new Error("Tu sesión terminó. Vuelve a entrar."); } throw new Error("Sin conexión. Revisa tu internet e intenta de nuevo."); }
   const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`,{method:"POST",
     headers:{"apikey":SB_KEY,"Authorization":"Bearer "+token,"Content-Type":"application/json"},body:JSON.stringify(args)});
+  if(r.status===401 && !retried){ try{ await refreshNow(); return rpc(fn,args,true); }catch(e){ if(!authDead(e)) throw new Error("Sin conexión. Revisa tu internet e intenta de nuevo."); } }
   const txt = await r.text(); let j = null; try{ j = txt ? JSON.parse(txt) : null; }catch(e){}
   if(!r.ok){
     const m = (j && (j.message||"")) + "";
@@ -458,6 +476,8 @@ $("#loginForm").addEventListener("submit", async e => {
     await authReq("password",{email:$("#email").value.trim(),password:$("#pass").value});
     const ok = await rpc("is_admin");
     if(!ok){ logout(); throw new Error("Esta cuenta no tiene permiso de maestra."); }
+    /* Este celular queda como "de maestra": aparece el botón Panel en la app */
+    try{ localStorage.setItem("mova_teacher_device","1"); localStorage.setItem("mova_teacher_email",$("#email").value.trim()); }catch(e){}
     showApp();
   }catch(err){ m.textContent = /invalid/i.test(err.message) ? "Wrong email or password." : err.message; }
   b.disabled=false; b.textContent="Sign in";
@@ -1171,7 +1191,7 @@ async function buildReport(s, all, y, mo, note){
       <div class="bx"><h3>Practicó por su cuenta</h3>${cats.length?cats.map((c,i)=>`<div class="bar"><div><b>${esc(c.n)}</b><span>${c.s?fmtMin(c.s)+" · ":""}${c.k} ${c.k===1?"vez":"veces"}</span></div><div class="tr"><i style="width:${Math.max(6,Math.round(c.s/maxS*100))}%;background:${BC[i%6]}"></i></div></div>`).join(""):`<p class="none">Sin actividad registrada este mes.</p>`}</div>
       <div class="bx"><h3>Días que practicó</h3><div class="cal">${cal}</div>${streak>=2?`<p class="cap">Su mejor racha: ${streak} días seguidos</p>`:""}</div>
     </div>
-    ${mTasks.length?`<div class="bx asg"><h3>Asignadas por la maestra <span>${mTasks.filter(x=>x.done).length} de ${mTasks.length} completadas</span></h3><ul>${mTasks.map(x=>`<li class="${x.done?"ok":"pe"}"><i>${x.done?"✓":"•"}</i><span>${esc(TASK_NAME[x.t.task]||x.t.title)}<small>Asignada el ${new Date(x.t.created_at).toLocaleDateString("es-MX",{day:"numeric",month:"short"})}${x.done?" · completada el "+new Date(x.done.created_at).toLocaleDateString("es-MX",{day:"numeric",month:"short"}):""}</small></span><b>${x.done?(x.done.total?Math.round(x.done.score/x.done.total*100)+"%":"Completada"):"Pendiente"}</b></li>`).join("")}</ul></div>`:""}
+    ${mTasks.length?`<div class="bx asg"><h3>Asignadas por la maestra <span>${mTasks.filter(x=>x.done).length} de ${mTasks.length} completadas</span></h3><ul>${mTasks.map(x=>`<li class="${x.done?"ok":"pe"}"><i>${x.done?"✓":"•"}</i><span>${esc(String(x.t.task).includes("~")?x.t.title:(TASK_NAME[x.t.task]||x.t.title))}<small>Asignada el ${new Date(x.t.created_at).toLocaleDateString("es-MX",{day:"numeric",month:"short"})}${x.done?" · completada el "+new Date(x.done.created_at).toLocaleDateString("es-MX",{day:"numeric",month:"short"}):""}</small></span><b>${x.done?(x.done.total?Math.round(x.done.score/x.done.total*100)+"%":"Completada"):"Pendiente"}</b></li>`).join("")}</ul></div>`:""}
     <div class="g2">
       <div class="bx"><h3>Lecturas del mes</h3>${readings.length?`<ul>${readings.slice(0,6).map(t=>`<li>${esc(t)}</li>`).join("")}${readings.length>6?`<li class="more">y ${readings.length-6} más</li>`:""}</ul>`:`<p class="none">Este mes no registró lecturas.</p>`}</div>
       <div class="bx res"><h3>Resultados</h3>${results.length?`<ul>${results.map(r=>`<li><span>${esc(ACT_NAMES[r.activity]||r.activity)} · ${esc(r.item==="Nuevo récord"?"récord":r.item.replace("Resultado del examen: ",""))}</span><b>${esc(rowRight(r))}</b></li>`).join("")}</ul>`:`<p class="none">Sin exámenes ni récords este mes.</p>`}</div>
@@ -1198,6 +1218,12 @@ async function buildReport(s, all, y, mo, note){
 const CAT_COL={"TOEFL":"#FFE58A","Lectura":"#BDF0D8","Juegos en inglés":"#C9D2FF","Escape rooms":"#C7B5FF","Español y matemáticas":"#FFC7E2"};
 const BOOK_ART="data:image/svg+xml;base64,"+btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 90"><rect width="160" height="90" fill="#DDF5EA"/><circle cx="130" cy="18" r="9" fill="#fff" opacity=".7"/><circle cx="22" cy="70" r="14" fill="#D3F36B" opacity=".7"/><path d="M48 26 Q64 20 80 28 Q96 20 112 26 L112 70 Q96 64 80 72 Q64 64 48 70Z" fill="#fff" stroke="#15192B" stroke-width="2.6" stroke-linejoin="round"/><path d="M80 28 L80 72" stroke="#15192B" stroke-width="2.6"/><path d="M56 36 L72 34 M56 44 L72 42 M88 34 L104 36 M88 42 L104 44" stroke="#B9A6FF" stroke-width="2.6" stroke-linecap="round"/></svg>');
 function taskArt(k){ if(k==="lectura") return BOOK_ART; if(k==="word-forms") return "wf-cover.webp"; return "thumb-"+k+".webp"; }
+/* Opciones dentro del juego: la maestra elige en la vista previa (mova-task.js) */
+const NO_PICK=new Set(["toefl-sim","level-up","lectura"]);
+let curPicks=[];
+function taskKeyOf(t){ return String((t&&t.task)||t||"").split("~")[0]; }
+function b64url(o){ return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+window.addEventListener("message",e=>{ if(e.origin!==location.origin||!e.data||e.data.type!=="mova-pick") return; curPicks=e.data.picks||[]; if(window.__pkRender) window.__pkRender(); });
 let pickCat=0;
 function pickerHtml(){
   return `<div class="pk"><div class="pk-cats">${TASK_CAT.map(([g],i)=>`<button type="button" class="pk-cat${i===pickCat?" on":""}" data-c="${i}"><i style="background:${CAT_COL[g]||"#EEE"}"></i>${esc(g)}</button>`).join("")}</div>
@@ -1210,7 +1236,17 @@ function wirePicker(box){
   const bind=()=>{
     pk.querySelectorAll(".pk-cat").forEach(c=>c.onclick=()=>{ pickCat=+c.dataset.c; pk.outerHTML=pickerHtml(); wirePicker(box); });
     pk.querySelectorAll(".pk-it").forEach(it=>it.onclick=()=>{ pk.querySelectorAll(".pk-it").forEach(x=>x.classList.toggle("on",x===it)); sel.value=it.dataset.k;
-      btn.disabled=false; btn.textContent=`Asignar: ${TASK_NAME[it.dataset.k]}`; const p=box.querySelector("#pkSel"); if(p) p.textContent=""; });
+      const k=it.dataset.k; curPicks=[]; btn.disabled=false; const p=box.querySelector("#pkSel"); if(p) p.textContent="";
+      let c=box.querySelector(".pkc"); if(c) c.remove();
+      const render=()=>{ const labs=curPicks.map(x=>x.l).filter(Boolean);
+        btn.textContent=`Asignar: ${TASK_NAME[k]}${labs.length?" · "+labs.join(" · "):""}`;
+        const sm=box.querySelector(".pkc .sum"); if(sm) sm.innerHTML=`Se asignará:${labs.length?labs.map(l=>`<span>${esc(l)}</span>`).join(""):`<span class="none">lo que el alumno elija</span>`}<button type="button" class="rs">Reiniciar</button>`, wireRs(); };
+      const wireRs=()=>{ const r=box.querySelector(".pkc .rs"); if(r) r.onclick=()=>{ curPicks=[]; const f=box.querySelector(".pkc iframe"); if(f) f.src=f.src; render(); }; };
+      window.__pkRender=render;
+      if(!NO_PICK.has(k)){
+        pk.insertAdjacentHTML("afterend",`<div class="pkc"><h4>Elige qué le vas a asignar</h4><p>Este es el juego tal como lo verá tu alumno. Toca el nivel, el tema o el modo que quieres; también puedes tocar Play para revisar el contenido. Si no eliges nada, el alumno escoge.</p><div class="ph"><iframe src="juego-${k}.html?pickmode=1" title="Vista previa" loading="lazy"></iframe></div><div class="sum"></div></div>`);
+      }
+      render(); });
   };
   bind();
 }
@@ -1223,7 +1259,8 @@ const TASK_CAT=[
  ["Español y matemáticas",[["lee-con-mochi","Aprende a leer con Mochi"],["mision-matematica","Misión Matemática"],["la-tiendita","La Tiendita"],["la-balanza","La Balanza"],["la-boveda","La Bóveda"],["lluvia-de-numeros","Lluvia de números"],["detective-patrones","Detective de patrones"],["pizzeria-fracciones","Pizzería de fracciones"],["que-hora-es","¿Qué hora es?"]]]
 ];
 const TASK_NAME=Object.fromEntries(TASK_CAT.flatMap(g=>g[1]));
-function taskMatch(t,r){
+function taskMatch(t0,r){
+  const t=Object.assign({},t0,{task:taskKeyOf(t0)});
   if(r.detail && r.detail.task!=null && String(r.detail.task)===String(t.id)) return true;
   if(new Date(r.created_at) < new Date(t.created_at)) return false;
   if(t.task==="toefl-sim") return !!(r.detail && r.detail.kind==="toefl-sim");
@@ -1255,7 +1292,7 @@ async function loadTasks(s){
     const done=taskDoneRow(t,rows);
     const res=done&&done.total?` · ${Math.round(done.score/done.total*100)}%`:"";
     const see=done&&isSim(done)?`<button class="see" data-r="${esc(simKey(done))}">Ver reporte</button>`:"";
-    return `<div class="row"><div><b>${esc(TASK_NAME[t.task]||t.title)}</b><small>Asignada ${esc(d(t.created_at))}${done?" · terminada "+esc(d(done.created_at)):""}</small></div>
+    return `<div class="row"><div><b>${esc(String(t.task).includes("~")?t.title:(TASK_NAME[t.task]||t.title))}</b><small>Asignada ${esc(d(t.created_at))}${done?" · terminada "+esc(d(done.created_at)):""}</small></div>
       ${done?`<span class="pill done">Completada${res}</span>${see}`:`<span class="pill pend">Pendiente</span>`}
       <button class="rm" data-t="${t.id}" aria-label="Quitar tarea">×</button></div>`;}).join("");
   const sHtml=sims.length?`<h3 style="margin-top:16px">Simulaciones TOEFL</h3>`+sims.map(r=>`<div class="row"><div><b>${r.score}/${r.total} · ${Math.round(r.score/r.total*100)}%</b><small>${esc(d(r.created_at))} · ${r.detail&&r.detail.secs?fmtT(r.detail.secs)+" min":"Quick Simulation"}</small></div><button class="see" style="margin-left:auto" data-r="${esc(simKey(r))}">Ver reporte</button></div>`).join(""):"";
@@ -1265,7 +1302,9 @@ async function loadTasks(s){
     <button class="asg" id="asgBtn">Asignar actividad</button>${tHtml||`<p class="sub" style="margin:10px 2px 0">Todavía no tiene tareas asignadas.</p>`}${sHtml}</div>`;
   wirePicker(box);
   $("#asgBtn").onclick=async()=>{ const b=$("#asgBtn"), k=$("#asgSel").value; b.disabled=true; b.textContent="Asignando…";
-    try{ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:k,p_title:TASK_NAME[k]||k}); toast(`${TASK_NAME[k]} asignada a ${s.full_name.split(" ")[0]}`); loadTasks(s); }
+    const picks=NO_PICK.has(k)?[]:curPicks.slice(), labs=picks.map(x=>x.l).filter(Boolean);
+    const task=picks.length?k+"~"+b64url({p:picks.map(x=>({a:x.a,t:x.t,l:x.l})),l:labs}):k, title=(TASK_NAME[k]||k)+(labs.length?" · "+labs.join(" · "):"");
+    try{ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:task,p_title:title}); toast(`${title} asignada a ${s.full_name.split(" ")[0]}`); curPicks=[]; loadTasks(s); }
     catch(e){ toast(e.message); b.disabled=false; b.textContent="Asignar actividad"; } };
   box.querySelectorAll(".rm").forEach(b=>b.onclick=async()=>{ if(!confirm("¿Quitar esta tarea?")) return; try{ await rpc("admin_remove_task",{p_id:+b.dataset.t}); loadTasks(s); }catch(e){ toast(e.message); } });
   box.querySelectorAll(".see").forEach(b=>b.onclick=()=>{ const r=sims.find(x=>simKey(x)===b.dataset.r)||rows.find(x=>simKey(x)===b.dataset.r); if(r) openSimReport(s,r); });
@@ -1353,7 +1392,15 @@ function openSimReport(s,r){
 /* ---------- Start ---------- */
 (async () => {
   try{ session = JSON.parse(localStorage.getItem(STORE)||"null"); }catch(e){}
-  if(session){ try{ await ensureToken(); if(await rpc("is_admin")) return showApp(); }catch(e){} logout(); }
+  try{ const em=localStorage.getItem("mova_teacher_email"); if(em && $("#email")) $("#email").value=em; }catch(e){}
+  if(session){
+    try{ await ensureToken(); if(await rpc("is_admin")) return showApp(); logout(); }
+    catch(e){
+      /* Sin internet: no se cierra la sesión, se vuelve a intentar */
+      if(authDead(e) || /terminó/.test(e.message||"")) return logout();
+      showApp(); toast("Sin conexión. Revisa tu internet.");
+    }
+  }
 })();
 </script>
 </body>
