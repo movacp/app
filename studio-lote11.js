@@ -1554,11 +1554,13 @@ READINGS.push(
     ],
     vocab: [["earn", "to get money for work"], ["piggy bank", "a small box, often a pig, to save coins"], ["sign", "a board with words that gives information"], ["disappointed", "sad because something wasn’t as good as you hoped"], ["thirsty", "wanting to drink"]],
     questions: [
-      ["Why did they need money?", ["to buy a present for their mom", "to buy toys", "to go to the park"]],
-      ["How much did the plant cost?", ["two hundred pesos", "forty pesos", "ten pesos"]],
-      ["Why was Luis disappointed?", ["Only two neighbors stopped.", "The lemonade was bad.", "It started to rain."]],
-      ["What was Carmen’s idea?", ["Move the table near the park and offer water for dogs.", "Make the lemonade cheaper.", "Sell cookies too."]],
-      ["How much money did they earn in the weekend?", ["190 pesos", "200 pesos", "40 pesos"]]
+      ["Why did they need money?",["to buy a present for their mom","to buy toys","to go to the park","to buy a new bike"]],
+      ["How much did the plant cost?",["two hundred pesos","forty pesos","ten pesos","one hundred pesos"]],
+      ["Why was Luis disappointed?",["Only two neighbors stopped.","The lemonade was bad.","It started to rain.","Their dad helped them."]],
+      ["What was Carmen’s idea?",["Move the table near the park and offer water for dogs.","Make the lemonade cheaper.","Sell cookies too.","Put the lemonade in bigger cups."]],
+      ["How much money did they earn in the weekend?",["190 pesos","200 pesos","40 pesos","100 pesos"]],
+      ["What does Mom think is the best part of the gift?",["Her children worked together.","The flowers are purple.","It was very expensive.","She can plant it outside."]],
+      ["What does “earn” mean in “We need to earn money”?",["get money by working","spend money","save money in a bank","find money on the street"]]
     ]
   },
   {
@@ -1573,11 +1575,13 @@ READINGS.push(
     ],
     vocab: [["amazing", "very surprising and wonderful"], ["kilometer", "a distance of one thousand meters"], ["belief", "an idea that people think is true"], ["lay eggs", "to put eggs out of the body, like birds and insects do"], ["survive", "to stay alive"]],
     questions: [
-      ["Where do the monarchs go in Mexico?", ["the forests of Michoacán and the State of Mexico", "the beaches of Cancún", "the desert of Sonora"]],
-      ["Why do they fly south?", ["The winter in the north is too cold.", "They like Mexican food.", "They follow the birds."]],
-      ["When do they arrive?", ["at the beginning of November", "in July", "in March"]],
-      ["What do some people believe about them?", ["They are the souls of loved ones.", "They bring rain.", "They are bad luck."]],
-      ["How can people help monarchs?", ["by planting milkweed", "by catching them", "by cutting trees"]]
+      ["Where do the monarchs go in Mexico?",["the forests of Michoacán and the State of Mexico","the beaches of Cancún","the desert of Sonora","the mountains of Chiapas"]],
+      ["Why do they fly south?",["The winter in the north is too cold.","They like Mexican food.","They follow the birds.","They want to see the ocean."]],
+      ["When do they arrive?",["at the beginning of November","in July","in March","in September"]],
+      ["What do some people believe about them?",["They are the souls of loved ones.","They bring rain.","They are bad luck.","They bring good weather."]],
+      ["How can people help monarchs?",["by planting milkweed","by catching them","by cutting trees","by giving them sugar water"]],
+      ["Why do the butterflies’ children and grandchildren continue the journey?",["One butterfly doesn’t live long enough to make the whole trip.","The parents get lost.","The parents stay in Mexico.","Only young butterflies can fly."]],
+      ["What does “survive” mean in “They need forests and milkweed plants to survive”?",["stay alive","fly fast","lay eggs","change color"]]
     ]
   },
   {
@@ -1611,11 +1615,13 @@ READINGS.push(
     ],
     vocab: [["train", "to practice a sport to get better"], ["lap", "one time from one end of the pool to the other"], ["whistle", "a small object that makes a high sound when you blow"], ["halfway", "in the middle"], ["beat", "to win against someone"]],
     questions: [
-      ["How long did Martín train?", ["three months", "two weeks", "one year"]],
-      ["How did he feel before the race?", ["nervous", "bored", "angry"]],
-      ["What was his position at the halfway point?", ["fourth", "first", "sixth"]],
-      ["In what place did he finish?", ["second", "first", "third"]],
-      ["Why was the coach proud?", ["He swam his best time ever.", "He won the race.", "He was the tallest."]]
+      ["How long did Martín train?",["three months","two weeks","one year","six months"]],
+      ["How did he feel before the race?",["nervous","bored","angry","excited and calm"]],
+      ["What was his position at the halfway point?",["fourth","first","sixth","second"]],
+      ["In what place did he finish?",["second","first","third","fourth"]],
+      ["Why was the coach proud?",["He swam his best time ever.","He won the race.","He was the tallest.","He beat the oldest swimmer."]],
+      ["What does “His stomach felt funny” tell us?",["He was nervous.","He was hungry.","He was sick.","He was happy."]],
+      ["What does “beat” mean in “you beat yourself”?",["do better than","hit","lose to","stop"]]
     ]
   },
   {
@@ -1630,11 +1636,13 @@ READINGS.push(
     ],
     vocab: [["rainforest", "a thick forest where it rains a lot"], ["block", "to stop something from passing"], ["jaguar", "a big wild cat with spots"], ["canopy", "the top part of a forest, made of leaves and branches"], ["depend on", "to need someone or something"]],
     questions: [
-      ["What is a rainforest like?", ["hot, wet and full of life", "cold and dry", "empty and quiet"]],
-      ["Why is the forest floor dark?", ["The leaves above block the sun.", "It is always night.", "There are no trees."]],
-      ["Which animal lives on the forest floor?", ["the jaguar", "the toucan", "the eagle"]],
-      ["Which is the busiest floor?", ["the canopy", "the forest floor", "the understory"]],
-      ["Where do eagles build their nests?", ["in the giant trees at the top", "on the ground", "in the bushes"]]
+      ["What is a rainforest like?",["hot, wet and full of life","cold and dry","empty and quiet","cold and snowy"]],
+      ["Why is the forest floor dark?",["The leaves above block the sun.","It is always night.","There are no trees.","There is too much rain."]],
+      ["Which animal lives on the forest floor?",["the jaguar","the toucan","the eagle","the parrot"]],
+      ["Which is the busiest floor?",["the canopy","the forest floor","the understory","the emergent layer"]],
+      ["Where do eagles build their nests?",["in the giant trees at the top","on the ground","in the bushes","inside caves"]],
+      ["Why does the writer compare a rainforest to a tall building?",["It has different levels, like floors.","It is made of stone.","Many people live there.","It has elevators."]],
+      ["What does “depend on” mean in “all the animals and plants depend on each other”?",["need","fight","forget","eat"]]
     ]
   },
 
@@ -1650,11 +1658,13 @@ READINGS.push(
     ],
     vocab: [["temperature", "how hot or cold something is"], ["layer", "one level of something that covers another"], ["overlap", "to cover part of something else"], ["huddle", "a tight group standing close together"], ["hatch", "to come out of an egg"]],
     questions: [
-      ["What protects penguins like a blanket?", ["a thick layer of fat", "their eggs", "the snow"]],
-      ["Why can’t wind and water get through the feathers?", ["They are very tight and overlap.", "They are very long.", "They are wet."]],
-      ["What is a huddle?", ["a big group of penguins standing close together", "a penguin’s nest", "a kind of fish"]],
-      ["How do all penguins get warm in the huddle?", ["They slowly move and take turns in the center.", "The biggest stay in the middle.", "They sleep in the water."]],
-      ["What does the father do with the egg?", ["He keeps it on his feet for about two months.", "He buries it in the snow.", "He gives it to another penguin."]]
+      ["What protects penguins like a blanket?",["a thick layer of fat","their eggs","the snow","long hair"]],
+      ["Why can’t wind and water get through the feathers?",["They are very tight and overlap.","They are very long.","They are wet.","They are full of oil."]],
+      ["What is a huddle?",["a big group of penguins standing close together","a penguin’s nest","a kind of fish","a type of ice"]],
+      ["How do all penguins get warm in the huddle?",["They slowly move and take turns in the center.","The biggest stay in the middle.","They sleep in the water.","They stay in the water."]],
+      ["What does the father do with the egg?",["He keeps it on his feet for about two months.","He buries it in the snow.","He gives it to another penguin.","He leaves it on the ice."]],
+      ["Why doesn’t the father eat for about two months?",["He must keep the egg warm and can’t leave it.","There is no food in winter.","He is sick.","He is waiting for the summer."]],
+      ["What does “overlap” mean in “feathers that overlap like the tiles on a roof”?",["cover part of each other","fall off","change color","grow very long"]]
     ]
   },
   {
@@ -1669,11 +1679,13 @@ READINGS.push(
     ],
     vocab: [["notice", "to see or become aware of something"], ["bounce", "to hit something and come back"], ["reflect", "to send light back, like a mirror"], ["phase", "one of the shapes the Moon has"], ["crescent", "a thin, curved shape, like a banana"]],
     questions: [
-      ["Does the Moon really change its shape?", ["No, it is always round.", "Yes, every night.", "Only in winter."]],
-      ["Why can we see the Moon?", ["Sunlight bounces off it.", "It makes its own light.", "It is made of fire."]],
-      ["How long does the Moon take to go around the Earth?", ["about twenty-nine and a half days", "one day", "one year"]],
-      ["What do we see during the new moon?", ["nothing", "a full circle", "a half moon"]],
-      ["Where does the word “month” come from?", ["from the word “moon”", "from the word “sun”", "from the word “Monday”"]]
+      ["Does the Moon really change its shape?",["No, it is always round.","Yes, every night.","Only in winter.","Yes, only in summer."]],
+      ["Why can we see the Moon?",["Sunlight bounces off it.","It makes its own light.","It is made of fire.","It is a big lamp."]],
+      ["How long does the Moon take to go around the Earth?",["about twenty-nine and a half days","one day","one year","about one week"]],
+      ["What do we see during the new moon?",["nothing","a full circle","a half moon","a crescent"]],
+      ["Where does the word “month” come from?",["from the word “moon”","from the word “sun”","from the word “Monday”","from the word “night”"]],
+      ["Why is the full moon so bright?",["The whole bright side faces the Earth.","The Moon is closer to the Earth.","The Moon makes more light.","There are no clouds."]],
+      ["What does “reflect” mean in “light reflects on a mirror”?",["bounces back","goes inside","disappears","gets hotter"]]
     ]
   },
   {
@@ -1688,11 +1700,13 @@ READINGS.push(
     ],
     vocab: [["crack", "a long, thin opening in something"], ["ash", "gray powder left after something burns"], ["frightened", "very scared"], ["lava", "hot, liquid rock from a volcano"], ["unforgettable", "so special that you always remember it"]],
     questions: [
-      ["What was Dionisio doing when it started?", ["working in his cornfield", "sleeping at home", "walking to school"]],
-      ["What came out of the crack?", ["smoke and gray ash", "water", "gold"]],
-      ["How tall was the volcano after one year?", ["more than three hundred meters", "as tall as a house", "five meters"]],
-      ["What happened to the villages?", ["The lava covered them.", "Nothing happened.", "They became bigger."]],
-      ["Why did scientists study Parícutin?", ["They could watch a volcano from the day it was born.", "It was the biggest volcano in the world.", "It had gold inside."]]
+      ["What was Dionisio doing when it started?",["working in his cornfield","sleeping at home","walking to school","fishing in a river"]],
+      ["What came out of the crack?",["smoke and gray ash","water","gold","fire and water"]],
+      ["How tall was the volcano after one year?",["more than three hundred meters","as tall as a house","five meters","about fifty meters"]],
+      ["What happened to the villages?",["The lava covered them.","Nothing happened.","They became bigger.","People built new houses on them."]],
+      ["Why did scientists study Parícutin?",["They could watch a volcano from the day it was born.","It was the biggest volcano in the world.","It had gold inside.","It was the hottest volcano."]],
+      ["Why is the church tower of San Juan special today?",["It is still standing in the middle of the lava rock.","It is the newest building in Mexico.","It is made of gold.","It is on top of the volcano."]],
+      ["What does “frightened” mean in “Frightened, he ran to the village”?",["very scared","very happy","very tired","very hungry"]]
     ]
   },
   {
@@ -1707,11 +1721,13 @@ READINGS.push(
     ],
     vocab: [["disappear", "to stop existing or being seen"], ["fossil", "the remains of an ancient animal or plant turned into stone"], ["paleontologist", "a scientist who studies fossils"], ["clue", "a piece of information that helps solve a mystery"], ["species", "a group of animals or plants of the same kind"]],
     questions: [
-      ["When did dinosaurs disappear?", ["about sixty-six million years ago", "one thousand years ago", "when humans arrived"]],
-      ["What is a paleontologist?", ["a scientist who studies fossils", "a doctor for animals", "a person who builds museums"]],
-      ["What did flat teeth tell scientists?", ["The dinosaur ate plants.", "The dinosaur ate meat.", "The dinosaur was a baby."]],
-      ["What can footprints show?", ["how fast dinosaurs walked and if they lived in groups", "the color of dinosaurs", "what dinosaurs ate"]],
-      ["Where in Mexico were many dinosaur bones found?", ["Coahuila", "Yucatán", "Mexico City"]]
+      ["When did dinosaurs disappear?",["about sixty-six million years ago","one thousand years ago","when humans arrived","ten million years ago"]],
+      ["What is a paleontologist?",["a scientist who studies fossils","a doctor for animals","a person who builds museums","a person who sells fossils"]],
+      ["What did flat teeth tell scientists?",["The dinosaur ate plants.","The dinosaur ate meat.","The dinosaur was a baby.","The dinosaur was very old."]],
+      ["What can footprints show?",["how fast dinosaurs walked and if they lived in groups","the color of dinosaurs","what dinosaurs ate","how long dinosaurs lived"]],
+      ["Where in Mexico were many dinosaur bones found?",["Coahuila","Yucatán","Mexico City","Oaxaca"]],
+      ["Why does the writer say paleontologists work like detectives?",["They use clues to find out about the past.","They catch thieves.","They work for the police.","They study crimes."]],
+      ["What does “clues” mean in “Bones are not the only clues”?",["things that help you find an answer","old toys","small animals","stones for building"]]
     ]
   },
   {
@@ -1726,11 +1742,13 @@ READINGS.push(
     ],
     vocab: [["constellation", "a group of stars that forms a shape"], ["astronomer", "a scientist who studies stars and planets"], ["binoculars", "a tool with two lenses to see far things"], ["crater", "a big round hole on a surface, like on the Moon"], ["observatory", "a building with big telescopes to study the sky"]],
     questions: [
-      ["What did Elena do on clear nights?", ["She counted stars on the roof.", "She watched TV.", "She read comics."]],
-      ["Why did her classmates laugh?", ["They thought her dream was impossible.", "She said something funny.", "She drew a bad picture."]],
-      ["Whose binoculars were they?", ["her grandfather’s", "her teacher’s", "her father’s"]],
-      ["What did Elena see with the binoculars?", ["the craters of the Moon and moons of Jupiter", "birds in the trees", "other houses"]],
-      ["What is Elena’s job today?", ["She works at an observatory.", "She is a teacher.", "She sells binoculars."]]
+      ["What did Elena do on clear nights?",["She counted stars on the roof.","She watched TV.","She read comics.","She played soccer in the park."]],
+      ["Why did her classmates laugh?",["They thought her dream was impossible.","She said something funny.","She drew a bad picture.","She didn’t know the answer."]],
+      ["Whose binoculars were they?",["her grandfather’s","her teacher’s","her father’s","her grandmother’s"]],
+      ["What did Elena see with the binoculars?",["the craters of the Moon and moons of Jupiter","birds in the trees","other houses","the planets Mars and Venus"]],
+      ["What is Elena’s job today?",["She works at an observatory.","She is a teacher.","She sells binoculars.","She builds telescopes."]],
+      ["Why does Elena keep the binoculars on her desk today?",["They remind her of her grandparents and her first dream.","She uses them for work every day.","They are very expensive.","She wants to sell them."]],
+      ["What does “curious” mean in “Nothing is impossible if you are curious”?",["wanting to learn and discover things","very tired","afraid of new things","always happy"]]
     ]
   },
 
@@ -1747,11 +1765,13 @@ READINGS.push(
     ],
     vocab: [["fade", "to slowly become weaker or less bright"], ["pressure", "the force of something pushing on something else"], ["crush", "to press something so hard that it breaks"], ["bioluminescence", "light produced by a living thing"], ["adapt", "to change in order to survive in a new situation"]],
     questions: [
-      ["At about what depth does sunlight disappear?", ["one thousand meters", "ten meters", "one hundred meters"]],
-      ["Which is NOT a problem in the deep sea?", ["too much sunlight", "very cold water", "enormous pressure"]],
-      ["How does the anglerfish catch food?", ["It uses a glowing lure to attract fish.", "It chases fish very fast.", "It eats plants."]],
-      ["What is special about the giant squid?", ["It has the largest eyes of any animal.", "It has no eyes.", "It lives near the surface."]],
-      ["What surprising fact does the text mention?", ["We have better maps of the Moon than of the ocean floor.", "The deep sea is very small.", "No new species have been found."]]
+      ["At about what depth does sunlight disappear?",["one thousand meters","ten meters","one hundred meters","five thousand meters"]],
+      ["Which is NOT a problem in the deep sea?",["too much sunlight","very cold water","enormous pressure","very little food"]],
+      ["How does the anglerfish catch food?",["It uses a glowing lure to attract fish.","It chases fish very fast.","It eats plants.","It hides under the sand."]],
+      ["What is special about the giant squid?",["It has the largest eyes of any animal.","It has no eyes.","It lives near the surface.","It can fly out of the water."]],
+      ["What surprising fact does the text mention?",["We have better maps of the Moon than of the ocean floor.","The deep sea is very small.","No new species have been found.","Scientists have mapped all the oceans."]],
+      ["Why did people think nothing could live in the deep sea?",["It is dark, cold and has enormous pressure.","There is no water there.","It is too close to the surface.","Sharks eat everything there."]],
+      ["What does “adapted” mean in “Other animals have adapted in different ways”?",["changed to live in a place","moved to another ocean","stopped eating","become bigger"]]
     ]
   },
   {
@@ -1766,11 +1786,13 @@ READINGS.push(
     ],
     vocab: [["constantly", "all the time, without stopping"], ["evaporation", "when liquid turns into gas because of heat"], ["condensation", "when gas cools and turns into liquid"], ["precipitation", "rain, snow or hail that falls from clouds"], ["soak", "to go into something and make it completely wet"]],
     questions: [
-      ["Why could your water be millions of years old?", ["Water on Earth moves in a never-ending cycle.", "Water never moves.", "Water is made in factories."]],
-      ["What is evaporation?", ["when water turns into vapor because of heat", "when rain falls", "when water freezes"]],
-      ["How do clouds form?", ["Tiny drops of water join together.", "Smoke goes up into the sky.", "The wind makes them."]],
-      ["What do plants do with groundwater?", ["They absorb it through their roots.", "They turn it into clouds directly.", "They send it to the sea."]],
-      ["What is the main message of the last paragraph?", ["Fresh water is limited, so every drop matters.", "There is too much water on Earth.", "People should not drink rain."]]
+      ["Why could your water be millions of years old?",["Water on Earth moves in a never-ending cycle.","Water never moves.","Water is made in factories.","Water turns into ice every night."]],
+      ["What is evaporation?",["when water turns into vapor because of heat","when rain falls","when water freezes","when clouds disappear"]],
+      ["How do clouds form?",["Tiny drops of water join together.","Smoke goes up into the sky.","The wind makes them.","Rocks melt in the sun."]],
+      ["What do plants do with groundwater?",["They absorb it through their roots.","They turn it into clouds directly.","They send it to the sea.","They keep it in their flowers forever."]],
+      ["What is the main message of the last paragraph?",["Fresh water is limited, so every drop matters.","There is too much water on Earth.","People should not drink rain.","Rivers are more important than oceans."]],
+      ["Why does the writer say a dinosaur could have drunk your water?",["The same water has moved around the Earth for millions of years.","Dinosaurs lived near rivers.","Water is made by animals.","Dinosaurs still exist."]],
+      ["What does “soaks into” mean in “Some soaks into the soil”?",["goes slowly inside","flies away","turns into ice","stays on top"]]
     ]
   },
   {
@@ -1785,11 +1807,13 @@ READINGS.push(
     ],
     vocab: [["strategy", "a plan to achieve something"], ["migration", "traveling from one region to another, usually each year"], ["hibernation", "a very deep sleep some animals have in winter"], ["behavior", "the way an animal or person acts"], ["bury", "to put something under the ground"]],
     questions: [
-      ["What are the three strategies?", ["leave, sleep or adapt", "eat, run or fight", "swim, fly or dig"]],
-      ["Where do many birds from Canada fly in autumn?", ["to Mexico and Central America", "to the Arctic", "to Europe"]],
-      ["What happens to an animal’s body during hibernation?", ["Its temperature drops and its heart beats slowly.", "It grows white fur.", "It becomes more active."]],
-      ["How does the arctic fox adapt?", ["It grows a thick white coat.", "It flies south.", "It sleeps all winter."]],
-      ["What surprised scientists about squirrels?", ["They remember where most of their nuts are.", "They sleep for six months.", "They migrate to Mexico."]]
+      ["What are the three strategies?",["leave, sleep or adapt","eat, run or fight","swim, fly or dig","hide, fight or eat"]],
+      ["Where do many birds from Canada fly in autumn?",["to Mexico and Central America","to the Arctic","to Europe","to Africa"]],
+      ["What happens to an animal’s body during hibernation?",["Its temperature drops and its heart beats slowly.","It grows white fur.","It becomes more active.","It moves faster and eats more."]],
+      ["How does the arctic fox adapt?",["It grows a thick white coat.","It flies south.","It sleeps all winter.","It digs a deep hole."]],
+      ["What surprised scientists about squirrels?",["They remember where most of their nuts are.","They sleep for six months.","They migrate to Mexico.","They eat all their nuts in one day."]],
+      ["Why do ground squirrels eat a lot in summer?",["to build up fat for the long winter sleep","because summer food is better","to grow a white coat","to fly south"]],
+      ["What does “bury” mean in “burying nuts in hundreds of hiding places”?",["put under the ground","eat quickly","throw away","count"]]
     ]
   },
   {
@@ -1804,11 +1828,13 @@ READINGS.push(
     ],
     vocab: [["seed", "the small part of a plant from which a new plant grows"], ["humid", "with a lot of water in the air"], ["roast", "to cook something with dry heat"], ["sacred", "very special and connected to religion"], ["valuable", "worth a lot"]],
     questions: [
-      ["Where did the story of chocolate begin?", ["in Mesoamerica", "in Switzerland", "in Spain"]],
-      ["Where do the cacao seeds grow?", ["inside large fruits called pods", "under the ground", "on flowers"]],
-      ["How was the ancient drink different?", ["It had no sugar or milk and was bitter.", "It was very sweet.", "It was always cold and solid."]],
-      ["What did the Aztecs use cacao seeds for?", ["as money", "as decorations", "to make clothes"]],
-      ["What did Europeans add to chocolate?", ["sugar and cinnamon", "chili and salt", "corn"]]
+      ["Where did the story of chocolate begin?",["in Mesoamerica","in Switzerland","in Spain","in Brazil"]],
+      ["Where do the cacao seeds grow?",["inside large fruits called pods","under the ground","on flowers","in the leaves"]],
+      ["How was the ancient drink different?",["It had no sugar or milk and was bitter.","It was very sweet.","It was always cold and solid.","It was made with milk and sugar."]],
+      ["What did the Aztecs use cacao seeds for?",["as money","as decorations","to make clothes","as medicine"]],
+      ["What did Europeans add to chocolate?",["sugar and cinnamon","chili and salt","corn","milk and salt"]],
+      ["Why was cacao so valuable for the Aztecs?",["It was sacred and they used it as money.","It was very easy to grow.","It grew everywhere.","They only used it for cooking."]],
+      ["What does “sacred” mean in “it was a sacred drink”?",["very special and holy","very cheap","for children only","very cold"]]
     ]
   },
   {
@@ -1823,11 +1849,13 @@ READINGS.push(
     ],
     vocab: [["sense", "to notice something using sensors or the senses"], ["precisely", "in an exact and careful way"], ["delicate", "easy to damage; needing great care"], ["survivor", "a person who stays alive after something terrible"], ["common sense", "the natural ability to make good, practical decisions"]],
     questions: [
-      ["What can a robot do, according to the text?", ["sense, make simple decisions and move", "feel emotions", "imagine new stories"]],
-      ["How do surgical robots help doctors?", ["They make smaller, steadier movements.", "They talk to patients.", "They replace the doctor completely."]],
-      ["Why are snake robots useful after earthquakes?", ["They can crawl through broken buildings.", "They can fly.", "They can build new houses."]],
-      ["What can’t robots do well?", ["have feelings and common sense", "repeat tasks", "follow instructions"]],
-      ["What does the text say about the future?", ["Humans and robots will probably work together.", "Robots will replace all humans.", "Robots will disappear."]]
+      ["What can a robot do, according to the text?",["sense, make simple decisions and move","feel emotions","imagine new stories","think like a person"]],
+      ["How do surgical robots help doctors?",["They make smaller, steadier movements.","They talk to patients.","They replace the doctor completely.","They choose the medicine."]],
+      ["Why are snake robots useful after earthquakes?",["They can crawl through broken buildings.","They can fly.","They can build new houses.","They can swim very fast."]],
+      ["What can’t robots do well?",["have feelings and common sense","repeat tasks","follow instructions","repeat the same task"]],
+      ["What does the text say about the future?",["Humans and robots will probably work together.","Robots will replace all humans.","Robots will disappear.","Robots will take all jobs."]],
+      ["Why might the future be about humans and robots working together?",["Robots are good at tasks but don’t have feelings or common sense.","Robots are better than humans at everything.","Humans can’t follow instructions.","Robots will stop working soon."]],
+      ["What does “survivors” mean in “to look for survivors”?",["people who are still alive","broken buildings","doctors","robots"]]
     ]
   }
 );
@@ -1994,11 +2022,12 @@ READINGS.push(
     ],
     vocab: [["bedroom", "the room where you sleep"], ["wall", "the side of a room"], ["window", "you look outside through it"], ["desk", "a table for studying"], ["shelf", "a long board on the wall for books"]],
     questions: [
-      ["How old is Emma?", ["nine", "six", "twelve"]],
-      ["What color are the walls?", ["blue", "pink", "green"]],
-      ["Where is the bed?", ["next to the window", "next to the door", "under the desk"]],
-      ["Where are the books?", ["on a shelf", "on the bed", "in a box"]],
-      ["Who sleeps on Emma’s bed?", ["her cat", "her dog", "her sister"]]
+      ["How old is Emma?",["nine","six","twelve","seven"]],
+      ["What color are the walls?",["blue","pink","green","yellow"]],
+      ["Where is the bed?",["next to the window","next to the door","under the desk","next to the desk"]],
+      ["Where are the books?",["on a shelf","on the bed","in a box","under the bed"]],
+      ["Who sleeps on Emma’s bed?",["her cat","her dog","her sister","her brother"]],
+      ["Why does Emma love her bedroom?",["It has her favorite things.","It is very big.","It has no windows.","Her cat doesn’t go in."]]
     ]
   },
   {
@@ -2015,11 +2044,12 @@ READINGS.push(
     ],
     vocab: [["best friend", "your favorite friend"], ["hair", "it grows on your head"], ["class", "a group of students"], ["drawing", "making pictures with a pencil"], ["kind", "nice to other people"]],
     questions: [
-      ["Who is Tomás’s best friend?", ["Leo", "Max", "Emma"]],
-      ["What color is Leo’s hair?", ["black", "brown", "red"]],
-      ["What is Leo good at?", ["math", "drawing", "music"]],
-      ["Where do they play soccer?", ["in the park", "at home", "at the beach"]],
-      ["What do they eat on Saturday?", ["popcorn", "pizza", "ice cream"]]
+      ["Who is Tomás’s best friend?",["Leo","Max","Emma","Tomás"]],
+      ["What color is Leo’s hair?",["black","brown","red","blond"]],
+      ["What is Leo good at?",["math","drawing","music","soccer"]],
+      ["Where do they play soccer?",["in the park","at home","at the beach","at school"]],
+      ["What do they eat on Saturday?",["popcorn","pizza","ice cream","tacos"]],
+      ["Why is Leo a great friend?",["He is kind and funny.","He is very tall.","He has a lot of toys.","He always wins at soccer."]]
     ]
   },
   {
@@ -2035,11 +2065,12 @@ READINGS.push(
     ],
     vocab: [["sunny", "with a lot of sun"], ["rainy", "with water falling from the sky"], ["windy", "with a lot of wind"], ["snowy", "with white snow on the ground"], ["umbrella", "it keeps you dry in the rain"]],
     questions: [
-      ["What is the weather like in Monterrey?", ["sunny", "rainy", "snowy"]],
-      ["What does the child wear?", ["a T-shirt and a cap", "a coat and a hat", "a jacket and boots"]],
-      ["What do people have in London?", ["umbrellas", "snowmen", "kites"]],
-      ["How is the weather in Chicago?", ["windy and cold", "hot and sunny", "rainy and warm"]],
-      ["What do children make in Canada?", ["a snowman", "a sandcastle", "a cake"]]
+      ["What is the weather like in Monterrey?",["sunny","rainy","snowy","cloudy"]],
+      ["What does the child wear?",["a T-shirt and a cap","a coat and a hat","a jacket and boots","a sweater and shorts"]],
+      ["What do people have in London?",["umbrellas","snowmen","kites","sunglasses"]],
+      ["How is the weather in Chicago?",["windy and cold","hot and sunny","rainy and warm","sunny and cold"]],
+      ["What do children make in Canada?",["a snowman","a sandcastle","a cake","a kite"]],
+      ["Which city is the hottest?",["Monterrey","London","Chicago","Canada"]]
     ]
   },
   {
@@ -2055,11 +2086,12 @@ READINGS.push(
     ],
     vocab: [["zoo", "a place where you see wild animals"], ["neck", "it is between your head and your body"], ["ears", "you hear with them"], ["climb", "to go up a tree"], ["penguin", "a black and white bird that swims"]],
     questions: [
-      ["Where is the class?", ["at the zoo", "at the park", "at the farm"]],
-      ["Which animal has a long neck?", ["the giraffe", "the lion", "the monkey"]],
-      ["What color is the elephant?", ["gray", "brown", "black"]],
-      ["What is the lion doing?", ["sleeping", "eating", "running"]],
-      ["What is Mía’s favorite animal?", ["the penguin", "the elephant", "the monkey"]]
+      ["Where is the class?",["at the zoo","at the park","at the farm","at the school"]],
+      ["Which animal has a long neck?",["the giraffe","the lion","the monkey","the elephant"]],
+      ["What color is the elephant?",["gray","brown","black","white"]],
+      ["What is the lion doing?",["sleeping","eating","running","swimming"]],
+      ["What is the writer’s favorite animal?",["the penguin","the elephant","the monkey","the giraffe"]],
+      ["Why does the writer say “Shh!”?",["The lion is sleeping.","The monkeys are noisy.","The penguin is swimming.","The class is in the library."]]
     ]
   },
   {
@@ -2076,11 +2108,12 @@ READINGS.push(
     ],
     vocab: [["week", "seven days"], ["busy", "with many things to do"], ["lesson", "a class"], ["visit", "to go and see someone"], ["rest", "to relax and not work"]],
     questions: [
-      ["When does Daniel have English class?", ["Monday and Wednesday", "Tuesday and Thursday", "Saturday"]],
-      ["What does he do on Tuesday?", ["He plays basketball.", "He swims.", "He visits Grandma."]],
-      ["When does he go swimming?", ["on Thursday", "on Friday", "on Sunday"]],
-      ["What does Grandma make?", ["enchiladas", "cookies", "soup"]],
-      ["Who does he play with on the weekend?", ["his brother", "his cousin", "his teacher"]]
+      ["When does Daniel have English class?",["Monday and Wednesday","Tuesday and Thursday","Saturday","Friday and Saturday"]],
+      ["What does he do on Tuesday?",["He plays basketball.","He swims.","He visits Grandma.","He goes to English class."]],
+      ["When does he go swimming?",["on Thursday","on Friday","on Sunday","on Tuesday"]],
+      ["What does Grandma make?",["enchiladas","cookies","soup","tamales"]],
+      ["Who does he play with on the weekend?",["his brother","his cousin","his teacher","his sister"]],
+      ["Why does Daniel say his week is busy?",["He has something to do almost every day.","He has a lot of homework.","He works on weekends.","He is sick all week."]]
     ]
   },
 
@@ -2098,11 +2131,12 @@ READINGS.push(
     ],
     vocab: [["market", "a place where people sell food"], ["avocado", "a green fruit for guacamole"], ["cook", "to make food hot on a stove"], ["spicy", "it burns a little in your mouth"], ["delicious", "very, very good to eat"]],
     questions: [
-      ["Where do Sofía and her mom go after school?", ["to the market", "to the park", "to a restaurant"]],
-      ["What does Sofía make?", ["the guacamole", "the salsa", "the meat"]],
-      ["Who makes the salsa?", ["her grandpa", "her dad", "her brother"]],
-      ["Why does Sofía eat only a little salsa?", ["It is very spicy.", "It is cold.", "She doesn’t like tomatoes."]],
-      ["Why does Sofía like Taco Friday?", ["The family is together and the food is great.", "She doesn’t go to school.", "She watches TV all night."]]
+      ["Where do the writer and Mom go after school?",["to the market","to the park","to a restaurant","to the supermarket"]],
+      ["What does the writer make?",["the guacamole","the salsa","the meat","the tortillas"]],
+      ["Who makes the salsa?",["her grandpa","her dad","her brother","her mom"]],
+      ["Why does the writer eat only a little salsa?",["It is very spicy.","It is cold.","She doesn’t like tomatoes.","It is too salty."]],
+      ["Why does the writer like Taco Friday?",["The family is together and the food is great.","She doesn’t go to school.","She watches TV all night.","There is no school on Friday."]],
+      ["What does “spicy” mean in the text?",["hot, with a lot of chili","very sweet","cold","very soft"]]
     ]
   },
   {
@@ -2118,11 +2152,12 @@ READINGS.push(
     ],
     vocab: [["present", "something you give for a birthday"], ["ride", "to move on a bike or a horse"], ["pedal", "to move the bike with your feet"], ["fall", "to go down to the ground"], ["alone", "with no other person"]],
     questions: [
-      ["How old is Diego today?", ["ten", "nine", "eleven"]],
-      ["What color is the bike?", ["red", "blue", "black"]],
-      ["What is Diego’s problem?", ["He can’t ride a bike.", "The bike is broken.", "He doesn’t like red."]],
-      ["Who helps Diego?", ["his sister Paula", "his dad", "his friend"]],
-      ["What happens on Saturday?", ["He rides alone.", "He falls again.", "He sells the bike."]]
+      ["How old is Diego today?",["ten","nine","eleven","twelve"]],
+      ["What color is the bike?",["red","blue","black","green"]],
+      ["What is Diego’s problem?",["He can’t ride a bike.","The bike is broken.","He doesn’t like red.","He doesn’t have a helmet."]],
+      ["Who helps Diego?",["his sister Paula","his dad","his friend","his grandpa"]],
+      ["What happens on Saturday?",["He rides alone.","He falls again.","He sells the bike.","Paula falls."]],
+      ["How does Diego feel when he rides alone?",["proud and excited","angry","scared and sad","tired and bored"]]
     ]
   },
   {
@@ -2138,11 +2173,12 @@ READINGS.push(
     ],
     vocab: [["library", "a place with many books to borrow"], ["quiet", "with very little noise"], ["librarian", "a person who works in a library"], ["comic", "a story with pictures and speech bubbles"], ["hobby", "something you like doing in your free time"]],
     questions: [
-      ["When is library day?", ["Thursday", "Monday", "Friday"]],
-      ["Who is Mrs. Ramos?", ["the librarian", "the principal", "Valeria’s mom"]],
-      ["What does Carlos read?", ["comics", "animal books", "adventure stories"]],
-      ["How many books can students take home?", ["two", "one", "five"]],
-      ["How long does Valeria read at night?", ["twenty minutes", "one hour", "five minutes"]]
+      ["When is library day?",["Thursday","Monday","Friday","Tuesday"]],
+      ["Who is Mrs. Ramos?",["the librarian","the principal","the writer’s mom","a math teacher"]],
+      ["What does Carlos read?",["comics","animal books","adventure stories","books about space"]],
+      ["How many books can students take home?",["two","one","five","three"]],
+      ["How long does the writer read at night?",["twenty minutes","one hour","five minutes","half an hour"]],
+      ["Why do you think the library is a good place to read?",["It is big and quiet, with comfortable cushions.","It is very noisy.","There are no books for kids.","Students can play video games there."]]
     ]
   },
   {
@@ -2158,11 +2194,12 @@ READINGS.push(
     ],
     vocab: [["pet", "an animal that lives with you"], ["shell", "the hard part on a turtle’s back"], ["scared", "afraid"], ["tank", "a glass box with water for animals"], ["feed", "to give food to"]],
     questions: [
-      ["How old is Shelly?", ["five", "thirty", "ten"]],
-      ["What does Shelly do when she is scared?", ["She puts her head in her shell.", "She swims fast.", "She jumps."]],
-      ["Where does Shelly sit to get warm?", ["on a rock under a lamp", "in Ian’s bed", "in the garden"]],
-      ["When does Ian feed Shelly?", ["every morning", "every night", "on Saturdays"]],
-      ["How long can turtles live?", ["more than thirty years", "about five years", "one year"]]
+      ["How old is Shelly?",["five","thirty","ten","two"]],
+      ["What does Shelly do when she is scared?",["She puts her head in her shell.","She swims fast.","She jumps.","She bites."]],
+      ["Where does Shelly sit to get warm?",["on a rock under a lamp","in the writer’s bed","in the garden","in the water all day"]],
+      ["When does the writer feed Shelly?",["every morning","every night","on Saturdays","after school"]],
+      ["How long can turtles live?",["more than thirty years","about five years","one year","more than one hundred years"]],
+      ["Why does the writer say “Shelly and I can be friends for a long time”?",["Turtles can live for more than thirty years.","Shelly is very friendly.","Shelly is a young turtle.","Turtles are easy to clean."]]
     ]
   },
 
@@ -2180,11 +2217,13 @@ READINGS.push(
     ],
     vocab: [["surprise", "something you don’t know is coming"], ["secret", "something you don’t tell other people"], ["sign", "to write your name"], ["hide", "to put something where people can’t see it"], ["principal", "the head of a school"]],
     questions: [
-      ["Who is the party for?", ["Miss Laura", "Marco", "the principal"]],
-      ["Where do they hide the card?", ["in Marco’s backpack", "in the teacher’s desk", "in the office"]],
-      ["Who almost tells the secret?", ["Fernanda", "Marco", "the principal"]],
-      ["How much time do they have to prepare the room?", ["ten minutes", "one hour", "all day"]],
-      ["What does Miss Laura drop?", ["her coffee", "the cake", "her bag"]]
+      ["Who is the party for?",["Miss Laura","Marco","the principal","the art teacher"]],
+      ["Where do they hide the card?",["in Marco’s backpack","in the teacher’s desk","in the office","in the classroom closet"]],
+      ["Who almost tells the secret?",["Fernanda","Marco","the principal","Miss Laura"]],
+      ["How much time do they have to prepare the room?",["ten minutes","one hour","all day","five minutes"]],
+      ["What does Miss Laura drop?",["her coffee","the cake","her bag","her phone"]],
+      ["Why is it hard to keep the secret?",["Everybody is excited and almost tells her.","Miss Laura reads their messages.","The principal tells her.","The card is very big."]],
+      ["What does “hide” mean in “We hide it in Marco’s backpack”?",["put something where nobody can see it","throw something away","open something","buy something"]]
     ]
   },
   {
@@ -2200,11 +2239,13 @@ READINGS.push(
     ],
     vocab: [["shallow", "not deep"], ["deep", "it goes a long way down"], ["coach", "a person who teaches a sport"], ["kick", "to move your legs strongly"], ["float", "to stay on top of the water"]],
     questions: [
-      ["When are Regina’s lessons?", ["Tuesday and Thursday", "Monday and Friday", "every weekend"]],
-      ["Why does the deep end scare her?", ["It is very deep.", "It is very cold.", "There are fish."]],
-      ["Who is Pedro?", ["her swimming coach", "her brother", "a lifeguard"]],
-      ["What advice does Pedro give?", ["Breathe slowly and kick your legs.", "Don’t look at the water.", "Swim very fast."]],
-      ["How does Regina feel about the deep end now?", ["It is her favorite part.", "She still hates it.", "She never goes there."]]
+      ["When are Regina’s lessons?",["Tuesday and Thursday","Monday and Friday","every weekend","every Wednesday"]],
+      ["Why does the deep end scare her?",["It is very deep.","It is very cold.","There are fish.","The water is dirty."]],
+      ["Who is Pedro?",["her swimming coach","her brother","a lifeguard","her teacher"]],
+      ["What advice does Pedro give?",["Breathe slowly and kick your legs.","Don’t look at the water.","Swim very fast.","Close your eyes and wait."]],
+      ["How does Regina feel about the deep end now?",["It is her favorite part.","She still hates it.","She never goes there.","She is still a little afraid."]],
+      ["Why does Pedro say “the water is the same”?",["to show her she can swim there too","because the pool is small","because the water is warm","to tell her to stop swimming"]],
+      ["What does “float” mean in “She is floating!”?",["stay on top of the water","go to the bottom","swim very fast","jump into the pool"]]
     ]
   },
   {
@@ -2220,11 +2261,13 @@ READINGS.push(
     ],
     vocab: [["ranch", "a big farm with animals"], ["milk", "to take milk from a cow"], ["river", "a long line of water that moves"], ["gentle", "calm and soft, not rough"], ["hundreds", "many, more than one hundred"]],
     questions: [
-      ["Where is Grandpa’s ranch?", ["near Linares", "in Monterrey", "near the beach"]],
-      ["Why doesn’t Santiago like the ranch at first?", ["There is no internet.", "There are no animals.", "It is too cold."]],
-      ["What is the name of his horse?", ["Canela", "Luna", "Paloma"]],
-      ["What can he see at night?", ["hundreds of stars", "city lights", "a big moon only"]],
-      ["What does Santiago ask at the end?", ["if he can come back in summer", "if he can go home early", "if he can take the horse home"]]
+      ["Where is Grandpa’s ranch?",["near Linares","in Monterrey","near the beach","near Saltillo"]],
+      ["Why doesn’t Santiago like the ranch at first?",["There is no internet.","There are no animals.","It is too cold.","There is no TV."]],
+      ["What is the name of his horse?",["Canela","Luna","Paloma","Estrella"]],
+      ["What can he see at night?",["hundreds of stars","city lights","a big moon only","airplanes"]],
+      ["What does Santiago ask at the end?",["if he can come back in summer","if he can go home early","if he can take the horse home","if he can bring his friends"]],
+      ["How does Santiago feel about the ranch at the end?",["He loves it and wants to go back.","He is happy to leave.","He is still angry about the internet.","He is scared of the horses."]],
+      ["What does “gentle” mean in “She is calm and gentle”?",["kind and not rough","very fast","wild","angry"]]
     ]
   },
   {
@@ -2240,11 +2283,13 @@ READINGS.push(
     ],
     vocab: [["partner", "a person who works with you"], ["clay", "soft earth you can make shapes with"], ["foam", "many tiny bubbles together"], ["judge", "a person who decides who wins"], ["prize", "something you win"]],
     questions: [
-      ["What is their project?", ["a volcano", "a robot", "a plant"]],
-      ["What is the volcano made of?", ["clay", "paper", "wood"]],
-      ["What makes the gas?", ["baking soda and vinegar", "water and salt", "paint and soap"]],
-      ["What is Andrés’s mistake?", ["He adds too much vinegar.", "He forgets the bottle.", "He drops the volcano."]],
-      ["What prize do they win?", ["Most Exciting Project", "First place", "Best Painting"]]
+      ["What is their project?",["a volcano","a robot","a plant","a solar system"]],
+      ["What is the volcano made of?",["clay","paper","wood","metal"]],
+      ["What makes the gas?",["baking soda and vinegar","water and salt","paint and soap","sugar and milk"]],
+      ["What is Andrés’s mistake?",["He adds too much vinegar.","He forgets the bottle.","He drops the volcano.","He paints it the wrong color."]],
+      ["What prize do they win?",["Most Exciting Project","First place","Best Painting","Best Science Project"]],
+      ["Why does the judge say “That is a very real volcano”?",["The foam goes everywhere, like real lava.","The volcano is very big.","The volcano is made of rock.","She is angry about her shoes."]],
+      ["What does “partners” mean in “Andrés and Valentina are partners”?",["people who work together","brothers and sisters","teachers","judges"]]
     ]
   },
   {
@@ -2260,11 +2305,13 @@ READINGS.push(
     ],
     vocab: [["altar", "a special table to remember someone"], ["great-grandma", "your grandma’s mother"], ["cloth", "a piece of fabric"], ["candle", "it gives light with a small fire"], ["remember", "to think about someone from the past"]],
     questions: [
-      ["When does the family make the altar?", ["at the beginning of November", "in December", "on her birthday"]],
-      ["Who is the altar for?", ["Great-Grandma Rosa", "Grandpa", "a famous singer"]],
-      ["What color are the cempasúchil flowers?", ["orange", "white", "purple"]],
-      ["Why is there a radio on the altar?", ["She loved music.", "It is a decoration.", "Grandma wants to listen."]],
-      ["How does Lucía describe the Day of the Dead?", ["a day to remember people we love", "a very sad day", "a day for scary costumes"]]
+      ["When does the family make the altar?",["at the beginning of November","in December","on her birthday","in October"]],
+      ["Who is the altar for?",["Great-Grandma Rosa","Grandpa","a famous singer","Great-Grandpa"]],
+      ["What color are the cempasúchil flowers?",["orange","white","purple","red"]],
+      ["Why is there a radio on the altar?",["She loved music.","It is a decoration.","Grandma wants to listen.","It is for the cousins."]],
+      ["How does the writer describe the Day of the Dead?",["a day to remember people we love","a very sad day","a day for scary costumes","a day for big parties only"]],
+      ["Why do they put hot chocolate and pan de muerto on the altar?",["They were Great-Grandma Rosa’s favorite things.","They are for the cousins.","They are the decorations every family uses.","The family is hungry."]],
+      ["What does “remember” mean in “a day to remember the people we love”?",["think about someone from the past","forget someone","meet new people","say goodbye forever"]]
     ]
   }
 );
@@ -2370,11 +2417,13 @@ READINGS.push(
     ],
     vocab: [["tent", "a small house made of fabric for camping"], ["instructions", "information that tells you how to do something"], ["campfire", "a fire you make outside when you camp"], ["flashlight", "a small light you hold in your hand"], ["raccoon", "a small gray animal with a black mask on its face"]],
     questions: [
-      ["Where did the family go camping?", ["in the mountains near Santiago", "at the beach", "in a park in Monterrey"]],
-      ["Why did it take Dad a long time to put up the tent?", ["He didn’t read the instructions.", "It was raining.", "The tent was broken."]],
-      ["What did they make with marshmallows?", ["s’mores", "a cake", "hot chocolate"]],
-      ["What woke the narrator up?", ["a strange noise", "the rain", "her brother"]],
-      ["What do they do now with their food?", ["keep it in the car", "eat it all at night", "hang it in a tree"]]
+      ["Where did the family go camping?",["in the mountains near Santiago","at the beach","in a park in Monterrey","at a lake in Coahuila"]],
+      ["Why did it take Dad a long time to put up the tent?",["He didn’t read the instructions.","It was raining.","The tent was broken.","The wind was very strong."]],
+      ["What did they make with marshmallows?",["s’mores","a cake","hot chocolate","pancakes"]],
+      ["What woke the narrator up?",["a strange noise","the rain","her brother","the wind"]],
+      ["What do they do now with their food?",["keep it in the car","eat it all at night","hang it in a tree","leave it outside the tent"]],
+      ["How did the family feel about the raccoon the next morning?",["They thought it was funny.","They were still very scared.","They were angry with Dad.","They wanted to go home."]],
+      ["What does “strange” mean in “a strange noise”?",["unusual and surprising","very quiet","beautiful","normal"]]
     ]
   },
   {
@@ -2392,11 +2441,13 @@ READINGS.push(
     ],
     vocab: [["pen pal", "a friend you write letters to in another place"], ["flat", "with no hills or mountains"], ["freeze", "to become very, very cold, like ice"], ["gloves", "you wear them on your hands"], ["snow fort", "a small house or wall made of snow"]],
     questions: [
-      ["Where does Hannah live?", ["Winnipeg, Canada", "Monterrey", "New York"]],
-      ["What does Hannah say about the land where she lives?", ["It is very flat.", "It has many mountains.", "It is near the ocean."]],
-      ["What do Hannah and her brother do on weekends?", ["go ice skating", "go swimming", "go to the movies"]],
-      ["What has Isabela never seen?", ["snow", "mountains", "a river"]],
-      ["What does Hannah want to know?", ["about Isabela’s school", "about Isabela’s pets", "about Mexican music"]]
+      ["Where does Hannah live?",["Winnipeg, Canada","Monterrey","New York","Toronto"]],
+      ["What does Hannah say about the land where she lives?",["It is very flat.","It has many mountains.","It is near the ocean.","It is very hot."]],
+      ["What do Hannah and her brother do on weekends?",["go ice skating","go swimming","go to the movies","go to the beach"]],
+      ["What has Isabela never seen?",["snow","mountains","a river","a taco"]],
+      ["What does Hannah want to know?",["about Isabela’s school","about Isabela’s pets","about Mexican music","about Isabela’s family"]],
+      ["Why does Hannah’s nose freeze?",["It is very, very cold in Winnipeg.","She walks very fast.","She doesn’t wear a hat.","She is sick."]],
+      ["What does “flat” mean in “the land is very flat”?",["with no hills or mountains","very green","full of snow","very small"]]
     ]
   },
   {
@@ -2412,11 +2463,13 @@ READINGS.push(
     ],
     vocab: [["perform", "to act or sing for an audience"], ["disappointed", "sad because something was not what you wanted"], ["still", "not moving"], ["rehearsal", "a practice before a show"], ["lines", "the words an actor says"]],
     questions: [
-      ["What play did the school perform?", ["Alice in Wonderland", "Peter Pan", "The Lion King"]],
-      ["What part did Martín get first?", ["a tree", "the Mad Hatter", "Alice"]],
-      ["Why couldn’t Rodrigo come?", ["He had a fever.", "He forgot.", "He was on a trip."]],
-      ["How did Martín know the Mad Hatter’s lines?", ["He listened to Rodrigo at every rehearsal.", "He read the book at home.", "The teacher gave him the lines that day."]],
-      ["What lesson did Martín learn?", ["Always be ready.", "Never be a tree.", "Plays are boring."]]
+      ["What play did the school perform?",["Alice in Wonderland","Peter Pan","The Lion King","Snow White"]],
+      ["What part did Martín get first?",["a tree","the Mad Hatter","Alice","a rock"]],
+      ["Why couldn’t Rodrigo come?",["He had a fever.","He forgot.","He was on a trip.","His family moved."]],
+      ["How did Martín know the Mad Hatter’s lines?",["He listened to Rodrigo at every rehearsal.","He read the book at home.","The teacher gave him the lines that day.","His mom told him."]],
+      ["What lesson did Martín learn?",["Always be ready.","Never be a tree.","Plays are boring.","Mad Hatters are funny."]],
+      ["Why did Martín decide to be “the best tree”?",["He wanted to do his best with any part.","He liked trees more than people.","His teacher asked him.","He didn’t want to talk."]],
+      ["What does “rehearsal” mean in “you came to every rehearsal”?",["a practice before the real show","a party after the show","a test at school","a costume"]]
     ]
   },
   {
@@ -2431,11 +2484,13 @@ READINGS.push(
     ],
     vocab: [["sign up", "to put your name on a list to participate"], ["train", "to practice a sport to get better"], ["costume", "special clothes to look like someone else"], ["finish line", "the end of a race"], ["raise money", "to collect money for a good cause"]],
     questions: [
-      ["Where was the fun run?", ["Parque Fundidora", "at the school", "in Santiago"]],
-      ["Who was the money for?", ["a children’s hospital", "the school", "the winners"]],
-      ["How long did they train?", ["six weeks", "two weeks", "six months"]],
-      ["When was the race most difficult?", ["in the fourth kilometer", "at the start", "in the first kilometer"]],
-      ["How much money did the school raise?", ["eighty thousand pesos", "eight thousand pesos", "six hundred pesos"]]
+      ["Where was the fun run?",["Parque Fundidora","at the school","in Santiago","Parque Chipinque"]],
+      ["Who was the money for?",["a children’s hospital","the school","the winners","the animals at the zoo"]],
+      ["How long did they train?",["six weeks","two weeks","six months","six days"]],
+      ["When was the race most difficult?",["in the fourth kilometer","at the start","in the first kilometer","at the finish line"]],
+      ["How much money did the school raise?",["eighty thousand pesos","eight thousand pesos","six hundred pesos","eighty pesos"]],
+      ["How did the narrator change during the training?",["At first five minutes, at the end thirty minutes without stopping.","At first fast, at the end very slow.","The narrator stopped running.","The narrator ran only on weekends."]],
+      ["What does “raised” mean in “our school raised eighty thousand pesos”?",["collected money for a cause","lost money","spent money","counted money"]]
     ]
   },
   {
@@ -2451,11 +2506,13 @@ READINGS.push(
     ],
     vocab: [["screen", "the glass part of a phone, TV or computer"], ["bored", "with nothing interesting to do"], ["complain", "to say you are not happy about something"], ["board game", "a game you play on a table, like chess"], ["rule", "something you must or must not do"]],
     questions: [
-      ["Why did Dad suggest the idea?", ["Nobody in the family was talking.", "The TV was broken.", "The kids had bad grades."]],
-      ["How were the first two days?", ["terrible", "easy", "exciting"]],
-      ["What did they find on Wednesday?", ["an old board game", "a new phone", "a dragon book"]],
-      ["What did the narrator do on Friday?", ["baked cookies with Grandma", "flew a kite", "played soccer"]],
-      ["What is the family rule now?", ["no phones at dinner", "no TV ever", "games only on Monday"]]
+      ["Why did Dad suggest the idea?",["Nobody in the family was talking.","The TV was broken.","The kids had bad grades.","The internet was very slow."]],
+      ["How were the first two days?",["terrible","easy","exciting","fun"]],
+      ["What did they find on Wednesday?",["an old board game","a new phone","a dragon book","a lost tablet"]],
+      ["What did the narrator do on Friday?",["baked cookies with Grandma","flew a kite","played soccer","went to the movies"]],
+      ["What is the family rule now?",["no phones at dinner","no TV ever","games only on Monday","phones only on Sunday"]],
+      ["How did the family change after the week?",["They spend more time together now.","They use screens all the time again.","They sold their phones.","They don’t eat dinner together."]],
+      ["What does “complained” mean in “My sister complained all the time”?",["said she was unhappy","laughed","helped","slept"]]
     ]
   },
 
@@ -2473,11 +2530,13 @@ READINGS.push(
     ],
     vocab: [["amphibian", "an animal that can live in water and on land, like a frog"], ["gills", "parts that help an animal breathe underwater"], ["regeneration", "growing a body part again"], ["polluted", "dirty and dangerous"], ["refuge", "a safe place"]],
     questions: [
-      ["Where do wild axolotls live?", ["Xochimilco, Mexico City", "all over Mexico", "in the ocean"]],
-      ["What kind of animal is an axolotl?", ["an amphibian", "a fish", "a reptile"]],
-      ["What can an axolotl do if it loses a leg?", ["grow a new one", "walk on three legs forever", "change color"]],
-      ["Why are wild axolotls in danger?", ["polluted water and other fish", "too much rain", "people keep them as pets"]],
-      ["Where can you see an axolotl in Mexico every day?", ["on the fifty-peso bill", "on the flag", "on stamps only"]]
+      ["Where do wild axolotls live?",["Xochimilco, Mexico City","all over Mexico","in the ocean","in the rivers of Chiapas"]],
+      ["What kind of animal is an axolotl?",["an amphibian","a fish","a reptile","a mammal"]],
+      ["What can an axolotl do if it loses a leg?",["grow a new one","walk on three legs forever","change color","sleep for months"]],
+      ["Why are wild axolotls in danger?",["polluted water and other fish","too much rain","people keep them as pets","the water is too cold"]],
+      ["Where can you see an axolotl in Mexico every day?",["on the fifty-peso bill","on the flag","on stamps only","on the twenty-peso bill"]],
+      ["Why do scientists all over the world study axolotls?",["to learn how regeneration works","because they are easy to catch","to make medicine from their eggs","because they live in many countries"]],
+      ["What does “polluted” mean in “The water in Xochimilco is polluted”?",["dirty and dangerous","very deep","clean and clear","very cold"]]
     ]
   },
   {
@@ -2493,11 +2552,13 @@ READINGS.push(
     ],
     vocab: [["contest", "a competition"], ["dish", "food prepared in a special way"], ["recipe", "instructions for cooking something"], ["salty", "with too much salt"], ["patient", "calm when things take a long time"]],
     questions: [
-      ["What did the contest ask the children to do?", ["cook a dish that tells a story", "make the biggest cake", "cook something new"]],
-      ["Why did Grandma invent a faster version?", ["The real cabrito takes too long.", "She didn’t like cabrito.", "Chicken is cheaper."]],
-      ["What was wrong the first time Camila practiced?", ["The rice was too dry.", "The chicken was burned.", "She forgot the salt."]],
-      ["Who won first place?", ["a boy with a chocolate cake", "Camila", "a girl with tacos"]],
-      ["What did Grandma do with the certificate?", ["She framed it and put it in the kitchen.", "She gave it to the judge.", "She lost it."]]
+      ["What did the contest ask the children to do?",["cook a dish that tells a story","make the biggest cake","cook something new","cook a dish from another country"]],
+      ["Why did Grandma invent a faster version?",["The real cabrito takes too long.","She didn’t like cabrito.","Chicken is cheaper.","It was too spicy."]],
+      ["What was wrong the first time Camila practiced?",["The rice was too dry.","The chicken was burned.","She forgot the salt.","The chicken was raw."]],
+      ["Who won first place?",["a boy with a chocolate cake","Camila","a girl with tacos","a girl with enchiladas"]],
+      ["What did Grandma do with the certificate?",["She framed it and put it in the kitchen.","She gave it to the judge.","She lost it.","She sold it."]],
+      ["Why did Camila win the prize for “Best Story”?",["She shared the story of her grandmother’s restaurant.","Her dish was the most beautiful.","She cooked the fastest.","She made a chocolate cake."]],
+      ["What does “patient” mean in “Her grandma was patient”?",["calm when things take time","angry","very fast","worried"]]
     ]
   },
   {
@@ -2513,11 +2574,13 @@ READINGS.push(
     ],
     vocab: [["display", "a group of objects for people to look at"], ["stranger", "a person you don’t know"], ["badge", "a small card that shows who you are or where you work"], ["radio", "a device to talk with people far away"], ["relieved", "happy because a worry is gone"]],
     questions: [
-      ["Why did Pablo lose his group?", ["He was reading very carefully.", "He went to the bathroom.", "He was playing a game."]],
-      ["What was his first idea?", ["to run and look for them", "to cry", "to call his mom"]],
-      ["What advice did he remember?", ["Stay calm and find a person who works there.", "Wait at the exit.", "Shout your teacher’s name."]],
-      ["Where was his class?", ["on the third floor", "outside the museum", "in the cafeteria"]],
-      ["What did Mr. Garza say at the end?", ["Next time, read a little faster.", "You can’t come on trips again.", "Let’s go home now."]]
+      ["Why did Pablo lose his group?",["He was reading very carefully.","He went to the bathroom.","He was playing a game.","He was looking at his phone."]],
+      ["What was his first idea?",["to run and look for them","to cry","to call his mom","to hide"]],
+      ["What advice did he remember?",["Stay calm and find a person who works there.","Wait at the exit.","Shout your teacher’s name.","Call your parents."]],
+      ["Where was his class?",["on the third floor","outside the museum","in the cafeteria","in the gift shop"]],
+      ["What did Mr. Garza say at the end?",["Next time, read a little faster.","You can’t come on trips again.","Let’s go home now.","Good job, but you can’t read signs anymore."]],
+      ["Why did Mr. Garza look relieved?",["Pablo was safe.","The trip was over.","Pablo found a new display.","The museum was closing."]],
+      ["What does “strangers” mean in “The room was full of strangers”?",["people you don’t know","classmates","teachers","museum workers"]]
     ]
   },
   {
@@ -2533,11 +2596,13 @@ READINGS.push(
     ],
     vocab: [["join", "to become part of a group"], ["mistake", "something that is not correct"], ["translation app", "an app that changes words into another language"], ["little by little", "slowly, step by step"], ["goalkeeper", "the player who protects the goal"]],
     questions: [
-      ["Why did Hyun-woo’s family move to Monterrey?", ["His dad works for a car company.", "They wanted to learn Spanish.", "They were on vacation."]],
-      ["What did the narrator do during the first week?", ["Nothing, but he felt bad.", "He laughed at Hyun-woo.", "He sat with Hyun-woo."]],
-      ["How did they communicate at first?", ["English, drawings and an app", "only Spanish", "only Korean"]],
-      ["What is Hangul?", ["the Korean writing system", "a Korean food", "a Korean game"]],
-      ["What is the main message of the story?", ["Sometimes a friend is waiting for you to say the first word.", "Science projects are difficult.", "It is easy to learn Korean."]]
+      ["Why did Hyun-woo’s family move to Monterrey?",["His dad works for a car company.","They wanted to learn Spanish.","They were on vacation.","He wanted to study in Mexico."]],
+      ["What did the narrator do during the first week?",["Nothing, but he felt bad.","He laughed at Hyun-woo.","He sat with Hyun-woo.","He helped him every day."]],
+      ["How did they communicate at first?",["English, drawings and an app","only Spanish","only Korean","with sign language only"]],
+      ["What is Hangul?",["the Korean writing system","a Korean food","a Korean game","a Korean dance"]],
+      ["What is the main message of the story?",["Sometimes a friend is waiting for you to say the first word.","Science projects are difficult.","It is easy to learn Korean.","Learning Spanish takes years."]],
+      ["Why did the narrator feel bad during the first week?",["Hyun-woo was alone and some kids laughed at him.","He didn’t understand his homework.","He lost a soccer game.","His teacher was angry with him."]],
+      ["What does “little by little” mean in the text?",["slowly, a bit at a time","very fast","all at once","never"]]
     ]
   },
   {
@@ -2553,11 +2618,13 @@ READINGS.push(
     ],
     vocab: [["coast", "the land next to the sea"], ["volunteer", "a person who works without pay to help"], ["lay eggs", "when an animal produces eggs from its body"], ["hatch", "to come out of an egg"], ["confuse", "to make someone not understand"]],
     questions: [
-      ["Where did Ximena’s family stay?", ["on the coast of Oaxaca", "in Cancún", "in Monterrey"]],
-      ["How many eggs does a turtle lay?", ["about one hundred", "about ten", "about one thousand"]],
-      ["Why do volunteers move the eggs?", ["to protect them from animals and people", "to sell them", "to keep them warm at home"]],
-      ["Why can’t people use flashlights?", ["The light confuses the turtles.", "It wakes up the birds.", "It is not allowed in town."]],
-      ["How many baby turtles become adults?", ["about one in a thousand", "about half", "all of them"]]
+      ["Where did the narrator’s family stay?",["on the coast of Oaxaca","in Cancún","in Monterrey","in Veracruz"]],
+      ["How many eggs does a turtle lay?",["about one hundred","about ten","about one thousand","about five"]],
+      ["Why do volunteers move the eggs?",["to protect them from animals and people","to sell them","to keep them warm at home","to count them"]],
+      ["Why can’t people use flashlights?",["The light confuses the turtles.","It wakes up the birds.","It is not allowed in town.","It is too hot."]],
+      ["How many baby turtles become adults?",["about one in a thousand","about half","all of them","about one in ten"]],
+      ["Why did the narrator feel “we gave them a chance”?",["They protected the eggs and helped the turtles reach the sea.","They took the turtles home.","All the turtles became adults.","They caught many fish."]],
+      ["What does “hatch” mean in “the baby turtles hatch”?",["come out of the egg","swim away","lay eggs","go to sleep"]]
     ]
   }
 );
@@ -2628,11 +2695,13 @@ READINGS.push(
     ],
     vocab: [["switch off", "to stop working, like a light"], ["release", "to let something go out"], ["hormone", "a chemical in the body that controls how it grows and works"], ["concentrate", "to give all your attention to something"], ["waste", "material that is not needed and must be removed"]],
     questions: [
-      ["What did people believe about sleep in the past?", ["The body and brain switched off.", "Sleep helped people grow.", "Sleep cleaned the brain."]],
-      ["How many hours of sleep do children need?", ["between nine and twelve", "between five and seven", "about fifteen"]],
-      ["What does the brain do with information at night?", ["It organizes it and decides what to keep.", "It deletes all of it.", "It sends it to the muscles."]],
-      ["Which is NOT mentioned as a result of too little sleep?", ["growing taller", "difficulty concentrating", "getting angry easily"]],
-      ["What do experts recommend before bed?", ["avoiding screens for an hour", "eating a big meal", "doing intense exercise"]]
+      ["What did people believe about sleep in the past?",["The body and brain switched off.","Sleep helped people grow.","Sleep cleaned the brain.","Sleep was the most important time of the day."]],
+      ["How many hours of sleep do children need?",["between nine and twelve","between five and seven","about fifteen","between three and five"]],
+      ["What does the brain do with information at night?",["It organizes it and decides what to keep.","It deletes all of it.","It sends it to the muscles.","It saves it for the next week only."]],
+      ["Which is NOT mentioned as a result of too little sleep?",["growing taller","difficulty concentrating","getting angry easily","getting sick more often"]],
+      ["What do experts recommend before bed?",["avoiding screens for an hour","eating a big meal","doing intense exercise","drinking coffee"]],
+      ["Why is it a good idea to sleep well before a test?",["Your brain organizes what you studied.","You will dream about the answers.","Your muscles will grow.","You won’t need to study."]],
+      ["What does “concentrate” mean in “find it hard to concentrate”?",["think carefully about one thing","fall asleep","get angry","eat a lot"]]
     ]
   },
   {
@@ -2648,11 +2717,13 @@ READINGS.push(
     ],
     vocab: [["inventor", "a person who creates something new"], ["raised", "higher than the surface around it"], ["blind", "not able to see"], ["in his honor", "to show respect for him"], ["annoy", "to make someone a little angry"]],
     questions: [
-      ["Why did Louis Braille create his system?", ["He was blind and wanted to read books.", "His teacher asked him to.", "He wanted to win a prize."]],
-      ["How old was Frank Epperson when he discovered the popsicle?", ["eleven", "fifteen", "twenty"]],
-      ["How was the popsicle discovered?", ["A drink froze outside on a cold night.", "He made it in a laboratory.", "His mother invented it."]],
-      ["Why did Chester Greenwood invent earmuffs?", ["His ears were cold while ice skating.", "He wanted to sell them.", "His grandmother needed them."]],
-      ["What do the three inventors have in common?", ["They solved a problem from their own lives.", "They were all from France.", "They all became very rich."]]
+      ["Why did Louis Braille create his system?",["He was blind and wanted to read books.","His teacher asked him to.","He wanted to win a prize.","He wanted to sell books."]],
+      ["How old was Frank Epperson when he discovered the popsicle?",["eleven","fifteen","twenty","nine"]],
+      ["How was the popsicle discovered?",["A drink froze outside on a cold night.","He made it in a laboratory.","His mother invented it.","His friend gave him the idea."]],
+      ["Why did Chester Greenwood invent earmuffs?",["His ears were cold while ice skating.","He wanted to sell them.","His grandmother needed them.","His hands were cold."]],
+      ["What do the three inventors have in common?",["They solved a problem from their own lives.","They were all from France.","They all became very rich.","They all lived in Maine."]],
+      ["What is the writer’s message to readers?",["You can solve problems in your own life too.","Only adults can invent things.","Inventions make you rich.","Stay away from laboratories."]],
+      ["What does “annoys” mean in “a problem that annoys you every day”?",["bothers you","makes you happy","helps you","scares you"]]
     ]
   },
   {
@@ -2668,11 +2739,13 @@ READINGS.push(
     ],
     vocab: [["case", "a glass box to show objects; also, a problem to solve"], ["investigate", "to try to find out the truth"], ["sawdust", "tiny pieces of wood that fall when you cut it"], ["accuse", "to say someone did something wrong"], ["embarrassed", "feeling uncomfortable because of a mistake"]],
     questions: [
-      ["How did Renata know that someone opened the case with a key?", ["The glass wasn’t broken.", "She saw the key on the floor.", "The janitor told her."]],
-      ["Who had keys to the case?", ["the principal and the janitor", "only the principal", "all the teachers"]],
-      ["Why wasn’t Renata convinced that Mr. Soto was guilty?", ["It didn’t make sense for him to steal it.", "He was on vacation.", "She saw him at home."]],
-      ["Where did the sawdust trail lead?", ["to the art room", "to the principal’s office", "outside the school"]],
-      ["Why did Ms. Villarreal have the trophy?", ["She was making a giant copy as a surprise.", "She wanted to keep it.", "She was cleaning it."]]
+      ["How did Renata know that someone opened the case with a key?",["The glass wasn’t broken.","She saw the key on the floor.","The janitor told her.","There was a key on the table."]],
+      ["Who had keys to the case?",["the principal and the janitor","only the principal","all the teachers","all the students"]],
+      ["Why wasn’t Renata convinced that Mr. Soto was guilty?",["It didn’t make sense for him to steal it.","He was on vacation.","She saw him at home.","He had a key."]],
+      ["Where did the sawdust trail lead?",["to the art room","to the principal’s office","outside the school","to the gym"]],
+      ["Why did Ms. Villarreal have the trophy?",["She was making a giant copy as a surprise.","She wanted to keep it.","She was cleaning it.","She wanted to clean it."]],
+      ["Why did the principal apologize to Mr. Soto?",["People had blamed him, but he did nothing wrong.","He lost his key.","He cleaned the case badly.","He found the trophy."]],
+      ["What does “accused” mean in “Some students accused Mr. Soto”?",["said he did something bad","thanked him","helped him","asked him a question"]]
     ]
   },
   {
@@ -2688,11 +2761,13 @@ READINGS.push(
     ],
     vocab: [["archaeologist", "a scientist who studies ancient objects and places"], ["court", "the area where some sports are played"], ["rubber", "a material from trees that bounces"], ["hip", "the side of your body between your waist and your leg"], ["civilization", "a large, organized society"]],
     questions: [
-      ["What did the Maya call the game?", ["pok-ta-pok", "ullamaliztli", "ulama"]],
-      ["What shape was the court?", ["like the letter I", "a circle", "a square"]],
-      ["How did players hit the ball?", ["with their hips, knees and elbows", "with their hands", "with a wooden bat"]],
-      ["What usually happened when a player passed the ball through the ring?", ["The game ended.", "The ball broke.", "The other team got a point."]],
-      ["Where is a version of the game played today?", ["in Sinaloa", "in Chichén Itzá", "in Mexico City’s stadiums"]]
+      ["What did the Maya call the game?",["pok-ta-pok","ullamaliztli","ulama","soccer"]],
+      ["What shape was the court?",["like the letter I","a circle","a square","a triangle"]],
+      ["How did players hit the ball?",["with their hips, knees and elbows","with their hands","with a wooden bat","with their heads only"]],
+      ["What usually happened when a player passed the ball through the ring?",["The game ended.","The ball broke.","The other team got a point.","The players changed teams."]],
+      ["Where is a version of the game played today?",["in Sinaloa","in Chichén Itzá","in Mexico City’s stadiums","in Monterrey"]],
+      ["Why did the game usually end when the ball passed through a ring?",["It was extremely difficult and didn’t happen often.","The ring broke.","The ball was lost.","The players were tired."]],
+      ["What does “civilizations” mean in “For these civilizations, the game had religious meaning”?",["large, organized groups of people with their own culture","small families","sports teams","temples"]]
     ]
   },
   {
@@ -2708,11 +2783,13 @@ READINGS.push(
     ],
     vocab: [["telescope", "a tube that makes faraway objects look closer"], ["allowance", "money parents give children regularly"], ["jar", "a glass container with a lid"], ["shelter", "a place that takes care of animals or people without a home"], ["savings", "money that you keep and don’t spend"]],
     questions: [
-      ["How much money did Emiliano need to save?", ["1,800 pesos", "3,600 pesos", "100 pesos"]],
-      ["What was his problem at first?", ["He spent his allowance immediately.", "He didn’t get an allowance.", "His parents said no."]],
-      ["What were the three sections of the jar?", ["Save, Spend and Share", "Toys, Food and School", "Week, Month and Year"]],
-      ["How did he earn extra money?", ["washing a car and selling lemonade", "selling his video games", "working at a shop"]],
-      ["Why didn’t he buy the video game?", ["He looked at a picture of Saturn and decided to wait.", "It was too expensive.", "His parents didn’t allow it."]]
+      ["How much money did Emiliano need to save?",["1,800 pesos","3,600 pesos","100 pesos","2,000 pesos"]],
+      ["What was his problem at first?",["He spent his allowance immediately.","He didn’t get an allowance.","His parents said no.","He didn’t like telescopes."]],
+      ["What were the three sections of the jar?",["Save, Spend and Share","Toys, Food and School","Week, Month and Year","Money, Bank and Gifts"]],
+      ["How did he earn extra money?",["washing a car and selling lemonade","selling his video games","working at a shop","asking his friends for money"]],
+      ["Why didn’t he buy the video game?",["He looked at a picture of Saturn and decided to wait.","It was too expensive.","His parents didn’t allow it.","He didn’t like video games."]],
+      ["Why did the rings of Saturn look “even better”?",["He worked hard to buy the telescope.","The telescope was new.","It was a very clear night.","His cousin helped him."]],
+      ["What does “allowance” mean in “his weekly allowance of 100 pesos”?",["money that parents give children regularly","a kind of job","a prize at school","a bank account"]]
     ]
   },
 
@@ -2729,11 +2806,13 @@ READINGS.push(
     ],
     vocab: [["orbit", "the curved path of an object around a planet"], ["microgravity", "a condition where things seem to have almost no weight"], ["sealed", "closed so that nothing can get in or out"], ["treadmill", "an exercise machine for walking or running in one place"], ["moisture", "a small amount of water in the air or on a surface"]],
     questions: [
-      ["How often does the ISS complete an orbit?", ["every ninety minutes", "every twenty-four hours", "every sixteen minutes"]],
-      ["Why do astronauts sleep in bags attached to the wall?", ["so they don’t float and hit equipment", "because it is very cold", "because there are no beds"]],
-      ["Why can crumbs be dangerous?", ["They can float into eyes or machines.", "They attract insects.", "They make the food go bad."]],
-      ["Why must astronauts exercise two hours a day?", ["to stop their muscles and bones from weakening", "because they are bored", "to produce electricity"]],
-      ["What does “Today’s coffee is yesterday’s coffee” refer to?", ["water recycling", "old coffee packets", "the speed of the station"]]
+      ["How often does the ISS complete an orbit?",["every ninety minutes","every twenty-four hours","every sixteen minutes","every week"]],
+      ["Why do astronauts sleep in bags attached to the wall?",["so they don’t float and hit equipment","because it is very cold","because there are no beds","because it is noisy"]],
+      ["Why can crumbs be dangerous?",["They can float into eyes or machines.","They attract insects.","They make the food go bad.","They are very hot."]],
+      ["Why must astronauts exercise two hours a day?",["to stop their muscles and bones from weakening","because they are bored","to produce electricity","to have fun with friends"]],
+      ["What does “Today’s coffee is yesterday’s coffee” refer to?",["water recycling","old coffee packets","the speed of the station","the coffee machine"]],
+      ["Why do astronauts feel responsible for protecting the planet?",["They see the Earth from above, without borders.","They work for the government.","Their coffee is recycled.","They see sixteen sunsets a day."]],
+      ["What does “sealed” mean in “Food comes in sealed packages”?",["closed so nothing can get in or out","open","very big","frozen"]]
     ]
   },
   {
@@ -2748,11 +2827,13 @@ READINGS.push(
     ],
     vocab: [["frequency", "how high or low a sound is"], ["rumble", "a long, deep sound"], ["detect", "to notice or discover something"], ["calf", "a baby elephant"], ["conservationist", "a person who works to protect nature and animals"]],
     questions: [
-      ["Why can’t humans hear many elephant sounds?", ["They are too low.", "They are too quiet.", "They happen at night."]],
-      ["How can elephants detect vibrations?", ["through sensors in their feet and trunks", "only with their ears", "through their tusks"]],
-      ["What did researchers in Kenya discover?", ["Elephants seem to use names for each other.", "Elephants can sing.", "Elephants forget their families."]],
-      ["How did the researchers test their idea?", ["They played calls and watched how elephants responded.", "They taught elephants new words.", "They counted elephants in the park."]],
-      ["How could this research help elephants?", ["It may help prevent conflicts with farmers.", "It will help sell more tickets to zoos.", "It will make elephants grow bigger."]]
+      ["Why can’t humans hear many elephant sounds?",["They are too low.","They are too quiet.","They happen at night.","They are too fast."]],
+      ["How can elephants detect vibrations?",["through sensors in their feet and trunks","only with their ears","through their tusks","through their tails"]],
+      ["What did researchers in Kenya discover?",["Elephants seem to use names for each other.","Elephants can sing.","Elephants forget their families.","Elephants can read."]],
+      ["How did the researchers test their idea?",["They played calls and watched how elephants responded.","They taught elephants new words.","They counted elephants in the park.","They followed elephants with drones."]],
+      ["How could this research help elephants?",["It may help prevent conflicts with farmers.","It will help sell more tickets to zoos.","It will make elephants grow bigger.","It will teach elephants to talk."]],
+      ["Why is the finding about names so surprising?",["Very few animals are known to do it.","Elephants never make sounds.","Names are only for zoo animals.","Elephants forget their families."]],
+      ["What does “detect” mean in “elephants can detect some of these vibrations”?",["notice or feel","make","stop","forget"]]
     ]
   },
   {
@@ -2767,11 +2848,13 @@ READINGS.push(
     ],
     vocab: [["ruins", "the parts of old buildings that remain"], ["rivalry", "a long competition between two sides"], ["inscription", "words carved into stone or metal"], ["remote", "far away from cities"], ["biosphere reserve", "a protected natural area"]],
     questions: [
-      ["Where is Calakmul?", ["in the jungle of Campeche", "in Guatemala", "near Mexico City"]],
-      ["What was Calakmul’s main rival?", ["Tikal", "Chichén Itzá", "Palenque"]],
-      ["What do the inscriptions describe?", ["alliances, battles and kings", "recipes and medicine", "the weather"]],
-      ["Why does Calakmul receive fewer tourists?", ["It is very remote.", "It is closed to visitors.", "It is very small."]],
-      ["Why is Calakmul’s UNESCO recognition special?", ["It was recognized for both cultural and natural value.", "It was the first site in Mexico.", "It is the oldest city in the world."]]
+      ["Where is Calakmul?",["in the jungle of Campeche","in Guatemala","near Mexico City","in Yucatán"]],
+      ["What was Calakmul’s main rival?",["Tikal","Chichén Itzá","Palenque","Teotihuacan"]],
+      ["What do the inscriptions describe?",["alliances, battles and kings","recipes and medicine","the weather","sports and games"]],
+      ["Why does Calakmul receive fewer tourists?",["It is very remote.","It is closed to visitors.","It is very small.","It is dangerous."]],
+      ["Why is Calakmul’s UNESCO recognition special?",["It was recognized for both cultural and natural value.","It was the first site in Mexico.","It is the oldest city in the world.","It has the biggest pyramid in the world."]],
+      ["How has the small number of tourists helped Calakmul?",["The surrounding forest is better protected.","The pyramids are taller.","More people live there.","It has more hotels."]],
+      ["What does “remote” mean in “Because the city is so remote”?",["far away from towns and roads","very old","very busy","very small"]]
     ]
   },
   {
@@ -2786,11 +2869,13 @@ READINGS.push(
     ],
     vocab: [["headline", "the title of a news story"], ["deliberately", "on purpose"], ["provoke", "to cause a strong reaction"], ["anonymous", "with no name given"], ["skeptical", "not easily believing something"]],
     questions: [
-      ["Why does false information spread quickly?", ["It provokes strong emotions.", "It is always funny.", "It is written by experts."]],
-      ["What is the first question you should ask?", ["Who created this?", "How many likes does it have?", "Is it long or short?"]],
-      ["What do reliable sources usually do?", ["explain where their facts come from", "use shocking headlines", "hide the author’s name"]],
-      ["What can a reverse image search reveal?", ["where a photo originally came from", "who liked the photo", "how to edit the photo"]],
-      ["According to the text, what does being skeptical mean?", ["taking a moment before accepting or sharing", "believing nothing at all", "never using the internet"]]
+      ["Why does false information spread quickly?",["It provokes strong emotions.","It is always funny.","It is written by experts.","It is very short."]],
+      ["What is the first question you should ask?",["Who created this?","How many likes does it have?","Is it long or short?","Is it in color?"]],
+      ["What do reliable sources usually do?",["explain where their facts come from","use shocking headlines","hide the author’s name","post many photos"]],
+      ["What can a reverse image search reveal?",["where a photo originally came from","who liked the photo","how to edit the photo","how many people saw it"]],
+      ["According to the text, what does being skeptical mean?",["taking a moment before accepting or sharing","believing nothing at all","never using the internet","sharing everything quickly"]],
+      ["Why should you check what other sources say?",["Important true events are reported by several trustworthy sources.","Other sources are always wrong.","It is more fun.","It gives you more likes."]],
+      ["What does “skeptical” mean in “Being skeptical doesn’t mean believing nothing”?",["careful about believing things too quickly","very angry","happy and excited","sure about everything"]]
     ]
   },
   {
@@ -2805,11 +2890,13 @@ READINGS.push(
     ],
     vocab: [["sprint", "a short, very fast race"], ["chariot", "an ancient cart with two wheels pulled by horses"], ["wreath", "a ring of leaves or flowers"], ["abolish", "to officially end something"], ["altitude", "the height of a place above the sea"]],
     questions: [
-      ["What was the only event in the first Olympic Games?", ["a sprint called the stadion", "wrestling", "chariot racing"]],
-      ["What did ancient winners receive?", ["a wreath of olive leaves", "a gold medal", "a bag of money"]],
-      ["Who helped revive the modern Olympics?", ["Pierre de Coubertin", "Koroibos", "Zeus"]],
-      ["When did women first compete in the modern Games?", ["1900", "1896", "1968"]],
-      ["What was special about Enriqueta Basilio?", ["She was the first woman to light the Olympic cauldron.", "She won Mexico’s first gold medal.", "She organized the 1968 Games."]]
+      ["What was the only event in the first Olympic Games?",["a sprint called the stadion","wrestling","chariot racing","boxing"]],
+      ["What did ancient winners receive?",["a wreath of olive leaves","a gold medal","a bag of money","a crown of gold"]],
+      ["Who helped revive the modern Olympics?",["Pierre de Coubertin","Koroibos","Zeus","Enriqueta Basilio"]],
+      ["When did women first compete in the modern Games?",["1900","1896","1968","1924"]],
+      ["What was special about Enriqueta Basilio?",["She was the first woman to light the Olympic cauldron.","She won Mexico’s first gold medal.","She organized the 1968 Games.","She was the youngest athlete."]],
+      ["Why did Pierre de Coubertin want to bring back the Olympics?",["He believed sport could promote peace.","He wanted to win a medal.","He liked ancient Greece.","He wanted to build stadiums."]],
+      ["What does “abolished” mean in “until they were abolished around 393 AD”?",["officially stopped","made bigger","moved to another city","started again"]]
     ]
   }
 );
@@ -4203,11 +4290,13 @@ READINGS.push(
     ],
     vocab: [["decorate", "to make a place look pretty for a special day"], ["noise", "a sound, often loud or strange"], ["whisper", "to speak very quietly"], ["nervous", "a little worried or afraid"], ["adopt", "to take an animal or child into your family"]],
     questions: [
-      ["What were the students doing?", ["decorating their classroom", "taking an exam", "eating lunch"]],
-      ["Where did the noise come from?", ["the closet", "the window", "the teacher’s desk"]],
-      ["What did Sofía think it was?", ["a ghost", "a kitten", "a mouse"]],
-      ["What was really in the closet?", ["a small gray kitten", "a ghost", "a bat"]],
-      ["What happened to Boo?", ["a family adopted it", "it stayed in the closet", "it ran away"]]
+      ["What were the students doing?",["decorating their classroom","taking an exam","eating lunch","painting the walls"]],
+      ["Where did the noise come from?",["the closet","the window","the teacher’s desk","under the floor"]],
+      ["What did Sofía think it was?",["a ghost","a kitten","a mouse","a rat"]],
+      ["What was really in the closet?",["a small gray kitten","a ghost","a bat","a mouse"]],
+      ["What happened to Boo?",["a family adopted it","it stayed in the closet","it ran away","the teacher took it home"]],
+      ["Why were the students nervous?",["They heard a strange noise in the closet.","They had a big exam.","The teacher was angry.","The lights went out."]],
+      ["What does “whispered” mean in “whispered Sofía”?",["said very quietly","shouted","sang","cried"]]
     ]
   },
   {

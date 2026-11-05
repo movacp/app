@@ -68,11 +68,13 @@ READINGS.push(
     ],
     vocab: [["contest", "a competition with a winner"], ["argue", "to talk angrily because you don’t agree"], ["bucket", "a container with a handle"], ["shell", "the hard part that protects some sea animals"], ["teamwork", "working well together"]],
     questions: [
-      ["Where did the family go?", ["to the beach in Mazatlán", "to the mountains", "to a water park"]],
-      ["What did Toño want to make?", ["a sea turtle", "a tall castle", "a boat"]],
-      ["What happened when they were almost finished?", ["A wave destroyed a tower.", "It started to rain.", "Toño lost the bucket."]],
-      ["How did Lucía help her brother?", ["She told him they could build it again.", "She bought him an ice cream.", "She called their parents."]],
-      ["What prize did they get?", ["a special prize for teamwork", "first prize", "no prize"]]
+      ["Where did the family go?",["to the beach in Mazatlán","to the mountains","to a water park","to a lake in Jalisco"]],
+      ["What did Toño want to make?",["a sea turtle","a tall castle","a boat","a dragon"]],
+      ["What happened when they were almost finished?",["A wave destroyed a tower.","It started to rain.","Toño lost the bucket.","Their bucket broke."]],
+      ["How did Lucía help her brother?",["She told him they could build it again.","She bought him an ice cream.","She called their parents.","She built the tower alone."]],
+      ["What prize did they get?",["a special prize for teamwork","first prize","no prize","second prize"]],
+      ["Why did the judges give them a prize for teamwork?",["They mixed both ideas and worked together.","They built the tallest castle.","They finished first.","Their parents helped them."]],
+      ["What does “argued” mean in “They argued for a few minutes”?",["didn’t agree and talked angrily","played together","laughed a lot","made a plan"]]
     ]
   },
   {
@@ -87,11 +89,13 @@ READINGS.push(
     ],
     vocab: [["soil", "the earth where plants grow"], ["root", "the part of a plant that grows under the ground"], ["shoot", "a new part of a plant that grows up"], ["nutrients", "things in food or soil that help living things grow"], ["photosynthesis", "how plants use sunlight to make food"]],
     questions: [
-      ["What is inside a seed?", ["a baby plant and food", "only water", "a small flower"]],
-      ["What grows first?", ["a root", "a flower", "the leaves"]],
-      ["What do the leaves do?", ["They use sunlight to make food.", "They drink water from the ground.", "They hold the plant in place."]],
-      ["How long does it take a sunflower to grow very tall?", ["about two months", "about two days", "about two years"]],
-      ["Why does the journey “begin again”?", ["The flower makes new seeds.", "The sun goes down.", "The root breaks."]]
+      ["What is inside a seed?",["a baby plant and food","only water","a small flower","sand and rocks"]],
+      ["What grows first?",["a root","a flower","the leaves","a big leaf"]],
+      ["What do the leaves do?",["They use sunlight to make food.","They drink water from the ground.","They hold the plant in place.","They make new seeds."]],
+      ["How long does it take a sunflower to grow very tall?",["about two months","about two days","about two years","about two weeks"]],
+      ["Why does the journey “begin again”?",["The flower makes new seeds.","The sun goes down.","The root breaks.","The wind stops."]],
+      ["Why does the root grow down first?",["to drink water and hold the plant in place","to look for the sun","to make new seeds","to make food from sunlight"]],
+      ["What does “nutrients” mean in “nutrients from the soil”?",["good things a plant needs to grow","small insects","dry leaves","rain drops"]]
     ]
   },
   {
@@ -106,11 +110,13 @@ READINGS.push(
     ],
     vocab: [["remarkable", "unusual in a way that surprises you"], ["neuron", "a cell that carries messages in the brain and body"], ["invertebrate", "an animal without a backbone"], ["camouflage", "a way of hiding by looking like the things around you"], ["texture", "how something feels when you touch it"]],
     questions: [
-      ["How many hearts does an octopus have?", ["three", "one", "eight"]],
-      ["Where are most of an octopus’s neurons?", ["in its arms", "in its head", "in its hearts"]],
-      ["What have octopuses done in aquariums?", ["opened jars and escaped from their tanks", "learned to speak", "built small houses"]],
-      ["What else can octopus skin change besides color?", ["its texture", "its temperature", "its size"]],
-      ["What does the writer suggest in the last paragraph?", ["Octopuses learn fast because their lives are short.", "Octopuses live for many years.", "Octopuses never learn new things."]]
+      ["How many hearts does an octopus have?",["three","one","eight","two"]],
+      ["Where are most of an octopus’s neurons?",["in its arms","in its head","in its hearts","in its eyes"]],
+      ["What have octopuses done in aquariums?",["opened jars and escaped from their tanks","learned to speak","built small houses","played games with people"]],
+      ["What else can octopus skin change besides color?",["its texture","its temperature","its size","its weight"]],
+      ["What does the writer suggest in the last paragraph?",["Octopuses learn fast because their lives are short.","Octopuses live for many years.","Octopuses never learn new things.","Octopuses forget everything quickly."]],
+      ["Why can each arm make simple decisions on its own?",["Most of the neurons are in the arms.","Each arm has its own heart.","The arms can see.","The arms are very long."]],
+      ["What does “camouflage” mean in the text?",["changing to look like the things around it","a kind of ink","a dangerous fish","a type of rock"]]
     ]
   },
 
@@ -126,11 +132,12 @@ READINGS.push(
     ],
     vocab: [["bag", "you carry your things in it"], ["book", "you read it"], ["pencil", "you write with it"], ["ruler", "you draw straight lines with it"], ["notebook", "you write in it"]],
     questions: [
-      ["What color is Leo’s bag?", ["blue", "red", "green"]],
-      ["How many books does he have?", ["two", "three", "one"]],
-      ["What color is his pen?", ["red", "blue", "black"]],
-      ["What food is in the bag?", ["an apple", "a sandwich", "a banana"]],
-      ["How is the bag?", ["big", "small", "old"]]
+      ["What color is Leo’s bag?",["blue","red","green","black"]],
+      ["How many books does he have?",["two","three","one","four"]],
+      ["What color is his pen?",["red","blue","black","green"]],
+      ["What food is in the bag?",["an apple","a sandwich","a banana","an orange"]],
+      ["How is the bag?",["big","small","old","new"]],
+      ["How does Leo feel about his bag?",["He likes it a lot.","He wants a new bag.","He thinks it is too big.","He doesn’t like the color."]]
     ]
   },
   {
@@ -145,11 +152,13 @@ READINGS.push(
     ],
     vocab: [["team", "a group of people who play together"], ["coach", "the person who trains a team"], ["match", "a game between two teams"], ["score", "to get a point or a goal"], ["tired", "when you need to rest"]],
     questions: [
-      ["When does the team practice?", ["on Tuesdays and Thursdays", "every day", "on Saturdays"]],
-      ["What does the coach always say?", ["Pass the ball and work together!", "Run faster!", "Don’t be late!"]],
-      ["Who is Camila?", ["Mateo’s little sister", "the coach", "Mateo’s friend"]],
-      ["Who scores the goal?", ["Iker", "Mateo", "the coach"]],
-      ["What do they do after the match?", ["They eat pizza together.", "They go to school.", "They practice again."]]
+      ["When does the team practice?",["on Tuesdays and Thursdays","every day","on Saturdays","on Mondays and Fridays"]],
+      ["What does the coach always say?",["Pass the ball and work together!","Run faster!","Don’t be late!","Score more goals!"]],
+      ["Who is Camila?",["Mateo’s little sister","the coach","Mateo’s friend","Mateo’s cousin"]],
+      ["Who scores the goal?",["Iker","Mateo","the coach","Camila"]],
+      ["What do they do after the match?",["They eat pizza together.","They go to school.","They practice again.","They watch a movie."]],
+      ["Why is Mateo a little nervous on Saturday?",["It is a big match.","He is sick.","His family is not there.","He doesn’t like football."]],
+      ["What does “score” mean in “Iker scores a goal”?",["get a point by putting the ball in the goal","stop the ball","run fast","lose the match"]]
     ]
   },
   {
@@ -164,11 +173,13 @@ READINGS.push(
     ],
     vocab: [["warehouse", "a big building where things are stored"], ["programming", "writing instructions for a computer or robot"], ["captain", "the leader of a team"], ["disagree", "to have a different opinion"], ["under pressure", "in a difficult or stressful moment"]],
     questions: [
-      ["What did the robot have to do?", ["pick up boxes and put them in the right place", "play football", "clean the classroom"]],
-      ["What was Paola good at?", ["programming", "building", "drawing"]],
-      ["Why did Chispa stop?", ["The battery was dead.", "A wheel broke.", "It was too slow."]],
-      ["Who changed the battery?", ["Bruno", "Paola", "a judge"]],
-      ["What did the judges say about the team?", ["They were the calmest under pressure.", "They were the fastest.", "They were the youngest."]]
+      ["What did the robot have to do?",["pick up boxes and put them in the right place","play football","clean the classroom","sort colored balls"]],
+      ["What was Paola good at?",["programming","building","drawing","music"]],
+      ["Why did Chispa stop?",["The battery was dead.","A wheel broke.","It was too slow.","It went the wrong way."]],
+      ["Who changed the battery?",["Bruno","Paola","a judge","Regina"]],
+      ["What did the judges say about the team?",["They were the calmest under pressure.","They were the fastest.","They were the youngest.","They were the most creative."]],
+      ["What helped the team finish the task?",["Regina remembered the extra battery.","The judges gave them more time.","Chispa was the fastest robot.","Another team helped them."]],
+      ["What does “under pressure” mean in the text?",["in a difficult, stressful moment","under the table","in a quiet place","with a lot of time"]]
     ]
   },
   {
@@ -182,11 +193,13 @@ READINGS.push(
     ],
     vocab: [["packaging", "the material used to wrap or protect a product"], ["break down", "to slowly separate into smaller parts"], ["confuse", "to think one thing is another"], ["campaign", "to work in an organized way to change something"], ["reusable", "you can use it many times"]],
     questions: [
-      ["Why does plastic stay in the ocean for so long?", ["It can take hundreds of years to break down.", "Fish eat it.", "The water is too cold."]],
-      ["Why do turtles eat plastic bags?", ["They confuse them with jellyfish.", "They like the taste.", "They use them to build nests."]],
-      ["What are microplastics?", ["tiny pieces of plastic", "small fish", "a kind of bottle"]],
-      ["What have some teenagers invented?", ["machines that collect plastic from rivers", "a new kind of plastic", "robot turtles"]],
-      ["What is the main message of the last paragraph?", ["Small actions by many people can make a big difference.", "Only inventors can help the ocean.", "Recycling doesn’t work."]]
+      ["Why does plastic stay in the ocean for so long?",["It can take hundreds of years to break down.","Fish eat it.","The water is too cold.","It is very heavy."]],
+      ["Why do turtles eat plastic bags?",["They confuse them with jellyfish.","They like the taste.","They use them to build nests.","They are very hungry."]],
+      ["What are microplastics?",["tiny pieces of plastic","small fish","a kind of bottle","big pieces of glass"]],
+      ["What have some teenagers invented?",["machines that collect plastic from rivers","a new kind of plastic","robot turtles","boats that make plastic"]],
+      ["What is the main message of the last paragraph?",["Small actions by many people can make a big difference.","Only inventors can help the ocean.","Recycling doesn’t work.","Plastic is not a problem."]],
+      ["Why is plastic in the ocean also a problem for people?",["Microplastics are found even in the food we eat.","Plastic makes the water hot.","Fish stop swimming.","Beaches become bigger."]],
+      ["What does “reusable” mean in “a reusable water bottle”?",["you can use it many times","you throw it away after one use","it is very small","it is made of paper"]]
     ]
   },
   {
@@ -201,11 +214,13 @@ READINGS.push(
     ],
     vocab: [["complex", "with many parts that are connected"], ["sketch", "to draw quickly without many details"], ["code", "instructions written for a computer"], ["release", "to make available to the public"], ["bug", "an error in a program"]],
     questions: [
-      ["What does the first paragraph say about making a game?", ["It can take many people and many years.", "One person usually makes it in a week.", "It only needs programmers."]],
-      ["What do game designers decide?", ["the rules and what the player will do", "the music", "the price of the game"]],
-      ["What do composers do?", ["They write music that changes with the action.", "They record footsteps.", "They test the levels."]],
-      ["What is a bug?", ["an error that makes the game behave strangely", "a character in the game", "a type of music"]],
-      ["According to the writer, what makes a team successful?", ["people with different talents who collaborate", "only expert programmers", "working alone"]]
+      ["What does the first paragraph say about making a game?",["It can take many people and many years.","One person usually makes it in a week.","It only needs programmers.","It is easy and fast."]],
+      ["What do game designers decide?",["the rules and what the player will do","the music","the price of the game","the story and characters"]],
+      ["What do composers do?",["They write music that changes with the action.","They record footsteps.","They test the levels.","They draw the landscapes."]],
+      ["What is a bug?",["an error that makes the game behave strangely","a character in the game","a type of music","a big level at the end"]],
+      ["According to the writer, what makes a team successful?",["people with different talents who collaborate","only expert programmers","working alone","having the most money"]],
+      ["Why does testing take a long time?",["Testers must find and fix many errors.","Testers play only once.","Games are very short.","The music must be recorded again."]],
+      ["What does “collaborate” mean in “people with very different talents learn to collaborate”?",["work together","compete","work alone","argue"]]
     ]
   },
 

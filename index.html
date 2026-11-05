@@ -1587,7 +1587,7 @@ function viewReading(id) {
         const missing = sets.filter((f) => !$("input:checked", f));
         if (missing.length) {
           result.className = "result warn";
-          result.textContent = `Answer all 5 questions to check your work. ${plural(missing.length, "question is", "questions are")} still empty.`;
+          result.textContent = `Answer all ${qs.length} questions to check your work. ${plural(missing.length, "question is", "questions are")} still empty.`;
           $("input", missing[0]).focus();
           return;
         }
@@ -1603,10 +1603,11 @@ function viewReading(id) {
           if (chosen === correct) score++;
           else f.insertAdjacentHTML("beforeend", `<p class="rq-note">Correct answer: ${esc(correct)}</p>`);
         });
-        result.className = `result ${score === 5 ? "good" : score >= 3 ? "mid" : "warn"}`;
-        result.textContent = score === 5
-          ? `Excellent! You got 5 of 5 correct.${isDone(r.id) ? "" : " You can mark this reading as completed."}`
-          : `You got ${score} of 5 correct. Read the text again and try once more.`;
+        const nq = qs.length;
+        result.className = `result ${score === nq ? "good" : score >= Math.ceil(nq * 0.6) ? "mid" : "warn"}`;
+        result.textContent = score === nq
+          ? `Excellent! You got ${nq} of ${nq} correct.${isDone(r.id) ? "" : " You can mark this reading as completed."}`
+          : `You got ${score} of ${nq} correct. Read the text again and try once more.`;
         check.hidden = true; reset.hidden = false;
       });
       reset.addEventListener("click", () => {
