@@ -371,7 +371,7 @@ function starsFor(p){return p>=90?3:p>=70?2:p>=40?1:0;}
 
 function setLive(on){
   listening=on;$("#rec").classList.toggle("live",on);$("#wave").classList.toggle("live",on);
-  $("#rec").setAttribute("aria-label",on?"Stop recording":"Start recording");$("#recCap").textContent=on?"Listening…":"Read";
+  $("#rec").setAttribute("aria-label",on?"Stop recording":"Start recording");$("#recCap").textContent=on?"Tap to finish":"Read";
   $("#listen").disabled=on;$("#slow").disabled=on;
 }
 function record(){
@@ -379,13 +379,16 @@ function record(){
   if(listening){try{rec.stop();}catch(e){}return;}
   try{speechSynthesis.cancel();}catch(e){}
   rec=new SR();rec.lang="en-US";rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=4;
-  t0=0;t1=0;finalAlts=null;var gotAny=false;
-  rec.onstart=function(){setLive(true);$("#hint").textContent="Read now…";paint({});};
+  t0=0;t1=0;finalAlts=null;var gotAny=false,lastTxt="",silT=0,capT=0,nsT=0;
+  function stopNow(){clearTimeout(silT);clearTimeout(capT);clearTimeout(nsT);try{rec.stop();}catch(e){}}
+  var nW=st.cur.words.length,capMs=Math.min(20000,Math.max(6000,nW*900+3500));
+  rec.onstart=function(){setLive(true);$("#hint").hidden=false;$("#hint").textContent="Read now. When you finish, tap the mic.";paint({});
+    capT=setTimeout(stopNow,capMs);nsT=setTimeout(function(){if(!gotAny)stopNow();},8000);};
   rec.onspeechstart=function(){t0=performance.now();};
   rec.onresult=function(e){
-    gotAny=true;var r=e.results[e.results.length-1];
+    gotAny=true;clearTimeout(nsT);clearTimeout(silT);silT=setTimeout(stopNow,1600);var r=e.results[e.results.length-1];
     if(!t0)t0=performance.now();t1=performance.now();
-    var txt="";for(var i=0;i<e.results.length;i++)txt+=e.results[i][0].transcript+" ";
+    var txt="";for(var i=0;i<e.results.length;i++)txt+=e.results[i][0].transcript+" ";lastTxt=txt;
     var ev=evaluate(txt), live={};Object.keys(ev.state).forEach(function(k){if(ev.state[k]==="ok")live[k]="ok";});paint(live);
     if(r.isFinal){finalAlts=[];for(var a=0;a<r.length;a++)finalAlts.push(r[a].transcript);
       if(e.results.length>1){var pre="";for(var q=0;q<e.results.length-1;q++)pre+=e.results[q][0].transcript+" ";finalAlts=finalAlts.map(function(x){return pre+x;});}}
@@ -396,7 +399,9 @@ function record(){
     if(m){$("#hint").hidden=false;$("#hint").textContent=m;}
   };
   rec.onend=function(){
-    setLive(false);
+    clearTimeout(silT);clearTimeout(capT);clearTimeout(nsT);setLive(false);
+    if((!finalAlts||!finalAlts.length)&&lastTxt.trim())finalAlts=[lastTxt];
+    if(!gotAny){$("#hint").hidden=false;$("#hint").textContent="We didn't hear you. Tap the mic, read loud and clear, then tap again to finish.";}
     if(!finalAlts||!finalAlts.length){if(!gotAny){/* sin resultado: el mensaje lo pone onerror */}return;}
     var secs=t0&&t1?(t1-t0)/1000:0, best=null;
     finalAlts.forEach(function(alt){var ev=evaluate(alt);ev.pts=score(ev,secs);if(!best||ev.pts>best.pts)best=ev;});
@@ -432,8 +437,10 @@ $("#next").onclick=function(){
 function say(t,rate){
   try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=rate||(st.stage==="kids"?.85:.95);speechSynthesis.speak(u);}catch(e){}
 }
-$("#listen").onclick=function(){say(st.cur.text);};
-$("#slow").onclick=function(){say(st.cur.text,.65);};
+function sayCheck(t,r){var started=false;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=r||(st.stage==="kids"?.85:.95);u.onstart=function(){started=true;};speechSynthesis.speak(u);}catch(e){}
+  setTimeout(function(){if(!started){$("#hint").hidden=false;$("#hint").textContent="No sound? Turn up the volume or ask your teacher to read it for you.";}},1800);}
+$("#listen").onclick=function(){sayCheck(st.cur.text);};
+$("#slow").onclick=function(){sayCheck(st.cur.text,.65);};
 
 /* ---------- resultado final ---------- */
 function finish(){

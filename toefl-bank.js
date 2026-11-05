@@ -194,7 +194,7 @@ TOEFL_BANK.passages = [
       ["According to the passage, maize was developed from", ["a wild grass", "a type of rice", "a tree native to the Andes", "wheat brought from Europe"], "Paragraph 1 says it came from a wild grass called teosinte."],
       ["The word “gradually” in paragraph 2 is closest in meaning to", ["slowly", "suddenly", "accidentally", "completely"], "Gradually means little by little, slowly."],
       ["The word “its” in the last sentence refers to", ["teosinte", "maize", "disease", "climate"], "Scientists study teosinte because its genes may help modern maize."],
-      ["Which of the following can be inferred from the passage?", ["Early farmers had a strong influence on how maize looks today.", "Teosinte is no longer found anywhere in the world.", "Maize was first grown in Antarctica.", "The Maya did not eat maize."], "Farmers selected seeds for thousands of years, which shaped modern maize."]
+      ["Which of the following can be inferred from the passage?", ["Early farmers had a strong influence on how maize looks today.", "Teosinte is no longer found anywhere in the world.", "Maize spread to every continent within a few years.", "Modern maize no longer needs any help from farmers."], "Farmers selected seeds for thousands of years, which shaped modern maize."]
     ] },
   { id: "bees", title: "How Honeybees Communicate", c: "#FBE6D8", art: "bee",
     text: [

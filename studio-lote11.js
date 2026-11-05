@@ -1736,7 +1736,7 @@ READINGS.push(
 
   /* ---------- B2 ---------- */
   {
-    id: "kids-deep-ocean", level: "B2", stage: "kids", topic: "Science", title: "Life in the Deep, Dark Ocean",
+    id: "kids-deep-ocean", level: "B1", stage: "children", topic: "Science", title: "Life in the Deep, Dark Ocean",
     description: "Thousands of meters below the surface, there is no sunlight. Yet strange creatures live there.",
     text: [
       "Imagine diving down into the ocean. Near the surface, the water is bright, blue and full of fish. But as you go deeper, the light starts to fade. At about one thousand meters, sunlight disappears completely, and everything is as dark as the darkest night. Scientists call this the deep sea, and it covers most of our planet.",
@@ -1755,7 +1755,7 @@ READINGS.push(
     ]
   },
   {
-    id: "kids-raindrop-journey", level: "B2", stage: "kids", topic: "Science", title: "The Endless Journey of a Raindrop",
+    id: "kids-raindrop-journey", level: "B1", stage: "children", topic: "Science", title: "The Endless Journey of a Raindrop",
     description: "The water you drink today may once have been in a cloud, a glacier, or a dinosaur’s lake.",
     text: [
       "Here is an incredible thought: the water in your glass today may be millions of years old. A dinosaur could have drunk it, it could have floated in a cloud over the Pacific Ocean, or it could have been frozen inside a glacier for centuries. This is possible because the water on Earth is constantly moving in a never-ending circle called the water cycle.",
@@ -1774,7 +1774,7 @@ READINGS.push(
     ]
   },
   {
-    id: "kids-animals-winter", level: "B2", stage: "kids", topic: "Nature", title: "How Animals Prepare for Winter",
+    id: "kids-animals-winter", level: "B1", stage: "children", topic: "Nature", title: "How Animals Prepare for Winter",
     description: "When the days get colder and food disappears, animals use clever strategies to survive.",
     text: [
       "When autumn arrives in many parts of the world, the days become shorter, the temperature drops, and food starts to disappear. For wild animals, winter is the most difficult season of the year. Over millions of years, however, they have developed three clever strategies to survive it: they leave, they sleep, or they adapt.",
@@ -1793,7 +1793,7 @@ READINGS.push(
     ]
   },
   {
-    id: "kids-chocolate-gift", level: "B2", stage: "kids", topic: "Mexico", title: "Chocolate: A Gift from Ancient Mexico",
+    id: "kids-chocolate-gift", level: "B1", stage: "children", topic: "Mexico", title: "Chocolate: A Gift from Ancient Mexico",
     description: "Before it was a candy bar, chocolate was a bitter drink for kings and a kind of money.",
     text: [
       "Today you can find chocolate in almost every store in the world: in candy bars, cakes, ice cream and hot drinks. But few people know that the story of chocolate began thousands of years ago in Mesoamerica, the region that includes the south of Mexico and part of Central America.",
@@ -1812,7 +1812,7 @@ READINGS.push(
     ]
   },
   {
-    id: "kids-robots-helpers", level: "B2", stage: "kids", topic: "Technology", title: "Robots That Help People",
+    id: "kids-robots-helpers", level: "B1", stage: "children", topic: "Technology", title: "Robots That Help People",
     description: "Robots are not only in movies. Today they help doctors, farmers and rescue teams.",
     text: [
       "When we hear the word “robot,” many of us imagine a metal machine with arms and legs that talks like a person, just like in the movies. In reality, most robots look very different, and they are already helping people in amazing ways.",

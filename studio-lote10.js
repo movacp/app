@@ -10,7 +10,7 @@
 /* ---------- Niveles ---------- */
 LEVELS.splice(0, LEVELS.length, "Pre-A1", "A1", "A1+", "A2", "A2+", "B1", "B1+", "B2", "C1", "C2");
 const STAGE_LEVELS = {
-  kids: ["Pre-A1", "A1", "A1+", "A2", "A2+", "B1", "B2"],
+  kids: ["Pre-A1", "A1", "A1+", "A2", "A2+", "B1"],
   children: ["Pre-A1", "A1", "A1+", "A2", "A2+", "B1", "B2"],
   teens: ["Pre-A1", "A1", "A1+", "A2", "A2+", "B1", "B2", "C1", "C2"]
 };
@@ -95,7 +95,7 @@ READINGS.push(
     ]
   },
   {
-    id: "secret-life-of-octopuses", level: "B2", stage: "kids", topic: "Science", title: "The Secret Life of Octopuses",
+    id: "secret-life-of-octopuses", level: "B1", stage: "children", topic: "Science", title: "The Secret Life of Octopuses",
     description: "Three hearts, blue blood and a brain in every arm: meet one of the smartest animals in the ocean.",
     text: [
       "If you could choose a superpower, would you like to change color in less than a second, squeeze through a hole the size of a coin, or taste things with your arms? An octopus can do all three.",
@@ -299,7 +299,7 @@ READINGS.push(
     vocab: [["conventional wisdom", "the opinion that most people accept"], ["paralyze", "to make someone unable to act"], ["compelled", "feeling that you must do something"], ["settle on", "to choose something after considering options"], ["haunted", "constantly worried or troubled by something"]],
     questions: [
       ["What belief is described in the first paragraph?", ["More choice leads to more freedom and satisfaction.", "Supermarkets have too few products.", "Streaming platforms are expensive."]],
-      ["What did the jam experiment show?", ["Fewer options led to more purchases.", "People prefer more types of jam.", "Shoppers did not like jam."]],
+      ["What did the jam experiment show?", ["Fewer options led to more purchases.", "People prefer more types of jam.", "Most shoppers ignored the tasting table."]],
       ["How are “satisficers” different from “maximizers”?", ["They accept the first option that meets their needs.", "They always search for the best possible option.", "They never make decisions."]],
       ["Why are maximizers often less satisfied?", ["They keep wondering if a better option existed.", "They always make bad decisions.", "They have fewer options."]],
       ["What is the author’s conclusion?", ["Well-being depends on knowing when enough is enough.", "Choice should be eliminated.", "More options always lead to happiness."]]

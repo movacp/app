@@ -257,15 +257,15 @@ const DATA = {
   weather: { level: "A1+", stage: "kids", label: "Weather", c: "var(--mustard)", items: [["sunny","soleado"],["rainy","lluvioso"],["cloudy","nublado"],["windy","con viento"],["snowy","con nieve"],["hot","calor"],["cold","frío"],["stormy","con tormenta"],["warm","templado"],["foggy","con neblina"]] },
 
   /* ---------- MOVA Children ---------- */
-  freq: { level: "A1+", stage: "children", label: "Adverbs of Frequency", c: "var(--coral)", type: "sentence", instr: "How often? Choose the adverb", rule: "always 100% · usually 80% · often 70% · sometimes 50% · rarely 10% · never 0%", options: ["always","usually","often","sometimes","rarely","never"], items: [
-    ["I ___ brush my teeth before bed.","always","100%"],
-    ["We ___ eat pizza on Fridays, but not every week.","sometimes","50%"],
-    ["My cat ___ swims. It hates water!","never","0%"],
-    ["She ___ walks to school, but on rainy days she takes the bus.","usually","80%"],
-    ["He is ___ late. He arrives on time every day.","never","0%"],
-    ["My dad ___ drinks coffee in the morning. Every single day!","always","100%"],
-    ["I ___ go to bed late. Only on my birthday.","rarely","10%"],
-    ["They ___ play soccer after school, about twice a week.","sometimes","50%"],
+  freq: { level: "A1+", stage: "children", label: "Adverbs of Frequency", c: "var(--coral)", type: "sentence", instr: "How often? Choose the adverb", rule: "From most to least: always › usually › often › sometimes › rarely › never", options: ["always","usually","often","sometimes","rarely","never"], items: [
+    ["I ___ brush my teeth before bed.","always","Every time"],
+    ["We ___ eat pizza. Just once in a while.","sometimes","Once in a while"],
+    ["My cat ___ swims. It hates water!","never","Not one time"],
+    ["She ___ walks to school, but on rainy days she takes the bus.","usually","Almost every time"],
+    ["He is ___ late. He arrives on time every day.","never","Not one time"],
+    ["My dad ___ drinks coffee in the morning. Every single day!","always","Every time"],
+    ["I ___ go to bed late. Only on my birthday.","rarely","Almost never"],
+    ["They ___ play soccer after school. Some days yes, some days no.","sometimes","Some days yes, some days no"],
     ["Choose the correct sentence.","She is always happy.","After the verb to be",["She is always happy.","She always is happy.","Always she is happy."]],
     ["Choose the correct sentence.","I usually walk to school.","Before the main verb",["I usually walk to school.","I walk usually to school.","Usually I to school walk."]],
     ["___ do you play video games? Every weekend.","How often","Asking about frequency",["How often","How much","What time"]]
@@ -420,7 +420,7 @@ const DATA = {
     ["Yesterday I ___ at the park.","was"],["My friends ___ at my party.","were"],["The cake ___ delicious.","was"],["We ___ very happy.","were"],["She ___ tired after school.","was"],["The dogs ___ in the garden.","were"],["It ___ cold last night.","was"],["You ___ late this morning.","were"],["My grandpa ___ a teacher.","was"],["The books ___ on the table.","were"],["Tom and I ___ in the same class.","were"],["The movie ___ very funny.","was"]
   ] },
   habitats: { stage: "kids", level: "B1", label: "Nature and Habitats", c: "var(--mint)", items: [["desert","desierto"],["jungle","selva"],["ocean","océano"],["forest","bosque"],["river","río"],["mountain","montaña"],["island","isla"],["cave","cueva"],["lake","lago"],["volcano","volcán"],["beach","playa"],["nest","nido"]] },
-  science: { stage: "kids", level: "B2", label: "Science Words", c: "var(--lilac)", items: [["planet","planeta"],["gravity","gravedad"],["energy","energía"],["oxygen","oxígeno"],["magnet","imán"],["skeleton","esqueleto"],["experiment","experimento"],["microscope","microscopio"],["temperature","temperatura"],["liquid","líquido"],["solid","sólido"],["habitat","hábitat"]] },
+  science: { stage: "children", level: "B1", label: "Science Words", c: "var(--lilac)", items: [["planet","planeta"],["gravity","gravedad"],["energy","energía"],["oxygen","oxígeno"],["magnet","imán"],["skeleton","esqueleto"],["experiment","experimento"],["microscope","microscopio"],["temperature","temperatura"],["liquid","líquido"],["solid","sólido"],["habitat","hábitat"]] },
 
   school: { stage: "children", level: "Pre-A1", label: "School Things", c: "var(--mustard)", items: [["pencil","lápiz"],["eraser","goma"],["ruler","regla"],["book","libro"],["notebook","cuaderno"],["backpack","mochila"],["scissors","tijeras"],["glue","pegamento"],["desk","pupitre"],["board","pizarrón"],["crayon","crayola"],["teacher","maestra"]] },
   routine: { stage: "children", level: "A1", label: "Daily Routine", c: "var(--sky)", items: [["wake up","despertarse"],["get dressed","vestirse"],["brush my teeth","lavarme los dientes"],["have breakfast","desayunar"],["go to school","ir a la escuela"],["do homework","hacer la tarea"],["have a shower","bañarse"],["have lunch","comer"],["have dinner","cenar"],["go to bed","irse a dormir"]] },
@@ -482,8 +482,8 @@ const DATA = {
     ["The plan ___ to be a great success.","turned out","",["turned out","turned down","turned up"]]
   ] },
   colloc: { stage: "teens", level: "B2", label: "Collocations", c: "var(--coral)", type: "sentence", instr: "Make, do, take or have?", rule: "make a decision / a mistake / progress · do homework / research / a favor · take a break / a risk · have a chat / an argument.", options: ["make","do","take","have"], items: [
-    ["Can you ___ me a favor?","do"],["I need to ___ a decision soon.","make"],["Let’s ___ a break for ten minutes.","take"],["She ___ a lot of progress this year.","made"],["We ___ an interesting chat after class.","had"],["Don’t worry. Everybody ___ mistakes.","makes"],["I have to ___ some research for my essay.","do"],["Sometimes you have to ___ a risk.","take"],["They ___ an argument about money.","had"],["He always ___ his homework before dinner.","does"]
-  ].map(([s, a]) => [s, a, "", [a, ...["make","do","take","have","made","does","makes","had"].filter((x) => x !== a && x[0] !== a[0]).slice(0, 2)]]) },
+    ["Can you ___ me a favor?","do"],["I need to ___ a decision soon.","make"],["Let’s ___ a break for ten minutes.","take"],["If you practice every day, you will ___ a lot of progress.","make"],["Let’s ___ a chat after class.","have"],["Don’t worry. It’s normal to ___ mistakes.","make"],["I have to ___ some research for my project.","do"],["You shouldn’t ___ risks when you drive.","take"],["We’re going to ___ a party on Saturday.","have"],["Could you ___ the dishes tonight?","do"]
+  ].map(([s, a]) => [s, a, "", [a, ...["make","do","take","have"].filter((x) => x !== a)]]) },
   idioms: { stage: "teens", level: "C1", label: "Idioms", c: "var(--mint)", items: [["break the ice","romper el hielo"],["a piece of cake","pan comido"],["hit the books","ponerse a estudiar"],["under the weather","sentirse mal"],["once in a blue moon","muy de vez en cuando"],["cost an arm and a leg","costar un ojo de la cara"],["spill the beans","soltar la sopa"],["hit the nail on the head","dar en el clavo"],["the ball is in your court","te toca decidir"],["on the same page","estar de acuerdo"],["call it a day","dar por terminado el día"],["beat around the bush","andarse por las ramas"]] },
   academic: { stage: "teens", level: "C1", label: "Academic Vocabulary", c: "var(--lilac)", items: [["analyze","analizar"],["evidence","evidencia"],["hypothesis","hipótesis"],["significant","significativo"],["approach","enfoque"],["assess","evaluar"],["consistent","coherente"],["framework","marco"],["interpret","interpretar"],["derive","derivar"],["implement","implementar"],["subsequent","posterior"]] },
   nuance: { stage: "teens", level: "C2", label: "Advanced Vocabulary", c: "var(--pink)", type: "sentence", instr: "Choose the most precise word", rule: "At C2, choose words for their exact nuance, not just their general meaning.", items: [
@@ -494,7 +494,7 @@ const DATA = {
     ["The minister’s apology seemed ___ rather than sincere.","perfunctory","",["perfunctory","profound","pertinent"]],
     ["The writer’s style is famously ___, full of hidden meanings.","enigmatic","",["enigmatic","emphatic","empathic"]],
     ["Despite the criticism, he remained ___ in his beliefs.","steadfast","",["steadfast","steady-handed","stagnant"]],
-    ["The ___ of the plan only became clear after it failed.","flaws","",["flaws","floors","flows"]],
+    ["The ___ in the plan only became clear after it failed.","flaws","",["flaws","virtues","outlines"]],
     ["Her argument was so ___ that nobody could refute it.","cogent","",["cogent","cognate","contingent"]],
     ["The policy had the ___ effect of increasing prices.","unintended","",["unintended","uninterested","undeterred"]]
   ] }

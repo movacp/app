@@ -260,14 +260,16 @@
       var tray0 = host.querySelector(".so-tray");
       tray0.innerHTML = '<div class="so-say"><small>Say it to your visitor</small><b>' + phrase + '</b><div class="so-sbtns"><button type="button" class="so-mic" id="so-mic">' + I.mic + 'Tap and speak</button><button type="button" class="so-skip" id="so-skip">Skip</button></div><span class="so-res" id="so-res"></span></div>';
       host.querySelector("#so-skip").onclick = function () { go(0); };
+      var live = null;
       host.querySelector("#so-mic").onclick = function () {
         var btn = this, res = host.querySelector("#so-res");
+        if (live) { try { live.stop(); } catch (e3) {} return; }
         try {
-          var rec = new SR(); rec.lang = "en-US"; rec.interimResults = false; rec.maxAlternatives = 3;
-          btn.classList.add("rec"); btn.lastChild.textContent = "Listening…";
+          var rec = new SR(); live = rec; rec.lang = "en-US"; rec.interimResults = true; rec.maxAlternatives = 3;
+          var last = "", silT = 0, capT = setTimeout(function () { try { rec.stop(); } catch (e4) {} }, 7000);
+          btn.classList.add("rec"); btn.lastChild.textContent = "Tap to finish";
           var got = false;
-          rec.onresult = function (e) {
-            got = true; var alts = []; for (var i = 0; i < e.results[0].length; i++) alts.push(e.results[0][i].transcript);
+          function check(alts) {
             if (alts.some(function (a) { return heard(phrase, a); })) {
               res.className = "so-res ok"; res.textContent = "Great English! +10 bonus"; if (typeof sfx !== "undefined") sfx.ok();
               setTimeout(function () { go(10); }, 1100);
@@ -276,8 +278,18 @@
               if (tries2 >= 2) setTimeout(function () { go(0); }, 1300);
             }
           };
-          rec.onerror = function () { res.textContent = "I couldn’t hear you. Try again or skip."; };
-          rec.onend = function () { btn.classList.remove("rec"); btn.lastChild.textContent = "Tap and speak"; };
+          var finalAlts = null;
+          rec.onresult = function (e) {
+            got = true; clearTimeout(silT); silT = setTimeout(function () { try { rec.stop(); } catch (e5) {} }, 1400);
+            var r = e.results[e.results.length - 1]; last = r[0].transcript;
+            if (r.isFinal) { finalAlts = []; for (var i = 0; i < r.length; i++) finalAlts.push(r[i].transcript); }
+          };
+          rec.onerror = function () {};
+          rec.onend = function () {
+            live = null; clearTimeout(silT); clearTimeout(capT); btn.classList.remove("rec"); btn.lastChild.textContent = "Tap and speak";
+            var alts = finalAlts || (last ? [last] : null);
+            if (alts) check(alts); else { res.className = "so-res"; res.textContent = "I couldn’t hear you. Tap, speak loud and clear, then tap again."; }
+          };
           try { synth && synth.cancel(); } catch (e2) {} rec.start();
         } catch (e) { go(0); }
       };
