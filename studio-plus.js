@@ -426,11 +426,11 @@ function viewLearn() {
     <section class="page-head wrap">
       <p class="kicker">Learn</p>
       <h1>Understand it, then practice it</h1>
-      <p class="lead">Explicaciones claras de cada tema de gramática y tarjetas para repasar vocabulario.</p>
+      <p class="lead">Clear explanations of every grammar topic and cards to review vocabulary.</p>
     </section>
     <section class="wrap"><div class="hub">
-      <a href="#/structures" data-c="sky"><span class="hub-mark">${ico("rule", 26)}</span><h2>Structures</h2><p>Present Simple, Past Continuous, Present Perfect, Adverbs of Frequency y más, explicados en español con ejemplos en inglés.</p></a>
-      <a href="#/flashcards" data-c="coral"><span class="hub-mark">${ico("cards", 26)}</span><h2>Flashcards</h2><p>Tarjetas para repasar vocabulario por etapa: voltea, escucha y practica.</p></a>
+      <a href="#/structures" data-c="sky"><span class="hub-mark">${ico("rule", 26)}</span><h2>Structures</h2><p>Every grammar topic from Kids to Teens, with patterns, examples and practice.</p></a>
+      <a href="#/flashcards" data-c="coral"><span class="hub-mark">${ico("cards", 26)}</span><h2>Flashcards</h2><p>Cards to review vocabulary by stage: flip, listen and practice.</p></a>
     </div></section>`
   };
 }
@@ -451,7 +451,7 @@ function viewStructures() {
     <section class="page-head wrap">
       <a class="back" href="#/learn">${ico("back", 18)} Learn</a>
       <h1>Structures</h1>
-      <p class="lead">Cada tema con su explicación, la fórmula, ejemplos, el error más común y práctica rápida. Al final encontrarás hojas y juegos del mismo tema.</p>
+      <p class="lead">Each topic with its explanation, the pattern, examples, the most common mistake and quick practice. At the end you'll find worksheets and games on the same topic.</p>
     </section>
     <section class="wrap filters">${searchField("st-q", "Search a topic, like adverbs", stF.q)}</section>
     <section class="wrap"><div class="grid cols" id="st-results"></div></section>`,
@@ -520,7 +520,7 @@ function viewFlashcards() {
     <section class="page-head wrap">
       <a class="back" href="#/learn">${ico("back", 18)} Learn</a>
       <h1>Flashcards</h1>
-      <p class="lead">Toca la tarjeta para voltearla y escuchar la palabra. Cada mes agregamos nuevas barajas.</p>
+      <p class="lead">Tap the card to flip it and hear the word. We add new decks every month.</p>
     </section>
     <section class="wrap"><div class="grid cols">${FLASH_DECKS.map(deckCard).join("")}</div></section>`
   };

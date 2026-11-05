@@ -359,7 +359,7 @@ if (ul && ROUTES.learn) ul.innerHTML = [["", "home", "Home"], ["library", "book"
         <p class="lead">Clear explanations of every grammar topic, and cards to review vocabulary.</p>
       </section>
       <section class="wrap"><div class="hub">
-        <a href="#/structures" data-c="sky"><span class="hub-mark">${ico("rule", 26)}</span><h2>Structures</h2><p>Present Simple, Past Continuous, Present Perfect, Adverbs of Frequency and more. In Spanish for Kids and Children, in English for Teens.</p></a>
+        <a href="#/structures" data-c="sky"><span class="hub-mark">${ico("rule", 26)}</span><h2>Structures</h2><p>Present Simple, Past Continuous, Present Perfect, Adverbs of Frequency and more.</p></a>
         <a href="#/flashcards" data-c="coral"><span class="hub-mark">${ico("cards", 26)}</span><h2>Flashcards</h2><p>Cards to review vocabulary by stage: flip, listen and practice.</p></a>
       </div></section>`
     };
@@ -473,11 +473,9 @@ if (ul && ROUTES.learn) ul.innerHTML = [["", "home", "Home"], ["library", "book"
         tip: "Never is already negative: I never eat fish (not “I don’t never eat fish”)." } }
   ];
   const LKEY = "mova-structures-lang";
-  const getL = () => { try { return localStorage.getItem(LKEY) === "en" ? "en" : "es"; } catch (e) { return "es"; } };
+  const getL = () => "en";
   const setL = (l) => { try { localStorage.setItem(LKEY, l); } catch (e) {} };
-  const langSwitch = (l) => `<div class="st-lang" role="group" aria-label="Explanation language">
-    <button type="button" data-l="es" aria-pressed="${l === "es"}"><b>Kids &amp; Children</b><small>Explicación en español</small></button>
-    <button type="button" data-l="en" aria-pressed="${l === "en"}"><b>Teens</b><small>Explanation in English</small></button></div>`;
+  const langSwitch = () => "";
   const bindSwitch = (root) => $$(".st-lang button", root).forEach((b) => b.addEventListener("click", () => { setL(b.dataset.l); router(); }));
   const REL = { es: { w: "Hoja", g: "Juego", s: "Estructura" }, en: { w: "Worksheet", g: "Game", s: "Structure" } };
   const stF = { q: "" };

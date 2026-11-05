@@ -179,7 +179,7 @@ button:focus-visible{outline:3px solid var(--subj);outline-offset:3px}
   <!-- START -->
   <main class="card hero" id="v-start">
     <h1 class="display">Sentence<br>Builder</h1>
-    <p>Read the sentence in Spanish and build it in English, word by word. Choose the tense you want to practice.</p>
+    <p>Use the words to build a correct sentence, one word at a time. Choose the tense you want to practice.</p>
     <div class="tenses" role="radiogroup" aria-label="Tense" id="tenses"></div>
     <div class="start-row">
       <span>10 sentences per session</span>
@@ -190,7 +190,7 @@ button:focus-visible{outline:3px solid var(--subj);outline-offset:3px}
   <!-- EXERCISE -->
   <main class="card" id="v-play" hidden>
     <div class="meta"><span class="tname" id="p-tense"></span><span id="p-type"></span></div>
-    <p class="prompt" id="p-prompt" lang="es"></p>
+    <p class="prompt" id="p-prompt" ></p>
     <div class="formula" id="p-formula" aria-label="Sentence structure"></div>
     <div class="rail" id="rail" aria-label="Your sentence"></div>
     <div class="bank" id="bank" aria-label="Word bank"></div>
@@ -202,7 +202,7 @@ button:focus-visible{outline:3px solid var(--subj);outline-offset:3px}
     <div class="fb" id="fb" hidden aria-live="polite">
       <div class="status"><i id="fb-i"></i><span id="fb-title"></span></div>
       <div class="answer" id="fb-answer"></div>
-      <p class="note" id="fb-note" lang="es"></p>
+      <p class="note" id="fb-note" ></p>
       <button class="btn" id="next">Continue</button>
     </div>
   </main>
@@ -251,46 +251,46 @@ const TENSES = {
 
 const BANK = {
   ps:[
-    ['a','She walks to school every day.','s v x x x x','Ella camina a la escuela todos los días.','walk','Con he / she / it, el verbo lleva -s: walks.'],
-    ['n','They don’t eat meat on Fridays.','s a v x x x','Ellos no comen carne los viernes.','doesn’t','Con they se usa don’t + verbo en forma base.'],
-    ['q','Does your brother play the guitar?','a s s v x x','¿Tu hermano toca la guitarra?','plays','En preguntas con does, el verbo va en forma base: play.'],
-    ['a','We usually have breakfast at seven.','s x v x x x','Normalmente desayunamos a las siete.','has','Los adverbios de frecuencia van antes del verbo principal.'],
-    ['n','My dad doesn’t drink coffee.','s s a v x','Mi papá no toma café.','drinks','Después de doesn’t, el verbo pierde la -s.'],
-    ['q','Where do you live?','q a s v','¿Dónde vives?','does','Wh- word + do / does + sujeto + verbo.'],
-    ['a','The store opens at nine o’clock.','s s v x x x','La tienda abre a las nueve.','open','The store equivale a it, por eso opens lleva -s.'],
-    ['a','I never watch TV in the morning.','s x v x x x x','Nunca veo la tele en la mañana.','watches','Con I, el verbo no lleva -s.'],
-    ['q','Do they speak French?','a s v x','¿Ellos hablan francés?','speaks','Do + sujeto + verbo en forma base.'],
-    ['a','Water boils at 100 degrees.','s v x x x','El agua hierve a 100 grados.','boil','El presente simple expresa hechos y verdades generales.'],
-    ['q','How often does she go to the gym?','q q a s v x x x','¿Qué tan seguido va ella al gimnasio?','goes','Con does, el verbo regresa a su forma base: go.'],
-    ['a','He studies English on Tuesdays.','s v x x x','Él estudia inglés los martes.','study','Consonante + y cambia a -ies: study → studies.']
+    ['a','She walks to school every day.','s v x x x x','she / walk / to school / every day','walk','With he, she, it, the verb takes -s: walks.'],
+    ['n','They don’t eat meat on Fridays.','s a v x x x','they / not eat / meat / on Fridays','doesn’t','They → don’t + base verb.'],
+    ['q','Does your brother play the guitar?','a s s v x x','your brother / play / the guitar?','plays','Questions with does use the base verb: play.'],
+    ['a','We usually have breakfast at seven.','s x v x x x','we / usually / have / breakfast / at seven','has','Adverbs of frequency go before the main verb.'],
+    ['n','My dad doesn’t drink coffee.','s s a v x','my dad / not drink / coffee','drinks','After doesn’t, the verb loses the -s.'],
+    ['q','Where do you live?','q a s v','where / you / live?','does','Wh- word + do / does + subject + verb.'],
+    ['a','The store opens at nine o’clock.','s s v x x x','the store / open / at nine o’clock','open','The store = it, so opens takes -s.'],
+    ['a','I never watch TV in the morning.','s x v x x x x','I / never / watch / TV / in the morning','watches','With I, the verb has no -s.'],
+    ['q','Do they speak French?','a s v x','they / speak / French?','speaks','Do + subject + base verb.'],
+    ['a','Water boils at 100 degrees.','s v x x x','water / boil / at 100 degrees','boil','The present simple is used for facts.'],
+    ['q','How often does she go to the gym?','q q a s v x x x','how often / she / go / to the gym?','goes','With does, the verb goes back to its base form: go.'],
+    ['a','He studies English on Tuesdays.','s v x x x','he / study / English / on Tuesdays','study','Consonant + y → -ies: study → studies.']
   ],
   pc:[
-    ['a','I am reading a great book right now.','s a v x x x x x','Estoy leyendo un libro buenísimo ahorita.','read','am / is / are + verbo con -ing.'],
-    ['a','They are playing soccer in the park.','s a v x x x x','Ellos están jugando futbol en el parque.','is','Con they se usa are.'],
-    ['n','She isn’t working today.','s a v x','Ella no está trabajando hoy.','doesn’t','Negativo: isn’t + verbo con -ing.'],
-    ['q','Are you listening to me?','a s v x x','¿Me estás escuchando?','Do','Pregunta: Am / Is / Are + sujeto + verbo con -ing.'],
-    ['a','We are having dinner at the moment.','s a v x x x x','Estamos cenando en este momento.','have','At the moment indica algo que pasa ahora.'],
-    ['a','It is raining outside.','s a v x','Está lloviendo afuera.','rains','Para acciones en progreso usamos be + -ing.'],
-    ['q','What is he doing?','q a s v','¿Qué está haciendo él?','does','Wh- word + is + sujeto + verbo con -ing.'],
-    ['n','My parents aren’t watching TV.','s s a v x','Mis papás no están viendo la tele.','isn’t','My parents equivale a they, por eso aren’t.'],
-    ['q','Why are you laughing?','q a s v','¿Por qué te estás riendo?','laugh','El verbo principal siempre lleva -ing: laughing.'],
-    ['a','The baby is sleeping now.','s s a v x','El bebé está durmiendo ahora.','sleeps','Now indica una acción en progreso.'],
-    ['n','I’m not wearing a jacket today.','s a v x x x','Hoy no traigo chamarra.','wear','I’m not + verbo con -ing.'],
-    ['q','Is your sister studying for the exam?','a s s v x x x','¿Tu hermana está estudiando para el examen?','Does','Is + sujeto + verbo con -ing.']
+    ['a','I am reading a great book right now.','s a v x x x x x','I / read / a great book / right now','read','am / is / are + verb + -ing.'],
+    ['a','They are playing soccer in the park.','s a v x x x x','they / play / soccer / in the park / now','is','They → are.'],
+    ['n','She isn’t working today.','s a v x','she / not work / today','doesn’t','Negative: isn’t + verb + -ing.'],
+    ['q','Are you listening to me?','a s v x x','you / listen / to me / right now?','Do','Question: Am / Is / Are + subject + verb + -ing.'],
+    ['a','We are having dinner at the moment.','s a v x x x x','we / have / dinner / at the moment','have','At the moment means now.'],
+    ['a','It is raining outside.','s a v x','it / rain / outside / now','rains','For actions in progress, use be + -ing.'],
+    ['q','What is he doing?','q a s v','what / he / do / now?','does','Wh- word + is + subject + verb + -ing.'],
+    ['n','My parents aren’t watching TV.','s s a v x','my parents / not watch / TV / now','isn’t','My parents = they, so aren’t.'],
+    ['q','Why are you laughing?','q a s v','why / you / laugh / now?','laugh','The main verb always takes -ing: laughing.'],
+    ['a','The baby is sleeping now.','s s a v x','the baby / sleep / now','sleeps','Now means an action in progress.'],
+    ['n','I’m not wearing a jacket today.','s a v x x x','I / not wear / a jacket / today','wear','I’m not + verb + -ing.'],
+    ['q','Is your sister studying for the exam?','a s s v x x x','your sister / study / for the exam / now?','Does','Is + subject + verb + -ing.']
   ],
   pp:[
-    ['a','I have finished my homework.','s a v x x','He terminado mi tarea.','finish','have / has + participio pasado.'],
-    ['a','She has never been to Paris.','s a x v x x','Ella nunca ha estado en París.','have','Con she se usa has.'],
-    ['q','Have you ever tried tamales?','a s x v x','¿Alguna vez has probado los tamales?','try','Ever va entre el sujeto y el participio. Try → tried.'],
-    ['n','They haven’t seen the new movie yet.','s a v x x x x','Todavía no han visto la película nueva.','saw','Yet va al final en negativos y preguntas. See → seen.'],
-    ['a','We have lived in Monterrey for five years.','s a v x x x x x','Hemos vivido en Monterrey por cinco años.','since','For + periodo de tiempo; since + punto de inicio.'],
-    ['a','He has already bought the tickets.','s a x v x x','Él ya compró los boletos.','buy','Already va entre has y el participio. Buy → bought.'],
-    ['q','Has she called you today?','a s v x x','¿Ella te ha llamado hoy?','Have','Con she, la pregunta empieza con has.'],
-    ['n','I haven’t spoken to him since Monday.','s a v x x x x','No he hablado con él desde el lunes.','for','Since + punto de inicio (Monday).'],
-    ['q','How long have you known her?','q q a s v x','¿Cuánto tiempo tienes de conocerla?','knew','How long + have + sujeto + participio. Know → known.'],
-    ['a','My brother has broken his phone.','s s a v x x','Mi hermano ha roto su celular.','broke','Break → broke → broken.'],
-    ['q','Have they arrived yet?','a s v x','¿Ya llegaron ellos?','Has','Con they se usa have.'],
-    ['a','It has rained a lot this week.','s a v x x x x','Ha llovido mucho esta semana.','rain','This week es un periodo que no ha terminado: presente perfecto.']
+    ['a','I have finished my homework.','s a v x x','I / finish / my homework (up to now)','finish','have / has + past participle.'],
+    ['a','She has never been to Paris.','s a x v x x','she / never / be / to Paris (in her life)','have','She → has.'],
+    ['q','Have you ever tried tamales?','a s x v x','you / ever / try / tamales?','try','Ever goes between the subject and the participle. Try → tried.'],
+    ['n','They haven’t seen the new movie yet.','s a v x x x x','they / not see / the new movie / yet','saw','Yet goes at the end of negatives and questions. See → seen.'],
+    ['a','We have lived in Monterrey for five years.','s a v x x x x x','we / live / in Monterrey / for five years','since','For + a period of time; since + a starting point.'],
+    ['a','He has already bought the tickets.','s a x v x x','he / already / buy / the tickets','buy','Already goes between has and the participle. Buy → bought.'],
+    ['q','Has she called you today?','a s v x x','she / call / you / today?','Have','With she, the question starts with has.'],
+    ['n','I haven’t spoken to him since Monday.','s a v x x x x','I / not speak / to him / since Monday','for','Since + a starting point (Monday).'],
+    ['q','How long have you known her?','q q a s v x','how long / you / know / her?','knew','How long + have + subject + participle. Know → known.'],
+    ['a','My brother has broken his phone.','s s a v x x','my brother / break / his phone (it doesn’t work now)','broke','Break → broke → broken.'],
+    ['q','Have they arrived yet?','a s v x','they / arrive / yet?','Has','They → have.'],
+    ['a','It has rained a lot this week.','s a v x x x x','it / rain / a lot / this week','rain','This week isn’t over yet: present perfect.']
   ]
 };
 const TYPE = { a:'Affirmative', n:'Negative', q:'Question' };
@@ -451,7 +451,7 @@ function results(){
   if(errs.length){
     const h = document.createElement('h3'); h.textContent = 'Sentences to review'; rv.appendChild(h);
     errs.forEach(e => { const d = document.createElement('div'); d.className = 'rv';
-      d.innerHTML = '<div class="es" lang="es"></div><div class="en"></div><div class="yours"></div>';
+      d.innerHTML = '<div class="es" ></div><div class="en"></div><div class="yours"></div>';
       d.querySelector('.es').textContent = e.es; d.querySelector('.en').textContent = e.en; d.querySelector('.yours').textContent = e.yours;
       rv.appendChild(d); });
   }

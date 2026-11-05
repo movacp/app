@@ -167,7 +167,7 @@ h2.sec{font-family:"Bricolage Grotesque",sans-serif;font-size:21px;letter-spacin
     <p class="lvnote" id="lvnote"></p>
     <div class="levels" id="levels" role="radiogroup" aria-label="Level"></div>
     <button class="go" id="go" disabled>Start practice</button>
-    <div class="warn" id="nosup" hidden><b>Speaking needs microphone access</b>Abre la app en Chrome (Android o computadora) o en Safari (iPhone) y permite el uso del micrófono cuando te lo pida.</div>
+    <div class="warn" id="nosup" hidden><b>Speaking needs microphone access</b>Open the app in Chrome (Android or computer) or Safari (iPhone), and allow the microphone when it asks.</div>
   </section>
 
   <!-- PRACTICE -->
@@ -395,7 +395,7 @@ function record(){
   };
   rec.onerror=function(e){
     setLive(false);
-    var m={"not-allowed":"Allow microphone access to practice speaking. / Permite el uso del micrófono.","service-not-allowed":"Speaking is not available in this browser. Try Chrome or Safari.","no-speech":"We didn't hear anything. Tap the mic and read a little louder.","audio-capture":"No microphone found. Check your device."}[e.error];
+    var m={"not-allowed":"Allow microphone access to practice speaking.","service-not-allowed":"Speaking is not available in this browser. Try Chrome or Safari.","no-speech":"We didn't hear anything. Tap the mic and read a little louder.","audio-capture":"No microphone found. Check your device."}[e.error];
     if(m){$("#hint").hidden=false;$("#hint").textContent=m;}
   };
   rec.onend=function(){

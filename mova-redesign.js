@@ -42,7 +42,7 @@
     return '<div class="mr-home">' + topRow() +
       '<div class="mr-grid2"><div class="mr-hero"><div class="brand">MOVA Learning Studio</div>' +
       '<h1 aria-label="Learn. Explore. Grow."><span>Learn.' + WAVE + '</span><br><span>Explore.' + WAVE + '</span><br><span>Grow.' + WAVE + "</span></h1>" +
-      "<p>Todo lo que se aprende en MOVA, ahora también en casa.</p>" +
+      "<p>Everything you learn at MOVA, now at home too.</p>" +
       '<a class="mr-pill" href="#mr-find">Start exploring →</a><span class="pipc">' + CH.bloom + "</span>" + TWK + "</div>" +
       '<div class="mr-gon" id="mr-gon"><span class="bt">' + CH.beatDark + '</span><span class="tg"><i></i>LIVE CHALLENGE</span><h2>Game On!</h2><p>Got a code from your teacher? Type it here.</p>' +
       '<div class="mr-code">' + [0, 1, 2, 3].map(function (i) { return '<input inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Code digit ' + (i + 1) + '">'; }).join("") + "</div>" +

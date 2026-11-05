@@ -205,11 +205,11 @@ img{-webkit-user-drag:none;max-width:100%}
 <!-- HOME -->
 <section class="scr on" id="home">
   <div class="layer" style="overflow-y:auto">
-    <div class="hud"><button class="ib" onclick="goBack()" aria-label="Volver">←</button><div class="sp"></div><button class="ib" id="sndBtn" onclick="toggleSnd()">🔊</button></div>
+    <div class="hud"><button class="ib" onclick="goBack()" aria-label="Back">←</button><div class="sp"></div><button class="ib" id="sndBtn" onclick="toggleSnd()">🔊</button></div>
     <img class="cov" src="cl-cover.webp" alt="CraftLand">
     <div class="hcard">
-      <h2>¡Hola, <span id="hName">explorer</span>!</h2>
-      <div style="font-size:14px;margin-top:4px;opacity:.75">Elige tu nivel y tu personaje</div>
+      <h2>Hi, <span id="hName">explorer</span>!</h2>
+      <div style="font-size:14px;margin-top:4px;opacity:.75">Choose your level and your character</div>
       <div class="stg" id="stgBox">
         <button data-s="kids">Kids</button><button data-s="children">Children</button><button data-s="teens">Teens</button>
       </div>
@@ -315,7 +315,7 @@ img{-webkit-user-drag:none;max-width:100%}
       <div class="sp"></div>
       <button class="ib" id="rCraftBtn" onclick="openCraft(CUR)" title="Craft"><img src="cl-i-pickaxe.webp" alt=""></button>
     </div>
-    <div class="roombar" id="rHint">Arrastra para acomodar · Toca para escuchar en inglés</div>
+    <div class="roombar" id="rHint">Drag to move things · Tap to hear the word</div>
     <div class="room"><div id="roomIn"><img class="bgr" id="roomBg" src="cl-house.webp" alt=""></div></div>
     <div class="inv" id="inv4"></div>
   </div>
@@ -531,7 +531,7 @@ const Cloud = {
     return this.rpc('cl_load',{p_token:U.token,p_username:U.username}).then(r=>{
       if(!r||r.ok===false) return;
       this.ok=true;
-      if(r.data && (r.ts||0) > (S.ts||0)){ S = migrate(r.data); try{ localStorage.setItem(KEY, JSON.stringify(S)) }catch(e){} rerender(); toast('Tu isla se cargó de la nube',1600) }
+      if(r.data && (r.ts||0) > (S.ts||0)){ S = migrate(r.data); try{ localStorage.setItem(KEY, JSON.stringify(S)) }catch(e){} rerender(); toast('Your island was loaded from the cloud',1600) }
       else if((S.ts||0) > (r.ts||0)) this.push();
       cloudInfo();
     }).catch(()=>{});
@@ -546,8 +546,8 @@ addEventListener('pagehide',()=>Cloud.push(true));
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden') Cloud.push(true) });
 function cloudInfo(){
   const el=$('cloudInfo'); if(!el) return;
-  el.innerHTML = U ? `<span class="dot"></span>${Cloud.ok?'Tu isla se guarda en tu cuenta MOVA':'Guardando tu isla en tu cuenta MOVA…'}`
-    : `Para no perder tu isla, <a href="#" onclick="event.preventDefault();window.MovaAuth&&MovaAuth.login&&MovaAuth.login()">entra con tu cuenta MOVA</a>`;
+  el.innerHTML = U ? `<span class="dot"></span>${Cloud.ok?'Your island is saved to your MOVA account':'Saving your island to your MOVA account…'}`
+    : `To keep your island safe, <a href="#" onclick="event.preventDefault();window.MovaAuth&&MovaAuth.login&&MovaAuth.login()">sign in with your MOVA account</a>`;
 }
 
 /* ===================== SONIDOS ===================== */
@@ -589,7 +589,7 @@ function refresh(){
   ['inv1','inv2','inv3','inv4'].forEach(id=>{ const el=$(id); if(!el) return;
     const keys=Object.keys(MATS).filter(k=>S.inv[k]>0);
     el.innerHTML = keys.length ? keys.map(k=>`<div class="slot" data-m="${k}"><img src="${IMG(MATS[k])}" alt="${k}"><b>${S.inv[k]}</b></div>`).join('')
-      : '<div style="color:#fff;font-weight:700;font-size:14px;align-self:center;padding:0 6px">Tu inventario está vacío. Ve a <b>The Mine</b> para juntar materiales.</div>';
+      : '<div style="color:#fff;font-weight:700;font-size:14px;align-self:center;padding:0 6px">Your inventory is empty. Go to <b>The Mine</b> to collect materials.</div>';
   });
   missionBadge();
 }
@@ -617,15 +617,15 @@ function qHtml(q){
 
 /* ===================== MISIONES DIARIAS ===================== */
 const MS_POOL = {
- mine:[ {id:'r1',who:'cl-pip',t:'Mine 1 round in The Mine.',es:'Juega 1 ronda en la mina',k:'rounds',g:1},
-        {id:'r2',who:'cl-pip',t:'Mine 2 rounds in The Mine.',es:'Juega 2 rondas en la mina',k:'rounds',g:2},
-        {id:'s3',who:'cl-pip',t:'Win 3 stars in The Mine.',es:'Gana 3 estrellas en la mina',k:'stars',g:3},
+ mine:[ {id:'r1',who:'cl-pip',t:'Mine 1 round in The Mine.',es:'Play 1 round in the mine',k:'rounds',g:1},
+        {id:'r2',who:'cl-pip',t:'Mine 2 rounds in The Mine.',es:'Play 2 rounds in the mine',k:'rounds',g:2},
+        {id:'s3',who:'cl-pip',t:'Win 3 stars in The Mine.',es:'Win 3 stars in the mine',k:'stars',g:3},
         {id:'c15',who:'cl-pip',t:'Answer 15 questions correctly.',es:'Contesta bien 15 preguntas',k:'correct',g:15} ],
  craft:[ {id:'k1',who:'cl-juno',t:'Juno needs your help! Craft 1 new item.',es:'Fabrica 1 objeto nuevo',k:'craft',g:1},
          {id:'k2',who:'cl-rex',t:'Rex is building! Craft 2 new items.',es:'Fabrica 2 objetos nuevos',k:'craft',g:2},
          {id:'rr',who:'cl-pip',t:'Find a rare block in The Mine.',es:'Encuentra un bloque raro',k:'rare',g:1} ],
- pet:[ {id:'p2',who:'cl-luna',t:'Take care of your pet 2 times.',es:'Cuida a tu mascota 2 veces',k:'pet',g:2},
-       {id:'p4',who:'cl-luna',t:'Your pet is hungry! Take care of it 4 times.',es:'Cuida a tu mascota 4 veces',k:'pet',g:4} ]
+ pet:[ {id:'p2',who:'cl-luna',t:'Take care of your pet 2 times.',es:'Take care of your pet 2 times',k:'pet',g:2},
+       {id:'p4',who:'cl-luna',t:'Your pet is hungry! Take care of it 4 times.',es:'Take care of your pet 4 times',k:'pet',g:4} ]
 };
 function dayKey(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate() }
 function hash(s){ let h=7; for(const c of s) h=(h*31+c.charCodeAt(0))>>>0; return h }
@@ -645,7 +645,7 @@ function openMissions(){
     return `<div class="ms"><img src="${IMG(m.who)}" alt=""><div class="tx">${m.t}<small>${m.es}</small><div class="bar"><i style="width:${v/m.g*100}%"></i></div></div>
       ${got?'<span class="done">✓</span>':`<button class="cl" ${done?'':'disabled'} onclick="claimMs('${id}')"><img src="${IMG('cl-r-coin')}">15</button>`}</div>` }).join('');
   const all=d.claimed.length===3;
-  modal(`<img class="hero" src="${IMG('cl-u-gift')}" style="width:96px;height:96px"><h2>Daily missions</h2><div style="font-size:13px;font-weight:700;opacity:.7">Misiones de hoy · se renuevan cada día</div>${rows}
+  modal(`<img class="hero" src="${IMG('cl-u-gift')}" style="width:96px;height:96px"><h2>Daily missions</h2><div style="font-size:13px;font-weight:700;opacity:.7">Today’s missions · new ones every day</div>${rows}
    <div class="ms" style="background:${all&&!d.bonus?'var(--lime)':'#fff8e1'}"><img src="${IMG('cl-u-gem')}" alt="" style="width:46px"><div class="tx">Complete all 3 missions<small>Premio especial: material raro + 25 monedas + 1 estrella</small></div>
    ${d.bonus?'<span class="done">✓</span>':`<button class="cl" ${all?'':'disabled'} onclick="claimBonus()">Open</button>`}</div>
    <button class="btn" style="width:100%;margin-top:6px" onclick="closeModal()">OK</button>`);
@@ -674,14 +674,14 @@ function renderIsland(){
 }
 function enterIsland(){ sfx.ok(); show('island'); if(!S.seenIntro2){ tutorial(0) } else checkRewards() }
 const TUT = [
- ['cl-pip','Welcome to CraftLand!','Esta es <b>tu isla</b>. En <b>The Mine</b> contestas en inglés para romper bloques y juntar materiales.'],
- ['cl-juno','Craft and decorate','Con tus materiales, <b>Juno</b> te ayuda a fabricar muebles en el <b>Workshop</b>. Lee la receta en inglés y decora <b>tu recámara</b>.'],
- ['cl-rex','The Build Zone','Cuando fabriques <b>6 objetos</b>, <b>Captain Rex</b> abre la <b>cocina</b> y el <b>jardín</b>. ¡Hay muchísimo por construir!'],
- ['cl-pet-puppy','Your own pet','Adopta una mascota, ponle nombre y cuídala contestando preguntas. Cada día hay <b>misiones nuevas</b> con premios.']
+ ['cl-pip','Welcome to CraftLand!','This is <b>your island</b>. In <b>The Mine</b>, answer in English to break blocks and collect materials.'],
+ ['cl-juno','Craft and decorate','With your materials, <b>Juno</b> helps you craft furniture in the <b>Workshop</b>. Read the recipe and decorate <b>your bedroom</b>.'],
+ ['cl-rex','The Build Zone','When you craft <b>6 items</b>, <b>Captain Rex</b> opens the <b>kitchen</b> and the <b>garden</b>. There’s so much to build!'],
+ ['cl-pet-puppy','Your own pet','Adopt a pet, give it a name and take care of it by answering questions. There are <b>new missions</b> with prizes every day.']
 ];
 function tutorial(i){ const t=TUT[i]; if(!t){ S.seenIntro=1; S.seenIntro2=1; save(); closeModal(); return }
   modal(`<img class="hero" src="${IMG(t[0])}"><h2>${t[1]}</h2><p>${t[2]}</p><button class="btn" style="width:100%" onclick="sfx.click();tutorial(${i+1})">${i<TUT.length-1?'Next':'Let\'s go!'}</button><div class="steps">${TUT.map((_,j)=>`<i class="${j===i?'on':''}"></i>`).join('')}</div>`) }
-function soon(who,img){ sfx.click(); modal(`<img class="hero" src="${IMG(img)}"><h2>${who}</h2><p>Esta zona se abre muy pronto.<br>Mientras, ¡junta materiales en la mina!</p><button class="btn" onclick="closeModal()">OK</button>`) }
+function soon(who,img){ sfx.click(); modal(`<img class="hero" src="${IMG(img)}"><h2>${who}</h2><p>This area opens very soon.<br>In the meantime, collect materials in the mine!</p><button class="btn" onclick="closeModal()">OK</button>`) }
 
 /* ===================== PREMIOS (personajes especiales) ===================== */
 function checkRewards(){
@@ -691,7 +691,7 @@ function checkRewards(){
   if(madeIn('garden')>=4 && !S.owned.includes('cl-av18')) give.push('cl-av18');
   if(!give.length) return false;
   give.forEach(a=>S.owned.push(a)); save();
-  setTimeout(()=>{ sfx.win(); confetti(40); modal(`<img class="hero" src="${IMG(give[0])}" style="height:150px"><h2>New look unlocked!</h2><p>Ganaste un personaje especial. Lo encuentras en <b>Luna's Shop</b>.</p><button class="btn" onclick="closeModal()">Cool!</button>`) },400);
+  setTimeout(()=>{ sfx.win(); confetti(40); modal(`<img class="hero" src="${IMG(give[0])}" style="height:150px"><h2>New look unlocked!</h2><p>You won a special character. Find it in <b>Luna's Shop</b>.</p><button class="btn" onclick="closeModal()">Cool!</button>`) },400);
   return true;
 }
 
@@ -699,7 +699,7 @@ function checkRewards(){
 const NUMW=['zero','one','two','three','four','five','six','seven','eight','nine','ten'];
 let R=null, busy=false;
 function openMine(){ sfx.click(); R={n:0,total:10,correct:0,streak:0,best:0,got:{}}; show('mine'); nextBlock(true) }
-function leaveMine(){ if(R&&R.n>0&&R.n<R.total){ if(!confirm('¿Salir de la mina? Tus materiales ya están guardados.')) return } R=null; show('island') }
+function leaveMine(){ if(R&&R.n>0&&R.n<R.total){ if(!confirm('Leave the mine? Your materials are already saved.')) return } R=null; show('island') }
 function nextBlock(){
   R.mat = Math.random()<.12 ? 'chest' : weighted(RARITY);
   $('blockImg').src = R.mat==='chest' ? IMG('cl-r-chest') : IMG(MATS[R.mat]);
@@ -810,7 +810,7 @@ function recipeQ(it){
 let CQ=null;
 function tryCraft(k){
   const it=ITEMS.find(x=>x.k===k), R0=ROOMS[it.room]; sfx.click(); speak(it.n);
-  if(S.made.includes(k)){ modal(`<img class="hero" src="${IMG(it.img)}"><h2>${it.n}</h2><p>¡Ya lo tienes! Está en <b>${R0.name.toLowerCase()}</b>.</p><div style="display:flex;gap:8px"><button class="btn w" style="flex:1" onclick="closeModal()">OK</button><button class="btn" style="flex:1" onclick="closeModal();openRoom('${it.room}')">Go there</button></div>`); return }
+  if(S.made.includes(k)){ modal(`<img class="hero" src="${IMG(it.img)}"><h2>${it.n}</h2><p>You’ve got it! It’s in the <b>${R0.name.toLowerCase()}</b>.</p><div style="display:flex;gap:8px"><button class="btn w" style="flex:1" onclick="closeModal()">OK</button><button class="btn" style="flex:1" onclick="closeModal();openRoom('${it.room}')">Go there</button></div>`); return }
   if(!canMake(it)){ const miss=Object.keys(it.cost).filter(m=>(S.inv[m]||0)<it.cost[m]).map(m=>`<span class="pill" style="display:inline-flex;margin:3px"><img src="${IMG(MATS[m])}">${it.cost[m]-(S.inv[m]||0)} more</span>`).join('');
     $('junoSay').textContent='You need more materials!'; modal(`<img class="hero" src="${IMG(R0.who)}"><h2>Not enough materials</h2><p>Para <b>${it.n}</b> te falta:</p><div style="margin-bottom:14px">${miss}</div><button class="btn" onclick="closeModal();openMine()">Go to the mine</button>`); return }
   CQ={it, ...recipeQ(it)};
@@ -830,10 +830,10 @@ function craft(it){
   $('junoSay').textContent=`You made ${art(it.n)} ${it.n}!`;
   const R0=ROOMS[it.room];
   if(before<UNLOCK_BZ && S.made.length>=UNLOCK_BZ){ unlockBuild(); return }
-  modal(`<img class="hero" src="${IMG(R0.who==='cl-juno'?'cl-juno-yay':'cl-rex')}"><h2>You made ${art(it.n)} ${it.n}!</h2><img src="${IMG(it.img)}" style="width:90px"><p>+5 coins · Ya está en <b>${R0.name.toLowerCase()}</b>.</p>
+  modal(`<img class="hero" src="${IMG(R0.who==='cl-juno'?'cl-juno-yay':'cl-rex')}"><h2>You made ${art(it.n)} ${it.n}!</h2><img src="${IMG(it.img)}" style="width:90px"><p>+5 coins · Now in the <b>${R0.name.toLowerCase()}</b>.</p>
    ${it.k==='pickaxe'?'<p><b>Bonus:</b> ahora cada bloque te da 2 materiales.</p>':''}
    <div style="display:flex;gap:8px"><button class="btn w" style="flex:1" onclick="closeModal();renderRecipes();checkRewards()">Keep crafting</button><button class="btn" style="flex:1" onclick="closeModal();openRoom('${it.room}');checkRewards()">Go see it</button></div>`);
-  if(madeIn(it.room)===totalIn(it.room)) setTimeout(()=>{ toast(`<img src="${IMG('cl-u-trophy')}" style="width:40px;vertical-align:middle"> ¡Completaste ${R0.name.toLowerCase()}!`,2600); S.stars+=3; save(); refresh() },900);
+  if(madeIn(it.room)===totalIn(it.room)) setTimeout(()=>{ toast(`<img src="${IMG('cl-u-trophy')}" style="width:40px;vertical-align:middle"> You finished the ${R0.name.toLowerCase()}!`,2600); S.stars+=3; save(); refresh() },900);
 }
 function unlockBuild(){
   save(); sfx.win(); confetti(80);
@@ -867,7 +867,7 @@ function renderRoom(){
   room.querySelectorAll('.furn,.empty').forEach(e=>e.remove());
   const mine=S.made.filter(k=>{ const it=ITEMS.find(x=>x.k===k); return it&&it.room===CUR });
   if(!mine.length){ const d=document.createElement('div'); d.className='empty'; d.style.cssText='position:absolute;inset:auto 10% 40% 10%;background:#fff;border:3px solid var(--navy);border-radius:16px;padding:12px;text-align:center;font-weight:800;z-index:200';
-    d.innerHTML = CUR==='house'?'Tu recámara está vacía. Fabrica muebles en el Workshop.':'Todavía no hay nada aquí. Abre los planos de Captain Rex para construir.'; room.appendChild(d) }
+    d.innerHTML = CUR==='house'?'Your bedroom is empty. Craft furniture in the Workshop.':'Nothing here yet. Open Captain Rex’s plans to build.'; room.appendChild(d) }
   const add=(src,key,w,label,cls)=>{ const h=hash(key), p=S.room[key]||(key.startsWith('_me')?{x:80,y:80}:{x:22+h%56,y:cls==='wall'?30:52+(h>>5)%30}), im=document.createElement('img'); im.src=src; im.className='furn'+(cls?' '+cls:''); im.style.left=p.x+'%'; im.style.top=p.y+'%';
     im.style.zIndex = cls==='flat'?1:cls==='wall'?2:Math.round(p.y)+10; im.style.width=w+'%'; im.dataset.k=key; im.dataset.say=label||''; room.appendChild(im); drag(im,room,cls) };
   mine.forEach(k=>{ const it=ITEMS.find(x=>x.k===k); add(IMG(it.img),k,it.w,it.n,it.t==='f'?'flat':it.t==='w'?'wall':'') });
@@ -908,7 +908,7 @@ function renderPet(){
   box.innerHTML = `<div class="petstage">${d.bed?`<img class="bed" src="${IMG(d.bed)}" alt="">`:''}<img class="me" id="petMe" src="${IMG(P.img)}" style="--s:${.8+Math.min(lvl,5)*.06}" alt=""></div>
    <div class="petcard"><div class="row"><h2>${d.name}</h2><span class="lvl">Level ${lvl}</span><div class="sp"></div><b style="font-size:13px;opacity:.7">${P.n}</b></div>
     <div class="hearts">${Array.from({length:PET_XP},(_,i)=>`<img src="${IMG('cl-u-heart')}" class="${i<xpIn?'':'off'}">`).join('')}</div>
-    <div class="today">${left?`Hoy puedes cuidarlo ${left} ${left===1?'vez':'veces'} más`:`${d.name} está feliz. Vuelve mañana para cuidarlo otra vez.`}</div></div>
+    <div class="today">${left?`You can take care of it ${left} more ${left===1?'time':'times'} today`:`${d.name} is happy. Come back tomorrow to take care of it again.`}</div></div>
    <div class="care">
     <button onclick="care('feed')" ${left?'':'disabled'}><img src="${IMG('cl-pc-food-bowl')}">Feed</button>
     <button onclick="care('water')" ${left?'':'disabled'}><img src="${IMG('cl-pc-water-bowl')}">Water</button>
@@ -923,7 +923,7 @@ function petCards(){
      ${own?`<div class="cost">Level ${petLvl(S.pets.data[P.k])}</div>`:P.stars?`<div class="cost"><img src="${IMG(lk?'cl-u-padlock':'cl-r-star')}">${P.stars}</div>`:'<div class="cost">Free</div>'}</div>` }).join('');
 }
 function bindPetCards(){ document.querySelectorAll('.pg').forEach(c=>c.onclick=()=>petTap(c.dataset.p)) }
-function petPicker(){ sfx.click(); modal(`<h2>My pets</h2><div style="font-size:13px;font-weight:700;opacity:.7">Toca una mascota para cambiar o adoptar</div><div class="petgrid" style="padding:10px 0">${petCards()}</div><button class="btn w" onclick="closeModal()">Close</button>`); bindPetCards() }
+function petPicker(){ sfx.click(); modal(`<h2>My pets</h2><div style="font-size:13px;font-weight:700;opacity:.7">Tap a pet to switch or adopt</div><div class="petgrid" style="padding:10px 0">${petCards()}</div><button class="btn w" onclick="closeModal()">Close</button>`); bindPetCards() }
 function petTap(k){
   const P=PETS.find(x=>x.k===k); sfx.click(); speak(P.n);
   if(S.pets.owned.includes(k)){ S.pets.active=k; save(); closeModal(); renderPet(); return }
@@ -974,7 +974,7 @@ function levelUp(l){
   const p=S.pets.active, d=S.pets.data[p], P=PETS.find(x=>x.k===p), bed=BEDS.find(b=>b.lvl===l);
   if(bed){ d.bed=bed.id; S.room._bed=S.room._bed||{x:62,y:72} } S.stars+=1; save(); sfx.win(); confetti(60);
   modal(`<img class="hero" src="${IMG(P.img)}"><h2>${d.name} is level ${l}!</h2><p>${d.name} grew a little bigger. +1 star</p>
-   ${bed?`<img src="${IMG(bed.id)}" style="width:110px"><p style="margin-top:0"><b>New:</b> a pet bed! Ya está en tu recámara.</p>`:''}
+   ${bed?`<img src="${IMG(bed.id)}" style="width:110px"><p style="margin-top:0"><b>New:</b> a pet bed! It’s in your bedroom now.</p>`:''}
    <button class="btn" onclick="closeModal();renderPet()">Yay!</button>`);
 }
 

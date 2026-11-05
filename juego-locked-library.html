@@ -370,19 +370,19 @@ const ROOMS = [
   { id:'hall', icon:'🚪', title:'The Front Hall', key:'S',
     story:'It is six o’clock. The library is closing. You are reading a book in a quiet corner… CLICK! The big door is locked. There is a note on the door: “To open this door, find the three numbers.”',
     clues:[
-      { id:'h1', type:'choice', title:'The librarian’s note', q:'“The first number is the number of legs a spider has.”', art:'spider', opts:['6','8','4','10'], ans:'8', reward:['Spider’s legs','8'], hint:'Una araña tiene más patas que un perro y más patas que una mosca.' },
-      { id:'h2', type:'choice', title:'The bookshelf', q:'“The second number: how many BLUE books are on the shelf?”', art:'shelf', opts:['2','3','4','5'], ans:'3', reward:['Blue books','3'], hint:'Cuenta solo los libros azules.' },
-      { id:'h3', type:'scramble', title:'The secret word', q:'“The third number is hidden in these letters. Put them in order.”', letters:['V','I','F','E'], ans:'FIVE', reward:['Secret word: FIVE','5'], hint:'Es un número entre cuatro y seis.' }
+      { id:'h1', type:'choice', title:'The librarian’s note', q:'“The first number is the number of legs a spider has.”', art:'spider', opts:['6','8','4','10'], ans:'8', reward:['Spider’s legs','8'], hint:'A spider has more legs than a dog and more legs than a fly.' },
+      { id:'h2', type:'choice', title:'The bookshelf', q:'“The second number: how many BLUE books are on the shelf?”', art:'shelf', opts:['2','3','4','5'], ans:'3', reward:['Blue books','3'], hint:'Count only the blue books.' },
+      { id:'h3', type:'scramble', title:'The secret word', q:'“The third number is hidden in these letters. Put them in order.”', letters:['V','I','F','E'], ans:'FIVE', reward:['Secret word: FIVE','5'], hint:'It’s a number between four and six.' }
     ],
     lock:{ type:'wheels', chars:'0123456789', code:'835', title:'Number lock', text:'Enter the three numbers in order: spider, blue books, secret word.' }
   },
   { id:'reading', icon:'📖', title:'The Reading Room', key:'T',
     story:'The door opens and you walk into the Reading Room. There are hundreds of books! On a table there is a box with a letter lock. A card says: “Answer the riddles. The first letter of each answer is the code.”',
     clues:[
-      { id:'r1', type:'choice', title:'Riddle 1', q:'“I have seven colors. You can see me after the rain. What am I?”', opts:['rainbow','sun','cloud','star'], pics:true, ans:'rainbow', reward:['Rainbow','R'], hint:'Aparece en el cielo cuando sale el sol después de la lluvia.' },
-      { id:'r2', type:'choice', title:'Riddle 2', q:'“I am white or brown. A hen makes me. You can eat me for breakfast. What am I?”', opts:['milk','egg','cookie','bread'], pics:true, ans:'egg', reward:['Egg','E'], hint:'Lo pone una gallina y lo puedes comer en el desayuno.' },
-      { id:'r3', type:'choice', title:'Riddle 3', q:'“I am a fruit. I can be red or green. I grow on trees. What am I?”', opts:['banana','apple','grapes','carrot'], pics:true, ans:'apple', reward:['Apple','A'], hint:'Es la fruta que le regalan a la maestra.' },
-      { id:'r4', type:'choice', title:'Riddle 4', q:'“I am a pet. I love bones and I say ‘woof’. What am I?”', opts:['cat','fish','bird','dog'], pics:true, ans:'dog', reward:['Dog','D'], hint:'Es el mejor amigo del ser humano.' }
+      { id:'r1', type:'choice', title:'Riddle 1', q:'“I have seven colors. You can see me after the rain. What am I?”', opts:['rainbow','sun','cloud','star'], pics:true, ans:'rainbow', reward:['Rainbow','R'], hint:'You see it in the sky when the sun comes out after the rain.' },
+      { id:'r2', type:'choice', title:'Riddle 2', q:'“I am white or brown. A hen makes me. You can eat me for breakfast. What am I?”', opts:['milk','egg','cookie','bread'], pics:true, ans:'egg', reward:['Egg','E'], hint:'A hen lays it, and you can eat it for breakfast.' },
+      { id:'r3', type:'choice', title:'Riddle 3', q:'“I am a fruit. I can be red or green. I grow on trees. What am I?”', opts:['banana','apple','grapes','carrot'], pics:true, ans:'apple', reward:['Apple','A'], hint:'It’s the fruit students give to the teacher.' },
+      { id:'r4', type:'choice', title:'Riddle 4', q:'“I am a pet. I love bones and I say ‘woof’. What am I?”', opts:['cat','fish','bird','dog'], pics:true, ans:'dog', reward:['Dog','D'], hint:'It’s man’s best friend.' }
     ],
     lock:{ type:'wheels', chars:'ABCDEFGHIJKLMNOPQRSTUVWXYZ', code:'READ', title:'Letter lock', text:'Write the first letter of each answer, in order.' }
   },
@@ -390,9 +390,9 @@ const ROOMS = [
     story:'Inside the box there is a note: “Find three things in the Map Room: a key, a flashlight and a map. Read carefully: the words tell you where they are.”',
     clues:[
       { id:'m1', type:'hunt', title:'Find the hidden things',
-        tasks:[ {spot:'under', item:'key', text:'The key is under the table.', hint:'Under = debajo de.'},
-                {spot:'behind', item:'flashlight', text:'The flashlight is behind the sofa.', hint:'Behind = detrás de.'},
-                {spot:'inbox', item:'mapitem', text:'The map is in the box.', hint:'In = dentro de.'} ],
+        tasks:[ {spot:'under', item:'key', text:'The key is under the table.', hint:'Under = below it.'},
+                {spot:'behind', item:'flashlight', text:'The flashlight is behind the sofa.', hint:'Behind = at the back of it.'},
+                {spot:'inbox', item:'mapitem', text:'The map is in the box.', hint:'In = inside it.'} ],
         reward:['The map says','UP, RIGHT, RIGHT, DOWN'] }
     ],
     lock:{ type:'arrows', code:['↑','→','→','↓'], title:'Direction lock', text:'The map shows the way to the secret door. Enter the directions in order.', note:'From the door, go up. Then go right, and right again. Then go down.' }
@@ -401,17 +401,17 @@ const ROOMS = [
     story:'Behind the secret door there are stairs. You go up to the Clock Tower. The big clock is stopped. On the floor there is a diary. It belongs to Mr. Page, the librarian.',
     diary:'My name is Mr. Page and I am the librarian. Every day I wake up at seven o’clock. I have breakfast at half past seven. I walk to the library at eight o’clock and I open the doors at nine. I have lunch at one o’clock. The tower door opens at a quarter past three.',
     clues:[
-      { id:'c1', type:'choice', title:'Question 1', q:'What time does Mr. Page have breakfast?', opts:['7:00','7:30','8:00','9:00'], ans:'7:30', reward:['Breakfast','7:30'], hint:'Half past seven = siete y media.' },
-      { id:'c2', type:'choice', title:'Question 2', q:'How does Mr. Page go to the library?', opts:['He drives.','He walks.','He takes the bus.','He rides a bike.'], ans:'He walks.', reward:['Transport','He walks'], hint:'Busca en el diario el verbo después de “I … to the library”.' },
-      { id:'c3', type:'choice', title:'Question 3', q:'What does Mr. Page do at nine o’clock?', opts:['He has lunch.','He wakes up.','He opens the doors.','He reads a book.'], ans:'He opens the doors.', reward:['At nine','He opens the doors'], hint:'Busca “at nine” en el diario.' }
+      { id:'c1', type:'choice', title:'Question 1', q:'What time does Mr. Page have breakfast?', opts:['7:00','7:30','8:00','9:00'], ans:'7:30', reward:['Breakfast','7:30'], hint:'Half past seven = 7:30.' },
+      { id:'c2', type:'choice', title:'Question 2', q:'How does Mr. Page go to the library?', opts:['He drives.','He walks.','He takes the bus.','He rides a bike.'], ans:'He walks.', reward:['Transport','He walks'], hint:'Look in the diary for the verb after “I … to the library”.' },
+      { id:'c3', type:'choice', title:'Question 3', q:'What does Mr. Page do at nine o’clock?', opts:['He has lunch.','He wakes up.','He opens the doors.','He reads a book.'], ans:'He opens the doors.', reward:['At nine','He opens the doors'], hint:'Look for “at nine” in the diary.' }
     ],
     lock:{ type:'clock', h:3, m:15, title:'Clock lock', text:'Set the clock to the time when the tower door opens.' }
   },
   { id:'final', icon:'🌟', title:'The Last Door', key:'',
     story:'DONG! The clock rings and a small door opens. Now you are in front of the last door. It has a golden lock. Use the letters on your four golden keys to open it.',
     clues:[
-      { id:'f1', type:'choice', title:'Odd one out', q:'Which word does NOT belong?', opts:['apple','banana','chair','orange'], ans:'chair', reward:['Odd one out','chair'], hint:'Tres de estas palabras son frutas.' },
-      { id:'f2', type:'scramble', title:'The detective’s motto', q:'Put the words in order to make a sentence.', letters:['clue.','Good','every','read','detectives'], words:true, ans:'Good detectives read every clue.', reward:['Motto','Good detectives read every clue.'], hint:'Empieza con “Good” y termina con “clue.”' }
+      { id:'f1', type:'choice', title:'Odd one out', q:'Which word does NOT belong?', opts:['apple','banana','chair','orange'], ans:'chair', reward:['Odd one out','chair'], hint:'Three of these words are fruits.' },
+      { id:'f2', type:'scramble', title:'The detective’s motto', q:'Put the words in order to make a sentence.', letters:['clue.','Good','every','read','detectives'], words:true, ans:'Good detectives read every clue.', reward:['Motto','Good detectives read every clue.'], hint:'Start with “Good” and end with “clue.”' }
     ],
     lock:{ type:'final', code:'STAR', title:'The golden lock', text:'Put your key letters in order. Clue: “I shine in the sky at night.”' }
   }
