@@ -171,7 +171,7 @@ RESOURCES.push(
   {
     id: "adverbs-of-frequency", category: "Grammar", type: "Printable worksheet", levels: ["A1", "A2"], ages: ["Ages 7–9", "Ages 10–12"],
     title: "Adverbs of Frequency", description: "How often? Order always, usually, sometimes and never, and place them in the sentence.",
-    notes: "Dibuje en el pizarrón una barra de 0 % a 100 % y pida a los alumnos que coloquen cada adverbio. Recuerde que el adverbio va antes del verbo, pero después de to be.",
+    notes: "Draw a line on the board from “never” to “always” and ask students to place each adverb on it. Remind them that the adverb goes before the main verb, but after to be.",
     sheet: { instructions: "Learn the rule. Then complete the exercises.", blocks: [
       { t: "rule", lines: ["always (100 %) → usually → often → sometimes → rarely → never (0 %)", "Before the main verb: I usually walk to school.", "After the verb to be: She is always happy."] },
       { t: "items", label: "Put the words in order.", list: ["always / I / breakfast / eat ___", "late / is / never / he ___", "sometimes / we / pizza / have ___", "usually / my dad / works / at home ___", "are / often / they / tired ___"] },
@@ -182,7 +182,7 @@ RESOURCES.push(
   {
     id: "present-continuous-now", category: "Grammar", type: "Printable worksheet", levels: ["A1"], ages: ["Ages 7–9", "Ages 10–12"],
     title: "Present Continuous: Right Now", description: "What is happening now? Practice am / is / are + -ing.",
-    notes: "Puede actuar algunas acciones frente al grupo y preguntar “What am I doing?” antes de empezar la hoja.",
+    notes: "Act out a few actions in front of the class and ask “What am I doing?” before starting the sheet.",
     sheet: { instructions: "Read the rule. Then complete the exercises.", blocks: [
       { t: "rule", lines: ["We use the present continuous for actions happening now.", "I am + verb-ing · He / She / It is + verb-ing · We / You / They are + verb-ing"] },
       { t: "items", label: "Complete with am, is or are and the -ing form.", list: ["My mom ___ (cook) dinner.", "The children ___ (play) in the garden.", "I ___ (write) a letter.", "The cat ___ (sleep) on the sofa.", "We ___ (watch) a movie."] },
@@ -193,7 +193,7 @@ RESOURCES.push(
   {
     id: "past-simple-weekend", category: "Grammar", type: "Printable worksheet", levels: ["A2"], ages: ["Ages 10–12", "Ages 13+"],
     title: "Past Simple: My Weekend", description: "Regular and irregular verbs in the past, with negatives and questions.",
-    notes: "Repase la pronunciación de -ed (/t/, /d/, /ɪd/). Puede usar el juego Verb Memory como calentamiento.",
+    notes: "Review the pronunciation of -ed (/t/, /d/, /ɪd/). You can use the Verb Memory game as a warm-up.",
     sheet: { instructions: "Learn the rule. Then write the past simple.", blocks: [
       { t: "rule", lines: ["Regular verbs: add -ed. play → played, study → studied, stop → stopped", "Irregular verbs change: go → went, eat → ate, see → saw", "Negative and questions: didn’t / Did + base verb."] },
       { t: "table", label: "Write the past simple.", headers: ["Verb", "Past", "Regular or irregular?"], rows: [["visit", "", ""], ["buy", "", ""], ["watch", "", ""], ["have", "", ""], ["cry", "", ""], ["make", "", ""]] },
@@ -204,7 +204,7 @@ RESOURCES.push(
   {
     id: "past-continuous-when-while", category: "Grammar", type: "Printable worksheet", levels: ["A2", "B1"], ages: ["Ages 10–12", "Ages 13+"],
     title: "Past Continuous: When and While", description: "Long actions and interruptions in the past.",
-    notes: "Dibuje una línea del tiempo: una flecha larga (past continuous) y un rayo que la interrumpe (past simple).",
+    notes: "Draw a timeline: a long arrow (past continuous) and a lightning bolt that interrupts it (past simple).",
     sheet: { instructions: "Read the rule. Then complete the sentences.", blocks: [
       { t: "rule", lines: ["Past continuous: was / were + verb-ing (a long action).", "I was walking home when it started to rain.", "While + past continuous: While she was cooking, he was cleaning."] },
       { t: "items", label: "Past simple or past continuous?", list: ["I ___ (sleep) when the phone ___ (ring).", "They ___ (play) soccer when it ___ (start) to rain.", "While we ___ (watch) TV, the lights ___ (go) out.", "She ___ (read) when her friend ___ (arrive)."] },
@@ -215,7 +215,7 @@ RESOURCES.push(
   {
     id: "present-perfect-experiences", category: "Grammar", type: "Printable worksheet", levels: ["B1"], ages: ["Ages 13+"],
     title: "Present Perfect: Experiences", description: "Have you ever…? Experiences, for and since, already and yet.",
-    notes: "Ideal para una actividad oral “Find someone who…” después de la hoja.",
+    notes: "Great for a “Find someone who…” speaking activity after the sheet.",
     sheet: { instructions: "Learn the rule. Then complete the exercises.", blocks: [
       { t: "rule", lines: ["have / has + past participle: I have visited Mexico City.", "Ever / never for experiences: Have you ever eaten sushi?", "For + period (for two years) · Since + starting point (since 2020)."] },
       { t: "items", label: "Complete with the present perfect.", list: ["I ___ (never / see) the ocean.", "___ you ever ___ (ride) a horse?", "She ___ (already / finish) her project.", "We ___ (not / start) the movie yet."] },
@@ -226,7 +226,7 @@ RESOURCES.push(
   {
     id: "comparatives-superlatives", category: "Grammar", type: "Printable worksheet", levels: ["A2"], ages: ["Ages 10–12", "Ages 13+"],
     title: "Comparatives and Superlatives", description: "Bigger, the biggest, more interesting: compare people, places and things.",
-    notes: "Lleve tres objetos de distinto tamaño al salón y compárenlos en voz alta antes de la hoja.",
+    notes: "Bring three objects of different sizes to class and compare them aloud before the sheet.",
     sheet: { instructions: "Learn the rules. Then complete the table and sentences.", blocks: [
       { t: "rule", lines: ["Short adjectives: tall → taller → the tallest · big → bigger → the biggest · happy → happier → the happiest", "Long adjectives: interesting → more interesting → the most interesting", "Irregular: good → better → the best · bad → worse → the worst"] },
       { t: "table", label: "Complete the table.", headers: ["Adjective", "Comparative", "Superlative"], rows: [["fast", "", ""], ["hot", "", ""], ["easy", "", ""], ["beautiful", "", ""], ["good", "", ""]] },
@@ -237,7 +237,7 @@ RESOURCES.push(
   {
     id: "subject-pronouns", category: "Grammar", type: "Printable worksheet", levels: ["Pre-A1", "A1"], ages: ["Ages 4–6", "Ages 7–9"],
     title: "Personal Pronouns", description: "I, you, he, she, it, we, they: replace names with the right pronoun.",
-    notes: "Señale a distintos alumnos y objetos del salón mientras dicen el pronombre en voz alta.",
+    notes: "Point to different students and classroom objects while the class says the pronoun aloud.",
     sheet: { instructions: "Write the correct pronoun.", blocks: [
       { t: "bank", label: "Pronouns", words: ["I", "you", "he", "she", "it", "we", "they"] },
       { t: "items", label: "Change the words for a pronoun.", list: ["Ana → ___", "Luis → ___", "the dog → ___", "my mom and I → ___", "Pedro and Sofía → ___", "the books → ___"] },
@@ -248,7 +248,7 @@ RESOURCES.push(
   {
     id: "there-is-there-are", category: "Grammar", type: "Printable worksheet", levels: ["A1"], ages: ["Ages 7–9"],
     title: "There Is / There Are", description: "Describe a room: there is a bed, there are two windows.",
-    notes: "Pida a los alumnos que describan su recámara al final; puede ser tarea con dibujo.",
+    notes: "At the end, ask students to describe their bedroom. It can be homework with a drawing.",
     sheet: { instructions: "Read the rule. Then complete the exercises.", blocks: [
       { t: "rule", lines: ["There is + one thing: There is a lamp.", "There are + two or more: There are three books.", "Negative: There isn’t / There aren’t · Question: Is there…? / Are there…?"] },
       { t: "items", label: "Is or are?", list: ["There ___ a cat under the table.", "There ___ two windows in my room.", "There ___ some apples in the fridge.", "There ___ a clock on the wall."] },
@@ -259,7 +259,7 @@ RESOURCES.push(
   {
     id: "can-cant-abilities", category: "Grammar", type: "Printable worksheet", levels: ["A1"], ages: ["Ages 7–9", "Ages 10–12"],
     title: "Can and Can’t: Abilities", description: "Talk about what you can and can’t do.",
-    notes: "Haga una encuesta rápida en el grupo: “Can you swim? Can you whistle?” y anoten resultados en el pizarrón.",
+    notes: "Do a quick class survey: “Can you swim? Can you whistle?” and write the results on the board.",
     sheet: { instructions: "Read the rule. Then complete the exercises.", blocks: [
       { t: "rule", lines: ["can + verb (it doesn’t change): I can swim. She can swim.", "Negative: can’t · Question: Can you…? Yes, I can. / No, I can’t."] },
       { t: "table", label: "Can you…? Write ✓ or ✗ and a sentence.", headers: ["Action", "✓ / ✗", "Sentence"], rows: [["ride a bike", "", ""], ["cook", "", ""], ["speak French", "", ""], ["play the guitar", "", ""]] },

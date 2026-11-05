@@ -747,7 +747,7 @@ const RESOURCES = [
     id: "short-vowel-sort", category: "Phonics", type: "Printable worksheet", levels: ["Pre-A1", "A1"], ages: ["Ages 4–6", "Ages 7–9"],
     title: "Short Vowel Sort",
     description: "Students read simple CVC words and sort them by their short vowel sound.",
-    notes: "Lea las palabras en voz alta con el grupo y exagere el sonido de cada vocal. Después, los alumnos clasifican las palabras de forma individual. Tiempo sugerido: 15–20 minutos.",
+    notes: "Read the words aloud with the class and stretch each vowel sound. Then students sort the words on their own. Suggested time: 15–20 minutes.",
     sheet: {
       instructions: "Read each word aloud. Write it under the correct short vowel sound.",
       blocks: [
@@ -762,7 +762,7 @@ const RESOURCES = [
     id: "food-vocabulary-builder", category: "Vocabulary", type: "Printable worksheet", levels: ["A1"], ages: ["Ages 7–9"],
     title: "Food Vocabulary Builder",
     description: "Match common food words to simple definitions, then use them in sentences.",
-    notes: "Ideal como cierre de una clase sobre comida. Puede pedir a los alumnos que dibujen su comida favorita al reverso de la hoja. Incluye clave de respuestas en una página aparte.",
+    notes: "A great closing activity for a lesson about food. Students can draw their favorite food on the back of the sheet. The answer key is on a separate page.",
     sheet: {
       instructions: "Match the words to their meanings. Then complete the sentences.",
       blocks: [
@@ -776,7 +776,7 @@ const RESOURCES = [
     id: "present-simple-routines", category: "Grammar", type: "Printable worksheet", levels: ["A1", "A2"], ages: ["Ages 7–9", "Ages 10–12"],
     title: "Present Simple: Daily Routines",
     description: "Practice affirmative and negative forms of the present simple with everyday routines.",
-    notes: "Repase la regla de la tercera persona (he/she/it + -s/-es) antes de comenzar. Puede usar la lectura “Lila’s Busy Monday” de la biblioteca como texto modelo.",
+    notes: "Review the third-person rule (he/she/it + -s/-es) before you start. You can use the reading “Lila’s Busy Monday” from the library as a model text.",
     sheet: {
       instructions: "Read the rule. Then complete the exercises.",
       blocks: [
@@ -791,7 +791,7 @@ const RESOURCES = [
     id: "spelling-ing-rules", category: "Spelling", type: "Printable worksheet", levels: ["A2"], ages: ["Ages 10–12"],
     title: "Spelling Rules: Adding -ing",
     description: "Three clear spelling rules for -ing forms, with practice and error correction.",
-    notes: "Escriba las tres reglas en el pizarrón con un ejemplo de cada una. Pida a los alumnos que identifiquen qué regla aplica antes de escribir.",
+    notes: "Write the three rules on the board with one example of each. Ask students to say which rule applies before they write.",
     sheet: {
       instructions: "Learn the three rules. Then write the -ing form of each verb.",
       blocks: [
@@ -806,7 +806,7 @@ const RESOURCES = [
     id: "reading-detective", category: "Reading comprehension", type: "Printable worksheet", levels: ["A2"], ages: ["Ages 7–9", "Ages 10–12"],
     title: "Reading Detective: The New Neighbor",
     description: "A short story with true or false questions and two open questions.",
-    notes: "Pida una primera lectura en silencio y una segunda en voz alta. Las preguntas abiertas funcionan bien para comentar en parejas antes de escribir.",
+    notes: "Ask for a first silent reading and a second reading aloud. The open questions work well for pair discussion before writing.",
     sheet: {
       instructions: "Read the story carefully. Then answer the questions.",
       blocks: [
@@ -821,7 +821,7 @@ const RESOURCES = [
     id: "write-about-your-weekend", category: "Writing", type: "Writing planner", levels: ["A2", "B1"], ages: ["Ages 10–12", "Ages 13+"],
     title: "Write About Your Weekend",
     description: "A guided planner and writing page for a short past-simple narrative.",
-    notes: "Modele un ejemplo breve en el pizarrón usando los conectores sugeridos. La lista de revisión final ayuda a que los alumnos corrijan su propio texto.",
+    notes: "Model a short example on the board using the suggested linking words. The final checklist helps students correct their own writing.",
     sheet: {
       instructions: "Plan your ideas first. Then write about your last weekend.",
       blocks: [
@@ -836,7 +836,7 @@ const RESOURCES = [
     id: "classroom-objects-flashcards", category: "Flashcards", type: "Flashcards", levels: ["Pre-A1"], ages: ["Ages 4–6"],
     title: "Classroom Objects Flashcards",
     description: "Twelve cut-out cards with a word, a simple clue, and space to draw.",
-    notes: "Imprima en cartulina si es posible. Los alumnos dibujan cada objeto y luego juegan a adivinar la palabra con la pista. Útil para memorama o “Simon says”.",
+    notes: "Print on card stock if possible. Students draw each object, then play guessing the word from the clue. Also useful for a memory game or “Simon says”.",
     sheet: {
       instructions: "Cut out the cards. Draw a picture of each object in the box.",
       blocks: [
@@ -853,7 +853,7 @@ const RESOURCES = [
     id: "phrasal-verbs-in-context", category: "Worksheets", type: "Printable worksheet", levels: ["B1"], ages: ["Ages 13+"],
     title: "Phrasal Verbs in Context",
     description: "Six high-frequency phrasal verbs with meaning-matching and gap-fill practice.",
-    notes: "Recuerde a los alumnos que deben conjugar el verbo según el tiempo de la oración. Puede ampliarse pidiendo una oración personal con cada phrasal verb.",
+    notes: "Remind students to change the verb to match the tense of the sentence. To extend the activity, ask for a personal sentence with each phrasal verb.",
     sheet: {
       instructions: "Match the phrasal verbs to their meanings. Then use them in context.",
       blocks: [
@@ -1631,7 +1631,7 @@ function viewResources() {
     <section class="page-head wrap">
       <p class="kicker">Print &amp; Learn</p>
       <h1>Worksheets ready to print</h1>
-      <p class="lead">Materiales listos para imprimir en tamaño carta, para el salón o para casa. Cada uno incluye sugerencias de uso y, cuando aplica, clave de respuestas.</p>
+      <p class="lead">Printable materials in letter size, for the classroom or for home. Each one includes teaching tips and, when needed, an answer key.</p>
     </section>
     <section class="wrap filters" aria-label="Filter resources">
       ${searchField("res-q", "Search worksheets", resF.q)}
@@ -1701,9 +1701,9 @@ function viewResource(id) {
         <div class="chips"><span class="chip">${esc(r.category)}</span>${r.levels.map(lvlChip).join("")}<span class="chip">${esc(r.ages.join(", "))}</span></div>
         <h1>${esc(r.title)}</h1>
         <p class="lead">${esc(r.description)}</p>
-        <div class="notes"><strong>Sugerencias de uso</strong>${esc(r.notes)}</div>
+        <div class="notes"><strong>Teaching tips</strong>${esc(r.notes)}</div>
         <div class="actions"><button class="btn btn-primary" type="button" data-action="print">${ico("print", 20)} Print or save as PDF</button>${favBtnWide("resource", r.id, r.title)}</div>
-        <p class="print-hint">Para guardar como PDF, elija “Guardar como PDF” en el destino de impresión. Tamaño carta.</p>
+        <p class="print-hint">To save it as a PDF, choose “Save as PDF” as the printer. Letter size.</p>
       </div>
     </div>
     <div class="wrap sheet-wrap">${renderSheet(r)}</div>`
