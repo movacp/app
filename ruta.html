@@ -10,6 +10,7 @@
 <link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
 <script src="mova-voice.js"></script>
 <script src="ruta-data.js"></script>
+<script src="fc-extra.js"></script>
 <style>
 :root{--bg:#F5F3FA;--ink:#15192B;--navy:#1A1B2E;--navy2:#2C3060;--muted:#6A6F85;--line:#ECE9F3;--lime:#D3F36B;--lav:#E6E2FF;--peri:#C9D2FF;--pink:#FF8FC0;--pinkSoft:#FFE1EE;--butter:#FFE58A;--mint:#BDF0D8;--okSoft:#E4F8B0;
   color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -130,6 +131,7 @@ h1.t{font-size:32px;margin:2px 4px 4px}
 .saved{text-align:center;font-size:13px;color:var(--muted);font-weight:700;margin-top:12px}
 .saved button{text-decoration:underline;font-weight:800;color:var(--ink)}
 /* flashcards */
+.mds{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#fff;border-radius:20px;padding:6px;margin:12px 0 14px;box-shadow:0 10px 30px -20px rgba(54,40,120,.35)}.mds button{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 6px;border-radius:15px;font-weight:800;font-size:14.5px;color:var(--ink)}.mds button svg{width:18px;height:18px}.mds .on{background:var(--ink);color:#fff}.mds .on svg{color:var(--lime)}.dkh{margin:2px 4px 0}.fc .b small.exs{display:block;font-size:14.5px;font-weight:600;font-style:italic;color:var(--muted);margin-top:10px;line-height:1.4}.fc.ex3{height:250px}.mt{display:grid;grid-template-columns:1fr 1.25fr;gap:10px;margin-top:4px}.mt.pic{grid-template-columns:1fr}.mt.pic .mc{grid-template-columns:1fr 1fr}.mt.pic .mc+.mc{margin-top:4px}.mc{display:grid;gap:8px;align-content:start}.mw,.md{display:flex;align-items:center;justify-content:center;min-height:62px;width:100%;padding:10px;border-radius:16px;background:var(--bg);border:2px solid transparent;font-weight:800;font-size:15.5px;text-align:center;line-height:1.25;transition:transform .12s,background .2s}.md span{font-size:13.5px;font-weight:700}.mt.pic .md{padding:6px;min-height:0}.md img{width:100%;max-width:104px;aspect-ratio:1;object-fit:contain;background:#fff;border-radius:12px}.mw.sel,.md.sel{border-color:var(--ink);background:#fff;transform:scale(1.02)}.mw.done,.md.done{background:var(--okSoft);border-color:#8BC34A;opacity:.55;pointer-events:none}.mw.bad,.md.bad{background:var(--pinkSoft);border-color:var(--pink);animation:shk .35s}@keyframes shk{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 .fc{perspective:900px;height:210px;margin:6px 0 12px}.fc.pic{height:330px}.fc .f img{display:block;width:190px;height:190px;object-fit:contain;margin:0 auto 6px;background:#fff;border-radius:22px}.fc .b small.def{display:block;font-size:19px;font-weight:700;color:#15192B;opacity:.85;margin-top:6px;line-height:1.3}.fc .b img{width:110px;height:110px;object-fit:contain;background:#fff;border-radius:18px;display:block;margin:0 auto 8px}.opts-pic{display:grid;grid-template-columns:1fr 1fr;gap:10px}.opt.pic{padding:8px;display:grid;place-items:center}.opt.pic img{width:100%;max-width:150px;aspect-ratio:1;object-fit:contain;background:#fff;border-radius:16px}
 .fc .in{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
 .fc.flip .in{transform:rotateY(180deg)}
@@ -244,7 +246,8 @@ function route(){
   if(h[0]==="lv"&&D[h[1]]&&D[h[1]][h[2]])return level(h[1],h[2],h[3]||"grammar");
   if(h[0]==="t")return topic(h[1],h[2]);
   if(h[0]==="check")return check(h[1],h[2]);
-  if(h[0]==="vocab")return vocab(h[1],h[2],+h[3]);
+  if(h[0]==="vocab")return vocab(h[1],h[2],+h[3],h[4]);
+  if(h[0]==="xv")return xvocab(h[1],h[2]);
   if(h[0]==="mix")return mix(h[1],h[2]);
   if(h[0]==="badges")return badges();
   home(h[0]==="stage"&&D[h[1]]?h[1]:curStage());
@@ -296,7 +299,7 @@ function level(st,code,tab){
     tb.innerHTML=list.length?'<p class="sub" style="margin-top:-4px">'+(tab==="writing"?(es?"Mayúsculas, puntuación y ortografía de este nivel.":"Capital letters, punctuation and spelling for this level."):"Sounds and words to help you read. Turn up the volume or use headphones.")+'</p>'+list.map(function(t,i){var d=o.done[t.id],isN=nx&&nx.id===t.id;return '<button class="u'+(d?" ok":"")+(isN?" next":"")+'" data-id="'+t.id+'"><span class="n">'+(d?IC.check:(i+1))+'</span><span class="tx">'+esc(t.t)+'<small>'+esc(t.s)+'</small></span>'+(d?stars(d.stars):(isN?'<span class="st" style="background:var(--butter)">Up next</span>':""))+'</button>';}).join(""):'<div class="empty"><b>Coming soon</b>'+(es?"Estamos preparando "+(tab==="writing"?"Writing":"Phonics")+" para este nivel.":"We're preparing Writing for this level.")+"</div>";
     tb.querySelectorAll("button.u").forEach(function(b){b.onclick=function(){go("t/"+b.dataset.id);};});
   } else if(tab==="vocabulary"){
-    tb.innerHTML=L.vocab.length?L.vocab.map(function(v,i){var sc=o.vocab[st+"|"+code+"|"+i];return '<button class="u'+(sc>=8?" ok":"")+'" data-i="'+i+'"><span class="n">'+(sc>=8?IC.check:(i+1))+'</span><span class="tx">'+esc(v.n)+'<small>'+v.w.length+' words · flashcards and quiz</small></span>'+(sc!=null?'<span class="st" style="background:'+(sc>=8?"var(--okSoft)":"var(--butter)")+'">'+sc+'/10</span>':"")+"</button>";}).join(""):'<div class="empty"><b>Coming soon</b>'+(es?"El vocabulario de este nivel está en preparación.":"Vocabulary for this level is on the way.")+"</div>";
+    tb.innerHTML=L.vocab.length?L.vocab.map(function(v,i){var sc=o.vocab[st+"|"+code+"|"+i];return '<button class="u'+(sc>=8?" ok":"")+'" data-i="'+i+'"><span class="n">'+(sc>=8?IC.check:(i+1))+'</span><span class="tx">'+esc(v.n)+'<small>'+v.w.length+' words · study, match and quiz</small></span>'+(sc!=null?'<span class="st" style="background:'+(sc>=8?"var(--okSoft)":"var(--butter)")+'">'+sc+'/10</span>':"")+"</button>";}).join(""):'<div class="empty"><b>Coming soon</b>'+(es?"El vocabulario de este nivel está en preparación.":"Vocabulary for this level is on the way.")+"</div>";
     tb.querySelectorAll("button.u").forEach(function(b){b.onclick=function(){go("vocab/"+st+"/"+encodeURIComponent(code)+"/"+b.dataset.i);};});
   } else if(tab==="practice"){
     tb.innerHTML='<button class="lk" id="mx" style="width:100%"><span class="ic" style="background:var(--lime)">'+IC.mix+'</span><b>Mixed review<small>'+(es?"10 preguntas de los temas de este nivel":"10 questions from this level's topics")+'</small></b>'+IC.chev+'</button><h3 style="font-family:Bricolage Grotesque;margin:18px 4px 10px">'+(es?"Juegos recomendados":"Recommended games")+'</h3>'+
@@ -409,29 +412,72 @@ function check(st,code){
     document.getElementById("nl").onclick=function(){if(pct>=75&&nxt){var m=S();m.level=nxt;W(m);go("lv/"+st+"/"+encodeURIComponent(nxt));}else go("lv/"+st+"/"+encodeURIComponent(code));};savedNote(saved,es);}});
 }
 
-/* ---------- vocabulario ---------- */
-function vocab(st,code,i){
-  var V=D[st][code].vocab[i],es=STG[st].lang==="es";if(!V)return go("lv/"+st+"/"+encodeURIComponent(code)+"/vocabulary");
-  var k=0,bh="#/lv/"+st+"/"+encodeURIComponent(code)+"/vocabulary",bl=STG[st].name+" · "+code;
-  function card(){
+/* ---------- vocabulario: Study, Match y Quiz (v76) ---------- */
+function vocab(st,code,i,from){
+  var V=D[st]&&D[st][code]&&D[st][code].vocab[i];if(!V)return go(D[st]&&D[st][code]?"lv/"+st+"/"+encodeURIComponent(code)+"/vocabulary":"");
+  var fl=from==="f";
+  deck(V,{key:st+"|"+code+"|"+i,es:false,bh:fl?"./#/flashcards":"#/lv/"+st+"/"+encodeURIComponent(code)+"/vocabulary",bl:fl?"Flashcards":STG[st].name+" · "+code,log:"My path · "+STG[st].name+" "+code+" · Vocabulary: "+V.n,st:st,code:code});
+}
+function xvocab(id,from){
+  var V=(window.MOVA_FC_EXTRA||[]).filter(function(x){return x.id===id;})[0];if(!V)return location.href="./#/flashcards";
+  deck(V,{key:"x|"+id,es:false,bh:"./#/flashcards",bl:"Flashcards",log:"Flashcards · "+V.n,st:V.stage,code:V.level,ask:V.ask});
+}
+function deck(V,c){
+  var k=0,mode="study",pic=V.w.every(function(x){return x[2];}),N=V.w.length;
+  function goBack(){if(/^\./.test(c.bh))location.href=c.bh;else location.hash=c.bh.slice(1);}
+  function modes(){return '<div class="mds" role="tablist">'+[["study","Study"],["match","Match"],["quiz","Quiz"]].map(function(m){return '<button role="tab" data-m="'+m[0]+'" class="'+(m[0]===mode?"on":"")+'" aria-selected="'+(m[0]===mode)+'">'+MI[m[0]]+'<b>'+m[1]+'</b></button>';}).join("")+"</div>";}
+  function head(){return back(c.bh,c.bl)+'<div class="dkh"><span class="kicker">'+esc((c.code||"")+" · "+N+" WORDS")+'</span><h1 class="t" style="margin:4px 0 0">'+esc(V.n)+'</h1></div>'+modes();}
+  function wire(){app.querySelectorAll(".mds button").forEach(function(b){b.onclick=function(){mode=b.dataset.m;try{speechSynthesis.cancel();}catch(e){}if(mode==="study")study();else if(mode==="match")match();else quizV();};});}
+  function study(){
     var w=V.w[k];
-    app.innerHTML=back(bh,bl)+'<div class="card"><span class="kicker">'+esc(V.n.toUpperCase())+' · '+(k+1)+'/'+V.w.length+'</span><div class="fc'+(w[2]?' pic':'')+'" id="fc"><div class="in"><div class="f"><div>'+(w[2]?'<img src="'+w[2]+'" alt="">':'')+'<b>'+esc(w[0])+'</b><small>Tap to see the meaning</small></div></div><div class="b"><div>'+(w[2]?'<img src="'+w[2]+'" alt="">':'')+'<b>'+esc(w[0])+'</b><small class="def">'+esc(w[1])+'</small></div></div></div></div><div class="fcnav"><button class="round" id="pv" aria-label="Previous">'+IC.prev+'</button><button class="round" id="sp" aria-label="Listen">'+IC.spk+'</button><button class="round" id="nx" aria-label="Next">'+IC.chev+'</button></div><button class="cta" id="qz">'+(es?"Hacer el quiz":"Take the quiz")+'</button></div>';
+    app.innerHTML=head()+'<div class="card"><span class="kicker">'+(k+1)+' / '+N+'</span><div class="fc'+(w[2]?' pic':'')+(w[3]?' ex3':'')+'" id="fc"><div class="in"><div class="f"><div>'+(w[2]?'<img src="'+w[2]+'" alt="">':'')+'<b>'+esc(w[0])+'</b><small>Tap to see the meaning</small></div></div><div class="b"><div>'+(w[2]?'<img src="'+w[2]+'" alt="">':'')+'<b>'+esc(w[0])+'</b><small class="def">'+esc(w[1])+'</small>'+(w[3]?'<small class="exs">'+esc(w[3])+'</small>':'')+'</div></div></div></div><div class="fcnav"><button class="round" id="pv" aria-label="Previous">'+IC.prev+'</button><button class="round" id="sp" aria-label="Listen">'+IC.spk+'</button><button class="round" id="nx" aria-label="Next">'+IC.chev+'</button></div></div>';
+    wire();
     document.getElementById("fc").onclick=function(){this.classList.toggle("flip");};
     document.getElementById("sp").onclick=function(){say(w[0],.85);};
-    document.getElementById("pv").onclick=function(){k=(k+V.w.length-1)%V.w.length;card();};
-    document.getElementById("nx").onclick=function(){k=(k+1)%V.w.length;card();};
-    document.getElementById("qz").onclick=quizV;
+    document.getElementById("pv").onclick=function(){k=(k+N-1)%N;study();};
+    document.getElementById("nx").onclick=function(){k=(k+1)%N;study();};
+  }
+  function match(){
+    var pool=shuffle(V.w),rounds=[],r,miss=0,found=0;
+    for(r=0;r<pool.length;r+=4)rounds.push(pool.slice(r,r+4));
+    if(rounds.length>1&&rounds[rounds.length-1].length<3){var last=rounds.pop();rounds[rounds.length-1]=rounds[rounds.length-1].concat(last);}
+    rounds=rounds.slice(0,3);var total=rounds.reduce(function(a,x){return a+x.length;},0),ri=0;
+    function one(){
+      var R=rounds[ri],L=shuffle(R),Rt=shuffle(R),sel=null,ok=0;
+      app.innerHTML=head()+'<div class="steps">'+rounds.map(function(_,i){return '<i class="'+(i<=ri?"on":"")+'"></i>';}).join("")+'</div><div class="card"><span class="kicker">ROUND '+(ri+1)+' / '+rounds.length+'</span><div class="qtext">'+(pic?"Match each word with its picture.":"Match each word with its meaning.")+'</div><div class="mt'+(pic?" pic":"")+'"><div class="mc">'+L.map(function(w){return '<button class="mw" data-w="'+esc(w[0])+'"><b>'+esc(w[0])+'</b></button>';}).join("")+'</div><div class="mc">'+Rt.map(function(w){return '<button class="md" data-w="'+esc(w[0])+'">'+(pic?'<img src="'+w[2]+'" alt="">':'<span>'+esc(w[1])+'</span>')+'</button>';}).join("")+'</div></div><div id="mfb"></div></div>';
+      wire();
+      function pick(b){
+        if(b.classList.contains("done"))return;
+        if(!sel||sel.className.split(" ")[0]===b.className.split(" ")[0]){app.querySelectorAll(".mw.sel,.md.sel").forEach(function(x){x.classList.remove("sel");});sel=b;b.classList.add("sel");if(b.classList.contains("mw"))say(b.dataset.w,.85);return;}
+        var a=sel;sel=null;a.classList.remove("sel");
+        if(a.dataset.w===b.dataset.w){a.classList.add("done");b.classList.add("done");ok++;found++;
+          if(ok===R.length){document.getElementById("mfb").innerHTML='<button class="cta" id="mn">'+(ri<rounds.length-1?"Next round":"See my result")+'</button>';document.getElementById("mn").onclick=function(){ri++;if(ri<rounds.length)one();else end();};}
+        }else{miss++;[a,b].forEach(function(x){x.classList.add("bad");setTimeout(function(){x.classList.remove("bad");},550);});}
+      }
+      app.querySelectorAll(".mw,.md").forEach(function(b){b.onclick=function(){pick(b);};});
+    }
+    function end(){
+      var st=miss===0?3:miss<=3?2:1;
+      app.innerHTML=head()+'<div class="res"><span class="ring"></span><span class="k">MATCH</span><h2>'+found+'<small> / '+total+'</small></h2>'+stars(st)+'<p>'+(miss===0?"Perfect! No mistakes.":miss===1?"Great job! Only 1 mistake.":"Well done! "+miss+" mistakes. Try again to beat it.")+'</p></div><div class="row2"><button class="cta ghost" id="ma">Play again</button><button class="cta" id="mq">Take the quiz</button></div>';
+      wire();document.getElementById("ma").onclick=match;document.getElementById("mq").onclick=function(){mode="quiz";quizV();};
+    }
+    one();
   }
   function quizV(){
-    var pic=V.w.every(function(x){return x[2];});var qs=shuffle(V.w).map(function(w){if(pic){var ot=shuffle(V.w.filter(function(x){return x!==w;})).slice(0,3).map(function(x){return {x:x[0],img:x[2],ok:false};});return {q:"Listen and tap the picture.",say:w[0],o:shuffle(ot.concat([{x:w[0],img:w[2],ok:true}])),why:w[0]+": "+w[1]};}var others=shuffle(V.w.filter(function(x){return x!==w;})).slice(0,3).map(function(x){return {x:x[1],ok:false};});return {q:(es?"¿Qué significa “":"What does “")+w[0]+(es?"”?":"” mean?"),o:shuffle(others.concat([{x:w[1],ok:true}])),why:w[0]+": "+w[1]};});
-    runQuiz({qs:qs,es:es,kicker:V.n.toUpperCase(),backHref:bh,backLabel:bl,done:function(sc,n){
-      var o=S(),kk=st+"|"+code+"|"+i;if(o.vocab[kk]==null||sc>o.vocab[kk])o.vocab[kk]=sc;var nb=checkBadges(o,null);W(o);
-      var saved=saveCloud("My path · "+STG[st].name+" "+code+" · Vocabulary: "+V.n,sc,n,{kind:"score",stage:st,level:code});
-      app.innerHTML=back(bh,bl)+'<div class="res"><span class="ring"></span><span class="k">'+esc(V.n.toUpperCase())+'</span><h2>'+sc+'<small> / '+n+'</small></h2>'+stars(sc>=10?3:sc>=8?2:1)+'</div>'+newBadgesHtml(nb)+'<button class="cta" id="bk">'+(es?"Volver al vocabulario":"Back to vocabulary")+'</button><p class="saved" id="sv"></p>';
-      document.getElementById("bk").onclick=function(){location.hash=bh.slice(1);};savedNote(saved,es);}});
+    var qs=shuffle(V.w).slice(0,10).map(function(w){
+      if(pic){var ot=shuffle(V.w.filter(function(x){return x!==w;})).slice(0,3).map(function(x){return {x:x[0],img:x[2],ok:false};});return {q:"Listen and tap the picture.",say:w[0],o:shuffle(ot.concat([{x:w[0],img:w[2],ok:true}])),why:w[0]+": "+w[1]};}
+      var others=shuffle(V.w.filter(function(x){return x!==w;})).slice(0,3).map(function(x){return {x:x[1],ok:false};});
+      return {q:c.ask?c.ask.replace("%",w[0]):"What does “"+w[0]+"” mean?",o:shuffle(others.concat([{x:w[1],ok:true}])),why:w[0]+": "+w[1]};});
+    runQuiz({qs:qs,es:false,kicker:esc(V.n.toUpperCase()),backHref:c.bh,backLabel:c.bl,done:function(sc,n){
+      var o=S(),kk=c.key;if(o.vocab[kk]==null||sc>o.vocab[kk])o.vocab[kk]=sc;var nb=checkBadges(o,null);W(o);
+      var saved=saveCloud(c.log,sc,n,{kind:"score",stage:c.st,level:c.code});
+      app.innerHTML=back(c.bh,c.bl)+'<div class="res"><span class="ring"></span><span class="k">'+esc(V.n.toUpperCase())+'</span><h2>'+sc+'<small> / '+n+'</small></h2>'+stars(sc>=10?3:sc>=8?2:1)+'</div>'+newBadgesHtml(nb)+'<div class="row2"><button class="cta ghost" id="ag">Study again</button><button class="cta" id="bk">Back to '+esc(c.bl)+'</button></div><p class="saved" id="sv"></p>';
+      document.getElementById("ag").onclick=function(){mode="study";k=0;study();};
+      document.getElementById("bk").onclick=goBack;savedNote(saved,false);}});
   }
-  card();
+  study();
 }
+var MI={study:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="13" height="15" rx="2.5"/><path d="M4 7v11a3 3 0 0 0 3 3h9"/></svg>',match:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="6" rx="2"/><rect x="14" y="14" width="7" height="6" rx="2"/><path d="M10 7h3a3 3 0 0 1 3 3v4"/></svg>',quiz:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14"/><circle cx="12" cy="17.2" r=".6" fill="currentColor"/></svg>'};
 
 /* ---------- insignias ---------- */
 function badges(){
