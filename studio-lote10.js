@@ -30,11 +30,11 @@ READINGS.push(
     ],
     vocab: [["windy", "with a lot of wind"], ["kite", "a toy that flies in the wind on a long string"], ["hill", "a small mountain"], ["string", "a thin rope"], ["climb", "to go up something using your hands and feet"]],
     questions: [
-      ["What is the weather like?", ["very windy", "very hot", "rainy"]],
-      ["What color is the kite?", ["red", "blue", "yellow"]],
-      ["Why does the kite fly away?", ["The string breaks.", "Sam lets it go.", "A bird takes it."]],
-      ["Where do they find the kite?", ["in a tall tree", "on a car", "in the river"]],
-      ["Who helps them?", ["a girl with a long stick", "a firefighter", "Sam’s mom"]]
+      ["What is the weather like?", ["very windy", "very hot", "rainy", "snowy"]],
+      ["What color is the kite?", ["red", "blue", "yellow", "green"]],
+      ["Why does the kite fly away?", ["The string breaks.", "Sam lets it go.", "A bird takes it.", "Grandpa cuts it."]],
+      ["Where do they find the kite?", ["in a tall tree", "on a car", "in the river", "on the roof"]],
+      ["Who helps them?", ["a girl with a long stick", "a firefighter", "Sam’s mom", "Sam’s teacher"]]
     ]
   },
   {
@@ -49,11 +49,11 @@ READINGS.push(
     ],
     vocab: [["cage", "a small house with bars for an animal"], ["escape", "to get out of a place"], ["worried", "a little afraid that something bad happened"], ["noise", "a sound"], ["share", "to give part of something to another person"]],
     questions: [
-      ["What kind of animal is Peanut?", ["a hamster", "a rabbit", "a mouse"]],
-      ["What was the problem on Monday?", ["The cage door was open and Peanut wasn’t there.", "Peanut was sick.", "Miss Rosa was late."]],
-      ["Who heard a noise?", ["Diego", "Ana", "Miss Rosa"]],
-      ["Where was Peanut?", ["in Ana’s backpack", "under a desk", "in the toy box"]],
-      ["What was Peanut eating?", ["cookies", "sunflower seeds", "an apple"]]
+      ["What kind of animal is Peanut?", ["a hamster", "a rabbit", "a mouse", "a guinea pig"]],
+      ["What was the problem on Monday?", ["The cage door was open and Peanut wasn’t there.", "Peanut was sick.", "Miss Rosa was late.", "The classroom was very cold."]],
+      ["Who heard a noise?", ["Diego", "Ana", "Miss Rosa", "the principal"]],
+      ["Where was Peanut?", ["in Ana’s backpack", "under a desk", "in the toy box", "behind the books"]],
+      ["What was Peanut eating?", ["cookies", "sunflower seeds", "an apple", "a carrot"]]
     ]
   },
   {

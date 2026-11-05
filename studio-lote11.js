@@ -1178,11 +1178,11 @@ READINGS.push(
     ],
     vocab: [["mom", "your mother"], ["dad", "your father"], ["sister", "a girl in your family, like you"], ["tall", "big from the floor to the head"], ["funny", "he makes you laugh"]],
     questions: [
-      ["How old is Nico?", ["six", "two", "ten"]],
-      ["What is Dad like?", ["funny", "tall", "sad"]],
-      ["Who is Ana?", ["his sister", "his mom", "his grandma"]],
-      ["What does Grandma make?", ["cookies", "pizza", "a cake"]],
-      ["What is the dog’s name?", ["Max", "Nico", "Pip"]]
+      ["How old is Nico?", ["six", "two", "ten", "eight"]],
+      ["What is Dad like?", ["funny", "tall", "sad", "short"]],
+      ["Who is Ana?", ["his sister", "his mom", "his grandma", "his cousin"]],
+      ["What does Grandma make?", ["cookies", "pizza", "a cake", "bread"]],
+      ["What is the dog’s name?", ["Max", "Nico", "Pip", "Rex"]]
     ]
   },
   {
@@ -1198,11 +1198,11 @@ READINGS.push(
     ],
     vocab: [["farm", "a place with animals and plants"], ["cow", "an animal that gives milk"], ["duck", "a bird that swims"], ["pig", "a pink animal with a short tail"], ["horse", "a big animal you can ride"]],
     questions: [
-      ["Whose farm is it?", ["Uncle Joe’s", "Grandma’s", "Nico’s"]],
-      ["What color is the cow?", ["black and white", "brown", "pink"]],
-      ["Where is the duck?", ["in the water", "on the horse", "in the house"]],
-      ["How many pigs are there?", ["three", "one", "five"]],
-      ["What animal can the child ride?", ["the horse", "the cow", "the pig"]]
+      ["Whose farm is it?", ["Uncle Joe’s", "Grandma’s", "Nico’s", "Aunt Rosa’s"]],
+      ["What color is the cow?", ["black and white", "brown", "pink", "gray"]],
+      ["Where is the duck?", ["in the water", "on the horse", "in the house", "under a tree"]],
+      ["How many pigs are there?", ["three", "one", "five", "two"]],
+      ["What animal can the child ride?", ["the horse", "the cow", "the pig", "the duck"]]
     ]
   },
   {
@@ -1219,11 +1219,11 @@ READINGS.push(
     ],
     vocab: [["lunch box", "a box for your food"], ["sandwich", "bread with food in the middle"], ["apple", "a round red or green fruit"], ["carrot", "a long orange vegetable"], ["bottle", "you put water in it"]],
     questions: [
-      ["What color is the lunch box?", ["blue", "red", "orange"]],
-      ["What color is the apple?", ["red", "green", "yellow"]],
-      ["How many carrots are there?", ["two", "one", "three"]],
-      ["What is the drink?", ["water", "milk", "juice"]],
-      ["Who eats with the child?", ["Leo", "Mom", "Max"]]
+      ["What color is the lunch box?", ["blue", "red", "orange", "green"]],
+      ["What color is the apple?", ["red", "green", "yellow", "pink"]],
+      ["How many carrots are there?", ["two", "one", "three", "four"]],
+      ["What is the drink?", ["water", "milk", "juice", "tea"]],
+      ["Who eats with the child?", ["Leo", "Mom", "Max", "Ana"]]
     ]
   },
   {
@@ -1239,11 +1239,11 @@ READINGS.push(
     ],
     vocab: [["toy", "a thing you play with"], ["teddy bear", "a soft toy bear"], ["soft", "nice to touch, not hard"], ["blocks", "toys you put on top of each other"], ["doll", "a toy that looks like a person"]],
     questions: [
-      ["Is the toy box big or small?", ["big", "small", "pink"]],
-      ["What is the teddy bear like?", ["soft and brown", "small and fast", "red and blue"]],
-      ["What is small and fast?", ["the car", "the doll", "the box"]],
-      ["What does the doll have?", ["a pink dress", "a red hat", "blue shoes"]],
-      ["Where do the toys go after playing?", ["in the box", "on the bed", "in the garden"]]
+      ["Is the toy box big or small?", ["big", "small", "pink", "empty"]],
+      ["What is the teddy bear like?", ["soft and brown", "small and fast", "red and blue", "small and pink"]],
+      ["What is small and fast?", ["the car", "the doll", "the box", "the teddy bear"]],
+      ["What does the doll have?", ["a pink dress", "a red hat", "blue shoes", "a blue dress"]],
+      ["Where do the toys go after playing?", ["in the box", "on the bed", "in the garden", "under the bed"]]
     ]
   },
 
@@ -1260,11 +1260,11 @@ READINGS.push(
     ],
     vocab: [["birthday", "the day you were born, every year"], ["balloon", "a colorful ball full of air"], ["present", "a gift"], ["wish", "something you want to happen"], ["candle", "it gives light and goes on a cake"]],
     questions: [
-      ["How old is Sam today?", ["seven", "six", "eight"]],
-      ["What are Sam’s favorite colors?", ["green and yellow", "red and blue", "black and white"]],
-      ["What kind of cake does Mom make?", ["chocolate", "strawberry", "lemon"]],
-      ["What is on Tom’s card?", ["a dinosaur", "a cat", "a car"]],
-      ["What is Sam’s wish?", ["It’s a secret.", "a new bike", "a puppy"]]
+      ["How old is Sam today?", ["seven", "six", "eight", "five"]],
+      ["What are Sam’s favorite colors?", ["green and yellow", "red and blue", "black and white", "pink and purple"]],
+      ["What kind of cake does Mom make?", ["chocolate", "strawberry", "lemon", "vanilla"]],
+      ["What is on Tom’s card?", ["a dinosaur", "a cat", "a car", "a robot"]],
+      ["What is Sam’s wish?", ["It’s a secret.", "a new bike", "a puppy", "a trip to the zoo"]]
     ]
   },
   {
@@ -1280,11 +1280,11 @@ READINGS.push(
     ],
     vocab: [["zoo", "a place where you can see wild animals"], ["trunk", "an elephant’s long nose"], ["noisy", "making a lot of sound"], ["neck", "the part between your head and body"], ["stripes", "long lines of color"]],
     questions: [
-      ["Who goes to the zoo with Emma?", ["her class", "her grandma", "her dog"]],
-      ["What do elephants have?", ["long noses called trunks", "black stripes", "long necks"]],
-      ["What do the monkeys do?", ["They jump from tree to tree.", "They sleep on a rock.", "They eat leaves."]],
-      ["What is the tiger doing?", ["sleeping on a rock", "eating leaves", "jumping"]],
-      ["What is Emma’s favorite animal?", ["the giraffe", "the tiger", "the monkey"]]
+      ["Who goes to the zoo with Emma?", ["her class", "her grandma", "her dog", "her family"]],
+      ["What do elephants have?", ["long noses called trunks", "black stripes", "long necks", "very short tails"]],
+      ["What do the monkeys do?", ["They jump from tree to tree.", "They sleep on a rock.", "They eat leaves.", "They swim in a pool."]],
+      ["What is the tiger doing?", ["sleeping on a rock", "eating leaves", "jumping", "drinking water"]],
+      ["What is Emma’s favorite animal?", ["the giraffe", "the tiger", "the monkey", "the elephant"]]
     ]
   },
   {
@@ -1299,11 +1299,11 @@ READINGS.push(
     ],
     vocab: [["flour", "white powder for making bread and cakes"], ["bowl", "a round dish for food"], ["mix", "to put things together and move them"], ["pan", "a flat pot for cooking"], ["delicious", "very, very good to eat"]],
     questions: [
-      ["When do they make pancakes?", ["every Sunday", "every Monday", "on birthdays"]],
-      ["How many eggs do they use?", ["two", "one", "ten"]],
-      ["Why is Grandpa careful?", ["The pan is very hot.", "The eggs are small.", "Mateo is sleeping."]],
-      ["How many pancakes does Mateo count?", ["ten", "three", "seven"]],
-      ["What do they put on the pancakes?", ["honey and bananas", "chocolate and nuts", "cheese"]]
+      ["When do they make pancakes?", ["every Sunday", "every Monday", "on birthdays", "every Saturday"]],
+      ["How many eggs do they use?", ["two", "one", "ten", "three"]],
+      ["Why is Grandpa careful?", ["The pan is very hot.", "The eggs are small.", "Mateo is sleeping.", "Grandma is watching."]],
+      ["How many pancakes does Mateo count?", ["ten", "three", "seven", "five"]],
+      ["What do they put on the pancakes?", ["honey and bananas", "chocolate and nuts", "cheese", "jam and strawberries"]]
     ]
   },
   {
@@ -1318,11 +1318,11 @@ READINGS.push(
     ],
     vocab: [["swim", "to move in the water with your arms and legs"], ["lesson", "a class where you learn something"], ["patient", "calm, not angry when you wait"], ["float", "to stay on top of the water"], ["proud", "happy because you did something well"]],
     questions: [
-      ["What can’t Lucy do at first?", ["swim", "run fast", "ride a bike"]],
-      ["Who is Coach Rita?", ["her swimming teacher", "her sister", "her friend"]],
-      ["How does Lucy feel on Monday?", ["scared", "proud", "tired"]],
-      ["What can Lucy do on Wednesday?", ["put her face in the water", "float on her back", "swim across the pool"]],
-      ["How does Lucy feel at the end?", ["very proud", "sad", "scared"]]
+      ["What can’t Lucy do at first?", ["swim", "run fast", "ride a bike", "jump rope"]],
+      ["Who is Coach Rita?", ["her swimming teacher", "her sister", "her friend", "her aunt"]],
+      ["How does Lucy feel on Monday?", ["scared", "proud", "tired", "happy"]],
+      ["What can Lucy do on Wednesday?", ["put her face in the water", "float on her back", "swim across the pool", "dive into the pool"]],
+      ["How does Lucy feel at the end?", ["very proud", "sad", "scared", "bored"]]
     ]
   },
   {
@@ -1337,11 +1337,11 @@ READINGS.push(
     ],
     vocab: [["puppy", "a baby dog"], ["everywhere", "in all places"], ["basket", "a container made of thin sticks"], ["fresh", "new and clean"], ["walk", "a short trip on your feet"]],
     questions: [
-      ["What color is the puppy?", ["white with one black ear", "all black", "brown"]],
-      ["What name does Diego want?", ["Snowball", "Cookie", "Max"]],
-      ["Where does the puppy sleep?", ["in a basket next to Paula’s bed", "in the garden", "under the table"]],
-      ["Who takes the puppy for a walk?", ["Paula", "Diego", "Mom"]],
-      ["Why is her name Cookie?", ["She eats a cookie.", "She is brown like a cookie.", "Diego likes cookies."]]
+      ["What color is the puppy?", ["white with one black ear", "all black", "brown", "brown with one white ear"]],
+      ["What name does Diego want?", ["Snowball", "Cookie", "Max", "Lucky"]],
+      ["Where does the puppy sleep?", ["in a basket next to Paula’s bed", "in the garden", "under the table", "in a box next to Diego’s bed"]],
+      ["Who takes the puppy for a walk?", ["Paula", "Diego", "Mom", "Dad"]],
+      ["Why is her name Cookie?", ["She eats a cookie.", "She is brown like a cookie.", "Diego likes cookies.", "Paula likes cookies."]]
     ]
   },
 
@@ -1358,11 +1358,11 @@ READINGS.push(
     ],
     vocab: [["lost", "you can’t find it"], ["closet", "a small room for clothes"], ["remember", "to think of something again"], ["flashlight", "a small light you hold in your hand"], ["hug", "to put your arms around someone"]],
     questions: [
-      ["Who is Mr. Buttons?", ["Olivia’s teddy bear", "her brother", "her dog"]],
-      ["Where did they look first?", ["under the bed", "in the garden", "in the kitchen"]],
-      ["What did Olivia play in the afternoon?", ["tea party", "football", "hide and seek"]],
-      ["Where was Mr. Buttons?", ["on a chair in the garden", "in the closet", "behind the door"]],
-      ["What happened five minutes later?", ["They were both asleep.", "Leo came home.", "It started to rain."]]
+      ["Who is Mr. Buttons?", ["Olivia’s teddy bear", "her brother", "her dog", "her cat"]],
+      ["Where did they look first?", ["under the bed", "in the garden", "in the kitchen", "in the living room"]],
+      ["What did Olivia play in the afternoon?", ["tea party", "football", "hide and seek", "a board game"]],
+      ["Where was Mr. Buttons?", ["on a chair in the garden", "in the closet", "behind the door", "under the bed"]],
+      ["What happened five minutes later?", ["They were both asleep.", "Leo came home.", "It started to rain.", "Mom made tea."]]
     ]
   },
   {
@@ -1377,11 +1377,11 @@ READINGS.push(
     ],
     vocab: [["picnic", "a meal you eat outside"], ["blanket", "a big piece of soft cloth"], ["frisbee", "a flat round toy you throw"], ["ant", "a very small insect that lives in big groups"], ["share", "to give part of something to others"]],
     questions: [
-      ["What was the weather like?", ["sunny and warm", "rainy", "cold"]],
-      ["Who carried the basket?", ["Dad", "Mom", "Carla"]],
-      ["What did Carla and her brother play?", ["frisbee", "football", "tag"]],
-      ["What were the ants carrying?", ["little pieces of cookie", "watermelon", "bread"]],
-      ["What did Carla learn about ants?", ["They are very strong and work together.", "They are dangerous.", "They like juice."]]
+      ["What was the weather like?", ["sunny and warm", "rainy", "cold", "windy"]],
+      ["Who carried the basket?", ["Dad", "Mom", "Carla", "Carla’s brother"]],
+      ["What did Carla and her brother play?", ["frisbee", "football", "tag", "basketball"]],
+      ["What were the ants carrying?", ["little pieces of cookie", "watermelon", "bread", "sandwiches"]],
+      ["What did Carla learn about ants?", ["They are very strong and work together.", "They are dangerous.", "They like juice.", "They are lazy."]]
     ]
   },
   {
@@ -1396,11 +1396,11 @@ READINGS.push(
     ],
     vocab: [["training wheels", "small wheels that help you ride a bike"], ["helmet", "a hard hat that protects your head"], ["pedal", "to push with your feet to move a bike"], ["knee", "the middle part of your leg"], ["alone", "with nobody else"]],
     questions: [
-      ["What did Andrés get for his birthday?", ["a new blue bike", "a helmet", "a skateboard"]],
-      ["Why were his legs shaking?", ["He was nervous.", "It was cold.", "He was tired."]],
-      ["What did Dad say?", ["“Look ahead, not down.”", "“Go home.”", "“Close your eyes.”"]],
-      ["On which try did he ride alone?", ["the fifth", "the first", "the second"]],
-      ["How often does he ride now?", ["every weekend", "every morning", "once a year"]]
+      ["What did Andrés get for his birthday?", ["a new blue bike", "a helmet", "a skateboard", "a red bike"]],
+      ["Why were his legs shaking?", ["He was nervous.", "It was cold.", "He was tired.", "The helmet was too small."]],
+      ["What did Dad say?", ["“Look ahead, not down.”", "“Go home.”", "“Close your eyes.”", "“Hold my hand.”"]],
+      ["On which try did he ride alone?", ["the fifth", "the first", "the second", "the third"]],
+      ["How often does he ride now?", ["every weekend", "every morning", "once a year", "every day after school"]]
     ]
   },
   {
@@ -1415,11 +1415,11 @@ READINGS.push(
     ],
     vocab: [["caterpillar", "a small animal like a worm that becomes a butterfly"], ["jar", "a glass container"], ["climb", "to go up"], ["case", "a cover that protects something"], ["wings", "a butterfly uses them to fly"]],
     questions: [
-      ["Where did Mia find the caterpillar?", ["on a leaf in her garden", "at school", "in the kitchen"]],
-      ["What did Mia give it every day?", ["fresh leaves", "milk", "flowers"]],
-      ["What did the caterpillar make?", ["a hard green case", "a nest", "a hole"]],
-      ["What came out of the case?", ["a butterfly", "a bird", "a bee"]],
-      ["What did Mia do at the end?", ["She let the butterfly go.", "She kept it in the jar.", "She gave it to her teacher."]]
+      ["Where did Mia find the caterpillar?", ["on a leaf in her garden", "at school", "in the kitchen", "on a flower in the park"]],
+      ["What did Mia give it every day?", ["fresh leaves", "milk", "flowers", "water"]],
+      ["What did the caterpillar make?", ["a hard green case", "a nest", "a hole", "a web"]],
+      ["What came out of the case?", ["a butterfly", "a bird", "a bee", "a ladybug"]],
+      ["What did Mia do at the end?", ["She let the butterfly go.", "She kept it in the jar.", "She gave it to her teacher.", "She took it to school."]]
     ]
   },
   {
@@ -1434,11 +1434,11 @@ READINGS.push(
     ],
     vocab: [["play", "a story that people act on a stage"], ["practice", "to do something many times to get better"], ["costume", "special clothes for a play or party"], ["whisper", "to speak very quietly"], ["roar", "the loud sound a lion makes"]],
     questions: [
-      ["Who watched the play?", ["the parents", "other schools", "the teachers only"]],
-      ["How long did Pablo practice?", ["three weeks", "one day", "two months"]],
-      ["Why did Pablo forget his words?", ["He felt nervous.", "He was sick.", "He didn’t practice."]],
-      ["Who helped him?", ["Sara, the parrot", "his grandma", "the teacher"]],
-      ["What did Grandma say?", ["“You were the best lion in the world.”", "“Practice more.”", "“Let’s go home.”"]]
+      ["Who watched the play?", ["the parents", "other schools", "the teachers only", "children from another class"]],
+      ["How long did Pablo practice?", ["three weeks", "one day", "two months", "one week"]],
+      ["Why did Pablo forget his words?", ["He felt nervous.", "He was sick.", "He didn’t practice.", "His costume was too big."]],
+      ["Who helped him?", ["Sara, the parrot", "his grandma", "the teacher", "his dad"]],
+      ["What did Grandma say?", ["“You were the best lion in the world.”", "“Practice more.”", "“Let’s go home.”", "“You forgot your words.”"]]
     ]
   }
 );
@@ -1457,11 +1457,11 @@ READINGS.push(
     ],
     vocab: [["attic", "a room at the top of a house, under the roof"], ["map", "a drawing that shows where places are"], ["well", "a deep hole where people get water"], ["dig", "to make a hole in the ground"], ["marbles", "small glass balls for playing games"]],
     questions: [
-      ["Where did they find the box?", ["in the attic", "in the garden", "under the bed"]],
-      ["What was the X next to?", ["some rocks", "the well", "the house"]],
-      ["What did Iván use to dig?", ["a small shovel", "his hands", "a stick"]],
-      ["What was inside the metal can?", ["marbles, a toy car, a photo and a note", "gold coins", "old books"]],
-      ["Who was Pedro?", ["their grandpa", "a pirate", "a neighbor"]]
+      ["Where did they find the box?", ["in the attic", "in the garden", "under the bed", "in the kitchen"]],
+      ["What was the X next to?", ["some rocks", "the well", "the house", "the big tree"]],
+      ["What did Iván use to dig?", ["a small shovel", "his hands", "a stick", "a spoon"]],
+      ["What was inside the metal can?", ["marbles, a toy car, a photo and a note", "gold coins", "old books", "toys and candy"]],
+      ["Who was Pedro?", ["their grandpa", "a pirate", "a neighbor", "their uncle"]]
     ]
   },
   {
@@ -1476,11 +1476,11 @@ READINGS.push(
     ],
     vocab: [["tent", "a small house made of cloth for camping"], ["campfire", "a fire outside when you camp"], ["sticky", "it stays on your fingers"], ["owl", "a bird that is awake at night"], ["deer", "a wild animal with long legs; some have antlers"]],
     questions: [
-      ["Where did they put the tent?", ["next to a small lake", "in the city", "on the mountain top"]],
-      ["What did they cook?", ["sausages and marshmallows", "pizza", "fish"]],
-      ["Why could Sofía see more stars?", ["She was far from the city.", "She had a telescope.", "It was her birthday."]],
-      ["What made the noise “Hoo, hoo”?", ["an owl", "a deer", "her brother"]],
-      ["What did she see in the morning?", ["two deer drinking water", "a bear", "a rainbow"]]
+      ["Where did they put the tent?", ["next to a small lake", "in the city", "on the mountain top", "next to a river"]],
+      ["What did they cook?", ["sausages and marshmallows", "pizza", "fish", "chicken and rice"]],
+      ["Why could Sofía see more stars?", ["She was far from the city.", "She had a telescope.", "It was her birthday.", "The moon was very big."]],
+      ["What made the noise “Hoo, hoo”?", ["an owl", "a deer", "her brother", "the wind"]],
+      ["What did she see in the morning?", ["two deer drinking water", "a bear", "a rainbow", "a fox"]]
     ]
   },
   {
@@ -1495,11 +1495,11 @@ READINGS.push(
     ],
     vocab: [["savanna", "a large, flat place with grass and few trees"], ["loud", "making a strong sound"], ["stuck", "unable to move"], ["mud", "wet, soft earth"], ["brave", "not afraid to do something difficult"]],
     questions: [
-      ["What was Leo’s problem?", ["He couldn’t roar.", "He couldn’t run.", "He was very small."]],
-      ["Who laughed at him?", ["the monkeys", "the elephants", "his family"]],
-      ["Why was the baby elephant crying?", ["She was stuck in the mud.", "She was hungry.", "She lost her toy."]],
-      ["How did Leo help?", ["He ran and found the mother elephant.", "He roared very loud.", "He pulled the baby out."]],
-      ["What is the message of the story?", ["You don’t need a big roar to have a big heart.", "Lions are better than elephants.", "Don’t go to the river."]]
+      ["What was Leo’s problem?", ["He couldn’t roar.", "He couldn’t run.", "He was very small.", "He was afraid of water."]],
+      ["Who laughed at him?", ["the monkeys", "the elephants", "his family", "the zebras"]],
+      ["Why was the baby elephant crying?", ["She was stuck in the mud.", "She was hungry.", "She lost her toy.", "She was scared of a lion."]],
+      ["How did Leo help?", ["He ran and found the mother elephant.", "He roared very loud.", "He pulled the baby out.", "He called the other lions."]],
+      ["What is the message of the story?", ["You don’t need a big roar to have a big heart.", "Lions are better than elephants.", "Don’t go to the river.", "Big animals are always strong."]]
     ]
   },
   {
@@ -1514,11 +1514,11 @@ READINGS.push(
     ],
     vocab: [["recipe", "instructions for cooking something"], ["dough", "a soft mix of flour or corn and water"], ["filling", "the food you put inside something"], ["corn husk", "the leaves that cover an ear of corn"], ["fold", "to bend something over itself"]],
     questions: [
-      ["When does the family make tamales?", ["every December", "every Sunday", "on birthdays"]],
-      ["What do the children do?", ["wash the corn husks", "cook the chicken", "buy the corn"]],
-      ["Which tamales have raisins?", ["the sweet ones", "the green ones", "the red ones"]],
-      ["How many tamales did they make?", ["more than two hundred", "twenty", "fifty"]],
-      ["What is Grandma’s secret?", ["They make them together.", "a special chili", "a lot of sugar"]]
+      ["When does the family make tamales?", ["every December", "every Sunday", "on birthdays", "every summer"]],
+      ["What do the children do?", ["wash the corn husks", "cook the chicken", "buy the corn", "make the dough"]],
+      ["Which tamales have raisins?", ["the sweet ones", "the green ones", "the red ones", "the chicken ones"]],
+      ["How many tamales did they make?", ["more than two hundred", "twenty", "fifty", "one hundred"]],
+      ["What is Grandma’s secret?", ["They make them together.", "a special chili", "a lot of sugar", "cooking them for a long time"]]
     ]
   },
   {
@@ -1533,11 +1533,11 @@ READINGS.push(
     ],
     vocab: [["storm", "very bad weather with wind and rain"], ["drawer", "a box in a table that you pull out"], ["bored", "not interested; with nothing to do"], ["shadow", "a dark shape made when something blocks light"], ["ghost", "a spirit in scary stories"]],
     questions: [
-      ["Why did the lights go out?", ["There was a storm.", "Dad turned them off.", "It was late."]],
-      ["Where did Mom find candles?", ["in a drawer", "in the car", "in the garden"]],
-      ["What did Dad make on the wall?", ["shadow animals", "a drawing", "a map"]],
-      ["What did Valeria make?", ["a crocodile", "a snail", "a rabbit"]],
-      ["How did Tomás feel when the lights came back?", ["He wanted to turn them off again.", "He was very happy.", "He was scared."]]
+      ["Why did the lights go out?", ["There was a storm.", "Dad turned them off.", "It was late.", "The TV broke."]],
+      ["Where did Mom find candles?", ["in a drawer", "in the car", "in the garden", "under the bed"]],
+      ["What did Dad make on the wall?", ["shadow animals", "a drawing", "a map", "a paper airplane"]],
+      ["What did Valeria make?", ["a crocodile", "a snail", "a rabbit", "a dog"]],
+      ["How did Tomás feel when the lights came back?", ["He wanted to turn them off again.", "He was very happy.", "He was scared.", "He wanted to watch TV."]]
     ]
   },
 
@@ -1592,11 +1592,11 @@ READINGS.push(
     ],
     vocab: [["bake", "to cook in an oven"], ["magnifying glass", "a glass that makes small things look big"], ["clue", "something that helps you find an answer"], ["crumbs", "very small pieces of bread or cookie"], ["guilty", "feeling bad because you did something wrong"]],
     questions: [
-      ["Where did Mom leave the cookies?", ["on a plate in the kitchen", "in the garden", "in a box"]],
-      ["What did Ema use?", ["a magnifying glass", "a camera", "a flashlight"]],
-      ["Why weren’t the footprints from a person?", ["They were too small.", "They were too big.", "They were blue."]],
-      ["Who took the cookies?", ["Bruno, the dog", "Ema’s brother", "a neighbor"]],
-      ["Why was Mom worried?", ["Chocolate is dangerous for dogs.", "There were no more cookies.", "Bruno was lost."]]
+      ["Where did Mom leave the cookies?", ["on a plate in the kitchen", "in the garden", "in a box", "on a high shelf"]],
+      ["What did Ema use?", ["a magnifying glass", "a camera", "a flashlight", "a notebook"]],
+      ["Why weren’t the footprints from a person?", ["They were too small.", "They were too big.", "They were blue.", "They were very old."]],
+      ["Who took the cookies?", ["Bruno, the dog", "Ema’s brother", "a neighbor", "a cat"]],
+      ["Why was Mom worried?", ["Chocolate is dangerous for dogs.", "There were no more cookies.", "Bruno was lost.", "The kitchen was dirty."]]
     ]
   },
   {
@@ -4183,11 +4183,11 @@ READINGS.push(
     ],
     vocab: [["costume", "special clothes to look like a character"], ["witch", "a woman in stories with a big hat and a broom"], ["pumpkin", "a big orange vegetable"], ["knock", "to hit a door softly with your hand"], ["share", "to give some of your things to other people"]],
     questions: [
-      ["What day is Halloween?", ["October 31", "December 25", "May 10"]],
-      ["What is Leo’s costume?", ["a black cat", "a witch", "a ghost"]],
-      ["What does Mia have?", ["a big hat and a broom", "ears and a tail", "a pumpkin"]],
-      ["What do they say at the doors?", ["“Trick or treat!”", "“Good morning!”", "“Happy birthday!”"]],
-      ["How many candies does Mia have?", ["twelve", "ten", "two"]]
+      ["What day is Halloween?", ["October 31", "December 25", "May 10", "November 2"]],
+      ["What is Leo’s costume?", ["a black cat", "a witch", "a ghost", "a pumpkin"]],
+      ["What does Mia have?", ["a big hat and a broom", "ears and a tail", "a pumpkin", "a cat costume"]],
+      ["What do they say at the doors?", ["“Trick or treat!”", "“Good morning!”", "“Happy birthday!”", "“Good night!”"]],
+      ["How many candies does Mia have?", ["twelve", "ten", "two", "eleven"]]
     ]
   },
   {

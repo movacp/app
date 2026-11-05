@@ -33,11 +33,11 @@ READINGS.push(
     ],
     vocab: [["rain", "water that falls from the sky"], ["wet", "with water on it"], ["blanket", "a soft cover for your bed"], ["flashlight", "a small light you hold in your hand"], ["rainbow", "colors in the sky after the rain"]],
     questions: [
-      ["What is the weather like today?", ["It is raining.", "It is sunny.", "It is snowing."]],
-      ["How does Ben feel at first?", ["a little sad", "very angry", "sleepy"]],
-      ["What do Ben and Mia build?", ["a house with blankets", "a big sandcastle", "a paper boat"]],
-      ["What does Mom give them?", ["cookies and a flashlight", "a pizza", "a new game"]],
-      ["What is in the sky in the afternoon?", ["a rainbow", "a plane", "the moon"]]
+      ["What is the weather like today?", ["It is raining.", "It is sunny.", "It is snowing.", "It is windy."]],
+      ["How does Ben feel at first?", ["a little sad", "very angry", "sleepy", "very happy"]],
+      ["What do Ben and Mia build?", ["a house with blankets", "a big sandcastle", "a paper boat", "a tent in the garden"]],
+      ["What does Mom give them?", ["cookies and a flashlight", "a pizza", "a new game", "milk and a blanket"]],
+      ["What is in the sky in the afternoon?", ["a rainbow", "a plane", "the moon", "a kite"]]
     ]
   },
   {
