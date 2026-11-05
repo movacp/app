@@ -2966,11 +2966,12 @@ READINGS.push(
     ],
     vocab: [["weekend", "Saturday and Sunday"], ["sleep late", "to stay in bed in the morning"], ["mall", "a big building with many stores"], ["series", "a TV show with many episodes"], ["grandparents", "your grandma and grandpa"]],
     questions: [
-      ["How old is Andrea?", ["fourteen", "twelve", "sixteen"]],
-      ["What time does she get up on Saturday?", ["at ten o’clock", "at seven o’clock", "at noon"]],
-      ["Where does she meet her friends?", ["at the mall", "at school", "at the park"]],
-      ["Who does she watch a series with?", ["her sister", "her friends", "her grandparents"]],
-      ["What does she do on Sunday afternoon?", ["her homework", "sports", "shopping"]]
+      ["How old is Andrea?",["fourteen","twelve","sixteen","fifteen"]],
+      ["What time does she get up on Saturday?",["at ten o’clock","at seven o’clock","at noon","at eight o’clock"]],
+      ["Where does she meet her friends?",["at the mall","at school","at the park","at the movies"]],
+      ["Who does she watch a series with?",["her sister","her friends","her grandparents","her mom"]],
+      ["What does she do after lunch on Sunday?",["her homework","sports","shopping","She visits her friends."]],
+      ["Why does Andrea love weekends?",["She can relax and see friends and family.","She has no homework.","She goes on trips.","She works at the mall."]]
     ]
   },
   {
@@ -2986,11 +2987,12 @@ READINGS.push(
     ],
     vocab: [["timetable", "a list of your classes and times"], ["grade", "your year at school"], ["difficult", "not easy"], ["break", "free time between classes"], ["P.E.", "physical education, sports class"]],
     questions: [
-      ["What grade is Iker in?", ["ninth grade", "sixth grade", "eleventh grade"]],
-      ["What is his first class?", ["math", "English", "art"]],
-      ["What is his favorite class?", ["English", "history", "science"]],
-      ["What does he do at break time?", ["eats a sandwich and plays soccer", "reads a book", "goes home"]],
-      ["What time does school finish?", ["at two o’clock", "at eleven o’clock", "at four o’clock"]]
+      ["What grade is Iker in?",["ninth grade","sixth grade","eleventh grade","seventh grade"]],
+      ["What is his first class?",["math","English","art","history"]],
+      ["What is his favorite class?",["English","history","science","math"]],
+      ["What does he do at break time?",["eats a sandwich and plays soccer","reads a book","goes home","talks to his teacher"]],
+      ["What time does school finish?",["at two o’clock","at eleven o’clock","at four o’clock","at one o’clock"]],
+      ["What does Iker think about math?",["It is difficult, but the teacher is good.","It is his favorite class.","It is very easy.","He doesn’t have math on Monday."]]
     ]
   },
   {
@@ -3007,11 +3009,12 @@ READINGS.push(
     ],
     vocab: [["love", "to like very, very much"], ["fruit", "food like apples, mangos and bananas"], ["broccoli", "a green vegetable that looks like a small tree"], ["boring", "not interesting"], ["breakfast", "the first meal of the day"]],
     questions: [
-      ["What pizza does Mateo love?", ["pepperoni", "cheese", "Hawaiian"]],
-      ["What is his favorite fruit?", ["mango", "apple", "banana"]],
-      ["Why doesn’t he like broccoli?", ["It’s green and boring.", "It’s spicy.", "It’s expensive."]],
-      ["Who loves fish?", ["his mom", "Mateo", "his friend"]],
-      ["What does he have for breakfast?", ["cereal and orange juice", "tacos", "pizza"]]
+      ["What pizza does Mateo love?",["pepperoni","cheese","Hawaiian","vegetarian"]],
+      ["What is his favorite fruit?",["mango","apple","banana","orange"]],
+      ["Why doesn’t he like broccoli?",["It’s green and boring.","It’s spicy.","It’s expensive.","It’s too sweet."]],
+      ["Who loves fish?",["his mom","Mateo","his friend","his sister"]],
+      ["What does he have for breakfast?",["cereal and orange juice","tacos","pizza","eggs and bread"]],
+      ["Which food does Mateo NOT like?",["fish","pizza","mango","tacos de trompo"]]
     ]
   },
   {
@@ -3027,11 +3030,12 @@ READINGS.push(
     ],
     vocab: [["city", "a very big town"], ["north", "the top part of a map"], ["mountain", "a very high hill"], ["river walk", "a path next to water where people walk"], ["boat", "you use it to travel on water"]],
     questions: [
-      ["Where is Monterrey?", ["in the north of Mexico", "in the south of Mexico", "in the center of Mexico"]],
-      ["What is Leo’s favorite mountain?", ["the Cerro de la Silla", "the Cerro de las Mitras", "the Huasteca"]],
-      ["What does he do in Parque Fundidora?", ["He rides his bike.", "He swims.", "He takes a boat."]],
-      ["What can you do at Paseo Santa Lucía?", ["take a boat", "climb a mountain", "see animals"]],
-      ["What is the weather like in summer?", ["very hot", "very cold", "rainy"]]
+      ["Where is Monterrey?",["in the north of Mexico","in the south of Mexico","in the center of Mexico","near the beach"]],
+      ["What is Leo’s favorite mountain?",["the Cerro de la Silla","the Cerro de las Mitras","the Huasteca","the Pico de Orizaba"]],
+      ["What does he do in Parque Fundidora?",["He rides his bike.","He swims.","He takes a boat.","He plays soccer."]],
+      ["What can you do at Paseo Santa Lucía?",["take a boat","climb a mountain","see animals","go skiing"]],
+      ["What is the weather like in summer?",["very hot","very cold","rainy","snowy"]],
+      ["Why does Leo say “Come and visit!”?",["He likes his city and wants people to see it.","He wants to sell his bike.","He wants to leave Monterrey.","He needs help with homework."]]
     ]
   },
   {
@@ -3047,11 +3051,12 @@ READINGS.push(
     ],
     vocab: [["listen to", "to hear something carefully"], ["singer", "a person who sings"], ["headphones", "you wear them on your ears to listen to music"], ["drums", "an instrument you hit with sticks"], ["loud", "with a lot of noise"]],
     questions: [
-      ["When does Daniela listen to music?", ["every day", "only on weekends", "only at school"]],
-      ["What music does she like?", ["pop and rock", "jazz", "classical"]],
-      ["What color are her headphones?", ["pink and white", "black", "blue"]],
-      ["When are her guitar lessons?", ["on Wednesday", "on Saturday", "on Monday"]],
-      ["What does her brother play?", ["the drums", "the guitar", "the piano"]]
+      ["When does Daniela listen to music?",["every day","only on weekends","only at school","only at night"]],
+      ["What music does she like?",["pop and rock","jazz","classical","reggaeton only"]],
+      ["What color are her headphones?",["pink and white","black","blue","green"]],
+      ["When are her guitar lessons?",["on Wednesday","on Saturday","on Monday","on Friday"]],
+      ["What does her brother play?",["the drums","the guitar","the piano","the violin"]],
+      ["Why does Daniela’s dad say “Stop, please!”?",["The drums are very loud.","Daniela sings badly.","It is very late.","The guitar is broken."]]
     ]
   },
 
@@ -3069,11 +3074,12 @@ READINGS.push(
     ],
     vocab: [["café", "a small restaurant for drinks and snacks"], ["ceiling", "the top part of a room"], ["order", "to ask for food or drinks in a restaurant"], ["slice", "a thin piece of food"], ["owner", "the person a business belongs to"]],
     questions: [
-      ["What is the name of the café?", ["Bean There", "Café Monterrey", "The Plant"]],
-      ["What is everywhere in the café?", ["plants", "books", "pictures"]],
-      ["What does Valeria always have?", ["a hot chocolate", "a mango smoothie", "a coffee"]],
-      ["What is strange about Pablo’s coffee?", ["He puts five spoons of sugar in it.", "He drinks it cold.", "He never finishes it."]],
-      ["What does Sara do?", ["She is the owner.", "She is a student.", "She is a teacher."]]
+      ["What is the name of the café?",["Bean There","Café Monterrey","The Plant","Bean Here"]],
+      ["What is everywhere in the café?",["plants","books","pictures","toys"]],
+      ["What does Valeria always have?",["a hot chocolate","a mango smoothie","a coffee","an orange juice"]],
+      ["What is strange about Pablo’s coffee?",["He puts five spoons of sugar in it.","He drinks it cold.","He never finishes it.","He adds salt to it."]],
+      ["What does Sara do?",["She is the owner.","She is a student.","She is a teacher.","She is the cook."]],
+      ["Why do the students like the café so much?",["It is cool and friendly, and they can study, play or talk.","It is very cheap.","It is next to their houses.","It has video games."]]
     ]
   },
   {
@@ -3088,11 +3094,12 @@ READINGS.push(
     ],
     vocab: [["air traffic controller", "a person who guides airplanes from the ground"], ["take off", "when a plane leaves the ground"], ["land", "when a plane comes down to the ground"], ["tower", "a tall, narrow building"], ["pilot", "a person who flies a plane"]],
     questions: [
-      ["How old is Fernanda?", ["twenty-four", "thirty", "eighteen"]],
-      ["Where does she work?", ["in a tower at the airport", "on an airplane", "in an office downtown"]],
-      ["How does she talk to pilots?", ["on a radio", "by email", "on her phone"]],
-      ["Why does she speak English at work?", ["It is the international language of aviation.", "Her boss is American.", "She likes practicing."]],
-      ["What does Carla want to be?", ["a pilot", "an air traffic controller", "a doctor"]]
+      ["How old is Fernanda?",["twenty-four","thirty","eighteen","twenty"]],
+      ["Where does she work?",["in a tower at the airport","on an airplane","in an office downtown","at a hotel"]],
+      ["How does she talk to pilots?",["on a radio","by email","on her phone","with signs"]],
+      ["Why does she speak English at work?",["It is the international language of aviation.","Her boss is American.","She likes practicing.","It is required at her school."]],
+      ["What does the narrator want to be?",["a pilot","an air traffic controller","a doctor","an engineer"]],
+      ["Why can’t Fernanda make mistakes?",["Airplanes and people could be in danger.","Her boss is very strict.","She is new at her job.","The radio is old."]]
     ]
   },
   {
@@ -3108,11 +3115,12 @@ READINGS.push(
     ],
     vocab: [["season", "the time of year when a sport is played"], ["coach", "a person who trains a team"], ["score", "to get a point; also, the number of points"], ["half time", "the break in the middle of a game"], ["throw", "to send something through the air with your hand"]],
     questions: [
-      ["What is the name of the narrator’s team?", ["the Falcons", "the Tigers", "the Eagles"]],
-      ["What does the coach say before the game?", ["Play as a team and have fun.", "You must win.", "Run as fast as you can."]],
-      ["What is the situation at half time?", ["The team is losing by ten points.", "The team is winning.", "The score is equal."]],
-      ["How many times does Iván score?", ["three times", "once", "ten times"]],
-      ["What is the final score?", ["50 to 48", "48 to 48", "48 to 50"]]
+      ["What is the name of the narrator’s team?",["the Falcons","the Tigers","the Eagles","the Lions"]],
+      ["What does the coach say before the game?",["Play as a team and have fun.","You must win.","Run as fast as you can.","Score fast!"]],
+      ["What is the situation at half time?",["The team is losing by ten points.","The team is winning.","The score is equal.","The team is winning by five points."]],
+      ["How many times does Iván score?",["three times","once","ten times","twice"]],
+      ["What is the final score?",["50 to 48","48 to 48","48 to 50","50 to 40"]],
+      ["How does the narrator feel at the end?",["extremely happy and excited","disappointed","nervous","bored"]]
     ]
   },
   {
@@ -3128,11 +3136,12 @@ READINGS.push(
     ],
     vocab: [["instant noodles", "noodles that are ready in three minutes"], ["responsibility", "a job or duty that you must do"], ["disaster", "something that goes very badly"], ["boil over", "when hot water comes out of the pot"], ["proud", "happy about something you did well"]],
     questions: [
-      ["What could Rodrigo make before?", ["only cereal and instant noodles", "spaghetti", "chicken soup"]],
-      ["Why does he cook on Tuesdays and Thursdays?", ["His mom comes home late.", "He has cooking class.", "His dad asked him."]],
-      ["What went wrong the first time?", ["The pasta was too soft.", "He burned the chicken.", "He forgot the salt."]],
-      ["How does he learn now?", ["He watches cooking videos.", "He takes classes.", "His grandma teaches him."]],
-      ["How does he feel at the end?", ["proud", "angry", "tired"]]
+      ["What could the narrator make before?",["only cereal and instant noodles","spaghetti","chicken soup","eggs and rice"]],
+      ["Why does the narrator cook on Tuesdays and Thursdays?",["His mom comes home late.","He has cooking class.","His dad asked him.","He wants to be a chef."]],
+      ["What went wrong the first time?",["The pasta was too soft.","He burned the chicken.","He forgot the salt.","The kitchen was dirty."]],
+      ["How does the narrator learn now?",["He watches cooking videos.","He takes classes.","His grandma teaches him.","He reads cookbooks."]],
+      ["How does the narrator feel at the end?",["proud","angry","tired","worried"]],
+      ["Why did the little brother laugh?",["The first dinner was a disaster.","The narrator told a joke.","The pasta was delicious.","Mom came home early."]]
     ]
   },
   {
@@ -3148,11 +3157,12 @@ READINGS.push(
     ],
     vocab: [["gift", "a present"], ["bookstore", "a store that sells books"], ["expensive", "it costs a lot of money"], ["stationery", "paper, pens and other things for writing"], ["print", "to put words or pictures on paper with a machine"]],
     questions: [
-      ["How much money does Natalia have for the gift?", ["500 pesos", "900 pesos", "320 pesos"]],
-      ["Why doesn’t she buy a book?", ["Ximena already has the books.", "The books are expensive.", "The bookstore is closed."]],
-      ["Why doesn’t she buy the jacket?", ["It’s too expensive.", "It’s ugly.", "It’s too small."]],
-      ["Whose idea is the photo album?", ["her cousin’s", "Natalia’s", "Ximena’s"]],
-      ["What does Natalia write in the album?", ["a short message under each photo", "a long letter", "Ximena’s name only"]]
+      ["How much money does the narrator have for the gift?",["500 pesos","900 pesos","320 pesos","1,000 pesos"]],
+      ["Why doesn’t she buy a book?",["Ximena already has the books.","The books are expensive.","The bookstore is closed.","She doesn’t like reading."]],
+      ["Why doesn’t she buy the jacket?",["It’s too expensive.","It’s ugly.","It’s too small.","It’s the wrong color."]],
+      ["Whose idea is the photo album?",["her cousin’s","the narrator’s","Ximena’s","the shop assistant’s"]],
+      ["What does the narrator write in the album?",["a short message under each photo","a long letter","Ximena’s name only","the date of the party"]],
+      ["Why is the photo album a good gift for Ximena?",["She loves photos, and it is personal.","It is very expensive.","She asked for it.","It is a fantasy novel."]]
     ]
   },
 
@@ -3170,11 +3180,13 @@ READINGS.push(
     ],
     vocab: [["ticket", "a piece of paper that lets you enter an event"], ["stage", "the place where musicians perform"], ["scream", "to shout very loudly"], ["record", "to make a video or audio"], ["frame", "a border around a picture"]],
     questions: [
-      ["Why did Sebastián go to the concert?", ["It was his birthday present.", "He won a contest.", "Luis invited him."]],
-      ["Why did they arrive three hours early?", ["to be close to the stage", "to buy T-shirts", "to meet the band"]],
-      ["What did the singer say in Spanish?", ["¡Gracias, Monterrey!", "¡Buenas noches!", "¡Hola, México!"]],
-      ["How did Sebastián feel after the concert?", ["very happy", "bored", "angry"]],
-      ["Where does he keep his ticket?", ["in a frame in his room", "in his wallet", "on his phone"]]
+      ["Why did the narrator go to the concert?",["It was his birthday present.","He won a contest.","Luis invited him.","His teacher gave him tickets."]],
+      ["Why did they arrive three hours early?",["to be close to the stage","to buy T-shirts","to meet the band","to eat dinner"]],
+      ["What did the singer say in Spanish?",["¡Gracias, Monterrey!","¡Buenas noches!","¡Hola, México!","¡Adiós, amigos!"]],
+      ["How did the narrator feel after the concert?",["very happy","bored","angry","tired and sad"]],
+      ["Where does the narrator keep the ticket?",["in a frame in his room","in his wallet","on his phone","on his wall with tape"]],
+      ["What does “My ears were ringing and my voice was gone” tell us?",["The concert was very loud and he sang a lot.","He was sick before the concert.","He didn’t like the music.","He slept during the concert."]],
+      ["What does “stage” mean in “close to the stage”?",["the place where the band plays","the entrance","the parking lot","the ticket office"]]
     ]
   },
   {
@@ -3189,11 +3201,13 @@ READINGS.push(
     ],
     vocab: [["in person", "face to face, not online"], ["community", "a group of people with something in common"], ["improve", "to get better"], ["challenge", "something difficult that tests your ability"], ["feedback", "comments to help someone improve"]],
     questions: [
-      ["How did Mariana meet her online friends?", ["in an online art community", "at school", "on a trip"]],
-      ["Why do they chat in English?", ["It’s the only language they all speak.", "Their teacher told them to.", "They all live in the U.S."]],
-      ["What happens every month?", ["They have a drawing challenge.", "They meet in person.", "They send letters."]],
-      ["What does Mariana never share online?", ["her address, school or personal photos", "her drawings", "her opinions"]],
-      ["What does Mariana hope for the future?", ["to meet her friends in person", "to stop drawing", "to move to Japan"]]
+      ["How did the narrator meet these online friends?",["in an online art community","at school","on a trip","at a summer camp"]],
+      ["Why do they chat in English?",["It’s the only language they all speak.","Their teacher told them to.","They all live in the U.S.","They are learning English at school."]],
+      ["What happens every month?",["They have a drawing challenge.","They meet in person.","They send letters.","They play a video game together."]],
+      ["What does the narrator never share online?",["her address, school or personal photos","her drawings","her opinions","her favorite colors"]],
+      ["What does the narrator hope for the future?",["to meet her friends in person","to stop drawing","to move to Japan","to work as a translator"]],
+      ["Why did the narrator show the conversations to the parents?",["They were worried about online friends.","They wanted to learn English.","They wanted to draw too.","They asked for the passwords."]],
+      ["What does “feedback” mean in “we give each other feedback”?",["comments to help someone improve","presents","money","new friends"]]
     ]
   },
   {
@@ -3209,11 +3223,13 @@ READINGS.push(
     ],
     vocab: [["volunteer", "to work without pay to help others"], ["food bank", "a place that gives free food to people who need it"], ["manager", "the person in charge"], ["pleasant", "nice, enjoyable"], ["adopt", "to take an animal or child into your family"]],
     questions: [
-      ["Why did Ricardo choose the shelter at first?", ["His friends chose it.", "He loves animals.", "His teacher told him to."]],
-      ["How many dogs were at the shelter?", ["more than eighty", "thirty", "ten"]],
-      ["What was the first job?", ["cleaning the dogs’ areas", "walking the dogs", "feeding the cats"]],
-      ["What did Bruno do when Ricardo sat with him?", ["He put his head on Ricardo’s leg.", "He ran away.", "He barked."]],
-      ["What happened to Bruno last week?", ["A family adopted him.", "He got sick.", "Ricardo took him home."]]
+      ["Why did the narrator choose the shelter at first?",["His friends chose it.","He loves animals.","His teacher told him to.","It was close to his house."]],
+      ["How many dogs were at the shelter?",["more than eighty","thirty","ten","fifty"]],
+      ["What was the first job?",["cleaning the dogs’ areas","walking the dogs","feeding the cats","giving baths to the cats"]],
+      ["What did Bruno do when the narrator sat with him?",["He put his head on Ricardo’s leg.","He ran away.","He barked.","He jumped and played."]],
+      ["What happened to Bruno last week?",["A family adopted him.","He got sick.","Ricardo took him home.","He went to another shelter."]],
+      ["How did the narrator change after volunteer day?",["The narrator started to care about the animals and keeps volunteering.","The narrator decided to never go back.","The narrator adopted a cat.","The narrator got a job at the food bank."]],
+      ["What does “pleasant” mean in “It wasn’t pleasant”?",["nice or enjoyable","difficult","dangerous","fast"]]
     ]
   },
   {
@@ -3229,11 +3245,13 @@ READINGS.push(
     ],
     vocab: [["elective", "a class you choose, not a required one"], ["talent", "a natural ability"], ["skill", "an ability you get by practicing"], ["shadow", "a dark area where light is blocked"], ["sketchbook", "a book with blank pages for drawing"]],
     questions: [
-      ["Why did Valentina take art?", ["It was the only class with space.", "She loves drawing.", "Her friends were in it."]],
-      ["What did her first drawing look like?", ["a potato with five sausages", "a perfect hand", "a flower"]],
-      ["What did Mr. Herrera say about drawing?", ["It’s a skill, not a talent.", "Some people can never draw.", "It’s easy for everyone."]],
-      ["What did they practice in class?", ["lines, shadows and shapes", "painting portraits", "sculpture"]],
-      ["What does Valentina do now?", ["She draws almost every day.", "She never draws.", "She teaches art."]]
+      ["Why did the narrator take art?",["It was the only class with space.","She loves drawing.","Her friends were in it.","Her parents made her."]],
+      ["What did her first drawing look like?",["a potato with five sausages","a perfect hand","a flower","a tree"]],
+      ["What did Mr. Herrera say about drawing?",["It’s a skill, not a talent.","Some people can never draw.","It’s easy for everyone.","Only talented people can draw."]],
+      ["What did they practice in class?",["lines, shadows and shapes","painting portraits","sculpture","computer design"]],
+      ["What does the narrator do now?",["She draws almost every day.","She never draws.","She teaches art.","She stopped taking art."]],
+      ["What surprised the narrator at the end of the semester?",["The new drawing was much better than the first one.","The teacher gave a prize.","Nobody laughed anymore.","The class was cancelled."]],
+      ["What does “skill” mean in “It’s a skill, like riding a bike”?",["something you learn by practicing","something you are born with","a kind of art class","a type of pencil"]]
     ]
   },
   {
@@ -3249,11 +3267,13 @@ READINGS.push(
     ],
     vocab: [["alarm", "a sound that wakes you up"], ["snooze", "a button that stops the alarm for a few minutes"], ["fall asleep", "to start sleeping"], ["calmly", "in a relaxed way"], ["stressed", "worried and nervous"]],
     questions: [
-      ["What did Joaquín do when his alarm rang?", ["He pressed snooze several times.", "He got up immediately.", "He turned it off and slept all day."]],
-      ["What was the real cause of the problem?", ["He used his phone late at night.", "His alarm was broken.", "His bus left too early."]],
-      ["What was his brother’s challenge?", ["Leave the phone in the kitchen after ten.", "Get up at five o’clock.", "Go to school by bike."]],
-      ["What did he do the first nights?", ["He read a book.", "He watched TV.", "He played video games."]],
-      ["What changed for Joaquín?", ["He has time for breakfast and feels less stressed.", "He sleeps in class now.", "He bought a new phone."]]
+      ["What did the narrator do when the alarm rang?",["He pressed snooze several times.","He got up immediately.","He turned it off and slept all day.","He asked his brother to wake him up."]],
+      ["What was the real cause of the problem?",["He used his phone late at night.","His alarm was broken.","His bus left too early.","He had too much homework."]],
+      ["What was his brother’s challenge?",["Leave the phone in the kitchen after ten.","Get up at five o’clock.","Go to school by bike.","Don’t use the phone at school."]],
+      ["What did the narrator do the first nights?",["He read a book.","He watched TV.","He played video games.","He went for a run."]],
+      ["What changed for the narrator?",["He has time for breakfast and feels less stressed.","He sleeps in class now.","He bought a new phone.","He goes to school by taxi now."]],
+      ["Why couldn’t the narrator concentrate in the first class?",["He was tired and hungry.","The class was boring.","The teacher spoke too fast.","He forgot his books."]],
+      ["What does “stressed” mean in “I feel less stressed”?",["worried and tense","sleepy","bored","hungry"]]
     ]
   }
 );
@@ -3334,11 +3354,13 @@ READINGS.push(
     ],
     vocab: [["flavor", "the taste of food, like chocolate or vanilla"], ["cash register", "a machine in a shop that holds money"], ["rude", "not polite"], ["scoop", "to take ice cream with a special spoon"], ["deserve", "to have earned something"]],
     questions: [
-      ["Why did Gael want a job?", ["to save money for a laptop", "because he was bored", "to help his aunt"]],
-      ["What was difficult on the first day?", ["learning flavors and using the cash register", "opening the shop", "making ice cream"]],
-      ["Why did his arm hurt?", ["from scooping ice cream", "from carrying boxes", "from playing sports"]],
-      ["What did the kids always choose?", ["chocolate", "vanilla", "strawberry"]],
-      ["What important lesson did Gael learn?", ["Every job deserves respect.", "Work is always easy.", "Customers are always rude."]]
+      ["Why did the narrator want a job?",["to save money for a laptop","because he was bored","to help his aunt","to buy a new phone"]],
+      ["What was difficult on the first day?",["learning flavors and using the cash register","opening the shop","making ice cream","cleaning the tables"]],
+      ["Why did his arm hurt?",["from scooping ice cream","from carrying boxes","from playing sports","from writing on the computer"]],
+      ["What did the kids always choose?",["chocolate","vanilla","strawberry","mango"]],
+      ["What important lesson did the narrator learn?",["Every job deserves respect.","Work is always easy.","Customers are always rude.","Ice cream is the best job."]],
+      ["Why did some customers ask for the narrator by name?",["The narrator was polite and friendly with them.","The narrator was the owner’s nephew.","The narrator gave free ice cream.","The narrator was famous."]],
+      ["What does “rude” mean in “even the rude ones”?",["not polite","very happy","in a hurry","very young"]]
     ]
   },
   {
@@ -3353,11 +3375,13 @@ READINGS.push(
     ],
     vocab: [["capital", "the city where a country’s government is"], ["metropolitan area", "a city and the towns around it"], ["square", "an open public place in a city"], ["ancient", "very, very old"], ["tiring", "making you tired"]],
     questions: [
-      ["How long was the trip?", ["three days", "one week", "one day"]],
-      ["Who discovered the Templo Mayor?", ["electricity workers", "archaeologists", "students"]],
-      ["What was Ana’s favorite object in the museum?", ["the Sun Stone", "a painting by Frida", "a mask"]],
-      ["What is a trajinera?", ["a boat in Xochimilco", "a type of food", "a museum"]],
-      ["What is the Frida Kahlo Museum also called?", ["the Blue House", "the Red House", "the Sun House"]]
+      ["How long was the trip?",["three days","one week","one day","two weeks"]],
+      ["Who discovered the Templo Mayor?",["electricity workers","archaeologists","students","tourists"]],
+      ["What was the narrator’s favorite object in the museum?",["the Sun Stone","a painting by Frida","a mask","a gold necklace"]],
+      ["What is a trajinera?",["a boat in Xochimilco","a type of food","a museum","a kind of dance"]],
+      ["What is the Frida Kahlo Museum also called?",["the Blue House","the Red House","the Sun House","the Green House"]],
+      ["How did the narrator’s opinion of Frida Kahlo change?",["The narrator didn’t know much about her and became a fan.","The narrator didn’t like her paintings.","The narrator already knew everything about her.","The narrator thought the museum was boring."]],
+      ["What does “tiring” mean in “The trip was tiring”?",["it made you feel tired","it was very short","it was boring","it was expensive"]]
     ]
   },
   {
@@ -3372,11 +3396,13 @@ READINGS.push(
     ],
     vocab: [["entrepreneurship", "the activity of starting a business"], ["run a business", "to manage and operate a business"], ["costs", "the money you spend to make something"], ["in charge of", "responsible for"], ["profit", "the money you earn after paying costs"]],
     questions: [
-      ["Why did the friends start a business?", ["It was a class project.", "They needed money.", "Their parents asked them."]],
-      ["What was the name of their business?", ["The Hungry Owl", "The Food Truck", "Friday Dogs"]],
-      ["What was the narrator’s job?", ["managing the money", "cooking", "designing the menu"]],
-      ["What changed in the second week?", ["They made fewer hot dogs and offered a combo.", "They raised the price.", "They sold pizza."]],
-      ["What did they do with the profit?", ["They donated half and had a pizza party.", "They bought a real truck.", "They gave it to the school."]]
+      ["Why did the friends start a business?",["It was a class project.","They needed money.","Their parents asked them.","They wanted to win a prize."]],
+      ["What was the name of their business?",["The Hungry Owl","The Food Truck","Friday Dogs","The Happy Dog"]],
+      ["What was the narrator’s job?",["managing the money","cooking","designing the menu","selling the hot dogs"]],
+      ["What changed in the second week?",["They made fewer hot dogs and offered a combo.","They raised the price.","They sold pizza.","They opened earlier."]],
+      ["What did they do with the profit?",["They donated half and had a pizza party.","They bought a real truck.","They gave it to the school.","They saved it all for next year."]],
+      ["What mistake did they make on the first Friday?",["They made too many hot dogs.","They sold them too cheap.","They forgot the sauces.","They arrived late."]],
+      ["What does “profit” mean in “we had a profit of 1,350 pesos”?",["money you keep after paying the costs","money you borrow","money you spend","the price of one hot dog"]]
     ]
   },
   {
@@ -3392,11 +3418,13 @@ READINGS.push(
     ],
     vocab: [["assignment", "a piece of work a teacher gives you"], ["notice", "to see or become aware of something"], ["flowerpot", "a container for plants"], ["sign", "a board with words on it"], ["pay attention", "to watch or listen carefully"]],
     questions: [
-      ["What was the first assignment?", ["Take fifty photos of your street.", "Take fifty selfies.", "Photograph your family."]],
-      ["What did Renata think about her street at first?", ["It was boring.", "It was beautiful.", "It was dangerous."]],
-      ["Which photo impressed everyone?", ["the cat sleeping in a flowerpot", "the yellow wall", "the store sign"]],
-      ["According to Ms. Treviño, what is good photography about?", ["paying attention", "having an expensive camera", "taking many selfies"]],
-      ["How has Renata changed?", ["She looks at the world differently.", "She stopped taking photos.", "She bought a new camera."]]
+      ["What was the first assignment?",["Take fifty photos of your street.","Take fifty selfies.","Photograph your family.","Photograph your best friends."]],
+      ["What did the narrator think about the street at first?",["It was boring.","It was beautiful.","It was dangerous.","It was noisy."]],
+      ["Which photo impressed everyone?",["the cat sleeping in a flowerpot","the yellow wall","the store sign","the sunset over the houses"]],
+      ["According to Ms. Treviño, what is good photography about?",["paying attention","having an expensive camera","taking many selfies","using many filters"]],
+      ["How has the narrator changed?",["She looks at the world differently.","She stopped taking photos.","She bought a new camera.","She takes only selfies now."]],
+      ["Why did Ms. Treviño say “No people, no selfies”?",["She wanted students to notice everyday things around them.","People don’t like photos.","Selfies are not allowed at school.","She wanted fewer photos."]],
+      ["What does “paying attention” mean in the text?",["looking and listening carefully","spending money","taking a long time","being quiet"]]
     ]
   },
   {
@@ -3412,11 +3440,13 @@ READINGS.push(
     ],
     vocab: [["realize", "to suddenly understand something"], ["disconnected", "not connected or in contact"], ["beat", "to win against someone"], ["classmate", "a person in your class"], ["notification", "a message or alert on your phone"]],
     questions: [
-      ["Where did Emilio lose his phone?", ["on the bus", "at school", "at the park"]],
-      ["How did he feel that evening?", ["disconnected", "relaxed", "excited"]],
-      ["What happened when he played chess?", ["His sister beat him twice.", "He won every game.", "His dad helped him."]],
-      ["What happened at school the next day?", ["He talked to a new classmate.", "He was late.", "He got his phone back."]],
-      ["What did he think about his notifications?", ["None of them were important.", "They were all urgent.", "He couldn’t read them."]]
+      ["Where did the narrator lose the phone?",["on the bus","at school","at the park","in a taxi"]],
+      ["How did the narrator feel that evening?",["disconnected","relaxed","excited","angry"]],
+      ["What happened when the narrator played chess?",["The little sister won twice.","The narrator won every game.","The dad helped the narrator.","He let her win."]],
+      ["What happened at school the next day?",["The narrator talked to a new classmate.","The narrator was late.","The narrator got the phone back.","He went home early."]],
+      ["What did the narrator think about the notifications?",["None of them were important.","They were all urgent.","He couldn’t read them.","He answered all of them immediately."]],
+      ["What is the writer’s main point at the end?",["Without the phone, the writer noticed many things he was missing.","Phones are very bad and should be banned.","Losing a phone is the worst thing that can happen.","Buses are not safe for phones."]],
+      ["What does “disconnected” mean in “I felt disconnected from everything”?",["not in contact with other people or information","very tired","angry","excited"]]
     ]
   },
 
@@ -3434,11 +3464,13 @@ READINGS.push(
     ],
     vocab: [["tournament", "a competition with many games"], ["opponent", "the person or team you play against"], ["under pressure", "in a stressful situation"], ["argue", "to give reasons for an opinion"], ["scholarship", "money given to a student to pay for studies"]],
     questions: [
-      ["What are esports?", ["competitive video game tournaments", "sports played outside", "online fitness classes"]],
-      ["How long do professional players often practice?", ["eight to ten hours a day", "one hour a day", "only on weekends"]],
-      ["What is one argument against esports being a sport?", ["Sports require physical effort.", "Esports are too expensive.", "Esports are too new."]],
-      ["Where were esports a medal event?", ["at the 2022 Asian Games", "at the 2020 Olympics", "at the World Cup"]],
-      ["What does the writer suggest at the end?", ["The answer depends on how we define sport.", "Esports are definitely not a sport.", "Esports are better than soccer."]]
+      ["What are esports?",["competitive video game tournaments","sports played outside","online fitness classes","online math competitions"]],
+      ["How long do professional players often practice?",["eight to ten hours a day","one hour a day","only on weekends","thirty minutes a day"]],
+      ["What is one argument against esports being a sport?",["Sports require physical effort.","Esports are too expensive.","Esports are too new.","Players earn too much money."]],
+      ["Where were esports a medal event?",["at the 2022 Asian Games","at the 2020 Olympics","at the World Cup","at the Pan American Games"]],
+      ["What does the writer suggest at the end?",["The answer depends on how we define sport.","Esports are definitely not a sport.","Esports are better than soccer.","Esports should be banned."]],
+      ["Why does the writer mention coaches, nutritionists and psychologists?",["to show that esports players train like athletes","to show that esports are expensive","to show that gamers are often sick","to show that esports are easy"]],
+      ["What does “opponents” mean in “analyze their opponents”?",["the people you play against","your teammates","your fans","your coaches"]]
     ]
   },
   {
@@ -3454,11 +3486,13 @@ READINGS.push(
     ],
     vocab: [["exchange student", "a student who lives and studies in another country for a time"], ["get along", "to have a good relationship"], ["shy", "nervous about talking to new people"], ["gesture", "a movement of the hands to communicate"], ["greet", "to say hello"]],
     questions: [
-      ["Why was the narrator nervous at first?", ["She worried they wouldn’t get along.", "She didn’t speak German.", "Clara was older."]],
-      ["How did they communicate at first?", ["a mix of English and Spanish with gestures", "only German", "only Spanish"]],
-      ["What surprised Clara about dinner?", ["Mexicans eat dinner very late.", "The food was very spicy.", "Everyone eats alone."]],
-      ["What surprised the narrator about Clara?", ["She was always exactly on time.", "She didn’t like tacos.", "She spoke perfect Spanish."]],
-      ["What is the narrator going to do this summer?", ["visit Clara in Hamburg", "host another student", "study German in Mexico"]]
+      ["Why was the narrator nervous at first?",["She worried they wouldn’t get along.","She didn’t speak German.","Clara was older.","Her house was too small."]],
+      ["How did they communicate at first?",["a mix of English and Spanish with gestures","only German","only Spanish","with a translation app only"]],
+      ["What surprised Clara about dinner?",["Mexicans eat dinner very late.","The food was very spicy.","Everyone eats alone.","Dinner was very early."]],
+      ["What surprised the narrator about Clara?",["She was always exactly on time.","She didn’t like tacos.","She spoke perfect Spanish.","She was always late."]],
+      ["What is the narrator going to do this summer?",["visit Clara in Hamburg","host another student","study German in Mexico","move to Germany forever"]],
+      ["How did the relationship between the narrator and Clara change?",["They became very close, and everyone cried when she left.","They never got along.","Clara wanted to leave early.","They only spoke in German."]],
+      ["What does “get along” mean in “What if we didn’t get along?”",["have a friendly relationship","travel together","study together","argue"]]
     ]
   },
   {
@@ -3474,11 +3508,13 @@ READINGS.push(
     ],
     vocab: [["obsessed", "thinking about something all the time"], ["subtitles", "words at the bottom of a screen that translate speech"], ["on my own", "alone, without help"], ["resource", "something useful to help you learn"], ["consistency", "doing something regularly in the same way"]],
     questions: [
-      ["Why did Sebastián start learning Japanese?", ["He loved anime.", "He moved to Japan.", "His school offered classes."]],
-      ["Why didn’t he take classes?", ["He didn’t have money.", "There were no classes.", "He didn’t have time."]],
-      ["What was the first challenge?", ["the writing systems", "the pronunciation", "finding an app"]],
-      ["What happened in his first video call?", ["He forgot how to say hello.", "He spoke perfectly.", "The call didn’t work."]],
-      ["What does he say is more important than talent?", ["consistency", "money", "a good teacher"]]
+      ["Why did the writer start learning Japanese?",["He loved anime.","He moved to Japan.","His school offered classes.","His friends spoke Japanese."]],
+      ["Why didn’t the writer take classes?",["He didn’t have money.","There were no classes.","He didn’t have time.","He preferred to study alone."]],
+      ["What was the first challenge?",["the writing systems","the pronunciation","finding an app","learning grammar"]],
+      ["What happened in the writer’s first video call?",["He forgot how to say hello.","He spoke perfectly.","The call didn’t work.","His internet stopped."]],
+      ["What does the writer say is more important than talent?",["consistency","money","a good teacher","expensive books"]],
+      ["Why was watching an episode without subtitles such an important moment?",["It showed that two years of daily practice worked.","It was the last episode of the series.","The writer didn’t like subtitles.","The writer won a prize for it."]],
+      ["What does “consistency” mean in “consistency is more important than talent”?",["doing something regularly over time","speaking very fast","having a lot of money","being very intelligent"]]
     ]
   },
   {
@@ -3494,11 +3530,13 @@ READINGS.push(
     ],
     vocab: [["limestone", "a type of light-colored rock"], ["destination", "the place where you are going"], ["route", "a path; in climbing, a specific way up the rock"], ["harness", "straps you wear to attach yourself to a rope"], ["hold", "a part of the rock you can grab or stand on"]],
     questions: [
-      ["How far is El Potrero Chico from Monterrey?", ["about forty-five minutes", "about five hours", "about ten minutes"]],
-      ["When do most climbers visit?", ["from November to March", "in summer", "all year equally"]],
-      ["Who is Mariana?", ["the narrator’s cousin and a climbing instructor", "a famous climber from Canada", "the narrator’s teacher at school"]],
-      ["What happened halfway up the route?", ["The narrator’s legs started shaking.", "The rope broke.", "It started to rain."]],
-      ["What lesson did climbing teach the narrator?", ["Focus on one small step at a time.", "Never try difficult things.", "Always climb alone."]]
+      ["How far is El Potrero Chico from Monterrey?",["about forty-five minutes","about five hours","about ten minutes","about two hours"]],
+      ["When do most climbers visit?",["from November to March","in summer","all year equally","only in July"]],
+      ["Who is Mariana?",["the narrator’s cousin and a climbing instructor","a famous climber from Canada","the narrator’s teacher at school","a guide from the town"]],
+      ["What happened halfway up the route?",["The narrator’s legs started shaking.","The rope broke.","It started to rain.","The helmet fell off."]],
+      ["What lesson did climbing teach the narrator?",["Focus on one small step at a time.","Never try difficult things.","Always climb alone.","Climbing is only for experts."]],
+      ["Why did Mariana check the equipment so carefully?",["Safety is the most important thing in climbing.","She wanted to sell new equipment.","The narrator asked her to.","The equipment was broken."]],
+      ["What does “hold” mean in “Look for the next hold”?",["a place to put your hand or foot","a short rest","a rope","a helmet"]]
     ]
   },
   {
@@ -3514,11 +3552,13 @@ READINGS.push(
     ],
     vocab: [["collection", "a group of new clothes a store sells"], ["convenient", "easy and useful"], ["landfill", "a place where trash is buried"], ["swap", "to exchange one thing for another"], ["sustainable", "not harmful to the environment over time"]],
     questions: [
-      ["What is fast fashion?", ["cheap clothes with collections that change often", "clothes for running", "expensive designer clothes"]],
-      ["How much water can one cotton T-shirt require?", ["about 2,700 liters", "about 27 liters", "about 270,000 liters"]],
-      ["Why do people throw away cheap clothes quickly?", ["They are cheap, so people wear them only a few times.", "They are too big.", "They are dangerous."]],
-      ["Which is NOT suggested in the text?", ["buying a new T-shirt every week", "swapping clothes with friends", "shopping at second-hand stores"]],
-      ["What does the last sentence mean?", ["Keeping and using what you have is best.", "You should buy a new T-shirt.", "T-shirts are not sustainable."]]
+      ["What is fast fashion?",["cheap clothes with collections that change often","clothes for running","expensive designer clothes","clothes made very quickly by hand"]],
+      ["How much water can one cotton T-shirt require?",["about 2,700 liters","about 27 liters","about 270,000 liters","about 2,700 milliliters"]],
+      ["Why do people throw away cheap clothes quickly?",["They are cheap, so people wear them only a few times.","They are too big.","They are dangerous.","They become unfashionable in one day."]],
+      ["Which is NOT suggested in the text?",["buying a new T-shirt every week","swapping clothes with friends","shopping at second-hand stores","learning to repair small holes"]],
+      ["What does the last sentence mean?",["Keeping and using what you have is best.","You should buy a new T-shirt.","T-shirts are not sustainable.","Old T-shirts are bad for the planet."]],
+      ["Why does the writer say fast fashion has “hidden costs”?",["Its effects on water, waste and workers are not in the price.","The clothes are secretly expensive.","Stores hide the price tags.","People pay with credit cards."]],
+      ["What does “swap” mean in “swap clothes with friends”?",["exchange","sell","wash","buy"]]
     ]
   }
 );
@@ -3582,11 +3622,13 @@ READINGS.push(
     ],
     vocab: [["discipline", "the ability to control your behavior"], ["melatonin", "a hormone that helps you sleep"], ["shift", "to move or change position"], ["chronic", "lasting for a long time"], ["attendance", "being present at school or an event"]],
     questions: [
-      ["What do many parents think causes teenagers’ sleep problems?", ["a lack of discipline", "too much homework", "bad food"]],
-      ["What happens to melatonin during adolescence?", ["Its production shifts later by up to two hours.", "The body stops producing it.", "It is produced earlier."]],
-      ["How many hours of sleep do experts recommend for teenagers?", ["between eight and ten", "about six", "more than twelve"]],
-      ["What did some schools report after starting later?", ["better attendance and grades", "more accidents", "no change"]],
-      ["Which tip is mentioned in the text?", ["getting sunlight in the morning", "sleeping late on weekends", "drinking coffee at night"]]
+      ["What do many parents think causes teenagers’ sleep problems?",["a lack of discipline","too much homework","bad food","playing video games"]],
+      ["What happens to melatonin during adolescence?",["Its production shifts later by up to two hours.","The body stops producing it.","It is produced earlier.","It doubles at night."]],
+      ["How many hours of sleep do experts recommend for teenagers?",["between eight and ten","about six","more than twelve","about twelve"]],
+      ["What did some schools report after starting later?",["better attendance and grades","more accidents","no change","more homework"]],
+      ["Which tip is mentioned in the text?",["getting sunlight in the morning","sleeping late on weekends","drinking coffee at night","drinking energy drinks"]],
+      ["What is the writer’s main point about teenagers’ sleep?",["It is mostly a biological issue, not just a lack of discipline.","Teenagers are lazy.","Parents should wake teens up earlier.","Schools should start at six."]],
+      ["What does “chronic” mean in “Chronic lack of sleep”?",["lasting a long time","very sudden","healthy","rare"]]
     ]
   },
   {
@@ -3602,11 +3644,13 @@ READINGS.push(
     ],
     vocab: [["procrastinate", "to delay doing something you should do"], ["tidy", "to make a place neat and organized"], ["regulation", "control"], ["relief", "a good feeling when stress or worry ends"], ["distraction", "something that takes your attention away"]],
     questions: [
-      ["How do many psychologists describe procrastination today?", ["as a problem of emotion regulation", "as simple laziness", "as a medical illness"]],
-      ["Why do we avoid tasks, according to the text?", ["They make us feel something unpleasant.", "We don’t have time.", "They are always too easy."]],
-      ["What is the problem with the relief of putting a task off?", ["It is temporary, and stress grows later.", "It never comes.", "It makes us sleepy."]],
-      ["What does “make the first step ridiculously small” mean?", ["Start with a tiny, easy action.", "Do the hardest part first.", "Skip the first step."]],
-      ["What did research find about students who forgave themselves?", ["They procrastinated less next time.", "They got worse grades.", "They stopped studying."]]
+      ["How do many psychologists describe procrastination today?",["as a problem of emotion regulation","as simple laziness","as a medical illness","as a problem of intelligence"]],
+      ["Why do we avoid tasks, according to the text?",["They make us feel something unpleasant.","We don’t have time.","They are always too easy.","We forget about them."]],
+      ["What is the problem with the relief of putting a task off?",["It is temporary, and stress grows later.","It never comes.","It makes us sleepy.","It makes us work faster."]],
+      ["What does “make the first step ridiculously small” mean?",["Start with a tiny, easy action.","Do the hardest part first.","Skip the first step.","Ask a friend to do it."]],
+      ["What did research find about students who forgave themselves?",["They procrastinated less next time.","They got worse grades.","They stopped studying.","They needed more help from teachers."]],
+      ["Why does the writer start with the example of the Friday project?",["to show a situation most readers know","to explain how to write a project","to show that Thursday is the best day","to criticize teachers"]],
+      ["What does “relief” mean in “immediate relief”?",["a good feeling when stress goes away","a strong pain","a big problem","a prize"]]
     ]
   },
   {
@@ -3621,11 +3665,13 @@ READINGS.push(
     ],
     vocab: [["collide", "to hit something while moving"], ["injury", "physical damage to the body"], ["cast", "a hard cover that protects a broken bone"], ["easel", "a stand that holds a painting"], ["self-portrait", "a picture an artist makes of themselves"]],
     questions: [
-      ["What did Frida originally want to study?", ["medicine", "art", "history"]],
-      ["How old was she when she had the accident?", ["eighteen", "twelve", "thirty"]],
-      ["Why was a mirror placed above her bed?", ["so she could paint herself", "to make the room brighter", "so she could see the street"]],
-      ["About what fraction of her paintings are self-portraits?", ["more than a third", "about a tenth", "all of them"]],
-      ["How was Frida often seen during her life?", ["mainly as Diego Rivera’s wife", "as the most famous painter in the world", "as a doctor"]]
+      ["What did Frida originally want to study?",["medicine","art","history","law"]],
+      ["How old was she when she had the accident?",["eighteen","twelve","thirty","twenty-five"]],
+      ["Why was a mirror placed above her bed?",["so she could paint herself","to make the room brighter","so she could see the street","to watch her visitors"]],
+      ["About what fraction of her paintings are self-portraits?",["more than a third","about a tenth","all of them","about half"]],
+      ["How was Frida often seen during her life?",["mainly as Diego Rivera’s wife","as the most famous painter in the world","as a doctor","as a famous doctor"]],
+      ["Why did Frida say “I paint myself because I am so often alone”?",["Her injuries kept her alone in bed for long periods.","She didn’t have any friends.","She didn’t like other people.","Diego Rivera told her to."]],
+      ["What does “reputation” mean in “her reputation is enormous”?",["what people think and know about someone","the size of a painting","a kind of museum","a group of artists"]]
     ]
   },
   {
@@ -3640,11 +3686,13 @@ READINGS.push(
     ],
     vocab: [["shiver", "a sudden shaking of the body"], ["dopamine", "a brain chemical connected to pleasure"], ["anticipate", "to expect something that is going to happen"], ["heart rate", "how fast your heart beats"], ["lyrics", "the words of a song"]],
     questions: [
-      ["What are musical “chills” connected to?", ["dopamine", "melatonin", "adrenaline"]],
-      ["When is dopamine also released?", ["while we anticipate an emotional moment", "only after the song ends", "only during sad songs"]],
-      ["Why do hospitals sometimes play calm music?", ["to reduce patients’ anxiety", "to entertain doctors", "to cover noise"]],
-      ["Why can songs with lyrics interfere with studying?", ["The brain processes both sets of words at once.", "They are too loud.", "They make people sleepy."]],
-      ["What does playing an instrument involve, according to the text?", ["memory, coordination, hearing and emotion", "only the hands", "only memory"]]
+      ["What are musical “chills” connected to?",["dopamine","melatonin","adrenaline","serotonin"]],
+      ["When is dopamine also released?",["while we anticipate an emotional moment","only after the song ends","only during sad songs","only when the song is very fast"]],
+      ["Why do hospitals sometimes play calm music?",["to reduce patients’ anxiety","to entertain doctors","to cover noise","to keep patients awake"]],
+      ["Why can songs with lyrics interfere with studying?",["The brain processes both sets of words at once.","They are too loud.","They make people sleepy.","They make the brain sleep."]],
+      ["What does playing an instrument involve, according to the text?",["memory, coordination, hearing and emotion","only the hands","only memory","only hearing"]],
+      ["What does the writer suggest about the pleasure of music?",["Part of it comes from expecting what will happen next.","It only comes from loud songs.","It is the same for everyone.","It disappears after a song ends."]],
+      ["What does “anticipating” mean in “while we are anticipating it”?",["expecting something to happen","forgetting something","stopping something","repeating something"]]
     ]
   },
 
@@ -3661,11 +3709,13 @@ READINGS.push(
     ],
     vocab: [["struggle", "to find something very difficult"], ["persevere", "to continue trying despite difficulty"], ["counterproductive", "having the opposite effect to what you want"], ["assessment", "a way of evaluating learning"], ["draft", "an early version of a piece of writing"]],
     questions: [
-      ["What concern do some educators have about AI?", ["Students may not develop important skills.", "AI is too expensive.", "AI is too slow."]],
-      ["Why do some believe banning AI is unrealistic?", ["AI will be part of almost every profession.", "Students don’t like AI.", "AI is always correct."]],
-      ["How can AI act as a good tool?", ["as a patient tutor that gives feedback", "by writing all assignments", "by replacing teachers"]],
-      ["How are many teachers redesigning assessments?", ["asking students to explain reasoning orally", "giving more multiple-choice tests", "banning all computers"]],
-      ["What is the writer’s main point?", ["How students use AI matters more than whether they use it.", "AI should be banned in all schools.", "AI is always confidently right."]]
+      ["What concern do some educators have about AI?",["Students may not develop important skills.","AI is too expensive.","AI is too slow.","AI uses too much electricity."]],
+      ["Why do some believe banning AI is unrealistic?",["AI will be part of almost every profession.","Students don’t like AI.","AI is always correct.","Teachers already use it every day."]],
+      ["How can AI act as a good tool?",["as a patient tutor that gives feedback","by writing all assignments","by replacing teachers","by grading exams automatically"]],
+      ["How are many teachers redesigning assessments?",["asking students to explain reasoning orally","giving more multiple-choice tests","banning all computers","allowing AI only at home"]],
+      ["What is the writer’s main point?",["How students use AI matters more than whether they use it.","AI should be banned in all schools.","AI is always confidently right.","AI answers are always reliable."]],
+      ["Why does the writer mention that AI answers are “often confidently wrong”?",["to show why students must evaluate AI critically","to prove that AI is useless","to encourage students to trust AI","to criticize teachers"]],
+      ["What does “productive struggle” mean in the text?",["useful effort that helps you learn","a fight between students","work that produces money","a problem with no solution"]]
     ]
   },
   {
@@ -3681,11 +3731,13 @@ READINGS.push(
     ],
     vocab: [["survey", "a set of questions asked to many people"], ["powerless", "without the ability to control or change things"], ["rational", "based on logic and reason"], ["overwhelming", "too strong to deal with"], ["antidote", "something that counteracts a negative effect"]],
     questions: [
-      ["What did nearly sixty percent of young people in the survey say?", ["They were very or extremely worried.", "They didn’t care.", "They felt optimistic."]],
-      ["How does the text describe eco-anxiety?", ["a rational response to a real threat", "a serious mental illness", "an exaggeration"]],
-      ["What can happen when anxiety becomes overwhelming?", ["paralysis", "more motivation", "better sleep"]],
-      ["What is one of the most effective antidotes?", ["collective action", "ignoring the news completely", "moving to another country"]],
-      ["What does the final sentence suggest about hope?", ["It is created through action.", "It arrives on its own.", "It is not realistic."]]
+      ["What did nearly sixty percent of young people in the survey say?",["They were very or extremely worried.","They didn’t care.","They felt optimistic.","They were slightly bored by the topic."]],
+      ["How does the text describe eco-anxiety?",["a rational response to a real threat","a serious mental illness","an exaggeration","a temporary trend on social media"]],
+      ["What can happen when anxiety becomes overwhelming?",["paralysis","more motivation","better sleep","faster decisions"]],
+      ["What is one of the most effective antidotes?",["collective action","ignoring the news completely","moving to another country","reading more alarming news"]],
+      ["What does the final sentence suggest about hope?",["It is created through action.","It arrives on its own.","It is not realistic.","It is only for scientists."]],
+      ["What is the writer’s purpose in this text?",["to validate young people’s worry and suggest healthy ways to cope","to prove that climate change is exaggerated","to criticize young people for being anxious","to sell environmental products"]],
+      ["What does “antidote” mean in “the most effective antidotes to eco-anxiety”?",["something that counteracts a harmful effect","a type of illness","a scientific survey","a feeling of fear"]]
     ]
   },
   {
@@ -3700,11 +3752,13 @@ READINGS.push(
     ],
     vocab: [["reservoir", "a large natural or artificial lake that stores water"], ["rationing", "limiting how much of something people can use"], ["infrastructure", "basic systems like roads, pipes and electricity"], ["leak", "a hole through which liquid escapes"], ["take for granted", "to expect something will always be available"]],
     questions: [
-      ["What caused the reservoirs to drop?", ["years of below-average rainfall", "a broken dam", "an earthquake"]],
-      ["What became a symbol of the crisis?", ["the cracked bottom of La Boca dam", "long lines at schools", "bottled water"]],
-      ["Besides drought, what contributed to the problem?", ["growing demand and leaks in the network", "too much rain", "lower population"]],
-      ["What ended the most acute phase of the crisis?", ["heavy rains in the autumn", "a new aqueduct", "water trucks"]],
-      ["What lesson does the text highlight?", ["Water security cannot be taken for granted.", "Droughts never happen twice.", "Bottled water solves the problem."]]
+      ["What caused the reservoirs to drop?",["years of below-average rainfall","a broken dam","an earthquake","a sudden drop in temperature"]],
+      ["What became a symbol of the crisis?",["the cracked bottom of La Boca dam","long lines at schools","bottled water","the price of tinacos"]],
+      ["Besides drought, what contributed to the problem?",["growing demand and leaks in the network","too much rain","lower population","fewer factories in the city"]],
+      ["What ended the most acute phase of the crisis?",["heavy rains in the autumn","a new aqueduct","water trucks","a ban on watering gardens"]],
+      ["What lesson does the text highlight?",["Water security cannot be taken for granted.","Droughts never happen twice.","Bottled water solves the problem.","Rain always solves water problems."]],
+      ["Why does the writer say the drought was “only part of the story”?",["Human factors like demand and leaks also caused the crisis.","There was no drought at all.","The crisis happened in another city.","The government invented the crisis."]],
+      ["What does “taken for granted” mean in “cannot be taken for granted”?",["assumed to always be available","shared with others","bought cheaply","measured carefully"]]
     ]
   },
   {
@@ -3719,11 +3773,13 @@ READINGS.push(
     ],
     vocab: [["trustworthiness", "the quality of being reliable and honest"], ["competence", "the ability to do something well"], ["ancestor", "a person in your family from long ago"], ["stereotype", "a fixed, often unfair idea about a group of people"], ["persist", "to continue to exist"]],
     questions: [
-      ["How quickly do people form judgments about faces?", ["in one tenth of a second", "in about ten seconds", "after several minutes"]],
-      ["What did longer exposure mainly do?", ["It made people more confident.", "It changed opinions completely.", "It made people less sure."]],
-      ["Why did rapid judgments probably evolve?", ["to quickly identify friends or threats", "to choose good food", "to win elections"]],
-      ["What is confirmation bias?", ["looking for information that supports our opinion", "changing our mind easily", "trusting strangers"]],
-      ["What does the text recommend?", ["giving people more chances and challenging our assumptions", "trusting first impressions completely", "avoiding new people"]]
+      ["How quickly do people form judgments about faces?",["in one tenth of a second","in about ten seconds","after several minutes","after one full day"]],
+      ["What did longer exposure mainly do?",["It made people more confident.","It changed opinions completely.","It made people less sure.","It made people forget the face."]],
+      ["Why did rapid judgments probably evolve?",["to quickly identify friends or threats","to choose good food","to win elections","to recognize family members by voice"]],
+      ["What is confirmation bias?",["looking for information that supports our opinion","changing our mind easily","trusting strangers","trusting only experts"]],
+      ["What does the text recommend?",["giving people more chances and challenging our assumptions","trusting first impressions completely","avoiding new people","making decisions as fast as possible"]],
+      ["Why does the writer end with the example of a misjudged classmate?",["to show the personal cost of trusting first impressions","to give advice about the first day of school","to prove first impressions are always right","to tell a story about the writer’s best friend"]],
+      ["What does “persist” mean in “first impressions tend to persist”?",["continue to exist","disappear quickly","become positive","change often"]]
     ]
   },
   {
@@ -3738,11 +3794,13 @@ READINGS.push(
     ],
     vocab: [["gap year", "a year off between school and further studies"], ["clarity", "the quality of being clear"], ["drop out", "to leave school or university before finishing"], ["peers", "people of the same age or level"], ["momentum", "the force that keeps something moving"]],
     questions: [
-      ["In which countries is a gap year common?", ["the UK, Australia and Denmark", "Mexico and Brazil", "China and Japan"]],
-      ["What benefit do supporters mention?", ["It can help students choose more carefully.", "It guarantees a good job.", "It makes university shorter."]],
-      ["What is one risk critics mention?", ["Students may lose academic momentum.", "Students learn too much.", "Universities don’t accept them."]],
-      ["What do most experts say is the key to a successful gap year?", ["structure and clear goals", "travelling as far as possible", "spending a lot of money"]],
-      ["What is the writer’s final position?", ["There is no universal right answer.", "Everyone should take a gap year.", "Gap years are always a mistake."]]
+      ["In which countries is a gap year common?",["the UK, Australia and Denmark","Mexico and Brazil","China and Japan","the United States and Canada"]],
+      ["What benefit do supporters mention?",["It can help students choose more carefully.","It guarantees a good job.","It makes university shorter.","It helps students finish university faster."]],
+      ["What is one risk critics mention?",["Students may lose academic momentum.","Students learn too much.","Universities don’t accept them.","Universities give fewer scholarships."]],
+      ["What do most experts say is the key to a successful gap year?",["structure and clear goals","travelling as far as possible","spending a lot of money","traveling without any plan"]],
+      ["What is the writer’s final position?",["There is no universal right answer.","Everyone should take a gap year.","Gap years are always a mistake.","A gap year is right for everyone."]],
+      ["What tone does the writer use toward gap years?",["balanced, presenting benefits and risks","strongly enthusiastic","completely negative","humorous and sarcastic"]],
+      ["What does “momentum” mean in “lose academic momentum”?",["the energy to keep going","good grades","a university program","free time"]]
     ]
   }
 );
@@ -3803,11 +3861,13 @@ READINGS.push(
     ],
     vocab: [["commodity", "something that can be bought and sold"], ["incentive", "something that motivates a person or company to act"], ["engaging", "attracting and holding interest"], ["variable reward", "a reward that comes at unpredictable times"], ["conflict of interest", "a situation where two goals work against each other"]],
     questions: [
-      ["In the attention economy, what is actually being sold?", ["users’ attention", "the apps", "phones"]],
-      ["Why does more time on a platform increase profit?", ["Users see more ads and generate more data.", "Users pay per minute.", "Apps become more expensive."]],
-      ["What principle do some features share with slot machines?", ["variable rewards", "fixed prices", "clear rules"]],
-      ["What conflict of interest do critics identify?", ["Company revenue vs. user wellbeing", "Advertisers vs. governments", "Designers vs. engineers"]],
-      ["What does the writer suggest is the most empowering response?", ["understanding how these systems work", "deleting all apps", "trusting the companies"]]
+      ["In the attention economy, what is actually being sold?",["users’ attention","the apps","phones","users’ passwords"]],
+      ["Why does more time on a platform increase profit?",["Users see more ads and generate more data.","Users pay per minute.","Apps become more expensive.","Companies charge higher prices for apps."]],
+      ["What principle do some features share with slot machines?",["variable rewards","fixed prices","clear rules","clear instructions"]],
+      ["What conflict of interest do critics identify?",["Company revenue vs. user wellbeing","Advertisers vs. governments","Designers vs. engineers","Users vs. advertisers"]],
+      ["What does the writer suggest is the most empowering response?",["understanding how these systems work","deleting all apps","trusting the companies","ignoring all notifications"]],
+      ["Why does the writer mention former tech employees who regret their work?",["to support the critics’ argument with insider views","to show that tech jobs are badly paid","to prove that apps are illegal","to praise their creativity"]],
+      ["What does “commodity” mean in “Attention… has become a commodity”?",["something that can be bought and sold","a free gift","a kind of app","a personal feeling"]]
     ]
   },
   {
@@ -3822,11 +3882,13 @@ READINGS.push(
     ],
     vocab: [["captivity", "being kept in a closed space, not free"], ["barren", "empty, with nothing growing or living"], ["captive breeding", "helping animals reproduce in controlled conditions"], ["brink", "the edge of something dangerous"], ["sanctuary", "a protected place for animals to live safely"]],
     questions: [
-      ["How do leading zoos describe their modern mission?", ["conservation, research and education", "entertainment only", "selling animals"]],
-      ["What happened to the Arabian oryx?", ["Zoo-bred animals were reintroduced to the wild.", "It became extinct forever.", "It was never endangered."]],
-      ["How many California condors remained in the 1980s?", ["twenty-two", "two hundred", "two thousand"]],
-      ["What is one argument critics make?", ["Successes involve only a small fraction of zoo animals.", "Zoos are too cheap.", "Zoos don’t have enough visitors."]],
-      ["What does the writer suggest at the end?", ["The key question is what kind of institutions zoos should become.", "All zoos should close immediately.", "Zoos need more animals."]]
+      ["How do leading zoos describe their modern mission?",["conservation, research and education","entertainment only","selling animals","research on animal intelligence only"]],
+      ["What happened to the Arabian oryx?",["Zoo-bred animals were reintroduced to the wild.","It became extinct forever.","It was never endangered.","It was moved to Europe permanently."]],
+      ["How many California condors remained in the 1980s?",["twenty-two","two hundred","two thousand","two"]],
+      ["What is one argument critics make?",["Successes involve only a small fraction of zoo animals.","Zoos are too cheap.","Zoos don’t have enough visitors.","Zoos teach too much science."]],
+      ["What does the writer suggest at the end?",["The key question is what kind of institutions zoos should become.","All zoos should close immediately.","Zoos need more animals.","Zoos should replace natural habitats."]],
+      ["How does the writer organize the text?",["history, arguments for, arguments against, then a middle ground","only arguments in favor of zoos","a personal story about a zoo visit","a list of the best zoos in the world"]],
+      ["What does “brink” mean in “back from the brink”?",["the edge of disaster","a safe place","a zoo enclosure","the beginning of life"]]
     ]
   },
   {
@@ -3842,11 +3904,13 @@ READINGS.push(
     ],
     vocab: [["cognitive", "related to thinking and mental processes"], ["illusion", "something that seems real but is not"], ["habitual", "done regularly as a habit"], ["simultaneously", "at the same time"], ["irrelevant", "not related or important to the topic"]],
     questions: [
-      ["What does research suggest about true multitasking?", ["It is largely an illusion for attention-demanding tasks.", "It is the most efficient way to work.", "Only teenagers can do it."]],
-      ["What usually happens instead of real multitasking?", ["rapid task switching", "deep focus", "automatic thinking"]],
-      ["What did the Stanford study find about heavy multitaskers?", ["They were worse at filtering irrelevant information.", "They were better at everything.", "They were faster readers."]],
-      ["When is combining tasks less of a problem?", ["when one task is highly automatic", "when both tasks involve reading", "when you are very tired"]],
-      ["What practical advice does the text give?", ["Work in focused blocks and silence notifications.", "Open more tabs.", "Always listen to podcasts while studying."]]
+      ["What does research suggest about true multitasking?",["It is largely an illusion for attention-demanding tasks.","It is the most efficient way to work.","Only teenagers can do it.","It works only for simple tasks."]],
+      ["What usually happens instead of real multitasking?",["rapid task switching","deep focus","automatic thinking","sleeping"]],
+      ["What did the Stanford study find about heavy multitaskers?",["They were worse at filtering irrelevant information.","They were better at everything.","They were faster readers.","They were more creative."]],
+      ["When is combining tasks less of a problem?",["when one task is highly automatic","when both tasks involve reading","when you are very tired","when both tasks require listening"]],
+      ["What practical advice does the text give?",["Work in focused blocks and silence notifications.","Open more tabs.","Always listen to podcasts while studying.","Do several tasks at once to save time."]],
+      ["Why were the Stanford results described as “surprising”?",["Heavy multitaskers were worse at skills they were assumed to practice.","Nobody had studied multitasking before.","Only students took part.","The study was very short."]],
+      ["What does “illusion” mean in “true multitasking is largely an illusion”?",["something that seems real but is not","a useful skill","a scientific law","a kind of game"]]
     ]
   },
   {
@@ -3861,11 +3925,13 @@ READINGS.push(
     ],
     vocab: [["linguistically", "related to languages"], ["variant", "a slightly different form of something"], ["encode", "to contain information in a particular form"], ["kinship", "family relationships"], ["revitalization", "the process of giving new life to something"]],
     questions: [
-      ["How many Indigenous languages does the Mexican government recognize?", ["sixty-eight", "seven thousand", "twelve"]],
-      ["What is lost when a language dies, according to the text?", ["ways of perceiving the world, histories and knowledge", "only vocabulary", "only grammar"]],
-      ["Why did some parents not pass on their language?", ["to spare their children prejudice", "because it was too difficult", "because schools required it"]],
-      ["What is helping to change attitudes?", ["bilingual education, radio and young artists", "banning Spanish", "closing rural schools"]],
-      ["What do the examples of Hebrew and Welsh show?", ["Revitalization is possible with sustained effort.", "All languages will disappear.", "Only European languages survive."]]
+      ["How many Indigenous languages does the Mexican government recognize?",["sixty-eight","seven thousand","twelve","one hundred and twenty"]],
+      ["What is lost when a language dies, according to the text?",["ways of perceiving the world, histories and knowledge","only vocabulary","only grammar","only songs"]],
+      ["Why did some parents not pass on their language?",["to spare their children prejudice","because it was too difficult","because schools required it","because the language had no writing"]],
+      ["What is helping to change attitudes?",["bilingual education, radio and young artists","banning Spanish","closing rural schools","new laws against Spanish"]],
+      ["What do the examples of Hebrew and Welsh show?",["Revitalization is possible with sustained effort.","All languages will disappear.","Only European languages survive.","Languages can’t change."]],
+      ["What does the writer imply about language loss in Mexico?",["It was largely caused by social pressure, not by lack of value.","Speakers chose to forget their languages for no reason.","It is a natural process that cannot be stopped.","It only affects very old people."]],
+      ["What does “relics” mean in “not relics of the past”?",["things that survive from an earlier time","modern inventions","popular songs","school subjects"]]
     ]
   },
   {
@@ -3881,11 +3947,13 @@ READINGS.push(
     ],
     vocab: [["phenomenon", "something that happens or exists, especially something unusual"], ["classify", "to arrange things into groups"], ["overwhelming", "very great in amount"], ["invasive species", "plants or animals that spread into new areas and cause harm"], ["democratic", "open to everyone"]],
     questions: [
-      ["Why did astronomers launch Galaxy Zoo?", ["They had too many galaxy images to classify alone.", "They needed funding.", "They wanted to sell telescopes."]],
-      ["Who discovered Hanny’s Voorwerp?", ["a Dutch schoolteacher", "a team of astronomers", "a computer program"]],
-      ["What did Foldit players achieve?", ["They solved a protein structure in about three weeks.", "They discovered a new planet.", "They created a vaccine."]],
-      ["How do photo platforms help researchers?", ["They help track migration, invasive species and climate effects.", "They replace all scientists.", "They sell nature photos."]],
-      ["What additional benefit of citizen science is mentioned?", ["It makes science more democratic.", "It is always more accurate.", "It is cheaper for universities."]]
+      ["Why did astronomers launch Galaxy Zoo?",["They had too many galaxy images to classify alone.","They needed funding.","They wanted to sell telescopes.","They wanted to test a new website."]],
+      ["Who discovered Hanny’s Voorwerp?",["a Dutch schoolteacher","a team of astronomers","a computer program","a famous astronomer"]],
+      ["What did Foldit players achieve?",["They solved a protein structure in about three weeks.","They discovered a new planet.","They created a vaccine.","They designed a new game console."]],
+      ["How do photo platforms help researchers?",["They help track migration, invasive species and climate effects.","They replace all scientists.","They sell nature photos.","They make scientists unnecessary."]],
+      ["What additional benefit of citizen science is mentioned?",["It makes science more democratic.","It is always more accurate.","It is cheaper for universities.","It makes science faster than laboratories."]],
+      ["What is the writer’s purpose in describing Galaxy Zoo and Foldit?",["to show that non-experts can make real scientific contributions","to criticize professional scientists","to advertise video games","to explain how telescopes work"]],
+      ["What does “democratic” mean in “they make science more democratic”?",["open to everyone, not only experts","controlled by the government","more expensive","more complicated"]]
     ]
   },
 
@@ -3902,11 +3970,13 @@ READINGS.push(
     ],
     vocab: [["romanticize", "to present something as better or more attractive than it is"], ["retrospectively", "when looking back at the past"], ["ambivalence", "having mixed or contradictory feelings"], ["epistemically", "relating to knowledge and how we know things"], ["rationalization", "an explanation invented to justify something after it happens"]],
     questions: [
-      ["What contradiction does the writer identify in contemporary culture?", ["Failure is romanticized but concealed in real life.", "Success is always criticized.", "Failure is openly celebrated in the present."]],
-      ["Why does the writer call success “epistemically lazy”?", ["We rarely examine why things went well.", "Successful people stop working.", "Success makes us forget facts."]],
-      ["What do resilience researchers observe?", ["Manageable setbacks can build emotional flexibility.", "Any adversity is harmful.", "Overwhelming adversity is best."]],
-      ["What does the writer say about the freedom to fail?", ["It is unevenly distributed.", "Everyone has it equally.", "It only matters for adults."]],
-      ["How does the writer interpret Beckett’s line?", ["as an honest acknowledgment that failure is permanent in any serious attempt", "as a cheerful motivational slogan", "as advice to give up"]]
+      ["What contradiction does the writer identify in contemporary culture?",["Failure is romanticized but concealed in real life.","Success is always criticized.","Failure is openly celebrated in the present.","Failure is ignored in every situation."]],
+      ["Why does the writer call success “epistemically lazy”?",["We rarely examine why things went well.","Successful people stop working.","Success makes us forget facts.","Successful people stop learning facts."]],
+      ["What do resilience researchers observe?",["Manageable setbacks can build emotional flexibility.","Any adversity is harmful.","Overwhelming adversity is best.","Avoiding all difficulties is healthiest."]],
+      ["What does the writer say about the freedom to fail?",["It is unevenly distributed.","Everyone has it equally.","It only matters for adults.","It depends only on age."]],
+      ["How does the writer interpret Beckett’s line?",["as an honest acknowledgment that failure is permanent in any serious attempt","as a cheerful motivational slogan","as advice to give up","as a reason to stop trying"]],
+      ["Why does the writer warn against “sentimentalizing” failure?",["Not every failure teaches something, and some carry serious consequences.","Failure is always useless.","People talk about failure too little.","Success is more important than learning."]],
+      ["What does “ambivalence” mean in “This ambivalence obscures what failure genuinely offers”?",["having mixed, contradictory feelings","total rejection","strong admiration","complete indifference"]]
     ]
   },
   {
@@ -3920,11 +3990,13 @@ READINGS.push(
     ],
     vocab: [["cherished", "deeply valued"], ["wholesale", "completely, on a large scale"], ["recombination", "putting existing elements together in new ways"], ["conflate", "to mix two different ideas as if they were the same"], ["livelihood", "the way a person earns money to live"]],
     questions: [
-      ["What myth does the writer challenge?", ["the solitary original genius", "the value of copyright", "the importance of art"]],
-      ["What does copyright protect?", ["specific expressions, not ideas", "ideas themselves", "artistic styles"]],
-      ["How do defenders view AI-generated art?", ["as an accelerated version of absorbing influences", "as completely original", "as illegal"]],
-      ["What do critics say changes with AI?", ["the scale, which may undermine artists’ livelihoods", "nothing important", "the colors used in art"]],
-      ["What two values does the writer distinguish?", ["freedom to be influenced and creators’ right to recognition", "speed and quality", "tradition and technology"]]
+      ["What myth does the writer challenge?",["the solitary original genius","the value of copyright","the importance of art","the value of collaboration"]],
+      ["What does copyright protect?",["specific expressions, not ideas","ideas themselves","artistic styles","titles and names only"]],
+      ["How do defenders view AI-generated art?",["as an accelerated version of absorbing influences","as completely original","as illegal","as a threat to all art"]],
+      ["What do critics say changes with AI?",["the scale, which may undermine artists’ livelihoods","nothing important","the colors used in art","the price of paintings"]],
+      ["What two values does the writer distinguish?",["freedom to be influenced and creators’ right to recognition","speed and quality","tradition and technology","originality and imitation"]],
+      ["Why does the writer mention Shakespeare and jazz musicians?",["to show that great art has always reused existing material","to criticize them for copying","to compare them with AI companies","to explain copyright law"]],
+      ["What does “conflated” mean in “two values that are often conflated”?",["mixed together as if they were the same","clearly separated","forgotten","protected by law"]]
     ]
   },
   {
@@ -3939,11 +4011,13 @@ READINGS.push(
     ],
     vocab: [["relentless", "continuing without stopping"], ["optimize", "to make something as effective as possible"], ["indicator", "a sign or measurement that shows something"], ["stagnate", "to stop developing or improving"], ["accountable", "responsible and required to explain actions"]],
     questions: [
-      ["Why are numbers appealing as a form of evaluation?", ["They appear objective and comparable.", "They are always accurate.", "They are easy to ignore."]],
-      ["What does Goodhart’s Law state?", ["When a measure becomes a target, it ceases to be a good measure.", "More data always improves decisions.", "Targets should never change."]],
-      ["What might a school judged only by exam results do?", ["narrow its curriculum to what is tested", "add more art classes", "stop giving exams"]],
-      ["How does the writer describe the like count?", ["as a signal that became an objective in itself", "as a perfectly accurate measure of value", "as irrelevant to users"]],
-      ["What is the writer’s final position?", ["Use numbers as instruments of understanding, not substitutes for judgment.", "Abandon all measurement.", "Trust metrics completely."]]
+      ["Why are numbers appealing as a form of evaluation?",["They appear objective and comparable.","They are always accurate.","They are easy to ignore.","They are never questioned."]],
+      ["What does Goodhart’s Law state?",["When a measure becomes a target, it ceases to be a good measure.","More data always improves decisions.","Targets should never change.","Targets make measures more accurate."]],
+      ["What might a school judged only by exam results do?",["narrow its curriculum to what is tested","add more art classes","stop giving exams","teach more creative subjects"]],
+      ["How does the writer describe the like count?",["as a signal that became an objective in itself","as a perfectly accurate measure of value","as irrelevant to users","as useless for social media"]],
+      ["What is the writer’s final position?",["Use numbers as instruments of understanding, not substitutes for judgment.","Abandon all measurement.","Trust metrics completely.","Replace judgment with numbers."]],
+      ["What do the hospital and research examples have in common?",["The number improves while the real quality doesn’t.","Both institutions became more honest.","Both show that metrics always work.","Both are about social media."]],
+      ["What does “stagnate” mean in “the underlying reality may stagnate”?",["stop improving","improve quickly","disappear","become visible"]]
     ]
   },
   {
@@ -3958,11 +4032,13 @@ READINGS.push(
     ],
     vocab: [["dismantle", "to take apart; to show that an idea is wrong"], ["reconstructive", "building something again from parts"], ["fictitious", "invented, not real"], ["vivid", "very clear and detailed"], ["testimony", "a formal statement of what someone saw or knows"]],
     questions: [
-      ["What metaphor has research dismantled?", ["memory as an archive", "memory as a story", "memory as a muscle"]],
-      ["What did Loftus’s car accident study show?", ["The verb used in a question influenced speed estimates.", "People remember accidents perfectly.", "Films are unreliable."]],
-      ["What was implanted in some participants?", ["a false memory of being lost in a mall", "a fear of cars", "a real childhood memory"]],
-      ["What did research on memories of dramatic events find?", ["Accounts changed, but confidence remained high.", "Accounts never changed.", "People forgot everything."]],
-      ["What does the writer suggest about identity?", ["It is an ongoing narrative we partly author.", "It is completely fixed.", "It has no connection to memory."]]
+      ["What metaphor has research dismantled?",["memory as an archive","memory as a story","memory as a muscle","memory as a camera"]],
+      ["What did Loftus’s car accident study show?",["The verb used in a question influenced speed estimates.","People remember accidents perfectly.","Films are unreliable.","Witnesses remembered the film perfectly."]],
+      ["What was implanted in some participants?",["a false memory of being lost in a mall","a fear of cars","a real childhood memory","a memory of winning a prize"]],
+      ["What did research on memories of dramatic events find?",["Accounts changed, but confidence remained high.","Accounts never changed.","People forgot everything.","Confidence dropped over time."]],
+      ["What does the writer suggest about identity?",["It is an ongoing narrative we partly author.","It is completely fixed.","It has no connection to memory.","It is controlled by others."]],
+      ["Why does the writer call memory “the unreliable archive”?",["Memories feel like stored records but are rebuilt each time.","Memories are stored in libraries.","Most people have bad memory.","Archives are always wrong."]],
+      ["What does “unsettling” mean in “The implications are unsettling”?",["disturbing or worrying","boring","encouraging","simple"]]
     ]
   },
   {
@@ -3977,11 +4053,13 @@ READINGS.push(
     ],
     vocab: [["coin", "to invent a new word or phrase"], ["affliction", "something that causes suffering"], ["mercenary", "a soldier paid to fight for a foreign country"], ["bittersweet", "pleasant but with a feeling of sadness"], ["curated", "carefully selected and organized"]],
     questions: [
-      ["Who first used the term “nostalgia”?", ["Johannes Hofer", "Constantine Sedikides", "a group of Swiss soldiers"]],
-      ["How was nostalgia originally regarded?", ["as a serious medical condition", "as a pleasant emotion", "as a type of music"]],
-      ["According to recent research, when do people tend to feel nostalgic?", ["when they feel lonely, anxious or uncertain", "only when they are very happy", "only in old age"]],
-      ["What effect did some participants report after nostalgic reflection?", ["feeling physically warmer", "feeling more anxious", "losing their appetite"]],
-      ["What risk does the writer mention in the final paragraph?", ["Nostalgia can be exploited by presenting an idealized past.", "Nostalgia always causes depression.", "Nostalgia makes people forget the past."]]
+      ["Who first used the term “nostalgia”?",["Johannes Hofer","Constantine Sedikides","a group of Swiss soldiers","a Greek philosopher"]],
+      ["How was nostalgia originally regarded?",["as a serious medical condition","as a pleasant emotion","as a type of music","as a sign of intelligence"]],
+      ["According to recent research, when do people tend to feel nostalgic?",["when they feel lonely, anxious or uncertain","only when they are very happy","only in old age","when they are busy at work"]],
+      ["What effect did some participants report after nostalgic reflection?",["feeling physically warmer","feeling more anxious","losing their appetite","feeling sleepy"]],
+      ["What risk does the writer mention in the final paragraph?",["Nostalgia can be exploited by presenting an idealized past.","Nostalgia always causes depression.","Nostalgia makes people forget the past.","It makes people too happy."]],
+      ["How has the understanding of nostalgia changed over time?",["from a disease to a mostly positive, useful emotion","from a pleasant emotion to a disease","It has never changed.","from a type of music to a medical term"]],
+      ["What does “bittersweet” mean in “a predominantly positive, if bittersweet, emotion”?",["happy and sad at the same time","completely sad","very intense","tasteless"]]
     ]
   }
 );
@@ -4311,11 +4389,13 @@ READINGS.push(
     ],
     vocab: [["roots", "the origin or beginning of something"], ["harvest", "the time when crops are collected from the fields"], ["boundary", "a line that separates two areas"], ["carve", "to cut a shape into something hard"], ["spread", "to move to more places or people"]],
     questions: [
-      ["What was the name of the ancient Celtic festival?", ["Samhain", "All Saints’ Day", "Hallows"]],
-      ["What did Samhain mark?", ["the end of the harvest and the start of the dark half of the year", "the first day of spring", "the birthday of a Celtic king"]],
-      ["Where does the word “Halloween” come from?", ["All Hallows’ Eve", "a Celtic god", "an American movie"]],
-      ["What did people in Ireland originally carve?", ["turnips and potatoes", "pumpkins", "apples"]],
-      ["How did trick-or-treating spread around the world?", ["through movies and television", "through Celtic songs", "through school books"]]
+      ["What was the name of the ancient Celtic festival?",["Samhain","All Saints’ Day","Hallows","Día de Muertos"]],
+      ["What did Samhain mark?",["the end of the harvest and the start of the dark half of the year","the first day of spring","the birthday of a Celtic king","the longest day of the year"]],
+      ["Where does the word “Halloween” come from?",["All Hallows’ Eve","a Celtic god","an American movie","a Scottish word for pumpkin"]],
+      ["What did people in Ireland originally carve?",["turnips and potatoes","pumpkins","apples","pumpkins and apples"]],
+      ["How did trick-or-treating spread around the world?",["through movies and television","through Celtic songs","through school books","through Celtic festivals in America"]],
+      ["Why did the Celts wear animal skins on Samhain?",["to confuse the spirits wandering that night","to keep warm at the bonfires","to win a costume contest","to hunt animals"]],
+      ["What does “spread” mean in “it spread around the world”?",["became known in many places","became smaller","disappeared","was forgotten"]]
     ]
   }
 );

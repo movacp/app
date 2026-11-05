@@ -237,11 +237,12 @@ READINGS.push(
     ],
     vocab: [["name", "what people call you"], ["years old", "your age"], ["live", "the place where your home is"], ["favorite", "the one you like the most"], ["brother", "a boy in your family, son of your parents"]],
     questions: [
-      ["How old is Daniela?", ["fourteen", "twelve", "sixteen"]],
-      ["Where is she from?", ["Monterrey", "Cancún", "Guadalajara"]],
-      ["What sport does she like?", ["basketball", "football", "tennis"]],
-      ["What is her favorite food?", ["tacos", "pizza", "salad"]],
-      ["What is her cat’s name?", ["Luna", "Daniela", "Sol"]]
+      ["How old is Daniela?",["fourteen","twelve","sixteen","fifteen"]],
+      ["Where is she from?",["Monterrey","Cancún","Guadalajara","Mexico City"]],
+      ["What sport does she like?",["basketball","football","tennis","volleyball"]],
+      ["What is her favorite food?",["tacos","pizza","salad","burgers"]],
+      ["What is her cat’s name?",["Luna","Daniela","Sol","Pepa"]],
+      ["Which sentence is true about Daniela?",["She doesn’t like math.","She lives alone.","She has a dog.","She doesn’t like music."]]
     ]
   },
   {
@@ -256,11 +257,13 @@ READINGS.push(
     ],
     vocab: [["social network", "an app to share photos and messages with friends"], ["note", "a single musical sound"], ["mistake", "something that is not correct"], ["practice", "to do something many times to get better"], ["band", "a group of musicians"]],
     questions: [
-      ["What is Santiago’s favorite app for?", ["learning the guitar", "playing games", "watching videos"]],
-      ["What happens when he makes a mistake?", ["The note turns red.", "The app closes.", "The note turns green."]],
-      ["When does he practice on school days?", ["in the evening, after his homework", "in the morning", "at school"]],
-      ["How many songs can he play now?", ["eight", "six", "twenty"]],
-      ["What does he want to do next year?", ["play in the school concert", "buy a new phone", "make an app"]]
+      ["What is Santiago’s favorite app for?",["learning the guitar","playing games","watching videos","learning English"]],
+      ["What happens when he makes a mistake?",["The note turns red.","The app closes.","The note turns green.","The phone turns off."]],
+      ["When does he practice on school days?",["in the evening, after his homework","in the morning","at school","before school"]],
+      ["How many songs can he play now?",["eight","six","twenty","twelve"]],
+      ["What does he want to do next year?",["play in the school concert","buy a new phone","make an app","teach guitar classes"]],
+      ["Why is Santiago’s dad surprised?",["Santiago can play a song by his favorite band.","Santiago stopped practicing.","Santiago made his own app.","Santiago broke the guitar."]],
+      ["What does “practice” mean in “I practice for twenty minutes”?",["do something many times to get better","listen to music","play a game","buy something"]]
     ]
   },
   {
@@ -275,11 +278,13 @@ READINGS.push(
     ],
     vocab: [["ancient", "very, very old"], ["guide", "a person who shows a place to visitors"], ["equinox", "one of two days a year when day and night are about the same length"], ["echo", "a sound that repeats because it bounces off walls"], ["cenote", "a natural pool of water in the ground, common in Yucatán"]],
     questions: [
-      ["How did the class get from Mérida to Chichén Itzá?", ["by bus", "by plane", "by train"]],
-      ["Why does El Castillo have 365 steps?", ["one for each day of the year", "one for each Maya king", "because it is very tall"]],
-      ["What can people see on the equinoxes?", ["shadows that look like a snake", "the sun rising inside the pyramid", "a festival of lights"]],
-      ["What happened when the students clapped in the ball court?", ["The sound echoed several times.", "The guide got angry.", "Nothing happened."]],
-      ["How did Andrea feel at first in the cenote?", ["a bit scared", "bored", "very tired"]]
+      ["How did the class get from Mérida to Chichén Itzá?",["by bus","by plane","by train","by boat"]],
+      ["Why does El Castillo have 365 steps?",["one for each day of the year","one for each Maya king","because it is very tall","one for each student"]],
+      ["What can people see on the equinoxes?",["shadows that look like a snake","the sun rising inside the pyramid","a festival of lights","snow on the pyramid"]],
+      ["What happened when the students clapped in the ball court?",["The sound echoed several times.","The guide got angry.","Nothing happened.","The lights turned on."]],
+      ["How did the narrator feel at first in the cenote?",["a bit scared","bored","very tired","very happy"]],
+      ["Why did the teacher make sure everyone had a hat and water?",["It was incredibly hot.","It was raining.","They were going to swim.","The guide asked for it."]],
+      ["What does “echoed” mean in “the sound echoed several times”?",["came back and was heard again","stopped immediately","became music","was very quiet"]]
     ]
   },
   {
@@ -294,11 +299,13 @@ READINGS.push(
     ],
     vocab: [["survey", "a set of questions asked to many people to learn their opinions"], ["passive", "accepting or watching without taking part"], ["envy", "the feeling of wanting what someone else has"], ["crucial", "extremely important"], ["intentionally", "on purpose, after thinking about it"]],
     questions: [
-      ["What paradox does the first paragraph describe?", ["Teenagers are very connected, but loneliness is increasing.", "Teenagers don’t use phones anymore.", "Celebrities feel lonely."]],
-      ["According to researchers, what is linked to envy and isolation?", ["passive scrolling", "messaging friends", "joining online communities"]],
-      ["What is an example of active use?", ["messaging a friend to arrange a meeting", "watching edited photos", "scrolling for hours"]],
-      ["Why does the writer mention sleep and exercise?", ["Time online can replace activities that affect our mood.", "They are popular topics on social media.", "Teenagers don’t like them."]],
-      ["What does the writer recommend?", ["using phones more intentionally", "deleting all social media", "using phones only at night"]]
+      ["What paradox does the first paragraph describe?",["Teenagers are very connected, but loneliness is increasing.","Teenagers don’t use phones anymore.","Celebrities feel lonely.","Teenagers have more friends than ever."]],
+      ["According to researchers, what is linked to envy and isolation?",["passive scrolling","messaging friends","joining online communities","using a study app"]],
+      ["What is an example of active use?",["messaging a friend to arrange a meeting","watching edited photos","scrolling for hours","scrolling through celebrity photos"]],
+      ["Why does the writer mention sleep and exercise?",["Time online can replace activities that affect our mood.","They are popular topics on social media.","Teenagers don’t like them.","Teenagers sleep and exercise too much."]],
+      ["What does the writer recommend?",["using phones more intentionally","deleting all social media","using phones only at night","stopping face-to-face conversations"]],
+      ["What is the writer’s attitude toward technology?",["Balanced: the problem is how we use it, not the technology itself.","Completely negative: phones should be banned.","Completely positive: phones solve loneliness.","Uninterested: the writer doesn’t care about it."]],
+      ["What does “intentionally” mean in “use them more intentionally”?",["with a clear purpose","by accident","very often","secretly"]]
     ]
   },
   {
@@ -313,11 +320,13 @@ READINGS.push(
     ],
     vocab: [["conventional wisdom", "the opinion that most people accept"], ["paralyze", "to make someone unable to act"], ["compelled", "feeling that you must do something"], ["settle on", "to choose something after considering options"], ["haunted", "constantly worried or troubled by something"]],
     questions: [
-      ["What belief is described in the first paragraph?", ["More choice leads to more freedom and satisfaction.", "Supermarkets have too few products.", "Streaming platforms are expensive."]],
-      ["What did the jam experiment show?", ["Fewer options led to more purchases.", "People prefer more types of jam.", "Most shoppers ignored the tasting table."]],
-      ["How are “satisficers” different from “maximizers”?", ["They accept the first option that meets their needs.", "They always search for the best possible option.", "They never make decisions."]],
-      ["Why are maximizers often less satisfied?", ["They keep wondering if a better option existed.", "They always make bad decisions.", "They have fewer options."]],
-      ["What is the author’s conclusion?", ["Well-being depends on knowing when enough is enough.", "Choice should be eliminated.", "More options always lead to happiness."]]
+      ["What belief is described in the first paragraph?",["More choice leads to more freedom and satisfaction.","Supermarkets have too few products.","Streaming platforms are expensive.","Too many choices are illegal."]],
+      ["What did the jam experiment show?",["Fewer options led to more purchases.","People prefer more types of jam.","Most shoppers ignored the tasting table.","Shoppers bought more with twenty-four types."]],
+      ["How are “satisficers” different from “maximizers”?",["They accept the first option that meets their needs.","They always search for the best possible option.","They never make decisions.","They never compare products."]],
+      ["Why are maximizers often less satisfied?",["They keep wondering if a better option existed.","They always make bad decisions.","They have fewer options.","They take too long to buy anything."]],
+      ["What is the author’s conclusion?",["Well-being depends on knowing when enough is enough.","Choice should be eliminated.","More options always lead to happiness.","People should always maximize."]],
+      ["Why does the writer mention university courses and career paths?",["to show the paradox applies beyond shopping","to recommend specific careers","to criticize universities","to explain how to choose jam"]],
+      ["What does “paralyze” mean in “additional options… paralyze us”?",["make us unable to act","make us happier","help us decide","make us spend more"]]
     ]
   },
   {
@@ -332,11 +341,13 @@ READINGS.push(
     ],
     vocab: [["eradicate", "to destroy something completely"], ["falter", "to lose strength or stop for a moment"], ["empirical", "based on observation or experiment"], ["divergent thinking", "producing many different, creative ideas"], ["tedium", "the state of being dull and long"]],
     questions: [
-      ["How does the writer describe our modern attitude toward boredom?", ["We try to eliminate it immediately.", "We enjoy it as much as possible.", "We have never experienced it."]],
-      ["What did Pascal claim?", ["Many problems come from our inability to sit quietly alone.", "Boredom should be avoided at all costs.", "People need more entertainment."]],
-      ["According to the third paragraph, what can mild boredom encourage?", ["creative and original thinking", "anxiety and fear", "better memory for facts"]],
-      ["What is the main danger of perpetual distraction?", ["It silences a signal that leads to reflection and change.", "It makes people physically tired.", "It is too expensive."]],
-      ["Which statement best reflects the conclusion?", ["Allowing the mind to idle helps us decide what is worth doing.", "Boredom is always pleasant.", "Entertainment should be banned."]]
+      ["How does the writer describe our modern attitude toward boredom?",["We try to eliminate it immediately.","We enjoy it as much as possible.","We have never experienced it.","We study it carefully."]],
+      ["What did Pascal claim?",["Many problems come from our inability to sit quietly alone.","Boredom should be avoided at all costs.","People need more entertainment.","Boredom is the worst human problem."]],
+      ["According to the third paragraph, what can mild boredom encourage?",["creative and original thinking","anxiety and fear","better memory for facts","faster reactions"]],
+      ["What is the main danger of perpetual distraction?",["It silences a signal that leads to reflection and change.","It makes people physically tired.","It is too expensive.","It makes conversations shorter."]],
+      ["Which statement best reflects the conclusion?",["Allowing the mind to idle helps us decide what is worth doing.","Boredom is always pleasant.","Entertainment should be banned.","Tedium should be celebrated."]],
+      ["What is the writer’s tone toward constant distraction?",["critical and reflective","enthusiastic","neutral and technical","humorous"]],
+      ["What does “eradicate” mean in “determined to eradicate”?",["eliminate completely","understand","enjoy","measure"]]
     ]
   }
 );

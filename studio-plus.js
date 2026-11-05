@@ -51,11 +51,12 @@ READINGS.push(
     ],
     vocab: [["move", "to go and live in a different place"], ["nervous", "a little worried or afraid"], ["pair", "two people together"], ["introduce", "to tell someone the name of another person"], ["expect", "to think that something will happen"]],
     questions: [
-      ["Why is Valeria at a new school?", ["Her family moved to Monterrey.", "She didn’t like her old school.", "Her friends are there."]],
-      ["How does she feel on the first day?", ["nervous", "bored", "angry"]],
-      ["What does Andrés like?", ["video games and music", "volleyball and art", "math and science"]],
-      ["What does Sofía invite her to do?", ["come to volleyball practice", "go to a concert", "study for a test"]],
-      ["How was Valeria’s day in the end?", ["better than she expected", "very boring", "terrible"]]
+      ["Why is Valeria at a new school?",["Her family moved to Monterrey.","She didn’t like her old school.","Her friends are there.","Her parents are teachers there."]],
+      ["How does she feel on the first day?",["nervous","bored","angry","excited"]],
+      ["What does Andrés like?",["video games and music","volleyball and art","math and science","sports and books"]],
+      ["What does Sofía invite her to do?",["come to volleyball practice","go to a concert","study for a test","have lunch at her house"]],
+      ["How was Valeria’s day in the end?",["better than she expected","very boring","terrible","worse than she expected"]],
+      ["Why do Valeria and Andrés laugh a lot?",["They have things in common and get along well.","The teacher tells jokes.","They don’t do the work.","Andrés falls down."]]
     ]
   }
 );
