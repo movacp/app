@@ -51,7 +51,7 @@ h1.t{font-size:32px;margin:2px 4px 4px}
 .lv .soon{flex:none;font-size:11px;font-weight:800;color:#8A7FB8}
 .badgesBtn{display:flex;align-items:center;gap:12px;width:100%;background:var(--navy);color:#fff;border-radius:22px;padding:14px 16px;margin-top:8px}
 .badgesBtn .mini{display:flex}.badgesBtn .mini span{width:30px;height:30px;margin-right:-8px;border-radius:50%;border:2px solid var(--navy);overflow:hidden;background:var(--navy2)}
-.badgesBtn .mini img,.badgesBtn .mini svg{width:100%;height:100%;display:block}
+.badgesBtn .mini .bimg{display:block;width:100%;height:100%}.badgesBtn .mini img,.badgesBtn .mini svg{width:100%;height:100%;display:block;object-fit:cover}
 .badgesBtn p{margin:0 0 0 10px;flex:1;font-weight:800;font-size:14.5px}.badgesBtn p small{display:block;color:#C9C3F2;font-size:12px;font-weight:700}
 .badgesBtn>svg{width:18px;height:18px;color:var(--lime)}
 
@@ -277,19 +277,23 @@ var GAMES={kids:[["juego-word-quest.html","Word Quest","Vocabulary and grammar"]
 function level(st,code,tab){
   var o=S();o.stage=st;o.level=code;W(o);
   var L=D[st][code],s=lvStats(st,code),es=STG[st].lang==="es";
-  var tabs=[["grammar","Grammar"],["vocabulary","Vocabulary"],["practice","Practice"],["worksheets","Worksheets"],["check","Check"]];
+  var tabs=[["grammar","Grammar"]].concat(st==="kids"?[["phonics","Phonics"]]:[]).concat([["writing","Writing"],["vocabulary","Vocabulary"],["practice","Practice"],["check","Check"]]);
   var html=back("#/stage/"+st,"My path")+'<div class="lvh" data-s="'+st+'"><span class="blob"></span><small>MOVA '+STG[st].name.toUpperCase()+'</small><h1>'+code+'</h1><p>'+L.name+'</p><span class="bar"><i style="width:'+s.pct+'%"></i></span><div class="cnt"><span>'+s.done+' of '+(s.ready||s.total)+' topics</span><span>'+s.pct+'%</span></div></div>';
   html+='<div class="tabs" role="tablist">'+tabs.map(function(t){return '<button role="tab" data-t="'+t[0]+'" class="'+(t[0]===tab?"on":"")+'" aria-selected="'+(t[0]===tab)+'">'+t[1]+"</button>";}).join("")+"</div><div id='tb'></div>";
   app.innerHTML=html;
   app.querySelectorAll(".tabs button").forEach(function(b){b.onclick=function(){history.replaceState(null,"","#/lv/"+st+"/"+encodeURIComponent(code)+"/"+b.dataset.t);level(st,code,b.dataset.t);};});
   var tb=document.getElementById("tb"),nt=nextTopic(st,code);
-  if(!s.ready){tb.innerHTML='<div class="empty"><b>Coming soon</b>'+(es?"Estamos preparando los temas de este nivel. Mientras tanto, revisa el temario:":"We're preparing this level. Here is the syllabus:")+"</div>"+L.topics.map(function(t,i){return '<div class="u soon"><span class="n">'+(i+1)+'</span><span class="tx">'+esc(t.t)+'<small>'+esc(t.s)+'</small></span></div>';}).join("");return;}
+  if(!s.ready&&(tab==="grammar"||tab==="check")){tb.innerHTML='<div class="empty"><b>Coming soon</b>'+(es?"Estamos preparando los temas de este nivel. Mientras tanto, revisa el temario:":"We're preparing this level. Here is the syllabus:")+"</div>"+L.topics.map(function(t,i){return '<div class="u soon"><span class="n">'+(i+1)+'</span><span class="tx">'+esc(t.t)+'<small>'+esc(t.s)+'</small></span></div>';}).join("");return;}
   if(tab==="grammar"){
     tb.innerHTML=L.topics.map(function(t,i){
       var d=o.done[t.id],isN=nt&&nt.id===t.id;
       if(!ready(t))return '<div class="u soon"><span class="n">'+(i+1)+'</span><span class="tx">'+esc(t.t)+'<small>'+esc(t.s)+'</small></span><span class="st" style="background:var(--bg)">Soon</span></div>';
       return '<button class="u'+(d?" ok":"")+(isN?" next":"")+'" data-id="'+t.id+'"><span class="n">'+(d?IC.check:(i+1))+'</span><span class="tx">'+esc(t.t)+'<small>'+esc(t.s)+'</small></span>'+(d?stars(d.stars):(isN?'<span class="st" style="background:var(--butter)">Up next</span>':""))+'</button>';
     }).join("");
+    tb.querySelectorAll("button.u").forEach(function(b){b.onclick=function(){go("t/"+b.dataset.id);};});
+  } else if(tab==="writing"||tab==="phonics"){
+    var list=L[tab]||[],nx=list.filter(function(t){return !o.done[t.id];})[0];
+    tb.innerHTML=list.length?'<p class="sub" style="margin-top:-4px">'+(tab==="writing"?(es?"Mayúsculas, puntuación y ortografía de este nivel.":"Capital letters, punctuation and spelling for this level."):"Sonidos y palabras para leer mejor. Usa audífonos o sube el volumen.")+'</p>'+list.map(function(t,i){var d=o.done[t.id],isN=nx&&nx.id===t.id;return '<button class="u'+(d?" ok":"")+(isN?" next":"")+'" data-id="'+t.id+'"><span class="n">'+(d?IC.check:(i+1))+'</span><span class="tx">'+esc(t.t)+'<small>'+esc(t.s)+'</small></span>'+(d?stars(d.stars):(isN?'<span class="st" style="background:var(--butter)">Up next</span>':""))+'</button>';}).join(""):'<div class="empty"><b>Coming soon</b>'+(es?"Estamos preparando "+(tab==="writing"?"Writing":"Phonics")+" para este nivel.":"We're preparing Writing for this level.")+"</div>";
     tb.querySelectorAll("button.u").forEach(function(b){b.onclick=function(){go("t/"+b.dataset.id);};});
   } else if(tab==="vocabulary"){
     tb.innerHTML=L.vocab.length?L.vocab.map(function(v,i){var sc=o.vocab[st+"|"+code+"|"+i];return '<button class="u'+(sc>=8?" ok":"")+'" data-i="'+i+'"><span class="n">'+(sc>=8?IC.check:(i+1))+'</span><span class="tx">'+esc(v.n)+'<small>'+v.w.length+' words · flashcards and quiz</small></span>'+(sc!=null?'<span class="st" style="background:'+(sc>=8?"var(--okSoft)":"var(--butter)")+'">'+sc+'/10</span>':"")+"</button>";}).join(""):'<div class="empty"><b>Coming soon</b>'+(es?"El vocabulario de este nivel está en preparación.":"Vocabulary for this level is on the way.")+"</div>";
@@ -298,28 +302,27 @@ function level(st,code,tab){
     tb.innerHTML='<button class="lk" id="mx" style="width:100%"><span class="ic" style="background:var(--lime)">'+IC.mix+'</span><b>Mixed review<small>'+(es?"10 preguntas de los temas de este nivel":"10 questions from this level's topics")+'</small></b>'+IC.chev+'</button><h3 style="font-family:Bricolage Grotesque;margin:18px 4px 10px">'+(es?"Juegos recomendados":"Recommended games")+'</h3>'+
       GAMES[st].map(function(g){return '<a class="lk" href="'+g[0]+'"><span class="ic" style="background:'+(g[3]?"var(--pink)":"var(--lav)")+'">'+(g[3]?IC.mic:IC.game)+'</span><b>'+g[1]+'<small>'+g[2]+'</small></b>'+IC.chev+'</a>';}).join("");
     document.getElementById("mx").onclick=function(){go("mix/"+st+"/"+encodeURIComponent(code));};
-  } else if(tab==="worksheets"){
-    tb.innerHTML='<label class="keyt"><input type="checkbox" id="wk" checked> '+(es?"Incluir hoja de respuestas":"Include answer key")+'</label>'+L.topics.filter(ready).map(function(t){return '<div class="prow"><b>'+esc(t.t)+'<small>'+(es?"Ordenar oraciones y opción múltiple":"Unscramble and multiple choice")+'</small></b><button data-id="'+t.id+'">'+(es?"Imprimir":"Print")+'</button></div>';}).join("");
-    tb.querySelectorAll(".prow button").forEach(function(b){b.onclick=function(){printSheet(st,code,b.dataset.id,document.getElementById("wk").checked);};});
   } else {
     var pc=o.checks[st+"|"+code],locked=s.done<s.ready;
     tb.innerHTML='<div class="res" style="text-align:left"><span class="ring"></span><span class="k">LEVEL CHECK · '+code+'</span><h2 style="font-size:28px;margin-top:12px">'+(pc!=null?"Best score: "+pc+"%":"12 questions")+'</h2><p style="margin:6px 0 0">'+(locked?(es?"Se desbloquea al terminar los "+s.ready+" temas del nivel. Llevas "+s.done+".":"Unlocks when you finish all "+s.ready+" topics. You've done "+s.done+"."):(es?"Preguntas de todos los temas del nivel. Con 75% o más apruebas el nivel.":"Questions from every topic in this level. Score 75% or more to pass."))+'</p></div><button class="cta" id="ck" '+(locked?"disabled":"")+'>'+(locked?"Locked":"Start level check")+'</button>';
     document.getElementById("ck").onclick=function(){go("check/"+st+"/"+encodeURIComponent(code));};
   }
 }
-function findTopic(id){for(var st in D)for(var code in D[st]){var ts=D[st][code].topics;for(var i=0;i<ts.length;i++)if(ts[i].id===id)return {st:st,code:code,t:ts[i],i:i};}return null;}
+var KINDS={topics:"Grammar",writing:"Writing",phonics:"Phonics"};
+function findTopic(id){for(var st in D)for(var code in D[st])for(var kind in KINDS){var ts=D[st][code][kind]||[];for(var i=0;i<ts.length;i++)if(ts[i].id===id)return {st:st,code:code,t:ts[i],i:i,kind:kind,list:ts};}return null;}
 
 /* ---------- tema: explicación → construir → quiz ---------- */
 function topic(id){
   var f=findTopic(id);if(!f||!ready(f.t))return go("");
   var t=f.t,es=STG[f.st].lang==="es",step=0,builtOk=0,qi=0,score=0,qs=null,bi=0;
-  var lvlHref="#/lv/"+f.st+"/"+encodeURIComponent(f.code);
-  function steps(n){return '<div class="steps">'+[0,1,2].map(function(i){return '<i class="'+(i<=n?"on":"")+'"></i>';}).join("")+"</div>";}
+  var tabName=f.kind==='topics'?'grammar':f.kind,lvlHref="#/lv/"+f.st+"/"+encodeURIComponent(f.code)+"/"+tabName,hasB=t.b&&t.b.length,NS=hasB?3:2;
+  function steps(n){if(!hasB&&n===2)n=1;return '<div class="steps">'+(hasB?[0,1,2]:[0,1]).map(function(i){return '<i class="'+(i<=n?"on":"")+'"></i>';}).join("")+"</div>";}
   function head(){return back(lvlHref,STG[f.st].name+" · "+f.code);}
   function learn(){
-    app.innerHTML=head()+steps(0)+'<div class="card"><span class="kicker">'+(es?"1 · APRENDE":"1 · LEARN")+'</span><h2>'+esc(t.t)+'</h2><ul class="exp">'+t.exp.map(function(x){return "<li>"+x+"</li>";}).join("")+'</ul><div class="exs">'+t.ex.map(function(x,i){return '<div class="ex"><button data-i="'+i+'" aria-label="Listen">'+IC.spk+'</button><p>'+esc(x[0])+(x[1]?"<small>"+esc(x[1])+"</small>":"")+'</p></div>';}).join("")+'</div><button class="cta" id="nx">'+(es?"Practicar":"Practice")+'</button></div>';
+    app.innerHTML=head()+steps(0)+'<div class="card"><span class="kicker">'+(es?"1 · APRENDE":"1 · LEARN")+'</span><h2>'+esc(t.t)+'</h2><ul class="exp">'+t.exp.map(function(x){return "<li>"+x+"</li>";}).join("")+'</ul><div class="exs">'+t.ex.map(function(x,i){return '<div class="ex"><button data-i="'+i+'" aria-label="Listen">'+IC.spk+'</button><p>'+esc(x[0])+(x[1]?"<small>"+esc(x[1])+"</small>":"")+'</p></div>';}).join("")+'</div><div class="row2">'+(f.kind!=='phonics'?'<button class="cta ghost" id="pr">'+(es?"Imprimir hoja":"Print worksheet")+'</button>':'')+'<button class="cta" id="nx">'+(es?"Practicar":"Practice")+'</button></div></div>';
     app.querySelectorAll(".ex button").forEach(function(b){b.onclick=function(){say(t.ex[+b.dataset.i][0]);};});
-    document.getElementById("nx").onclick=function(){bi=0;build();};
+    var pr=document.getElementById("pr");if(pr)pr.onclick=function(){printSheet(f.st,f.code,id,true);};
+    document.getElementById("nx").onclick=function(){bi=0;if(hasB)build();else startQuiz();};
   }
   function build(){
     var target=t.b[bi],words=target.split(" "),pool=shuffle(words.map(function(w,i){return {w:w,i:i};})),picked=[],tries=0;
@@ -335,7 +338,7 @@ function topic(id){
           if(tries===1)builtOk++;say(target);draw("good");
           document.getElementById("fbb").innerHTML='<div class="fb good"><b>'+(es?"¡Muy bien!":"Correct!")+'</b>'+esc(target)+"</div>";
           var ok=document.getElementById("ok");ok.disabled=false;ok.textContent=bi<t.b.length-1?(es?"Siguiente":"Next"):(es?"Ir al quiz":"Go to quiz");document.getElementById("rs").hidden=true;
-          ok.onclick=function(){bi++;if(bi<t.b.length)build();else{qs=shuffle(t.q).map(function(q){var o=q[1].map(function(x,i){return {x:x,ok:i===q[2]};});return {q:q[0],o:shuffle(o),why:q[3]};});qi=0;score=0;quiz();}};
+          ok.onclick=function(){bi++;if(bi<t.b.length)build();else startQuiz();};
         } else {
           draw("bad");document.getElementById("fbb").innerHTML='<div class="fb bad"><b>'+(es?"Casi. Inténtalo otra vez.":"Almost. Try again.")+'</b>'+(tries>=2?(es?"Respuesta: ":"Answer: ")+esc(target):(es?"Revisa el orden de las palabras.":"Check the word order."))+"</div>";
         }
@@ -343,9 +346,11 @@ function topic(id){
     }
     draw();
   }
+  function startQuiz(){qs=shuffle(t.q).map(function(q){var o=q[1].map(function(x,i){return {x:x,ok:i===q[2]};});return {q:q[0],o:shuffle(o),why:q[3],say:q[4]};});qi=0;score=0;quiz();}
   function quiz(){
     var q=qs[qi];
-    app.innerHTML=head()+steps(2)+'<div class="card"><span class="kicker">'+(es?"3 · QUIZ":"3 · QUIZ")+' · '+(qi+1)+'/'+qs.length+'</span><div class="qtext">'+esc(q.q)+'</div>'+q.o.map(function(o,i){return '<button class="opt" data-i="'+i+'">'+esc(o.x)+"</button>";}).join("")+'<div id="fbq"></div></div>';
+    app.innerHTML=head()+steps(2)+'<div class="card"><span class="kicker">'+NS+' · QUIZ · '+(qi+1)+'/'+qs.length+'</span><div class="qtext">'+esc(q.q)+'</div>'+(q.say?'<button class="lk" id="hear" style="width:100%;background:var(--lav)"><span class="ic" style="background:#fff">'+IC.spk+'</span><b>'+(es?"Escuchar otra vez":"Listen again")+'</b></button>':'')+q.o.map(function(o,i){return '<button class="opt" data-i="'+i+'">'+esc(o.x)+"</button>";}).join("")+'<div id="fbq"></div></div>';
+    if(q.say){say(q.say,.8);document.getElementById("hear").onclick=function(){say(q.say,.75);};}
     app.querySelectorAll(".opt").forEach(function(b){b.onclick=function(){
       var o=q.o[+b.dataset.i];app.querySelectorAll(".opt").forEach(function(x,i){x.disabled=true;if(q.o[i].ok)x.classList.add("good");});
       if(o.ok)score++;else b.classList.add("bad");
@@ -357,8 +362,8 @@ function topic(id){
     var st=score>=6?3:score>=4?2:1,o=S(),prev=o.done[t.id];
     if(!prev||score>prev.score)o.done[t.id]={score:score,stars:st,d:Date.now()};
     o.built+=builtOk;var nb=checkBadges(o,score);W(o);
-    var saved=saveCloud("My path · "+STG[f.st].name+" "+f.code+" · "+t.t,score,6,{kind:"score",stage:f.st,level:f.code,topic:t.t,sentences_first_try:builtOk});
-    var nt=nextTopic(f.st,f.code);
+    var saved=saveCloud("My path · "+STG[f.st].name+" "+f.code+" · "+(f.kind!=="topics"?KINDS[f.kind]+": ":"")+t.t,score,6,{kind:"score",stage:f.st,level:f.code,topic:t.t,sentences_first_try:builtOk});
+    var nt=f.list.filter(function(x){return x.exp&&!S().done[x.id];})[0]||null;
     app.innerHTML=head()+'<div class="res"><span class="ring"></span><span class="k">'+esc(t.t)+'</span><h2>'+score+'<small> / 6</small></h2>'+stars(st)+'<p>'+(score>=6?(es?"¡Perfecto! Dominas este tema.":"Perfect! You've mastered this topic."):score>=4?(es?"¡Muy bien! Un repaso más y será perfecto.":"Great work! One more review and it'll be perfect."):(es?"Buen intento. Vuelve a leer la explicación y repite el quiz.":"Good try. Read the explanation again and retake the quiz."))+'</p></div>'+newBadgesHtml(nb)+
       '<div class="row2" style="margin-top:6px"><button class="cta ghost" id="again">'+(es?"Repetir":"Try again")+'</button><button class="cta" id="nt">'+(nt?(es?"Siguiente tema":"Next topic"):(es?"Ir al nivel":"Back to level"))+'</button></div><p class="saved" id="sv"></p>';
     document.getElementById("again").onclick=function(){topic(id);};
@@ -436,14 +441,14 @@ function badges(){
 /* ---------- hojas imprimibles ---------- */
 function printSheet(st,code,id,key){
   var f=findTopic(id),t=f.t,es=STG[st].lang==="es";
-  var un=t.b.map(function(s){var w=s.split(" "),sh=shuffle(w);if(sh.join(" ")===s)sh.reverse();return {s:s,sh:sh.join("  /  ")};});
+  var un=(t.b||[]).map(function(s){var w=s.split(" "),sh=shuffle(w);if(sh.join(" ")===s)sh.reverse();return {s:s,sh:sh.join("  /  ")};});
   var mc=t.q.map(function(q){var o=shuffle(q[1].map(function(x,i){return {x:x,ok:i===q[2]};}));return {q:q[0],o:o};});
   var L="abcd";
   var h='<div class="sheet"><div class="hd"><b>'+esc(t.t)+'</b><span>MOVA Learning Studio · '+STG[st].name+" · "+code+'</span></div><div class="nm"><span>Name:</span><span style="flex:.5">Date:</span></div>'+
    '<p class="tip">'+t.exp.join(" · ")+'</p>'+
-   '<h3>A. '+(es?"Ordena las palabras y escribe la oración.":"Unscramble the words and write the sentence.")+'</h3><ol>'+un.map(function(u){return "<li>"+esc(u.sh)+'<span class="ln"></span></li>';}).join("")+'</ol>'+
-   '<h3>B. '+(es?"Encierra la respuesta correcta.":"Circle the correct answer.")+'</h3><ol>'+mc.map(function(m){return "<li>"+esc(m.q)+'<div class="ops">'+m.o.map(function(o,i){return L[i]+") "+esc(o.x);}).join("<span></span>")+"</div></li>";}).join("")+"</ol>";
-  if(key)h+='<div class="key"><div class="hd"><b>'+(es?"Respuestas":"Answer key")+'</b><span>'+esc(t.t)+'</span></div><h3>A</h3><ol>'+un.map(function(u){return "<li>"+esc(u.s)+"</li>";}).join("")+'</ol><h3>B</h3><ol>'+mc.map(function(m){var c=0;m.o.forEach(function(o,i){if(o.ok)c=i;});return "<li>"+L[c]+") "+esc(m.o[c].x)+"</li>";}).join("")+"</ol></div>";
+   (un.length?'<h3>A. '+(es?"Ordena las palabras y escribe la oración.":"Unscramble the words and write the sentence.")+'</h3><ol>'+un.map(function(u){return "<li>"+esc(u.sh)+'<span class="ln"></span></li>';}).join("")+'</ol>':'')+
+   '<h3>'+(un.length?'B. ':'')+(es?"Encierra la respuesta correcta.":"Circle the correct answer.")+'</h3><ol>'+mc.map(function(m){return "<li>"+esc(m.q)+'<div class="ops">'+m.o.map(function(o,i){return L[i]+") "+esc(o.x);}).join("<span></span>")+"</div></li>";}).join("")+"</ol>";
+  if(key)h+='<div class="key"><div class="hd"><b>'+(es?"Respuestas":"Answer key")+'</b><span>'+esc(t.t)+'</span></div>'+(un.length?'<h3>A</h3><ol>'+un.map(function(u){return "<li>"+esc(u.s)+"</li>";}).join("")+'</ol><h3>B</h3>':'')+'<ol>'+mc.map(function(m){var c=0;m.o.forEach(function(o,i){if(o.ok)c=i;});return "<li>"+L[c]+") "+esc(m.o[c].x)+"</li>";}).join("")+"</ol></div>";
   document.getElementById("sheet").innerHTML=h+"</div>";
   setTimeout(function(){window.print();},120);
 }
