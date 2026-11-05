@@ -177,7 +177,7 @@ h1.t{font-size:32px;margin:2px 4px 4px}
 (function(){
 "use strict";
 var D=window.MOVA_PATH, app=document.getElementById("app");
-var STG={kids:{name:"Kids",ages:"Ages 6–8",lang:"es"},children:{name:"Children",ages:"Ages 9–12",lang:"es"},teens:{name:"Teens",ages:"Ages 12–17",lang:"en"}};
+var STG={kids:{name:"Kids",ages:"Ages 6–8",lang:"en"},children:{name:"Children",ages:"Ages 9–12",lang:"en"},teens:{name:"Teens",ages:"Ages 12–17",lang:"en"}};
 var ORDER=["kids","children","teens"];
 function sv(p,w){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(w||2.4)+'" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';}
 var IC={back:sv('<path d="M15 5l-7 7 7 7"/>',2.6),check:sv('<path d="M5 12l5 5 9-10"/>',3),chev:sv('<path d="M9 6l6 6-6 6"/>',2.6),spk:sv('<path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/>'),
@@ -242,7 +242,7 @@ function route(){
   var h=location.hash.replace(/^#\/?/,"").split("/").map(decodeURIComponent);
   window.scrollTo(0,0);
   if(h[0]==="lv"&&D[h[1]]&&D[h[1]][h[2]])return level(h[1],h[2],h[3]||"grammar");
-  if(h[0]==="t")return topic(h[1],h[2],h[3]);
+  if(h[0]==="t")return topic(h[1],h[2]);
   if(h[0]==="check")return check(h[1],h[2]);
   if(h[0]==="vocab")return vocab(h[1],h[2],+h[3]);
   if(h[0]==="mix")return mix(h[1],h[2]);
@@ -293,7 +293,7 @@ function level(st,code,tab){
     tb.querySelectorAll("button.u").forEach(function(b){b.onclick=function(){go("t/"+b.dataset.id);};});
   } else if(tab==="writing"||tab==="phonics"){
     var list=L[tab]||[],nx=list.filter(function(t){return !o.done[t.id];})[0];
-    tb.innerHTML=list.length?'<p class="sub" style="margin-top:-4px">'+(tab==="writing"?(es?"Mayúsculas, puntuación y ortografía de este nivel.":"Capital letters, punctuation and spelling for this level."):"Sonidos y palabras para leer mejor. Usa audífonos o sube el volumen.")+'</p>'+list.map(function(t,i){var d=o.done[t.id],isN=nx&&nx.id===t.id;return '<button class="u'+(d?" ok":"")+(isN?" next":"")+'" data-id="'+t.id+'"><span class="n">'+(d?IC.check:(i+1))+'</span><span class="tx">'+esc(t.t)+'<small>'+esc(t.s)+'</small></span>'+(d?stars(d.stars):(isN?'<span class="st" style="background:var(--butter)">Up next</span>':""))+'</button>';}).join(""):'<div class="empty"><b>Coming soon</b>'+(es?"Estamos preparando "+(tab==="writing"?"Writing":"Phonics")+" para este nivel.":"We're preparing Writing for this level.")+"</div>";
+    tb.innerHTML=list.length?'<p class="sub" style="margin-top:-4px">'+(tab==="writing"?(es?"Mayúsculas, puntuación y ortografía de este nivel.":"Capital letters, punctuation and spelling for this level."):"Sounds and words to help you read. Turn up the volume or use headphones.")+'</p>'+list.map(function(t,i){var d=o.done[t.id],isN=nx&&nx.id===t.id;return '<button class="u'+(d?" ok":"")+(isN?" next":"")+'" data-id="'+t.id+'"><span class="n">'+(d?IC.check:(i+1))+'</span><span class="tx">'+esc(t.t)+'<small>'+esc(t.s)+'</small></span>'+(d?stars(d.stars):(isN?'<span class="st" style="background:var(--butter)">Up next</span>':""))+'</button>';}).join(""):'<div class="empty"><b>Coming soon</b>'+(es?"Estamos preparando "+(tab==="writing"?"Writing":"Phonics")+" para este nivel.":"We're preparing Writing for this level.")+"</div>";
     tb.querySelectorAll("button.u").forEach(function(b){b.onclick=function(){go("t/"+b.dataset.id);};});
   } else if(tab==="vocabulary"){
     tb.innerHTML=L.vocab.length?L.vocab.map(function(v,i){var sc=o.vocab[st+"|"+code+"|"+i];return '<button class="u'+(sc>=8?" ok":"")+'" data-i="'+i+'"><span class="n">'+(sc>=8?IC.check:(i+1))+'</span><span class="tx">'+esc(v.n)+'<small>'+v.w.length+' words · flashcards and quiz</small></span>'+(sc!=null?'<span class="st" style="background:'+(sc>=8?"var(--okSoft)":"var(--butter)")+'">'+sc+'/10</span>':"")+"</button>";}).join(""):'<div class="empty"><b>Coming soon</b>'+(es?"El vocabulario de este nivel está en preparación.":"Vocabulary for this level is on the way.")+"</div>";
@@ -312,12 +312,12 @@ var KINDS={topics:"Grammar",writing:"Writing",phonics:"Phonics"};
 function findTopic(id){for(var st in D)for(var code in D[st])for(var kind in KINDS){var ts=D[st][code][kind]||[];for(var i=0;i<ts.length;i++)if(ts[i].id===id)return {st:st,code:code,t:ts[i],i:i,kind:kind,list:ts};}return null;}
 
 /* ---------- tema: explicación → construir → quiz ---------- */
-function topic(id){
+function topic(id,from){
   var f=findTopic(id);if(!f||!ready(f.t))return go("");
   var t=f.t,es=STG[f.st].lang==="es",step=0,builtOk=0,qi=0,score=0,qs=null,bi=0;
-  var tabName=f.kind==='topics'?'grammar':f.kind,lvlHref="#/lv/"+f.st+"/"+encodeURIComponent(f.code)+"/"+tabName,hasB=t.b&&t.b.length,NS=hasB?3:2;
+  var tabName=f.kind==='topics'?'grammar':f.kind,lvlHref=from==="g"?"./#/structures":"#/lv/"+f.st+"/"+encodeURIComponent(f.code)+"/"+tabName,hasB=t.b&&t.b.length,NS=hasB?3:2;
   function steps(n){if(!hasB&&n===2)n=1;return '<div class="steps">'+(hasB?[0,1,2]:[0,1]).map(function(i){return '<i class="'+(i<=n?"on":"")+'"></i>';}).join("")+"</div>";}
-  function head(){return back(lvlHref,STG[f.st].name+" · "+f.code);}
+  function head(){return back(lvlHref,from==="g"?"Grammar":STG[f.st].name+" · "+f.code);}
   function learn(){
     app.innerHTML=head()+steps(0)+'<div class="card"><span class="kicker">'+(es?"1 · APRENDE":"1 · LEARN")+'</span><h2>'+esc(t.t)+'</h2><ul class="exp">'+t.exp.map(function(x){return "<li>"+x+"</li>";}).join("")+'</ul><div class="exs">'+t.ex.map(function(x,i){return '<div class="ex"><button data-i="'+i+'" aria-label="Listen">'+IC.spk+'</button><p>'+esc(x[0])+(x[1]?"<small>"+esc(x[1])+"</small>":"")+'</p></div>';}).join("")+'</div><div class="row2">'+(f.kind!=='phonics'?'<button class="cta ghost" id="pr">'+(es?"Imprimir hoja":"Print worksheet")+'</button>':'')+'<button class="cta" id="nx">'+(es?"Practicar":"Practice")+'</button></div></div>';
     app.querySelectorAll(".ex button").forEach(function(b){b.onclick=function(){say(t.ex[+b.dataset.i][0]);};});
@@ -367,7 +367,7 @@ function topic(id){
     app.innerHTML=head()+'<div class="res"><span class="ring"></span><span class="k">'+esc(t.t)+'</span><h2>'+score+'<small> / 6</small></h2>'+stars(st)+'<p>'+(score>=6?(es?"¡Perfecto! Dominas este tema.":"Perfect! You've mastered this topic."):score>=4?(es?"¡Muy bien! Un repaso más y será perfecto.":"Great work! One more review and it'll be perfect."):(es?"Buen intento. Vuelve a leer la explicación y repite el quiz.":"Good try. Read the explanation again and retake the quiz."))+'</p></div>'+newBadgesHtml(nb)+
       '<div class="row2" style="margin-top:6px"><button class="cta ghost" id="again">'+(es?"Repetir":"Try again")+'</button><button class="cta" id="nt">'+(nt?(es?"Siguiente tema":"Next topic"):(es?"Ir al nivel":"Back to level"))+'</button></div><p class="saved" id="sv"></p>';
     document.getElementById("again").onclick=function(){topic(id);};
-    document.getElementById("nt").onclick=function(){if(nt)go("t/"+nt.id);else location.hash=lvlHref.slice(1);};
+    document.getElementById("nt").onclick=function(){if(nt)go("t/"+nt.id+(from==="g"?"/g":""));else if(from==="g")location.href=lvlHref;else location.hash=lvlHref.slice(1);};
     savedNote(saved,es);
   }
   learn();

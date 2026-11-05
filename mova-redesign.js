@@ -83,7 +83,7 @@
   }
 
   /* Rutas */
-  var NAMES = { library: "Read", learn: "Learn", games: "Play", resources: "Print & Learn", matematicas: "Math", lectoescritura: "Lectoescritura", flashcards: "Flashcards", structures: "Structures", lecturas: "Lecturas", holidays: "This season", familias: "For families", saved: "Saved", shop: "Shop", mova: "MOVA", exams: "Exams", coloring: "Coloring", wordsearch: "Word search" };
+  var NAMES = { library: "Read", learn: "Learn", games: "Play", resources: "Print & Learn", matematicas: "Math", lectoescritura: "Lectoescritura", flashcards: "Flashcards", structures: "Grammar", lecturas: "Lecturas", holidays: "This season", familias: "For families", saved: "Saved", shop: "Shop", mova: "MOVA", exams: "Exams", coloring: "Coloring", wordsearch: "Word search" };
   function install() {
     if (typeof ROUTES !== "object" || ROUTES.__mr) return false;
     ROUTES.__mr = true;
@@ -115,6 +115,7 @@
     var parentHref = "#/", parentName = "Home";
     if (parts.length > 1 && parts[0] !== "library") { parentHref = "#/" + parts[0]; parentName = NAMES[parts[0]] || "Back"; }
     else if (parts.length > 1 && parts[0] === "library" && parts.length > 2) { parentHref = "#/library/" + parts[1]; parentName = "Read"; }
+    if (parts.length === 1 && /^(structures|flashcards)$/.test(parts[0])) { parentHref = "#/learn"; parentName = "Learn"; }
     var u = user();
     var d = document.createElement("div"); d.className = "mr-back no-print";
     d.innerHTML = '<a href="' + parentHref + '" aria-label="Back to ' + esc(parentName) + '"><span class="c">' + ico("back", 18) + "</span><span><small>Back to</small><b>" + esc(parentName) + "</b></span></a>" +
