@@ -10,7 +10,7 @@
 /* ---------- Niveles ---------- */
 LEVELS.splice(0, LEVELS.length, "Pre-A1", "A1", "A1+", "A2", "A2+", "B1", "B1+", "B2", "C1", "C2");
 const STAGE_LEVELS = {
-  kids: ["Pre-A1", "A1", "A1+", "A2", "A2+", "B1"],
+  kids: ["Pre-A1", "A1", "A1+", "A2", "A2+"],
   children: ["Pre-A1", "A1", "A1+", "A2", "A2+", "B1", "B2"],
   teens: ["Pre-A1", "A1", "A1+", "A2", "A2+", "B1", "B2", "C1", "C2"]
 };
@@ -57,7 +57,7 @@ READINGS.push(
     ]
   },
   {
-    id: "the-sandcastle-contest", level: "A2+", stage: "kids", topic: "Holidays", title: "The Sandcastle Contest",
+    id: "the-sandcastle-contest", level: "A2+", stage: "children", topic: "Holidays", title: "The Sandcastle Contest",
     description: "Lucía and her brother enter a sandcastle contest at the beach. Will the waves ruin everything?",
     text: [
       "Last summer, Lucía and her little brother Toño went to the beach in Mazatlán with their parents. On the second day, they saw a big sign: “Sandcastle Contest, 11 o’clock. Prize: a giant ice cream!”",
@@ -76,7 +76,7 @@ READINGS.push(
     ]
   },
   {
-    id: "the-tiny-seed", level: "B1", stage: "kids", topic: "Science", title: "The Journey of a Tiny Seed",
+    id: "the-tiny-seed", level: "B1", stage: "children", topic: "Science", title: "The Journey of a Tiny Seed",
     description: "How does a tiny seed become a big sunflower? Follow its amazing journey.",
     text: [
       "Every sunflower starts as a tiny seed, smaller than your fingernail. Inside the seed, there is a baby plant and enough food to help it start growing.",

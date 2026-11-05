@@ -1543,7 +1543,7 @@ READINGS.push(
 
   /* ---------- A2+ ---------- */
   {
-    id: "kids-lemonade-stand", level: "A2+", stage: "kids", topic: "Money", title: "The Lemonade Stand",
+    id: "kids-lemonade-stand", level: "A2+", stage: "children", topic: "Money", title: "The Lemonade Stand",
     description: "Carmen and Luis want to buy a gift for their mom. Can they earn the money?",
     text: [
       "Mother’s Day was in two weeks, and Carmen and her brother Luis wanted to buy their mom a special present: a plant with purple flowers that cost two hundred pesos. They only had forty pesos in their piggy bank.",
@@ -1562,7 +1562,7 @@ READINGS.push(
     ]
   },
   {
-    id: "kids-monarch-journey", level: "A2+", stage: "kids", topic: "Science", title: "The Monarchs Come Home",
+    id: "kids-monarch-journey", level: "A2+", stage: "children", topic: "Science", title: "The Monarchs Come Home",
     description: "Every fall, millions of butterflies fly to the forests of Mexico. How do they do it?",
     text: [
       "Every year, something amazing happens in the forests of Michoacán and the State of Mexico. Millions of orange and black butterflies arrive and cover the trees. They are monarch butterflies.",
@@ -1600,7 +1600,7 @@ READINGS.push(
     ]
   },
   {
-    id: "kids-first-swim-race", level: "A2+", stage: "kids", topic: "Sports", title: "The Big Race",
+    id: "kids-first-swim-race", level: "A2+", stage: "children", topic: "Sports", title: "The Big Race",
     description: "Martín trained for months for his first swimming race. Did he win?",
     text: [
       "Martín had trained for three months for his first swimming competition. Every Tuesday and Thursday after school, he swam lap after lap while his coach timed him.",
@@ -1619,7 +1619,7 @@ READINGS.push(
     ]
   },
   {
-    id: "kids-rainforest-adventure", level: "A2+", stage: "kids", topic: "Nature", title: "Layers of the Rainforest",
+    id: "kids-rainforest-adventure", level: "A2+", stage: "children", topic: "Nature", title: "Layers of the Rainforest",
     description: "A rainforest is like a building with many floors. Who lives on each one?",
     text: [
       "A rainforest is a forest where it rains almost every day. It is hot, wet and full of life. In fact, more than half of all the kinds of plants and animals in the world live in rainforests. Mexico has rainforests too, in the south, in states like Chiapas.",
@@ -1640,7 +1640,7 @@ READINGS.push(
 
   /* ---------- B1 ---------- */
   {
-    id: "kids-penguins-warm", level: "B1", stage: "kids", topic: "Science", title: "How Do Penguins Stay Warm?",
+    id: "kids-penguins-warm", level: "B1", stage: "children", topic: "Science", title: "How Do Penguins Stay Warm?",
     description: "Antarctica is the coldest place on Earth. How do emperor penguins survive there?",
     text: [
       "Antarctica is the coldest place on our planet. In winter, the temperature can drop below minus forty degrees Celsius, and strong winds blow across the ice. Most animals could never survive there, but emperor penguins spend the whole winter on the ice. How do they do it?",
@@ -1658,7 +1658,7 @@ READINGS.push(
     ]
   },
   {
-    id: "kids-moon-phases", level: "B1", stage: "kids", topic: "Space", title: "Why Does the Moon Change Shape?",
+    id: "kids-moon-phases", level: "B1", stage: "children", topic: "Space", title: "Why Does the Moon Change Shape?",
     description: "Sometimes the Moon is round, sometimes it is thin like a smile. Why?",
     text: [
       "Have you noticed that the Moon looks different on different nights? Sometimes it is a big, bright circle. Other times it is only a thin line, like a smile in the sky. And some nights you can’t see it at all. Does the Moon really change its shape?",
@@ -1677,7 +1677,7 @@ READINGS.push(
     ]
   },
   {
-    id: "kids-volcano-cornfield", level: "B1", stage: "kids", topic: "Mexico", title: "The Volcano in the Cornfield",
+    id: "kids-volcano-cornfield", level: "B1", stage: "children", topic: "Mexico", title: "The Volcano in the Cornfield",
     description: "In 1943, a farmer in Michoacán saw a volcano being born in his field.",
     text: [
       "On the afternoon of February 20, 1943, a farmer called Dionisio Pulido was working in his cornfield near the village of Parícutin, in Michoacán. Suddenly, he heard a loud noise like thunder, and the ground started to shake.",
@@ -1696,7 +1696,7 @@ READINGS.push(
     ]
   },
   {
-    id: "kids-dinosaur-detectives", level: "B1", stage: "kids", topic: "Science", title: "Dinosaur Detectives",
+    id: "kids-dinosaur-detectives", level: "B1", stage: "children", topic: "Science", title: "Dinosaur Detectives",
     description: "Nobody has ever seen a living dinosaur. So how do we know so much about them?",
     text: [
       "Dinosaurs lived on Earth for more than one hundred and fifty million years and disappeared about sixty-six million years ago, long before the first humans. Nobody has ever seen a living dinosaur. So how do we know what they looked like, what they ate and how they moved?",
@@ -1715,7 +1715,7 @@ READINGS.push(
     ]
   },
   {
-    id: "kids-girl-who-loved-stars", level: "B1", stage: "kids", topic: "Science", title: "The Girl Who Counted Stars",
+    id: "kids-girl-who-loved-stars", level: "B1", stage: "children", topic: "Science", title: "The Girl Who Counted Stars",
     description: "Elena wanted to be an astronomer. Everyone said it was impossible, except her grandmother.",
     text: [
       "When Elena was seven, she spent every clear night on the roof of her house in a small town in Sonora, counting stars. She made drawings of the constellations in a notebook and gave names to the brightest stars.",
