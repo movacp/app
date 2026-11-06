@@ -2,6 +2,26 @@
 <html lang="es">
 <head>
 <script src="mova-gate.js"></script>
+<script>
+/* Level Up Test: solo se abre si la maestra lo asignó (o con sesión de maestra) */
+(function(){
+  if(/[?&]task=/.test(location.search)) return;
+  try{ var a=JSON.parse(localStorage.getItem("mova_admin_session")||"null"); if(a&&a.refresh) return; }catch(e){}
+  function show(){
+    if(document.getElementById("lu-lock")) return;
+    var d=document.createElement("div"); d.id="lu-lock";
+    d.setAttribute("style","position:fixed;inset:0;z-index:2147483647;background:#F5F3FA;display:grid;place-items:center;padding:24px;font-family:'Plus Jakarta Sans',system-ui,sans-serif");
+    d.innerHTML='<div style="background:#fff;border-radius:30px;max-width:380px;width:100%;padding:30px 24px;text-align:center;box-shadow:0 18px 40px rgba(21,25,43,.10)">'+
+      '<div style="width:74px;height:74px;margin:0 auto 16px;border-radius:24px;background:#D3F36B;display:grid;place-items:center"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#15192B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.6"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg></div>'+
+      '<div style="font:800 12px/1 \'Plus Jakarta Sans\',sans-serif;letter-spacing:.08em;color:#8C91AD;margin-bottom:8px">LEVEL UP TEST</div>'+
+      '<h1 style="font:800 27px/1.08 \'Bricolage Grotesque\',sans-serif;color:#15192B;margin:0 0 10px">Your teacher opens this test</h1>'+
+      '<p style="color:#5A5F75;font-weight:600;font-size:15px;line-height:1.5;margin:0 0 22px">Level Up is available when Miss Karla or Miss Letty assigns it to you. You will see it in <b style="color:#15192B">Assigned activities</b>.</p>'+
+      '<a href="index.html#/" style="display:block;background:#15192B;color:#fff;border-radius:999px;padding:16px;font-weight:800;text-decoration:none">Back to MOVA Studio</a></div>';
+    document.body.appendChild(d); document.documentElement.style.overflow="hidden";
+  }
+  document.readyState==="loading"?document.addEventListener("DOMContentLoaded",show):show();
+})();
+</script>
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("mova-theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
 
 <meta charset="utf-8">

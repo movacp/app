@@ -310,7 +310,8 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
 .tks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}.tks div{border-radius:18px;padding:12px 10px;text-align:center}.tks b{display:block;font:800 24px 'Bricolage Grotesque',sans-serif}.tks span{font-size:11.5px;font-weight:700;color:#5A5F75}
 .tkc{background:#fff;border-radius:22px;padding:14px;margin-bottom:10px;box-shadow:0 1px 0 #ECE9F5}.tkc .tkh{display:flex;align-items:center;gap:10px;margin-bottom:6px;cursor:pointer}.tkc .tkh .av2{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#E6E2FF;font-weight:800;font-size:13px;flex:none}.tkc .tkh b{font-size:15px}.tkc .tkh small{display:block;color:#6A6F85;font-weight:600;font-size:12px}.tkc .tkh .go{margin-left:auto;font-weight:800;font-size:12.5px;color:#15192B;background:#D3F36B;border-radius:999px;padding:7px 12px;white-space:nowrap}
 .tkr{display:flex;align-items:center;gap:10px;padding:9px 2px;border-top:1px solid #F0EDF7}.tkr div{flex:1;min-width:0}.tkr b{display:block;font-size:13.5px;line-height:1.25}.tkr small{color:#6A6F85;font-size:11.5px;font-weight:600}.tkr .pill{flex:none}.tkby{display:inline-block;border-radius:999px;padding:1px 7px;font-size:10.5px;font-weight:800;margin-right:4px}
-/* Level Up */
+/* Level Up */ .lug{background:#fff;border-radius:22px;margin-bottom:10px;overflow:hidden}.lug .lur{margin:0!important;box-shadow:none!important;background:transparent!important}.luh{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:0 16px 14px}.luh button{border:0;border-radius:999px;padding:6px 11px;background:#F1EFF7;color:#444;font:700 12px 'Plus Jakarta Sans',sans-serif}.luh button.on{background:#ECFBC8;color:#3E5A07}.luh .arw{color:#8C91AD;font-weight:800;font-size:12px}
+.sp.up{background:#ECFBC8!important;color:#3E5A07!important}.sp.dn{background:#FFE6F2!important;color:#A3245E!important}.sp.eq{background:#F1EFF7!important;color:#5A5F75!important}.sp.first{background:#E6E2FF!important;color:#3C3489!important}
 .lur{display:flex;align-items:center;gap:12px;background:#fff;border:0;border-radius:20px;padding:12px 14px;text-align:left;width:100%;font-family:inherit;color:#15192B}
 .lvb{width:48px;height:48px;border-radius:14px;background:#D3F36B;display:grid;place-items:center;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:17px;flex:none}.lvb.sm{font-size:12.5px}
 .lur .mid{flex:1;min-width:0}.lur b{display:block;font-size:14.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lur small{display:block;font-size:12px;color:#6B6F86}
@@ -382,13 +383,13 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
     <div class="view hidden" id="v-levelup">
       <div class="stats lu-stats">
         <div class="stat"><b id="luMonth">0</b><span>Exámenes este mes</span></div>
-        <div class="stat"><b id="luPend">0</b><span>Seguimiento pendiente</span></div>
-        <div class="stat"><b id="luEnr">0</b><span>Inscritos</span></div>
+        <div class="stat"><b id="luPend">0</b><span>Subieron de nivel</span></div>
+        <div class="stat"><b id="luEnr">0</b><span>Alumnos evaluados</span></div>
       </div>
-      <div class="toolbar" style="margin-top:12px"><input class="in" id="luSearch" type="search" placeholder="Buscar por nombre, folio o teléfono"></div>
+      <div class="toolbar" style="margin-top:12px"><input class="in" id="luSearch" type="search" placeholder="Buscar alumno o folio"></div>
       <div class="chips" id="luChipsS"></div>
       <div class="chips" id="luChipsP" style="margin-top:-4px"></div>
-      <div class="sech"><h3>Exámenes recientes</h3><button class="lnk" id="expLu">Exportar a Excel</button></div>
+      <div class="sech"><h3>Resultados por alumno</h3><button class="lnk" id="expLu">Exportar a Excel</button></div>
       <div class="list" id="luList"></div>
     </div>
     <div id="v-tasks" class="hidden"><div id="tkAll"></div></div>
@@ -504,7 +505,7 @@ function setTab(v){
   ["students","tasks","levelup","insights"].forEach(k => $("#v-"+k).classList.toggle("hidden", k!==v));
   document.querySelectorAll("#tabbar button").forEach(b => b.classList.toggle("on", b.dataset.v===v));
   const h=new Date().getHours(), hi=h<12?"Buenos días":h<19?"Buenas tardes":"Buenas noches";
-  const T={students:[hi+", "+tName(),"Panel de maestra"],tasks:["Actividades asignadas","Tareas"],levelup:["Resultados del examen de ubicación","Level Up"],insights:["Uso de la app","Estadísticas"]}[v];
+  const T={students:[hi+", "+tName(),"Panel de maestra"],tasks:["Actividades asignadas","Tareas"],levelup:["Placement and progress","Level Up Test"],insights:["Uso de la app","Estadísticas"]}[v];
   $("#hdSmall").textContent=T[0]; $("#hdTitle").textContent=T[1];
   history.replaceState(null,"",v==="students"?location.pathname:"#"+v); window.scrollTo(0,0);
   if(v==="tasks") loadAllTasks();
@@ -832,22 +833,37 @@ function luWhen(d){
   if(x.toDateString()===y.toDateString()) return "Ayer, "+hr;
   return x.toLocaleDateString("es-MX",{day:"numeric",month:"short",year: x.getFullYear()===t.getFullYear()?undefined:"numeric"});
 }
+const LU_ORD=["Pre-A1","A1","A2","B1","B2","C1","C2"];
+function luIdx(l){ const i=LU_ORD.indexOf(String(l||"").replace(/\s.*$/,"")); return i<0?-1:i; }
+function luKey(n){ return String(n||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim(); }
+function luGroups(){
+  const G={};
+  LU.forEach(r=>{ const k=luKey(r.name); (G[k]=G[k]||{k,name:r.name,rows:[]}).rows.push(r); });
+  return Object.values(G).map(g=>{
+    const byDay={}; g.rows.forEach(r=>{ const d=new Date(r.created_at).toDateString(), b=byDay[d]; if(!b||luIdx(r.level)>luIdx(b.level)||(luIdx(r.level)===luIdx(b.level)&&(r.correct||0)>(b.correct||0))) byDay[d]=r; });
+    const h=Object.values(byDay).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at)), last=h[h.length-1], prev=h[h.length-2];
+    return {k:g.k,name:last.name,stage:last.stage,h,last,up:prev?luIdx(last.level)>luIdx(prev.level):false,down:prev?luIdx(last.level)<luIdx(prev.level):false};
+  });
+}
 function renderLU(){
   const now=new Date(), mo=LU.filter(r=>{const d=new Date(r.created_at);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
-  $("#luMonth").textContent=mo.length; $("#luPend").textContent=LU.filter(r=>r.status==="pending").length; $("#luEnr").textContent=LU.filter(r=>r.status==="enrolled").length;
-  const fs=window.__luS||"all", fp=window.__luP||"all";
-  const chip=(box,list,cur,key)=>{ $(box).innerHTML=list.map(([k,l])=>`<button data-k="${k}" class="${k===cur?"on":""}">${l}</button>`).join(""); $(box).querySelectorAll("button").forEach(b=>b.onclick=()=>{window[key]=b.dataset.k;renderLU();}); };
-  chip("#luChipsS",[["all","Todos"],["pending","Pendientes"],["booked","Agendados"],["enrolled","Inscritos"],["closed","Cerrados"]],fs,"__luS");
-  chip("#luChipsP",[["all","Todos los programas"],["kids","Kids"],["children","Children"],["teens","Teens"],["adults","Adults"]],fp,"__luP");
-  const q=($("#luSearch").value||"").trim().toLowerCase(), qd=q.replace(/\D/g,"");
-  const rows=LU.filter(r=>(fs==="all"||r.status===fs)&&(fp==="all"||r.stage===fp)&&(!q||r.name.toLowerCase().includes(q)||(r.folio||"").toLowerCase().includes(q)||(qd.length>3&&(r.contact||"").replace(/\D/g,"").includes(qd))));
+  const groups=luGroups();
+  $("#luMonth").textContent=mo.length; $("#luPend").textContent=groups.filter(g=>g.up).length; $("#luEnr").textContent=groups.length;
+  const fp=window.__luP||"all";
+  $("#luChipsS").innerHTML="";
+  $("#luChipsP").innerHTML=[["all","Todos los programas"],["kids","Kids"],["children","Children"],["teens","Teens"],["adults","Adults"]].map(([k,l])=>`<button data-k="${k}" class="${k===fp?"on":""}">${l}</button>`).join("");
+  $("#luChipsP").querySelectorAll("button").forEach(b=>b.onclick=()=>{window.__luP=b.dataset.k;renderLU();});
+  const q=luKey($("#luSearch").value||"");
+  const rows=groups.filter(g=>(fp==="all"||g.stage===fp)&&(!q||g.k.includes(q)||g.h.some(r=>(r.folio||"").toLowerCase().includes(q)))).sort((a,b)=>new Date(b.last.created_at)-new Date(a.last.created_at));
   if(luErr){ $("#luList").innerHTML=`<div class="empty"><b>Aún no se puede mostrar</b>${esc(luErr)}</div>`; return; }
-  if(!LU.length){ $("#luList").innerHTML=`<div class="empty"><b>Aún no hay exámenes</b>Cuando alguien presente Level Up, su resultado aparecerá aquí.</div>`; return; }
+  if(!LU.length){ $("#luList").innerHTML=`<div class="empty"><b>Aún no hay exámenes</b>Cuando un alumno presente Level Up Test, su resultado aparecerá aquí.</div>`; return; }
   if(!rows.length){ $("#luList").innerHTML=`<div class="empty"><b>Sin resultados</b>Prueba con otro filtro.</div>`; return; }
-  $("#luList").innerHTML=rows.map(r=>`<button class="lur" data-id="${r.id}"><div class="lvb${r.level.length>2?" sm":""}">${esc(r.level)}</div>
-    <div class="mid"><b>${esc(r.name)}</b><small>${LU_STAGE[r.stage]||esc(r.stage)} · ${esc(luWhen(r.created_at))}</small><span class="sp ${esc(r.status)}">${LU_ST[r.status]||esc(r.status)}</span></div>
-    <svg class="ar" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>`).join("");
-  $("#luList").querySelectorAll(".lur").forEach(b=>b.onclick=()=>openLU(+b.dataset.id));
+  const mon=d=>new Date(d).toLocaleDateString("es-MX",{day:"numeric",month:"short"});
+  $("#luList").innerHTML=rows.map(g=>`<div class="lug"><button class="lur" data-id="${g.last.id}"><div class="lvb${g.last.level.length>2?" sm":""}">${esc(g.last.level)}</div>
+    <div class="mid"><b>${esc(g.name)}</b><small>${LU_STAGE[g.stage]||esc(g.stage)} · ${esc(luWhen(g.last.created_at))}</small>${g.h.length>1?(g.up?`<span class="sp up">Subió de nivel</span>`:g.down?`<span class="sp dn">Bajó de nivel</span>`:`<span class="sp eq">Mismo nivel</span>`):`<span class="sp first">Primer examen</span>`}</div>
+    <svg class="ar" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    ${g.h.length>1?`<div class="luh">${g.h.map((r,i)=>`${i?'<span class="arw">→</span>':""}<button data-id="${r.id}" class="${i===g.h.length-1?"on":""}">${esc(r.level)} · ${esc(mon(r.created_at))}</button>`).join("")}</div>`:""}</div>`).join("");
+  $("#luList").querySelectorAll("[data-id]").forEach(b=>b.onclick=()=>openLU(+b.dataset.id));
 }
 $("#luSearch").addEventListener("input", renderLU);
 function renderLUIns(){
@@ -887,17 +903,13 @@ function openLU(id){
   const IC={doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M12 11v6M9 14l3 3 3-3"/></svg>',
     wa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.6-2-1-1 1c-1-.4-1.9-1.3-2.4-2.4l1-1-1-2z"/></svg>'};
   openModal(`<button class="x" aria-label="Cerrar">×</button><div class="lud">
-    <p class="sub" style="margin:4px 0 0">Level Up · ${esc(luWhen(r.created_at))}</p>
+    <p class="sub" style="margin:4px 0 0">Level Up Test · ${esc(luWhen(r.created_at))}</p>
     <div class="big"><div class="L${r.level.length>2?" sm":""}">${esc(r.level)}</div><div><b>${esc(r.name)}</b><small>${LU_STAGE[r.stage]||esc(r.stage)} · ${esc((LUR.LVES[r.level]||{}).band||"")}<br>Folio ${esc(r.folio||"—")} · ${r.correct} de ${r.total} correctas</small></div></div>
     <div class="bx"><h4>Desempeño por habilidad</h4>${["g","v","r","l"].filter(k=>sk[k]&&sk[k][1]).map(k=>{const p=Math.round(sk[k][0]/sk[k][1]*100);return `<div class="sk"><span>${{g:"Gramática",v:"Vocabulario",r:"Lectura",l:"Comprensión auditiva"}[k]}</span><i><em style="width:${p}%"></em></i><span>${p}%</span></div>`;}).join("")}</div>
-    <div class="bx"><h4>Seguimiento</h4><div class="seg">${["pending","booked","enrolled"].map(k=>`<button data-s="${k}" class="${r.status===k?"on":""}">${{pending:"Pendiente",booked:"Evaluación agendada",enrolled:"Inscrito"}[k]}</button>`).join("")}</div></div>
-    <div class="bx"><h4>WhatsApp de contacto</h4><div class="ctr"><input class="in" id="luC" type="tel" value="${esc(r.contact||"")}" placeholder="Sin teléfono registrado"><button id="luCs">Guardar</button></div></div>
-    <div class="bx"><h4>Notas de la maestra</h4><textarea class="in" id="luN" placeholder="Ej. Agendó evaluación para el jueves 5 pm">${esc(r.notes||"")}</textarea><div class="ctr" style="margin-top:8px;justify-content:flex-end"><span style="flex:1"></span><button id="luNs">Guardar nota</button></div></div>
-    <div class="acts"><button class="dk" id="luRep">${IC.doc} Reporte para padres</button><button id="luCert">${IC.doc} Certificado</button>${wa?`<a class="wa" href="${wa}" target="_blank" rel="noopener">${IC.wa} Escribir por WhatsApp</a>`:""}</div>
+    <div class="bx"><h4>Notas de la maestra</h4><textarea class="in" id="luN" placeholder="Ej. Repasar past simple antes del siguiente Level Up">${esc(r.notes||"")}</textarea><div class="ctr" style="margin-top:8px;justify-content:flex-end"><span style="flex:1"></span><button id="luNs">Guardar nota</button></div></div>
+    <div class="acts"><button class="dk" id="luRep">${IC.doc} Reporte para padres</button><button id="luCert">${IC.doc} Certificado</button></div>
     <button class="del" id="luDel">Eliminar este resultado</button></div>`);
   const upd=async(args,msg)=>{ try{ await rpc("admin_update_levelup",Object.assign({p_id:r.id},args)); Object.assign(r,{status:args.p_status??r.status,notes:args.p_notes??r.notes,contact:args.p_contact??r.contact}); renderLU(); renderLUIns(); toast(msg); }catch(e){ toast(e.message||"No se pudo guardar"); } };
-  document.querySelectorAll(".lud .seg button").forEach(b=>b.onclick=async()=>{ document.querySelectorAll(".lud .seg button").forEach(x=>x.classList.toggle("on",x===b)); await upd({p_status:b.dataset.s},"Seguimiento actualizado"); });
-  $("#luCs").onclick=async()=>{ await upd({p_contact:$("#luC").value.trim()},"Teléfono guardado"); openLU(r.id); };
   $("#luNs").onclick=()=>upd({p_notes:$("#luN").value.trim()},"Nota guardada");
   const busy=async(btn,fn)=>{ const o=btn.innerHTML; btn.disabled=true; btn.textContent="Generando…"; try{ await fn(); }catch(e){ toast("No se pudo generar el PDF"); } btn.disabled=false; btn.innerHTML=o; };
   $("#luRep").onclick=e=>busy(e.currentTarget,()=>luParentPdf(r));
