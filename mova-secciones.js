@@ -120,13 +120,14 @@
     { g: "5p", n: "5°", sub: "primaria", lv: "Primaria", full: "5° de primaria", q: 2, plan: [["exam", "ex5", ""]] },
     { g: "6p", n: "6°", sub: "primaria", lv: "Primaria", full: "6° de primaria", q: 2, plan: [["nivel", "ex5", "grado"]] },
     { g: "1s", n: "1°", sub: "secundaria", lv: "Secundaria", full: "1° de secundaria", q: 3, plan: [["grado", "signos", "grado"]] },
-    { g: "2s", n: "2°", sub: "secundaria", lv: "Secundaria", full: "2° de secundaria", q: 3, plan: [["nivel", "signos", "base"]] },
+    { g: "2s", n: "2°", sub: "secundaria", lv: "Secundaria", full: "2° de secundaria", q: 3, plan: [["exam", "ex2s", ""], ["nivel", "signos", "base"]] },
     { g: "3s", n: "3°", sub: "secundaria", lv: "Secundaria", full: "3° de secundaria", q: 3, plan: [["exam", "ex3s", ""], ["nivel", "signos", "base"]] },
     { g: "1b", n: "1er", sub: "semestre", lv: "Preparatoria", full: "1er semestre de prepa", q: 4, plan: [["nivel", "signos", "base"], ["nivel", "ex3s", "grado"]] }
   ];
   var MPR = { signos: { file: "juego-signos-jerarquia.html", img: "math-signos.webp", title: "Signos y jerarquía de operaciones", desc: "Suma y resta con signo, multiplicación y división, y orden de las operaciones.", n: 24 },
     ex5: { file: "juego-repaso-5-primaria.html", img: "math-repaso-5p.webp", fb: "math-fracciones.webp", title: "Repaso de 5° de primaria", desc: "Fracciones, división con residuo, ángulos, conversiones, romanos y siglos, proporcionalidad y tiempo.", n: 42 },
-    ex3s: { file: "juego-repaso-3-secundaria.html", img: "math-repaso-3s.webp", fb: "math-geometria.webp", title: "Repaso de 3° de secundaria", desc: "Lenguaje algebraico, productos notables, fórmula general, Pitágoras, funciones lineales y cuadráticas.", n: 36 } };
+    ex3s: { file: "juego-repaso-3-secundaria.html", img: "math-repaso-3s.webp", fb: "math-geometria.webp", title: "Repaso de 3° de secundaria", desc: "Lenguaje algebraico, productos notables, fórmula general, Pitágoras, funciones lineales y cuadráticas.", n: 36 },
+    ex2s: { file: "juego-repaso-2-secundaria.html", img: "math-repaso-2s.webp", fb: "math-jerarquia.webp", title: "Repaso de 2° de secundaria", desc: "En tres partes: números y porcentajes; divisibilidad y potencias; ecuaciones, polígonos y estadística.", n: 72, chip: "3 partes · 72 ejercicios" } };
   var MSEC = { exam: ["Para tu examen", "Los temas de tu guía de estudio, con calificación."], grado: ["Temas de tu grado", "Explicación, ejemplos paso a paso y ejercicios con calificación."], nivel: ["Nivelación", "Repasa la base para avanzar con seguridad."] };
   var MLVC = { Primaria: "#D3F36B", Secundaria: "#9C8BFF", Preparatoria: "#FF8FC0" };
   var MHC = { Primaria: "#D3F36B", Secundaria: "#C7B5FF", Preparatoria: "#FFC7E2" };
@@ -174,7 +175,7 @@
       out += '<div class="mv-sh"><b>' + MSEC[sk][0] + "</b><small>" + MSEC[sk][1] + "</small></div>";
       items.forEach(function (it) {
         var P = MPR[it[1]];
-        out += '<a class="mv-pc" href="' + P.file + "?" + (it[2] ? "nivel=" + it[2] + "&" : "") + "g=" + G.g + '"><img src="' + P.img + '" alt="" loading="lazy"' + (P.fb ? " onerror=\"this.onerror=null;this.src='" + P.fb + "'\"" : "") + '><span><b>' + esc(P.title) + "</b><small>" + esc(P.desc) + '</small><em class="c3" style="background:#DCF4EA;color:#1F6E4E">' + (!it[2] ? "Nivelación y Mi grado" : it[2] === "base" ? "Nivelación" : "Mi grado") + " · " + P.n + " ejercicios" + "</em></span></a>";
+        out += '<a class="mv-pc" href="' + P.file + "?" + (it[2] ? "nivel=" + it[2] + "&" : "") + "g=" + G.g + '"><img src="' + P.img + '" alt="" loading="lazy"' + (P.fb ? " onerror=\"this.onerror=null;this.src='" + P.fb + "'\"" : "") + '><span><b>' + esc(P.title) + "</b><small>" + esc(P.desc) + '</small><em class="c3" style="background:#DCF4EA;color:#1F6E4E">' + (P.chip && !it[2] ? P.chip : (!it[2] ? "Nivelación y Mi grado" : it[2] === "base" ? "Nivelación" : "Mi grado") + " · " + P.n + " ejercicios") + "</em></span></a>";
       });
     });
     var qs = MT.filter(function (t) { return t.levels.indexOf(G.q) >= 0; });

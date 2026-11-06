@@ -545,21 +545,25 @@ function who(){try{var u=(window.MovaAuth&&MovaAuth.user())||JSON.parse(localSto
 var Q=(function(){var o={};location.search.replace(/^\?/,'').split('&').forEach(function(kv){var p=kv.split('=');if(p[0])o[decodeURIComponent(p[0])]=decodeURIComponent(p[1]||'')});return o})();
 function toList(){location.href='index.html#/matematicas/practicas'+(S.from?'/'+S.from:'')}
 function practiceHome(pre){
-  S.inPractice=false;S.level=null;var lv=pre||null;
+  S.inPractice=false;S.level=null;var lv=pre||null,pt=S.part||(CONF.parts&&CONF.parts[Q.parte]?Q.parte:null);
   render('<div class="card">'+
     CONF.home()+
     '<label class="f" for="nm">¿Cómo te llamas?</label><input class="name" id="nm" autocomplete="given-name" placeholder="Escribe tu nombre" value="'+esc(S.name)+'">'+
+    (CONF.parts?'<label class="f">Elige la parte</label><div class="levels">'+Object.keys(CONF.parts).map(function(k,i){var P=CONF.parts[k],c=['lime','lila','rosa'][i%3];return '<button class="lvl prt" data-p="'+k+'" aria-pressed="'+(pt===k)+'"><span class="dot" style="background:var(--'+c+'S);color:var(--'+c+'D)">'+k+'</span><span><b>'+P.name+'</b><span>'+P.desc+'</span></span></button>'}).join('')+'</div>':'')+
     '<label class="f">Elige tu nivel</label><div class="levels">'+
      '<button class="lvl" data-l="base" aria-pressed="'+(lv==='base')+'"><span class="dot" style="background:var(--limeS);color:var(--limeD)">1</span><span><b>Nivelación</b><span>'+CONF.lvBase+'</span></span></button>'+
      '<button class="lvl" data-l="grado" aria-pressed="'+(lv==='grado')+'"><span class="dot" style="background:var(--lilaS);color:var(--lilaD)">2</span><span><b>Mi grado</b><span>'+CONF.lvGrado+'</span></span></button>'+
     '</div><div class="err" id="er"></div>'+
     '<button class="btn" id="go">Empezar la práctica</button></div>',toList,'Prácticas');
   var w=who();if(w){S.name=w;var nm=document.getElementById('nm');nm.value=w;nm.parentNode.removeChild(nm.previousElementSibling);nm.parentNode.removeChild(nm);}
-  [].forEach.call(document.querySelectorAll('.lvl'),function(b){b.onclick=function(){lv=b.dataset.l;[].forEach.call(document.querySelectorAll('.lvl'),function(x){x.setAttribute('aria-pressed',x===b)})}});
+  [].forEach.call(document.querySelectorAll('.lvl:not(.prt)'),function(b){b.onclick=function(){lv=b.dataset.l;[].forEach.call(document.querySelectorAll('.lvl:not(.prt)'),function(x){x.setAttribute('aria-pressed',x===b)})}});
+  [].forEach.call(document.querySelectorAll('.prt'),function(b){b.onclick=function(){pt=b.dataset.p;[].forEach.call(document.querySelectorAll('.prt'),function(x){x.setAttribute('aria-pressed',x===b)})}});
   document.getElementById('go').onclick=function(){
     var ne=document.getElementById('nm'),n=ne?ne.value.trim():S.name;
     if(!n){document.getElementById('er').textContent='Escribe tu nombre para empezar.';return}
+    if(CONF.parts&&!pt){document.getElementById('er').textContent='Elige una parte para empezar.';return}
     if(!lv){document.getElementById('er').textContent='Elige un nivel para empezar.';return}
+    if(CONF.parts){S.part=pt;CONF.setPart(pt)}
     S.name=n.split(/\s+/)[0];S.name=S.name.charAt(0).toUpperCase()+S.name.slice(1);
     start(lv);
   };
