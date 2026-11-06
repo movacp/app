@@ -1,5 +1,5 @@
 /* MOVA · Acceso exclusivo para alumnos (v82)
-   Sin sesión de alumno (ni dispositivo de maestra activado), la app muestra una vitrina:
+   Sin sesión de alumno ni sesión abierta en el panel de maestras, la app muestra una vitrina:
    inicio con candados, cifras reales, About us / programas y aviso de privacidad abiertos.
    Todo lo demás pide iniciar sesión con usuario y contraseña de MOVA.
    En las páginas sueltas (juegos, ruta.html) redirige al inicio si no hay sesión. */
@@ -7,9 +7,10 @@
   "use strict";
   function isIn() {
     try {
-      if (localStorage.getItem("mova_teacher_device") === "1") return true;
       var u = JSON.parse(localStorage.getItem("mova_student") || "null");
-      return !!(u && u.token);
+      if (u && u.token) return true;
+      var t = JSON.parse(localStorage.getItem("mova_admin_session") || "null");
+      return !!(t && t.refresh);
     } catch (e) { return false; }
   }
   var page = (location.pathname.split("/").pop() || "index.html").toLowerCase();
