@@ -491,12 +491,13 @@ $("#logoutBtn").onclick = () => { logout(); toast("Sesión cerrada"); };
 
 /* ---------- Students ---------- */
 async function showApp(){ $("#login").classList.add("hidden"); $("#app").classList.remove("hidden"); setTab(location.hash.replace("#","")||"students"); loadVisits(); loadLevelUp(); await loadStudents(); }
+function tName(){ let em=""; try{ em=(localStorage.getItem("mova_teacher_email")||"").toLowerCase(); }catch(e){} const u=em.split("@")[0]; if(/let/.test(u)) return "Miss Letty"; if(/claud/.test(u)) return "Miss Claudia"; if(/mayte|teresa/.test(u)) return "Miss Mayte"; return "Miss Karla"; }
 function setTab(v){
   if(!["students","levelup","insights"].includes(v)) v="students";
   ["students","levelup","insights"].forEach(k => $("#v-"+k).classList.toggle("hidden", k!==v));
   document.querySelectorAll("#tabbar button").forEach(b => b.classList.toggle("on", b.dataset.v===v));
   const h=new Date().getHours(), hi=h<12?"Buenos días":h<19?"Buenas tardes":"Buenas noches";
-  const T={students:[hi,"Panel de maestra"],levelup:["Resultados del examen de ubicación","Level Up"],insights:["Uso de la app","Estadísticas"]}[v];
+  const T={students:[hi+", "+tName(),"Panel de maestra"],levelup:["Resultados del examen de ubicación","Level Up"],insights:["Uso de la app","Estadísticas"]}[v];
   $("#hdSmall").textContent=T[0]; $("#hdTitle").textContent=T[1];
   history.replaceState(null,"",v==="students"?location.pathname:"#"+v); window.scrollTo(0,0);
 }
@@ -1186,7 +1187,7 @@ async function buildReport(s, all, y, mo, note){
   const html=`<div class="rpA">
     <div class="hd">
       <div class="brand2"><div class="lg"><img src="icon-192.png" alt=""></div><div><b>MOVA Learning Studio</b><small>MOVA Centro Pedagógico</small></div></div>
-      <div class="ttl"><small>Reporte de ${MESES[mo].toLowerCase()} ${y}</small><h1>${esc(head)}</h1></div>
+      <div class="ttl"><small>${esc(nm)}${s.stage?" · "+esc(s.stage):""} · ${MESES[mo]} ${y}</small><h1 style="font-size:34px;line-height:1.02">Reporte mensual de progreso</h1></div>
       <img class="bl" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMjAgMjIwIiBhcmlhLWhpZGRlbj0idHJ1ZSI+PHBhdGggZD0iTTk4IDEzOCBDOTYgMTU2LjAgOTAgMTY2LjAgOTIgMTc4IiBzdHJva2U9IiMxQTFCMkUiIHN0cm9rZS13aWR0aD0iMi4zIiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48ZWxsaXBzZSBjeD0iODkiIGN5PSIxODAiIHJ4PSI2LjIiIHJ5PSI0IiBmaWxsPSIjMUExQjJFIi8+PHBhdGggZD0iTTEyMiAxMzggQzEyNCAxNTYuMCAxMjggMTY2LjAgMTI3IDE3OCIgc3Ryb2tlPSIjMUExQjJFIiBzdHJva2Utd2lkdGg9IjIuMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PGVsbGlwc2UgY3g9IjEzMCIgY3k9IjE4MCIgcng9IjYuMiIgcnk9IjQiIGZpbGw9IiMxQTFCMkUiLz48cGF0aCBkPSJNODAgOTggQzYyIDEwNCA1MCA5MiA0OCA3NCIgc3Ryb2tlPSIjMUExQjJFIiBzdHJva2Utd2lkdGg9IjIuMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PGNpcmNsZSBjeD0iNDgiIGN5PSI3NCIgcj0iMy42IiBmaWxsPSIjMUExQjJFIi8+PHBhdGggZD0iTTE0MiAxMDAgQzE1MiAxMDQgMTYwIDEwMiAxNjggOTYiIHN0cm9rZT0iIzFBMUIyRSIgc3Ryb2tlLXdpZHRoPSIyLjMiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxjaXJjbGUgY3g9IjE2OCIgY3k9Ijk2IiByPSIzLjYiIGZpbGw9IiMxQTFCMkUiLz48Y2lyY2xlIGN4PSI4NiIgY3k9IjY4IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9IjEzNCIgY3k9IjY4IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9Ijg2IiBjeT0iMTE2IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9IjEzNCIgY3k9IjExNiIgcj0iMzAiIGZpbGw9IiM5QzhCRkYiLz48Y2lyY2xlIGN4PSIxMTAiIGN5PSI5MiIgcj0iMjYiIGZpbGw9IiM5QzhCRkYiLz48Y2lyY2xlIGN4PSI4MCIgY3k9IjYyIiByPSI3IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMjgiLz48cGF0aCBkPSJNOTQgMTA2IFExMTAgMTIyIDEyNiAxMDYiIHN0cm9rZT0iIzFBMUIyRSIgc3Ryb2tlLXdpZHRoPSIyLjMiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxlbGxpcHNlIGN4PSI4NCIgY3k9IjEwMCIgcng9IjUiIHJ5PSIzIiBmaWxsPSIjRkY4RkMwIiBvcGFjaXR5PSIuNTUiLz48ZWxsaXBzZSBjeD0iMTM2IiBjeT0iMTAwIiByeD0iNSIgcnk9IjMiIGZpbGw9IiNGRjhGQzAiIG9wYWNpdHk9Ii41NSIvPjxlbGxpcHNlIGN4PSI5NyIgY3k9Ijg4IiByeD0iNC4yIiByeT0iNS4yIiBmaWxsPSIjMUExQjJFIi8+PGVsbGlwc2UgY3g9IjEyMyIgY3k9Ijg4IiByeD0iNC4yIiByeT0iNS4yIiBmaWxsPSIjMUExQjJFIi8+PGNpcmNsZSBjeD0iOTguNCIgY3k9Ijg2LjIiIHI9IjEuNCIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjEyNC40IiBjeT0iODYuMiIgcj0iMS40IiBmaWxsPSIjZmZmIi8+PC9zdmc+" alt="">
       <svg class="wv" viewBox="0 0 794 46" preserveAspectRatio="none"><path d="M0 26 C 160 0 300 46 470 22 S 700 6 794 24 L794 46 L0 46Z" fill="#F5F3FA"/></svg>
     </div>
@@ -1324,8 +1325,8 @@ function simReportHtml(s,r){
   const lvl=pct>=80?"Excelente desempeño":pct>=60?"Buen desempeño":pct>=40?"En desarrollo":"Necesita reforzar";
   const log=D.log||[], wrong=log.filter(l=>!l.ok).length;
   return `<div class="srp">
-    <div class="hd"><span class="k">TOEFL ITP · Quick Simulation</span><h1>${esc(first)}, ${pct>=60?"¡buen trabajo!":"aquí está tu resultado"}</h1>
-      <p>${esc(s.full_name)} · ${new Date(r.created_at).toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</p></div>
+    <div class="hd"><span class="k">${esc(s.full_name)}${s.stage?" · "+esc(s.stage):""}</span><h1>TOEFL Quick Simulation Results</h1>
+      <p>${new Date(r.created_at).toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</p></div>
     <div class="big"><div class="ring" style="background:conic-gradient(${col} ${pct*3.6}deg,#F2EFF8 0)"><span>${pct}%</span></div>
       <div><b>${r.score} de ${r.total} correctas · ${lvl}</b><small>${D.secs?"Tiempo: "+fmtT(D.secs)+" de":"Tiempo límite:"} ${fmtT(Math.round((D.limit||1080)/60)*60)} min${D.timeUp?" · se terminó el tiempo":""}${D.passage?`<br>Lectura: ${esc(D.passage)}`:""}</small></div></div>
     <div class="bx"><h3>Resultado por habilidad</h3>${parts.length?"":`<p style="margin:4px 0 0;color:#6A6F85;font-size:13.5px">Esta simulación se hizo con una versión anterior de la app, así que solo se guardó el resultado general.</p>`}${parts.map(x=>`<div class="pb"><div>${esc(PES[x.p]||x.p)}<span>${x.c}/${x.t} · ${Math.round(x.v*100)}%</span></div><div class="tr"><i style="width:${Math.max(4,Math.round(x.v*100))}%;background:${PCOL[x.p]||"#B9A6FF"}"></i></div></div>`).join("")}</div>
@@ -1351,7 +1352,7 @@ function simPdfHtml(s,r,note,R){
   return `<div class="sr2">
   <div class="s2hd"><span class="s2dot" style="width:90px;height:90px;background:#D3F36B;opacity:.6;left:560px;bottom:-34px"></span><span class="s2dot" style="width:22px;height:22px;background:#FF8FC8;left:380px;top:40px"></span><span class="s2dot" style="width:14px;height:14px;background:#8FA2FF;left:520px;top:210px"></span>
   <div class="s2brand"><div class="s2lg"><img src="icon-192.png" alt=""></div><div><b>MOVA Learning Studio</b><small>MOVA Centro Pedagógico</small></div></div>
-  <div class="s2ttl"><small>TOEFL ITP · Quick Simulation</small><h1>${esc(head)}</h1></div>
+  <div class="s2ttl"><small>${esc(nm)}${s.stage?" · "+esc(s.stage):""}</small><h1 style="font-size:34px;line-height:1.02">TOEFL Quick Simulation Results</h1></div>
   <img class="s2bl" src="${R.ill}" alt="">
   <img class="s2wv" src="${R.wave}" alt=""></div>
   <div class="s2who"><div class="s2av">${esc(initials(nm))}</div><div><h2>${esc(nm)}</h2><span>Simulation taken on ${esc(fecha)}</span></div>${s.stage?`<em>${esc(s.stage)}</em>`:""}</div>

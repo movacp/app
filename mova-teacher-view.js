@@ -73,12 +73,13 @@
   function toast(t) { var o = document.querySelector(".tvtoast"); if (o) o.remove(); var d = document.createElement("div"); d.className = "tvtoast"; d.textContent = t; document.body.appendChild(d); setTimeout(function () { d.remove(); }, 2800); }
 
   /* ---------- barra ---------- */
+  function tName(em) { var u = String(em || "").toLowerCase().split("@")[0]; if (/let/.test(u)) return "Miss Letty"; if (/claud/.test(u)) return "Miss Claudia"; if (/mayte|teresa/.test(u)) return "Miss Mayte"; return "Miss Karla"; }
   function bar() {
     document.body.classList.add("tv-on");
     if (document.querySelector(".tvbar")) return;
     var em = ""; try { em = localStorage.getItem("mova_teacher_email") || ""; } catch (e) {}
     var b = document.createElement("div"); b.className = "tvbar";
-    b.innerHTML = '<span class="k">TEACHER VIEW</span><b>' + esc(em ? em.split("@")[0] : "Teacher") + '</b><a href="admin.html">Panel →</a>';
+    b.innerHTML = '<span class="k">TEACHER VIEW</span><b>' + esc(tName(em)) + '</b><a href="admin.html">Panel →</a>';
     document.body.prepend(b);
   }
 
