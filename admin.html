@@ -376,7 +376,7 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
         <div class="stat"><b id="sActs">0</b><span>Actividades</span></div>
       </div>
       <div class="sech"><h3>Mis alumnos</h3><button class="lnk" id="expStudents">Exportar a Excel</button></div>
-      <div class="toolbar"><input class="in" id="search" type="search" placeholder="Buscar alumno"><button class="addb" id="addBtn">+ Agregar alumno</button></div>
+      <div class="toolbar"><input class="in" id="search" type="search" placeholder="Buscar alumno"><button class="addb" id="addBtn">+ Agregar alumno</button></div><div style="display:flex;justify-content:flex-end;margin:-4px 0 10px"><button type="button" id="allPassBtn" style="border:0;background:none;color:#5B4BC4;font:800 13px inherit;font-family:inherit;text-decoration:underline;cursor:pointer;padding:6px 4px">Cambiar la contraseña de todos</button></div>
       <div class="chips" id="stChips"></div>
       <div class="list" id="list"></div>
     </div>
@@ -930,6 +930,23 @@ async function loadVisits(){
       <div class="vchart">${days.map(([d,n])=>`<div>${n?`<small>${n}</small>`:""}<i style="height:${Math.round(n/mx*60)}px"></i><em>${d}</em></div>`).join("")}</div>`;
   }catch(err){ box.innerHTML=`<h2>Visitas a la app</h2><p class="vs" style="margin:0">Aún no hay datos de visitas.</p>`; }
 }
+/* Cambiar la contraseña de todos los alumnos de una sola vez */
+document.addEventListener("click", async e => {
+  const b = e.target.closest && e.target.closest("#allPassBtn"); if (!b || b.disabled) return;
+  if (!students.length) { toast("No hay alumnos en la lista"); return; }
+  const pass = (prompt("Nueva contraseña para TODOS los alumnos (mínimo 6 caracteres):", "MOVA2027") || "").trim();
+  if (!pass) return;
+  if (pass.length < 6) { alert("La contraseña debe tener al menos 6 caracteres."); return; }
+  if (!confirm(`Se cambiará la contraseña de ${students.length} alumnos a: ${pass}\n\nSus usuarios no cambian. ¿Continuar?`)) return;
+  const txt = b.textContent; b.disabled = true; let ok = 0; const bad = [];
+  for (let i = 0; i < students.length; i++) {
+    const st = students[i]; b.textContent = `Cambiando ${i + 1} de ${students.length}…`;
+    try { await rpc("admin_set_password", { p_student: st.id, p_password: pass }); ok++; }
+    catch (err) { bad.push(st.full_name || st.username); }
+  }
+  b.disabled = false; b.textContent = txt;
+  alert(`Listo: ${ok} de ${students.length} alumnos ya tienen la contraseña ${pass}.` + (bad.length ? `\n\nNo se pudo cambiar a: ${bad.join(", ")}. Inténtalo de nuevo con esos alumnos.` : ""));
+});
 async function loadStudents(){
   try{ students = await rpc("admin_list_students") || []; render(); }
   catch(err){ $("#list").innerHTML = `<div class="empty"><b>No se pudo cargar la lista</b>${esc(err.message)}</div>`; }
