@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Matemáticas de 1° de secundaria · MOVA</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script src="mova-gate.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F3FA; --surface:#fff; --surface2:#ECE9F3; --navy:#15192B; --ink:#15192B; --ink2:#4E5268; --muted:#6A6F85; --line:#E4E0EE;
+  --lime:#D3F36B; --limeS:#F1FBD0; --limeD:#4F6B00;
+  --lila:#9C8BFF; --lilaS:#E6E2FF; --lilaD:#4B3BB0;
+  --rosa:#FF8FC0; --rosaS:#FFE6F2; --rosaD:#A3345C;
+  --yel:#FFD54A; --yelS:#FFF1C2; --yelD:#7A5A00;
+  --cream:#F5F3FA; --white:#fff;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0;min-height:100%}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased}
+h1,h2,h3,.big,.ttl{font-family:'Bricolage Grotesque','Plus Jakarta Sans',sans-serif;letter-spacing:-.02em}
+button{font-family:inherit;cursor:pointer;border:0;color:inherit;background:none}
+a{color:inherit}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--lila);outline-offset:3px}
+.app{max-width:560px;margin:0 auto;padding:16px 16px 48px}
+/* encabezado */
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 14px;min-height:56px}
+.bkw{display:flex;align-items:center;gap:12px;text-align:left}
+.bk{flex:none;width:52px;height:52px;border-radius:50%;border:2.5px solid var(--ink);display:grid;place-items:center;background:transparent}
+.bkw small{display:block;font-size:13px;color:var(--muted);font-weight:500;line-height:1.1}
+.bkw b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:21px;line-height:1.15}
+.pill{font-size:12px;font-weight:800;padding:8px 14px;border-radius:999px;background:var(--navy);color:#fff}
+/* vitrina principal, igual a la app */
+.ms-hero{position:relative;overflow:hidden;background:var(--c,#C7B5FF);color:#15192B;border-radius:30px;padding:24px 22px 26px;min-height:200px;margin:0 0 18px}
+.ms-hero h1{font-size:clamp(34px,9.5vw,46px);line-height:.98;letter-spacing:-.03em;margin:14px 0 10px;color:#15192B}
+.ms-hero p{margin:0;font-size:15px;line-height:1.55;color:#2B2F45;max-width:30ch}
+.ms-hx{position:relative;z-index:2;max-width:64%}
+.ms-art{position:absolute;right:-6px;bottom:-12px;width:44%;max-width:210px;z-index:1;pointer-events:none}
+.ms-art svg{width:100%;height:auto;display:block}
+.ms-dot{position:absolute;border-radius:50%;background:#fff;opacity:.45}
+.ms-dot.a{width:120px;height:120px;right:-32px;top:-36px}
+.ms-dot.b{width:14px;height:14px;right:46%;top:28px;opacity:.8}
+.ms-dot.c{width:9px;height:9px;right:36%;top:66px;background:#15192B;opacity:.18}
+.ms-dk{background:#15192B;color:#fff}
+.ms-dk h1{color:#fff}.ms-dk p{color:#C9CCE0}
+.ms-dk .ms-dot.a{background:#2A3150;opacity:1}.ms-dk .ms-dot.b{background:#FFD54A;opacity:1}.ms-dk .ms-dot.c{background:#FF8FC0;opacity:1}
+.mp-k{display:inline-block;background:#fff;color:#15192B;font-size:12.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:8px 15px;border-radius:999px}
+.ms-dk .mp-k{background:var(--lime)}
+.ms-h{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;margin:22px 4px 4px}
+.ms-sub{margin:0 4px 14px;color:var(--muted);font-size:14px;line-height:1.45}
+/* vitrinas de Prácticas y Juegos */
+.vit{display:block;background:#fff;border-radius:28px;padding:8px 8px 18px;text-decoration:none;color:var(--ink);box-shadow:0 10px 30px -18px rgba(54,40,120,.45);margin-bottom:14px;width:100%;text-align:left}
+.vit:active{transform:scale(.985)}
+.vit .th{display:block;position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:var(--lilaS)}
+.vit .th img{width:100%;height:100%;object-fit:cover;display:block}
+.vit .th .k{position:absolute;left:14px;top:14px;background:#15192B;color:var(--lime);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;border-radius:999px}
+.vit .tx{display:block;padding:14px 12px 0}
+.vit b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:28px;line-height:1.05;letter-spacing:-.02em}
+.vit .d{display:block;font-size:15px;color:var(--muted);line-height:1.5;margin-top:6px}
+.vit .ft{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips em{font-style:normal;font-size:11.5px;font-weight:700;border-radius:999px;padding:5px 10px}
+.c1{background:#FFE1EA;color:#A3345C}.c2{background:#E6E2FF;color:#4B3BB0}.c3{background:#DCF4EA;color:#1F6E4E}.c4{background:#FFF1C2;color:#7A5A00}
+.goB{flex:none;width:44px;height:44px;border-radius:50%;background:#15192B;color:#fff;display:grid;place-items:center}
+.mini{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#fff;border-radius:24px;padding:14px 16px;box-shadow:0 10px 30px -18px rgba(54,40,120,.45);text-decoration:none;color:var(--ink)}
+.mini .ic{flex:none;width:50px;height:50px;border-radius:16px;display:grid;place-items:center;background:var(--yelS);color:var(--ink)}
+.mini b{display:block;font-size:16px;color:var(--ink)}.mini span{display:block;font-size:13px;color:var(--muted);line-height:1.4;margin-top:2px}
+/* grados */
+.sect{font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:700;margin:22px 4px 10px;display:flex;align-items:center;gap:10px}
+.sect i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.sect small{display:block;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:500;color:var(--muted);margin-top:2px}
+.grades{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gr{border-radius:22px;padding:16px 8px 14px;text-align:center;background:#fff;box-shadow:0 10px 26px -18px rgba(54,40,120,.5)}
+.gr b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:32px;line-height:1}
+.gr span{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-top:5px}
+.pc{display:flex;gap:14px;align-items:center;width:100%;text-align:left;background:#fff;border-radius:24px;padding:16px;margin-bottom:10px;box-shadow:0 10px 30px -18px rgba(54,40,120,.45)}
+.pc .ic{flex:none;width:56px;height:56px;border-radius:18px;display:grid;place-items:center}
+.pc b{display:block;font-size:16px;line-height:1.3;color:var(--ink)}
+.pc span{display:block;font-size:13px;color:var(--muted);line-height:1.4;margin-top:3px}
+.pc .tg{display:inline-block;font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;margin-top:8px}
+.pc[disabled]{cursor:default}
+.ggrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gm{display:flex;flex-direction:column;background:#fff;border-radius:22px;padding:7px 7px 12px;text-decoration:none;color:var(--ink);box-shadow:0 8px 24px -16px rgba(54,40,120,.4)}
+.gm img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:16px;background:#EEE9FB}
+.gm b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;line-height:1.15;padding:10px 6px 0}
+.gm span{display:block;font-size:12.5px;color:var(--muted);padding:4px 6px 0;line-height:1.35}
+.empty{background:#fff;border-radius:24px;padding:20px;color:var(--muted);font-size:14px;line-height:1.5}
+/* tarjetas de práctica */
+.card{background:#fff;border-radius:30px;padding:24px 20px;box-shadow:0 10px 30px -18px rgba(54,40,120,.45);margin-bottom:16px}
+h1{font-size:30px;line-height:1.05;margin:6px 0 10px;font-weight:800}
+h2{font-size:23px;line-height:1.15;margin:0 0 8px;font-weight:700}
+h3{font-size:18px;margin:0 0 6px;font-weight:700}
+p{margin:0 0 12px;line-height:1.6;font-size:15px}
+.muted{color:var(--muted)}
+.signs{display:flex;gap:8px;margin-bottom:14px}
+.sg{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:22px;color:var(--navy)}
+.facts{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
+.fact{font-size:13px;font-weight:700;padding:8px 12px;border-radius:14px;background:var(--paper)}
+label.f{display:block;font-size:14px;font-weight:700;margin:18px 0 8px}
+input.name{width:100%;font:inherit;font-size:16px;padding:14px 16px;border-radius:16px;border:2px solid var(--line);background:#fff;color:var(--ink)}
+.levels{display:grid;gap:10px;margin-top:4px}
+.lvl{text-align:left;padding:16px;border-radius:20px;background:#fff;border:2px solid var(--line);display:flex;gap:14px;align-items:center}
+.lvl .dot{flex:none;width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-weight:800}
+.lvl b{display:block;font-size:15px;color:var(--ink)}
+.lvl span{display:block;font-size:13px;color:var(--muted);line-height:1.4}
+.lvl[aria-pressed="true"]{border-color:var(--navy);box-shadow:0 0 0 3px rgba(21,25,43,.08)}
+.btn{display:block;width:100%;padding:17px;border-radius:999px;background:var(--navy);color:#fff;font-weight:800;font-size:16px;margin-top:18px;box-shadow:0 4px 0 var(--lime)}
+.btn:disabled{opacity:.35;cursor:default;box-shadow:none}
+.btn.ghost{background:#fff;color:var(--navy);border:2.5px solid var(--navy);box-shadow:none}
+.err{color:var(--rosaD);font-size:13px;margin-top:8px;min-height:18px}
+.tchip{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;padding:7px 12px;border-radius:999px}
+.rule{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1.5px dashed var(--line)}
+.rule:first-of-type{border-top:0}
+.rule .n{flex:none;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:14px}
+.rule p{margin:0;font-size:14.5px}
+.visual{background:var(--paper);border-radius:20px;padding:14px;margin:14px 0}
+.visual svg{display:block;width:100%;height:auto}
+.steps{margin:6px 0 0;padding:0;list-style:none}
+.steps li{display:flex;gap:12px;padding:10px 0;border-top:1.5px dashed var(--line);font-size:15px;line-height:1.5}
+.steps li:first-child{border-top:0}
+.steps .k{flex:none;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center;margin-top:1px}
+.expr{font-weight:800;white-space:nowrap}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05;margin:0 .1em}.fr b{font-weight:inherit;border-bottom:.07em solid currentColor;padding:0 .14em}.fr i{font-style:normal;padding:0 .14em}
+.big svg{max-width:100%;height:auto;display:block;margin-top:8px}
+.tb{border-collapse:separate;border-spacing:0;font-size:18px;margin-top:6px;border-radius:14px;overflow:hidden;border:2px solid var(--line)}.tb td,.tb th{padding:8px 16px;text-align:center;border-bottom:1.5px solid var(--line)}.tb th{background:var(--paper);font-size:14px}.tb tr:last-child td{border-bottom:0}.tb .q{background:var(--yelS);font-weight:800}
+.opt .fr{font-size:1.15em}
+.big.wrap{white-space:normal;font-size:clamp(20px,5.4vw,26px);line-height:1.35}
+.progress{height:10px;border-radius:999px;background:var(--surface2);overflow:hidden;margin-bottom:14px}
+.progress i{display:block;height:100%;border-radius:999px;transition:width .35s ease}
+.qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.qnum{font-size:13px;color:var(--muted);font-weight:700}
+.recuerda{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;padding:8px 12px;border-radius:999px;background:var(--yelS)}
+.prompt{font-size:15px;color:var(--muted);margin:14px 0 4px}
+.big{font-size:clamp(28px,8vw,40px);font-weight:800;margin:4px 0 16px;overflow-x:auto;white-space:nowrap}
+.ansbox{display:flex;align-items:center;justify-content:center;height:64px;border-radius:18px;border:2.5px solid var(--line);font-size:30px;font-weight:800;margin-bottom:12px;background:#fff;font-family:'Bricolage Grotesque',sans-serif}
+.ansbox.empty{color:#B9B5C9;font-size:16px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif}
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pad button{height:56px;border-radius:16px;background:var(--paper);font-size:22px;font-weight:800}
+.pad button.sp{font-size:15px}
+.vt{display:inline-block;text-align:right;font-variant-numeric:tabular-nums;line-height:1.12;letter-spacing:.06em;margin:4px 0}.vt div:last-child{border-bottom:.09em solid currentColor;padding-bottom:2px}.vt span{float:left;margin-right:.45em}
+.pad button:active{transform:scale(.97)}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;padding:16px;border-radius:18px;border:2px solid var(--line);background:#fff;font-size:16px;font-weight:700}
+.opt[aria-pressed="true"]{border-color:var(--navy);background:var(--paper)}
+.fb{border-radius:22px;padding:18px;margin-top:14px}
+.fb.ok{background:var(--limeS)} .fb.no{background:var(--rosaS)}
+.fb h3{display:flex;align-items:center;gap:8px}
+.fb .steps li{border-color:rgba(21,25,43,.12)}
+.sheet{position:fixed;inset:0;background:rgba(21,25,43,.45);display:none;align-items:flex-end;justify-content:center;z-index:30}
+.sheet.on{display:flex}
+.sheet .in{background:#fff;width:100%;max-width:560px;border-radius:30px 30px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom,0px));max-height:85vh;overflow:auto;animation:up .25s ease}
+@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.score{display:flex;align-items:center;gap:18px;margin:8px 0 6px}
+.ring{flex:none;width:118px;height:118px}
+.bars{margin-top:8px}
+.bar{margin:12px 0}
+.bar .l{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:6px}
+.bar .t{height:12px;border-radius:999px;background:var(--paper);overflow:hidden}
+.bar .t i{display:block;height:100%;border-radius:999px}
+.letter{background:var(--paper);border-radius:22px;padding:20px}
+.letter p{font-size:15px}
+.sign{font-weight:800;font-size:14px;margin-top:6px}
+.rec{display:flex;gap:14px;align-items:center;padding:14px;border-radius:20px;border:2px solid var(--line);margin-top:10px}
+.rec .ic{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center}
+.rec b{display:block;font-size:15px;color:var(--ink)}
+.rec span{display:block;font-size:13px;color:var(--muted);line-height:1.4}
+.foot{display:none}
+/* barra inferior de la app (solo vista previa) */
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom,0px));width:calc(100% - 24px);max-width:536px;background:#15192B;border-radius:30px;padding:8px;display:grid;grid-template-columns:repeat(6,1fr);gap:2px;z-index:20;pointer-events:none}
+.nav span{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0;border-radius:22px;color:#A9ADC4;font-size:11px;font-weight:700}
+.nav span.on{background:var(--lime);color:#15192B}
+.nav svg{width:22px;height:22px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Recuerda"><div class="in" id="sheetIn"></div></div>
+
+<script>
+(function(){
+"use strict";
+var $app=document.getElementById('app'), $sheet=document.getElementById('sheet'), $sheetIn=document.getElementById('sheetIn');
+
+/* ---------- utilidades ---------- */
+function W(obj,val,tag,ans){if(Math.abs(val-ans)>1e-9&&obj[KEY(val)]===undefined)obj[KEY(val)]=tag}
+function R(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function NZ(a,b){var n;do{n=R(a,b)}while(n===0);return n}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+var M='\u2212';
+function f(n){return n<0?M+Math.abs(n):String(n)}
+function t(n){return n<0?'('+M+Math.abs(n)+')':String(n)}
+function E(s){return '<span class="expr">'+s+'</span>'}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function sgnW(n){return n<0?'negativo':'positivo'}
+function KEY(v){return String(Math.round(v*1e6)/1e6)}
+function NF(n){if(typeof n!=='number'||isNaN(n))return String(n);var r=Math.round(n*1e6)/1e6;return (r<0?M:'')+Math.abs(r).toLocaleString('es-MX',{maximumFractionDigits:6})}
+
+/* ---------- temas ---------- */
+var ALLT={
+ sig:{id:'sig',name:'Leyes de los signos',short:'Leyes de los signos',c:'--lime',s:'--limeS',d:'--limeD'},
+ jer:{id:'jer',name:'Jerarquía de operaciones',short:'Jerarquía de operaciones',c:'--lila',s:'--lilaS',d:'--lilaD'},
+ frd:{id:'frd',name:'Fracciones y decimales',short:'Fracciones y decimales',c:'--rosa',s:'--rosaS',d:'--rosaD'},
+ por:{id:'por',name:'Porcentajes',short:'Porcentajes',c:'--yel',s:'--yelS',d:'--yelD'},
+ dv:{id:'dv',name:'Divisibilidad y números primos',short:'Divisibilidad',c:'--lime',s:'--limeS',d:'--limeD'},
+ mcd:{id:'mcd',name:'MCD y mcm',short:'MCD y mcm',c:'--lila',s:'--lilaS',d:'--lilaD'},
+ pot:{id:'pot',name:'Potencias y raíces',short:'Potencias',c:'--rosa',s:'--rosaS',d:'--rosaD'},
+ nc:{id:'nc',name:'Notación científica',short:'Notación científica',c:'--yel',s:'--yelS',d:'--yelD'},
+ ec:{id:'ec',name:'Ecuaciones de primer grado',short:'Ecuaciones',c:'--lime',s:'--limeS',d:'--limeD'},
+ suc:{id:'suc',name:'Sucesiones',short:'Sucesiones',c:'--lila',s:'--lilaS',d:'--lilaD'},
+ pol:{id:'pol',name:'Polígonos',short:'Polígonos',c:'--rosa',s:'--rosaS',d:'--rosaD'},
+ est:{id:'est',name:'Histogramas y medidas de tendencia central',short:'Estadística',c:'--yel',s:'--yelS',d:'--yelD'}
+};
+var TOPICS=[ALLT.sig,ALLT.jer,ALLT.frd,ALLT.por];
+function cv(v){return 'var('+v+')'}
+
+var TAGS={
+ sigSuma:{topic:'sig',say:'al sumar números con distinto signo a veces te queda el signo equivocado',fix:'Si los signos son diferentes, resta y deja el signo del número más grande (sin contar el signo).'},
+ sigResta:{topic:'sig',say:'al restar un número negativo a veces se te olvida que dos menos juntos se vuelven más',fix:'Restar un negativo es sumar: 5 − (−3) = 5 + 3.'},
+ sigMult:{topic:'sig',say:'en multiplicaciones y divisiones con signo a veces el resultado queda con el signo contrario',fix:'Signos iguales dan positivo; signos diferentes dan negativo.'},
+ jerOrden:{topic:'jer',say:'a veces resuelves de izquierda a derecha sin respetar la jerarquía',fix:'Primero paréntesis, luego potencias, después multiplicaciones y divisiones, y al final sumas y restas.'},
+ jerParen:{topic:'jer',say:'a veces no empiezas por lo que está dentro del paréntesis',fix:'Lo primero que se resuelve es lo que está dentro de los paréntesis.'},
+ frDen:{topic:'frd',say:'al sumar fracciones en algunos casos sumas también los denominadores',fix:'Busca un denominador común y suma solo los numeradores.'},
+ frMult:{topic:'frd',say:'al multiplicar fracciones a veces multiplicas en cruz',fix:'Para multiplicar: numerador por numerador y denominador por denominador.'},
+ frDiv:{topic:'frd',say:'al dividir fracciones a veces multiplicas derecho',fix:'Para dividir, multiplica en cruz: el numerador de la primera por el denominador de la segunda.'},
+ frDec:{topic:'frd',say:'al convertir fracciones y decimales hay confusiones',fix:'Una fracción es una división: 3/4 = 3 ÷ 4 = 0.75.'},
+ porc:{topic:'por',say:'al calcular porcentajes hay errores',fix:'Para sacar un porcentaje, multiplica la cantidad por el porcentaje y divide entre 100.'},
+ porDesc:{topic:'por',say:'en los descuentos a veces das solo el descuento y no lo que se paga',fix:'Primero calcula el descuento y después réstaselo al precio original.'},
+ divCrit:{topic:'dv',say:'los criterios de divisibilidad todavía se confunden',fix:'Entre 2: termina en par. Entre 3: la suma de sus cifras es múltiplo de 3. Entre 5: termina en 0 o 5. Entre 9: la suma de sus cifras es múltiplo de 9.'},
+ primo:{topic:'dv',say:'todavía cuesta reconocer los números primos',fix:'Un número primo solo se divide entre 1 y entre sí mismo. Prueba dividir entre 2, 3, 5 y 7.'},
+ factP:{topic:'dv',say:'en la descomposición en factores primos hay errores',fix:'Divide entre números primos (2, 3, 5, 7…) hasta llegar a 1, y cuenta cuántas veces usaste cada uno.'},
+ mcdMcm:{topic:'mcd',say:'el MCD y el mcm todavía se confunden',fix:'El MCD es el número más grande que divide a ambos; el mcm es el número más pequeño que es múltiplo de ambos.'},
+ mcmProd:{topic:'mcd',say:'para el mcm a veces solo multiplicas los dos números',fix:'Multiplicarlos da un múltiplo común, pero no siempre el menor. Descompón en factores primos.'},
+ mcdProb:{topic:'mcd',say:'en los problemas cuesta decidir si se usa MCD o mcm',fix:'Si se reparte o se corta en partes iguales lo más grandes posible, es MCD. Si algo coincide o se repite al mismo tiempo, es mcm.'},
+ potLey:{topic:'pot',say:'las leyes de los exponentes todavía se confunden',fix:'Al multiplicar, los exponentes se suman; al dividir, se restan; y potencia de una potencia, se multiplican.'},
+ potMult:{topic:'pot',say:'a veces multiplicas la base por el exponente',fix:'2⁵ no es 2 × 5: es 2 × 2 × 2 × 2 × 2 = 32.'},
+ potNeg:{topic:'pot',say:'con potencias de números negativos se pierde el signo',fix:'Un negativo con exponente par da positivo y con exponente impar da negativo. Sin paréntesis, −3² = −9.'},
+ raiz:{topic:'pot',say:'las raíces cuadradas todavía cuestan',fix:'La raíz cuadrada es el número que multiplicado por sí mismo da el número: √49 = 7 porque 7 × 7 = 49.'},
+ ncForma:{topic:'nc',say:'en notación científica a veces el primer número no queda entre 1 y 10',fix:'El primer número debe tener una sola cifra antes del punto: 4.5 × 10⁷, no 45 × 10⁶.'},
+ ncExp:{topic:'nc',say:'el exponente en notación científica a veces queda con un lugar de más o de menos',fix:'Cuenta cuántos lugares se mueve el punto. Si el número es grande el exponente es positivo; si es menor que 1, negativo.'},
+ ecTrans:{topic:'ec',say:'al despejar a veces un número pasa al otro lado sin cambiar de signo',fix:'Lo que suma pasa restando, lo que resta pasa sumando, lo que multiplica pasa dividiendo.'},
+ ecParen:{topic:'ec',say:'en ecuaciones con paréntesis a veces no multiplicas a todos los términos',fix:'Primero multiplica el número de afuera por cada término dentro del paréntesis.'},
+ ecPlant:{topic:'ec',say:'todavía cuesta plantear la ecuación de un problema',fix:'Llama x a lo que no conoces y escribe la frase como operación, paso por paso.'},
+ sucSig:{topic:'suc',say:'al encontrar el siguiente término hay errores',fix:'Busca cuánto cambia de un término al siguiente y aplica el mismo cambio.'},
+ sucRegla:{topic:'suc',say:'la regla general de una sucesión todavía cuesta',fix:'En una sucesión que aumenta de d en d, la regla es dn + (primer término − d).'},
+ polNom:{topic:'pol',say:'los nombres de los polígonos todavía se confunden',fix:'5 pentágono, 6 hexágono, 7 heptágono, 8 octágono, 9 eneágono, 10 decágono, 12 dodecágono.'},
+ polAng:{topic:'pol',say:'al calcular ángulos interiores a veces no restas 2 al número de lados',fix:'La suma de los ángulos interiores es (n − 2) × 180°.'},
+ polExt:{topic:'pol',say:'el ángulo interior y el exterior se confunden',fix:'El ángulo exterior de un polígono regular es 360° ÷ n; el interior es 180° menos el exterior.'},
+ polDiag:{topic:'pol',say:'en las diagonales a veces se te olvida dividir entre 2',fix:'Número de diagonales: n(n − 3) ÷ 2.'},
+ hisLeer:{topic:'est',say:'al leer el histograma hay errores',fix:'La altura de cada barra es la frecuencia: cuántos datos hay en ese intervalo.'},
+ estMedida:{topic:'est',say:'la media, la mediana y la moda todavía se confunden',fix:'Media: suma todo y divide. Mediana: el dato de en medio ya ordenado. Moda: el que más se repite.'},
+ calculo:{topic:null,say:'hubo algunos errores pequeños de cálculo',fix:'Haz cada operación con calma y revisa antes de comprobar.'}
+};
+
+/* ---------- ayudas ---------- */
+function NZ(a,b){var v=0;while(v===0)v=R(a,b);return v}
+function SG(n){return n<0?M+Math.abs(n):String(n)}
+function PAR(n){return n<0?'('+M+Math.abs(n)+')':String(n)}
+function FR(n,d){return '<span class="fr"><b>'+n+'</b><i>'+d+'</i></span>'}
+function gcd(a,b){return b?gcd(b,a%b):Math.abs(a)}
+function lcm(a,b){return a/gcd(a,b)*b}
+function SF(n,d){var g=gcd(n,d);return d/g===1?String(n/g):FR(n/g,d/g)}
+function PF(maxd){var d=R(2,maxd),n=R(1,d-1);while(gcd(n,d)!==1)n=R(1,d-1);return[n,d]}
+function SUP(b,e){return b+'<sup>'+SG(e)+'</sup>'}
+function optsFrom(correct,wrongs){
+  var all=[{t:correct,c:1}].concat(wrongs.filter(function(w,i,a){return w.t!==correct&&a.findIndex(function(x){return x.t===w.t})===i}));
+  all=shuffle(all);return{opts:all.map(function(x){return x.t}),ans:all.findIndex(function(x){return x.c})};
+}
+function OPT(o){var x=optsFrom(o.correct,o.wrongs);o.type='opt';o.opts=x.opts;o.ans=x.ans;return o}
+var TXT='font-family="Plus Jakarta Sans" font-weight="800"';
+function isPrime(n){if(n<2)return false;for(var i=2;i*i<=n;i++)if(n%i===0)return false;return true}
+function factors(n){var f={},p=2;while(n>1){while(n%p===0){f[p]=(f[p]||0)+1;n/=p}p++}return f}
+function factStr(f){return Object.keys(f).map(function(p){return f[p]>1?SUP(p,f[p]):p}).join(' × ')}
+
+var GEN={};Object.keys(ALLT).forEach(function(k){GEN[k]={}});
+function both(topic,fn){GEN[topic].base=(GEN[topic].base||[]).concat([function(){return fn('base')}]);GEN[topic].grado=(GEN[topic].grado||[]).concat([function(){return fn('grado')}])}
+
+/* ===== Parte A ===== */
+both('sig',function(lv){var L=lv==='base'?15:60,a=NZ(-L,L),b=NZ(-L,L);while(Math.sign(a)===Math.sign(b))b=NZ(-L,L);var ans=a+b,w={};W(w,-ans,'sigSuma',ans);W(w,Math.abs(a)+Math.abs(b),'sigSuma',ans);W(w,-(Math.abs(a)+Math.abs(b)),'sigSuma',ans);
+  return{type:'num',disp:SG(a)+' + '+PAR(b),ans:ans,w:w,def:'sigSuma',steps:['Los signos son diferentes: resto '+E(Math.max(Math.abs(a),Math.abs(b))+' '+M+' '+Math.min(Math.abs(a),Math.abs(b))+' = '+Math.abs(ans))+'.','Dejo el signo del número más grande ('+SG(Math.abs(a)>Math.abs(b)?a:b)+'): '+E(SG(ans))+'.']}});
+both('sig',function(lv){var L=lv==='base'?15:60,a=NZ(-L,L),b=R(2,L),ans=a+b,w={};W(w,a-b,'sigResta',ans);W(w,-ans,'sigSuma',ans);
+  return{type:'num',disp:SG(a)+' '+M+' ('+M+b+')',ans:ans,w:w,def:'sigResta',steps:['Dos signos menos juntos se vuelven más: '+E(SG(a)+' + '+b)+'.','Resuelvo: '+E(SG(a)+' + '+b+' = '+SG(ans))+'.']}});
+both('sig',function(lv){var a=NZ(-12,12),b=NZ(-12,12);if(Math.sign(a)===Math.sign(b)&&Math.random()<.5)b=-b;var w={};
+  if(lv==='grado'&&Math.random()<.5){var p=a*b,ans2=a,d=b;W(w,-ans2,'sigMult',ans2);return{type:'num',disp:SG(p)+' ÷ '+PAR(d),ans:ans2,w:w,def:'sigMult',steps:['Divido sin signos: '+E(Math.abs(p)+' ÷ '+Math.abs(d)+' = '+Math.abs(ans2))+'.',(Math.sign(p)===Math.sign(d)?'Signos iguales: positivo.':'Signos diferentes: negativo.')+' Resultado: '+E(SG(ans2))+'.']}}
+  var ans=a*b;W(w,-ans,'sigMult',ans);W(w,a+b,'calculo',ans);
+  return{type:'num',disp:PAR(a)+' × '+PAR(b),ans:ans,w:w,def:'sigMult',steps:['Multiplico sin signos: '+E(Math.abs(a)+' × '+Math.abs(b)+' = '+Math.abs(ans))+'.',(Math.sign(a)===Math.sign(b)?'Signos iguales: positivo.':'Signos diferentes: negativo.')+' Resultado: '+E(SG(ans))+'.']}});
+both('sig',function(lv){var n=lv==='base'?3:R(3,5),fs=[],neg=0;for(var i=0;i<n;i++){var v=NZ(-6,6);if(v<0)neg++;fs.push(v)}var pos=neg%2===0;
+  return OPT({prompt:'Sin hacer la operación, ¿qué signo tiene el resultado?',disp:fs.map(PAR).join(' × '),correct:pos?'Positivo':'Negativo',wrongs:[{t:pos?'Negativo':'Positivo'}],tag:'sigMult',
+    steps:['Cuento los factores negativos: hay '+E(neg)+'.','Si la cantidad de negativos es par, el resultado es positivo; si es impar, negativo. Aquí es '+E(pos?'positivo':'negativo')+'.']})});
+
+both('jer',function(lv){var a=lv==='base'?R(2,20):NZ(-20,20),b=lv==='base'?R(2,9):NZ(-9,9),c=lv==='base'?R(2,9):NZ(-9,9),ans=a+b*c,w={};W(w,(a+b)*c,'jerOrden',ans);W(w,a-b*c,'sigMult',ans);
+  return{type:'num',disp:SG(a)+' + '+PAR(b)+' × '+PAR(c),ans:ans,w:w,def:'jerOrden',steps:['Primero la multiplicación: '+E(PAR(b)+' × '+PAR(c)+' = '+SG(b*c))+'.','Después la suma: '+E(SG(a)+' + '+PAR(b*c)+' = '+SG(ans))+'.']}});
+both('jer',function(lv){var c=lv==='base'?R(2,6):NZ(-6,6),q=lv==='base'?R(2,9):NZ(-9,9),a=c*q,d=lv==='base'?R(2,9):NZ(-9,9),e=R(2,6),ans=q-d*e,w={};W(w,Math.round((a/c-d)*e),'jerOrden',ans);W(w,q+d*e,'sigMult',ans);
+  return{type:'num',disp:SG(a)+' ÷ '+PAR(c)+' '+M+' '+PAR(d)+' × '+e,ans:ans,w:w,def:'jerOrden',steps:['Primero divisiones y multiplicaciones: '+E(SG(a)+' ÷ '+PAR(c)+' = '+SG(q))+' y '+E(PAR(d)+' × '+e+' = '+SG(d*e))+'.','Después la resta: '+E(SG(q)+' '+M+' '+PAR(d*e)+' = '+SG(ans))+'.']}});
+both('jer',function(lv){if(lv==='base'){var a=R(2,9),b=R(1,9),c=R(1,9),d=R(1,20),ans=a*(b+c)-d,w={};W(w,a*b+c-d,'jerParen',ans);
+    return{type:'num',disp:a+' × ('+b+' + '+c+') '+M+' '+d,ans:ans,w:w,def:'jerParen',steps:['Primero el paréntesis: '+E(b+' + '+c+' = '+(b+c))+'.','Multiplico: '+E(a+' × '+(b+c)+' = '+a*(b+c))+'.','Resto: '+E(a*(b+c)+' '+M+' '+d+' = '+SG(ans))+'.']}}
+  var x=NZ(-6,6),y=NZ(-6,6),s=x-y;while(s===0||Math.abs(s)>8){y=NZ(-6,6);s=x-y}var k=pick([1,2,4].filter(function(v){return (s*s)%v===0})),d=NZ(-15,15),ans=s*s/k+d,w2={};W(w2,-(s*s)/k+d,'potNeg',ans);W(w2,x-y*y/k+d,'jerParen',ans);W(w2,2*s/k+d,'potMult',ans);
+  return{type:'num',disp:'('+SG(x)+' '+M+' '+PAR(y)+')<sup>2</sup>'+(k>1?' ÷ '+k:'')+' + '+PAR(d),ans:ans,w:w2,def:'jerOrden',steps:['Primero el paréntesis: '+E(SG(x)+' '+M+' '+PAR(y)+' = '+SG(s))+'.','Después la potencia: '+E(PAR(s)+'² = '+(s*s))+(k>1?' y divido: '+E((s*s)+' ÷ '+k+' = '+(s*s/k)):'')+'.','Al final la suma: '+E((s*s/k)+' + '+PAR(d)+' = '+SG(ans))+'.']}});
+
+both('frd',function(lv){var b=pick([2,3,4,5,6]),d=pick([3,4,6,8,9,10].filter(function(v){return v!==b})),a=R(1,b-1),c=R(1,d-1),L=lcm(b,d),N=a*L/b+c*L/d;
+  return OPT({prompt:'Resuelve y simplifica:',disp:FR(a,b)+' + '+FR(c,d)+' =',correct:SF(N,L),wrongs:[{t:SF(a+c,b+d)},{t:FR(a+c,L)},{t:SF(a*c,b*d)}],tag:'frDen',
+    steps:['Denominador común: '+E(L)+'.','Convierto: '+FR(a,b)+' = '+FR(a*L/b,L)+' y '+FR(c,d)+' = '+FR(c*L/d,L)+'.','Sumo los numeradores: '+FR(N,L)+(gcd(N,L)>1?', que simplificado es '+SF(N,L):'')+'.']})});
+both('frd',function(lv){var f1=PF(9),f2=PF(9),a=f1[0],b=f1[1],c=f2[0],d=f2[1];
+  return OPT({prompt:'Multiplica y simplifica:',disp:FR(a,b)+' × '+FR(c,d)+' =',correct:SF(a*c,b*d),wrongs:[{t:SF(a*d,b*c)},{t:SF(a+c,b+d)},{t:SF(a*c,b+d)}],tag:'frMult',
+    steps:['Numerador por numerador: '+E(a+' × '+c+' = '+a*c)+'.','Denominador por denominador: '+E(b+' × '+d+' = '+b*d)+'.','Resultado: '+FR(a*c,b*d)+(gcd(a*c,b*d)>1?' = '+SF(a*c,b*d):'')+'.']})});
+both('frd',function(lv){var f1=PF(9),f2=PF(9);while(f1[0]*f2[1]===f1[1]*f2[0])f2=PF(9);var a=f1[0],b=f1[1],c=f2[0],d=f2[1];
+  return OPT({prompt:'Divide y simplifica:',disp:FR(a,b)+' ÷ '+FR(c,d)+' =',correct:SF(a*d,b*c),wrongs:[{t:SF(a*c,b*d)},{t:SF(b*c,a*d)},{t:SF(a+d,b+c)}],tag:'frDiv',
+    steps:['Para dividir multiplico en cruz.','Arriba: '+E(a+' × '+d+' = '+a*d)+'. Abajo: '+E(b+' × '+c+' = '+b*c)+'.','Resultado: '+FR(a*d,b*c)+(gcd(a*d,b*c)>1?' = '+SF(a*d,b*c):'')+'.']})});
+both('frd',function(lv){var d=pick(lv==='base'?[2,4,5,10]:[4,5,8,20,25]),n=R(1,d-1);while(gcd(n,d)!==1)n=R(1,d-1);var dec=n/d,ds=NF(dec);
+  if(lv==='grado'&&Math.random()<.5)return OPT({prompt:'Escribe el decimal como fracción simplificada:',disp:ds,correct:FR(n,d),wrongs:[{t:FR(n,d+1)},{t:FR(Math.round(dec*100),10)},{t:FR(d,n)}],tag:'frDec',steps:['Escribo el decimal sobre su potencia de 10: '+FR(Math.round(dec*1000),1000)+'.','Simplifico: '+FR(n,d)+'.']});
+  return OPT({prompt:'Convierte la fracción a decimal:',disp:FR(n,d),correct:ds,wrongs:[{t:NF(+(n+'.'+d))},{t:NF(d/n>9?+(d+'.'+n):Math.round(d/n*100)/100)},{t:NF(n/10)}],tag:'frDec',steps:['Una fracción es una división: '+E(n+' ÷ '+d)+'.','Resultado: '+E(ds)+'.']})});
+
+both('por',function(lv){var p=pick(lv==='base'?[10,20,25,50,75]:[5,12,15,30,35,40,60,85]),N=R(2,lv==='base'?20:40)*(100/gcd(p,100)),ans=N*p/100,w={};W(w,N*p,'porc',ans);W(w,N-ans,'porDesc',ans);W(w,p,'porc',ans);
+  return{type:'num',prompt:'Calcula:',disp:p+'% de '+NF(N),ans:ans,w:w,def:'porc',steps:['Multiplico la cantidad por el porcentaje: '+E(NF(N)+' × '+p+' = '+NF(N*p))+'.','Divido entre 100: '+E(NF(N*p)+' ÷ 100 = '+NF(ans))+'.']}});
+both('por',function(lv){var d=pick(lv==='base'?[10,20,25,50]:[15,30,35,40]),P=R(2,lv==='base'?20:30)*(100/gcd(d,100))*pick([1,2,5]),desc=P*d/100,ans=P-desc,w={};W(w,desc,'porDesc',ans);W(w,P-d,'porc',ans);W(w,P+desc,'porDesc',ans);
+  return{type:'num',prompt:'Lee y resuelve:',disp:'Una mochila cuesta $'+NF(P)+' y tiene '+d+'% de descuento. ¿Cuánto se paga?',wrap:true,noEq:true,ans:ans,w:w,def:'porDesc',steps:['Calculo el descuento: '+E(d+'% de '+NF(P)+' = $'+NF(desc))+'.','Se lo resto al precio: '+E('$'+NF(P)+' '+M+' $'+NF(desc)+' = $'+NF(ans))+'.']}});
+both('por',function(lv){var p=pick(lv==='base'?[10,20,25,50,75]:[5,15,30,35,40,45,60,80]),b=R(2,lv==='base'?10:30)*(100/gcd(p,100)),a=b*p/100,w={};W(w,a,'porc',p);W(w,Math.round(b/a),'porc',p);W(w,100-p,'porc',p);
+  return{type:'num',prompt:'Lee y resuelve:',disp:'En un grupo de '+b+' alumnos, '+a+' aprobaron. ¿Qué porcentaje aprobó?',wrap:true,noEq:true,ans:p,w:w,def:'porc',steps:['Divido la parte entre el total: '+E(a+' ÷ '+b+' = '+NF(a/b))+'.','Multiplico por 100: '+E(NF(a/b)+' × 100 = '+p+'%')+'.']}});
+both('por',function(lv){var p=lv==='base'?pick([10,20,50]):16,P=R(2,lv==='base'?30:40)*(lv==='base'?10:25),inc=P*p/100,ans=P+inc,w={};W(w,inc,'porDesc',ans);W(w,P-inc,'porDesc',ans);W(w,P+p,'porc',ans);
+  return{type:'num',prompt:'Lee y resuelve:',disp:'Un artículo cuesta $'+NF(P)+(p===16?' más 16% de IVA':' y aumentó '+p+'%')+'. ¿Cuál es el precio final?',wrap:true,noEq:true,ans:ans,w:w,def:'porc',steps:['Calculo el aumento: '+E(p+'% de '+NF(P)+' = $'+NF(inc))+'.','Lo sumo al precio: '+E('$'+NF(P)+' + $'+NF(inc)+' = $'+NF(ans))+'.']}});
+
+/* ===== Parte B ===== */
+both('dv',function(lv){var k=pick(lv==='base'?[2,3,5,10]:[3,4,6,9]),good=k*R(lv==='base'?11:101,lv==='base'?99:999),bad=[];while(bad.length<3){var v=good+R(1,k-1)+k*R(-5,5);if(v>0&&v%k!==0&&bad.indexOf(v)<0)bad.push(v)}
+  var crit={2:'termina en cifra par',3:'la suma de sus cifras es múltiplo de 3',4:'sus dos últimas cifras forman un múltiplo de 4',5:'termina en 0 o en 5',6:'es divisible entre 2 y entre 3',9:'la suma de sus cifras es múltiplo de 9',10:'termina en 0'};
+  return OPT({prompt:'¿Cuál número es divisible entre '+k+'?',disp:'',correct:NF(good),wrongs:bad.map(function(v){return{t:NF(v)}}),tag:'divCrit',steps:['Un número es divisible entre '+k+' si '+crit[k]+'.',E(NF(good))+' cumple: '+E(NF(good)+' ÷ '+k+' = '+NF(good/k))+'.']})});
+both('dv',function(lv){var P=lv==='base'?[7,11,13,17,19,23,29,31,37,41,43,47]:[53,59,61,67,71,73,79,83,89,97],C=lv==='base'?[9,15,21,25,27,33,35,39,45,49]:[51,57,63,69,77,81,87,91,93,99],p=pick(P),cs=shuffle(C).slice(0,3);
+  return OPT({prompt:'¿Cuál de estos números es primo?',disp:'',correct:String(p),wrongs:cs.map(function(c){return{t:String(c)}}),tag:'primo',steps:['Un primo solo se divide entre 1 y entre sí mismo.','Los otros sí tienen divisores: '+cs.map(function(c){var d=[3,5,7,11,13].filter(function(x){return c%x===0})[0];return c+' = '+d+' × '+c/d}).join(', ')+'. El primo es '+E(p)+'.']})});
+both('dv',function(lv){var f=lv==='base'?{2:R(1,3),3:R(1,2)}:{2:R(1,4),3:R(1,2),5:R(0,1)};if(lv==='base'&&Math.random()<.5)f[5]=1;var n=1;Object.keys(f).forEach(function(p){if(!f[p])delete f[p];else n*=Math.pow(+p,f[p])});
+  var c=factStr(f),w1=JSON.parse(JSON.stringify(f));w1[2]=(w1[2]||0)+1;var w2=JSON.parse(JSON.stringify(f));w2[3]=Math.max(1,(w2[3]||1)-1)+(f[3]>1?0:1);
+  var comp=(n%4===0?'4 × '+n/4:n%6===0?'6 × '+n/6:'2 × '+n/2);
+  return OPT({prompt:'¿Cuál es la descomposición en factores primos?',disp:NF(n),correct:c,wrongs:[{t:factStr(w1)},{t:factStr(w2)},{t:comp}],tag:'factP',steps:['Divido entre primos: '+Object.keys(f).map(function(p){return 'entre '+p+' '+f[p]+' vez'+(f[p]>1?'es':'')}).join(', ')+'.','Resultado: '+E(NF(n)+' = ')+c+'.']})});
+
+function pairM(lv){var g=pick(lv==='base'?[2,3,4,5,6]:[4,6,8,9,12,15]),x=R(2,lv==='base'?6:9),y=R(2,lv==='base'?6:9);while(gcd(x,y)!==1||x===y)y=R(2,lv==='base'?7:10);return{a:g*x,b:g*y,g:g,l:g*x*y}}
+both('mcd',function(lv){var p=pairM(lv),w={};W(w,p.l,'mcdMcm',p.g);W(w,Math.min(p.a,p.b),'mcdMcm',p.g);
+  return{type:'num',prompt:'Encuentra el máximo común divisor:',disp:'MCD('+p.a+', '+p.b+')',ans:p.g,w:w,def:'calculo',steps:[E(p.a+' = ')+factStr(factors(p.a))+' y '+E(p.b+' = ')+factStr(factors(p.b))+'.','Tomo los factores comunes con su menor exponente: '+E('MCD = '+p.g)+'.']}});
+both('mcd',function(lv){var p=pairM(lv),w={};W(w,p.a*p.b,'mcmProd',p.l);W(w,p.g,'mcdMcm',p.l);
+  return{type:'num',prompt:'Encuentra el mínimo común múltiplo:',disp:'mcm('+p.a+', '+p.b+')',ans:p.l,w:w,def:'calculo',steps:[E(p.a+' = ')+factStr(factors(p.a))+' y '+E(p.b+' = ')+factStr(factors(p.b))+'.','Tomo todos los factores con su mayor exponente: '+E('mcm = '+NF(p.l))+'.']}});
+both('mcd',function(lv){var p=pairM(lv),w={};W(w,p.l,'mcdProb',p.g);W(w,p.a+p.b,'mcdProb',p.g);
+  return{type:'num',prompt:'Lee y resuelve:',disp:'Se tienen '+p.a+' m de listón rojo y '+p.b+' m de listón azul. Se quieren cortar en trozos iguales, lo más largos posible, sin que sobre nada. ¿Cuánto mide cada trozo?',wrap:true,noEq:true,ans:p.g,w:w,def:'mcdProb',steps:['Se corta en partes iguales lo más grandes posible: es un problema de MCD.',E('MCD('+p.a+', '+p.b+') = '+p.g)+'. Cada trozo mide '+E(p.g+' m')+'.']}});
+both('mcd',function(lv){var p=pairM(lv),w={};W(w,p.g,'mcdProb',p.l);W(w,p.a*p.b,'mcmProd',p.l);
+  return{type:'num',prompt:'Lee y resuelve:',disp:'Un autobús pasa cada '+p.a+' minutos y otro cada '+p.b+' minutos. Si acaban de pasar juntos, ¿en cuántos minutos vuelven a coincidir?',wrap:true,noEq:true,ans:p.l,w:w,def:'mcdProb',steps:['Buscamos cuándo coinciden: es un problema de mcm.',E('mcm('+p.a+', '+p.b+') = '+NF(p.l))+'. Coinciden en '+E(NF(p.l)+' minutos')+'.']}});
+
+both('pot',function(lv){var b=lv==='base'?pick([2,3,5,'x']):pick(['x','a',2,3]),m=R(2,7),n=R(2,7),kind=pick(lv==='base'?['mul','pow']:['mul','pow','div']);if(kind==='div'&&m<=n){var t=m;m=n+1;n=t}
+  var res=kind==='mul'?m+n:kind==='pow'?m*n:m-n,disp=kind==='mul'?SUP(b,m)+' × '+SUP(b,n):kind==='pow'?'('+SUP(b,m)+')<sup>'+n+'</sup>':SUP(b,m)+' ÷ '+SUP(b,n);
+  var alt=kind==='mul'?[m*n,m-n]:kind==='pow'?[m+n,Math.pow(m,n)>99?m*n+1:Math.pow(m,n)]:[m+n,m*n];
+  return OPT({prompt:'Simplifica usando las leyes de los exponentes:',disp:disp,correct:SUP(b,res),wrongs:[{t:SUP(typeof b==='number'?b*b:b,res)},{t:SUP(b,res+1)}].concat(alt.filter(function(v){return v>0}).map(function(v){return{t:SUP(b,v)}})).filter(function(x,i,arr){return x.t!==SUP(b,res)&&arr.findIndex(function(y){return y.t===x.t})===i}).slice(0,3),tag:'potLey',
+    steps:[kind==='mul'?'Misma base que se multiplica: los exponentes se suman.':kind==='pow'?'Potencia de una potencia: los exponentes se multiplican.':'Misma base que se divide: los exponentes se restan.',kind==='mul'?E(m+' + '+n+' = '+res):kind==='pow'?E(m+' × '+n+' = '+res):E(m+' '+M+' '+n+' = '+res),'Resultado: '+SUP(b,res)+'.']})});
+both('pot',function(lv){var b,e,neg,paren,ans,w={};
+  if(lv==='base'){b=pick([2,3,4,5,10]);e=b===2?R(3,6):b===10?R(2,5):R(2,3);ans=Math.pow(b,e);W(w,b*e,'potMult',ans);W(w,b+e,'potMult',ans);
+    return{type:'num',disp:SUP(b,e),ans:ans,w:w,def:'calculo',steps:['El exponente dice cuántas veces se multiplica la base: '+E(Array(e).fill(b).join(' × '))+'.','Resultado: '+E(NF(ans))+'.']}}
+  b=R(2,5);e=R(2,4);paren=Math.random()<.6;ans=paren?Math.pow(-b,e):-Math.pow(b,e);W(w,-ans,'potNeg',ans);W(w,-b*e,'potMult',ans);W(w,b*e,'potMult',ans);
+  return{type:'num',disp:paren?'('+M+b+')<sup>'+e+'</sup>':M+b+'<sup>'+e+'</sup>',ans:ans,w:w,def:'potNeg',steps:[paren?'El '+M+b+' está entre paréntesis: el signo también se eleva.':'No hay paréntesis: solo se eleva el '+b+' y el menos se queda.',paren?E(Array(e).fill('('+M+b+')').join(' × ')+' = '+SG(ans))+(e%2===0?' (exponente par: positivo).':' (exponente impar: negativo).'):E(M+'('+Array(e).fill(b).join(' × ')+') = '+SG(ans))+'.']}});
+both('pot',function(lv){var r=lv==='base'?R(2,12):R(11,25),n=r*r,w={};W(w,n/2,'raiz',r);W(w,r+1,'raiz',r);W(w,r-1,'raiz',r);
+  return{type:'num',disp:'√'+n,ans:r,w:w,def:'raiz',steps:['Busco el número que multiplicado por sí mismo da '+n+'.',E(r+' × '+r+' = '+n)+', así que '+E('√'+n+' = '+r)+'.']}});
+both('pot',function(lv){var b=pick([2,3,5,7,'x']),k=R(2,lv==='base'?4:6);
+  if(lv==='grado'&&Math.random()<.5)return OPT({prompt:'¿Cuánto vale?',disp:SUP(b,0),correct:'1',wrongs:[{t:'0'},{t:String(b)}],tag:'potLey',steps:['Todo número (distinto de cero) elevado a la 0 es igual a 1.']});
+  return OPT({prompt:'Simplifica:',disp:SUP(b,k)+' × '+b,correct:SUP(b,k+1),wrongs:[{t:SUP(b,k)},{t:SUP(b,2*k)},{t:SUP(typeof b==='number'?b*b:b,k)}],tag:'potLey',steps:['Un número sin exponente tiene exponente 1: '+E(b)+' = '+SUP(b,1)+'.','Sumo los exponentes: '+E(k+' + 1 = '+(k+1))+'. Resultado: '+SUP(b,k+1)+'.']})});
+
+function NCG(lv,small){var m=R(11,99)/10,e=small?-R(2,lv==='base'?4:6):R(3,lv==='base'?7:11),dig=String(Math.round(m*10)).replace(/0$/,'');var std;
+  if(e>0){std=NF(Math.round(m*Math.pow(10,e)))}else{std='0.'+'0'.repeat(-e-1)+dig}
+  return{m:m,e:e,std:std,sci:NF(m)+' × '+SUP(10,e)}}
+both('nc',function(lv){var small=lv==='grado'&&Math.random()<.5,x=NCG(lv,small);
+  return OPT({prompt:'Escribe en notación científica:',disp:x.std,wrap:x.std.length>12,correct:x.sci,wrongs:[{t:NF(x.m*10)+' × '+SUP(10,x.e-1)},{t:NF(x.m)+' × '+SUP(10,x.e+1)},{t:NF(x.m)+' × '+SUP(10,x.e-1)}],tag:'ncExp',
+    steps:['Pongo el punto después de la primera cifra: '+E(NF(x.m))+'.','Cuento cuántos lugares se movió el punto: '+E(Math.abs(x.e))+' lugares '+(x.e>0?'(número grande: exponente positivo)':'(número menor que 1: exponente negativo)')+'.','Resultado: '+E(x.sci)+'.']})});
+both('nc',function(lv){var small=lv==='grado'&&Math.random()<.5,x=NCG(lv,small),y=NCG(lv,small);y.e=x.e+1;var z=NCG(lv,small);z.e=x.e-1;
+  var mk=function(m,e){return e>0?NF(Math.round(m*Math.pow(10,e))):'0.'+'0'.repeat(-e-1)+String(Math.round(m*10)).replace(/0$/,'')};
+  return OPT({prompt:'Escribe el número en notación normal:',disp:x.sci,correct:x.std,wrongs:[{t:mk(x.m,x.e+1)},{t:mk(x.m,x.e-1)},{t:mk(x.m,-x.e)}],tag:'ncExp',
+    steps:[x.e>0?'El exponente es positivo: muevo el punto '+x.e+' lugares a la derecha.':'El exponente es negativo: muevo el punto '+(-x.e)+' lugares a la izquierda.','Resultado: '+E(x.std)+'.']})});
+both('nc',function(lv){var small=lv==='grado'&&Math.random()<.5,x=NCG(lv,small),w={};W(w,x.e+1,'ncExp',x.e);W(w,x.e-1,'ncExp',x.e);W(w,-x.e,'ncExp',x.e);
+  return{type:'num',prompt:'Al escribirlo en notación científica, ¿cuál es el exponente de 10?',disp:x.std,wrap:x.std.length>12,noEq:true,ans:x.e,w:w,def:'ncExp',steps:['El primer número debe quedar entre 1 y 10: '+E(NF(x.m))+'.','El punto se mueve '+Math.abs(x.e)+' lugares'+(x.e<0?' y el número es menor que 1, así que el exponente es negativo':'')+': '+E(SG(x.e))+'.']}});
+both('nc',function(lv){var x=NCG(lv,false);
+  return OPT({prompt:'¿Cuál está bien escrito en notación científica?',disp:'',correct:x.sci,wrongs:[{t:NF(x.m*10)+' × '+SUP(10,x.e-1)},{t:NF(x.m/10)+' × '+SUP(10,x.e+1)},{t:NF(Math.round(x.m*100))+' × '+SUP(10,x.e-2)}],tag:'ncForma',
+    steps:['En notación científica el primer número debe estar entre 1 y 10.','Solo '+E(x.sci)+' cumple, porque '+E(NF(x.m))+' tiene una sola cifra antes del punto.']})});
+
+/* ===== Parte C ===== */
+both('ec',function(lv){var a=R(2,9),x=lv==='base'?R(1,12):NZ(-12,12),b=lv==='base'?R(1,20):NZ(-20,20),c=a*x+b,w={};W(w,(c+b)/a,'ecTrans',x);W(w,c-b,'ecTrans',x);W(w,c/a-b,'ecTrans',x);
+  return{type:'num',prompt:'Encuentra el valor de x:',disp:a+'x '+(b<0?M+' '+(-b):'+ '+b)+' = '+SG(c),noEq:true,ans:x,w:w,def:'ecTrans',steps:['El '+SG(b)+' pasa al otro lado con el signo contrario: '+E(a+'x = '+SG(c)+(b<0?' + '+(-b):' '+M+' '+b)+' = '+SG(a*x))+'.','El '+a+' multiplica, así que pasa dividiendo: '+E('x = '+SG(a*x)+' ÷ '+a+' = '+SG(x))+'.']}});
+both('ec',function(lv){var a=R(3,9),c=R(1,a-1),x=lv==='base'?R(1,10):NZ(-10,10),b=lv==='base'?R(1,15):NZ(-15,15),d=(a-c)*x+b,w={};W(w,-x,'ecTrans',x);W(w,(d+b)/(a-c),'ecTrans',x);W(w,(d-b)/(a+c),'ecTrans',x);
+  return{type:'num',prompt:'Encuentra el valor de x:',disp:a+'x '+(b<0?M+' '+(-b):'+ '+b)+' = '+c+'x '+(d<0?M+' '+(-d):'+ '+d),noEq:true,wrap:true,ans:x,w:w,def:'ecTrans',steps:['Paso las x a la izquierda y los números a la derecha, cambiando de signo: '+E(a+'x '+M+' '+c+'x = '+SG(d)+' '+(b<0?'+ '+(-b):M+' '+b))+'.','Reduzco: '+E((a-c)+'x = '+SG(d-b))+'.','Divido: '+E('x = '+SG(d-b)+' ÷ '+(a-c)+' = '+SG(x))+'.']}});
+both('ec',function(lv){var a=R(2,6),b=lv==='base'?R(1,9):NZ(-9,9),x=lv==='base'?R(1,10):NZ(-10,10),c=a*(x+b),w={};W(w,c-b,'ecParen',x);W(w,(c-b)/a,'ecParen',x);W(w,c/a+b,'ecTrans',x);
+  return{type:'num',prompt:'Encuentra el valor de x:',disp:a+'(x '+(b<0?M+' '+(-b):'+ '+b)+') = '+SG(c),noEq:true,ans:x,w:w,def:'ecParen',steps:['Multiplico el '+a+' por cada término: '+E(a+'x '+(a*b<0?M+' '+(-a*b):'+ '+a*b)+' = '+SG(c))+'.','Paso el '+SG(a*b)+' con signo contrario: '+E(a+'x = '+SG(c-a*b))+'.','Divido: '+E('x = '+SG(c-a*b)+' ÷ '+a+' = '+SG(x))+'.']}});
+both('ec',function(lv){if(lv==='base'||Math.random()<.4){var k=pick([2,3,4,5]),n=R(3,20),s=R(1,15),T=k*n+s,w={};W(w,(T+s)/k,'ecTrans',n);W(w,T-s,'ecPlant',n);
+    var K={2:'El doble',3:'El triple',4:'El cuádruple',5:'El quíntuple'}[k];
+    return{type:'num',prompt:'Plantea y resuelve:',disp:K+' de un número más '+s+' es igual a '+T+'. ¿Cuál es el número?',wrap:true,noEq:true,ans:n,w:w,def:'ecPlant',steps:['Planteo: '+E(k+'x + '+s+' = '+T)+'.','Despejo: '+E(k+'x = '+(T-s))+', '+E('x = '+n)+'.']}}
+  var m=R(5,40),T2=3*m+3,w2={};W(w2,T2/3,'ecPlant',m);W(w2,T2/3+1,'ecPlant',m);
+  return{type:'num',prompt:'Plantea y resuelve:',disp:'La suma de tres números consecutivos es '+T2+'. ¿Cuál es el menor?',wrap:true,noEq:true,ans:m,w:w2,def:'ecPlant',steps:['Los números son x, x + 1 y x + 2: '+E('3x + 3 = '+T2)+'.','Despejo: '+E('3x = '+(T2-3))+', '+E('x = '+m)+'. Los números son '+m+', '+(m+1)+' y '+(m+2)+'.']}});
+
+function seqA(lv){var d=lv==='base'?R(2,9):NZ(-9,9),a=lv==='base'?R(1,15):R(-15,20);return{a:a,d:d,t:[0,1,2,3].map(function(i){return a+i*d})}}
+function rule(d,c){return (d===1?'':d===-1?M:SG(d))+'n'+(c===0?'':c<0?' '+M+' '+(-c):' + '+c)}
+both('suc',function(lv){var s=seqA(lv),ans=s.a+4*s.d,w={};W(w,s.t[3]-s.d,'sucSig',ans);W(w,s.t[3]+s.d+1,'sucSig',ans);W(w,s.t[3]*2-s.t[2]+s.d,'sucSig',ans);
+  return{type:'num',prompt:'¿Cuál es el siguiente término?',disp:s.t.map(SG).join(', ')+', ?',noEq:true,ans:ans,w:w,def:'sucSig',steps:['De un término al siguiente cambia '+E(SG(s.d))+'.',E(SG(s.t[3])+' + '+PAR(s.d)+' = '+SG(ans))+'.']}});
+both('suc',function(lv){var s=seqA(lv),c=s.a-s.d;
+  return OPT({prompt:'¿Cuál es la regla general (término n)?',disp:s.t.map(SG).join(', ')+', …',correct:rule(s.d,c),wrongs:[{t:rule(s.d,s.a)},{t:rule(1,s.d)},{t:rule(s.d,c+1)}],tag:'sucRegla',
+    steps:['Aumenta de '+SG(s.d)+' en '+SG(s.d)+': la regla empieza con '+E(rule(s.d,0))+'.','Para n = 1 debe dar '+SG(s.a)+': '+E(SG(s.d)+' + '+PAR(c)+' = '+SG(s.a))+'. Regla: '+E(rule(s.d,c))+'.']})});
+both('suc',function(lv){var s=seqA(lv),c=s.a-s.d,n=pick([10,12,15,20,25,30]),ans=s.d*n+c,w={};W(w,s.d*n,'sucRegla',ans);W(w,s.a*n,'sucRegla',ans);W(w,s.d*n+s.a,'sucRegla',ans);
+  if(lv==='base')return{type:'num',prompt:'En la sucesión con regla '+E(rule(s.d,c))+', ¿cuál es el término '+n+'?',disp:rule(s.d,c).replace('n','('+n+')'),ans:ans,w:w,def:'sucRegla',steps:['Sustituyo n = '+n+': '+E(SG(s.d)+' × '+n+(c?(c<0?' '+M+' '+(-c):' + '+c):'')+' = '+SG(ans))+'.']};
+  return{type:'num',prompt:'¿Cuál es el término '+n+' de la sucesión?',disp:s.t.map(SG).join(', ')+', …',noEq:true,ans:ans,w:w,def:'sucRegla',steps:['La regla es '+E(rule(s.d,c))+'.','Sustituyo n = '+n+': '+E(SG(s.d)+' × '+n+(c?(c<0?' '+M+' '+(-c):' + '+c):'')+' = '+SG(ans))+'.']}});
+both('suc',function(lv){var kind=lv==='base'?pick(['dob','cuad']):pick(['cuad','tri','dob']),t,ans,ex;
+  if(kind==='dob'){var a=R(1,5),r=lv==='base'?2:pick([2,3]);t=[a,a*r,a*r*r,a*r*r*r];ans=a*Math.pow(r,4);ex='Cada término se multiplica por '+r+': '+E(t[3]+' × '+r+' = '+ans)+'.'}
+  else if(kind==='cuad'){var o=R(1,4);t=[o,o+1,o+2,o+3].map(function(v){return v*v});ans=(o+4)*(o+4);ex='Son números al cuadrado: '+E((o+4)+'² = '+ans)+'.'}
+  else{t=[1,3,6,10];ans=15;ex='Se suma 2, luego 3, luego 4… El siguiente suma 5: '+E('10 + 5 = 15')+'.'}
+  var w={};W(w,t[3]+(t[3]-t[2]),'sucSig',ans);W(w,t[3]*2,'sucSig',ans);
+  return{type:'num',prompt:'¿Cuál es el siguiente término?',disp:t.join(', ')+', ?',noEq:true,ans:ans,w:w,def:'sucSig',steps:['La diferencia entre términos no es siempre la misma; busco otro patrón.',ex]}});
+
+var PN={3:'Triángulo',4:'Cuadrilátero',5:'Pentágono',6:'Hexágono',7:'Heptágono',8:'Octágono',9:'Eneágono',10:'Decágono',11:'Endecágono',12:'Dodecágono'};
+function polySvg(n,lab){var cx=110,cy=95,r=78,p=[];for(var i=0;i<n;i++){var a=-Math.PI/2+2*Math.PI*i/n;p.push((cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1))}
+  return '<svg viewBox="0 0 220 190" width="220" role="img" aria-label="'+PN[n]+' regular"><polygon points="'+p.join(' ')+'" fill="#FFE6F2" stroke="#15192B" stroke-width="4" stroke-linejoin="round"/>'+(lab?'<text x="'+cx+'" y="'+(cy+7)+'" text-anchor="middle" '+TXT+' font-size="18" fill="#C2387A">'+lab+'</text>':'')+'</svg>'}
+both('pol',function(lv){var n=R(lv==='base'?5:7,lv==='base'?8:12);
+  return OPT({prompt:'¿Cómo se llama este polígono de '+n+' lados?',disp:polySvg(n,n+' lados'),correct:PN[n],wrongs:[n-1,n+1,n+2].filter(function(k){return PN[k]}).map(function(k){return{t:PN[k]}}),tag:'polNom',steps:['Cuento los lados: '+E(n)+'.','Un polígono de '+n+' lados se llama '+E(PN[n].toLowerCase())+'.']})});
+both('pol',function(lv){var n=R(5,12),ans=(n-2)*180,w={};W(w,n*180,'polAng',ans);W(w,(n-2)*360,'polAng',ans);W(w,360,'polExt',ans);
+  return{type:'num',prompt:'¿Cuánto suman los ángulos interiores de un '+PN[n].toLowerCase()+'? (en grados)',disp:polySvg(n),noEq:true,ans:ans,w:w,def:'polAng',steps:['Uso (n '+M+' 2) × 180°, con n = '+n+'.',E('('+n+' '+M+' 2) × 180 = '+(n-2)+' × 180 = '+NF(ans)+'°')+'.']}});
+both('pol',function(lv){var n=pick([5,6,8,9,10,12]),ans=(n-2)*180/n,w={};W(w,360/n,'polExt',ans);W(w,(n-2)*180,'polAng',ans);W(w,180*n/n,'polAng',ans);
+  return{type:'num',prompt:'¿Cuánto mide cada ángulo interior de un '+PN[n].toLowerCase()+' regular? (en grados)',disp:polySvg(n),noEq:true,ans:ans,w:w,def:'polAng',steps:['Suma de ángulos interiores: '+E('('+n+' '+M+' 2) × 180 = '+NF((n-2)*180)+'°')+'.','Como es regular, todos miden lo mismo: '+E(NF((n-2)*180)+' ÷ '+n+' = '+ans+'°')+'.']}});
+both('pol',function(lv){if(lv==='base'){var n=R(5,10),l=R(3,15),ans=n*l,w={};W(w,l*l,'calculo',ans);W(w,(n-1)*l,'calculo',ans);
+    return{type:'num',prompt:'Un '+PN[n].toLowerCase()+' regular tiene lados de '+l+' cm. ¿Cuál es su perímetro? (en cm)',disp:polySvg(n,l+' cm'),noEq:true,ans:ans,w:w,def:'calculo',steps:['El perímetro es la suma de todos los lados.',E(n+' × '+l+' = '+ans+' cm')+'.']}}
+  var m=R(5,12),d=m*(m-3)/2,w2={};W(w2,m*(m-3),'polDiag',d);W(w2,m*(m-2)/2,'polDiag',d);
+  return{type:'num',prompt:'¿Cuántas diagonales tiene un '+PN[m].toLowerCase()+'?',disp:polySvg(m),noEq:true,ans:d,w:w2,def:'polDiag',steps:['Uso n(n '+M+' 3) ÷ 2, con n = '+m+'.',E(m+' × '+(m-3)+' ÷ 2 = '+(m*(m-3))+' ÷ 2 = '+d)+'.']}});
+
+function histo(lv){var start=pick([140,145,150]),wd=5,k=5,labels=[],f=[];for(var i=0;i<k;i++){labels.push((start+i*wd)+'–'+(start+(i+1)*wd));f.push(R(lv==='base'?1:2,lv==='base'?8:12))}
+  var mx=Math.max.apply(null,f);while(f.filter(function(v){return v===mx}).length>1){f[f.indexOf(mx)]--;mx=Math.max.apply(null,f)}return{labels:labels,f:f,start:start}}
+function histSvg(h){var W0=320,H0=230,x0=40,y0=190,bw=52,top=Math.max.apply(null,h.f),sc=150/top,s='<svg viewBox="0 0 '+W0+' '+H0+'" width="320" role="img" aria-label="Histograma de estaturas">';
+  for(var v=0;v<=top;v+=top>8?2:1){var y=y0-v*sc;s+='<line x1="'+x0+'" y1="'+y.toFixed(1)+'" x2="'+(x0+bw*5)+'" y2="'+y.toFixed(1)+'" stroke="#E7E4F0" stroke-width="1.5"/><text x="'+(x0-6)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" '+TXT+' font-size="10" fill="#4E5268">'+v+'</text>'}
+  var cols=['#D3F36B','#9C8BFF','#FF8FC0','#FFD166','#8FD9C2'];
+  h.f.forEach(function(v,i){var x=x0+i*bw;s+='<rect x="'+x+'" y="'+(y0-v*sc).toFixed(1)+'" width="'+bw+'" height="'+(v*sc).toFixed(1)+'" fill="'+cols[i]+'" stroke="#15192B" stroke-width="2"/><text x="'+(x+bw/2)+'" y="'+(y0+14)+'" text-anchor="middle" '+TXT+' font-size="9" fill="#15192B">'+h.labels[i]+'</text>'});
+  s+='<text x="'+(x0+bw*2.5)+'" y="'+(y0+32)+'" text-anchor="middle" '+TXT+' font-size="11" fill="#4E5268">Estatura (cm)</text><text x="12" y="'+(y0-75)+'" text-anchor="middle" '+TXT+' font-size="11" fill="#4E5268" transform="rotate(-90 12 '+(y0-75)+')">Alumnos</text></svg>';return s}
+both('est',function(lv){var h=histo(lv),i=R(0,4),w={};W(w,h.f[(i+1)%5],'hisLeer',h.f[i]);W(w,i+1,'hisLeer',h.f[i]);
+  return{type:'num',prompt:'¿Cuántos alumnos miden entre '+h.labels[i].replace('–',' y ')+' cm?',disp:histSvg(h),noEq:true,ans:h.f[i],w:w,def:'hisLeer',steps:['Busco la barra del intervalo '+h.labels[i]+'.','Su altura llega a '+E(h.f[i])+': esa es la frecuencia.']}});
+both('est',function(lv){var h=histo(lv),tot=h.f.reduce(function(a,b){return a+b},0),w={};W(w,5,'hisLeer',tot);W(w,Math.max.apply(null,h.f),'hisLeer',tot);
+  return{type:'num',prompt:'¿Cuántos alumnos se midieron en total?',disp:histSvg(h),noEq:true,ans:tot,w:w,def:'hisLeer',steps:['Sumo las alturas de todas las barras: '+E(h.f.join(' + ')+' = '+tot)+'.']}});
+both('est',function(lv){var h=histo(lv),mx=Math.max.apply(null,h.f),i=h.f.indexOf(mx);
+  return OPT({prompt:'¿En qué intervalo hay más alumnos?',disp:histSvg(h),correct:h.labels[i]+' cm',wrongs:h.labels.filter(function(l,j){return j!==i}).slice(0,3).map(function(l){return{t:l+' cm'}}),tag:'hisLeer',steps:['Busco la barra más alta: llega a '+E(mx)+'.','Corresponde al intervalo '+E(h.labels[i]+' cm')+'.']})});
+both('est',function(lv){var n=lv==='base'?5:7,d=[];for(var i=0;i<n-1;i++)d.push(R(lv==='base'?4:50,lv==='base'?10:95));
+  var ask=pick(lv==='base'?['media','moda','mediana']:['media','mediana','moda']);
+  if(ask==='media'){var s=d.reduce(function(a,b){return a+b},0),r=n-(s%n),last=R(lv==='base'?4:50,lv==='base'?10:95);while((s+last)%n!==0)last++;d.push(last)}
+  else if(ask==='moda'){d.push(d[R(0,d.length-1)])}else d.push(R(lv==='base'?4:50,lv==='base'?10:95));
+  if(ask==='moda'){var cnt={};d.forEach(function(v){cnt[v]=(cnt[v]||0)+1});var best=Object.keys(cnt).sort(function(a,b){return cnt[b]-cnt[a]});if(cnt[best[0]]===cnt[best[1]]){d[d.indexOf(+best[1])]=+best[0]}}
+  d=shuffle(d);var sd=d.slice().sort(function(a,b){return a-b}),sum=d.reduce(function(a,b){return a+b},0),mean=sum/n,med=sd[(n-1)/2],cnt2={};d.forEach(function(v){cnt2[v]=(cnt2[v]||0)+1});var mode=+Object.keys(cnt2).sort(function(a,b){return cnt2[b]-cnt2[a]})[0];
+  var ans=ask==='media'?mean:ask==='mediana'?med:mode,w={};[mean,med,mode].forEach(function(v){if(Number.isInteger(v))W(w,v,'estMedida',ans)});W(w,d[(n-1)/2],'estMedida',ans);
+  if(ask==='media'&&!Number.isInteger(mean))return GEN.est[lv][3]();
+  var st=ask==='media'?['Sumo todos los datos: '+E(d.join(' + ')+' = '+sum)+'.','Divido entre cuántos son: '+E(sum+' ÷ '+n+' = '+mean)+'.']:ask==='mediana'?['Ordeno los datos: '+E(sd.join(', '))+'.','El de en medio es '+E(med)+'.']:['Busco el dato que más se repite: '+E(mode)+' aparece '+cnt2[mode]+' veces.'];
+  return{type:'num',prompt:'Calificaciones de '+n+' alumnos. ¿Cuál es la '+ask+'?',disp:d.join(', '),wrap:true,noEq:true,ans:ans,w:w,def:'estMedida',steps:st}});
+
+/* ===== Temas nuevos para 1° de secundaria ===== */
+ALLT.ent={id:'ent',name:'Números con signo en la recta',short:'Recta numérica',c:'--lime',s:'--limeS',d:'--limeD'};
+ALLT.iprob={id:'iprob',name:'Problemas con números con signo',short:'Problemas con signo',c:'--yel',s:'--yelS',d:'--yelD'};
+ALLT.dec={id:'dec',name:'Operaciones con decimales',short:'Decimales',c:'--yel',s:'--yelS',d:'--yelD'};
+ALLT.per={id:'per',name:'Perímetro',short:'Perímetro',c:'--lime',s:'--limeS',d:'--limeD'};
+ALLT.area={id:'area',name:'Área',short:'Área',c:'--lila',s:'--lilaS',d:'--lilaD'};
+ALLT.graf={id:'graf',name:'Gráficas de barras y circulares',short:'Gráficas',c:'--rosa',s:'--rosaS',d:'--rosaD'};
+['ent','iprob','dec','per','area','graf'].forEach(function(k){GEN[k]={}});
+TAGS.entRecta={topic:'ent',say:'al ubicar números negativos en la recta todavía hay confusión',fix:'Los negativos van a la izquierda del cero. Cuenta las rayitas desde el 0.'};
+TAGS.entComp={topic:'ent',say:'al comparar números negativos a veces eliges el que no es',fix:'En los negativos, el que está más lejos del cero es el más chico: −8 es menor que −2.'};
+TAGS.entAbs={topic:'ent',say:'el valor absoluto y el número opuesto todavía se confunden',fix:'El valor absoluto es la distancia al cero (siempre positiva). El opuesto es el mismo número con el signo contrario.'};
+TAGS.decAlinear={topic:'dec',say:'al sumar o restar decimales a veces no acomodas el punto',fix:'Acomoda los números punto con punto, como en el dinero: décimos con décimos y centésimos con centésimos.'};
+TAGS.decPunto={topic:'dec',say:'al multiplicar o dividir decimales el punto queda en otro lugar',fix:'Al multiplicar, cuenta las cifras decimales de los dos números; el resultado lleva esa misma cantidad.'};
+TAGS.perArea={topic:'per',say:'el perímetro y el área se confunden',fix:'Perímetro es la orilla: se suman los lados. Área es lo de adentro: se multiplica.'};
+TAGS.perMitad={topic:'per',say:'en el perímetro a veces sumas solo algunos lados',fix:'Suma todos los lados. En un rectángulo son cuatro: dos largos y dos cortos.'};
+TAGS.areaTri={topic:'area',say:'en el área del triángulo a veces se te olvida dividir entre 2',fix:'El área del triángulo es base × altura ÷ 2.'};
+TAGS.areaComp={topic:'area',say:'en las figuras compuestas cuesta separar la figura',fix:'Divide la figura en rectángulos, calcula el área de cada uno y súmalas.'};
+TAGS.areaCirc={topic:'area',say:'en el círculo se confunden el radio y el diámetro',fix:'El radio es la mitad del diámetro. Área = 3.14 × r × r; perímetro = 3.14 × diámetro.'};
+TAGS.grafLeer={topic:'graf',say:'al leer las gráficas hay errores',fix:'Sigue la barra con el dedo hasta los números de la izquierda para leer su valor.'};
+TAGS.grafPorc={topic:'graf',say:'en las gráficas circulares hay errores con los porcentajes',fix:'Toda la gráfica es el 100%. Para saber cuántos son, multiplica el total por el porcentaje y divide entre 100.'};
+
+/* Recta numérica */
+function recta(n,L){var x0=20,x1=340,s='<svg viewBox="0 0 360 80" width="360" role="img" aria-label="Recta numérica"><line x1="'+x0+'" y1="34" x2="'+x1+'" y2="34" stroke="#15192B" stroke-width="3"/>';
+  for(var i=-L;i<=L;i++){var x=x0+(x1-x0)*(i+L)/(2*L);s+='<line x1="'+x.toFixed(1)+'" y1="'+(i===0?22:27)+'" x2="'+x.toFixed(1)+'" y2="'+(i===0?46:41)+'" stroke="#15192B" stroke-width="'+(i===0?3:2)+'"/>';
+    if(i===0||Math.abs(i)===L||(L>6&&i%5===0))s+='<text x="'+x.toFixed(1)+'" y="68" text-anchor="middle" '+TXT+' font-size="13" fill="#15192B">'+SG(i)+'</text>'}
+  if(n!=null){var px=x0+(x1-x0)*(n+L)/(2*L);s+='<circle cx="'+px.toFixed(1)+'" cy="34" r="8" fill="#FF8FC0" stroke="#15192B" stroke-width="2.5"/>'}return s+'</svg>'}
+both('ent',function(lv){var L=lv==='base'?6:10,n=NZ(-L+1,L-1);
+  return OPT({prompt:'¿Qué número marca el punto rosa?',disp:recta(n,L),correct:SG(n),wrongs:[{t:SG(-n)},{t:SG(n+1)},{t:SG(n-1)}],tag:'entRecta',steps:['Cuento las rayitas desde el 0: el punto está '+E(Math.abs(n))+' lugares a la '+(n<0?'izquierda':'derecha')+'.',(n<0?'A la izquierda del cero son negativos: ':'A la derecha son positivos: ')+E(SG(n))+'.']})});
+both('ent',function(lv){var L=lv==='base'?10:50,a=NZ(-L,L),b=NZ(-L,L);if(Math.random()<.6){a=-Math.abs(a);b=-Math.abs(b)}if(a===b)b=a-1;var sym=a>b?'>':'<',N={'>':'> (es mayor que)','<':'< (es menor que)','=':'= (es igual a)'};
+  return OPT({prompt:'¿Qué signo va en medio?',disp:SG(a)+'  ?  '+SG(b),correct:N[sym],wrongs:Object.keys(N).filter(function(s){return s!==sym}).map(function(s){return{t:N[s]}}),tag:'entComp',steps:['En la recta, el que está más a la derecha es el mayor.',E(SG(a))+' está más a la '+(a>b?'derecha':'izquierda')+' que '+E(SG(b))+', así que '+E(SG(a)+' '+sym+' '+SG(b))+'.']})});
+both('ent',function(lv){var n=NZ(-25,25),ask=pick(lv==='base'?['abs','opp']:['abs','opp','absneg']),ans,w={},pr,st;
+  if(ask==='abs'){ans=Math.abs(n);W(w,-ans,'entAbs',ans);pr='¿Cuál es el valor absoluto?';st='El valor absoluto es la distancia al cero; siempre es positivo: '+E('|'+SG(n)+'| = '+ans)+'.';return{type:'num',prompt:pr,disp:'|'+SG(n)+'|',ans:ans,w:w,def:'entAbs',steps:[st]}}
+  if(ask==='opp'){ans=-n;W(w,n,'entAbs',ans);W(w,Math.abs(n),'entAbs',ans);return{type:'num',prompt:'¿Cuál es el número opuesto (simétrico) de '+E(SG(n))+'?',disp:'Opuesto de '+SG(n),noEq:true,ans:ans,w:w,def:'entAbs',steps:['El opuesto está a la misma distancia del cero, pero del otro lado.','El opuesto de '+E(SG(n))+' es '+E(SG(ans))+'.']}}
+  var a=NZ(-15,-1),b=R(1,15);ans=Math.abs(a)+b;W(w,a+b,'entAbs',ans);W(w,Math.abs(a+b),'entAbs',ans);
+  return{type:'num',disp:'|'+SG(a)+'| + '+b,ans:ans,w:w,def:'entAbs',steps:['Primero el valor absoluto: '+E('|'+SG(a)+'| = '+Math.abs(a))+'.','Después sumo: '+E(Math.abs(a)+' + '+b+' = '+ans)+'.']}});
+both('ent',function(lv){var L=lv==='base'?9:30,v=[];while(v.length<4){var x=NZ(-L,L);if(v.indexOf(x)<0)v.push(x)}if(v.filter(function(x){return x<0}).length<2)v[0]=-Math.abs(v[0]||3),v[1]=-Math.abs(v[1]||5);v=v.filter(function(x,i,a){return a.indexOf(x)===i});while(v.length<4){x=NZ(-L,L);if(v.indexOf(x)<0)v.push(x)}
+  var asc=v.slice().sort(function(a,b){return a-b}),byAbs=v.slice().sort(function(a,b){return Math.abs(a)-Math.abs(b)}),f=function(a){return a.map(SG).join(', ')};
+  return OPT({prompt:'¿Cuál está ordenado de menor a mayor?',disp:f(shuffle(v)),wrap:true,correct:f(asc),wrongs:[{t:f(byAbs)},{t:f(asc.slice().reverse())},{t:f([asc[1],asc[0],asc[2],asc[3]])}],tag:'entComp',steps:['El menor es el que está más a la izquierda en la recta: los negativos más lejos del cero van primero.','De menor a mayor: '+E(f(asc))+'.']})});
+
+/* Problemas con signo */
+both('iprob',function(lv){var t=lv==='base'?NZ(-8,-1):NZ(-15,-1),u=R(3,lv==='base'?12:25),ans=t+u,w={};W(w,t-u,'sigSuma',ans);W(w,-(Math.abs(t)+u),'sigSuma',ans);W(w,Math.abs(t)+u,'sigSuma',ans);
+  return{type:'num',prompt:'Lee y resuelve (en °C):',disp:'En la madrugada la temperatura era de '+SG(t)+' °C y al mediodía subió '+u+' °C. ¿Qué temperatura hay al mediodía?',wrap:true,noEq:true,ans:ans,w:w,def:'sigSuma',steps:['Subir es sumar: '+E(SG(t)+' + '+u)+'.','Signos diferentes: resto y dejo el signo del más grande. '+E('= '+SG(ans)+' °C')+'.']}});
+both('iprob',function(lv){var mx=R(2,lv==='base'?12:35),mn=NZ(-12,-1),ans=mx-mn,w={};W(w,mx+mn,'sigResta',ans);W(w,-(ans),'sigResta',ans);
+  return{type:'num',prompt:'Lee y resuelve (en °C):',disp:'En una ciudad, la temperatura máxima fue de '+mx+' °C y la mínima de '+SG(mn)+' °C. ¿Cuál fue la diferencia de temperatura?',wrap:true,noEq:true,ans:ans,w:w,def:'sigResta',steps:['Diferencia es resta: '+E(mx+' '+M+' ('+SG(mn)+')')+'.','Restar un negativo es sumar: '+E(mx+' + '+Math.abs(mn)+' = '+ans+' °C')+'.']}});
+both('iprob',function(lv){var s=R(2,lv==='base'?9:30)*50,g=s+R(1,lv==='base'?6:20)*50,ans=s-g,w={};W(w,-ans,'sigSuma',ans);W(w,s+g,'sigSuma',ans);
+  return{type:'num',prompt:'Lee y resuelve (en pesos):',disp:'Ana tenía $'+NF(s)+' en su tarjeta y pagó una compra de $'+NF(g)+'. ¿Cuál es su saldo ahora? (si debe, el saldo es negativo)',wrap:true,noEq:true,ans:ans,w:w,def:'sigSuma',steps:['Pagar es restar: '+E(NF(s)+' '+M+' '+NF(g))+'.','Como gastó más de lo que tenía, el resultado es negativo: '+E(SG(ans))+'. Debe $'+NF(-ans)+'.']}});
+both('iprob',function(lv){var d=NZ(-60,-10),u=R(5,lv==='base'?20:50),up=Math.random()<.6,ans=up?d+u:d-u,w={};W(w,up?d-u:d+u,'sigSuma',ans);W(w,-ans,'sigSuma',ans);
+  return{type:'num',prompt:'Lee y resuelve (en metros):',disp:'Un buzo está a '+SG(d)+' m (bajo el nivel del mar) y '+(up?'sube':'baja')+' '+u+' m. ¿A qué profundidad queda?',wrap:true,noEq:true,ans:ans,w:w,def:'sigSuma',steps:[(up?'Subir es sumar: ':'Bajar es restar: ')+E(SG(d)+(up?' + ':' '+M+' ')+u)+'.','Resultado: '+E(SG(ans)+' m')+'.']}});
+
+/* Decimales */
+function dpl(x){var s=String(x);return s.indexOf('.')<0?0:s.split('.')[1].length}
+function rr(v){return Math.round(v*1e6)/1e6}
+both('dec',function(lv){var a=lv==='base'?R(11,99)/10:R(101,999)/100,b=lv==='base'?R(11,99)/10:pick([R(11,99)/10,R(1,9)]),ans=rr(a+b),w={};var A=Math.round(a*Math.pow(10,dpl(a))),B=Math.round(b*Math.pow(10,dpl(b)));W(w,rr((A+B)/Math.pow(10,Math.max(dpl(a),dpl(b)))),'decAlinear',ans);W(w,rr((A+B)/Math.pow(10,Math.min(dpl(a),dpl(b))||1)),'decAlinear',ans);
+  return{type:'num',prompt:'Suma (usa el punto del teclado):',disp:NF(a)+' + '+NF(b),ans:ans,w:w,def:'decAlinear',steps:['Acomodo punto con punto: '+E(a.toFixed(Math.max(dpl(a),dpl(b))))+' y '+E(b.toFixed(Math.max(dpl(a),dpl(b))))+'.','Sumo como siempre y bajo el punto: '+E(NF(ans))+'.']}});
+both('dec',function(lv){var a=lv==='base'?R(30,99)/10:R(500,999)/100,b=lv==='base'?R(11,a*10-5)/10:pick([R(11,49)/10,R(1,4)]),ans=rr(a-b),w={};var A=Math.round(a*Math.pow(10,dpl(a))),B=Math.round(b*Math.pow(10,dpl(b)));if(dpl(a)!==dpl(b))W(w,rr((A-B)/Math.pow(10,Math.max(dpl(a),dpl(b)))),'decAlinear',ans);W(w,rr(a+b),'calculo',ans);
+  return{type:'num',prompt:'Resta (usa el punto del teclado):',disp:NF(a)+' '+M+' '+NF(b),ans:ans,w:w,def:'decAlinear',steps:['Acomodo punto con punto: '+E(a.toFixed(Math.max(dpl(a),dpl(b))))+' y '+E(b.toFixed(Math.max(dpl(a),dpl(b))))+'.','Resto como siempre y bajo el punto: '+E(NF(ans))+'.']}});
+both('dec',function(lv){var a=lv==='base'?R(11,49)/10:R(11,99)/10,b=lv==='base'?R(2,9):pick([R(2,9),R(2,9)/10]),ans=rr(a*b),w={};W(w,rr(ans*10),'decPunto',ans);W(w,rr(ans/10),'decPunto',ans);
+  var k=dpl(a)+dpl(b);return{type:'num',prompt:'Multiplica:',disp:NF(a)+' × '+NF(b),ans:ans,w:w,def:'decPunto',steps:['Multiplico sin fijarme en el punto: '+E(Math.round(a*Math.pow(10,dpl(a)))+' × '+Math.round(b*Math.pow(10,dpl(b)))+' = '+Math.round(ans*Math.pow(10,k)))+'.','Cuento las cifras decimales: '+k+'. Pongo el punto: '+E(NF(ans))+'.']}});
+both('dec',function(lv){var d=lv==='base'?R(2,6):pick([R(2,9),R(2,9)/10]),q=lv==='base'?R(11,49)/10:R(11,99)/10,a=rr(d*q),w={};W(w,rr(q*10),'decPunto',q);W(w,rr(q/10),'decPunto',q);
+  return{type:'num',prompt:'Divide:',disp:NF(a)+' ÷ '+NF(d),ans:q,w:w,def:'decPunto',steps:[dpl(d)?'El divisor tiene punto: recorro el punto un lugar en los dos números: '+E(NF(rr(a*10))+' ÷ '+NF(rr(d*10)))+'.':'Divido como siempre y subo el punto al cociente.','Resultado: '+E(NF(q))+'. Compruebo: '+E(NF(q)+' × '+NF(d)+' = '+NF(a))+'.']}});
+
+/* Perímetro y área */
+function rectSvg(a,b,la,lb){var W=Math.min(260,40+a*14),H=Math.min(140,30+b*10);return '<svg viewBox="0 0 320 '+(H+50)+'" width="320" role="img" aria-label="Rectángulo"><rect x="'+(160-W/2)+'" y="16" width="'+W+'" height="'+H+'" fill="#E6E2FF" stroke="#15192B" stroke-width="4" rx="2"/><text x="160" y="'+(H+42)+'" text-anchor="middle" '+TXT+' font-size="16" fill="#15192B">'+(la||a+' cm')+'</text><text x="'+(160-W/2-10)+'" y="'+(16+H/2+5)+'" text-anchor="end" '+TXT+' font-size="16" fill="#15192B">'+(lb||b+' cm')+'</text></svg>'}
+function triSvg(b,h){return '<svg viewBox="0 0 320 180" width="320" role="img" aria-label="Triángulo"><path d="M50 150 H270 L120 30 Z" fill="#FFE6F2" stroke="#15192B" stroke-width="4" stroke-linejoin="round"/><path d="M120 30 V150" stroke="#C2387A" stroke-width="2.5" stroke-dasharray="6 5"/><path d="M120 138 H132 V150" fill="none" stroke="#C2387A" stroke-width="2"/><text x="160" y="172" text-anchor="middle" '+TXT+' font-size="16" fill="#15192B">b = '+b+' cm</text><text x="126" y="96" '+TXT+' font-size="16" fill="#C2387A">h = '+h+' cm</text></svg>'}
+function lSvg(W,H,w,h,all){/* L: rectángulo W×H sin la esquina superior derecha w×h */var S=Math.min(220/W,130/H),x0=50,y0=20,X=function(v){return (x0+v*S).toFixed(1)},Y=function(v){return (y0+v*S).toFixed(1)};
+  var d='M'+X(0)+' '+Y(0)+' H'+X(W-w)+' V'+Y(h)+' H'+X(W)+' V'+Y(H)+' H'+X(0)+' Z',t=function(x,y,s,a){return '<text x="'+x+'" y="'+y+'" text-anchor="'+(a||'middle')+'" '+TXT+' font-size="14" fill="#15192B">'+s+'</text>'};
+  var s='<svg viewBox="0 0 320 '+(H*S+60).toFixed(0)+'" width="320" role="img" aria-label="Figura compuesta"><path d="'+d+'" fill="#D3F36B" stroke="#15192B" stroke-width="4" stroke-linejoin="round"/>';
+  s+=t(X(W/2),(+Y(H)+20).toFixed(1),W+' cm')+t((+X(0)-8).toFixed(1),(+Y(H/2)+5).toFixed(1),H+' cm','end');
+  if(all){s+=t(X((W-w)/2),(+Y(0)-6).toFixed(1),(W-w)+' cm')+t((+X(W)+8).toFixed(1),(+Y((H+h)/2)+5).toFixed(1),(H-h)+' cm','start')}
+  s+=t(X(W-w/2),(+Y(h)-6).toFixed(1),w+' cm')+t((+X(W-w)-6).toFixed(1),(+Y(h/2)+5).toFixed(1),h+' cm','end');return s+'</svg>'}
+both('per',function(lv){var a=R(4,lv==='base'?12:25),b=R(2,a-1),ans=2*(a+b),w={};W(w,a*b,'perArea',ans);W(w,a+b,'perMitad',ans);W(w,2*a+b,'perMitad',ans);
+  return{type:'num',prompt:'¿Cuál es el perímetro del rectángulo? (en cm)',disp:rectSvg(a,b),noEq:true,ans:ans,w:w,def:'perMitad',steps:['El perímetro es la suma de los 4 lados: '+E(a+' + '+b+' + '+a+' + '+b)+'.','Resultado: '+E(ans+' cm')+'.']}});
+both('per',function(lv){var n=pick(lv==='base'?[4,3,5,6]:[5,6,8,10]),l=R(3,lv==='base'?12:20),P=n*l,nm={3:'triángulo equilátero',4:'cuadrado',5:'pentágono regular',6:'hexágono regular',8:'octágono regular',10:'decágono regular'}[n],w={};W(w,P/2,'perMitad',l);W(w,P-n,'perMitad',l);
+  return{type:'num',prompt:'Lee y resuelve (en cm):',disp:'Un '+nm+' tiene un perímetro de '+P+' cm. ¿Cuánto mide cada lado?',wrap:true,noEq:true,ans:l,w:w,def:'perMitad',steps:['Un '+nm+' tiene '+n+' lados iguales.','Divido el perímetro entre '+n+': '+E(P+' ÷ '+n+' = '+l+' cm')+'.']}});
+both('per',function(lv){var W0=R(6,14),H0=R(5,10),w0=R(2,W0-3),h0=R(2,H0-2),ans=2*(W0+H0),all=lv==='base',ws={};W(ws,W0*H0-w0*h0,'perArea',ans);W(ws,W0+H0+w0+h0,'perMitad',ans);W(ws,2*(W0+H0)-w0-h0,'perMitad',ans);
+  return{type:'num',prompt:'¿Cuál es el perímetro de la figura? (en cm)'+(all?'':' Encuentra primero los lados que faltan.'),disp:lSvg(W0,H0,w0,h0,all),noEq:true,ans:ans,w:ws,def:'perMitad',steps:[(all?'':'Lados que faltan: arriba '+E(W0+' '+M+' '+w0+' = '+(W0-w0))+' y a la derecha '+E(H0+' '+M+' '+h0+' = '+(H0-h0))+'. ')+'Sumo los 6 lados: '+E(W0+' + '+H0+' + '+(W0-w0)+' + '+h0+' + '+w0+' + '+(H0-h0))+'.','Resultado: '+E(ans+' cm')+'.']}});
+both('per',function(lv){if(lv==='base'){var l=R(3,15),ans=4*l,w={};W(w,l*l,'perArea',ans);W(w,2*l,'perMitad',ans);return{type:'num',prompt:'¿Cuál es el perímetro de un cuadrado de '+l+' cm de lado? (en cm)',disp:rectSvg(l,l),noEq:true,ans:ans,w:w,def:'perMitad',steps:['El cuadrado tiene 4 lados iguales.',E('4 × '+l+' = '+ans+' cm')+'.']}}
+  var d=R(2,20),ans2=rr(3.14*d),w2={};W(w2,rr(3.14*d/2),'areaCirc',ans2);W(w2,rr(3.14*d*d/4),'perArea',ans2);W(w2,rr(3.14*2*d),'areaCirc',ans2);
+  return{type:'num',prompt:'Un círculo mide '+d+' cm de diámetro. ¿Cuánto mide su perímetro? (usa π = 3.14)',disp:'P = 3.14 × '+d,ans:ans2,w:w2,def:'areaCirc',steps:['El perímetro del círculo es π × diámetro.',E('3.14 × '+d+' = '+NF(ans2)+' cm')+'.']}});
+both('area',function(lv){var a=R(3,lv==='base'?12:25),b=R(2,lv==='base'?9:15),ans=a*b,w={};W(w,2*(a+b),'perArea',ans);W(w,a+b,'perArea',ans);
+  return{type:'num',prompt:'¿Cuál es el área del rectángulo? (en cm²)',disp:rectSvg(a,b),noEq:true,ans:ans,w:w,def:'calculo',steps:['Área del rectángulo = base × altura.',E(a+' × '+b+' = '+ans+' cm²')+'.']}});
+both('area',function(lv){var b=R(2,lv==='base'?10:20)*2,h=R(3,lv==='base'?10:18),ans=b*h/2,w={};W(w,b*h,'areaTri',ans);W(w,b+h,'perArea',ans);
+  return{type:'num',prompt:'¿Cuál es el área del triángulo? (en cm²)',disp:triSvg(b,h),noEq:true,ans:ans,w:w,def:'areaTri',steps:['Área del triángulo = base × altura ÷ 2.',E(b+' × '+h+' = '+(b*h))+', y '+E((b*h)+' ÷ 2 = '+ans+' cm²')+'.']}});
+both('area',function(lv){var W0=R(6,14),H0=R(5,10),w0=R(2,W0-3),h0=R(2,H0-2),ans=W0*H0-w0*h0,ws={};W(ws,W0*H0,'areaComp',ans);W(ws,2*(W0+H0),'perArea',ans);W(ws,W0*H0+w0*h0,'areaComp',ans);
+  return{type:'num',prompt:'¿Cuál es el área de la figura? (en cm²)',disp:lSvg(W0,H0,w0,h0,lv==='base'),noEq:true,ans:ans,w:ws,def:'areaComp',steps:['Imagino el rectángulo completo: '+E(W0+' × '+H0+' = '+(W0*H0))+'.','Le quito la esquina que falta: '+E(w0+' × '+h0+' = '+(w0*h0))+'.',E((W0*H0)+' '+M+' '+(w0*h0)+' = '+ans+' cm²')+'.']}});
+both('area',function(lv){if(lv==='base'){var l=R(2,12),ans=l*l,w={};W(w,4*l,'perArea',ans);W(w,2*l,'perArea',ans);return{type:'num',prompt:'¿Cuál es el área de un cuadrado de '+l+' cm de lado? (en cm²)',disp:rectSvg(l,l),noEq:true,ans:ans,w:w,def:'perArea',steps:['Área del cuadrado = lado × lado.',E(l+' × '+l+' = '+ans+' cm²')+'.']}}
+  var r=R(2,10),ans2=rr(3.14*r*r),w2={};W(w2,rr(3.14*2*r),'areaCirc',ans2);W(w2,rr(3.14*4*r*r),'areaCirc',ans2);W(w2,rr(3.14*r),'areaCirc',ans2);
+  return{type:'num',prompt:'Un círculo tiene '+r+' cm de radio. ¿Cuál es su área? (usa π = 3.14, en cm²)',disp:'A = 3.14 × '+r+' × '+r,ans:ans2,w:w2,def:'areaCirc',steps:['Área del círculo = π × radio × radio.',E('3.14 × '+(r*r)+' = '+NF(ans2)+' cm²')+'.']}});
+
+/* Gráficas */
+var CATS=[['Manzana','Plátano','Uva','Mango','Fresa'],['Futbol','Básquet','Natación','Tenis','Voleibol'],['Lunes','Martes','Miércoles','Jueves','Viernes']];
+var GTIT=['Fruta favorita','Deporte favorito','Libros prestados'];
+function barData(lv){var k=R(0,2),st=lv==='base'?1:5,v=CATS[k].map(function(){return R(1,lv==='base'?10:12)*st});return{k:k,c:CATS[k],v:v,st:st}}
+function barSvg(d){var x0=44,y0=170,bw=50,top=Math.max.apply(null,d.v),gs=d.st===1?2:10,mx=Math.ceil(top/gs)*gs,sc=140/mx,s='<svg viewBox="0 0 320 210" width="320" role="img" aria-label="'+GTIT[d.k]+'">';
+  for(var v=0;v<=mx;v+=gs){var y=y0-v*sc;s+='<line x1="'+x0+'" y1="'+y.toFixed(1)+'" x2="'+(x0+bw*5)+'" y2="'+y.toFixed(1)+'" stroke="#E7E4F0" stroke-width="1.5"/><text x="'+(x0-6)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" '+TXT+' font-size="10" fill="#4E5268">'+v+'</text>'}
+  var cols=['#D3F36B','#9C8BFF','#FF8FC0','#FFD166','#8FD9C2'];d.v.forEach(function(v,i){var x=x0+i*bw+8;s+='<rect x="'+x+'" y="'+(y0-v*sc).toFixed(1)+'" width="'+(bw-16)+'" height="'+(v*sc).toFixed(1)+'" rx="4" fill="'+cols[i]+'" stroke="#15192B" stroke-width="2"/><text x="'+(x+(bw-16)/2)+'" y="'+(y0+15)+'" text-anchor="middle" '+TXT+' font-size="9" fill="#15192B">'+d.c[i]+'</text>'});
+  return s+'<text x="160" y="'+(y0+34)+'" text-anchor="middle" '+TXT+' font-size="11" fill="#4E5268">'+GTIT[d.k]+'</text></svg>'}
+both('graf',function(lv){var d=barData(lv),i=R(0,4),w={};W(w,d.v[(i+1)%5],'grafLeer',d.v[i]);W(w,d.v[i]+d.st,'grafLeer',d.v[i]);W(w,d.v[i]-d.st,'grafLeer',d.v[i]);
+  return{type:'num',prompt:'Según la gráfica, ¿cuánto corresponde a '+E(d.c[i])+'?',disp:barSvg(d),noEq:true,ans:d.v[i],w:w,def:'grafLeer',steps:['Busco la barra de '+d.c[i]+' y sigo su altura hasta los números de la izquierda.','Llega a '+E(d.v[i])+'.']}});
+both('graf',function(lv){var d=barData(lv),i=R(0,4),j=(i+R(1,4))%5;while(d.v[i]===d.v[j])d.v[j]+=d.st;var a=Math.max(d.v[i],d.v[j]),b=Math.min(d.v[i],d.v[j]),ans=a-b,w={};W(w,a+b,'grafLeer',ans);W(w,a,'grafLeer',ans);
+  return{type:'num',prompt:'¿Cuál es la diferencia entre '+E(d.c[i])+' y '+E(d.c[j])+'?',disp:barSvg(d),noEq:true,ans:ans,w:w,def:'grafLeer',steps:[d.c[i]+': '+E(d.v[i])+'. '+d.c[j]+': '+E(d.v[j])+'.','Diferencia: '+E(a+' '+M+' '+b+' = '+ans)+'.']}});
+function pieData(){var p=[R(5,9)*5,R(3,7)*5,R(2,5)*5];p.push(100-p[0]-p[1]-p[2]);if(p[3]<5){p[0]-=10;p[3]+=10}return{c:['Futbol','Básquet','Natación','Tenis'],p:p}}
+function pieSvg(d,hide){var cx=95,cy=95,r=80,a0=-Math.PI/2,cols=['#D3F36B','#9C8BFF','#FF8FC0','#FFD166'],s='<svg viewBox="0 0 330 190" width="330" role="img" aria-label="Gráfica circular">';
+  d.p.forEach(function(p,i){var a1=a0+p/100*2*Math.PI,x0=cx+r*Math.cos(a0),y0=cy+r*Math.sin(a0),x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1);s+='<path d="M'+cx+' '+cy+' L'+x0.toFixed(1)+' '+y0.toFixed(1)+' A'+r+' '+r+' 0 '+(p>50?1:0)+' 1 '+x1.toFixed(1)+' '+y1.toFixed(1)+' Z" fill="'+cols[i]+'" stroke="#15192B" stroke-width="2.5"/>';
+    var am=(a0+a1)/2;s+='<text x="'+(cx+r*.62*Math.cos(am)).toFixed(1)+'" y="'+(cy+r*.62*Math.sin(am)+5).toFixed(1)+'" text-anchor="middle" '+TXT+' font-size="13" fill="#15192B">'+(i===hide?'?':p+'%')+'</text>';a0=a1;
+    s+='<rect x="200" y="'+(36+i*30)+'" width="16" height="16" rx="4" fill="'+cols[i]+'" stroke="#15192B" stroke-width="2"/><text x="224" y="'+(49+i*30)+'" '+TXT+' font-size="13" fill="#15192B">'+d.c[i]+'</text>'});return s+'</svg>'}
+both('graf',function(lv){var d=pieData(),i=R(0,3),T=pick(lv==='base'?[20,40,100,200]:[60,80,120,240,300,400]),ans=T*d.p[i]/100;while(!Number.isInteger(ans)){i=R(0,3);ans=T*d.p[i]/100;if(!Number.isInteger(ans))T=200}var w={};W(w,d.p[i],'grafPorc',ans);W(w,T-ans,'grafPorc',ans);W(w,T*d.p[i],'grafPorc',ans);
+  return{type:'num',prompt:'Se preguntó a '+T+' alumnos su deporte favorito. ¿Cuántos eligieron '+E(d.c[i])+'?',disp:pieSvg(d),noEq:true,ans:ans,w:w,def:'grafPorc',steps:[d.c[i]+' es el '+E(d.p[i]+'%')+' del total.',E(T+' × '+d.p[i]+' ÷ 100 = '+ans)+' alumnos.']}});
+both('graf',function(lv){var d=pieData(),i=R(0,3),ans=d.p[i],w={};W(w,100-ans,'grafPorc',ans);W(w,d.p.reduce(function(a,b){return a+b},0)-ans,'grafPorc',ans);
+  return{type:'num',prompt:'¿Qué porcentaje falta en la gráfica (el del signo ?)',disp:pieSvg(d,i),noEq:true,ans:ans,w:w,def:'grafPorc',steps:['Toda la gráfica suma 100%.','Sumo los que sí aparecen: '+E(d.p.filter(function(x,j){return j!==i}).join(' + ')+' = '+(100-ans)+'%')+'.','Lo que falta: '+E('100 '+M+' '+(100-ans)+' = '+ans+'%')+'.']}});
+
+/* Fracciones más sencillas en Nivelación (mismo denominador) */
+GEN.frd.base[0]=function(){var d=R(3,10),a=R(1,d-2),c=R(1,d-1-a),isSum=Math.random()<.6;if(!isSum){a=a+c}var res=isSum?a+c:a-c;
+  return OPT({prompt:'Resuelve:',disp:FR(a,d)+(isSum?' + ':' '+M+' ')+FR(c,d)+' =',correct:FR(res,d),wrongs:[{t:FR(res,isSum?2*d:d+1)},{t:FR(isSum?a*c:a+c,d)},{t:FR(res+1,d)}],tag:'frDen',steps:['Los denominadores son iguales: el '+d+' se queda igual.',(isSum?'Sumo':'Resto')+' los numeradores: '+E(a+(isSum?' + ':' '+M+' ')+c+' = '+res)+'.','Resultado: '+FR(res,d)+'.']})};
+
+
+/* ---------- configuración de la práctica ---------- */
+var PARTS={
+ A:{name:'Parte A · Números',desc:'Divisibilidad, primos, MCD y mcm, fracciones y decimales.',topics:['dv','mcd','frd','dec']},
+ B:{name:'Parte B · Números con signo',desc:'La recta numérica, operaciones con signo, jerarquía y problemas.',topics:['ent','sig','jer','iprob']},
+ C:{name:'Parte C · Geometría y datos',desc:'Perímetro, área, gráficas y medidas de tendencia central.',topics:['per','area','graf','est']}
+};
+TOPICS=PARTS.A.topics.map(function(k){return ALLT[k]});
+var CONF={slug:'matematicas-1-secundaria',short:'Matemáticas de 1° de secundaria',per:6,parts:PARTS,padCols:4,
+  keys:['7','8','9','⌫','4','5','6',M,'1','2','3','.','0'],
+  setPart:function(p){TOPICS=PARTS[p].topics.map(function(k){return ALLT[k]});CONF.slug='matematicas-1-secundaria-'+p.toLowerCase();CONF.short='Matemáticas de 1° de secundaria · Parte '+p},
+  lvBase:'Para repasar lo de 6° de primaria, con números sencillos y paso a paso.',lvGrado:'Los temas de tu libro de 1° de secundaria.',
+  upTxt:'Ya dominas la base; ahora con los temas de tu libro.',readyTxt:'Con este resultado ya dominas esta parte. Sigue con la siguiente.',
+  home:function(){return '<div class="signs"><div class="sg" style="background:var(--lime);font-size:18px">'+FR(1,2)+'</div><div class="sg" style="background:var(--lila)">±</div><div class="sg" style="background:var(--rosa);font-size:15px">0.5</div><div class="sg" style="background:var(--yel);font-size:20px">▭</div><div class="sg" style="background:var(--navy);color:#fff;font-size:15px">MCD</div></div>'+
+    '<h1>Matemáticas de 1° de secundaria</h1>'+
+    '<p class="muted">Los temas de tu libro en tres partes. Haz una a la vez: cada tema empieza con una explicación corta y un ejemplo resuelto paso a paso. Si algo no te acuerdas, toca «Recuerda».</p>'+
+    '<div class="facts"><span class="fact">3 partes</span><span class="fact">24 ejercicios por parte</span><span class="fact">25 minutos aprox.</span></div>'},
+  game:function(t){return (t==='sig'||t==='jer'||t==='ent'||t==='iprob')?{t:'La Bóveda',d:'Para practicar signos y jerarquía jugando.'}:t==='frd'?{t:'Pizzería de fracciones',d:'Para practicar las fracciones jugando.'}:t==='dec'?{t:'La Tiendita',d:'Para practicar con decimales y dinero jugando.'}:{t:'Misión Matemática · 1° de secundaria',d:'Para repasar todo lo de tu grado jugando.'}}
+};
+
+/* ---------- contenido de cada tema ---------- */
+function chips(items){return '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px">'+items.map(function(it,i){var bg=['#D3F36B','#E6E2FF','#FFE6F2','#FFF1C2'][i%4];return '<div style="background:'+bg+';border-radius:14px;padding:12px;text-align:center;font-family:Bricolage Grotesque,sans-serif;font-weight:800;font-size:17px;color:#15192B">'+it[0]+(it[1]?'<div style="font-family:Plus Jakarta Sans,sans-serif;font-size:12px;font-weight:700;color:#4E5268;margin-top:4px">'+it[1]+'</div>':'')+'</div>'}).join('')+'</div>'}
+var LESSON={
+ sig:{intro:'Los números con signo se suman, restan, multiplican y dividen con reglas fijas.',
+  rules:['<b>Suma con signos iguales:</b> suma y deja el signo. <b>Con signos diferentes:</b> resta y deja el signo del más grande.','<b>Restar un negativo es sumar:</b> 5 '+M+' ('+M+'3) = 5 + 3 = 8.','<b>Multiplicación y división:</b> signos iguales dan positivo; diferentes, negativo.'],
+  example:{disp:M+'8 + 3 '+M+' ('+M+'6)',steps:['Restar un negativo es sumar: '+E(M+'8 + 3 + 6')+'.','Sumo los positivos: '+E('3 + 6 = 9')+'.','Signos diferentes: '+E(M+'8 + 9 = 1')+'.']},
+  visual:function(){return chips([['(+)(+) = +','iguales'],['('+M+')('+M+') = +','iguales'],['(+)('+M+') = '+M,'diferentes'],['('+M+')(+) = '+M,'diferentes']])}},
+ jer:{intro:'Cuando hay varias operaciones, se resuelven en un orden establecido.',
+  rules:['<b>1. Paréntesis</b> y lo que esté agrupado.','<b>2. Potencias y raíces.</b>','<b>3. Multiplicaciones y divisiones</b> (de izquierda a derecha), y al final <b>4. sumas y restas</b>.'],
+  example:{disp:'20 '+M+' 2 × (3 + 1)<sup>2</sup>',steps:['Paréntesis: '+E('3 + 1 = 4')+'. Potencia: '+E('4² = 16')+'.','Multiplicación: '+E('2 × 16 = 32')+'.','Resta: '+E('20 '+M+' 32 = '+M+'12')+'.']},
+  visual:function(){return chips([['1 · ( )','Paréntesis'],['2 · x²  √','Potencias y raíces'],['3 · ×  ÷','Multiplicar y dividir'],['4 · +  '+M,'Sumar y restar']])}},
+ frd:{intro:'Cada operación con fracciones tiene su propia regla.',
+  rules:['<b>Sumar y restar:</b> denominador común, y se operan los numeradores.','<b>Multiplicar:</b> derecho, numerador por numerador y denominador por denominador.','<b>Dividir:</b> en cruz. <b>A decimal:</b> divide el numerador entre el denominador.'],
+  example:{disp:FR(2,3)+' ÷ '+FR(4,5),steps:['Para dividir multiplico en cruz.','Arriba: '+E('2 × 5 = 10')+'. Abajo: '+E('3 × 4 = 12')+'.','Resultado: '+FR(10,12)+' = '+FR(5,6)+'.']},
+  visual:function(){return chips([[FR('a','b')+' + '+FR('c','d'),'denominador común'],[FR('a','b')+' × '+FR('c','d'),'derecho'],[FR('a','b')+' ÷ '+FR('c','d'),'en cruz'],[FR(3,4)+' = 0.75','3 ÷ 4']])}},
+ por:{intro:'El porcentaje es una parte de cada 100.',
+  rules:['<b>Para sacar un porcentaje:</b> multiplica la cantidad por el porcentaje y divide entre 100.','<b>Descuento:</b> calcula el porcentaje y réstalo al precio. <b>Aumento o IVA:</b> calcúlalo y súmalo.','<b>¿Qué porcentaje es?</b> Divide la parte entre el total y multiplica por 100.'],
+  example:{disp:'25% de 80',steps:['Multiplico: '+E('80 × 25 = 2,000')+'.','Divido entre 100: '+E('2,000 ÷ 100 = 20')+'.','El 25% de 80 es '+E('20')+'.']},
+  visual:function(){var s='<svg viewBox="0 0 400 70" role="img" aria-label="Barra del 25 por ciento"><rect x="10" y="10" width="380" height="36" rx="12" fill="#fff" stroke="#15192B" stroke-width="3"/><rect x="10" y="10" width="95" height="36" rx="12" fill="#FFD166" stroke="#15192B" stroke-width="3"/>';for(var i=1;i<4;i++)s+='<line x1="'+(10+95*i)+'" y1="10" x2="'+(10+95*i)+'" y2="46" stroke="#15192B" stroke-width="2" stroke-dasharray="4 4"/>';return s+'<text x="57" y="34" text-anchor="middle" '+TXT+' font-size="15" fill="#15192B">25%</text><text x="200" y="64" text-anchor="middle" '+TXT+' font-size="12" fill="#4E5268">100% = el total</text></svg>'}},
+ dv:{intro:'Los criterios de divisibilidad te dicen si un número se puede dividir exacto, sin hacer la división.',
+  rules:['<b>Entre 2:</b> termina en par. <b>Entre 5:</b> termina en 0 o 5. <b>Entre 10:</b> termina en 0.','<b>Entre 3:</b> la suma de sus cifras es múltiplo de 3. <b>Entre 9:</b> múltiplo de 9.','<b>Número primo:</b> solo se divide entre 1 y entre sí mismo (2, 3, 5, 7, 11, 13…).'],
+  example:{disp:'360 = ?',steps:[E('360 ÷ 2 = 180, ÷ 2 = 90, ÷ 2 = 45')+' (tres veces entre 2).',E('45 ÷ 3 = 15, ÷ 3 = 5')+' (dos veces entre 3), y '+E('5 ÷ 5 = 1')+'.','Resultado: 360 = '+SUP(2,3)+' × '+SUP(3,2)+' × 5.']},
+  visual:function(){return chips([['÷ 2','termina en par'],['÷ 3','suma de cifras'],['÷ 5','termina en 0 o 5'],['÷ 9','suma de cifras']])}},
+ mcd:{intro:'El MCD y el mcm se encuentran descomponiendo los números en factores primos.',
+  rules:['<b>MCD:</b> el divisor más grande que comparten. Factores comunes con su menor exponente.','<b>mcm:</b> el múltiplo más pequeño que comparten. Todos los factores con su mayor exponente.','<b>En problemas:</b> repartir o cortar en partes iguales → MCD. Coincidir o repetirse → mcm.'],
+  example:{disp:'24 y 36',steps:['24 = '+SUP(2,3)+' × 3 y 36 = '+SUP(2,2)+' × '+SUP(3,2)+'.','MCD = '+SUP(2,2)+' × 3 = '+E('12')+'.','mcm = '+SUP(2,3)+' × '+SUP(3,2)+' = '+E('72')+'.']},
+  visual:function(){return chips([['MCD','repartir, cortar'],['mcm','coincidir, repetirse']])}},
+ pot:{intro:'Una potencia es una multiplicación repetida: la base se multiplica tantas veces como dice el exponente.',
+  rules:['<b>Multiplicar misma base:</b> se suman los exponentes. <b>Dividir:</b> se restan.','<b>Potencia de una potencia:</b> se multiplican. <b>Exponente 0:</b> siempre da 1.','<b>Negativos:</b> ('+M+'3)² = 9, pero '+M+'3² = '+M+'9. <b>Raíz cuadrada:</b> √49 = 7.'],
+  example:{disp:SUP(2,3)+' × '+SUP(2,4),steps:['Misma base que se multiplica: sumo los exponentes.',E('3 + 4 = 7')+'.','Resultado: '+SUP(2,7)+' = '+E('128')+'.']},
+  visual:function(){return chips([[SUP('a','m')+' × '+SUP('a','n'),'= a<sup>m+n</sup>'],[SUP('a','m')+' ÷ '+SUP('a','n'),'= a<sup>m'+M+'n</sup>'],['('+SUP('a','m')+')<sup>n</sup>','= a<sup>m×n</sup>'],[SUP('a',0)+' = 1','siempre']])}},
+ nc:{intro:'La notación científica sirve para escribir números muy grandes o muy pequeños.',
+  rules:['<b>Forma:</b> un número entre 1 y 10, multiplicado por una potencia de 10.','<b>Número grande:</b> el exponente es positivo y dice cuántos lugares se movió el punto.','<b>Número menor que 1:</b> el exponente es negativo.'],
+  example:{disp:'45,000,000',steps:['Pongo el punto después de la primera cifra: '+E('4.5')+'.','El punto se movió '+E('7')+' lugares a la izquierda.','Resultado: '+E('4.5 × ')+SUP(10,7)+'.']},
+  visual:function(){return chips([['4.5 × '+SUP(10,7),'= 45,000,000'],['3.2 × '+SUP(10,-4),'= 0.00032']])}},
+ ec:{intro:'Resolver una ecuación es encontrar el valor de x que hace que los dos lados sean iguales, como una balanza.',
+  rules:['<b>Lo que suma pasa restando</b> y lo que resta pasa sumando.','<b>Lo que multiplica pasa dividiendo</b> y lo que divide pasa multiplicando.','<b>Con paréntesis:</b> primero multiplica el número de afuera por cada término.'],
+  example:{disp:'3x + 5 = 20',steps:['El +5 pasa restando: '+E('3x = 20 '+M+' 5 = 15')+'.','El 3 multiplica, pasa dividiendo: '+E('x = 15 ÷ 3')+'.','Resultado: '+E('x = 5')+'. Compruebo: '+E('3(5) + 5 = 20')+'.']},
+  visual:function(){return '<svg viewBox="0 0 400 130" role="img" aria-label="Balanza en equilibrio"><path d="M200 30 V110 M150 118 H250" stroke="#15192B" stroke-width="5" stroke-linecap="round"/><path d="M70 40 H330" stroke="#15192B" stroke-width="5" stroke-linecap="round"/><circle cx="200" cy="30" r="8" fill="#15192B"/><path d="M40 70 H130 L115 90 H55 Z" fill="#D3F36B" stroke="#15192B" stroke-width="3"/><path d="M270 70 H360 L345 90 H285 Z" fill="#E6E2FF" stroke="#15192B" stroke-width="3"/><path d="M85 40 V70 M315 40 V70" stroke="#15192B" stroke-width="3"/><text x="85" y="86" text-anchor="middle" '+TXT+' font-size="15" fill="#15192B">3x + 5</text><text x="315" y="86" text-anchor="middle" '+TXT+' font-size="15" fill="#15192B">20</text></svg>'}},
+ suc:{intro:'Una sucesión es una lista de números que siguen un patrón.',
+  rules:['<b>Siguiente término:</b> busca cuánto cambia de uno a otro.','<b>Regla general:</b> si aumenta de d en d, la regla es dn + (primer término '+M+' d).','<b>Para el término n:</b> sustituye n en la regla.'],
+  example:{disp:'5, 8, 11, 14, …',steps:['Aumenta de 3 en 3: la regla empieza con '+E('3n')+'.','Primer término '+M+' 3 = '+E('5 '+M+' 3 = 2')+'. Regla: '+E('3n + 2')+'.','Término 20: '+E('3(20) + 2 = 62')+'.']},
+  visual:function(){return chips([['5','n = 1'],['8','n = 2'],['11','n = 3'],['14','n = 4']])+'<p style="text-align:center;margin:8px 0 0;font-weight:800;color:#5B45D6">+3 cada vez</p>'}},
+ pol:{intro:'Los polígonos se nombran por su número de lados, y sus ángulos siguen fórmulas fijas.',
+  rules:['<b>Suma de ángulos interiores:</b> (n '+M+' 2) × 180°.','<b>Ángulo interior de un polígono regular:</b> la suma dividida entre n.','<b>Diagonales:</b> n(n '+M+' 3) ÷ 2.'],
+  example:{disp:'Hexágono regular',steps:['Suma: '+E('(6 '+M+' 2) × 180 = 720°')+'.','Cada ángulo: '+E('720 ÷ 6 = 120°')+'.','Diagonales: '+E('6 × 3 ÷ 2 = 9')+'.']},
+  visual:function(){return '<div style="display:flex;justify-content:center;gap:6px">'+polySvg(5,'Pentágono')+polySvg(6,'Hexágono')+'</div>'}},
+ est:{intro:'Un histograma muestra cuántos datos hay en cada intervalo. Las medidas de tendencia central resumen un grupo de datos.',
+  rules:['<b>Histograma:</b> la altura de cada barra es la frecuencia del intervalo.','<b>Media:</b> suma todos los datos y divide entre cuántos son.','<b>Mediana:</b> el dato de en medio, ya ordenados. <b>Moda:</b> el que más se repite.'],
+  example:{disp:'7, 9, 6, 9, 8',steps:['Media: '+E('(7 + 9 + 6 + 9 + 8) ÷ 5 = 39 ÷ 5 = 7.8')+'.','Mediana: ordeno '+E('6, 7, 8, 9, 9')+' y el de en medio es '+E('8')+'.','Moda: el que más se repite es '+E('9')+'.']},
+  visual:function(){return '<div style="display:flex;justify-content:center">'+histSvg({labels:['140–145','145–150','150–155','155–160','160–165'],f:[3,6,9,5,2]})+'</div>'}}
+};
+
+
+/* ---------- lecciones de los temas nuevos ---------- */
+LESSON.ent={intro:'Los números negativos están a la izquierda del cero y los positivos a la derecha. Sirven para temperaturas bajo cero, deudas o profundidades.',
+  rules:['<b>En la recta</b>, un número es mayor mientras más a la derecha esté.','<b>En los negativos</b>, el más lejos del cero es el más chico: '+M+'8 &lt; '+M+'2.','<b>Valor absoluto:</b> la distancia al cero, siempre positiva (|'+M+'5| = 5). <b>Opuesto:</b> el mismo número con el signo contrario.'],
+  example:{disp:M+'6  ?  '+M+'2',steps:['Ubico los dos en la recta: '+M+'6 está más a la izquierda.','El que está más a la izquierda es el menor.','Entonces '+E(M+'6 &lt; '+M+'2')+'.']},
+  visual:function(){return '<div style="display:flex;justify-content:center">'+recta(-3,6)+'</div>'}};
+LESSON.iprob={intro:'Los números con signo aparecen en la vida diaria: temperaturas, dinero, alturas y profundidades.',
+  rules:['<b>Subir, ganar o depositar</b> es sumar.','<b>Bajar, perder, gastar o deber</b> es restar.','<b>La diferencia</b> entre dos números es el mayor menos el menor; si el menor es negativo, se suman las distancias al cero.'],
+  example:{disp:'De '+M+'4 °C sube 9 °C',steps:['Subir es sumar: '+E(M+'4 + 9')+'.','Signos diferentes: resto '+E('9 '+M+' 4 = 5')+' y dejo el signo del más grande (+).','La temperatura queda en '+E('5 °C')+'.']},
+  visual:function(){return chips([['+','subir, ganar'],[M,'bajar, gastar'],[M+'4 °C','bajo cero'],['+9 °C','sobre cero']])}};
+LESSON.dec={intro:'Los decimales se operan como los números enteros, pero hay que cuidar dónde va el punto.',
+  rules:['<b>Sumar y restar:</b> acomoda punto con punto, como en el dinero. Si falta una cifra, pon un 0.','<b>Multiplicar:</b> multiplica sin el punto y al final cuenta cuántas cifras decimales tenían los dos números.','<b>Dividir:</b> si el divisor tiene punto, recórrelo en los dos números hasta que el divisor sea entero.'],
+  example:{disp:'3.5 + 2.25',steps:['Acomodo punto con punto: '+E('3.50')+' y '+E('2.25')+'.','Sumo: '+E('350 + 225 = 575')+'.','Bajo el punto: '+E('5.75')+'.']},
+  visual:function(){return '<div style="display:flex;justify-content:center;font-family:Bricolage Grotesque,sans-serif;font-weight:800;font-size:36px;color:#15192B">'+'<div class="vt"><div>3.50</div><div><span>+</span>2.25</div></div></div><p style="text-align:center;margin:4px 0 0;font-weight:800;color:#5B45D6">5.75 · punto con punto</p>'}};
+LESSON.per={intro:'El perímetro es la medida de la orilla de una figura: lo que medirías si caminaras por todo su borde.',
+  rules:['<b>Perímetro:</b> suma todos los lados.','<b>Rectángulo:</b> largo + ancho + largo + ancho. <b>Polígono regular:</b> número de lados × lado.','<b>Círculo:</b> 3.14 × diámetro. Si falta un lado en una figura, encuéntralo con los otros.'],
+  example:{disp:'Rectángulo de 8 × 3 cm',steps:['Tiene dos lados de 8 cm y dos de 3 cm.',E('8 + 3 + 8 + 3 = 22')+'.','El perímetro es '+E('22 cm')+'.']},
+  visual:function(){return '<div style="display:flex;justify-content:center">'+rectSvg(8,3)+'</div>'}};
+LESSON.area={intro:'El área es lo que ocupa una figura por dentro. Se mide en unidades cuadradas, como cm².',
+  rules:['<b>Rectángulo:</b> base × altura. <b>Cuadrado:</b> lado × lado.','<b>Triángulo:</b> base × altura ÷ 2.','<b>Figura compuesta:</b> divídela en rectángulos y suma sus áreas. <b>Círculo:</b> 3.14 × radio × radio.'],
+  example:{disp:'Triángulo: b = 10, h = 6',steps:['Uso base × altura ÷ 2.',E('10 × 6 = 60')+'.',E('60 ÷ 2 = 30 cm²')+'.']},
+  visual:function(){return '<div style="display:flex;justify-content:center">'+triSvg(10,6)+'</div>'}};
+LESSON.graf={intro:'Las gráficas muestran datos de forma visual para compararlos rápido.',
+  rules:['<b>Gráfica de barras:</b> la altura de cada barra es su valor. Síguela con el dedo hasta los números.','<b>Gráfica circular:</b> todo el círculo es el 100%.','<b>Para saber cuántos son</b> en una gráfica circular: total × porcentaje ÷ 100.'],
+  example:{disp:'25% de 200 alumnos',steps:['Todo el círculo son los 200 alumnos.',E('200 × 25 = 5,000')+'.',E('5,000 ÷ 100 = 50')+' alumnos.']},
+  visual:function(){return '<div style="display:flex;justify-content:center">'+pieSvg({c:['Futbol','Básquet','Natación','Tenis'],p:[40,25,20,15]})+'</div>'}};
+function buildSet(level){
+  var set=[];
+  TOPICS.forEach(function(tp,ti){
+    var gens=GEN[tp.id][level],N=CONF.per,list=[],pool=[];
+    for(var i=0;i<N;i++){if(!pool.length)pool=shuffle(gens);list.push(pool.pop())}
+    list.forEach(function(g,k){var q=g();q.topic=tp.id;q.ti=ti;q.k=k;q.n=N;set.push(q)});
+  });
+  return set;
+}
+
+/* ---------- estado ---------- */
+var S={inPractice:false,from:null,name:'',level:null,set:[],i:0,topicIdx:0,res:[],entry:'',choice:null,answered:false};
+
+function header(back,label){
+  return '<div class="top">'+(back?'<button class="bkw" id="bk" aria-label="Regresar a '+(label||'')+'"><span class="bk">'+ico('back')+'</span><span><small>Regresar a</small><b>'+(label||'')+'</b></span></button>':'<span></span>')+
+    (S.inPractice&&S.level?'<span class="pill">'+(S.level==='base'?'Nivelación':'Mi grado')+'</span>':'')+'</div>';
+}
+var NAVI={Home:'<path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/>','Game On':'<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>',Read:'<path d="M3 6c3-1.5 6-1.5 9 0v13c-3-1.5-6-1.5-9 0zM21 6c-3-1.5-6-1.5-9 0v13c3-1.5 6-1.5 9 0z"/>',Learn:'<path d="M2 9l10-5 10 5-10 5zM6 11v5c3 2.5 9 2.5 12 0v-5"/>',Play:'<rect x="2.5" y="7" width="19" height="11" rx="5.5"/><path d="M7 12.5h4M9 10.5v4"/><circle cx="16" cy="11.5" r=".6"/><circle cx="17.5" cy="13.5" r=".6"/>',Me:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>'};
+function navbar(){return '';return '<nav class="nav" aria-hidden="true">'+Object.keys(NAVI).map(function(k){return '<span class="'+(k==='Learn'?'on':'')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+NAVI[k]+'</svg>'+k+'</span>'}).join('')+'</nav>'}
+function ico(name,col){
+  var p={bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V17h5.2v-1.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/>',
+    ok:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',no:'<path d="M7 7l10 10M17 7L7 17"/>',
+    redo:'<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/>',vault:'<rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="12" cy="12" r="3.5"/><path d="M12 8.5V7M15.5 12H17"/>',
+    up:'<path d="M12 19V5M6 11l6-6 6 6"/>',back:'<path d="M15 5l-7 7 7 7"/>',arrow:'<path d="M9 5l7 7-7 7"/>'}[name];
+  return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="'+(col||'currentColor')+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';
+}
+function render(h,back,label){$app.innerHTML=header(back,label)+h+navbar();var bk=document.getElementById('bk');if(bk)bk.onclick=back;window.scrollTo(0,0)}
+
+/* ---------- catálogo ---------- */
+var BASE=/heymova\.mx$/.test(location.hostname)?'':'https://heymova.mx/';
+var PR={
+ signos:{title:'Signos y jerarquía de operaciones',desc:'Suma y resta con signo, multiplicación y división, y orden de las operaciones.',ready:true,ic:'signs',c:'--lilaS',d:'--lilaD'},
+ num:{title:'Números y operaciones',desc:'Valor posicional, sumas y restas, tablas de multiplicar y problemas.',ic:'blocks',c:'--limeS',d:'--limeD'},
+ ex5:{title:'Repaso para tu examen',desc:'Fracciones, divisiones, ángulos, conversiones, números romanos y más.',ic:'star',c:'--yelS',d:'--navy'},
+ ex2s:{title:'Repaso para tu examen',desc:'En tres partes: números; divisibilidad y potencias; álgebra, geometría y datos.',ic:'star',c:'--yelS',d:'--navy'},
+ ex3s:{title:'Repaso para tu examen',desc:'Productos notables, fórmula general, Pitágoras y funciones.',ic:'star',c:'--yelS',d:'--navy'},
+ pn:{title:'Productos notables',desc:'Cuadrado de una suma y de una diferencia, binomios conjugados y con término común.',ic:'square',c:'--rosaS',d:'--rosaD'}
+};
+var SECS={exam:['Para tu examen','Lo que viene en tu examen del trimestre.'],grado:['Temas de tu grado','Practica lo que estás viendo en clase.'],nivel:['Nivelación','Repasa la base para avanzar con seguridad.']};
+var GR=[
+ {g:'1p',n:'1°',sub:'primaria',lv:'Primaria',full:'1° de primaria',plan:[['grado','num']]},
+ {g:'2p',n:'2°',sub:'primaria',lv:'Primaria',full:'2° de primaria',plan:[['grado','num']]},
+ {g:'3p',n:'3°',sub:'primaria',lv:'Primaria',full:'3° de primaria',plan:[['grado','num']]},
+ {g:'4p',n:'4°',sub:'primaria',lv:'Primaria',full:'4° de primaria',plan:[['nivel','num']]},
+ {g:'5p',n:'5°',sub:'primaria',lv:'Primaria',full:'5° de primaria',plan:[['exam','ex5']]},
+ {g:'6p',n:'6°',sub:'primaria',lv:'Primaria',full:'6° de primaria',plan:[]},
+ {g:'1s',n:'1°',sub:'secundaria',lv:'Secundaria',full:'1° de secundaria',plan:[['grado','signos']]},
+ {g:'2s',n:'2°',sub:'secundaria',lv:'Secundaria',full:'2° de secundaria',plan:[['exam','ex2s'],['nivel','signos']]},
+ {g:'3s',n:'3°',sub:'secundaria',lv:'Secundaria',full:'3° de secundaria',plan:[['exam','ex3s'],['nivel','signos']]},
+ {g:'1b',n:'1er',sub:'semestre',lv:'Preparatoria',full:'1er semestre de prepa',plan:[['grado','pn'],['nivel','signos']]}
+];
+var LVC={Primaria:['--lime','--limeD'],Secundaria:['--lila','--lilaD'],Preparatoria:['--rosa','--rosaD']};
+var GAMES=[
+ ['mision-matematica','Misión Matemática','De 1° de primaria a prepa'],
+ ['la-tiendita','La Tiendita','Sumas, dinero y cambio'],
+ ['que-hora-es','¿Qué hora es?','Leer el reloj'],
+ ['detective-patrones','Detective de patrones','Patrones y secuencias'],
+ ['pizzeria-fracciones','Pizzería de fracciones','Fracciones'],
+ ['lluvia-de-numeros','Lluvia de números','Las cuatro operaciones'],
+ ['la-balanza','La Balanza','Ecuaciones'],
+ ['la-boveda','La Bóveda','Jerarquía, signos y porcentajes']
+];
+var TRI_DK='<svg viewBox="0 0 220 220" aria-hidden="true"><path d="M98 152 C96 170.0 90 180.0 92 192" stroke="#FFFFFF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="89" cy="194" rx="6.2" ry="4" fill="#FFFFFF"/><path d="M122 152 C124 170.0 128 180.0 127 192" stroke="#FFFFFF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="130" cy="194" rx="6.2" ry="4" fill="#FFFFFF"/><path d="M70 128 C56 130 46 120 46 104" stroke="#FFFFFF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="46" cy="104" r="3.6" fill="#FFFFFF"/><path d="M150 128 C158 128 164 124 168 118" stroke="#FFFFFF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="168" cy="118" r="3.6" fill="#FFFFFF"/><path d="M110 44 L168 146 L52 146Z" fill="#FF9FCB" stroke="#FF9FCB" stroke-width="26" stroke-linejoin="round"/><circle cx="104" cy="76" r="6" fill="#fff" opacity=".28"/><path d="M88 108 h20 q0 12 -10 12 q-10 0 -10 -12z" fill="#1A1B2E"/><path d="M93 111 q3 -1.6 6 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".6"/><path d="M112 108 h20 q0 12 -10 12 q-10 0 -10 -12z" fill="#1A1B2E"/><path d="M117 111 q3 -1.6 6 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".6"/><path d="M108 109 q2 -4 4 0" stroke="#1A1B2E" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M104 126 q0 6 6 6 q6 0 6 -6" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="86" cy="126" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><ellipse cx="134" cy="126" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><g transform="translate(170 118) rotate(-35)"><rect x="-4" y="-30" width="8" height="30" rx="2" fill="#FFD54A"/><rect x="-4" y="-35" width="8" height="6" rx="2" fill="#FF8FC8"/><path d="M-4 0 L0 8 L4 0z" fill="#F4E1C1"/><path d="M-1.3 5.4 L0 8 L1.3 5.4z" fill="#1A1B2E"/></g></svg>', TRI='<svg viewBox="0 0 220 220" aria-hidden="true"><path d="M98 152 C96 170.0 90 180.0 92 192" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="89" cy="194" rx="6.2" ry="4" fill="#1A1B2E"/><path d="M122 152 C124 170.0 128 180.0 127 192" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="130" cy="194" rx="6.2" ry="4" fill="#1A1B2E"/><path d="M70 128 C56 130 46 120 46 104" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="46" cy="104" r="3.6" fill="#1A1B2E"/><path d="M150 128 C158 128 164 124 168 118" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="168" cy="118" r="3.6" fill="#1A1B2E"/><path d="M110 44 L168 146 L52 146Z" fill="#FF9FCB" stroke="#FF9FCB" stroke-width="26" stroke-linejoin="round"/><circle cx="104" cy="76" r="6" fill="#fff" opacity=".28"/><path d="M88 108 h20 q0 12 -10 12 q-10 0 -10 -12z" fill="#1A1B2E"/><path d="M93 111 q3 -1.6 6 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".6"/><path d="M112 108 h20 q0 12 -10 12 q-10 0 -10 -12z" fill="#1A1B2E"/><path d="M117 111 q3 -1.6 6 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".6"/><path d="M108 109 q2 -4 4 0" stroke="#1A1B2E" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M104 126 q0 6 6 6 q6 0 6 -6" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="86" cy="126" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><ellipse cx="134" cy="126" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><g transform="translate(170 118) rotate(-35)"><rect x="-4" y="-30" width="8" height="30" rx="2" fill="#FFD54A"/><rect x="-4" y="-35" width="8" height="6" rx="2" fill="#FF8FC8"/><path d="M-4 0 L0 8 L4 0z" fill="#F4E1C1"/><path d="M-1.3 5.4 L0 8 L1.3 5.4z" fill="#1A1B2E"/></g></svg>';
+function hero(o){return '<div class="ms-hero'+(o.dark?' ms-dk':'')+'" style="--c:'+(o.c||'#C7B5FF')+'"><span class="ms-dot a"></span><span class="ms-dot b"></span><span class="ms-dot c"></span><div class="ms-hx">'+(o.k?'<span class="mp-k">'+o.k+'</span>':'')+'<h1>'+o.h+'</h1>'+(o.p?'<p>'+o.p+'</p>':'')+'</div>'+(o.art?'<span class="ms-art">'+o.art+'</span>':'')+'</div>'}
+function pico(k,col){
+  var P={signs:'<text x="12" y="17" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="15" fill="'+col+'">±×</text>',
+    blocks:'<rect x="3" y="12" width="6" height="8" rx="1.5" fill="'+col+'"/><rect x="9.5" y="7" width="6" height="13" rx="1.5" fill="'+col+'" opacity=".7"/><rect x="16" y="3" width="5" height="17" rx="1.5" fill="'+col+'" opacity=".45"/>',
+    star:'<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z" fill="'+col+'"/>',
+    square:'<text x="12" y="17" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="14" fill="'+col+'">(a+b)²</text>'};
+  return '<svg width="'+(k==='square'?44:30)+'" height="30" viewBox="0 0 24 24" aria-hidden="true">'+P[k]+'</svg>';
+}
+function arrowB(){return '<span class="goB">'+ico('arrow')+'</span>'}
+
+/* ---------- Matemáticas: vitrina principal ---------- */
+function mathHub(){
+  S.inPractice=false;
+  render(hero({dark:true,k:'MOVA Math',h:'Matemáticas',p:'Explicaciones claras, ejemplos paso a paso y ejercicios pensados para tu grado.',art:TRI_DK})+
+    '<h2 class="ms-h">¿Qué quieres hacer hoy?</h2><p class="ms-sub">Elige cómo quieres practicar.</p>'+
+    '<button class="vit" id="dP"><span class="th" style="background:#E6E2FF"><img src="'+BASE+'math-signos.webp" alt=""><span class="k">Prácticas</span></span><span class="tx"><b>Prácticas</b><span class="d">Explicación, ejemplos y ejercicios con calificación y retroalimentación de tu maestra.</span>'+
+      '<span class="ft"><span class="chips"><em class="c2">Por grado</em><em class="c3">Para tu examen</em><em class="c1">Nivelación</em></span>'+arrowB()+'</span></span></button>'+
+    '<button class="vit" id="dG"><span class="th" style="background:#DCF4EA"><img src="'+BASE+'thumb-mision-matematica.webp" alt=""><span class="k">Juegos</span></span><span class="tx"><b>Juegos</b><span class="d">Aprende jugando, por nivel y a tu ritmo.</span>'+
+      '<span class="ft"><span class="chips"><em class="c4">8 juegos</em><em class="c2">De primaria a prepa</em></span>'+arrowB()+'</span></span></button>'+
+    '<button class="mini" id="dI"><span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#15192B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/></svg></span><span><b>Hojas para imprimir</b><span>Genera hojas por grado y tema, con clave de respuestas.</span></span></button>',
+    function(){},'Learn');
+  document.getElementById('dP').onclick=practicas;
+  document.getElementById('dG').onclick=games;
+}
+function games(){
+  render(hero({k:'MOVA Math',h:'Juegos',p:'Elige un juego y empieza.',c:'#D3F36B',art:TRI})+'<div class="ggrid">'+
+    GAMES.map(function(g){return '<a class="gm" href="'+BASE+'juego-'+g[0]+'.html"><img src="'+BASE+'thumb-'+g[0]+'.webp" alt="" loading="lazy"><b>'+g[1]+'</b><span>'+g[2]+'</span></a>'}).join('')+'</div>',mathHub,'Matemáticas');
+}
+function practicas(){
+  S.inPractice=false;
+  var h=hero({k:'MOVA Math',h:'Prácticas',p:'Elige tu grado y encuentra lo que necesitas practicar.',c:'#C7B5FF',art:TRI});
+  ['Primaria','Secundaria','Preparatoria'].forEach(function(lv){
+    var c=LVC[lv];
+    h+='<div class="sect"><i style="background:'+cv(c[0])+'"></i>'+lv+'</div><div class="grades">'+GR.filter(function(x){return x.lv===lv}).map(function(x){
+      return '<button class="gr" data-g="'+x.g+'" style="box-shadow:inset 0 -6px 0 '+cv(c[0])+',0 10px 26px -18px rgba(54,40,120,.5)"><b>'+x.n+'</b><span>'+x.sub+'</span></button>'}).join('')+'</div>';
+  });
+  render(h,mathHub,'Matemáticas');
+  [].forEach.call(document.querySelectorAll('.gr'),function(b){b.onclick=function(){grade(b.dataset.g)}});
+}
+var HC={Primaria:'#D3F36B',Secundaria:'#C7B5FF',Preparatoria:'#FFC7E2'};
+function grade(g){
+  S.inPractice=false;
+  var G=GR.filter(function(x){return x.g===g})[0];
+  var h=hero({k:G.lv,h:G.full,p:'Tus prácticas de matemáticas.',c:HC[G.lv],art:TRI});
+  if(!G.plan.length)h+='<div class="empty">Estamos preparando las prácticas de este grado. Muy pronto las vas a encontrar aquí.</div>';
+  ['exam','grado','nivel'].forEach(function(sk){
+    var items=G.plan.filter(function(x){return x[0]===sk});if(!items.length)return;
+    h+='<div class="sect" style="display:block">'+SECS[sk][0]+'<small>'+SECS[sk][1]+'</small></div>';
+    items.forEach(function(it){var P=PR[it[1]];
+      h+='<button class="pc" data-p="'+it[1]+'" data-s="'+sk+'"'+(P.ready?'':' disabled')+'><span class="ic" style="background:'+cv(P.c)+'">'+pico(P.ic,P.d==='--navy'?'#15192B':getComputedStyle(document.documentElement).getPropertyValue(P.d).trim())+'</span><span><b>'+P.title+'</b><span>'+P.desc+'</span>'+
+        (P.ready?'<span class="tg" style="background:var(--limeS);color:var(--limeD)">Lista para practicar</span>':'<span class="tg" style="background:var(--paper);color:var(--muted)">En preparación</span>')+'</span></button>'});
+  });
+  render(h,practicas,'Prácticas');
+  [].forEach.call(document.querySelectorAll('.pc:not([disabled])'),function(b){b.onclick=function(){S.from=g;practiceHome(b.dataset.s==='nivel'?'base':'grado')}});
+}
+
+/* ---------- inicio de la práctica ---------- */
+function who(){try{var u=(window.MovaAuth&&MovaAuth.user())||JSON.parse(localStorage.getItem('mova_student')||'null');if(u&&u.name)return String(u.name).trim().split(/\s+/)[0]}catch(e){}return ''}
+var Q=(function(){var o={};location.search.replace(/^\?/,'').split('&').forEach(function(kv){var p=kv.split('=');if(p[0])o[decodeURIComponent(p[0])]=decodeURIComponent(p[1]||'')});return o})();
+function toList(){location.href='index.html#/matematicas/practicas'+(S.from?'/'+S.from:'')}
+function practiceHome(pre){
+  S.inPractice=false;S.level=null;var lv=pre||null,pt=S.part||(CONF.parts&&CONF.parts[Q.parte]?Q.parte:null);
+  render('<div class="card">'+
+    CONF.home()+
+    '<label class="f" for="nm">¿Cómo te llamas?</label><input class="name" id="nm" autocomplete="given-name" placeholder="Escribe tu nombre" value="'+esc(S.name)+'">'+
+    (CONF.parts?'<label class="f">Elige la parte</label><div class="levels">'+Object.keys(CONF.parts).map(function(k,i){var P=CONF.parts[k],c=['lime','lila','rosa'][i%3];return '<button class="lvl prt" data-p="'+k+'" aria-pressed="'+(pt===k)+'"><span class="dot" style="background:var(--'+c+'S);color:var(--'+c+'D)">'+k+'</span><span><b>'+P.name+'</b><span>'+P.desc+'</span></span></button>'}).join('')+'</div>':'')+
+    '<label class="f">Elige tu nivel</label><div class="levels">'+
+     '<button class="lvl" data-l="base" aria-pressed="'+(lv==='base')+'"><span class="dot" style="background:var(--limeS);color:var(--limeD)">1</span><span><b>Nivelación</b><span>'+CONF.lvBase+'</span></span></button>'+
+     '<button class="lvl" data-l="grado" aria-pressed="'+(lv==='grado')+'"><span class="dot" style="background:var(--lilaS);color:var(--lilaD)">2</span><span><b>Mi grado</b><span>'+CONF.lvGrado+'</span></span></button>'+
+    '</div><div class="err" id="er"></div>'+
+    '<button class="btn" id="go">Empezar la práctica</button></div>',toList,'Prácticas');
+  var w=who();if(w){S.name=w;var nm=document.getElementById('nm');nm.value=w;nm.parentNode.removeChild(nm.previousElementSibling);nm.parentNode.removeChild(nm);}
+  [].forEach.call(document.querySelectorAll('.lvl:not(.prt)'),function(b){b.onclick=function(){lv=b.dataset.l;[].forEach.call(document.querySelectorAll('.lvl:not(.prt)'),function(x){x.setAttribute('aria-pressed',x===b)})}});
+  [].forEach.call(document.querySelectorAll('.prt'),function(b){b.onclick=function(){pt=b.dataset.p;[].forEach.call(document.querySelectorAll('.prt'),function(x){x.setAttribute('aria-pressed',x===b)})}});
+  document.getElementById('go').onclick=function(){
+    var ne=document.getElementById('nm'),n=ne?ne.value.trim():S.name;
+    if(!n){document.getElementById('er').textContent='Escribe tu nombre para empezar.';return}
+    if(CONF.parts&&!pt){document.getElementById('er').textContent='Elige una parte para empezar.';return}
+    if(!lv){document.getElementById('er').textContent='Elige un nivel para empezar.';return}
+    if(CONF.parts){S.part=pt;CONF.setPart(pt)}
+    S.name=n.split(/\s+/)[0];S.name=S.name.charAt(0).toUpperCase()+S.name.slice(1);
+    start(lv);
+  };
+}
+function start(lv){S.inPractice=true;S.level=lv;S.set=buildSet(lv);S.i=0;S.res=[];S.topicIdx=0;lesson(0)}
+
+/* ---------- lección ---------- */
+function lesson(ti){
+  var tp=TOPICS[ti],L=LESSON[tp.id];
+  var shown=1;
+  function draw(){
+    var st=L.example.steps.map(function(s,i){return i<shown?'<li><span class="k">'+(i+1)+'</span><span>'+s+'</span></li>':''}).join('');
+    render(progress()+'<div class="card">'+
+      '<span class="tchip" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">Tema '+(ti+1)+' de '+TOPICS.length+'</span>'+
+      '<h2 style="margin-top:12px">'+tp.name+'</h2><p class="muted">'+L.intro+'</p>'+
+      '<div class="visual">'+L.visual()+'</div>'+
+      L.rules.map(function(r,i){return '<div class="rule"><span class="n" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">'+(i+1)+'</span><p>'+r+'</p></div>'}).join('')+
+      '</div><div class="card"><h3>Ejemplo paso a paso</h3><div class="big" style="font-size:30px;margin:8px 0 6px">'+L.example.disp+'</div><ol class="steps">'+st+'</ol>'+
+      (shown<L.example.steps.length?'<button class="btn ghost" id="nx">Ver el siguiente paso</button>':'<button class="btn" id="pr">Practicar este tema</button>')+'</div>');
+    var nx=document.getElementById('nx');if(nx)nx.onclick=function(){shown++;draw()};
+    var pr=document.getElementById('pr');if(pr)pr.onclick=function(){S.topicIdx=ti;question()};
+  }
+  draw();
+}
+function progress(){
+  var pct=Math.round(S.i/S.set.length*100),col=cv(TOPICS[S.set[Math.min(S.i,S.set.length-1)].ti].c);
+  return '<div class="progress" aria-label="Avance '+pct+'%"><i style="width:'+Math.max(pct,3)+'%;background:'+col+'"></i></div>';
+}
+
+/* ---------- ejercicio ---------- */
+function question(){
+  var q=S.set[S.i],tp=TOPICS.filter(function(x){return x.id===q.topic})[0],inTopic=q.k+1;
+  S.entry='';S.choice=null;S.answered=false;
+  var body='<div class="card"><div class="qhead"><span class="tchip" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">'+tp.short+'</span>'+
+    '<button class="recuerda" id="rc">'+ico('bulb')+'Recuerda</button></div>'+
+    '<div class="qnum">Ejercicio '+inTopic+' de '+q.n+'</div>'+
+    '<div class="prompt">'+(q.prompt||'Resuelve:')+'</div><div class="big'+(q.wrap?' wrap':'')+'">'+q.disp+(q.type==='num'&&!q.noEq?' =':'')+'</div>';
+  if(q.type==='num'){
+    body+='<div class="ansbox empty" id="ab" aria-live="polite">Tu respuesta</div><div class="pad" id="pad"'+(CONF.padCols?' style="grid-template-columns:repeat('+CONF.padCols+',1fr)"':'')+'>'+
+      (CONF.keys||['7','8','9','⌫','4','5','6',M,'1','2','3','0']).map(function(k){return '<button data-k="'+k+'" class="'+(k==='⌫'||k===M?'sp':'')+'" aria-label="'+(k==='⌫'?'Borrar':k===M?'Cambiar signo':k==='.'?'Punto decimal':k)+'">'+(k===M?'+/'+M:k)+'</button>'}).join('')+'</div>';
+  }else{
+    body+='<div class="opts">'+q.opts.map(function(o,i){return '<button class="opt" data-o="'+i+'" aria-pressed="false">'+o+'</button>'}).join('')+'</div>';
+  }
+  body+='<div id="fbz"></div><button class="btn" id="ck" disabled>Comprobar</button></div>';
+  render(progress()+body);
+  document.getElementById('rc').onclick=function(){openRecuerda(q.topic)};
+  var ck=document.getElementById('ck');
+  if(q.type==='num'){
+    var ab=document.getElementById('ab');
+    var upd=function(){if(!S.entry||S.entry===M){ab.className='ansbox'+(S.entry?'':' empty');ab.textContent=S.entry||'Tu respuesta';ck.disabled=true}else{ab.className='ansbox';ab.textContent=S.entry;ck.disabled=false}};
+    [].forEach.call(document.querySelectorAll('#pad button'),function(b){b.onclick=function(){if(S.answered)return;var k=b.dataset.k;
+      if(k==='⌫')S.entry=S.entry.slice(0,-1);
+      else if(k===M)S.entry=S.entry.charAt(0)===M?S.entry.slice(1):M+S.entry;
+      else if(k==='.'){if(S.entry.indexOf('.')<0)S.entry=(S.entry||'0')+'.'}
+      else if(S.entry.replace(M,'').length<7)S.entry=(S.entry===M+'0'||S.entry==='0')?S.entry.replace('0',k):S.entry+k;
+      upd()}});
+  }else{
+    [].forEach.call(document.querySelectorAll('.opt'),function(b){b.onclick=function(){if(S.answered)return;S.choice=+b.dataset.o;
+      [].forEach.call(document.querySelectorAll('.opt'),function(x){x.setAttribute('aria-pressed',x===b)});ck.disabled=false}});
+  }
+  ck.onclick=function(){if(S.answered){next();return}check(q)};
+}
+function check(q){
+  S.answered=true;var ok,given,tag=null;
+  if(q.type==='num'){given=parseFloat(S.entry.replace(M,'-'));ok=Math.abs(given-q.ans)<1e-9;
+    if(!ok){tag=q.w[KEY(given)]||q.w[given]||q.def||null;
+      if(!tag&&q.tagAbs){tag=(Math.sign(given)===Math.sign(q.ans))?q.tagAbs:'calculo'}
+      if(!tag)tag='calculo';}}
+  else{given=S.choice;ok=given===q.ans;if(!ok)tag=q.tag}
+  S.res.push({topic:q.topic,ok:ok,tag:tag,disp:q.disp,given:q.type==='num'?NF(given):q.opts[given],ans:q.type==='num'?NF(q.ans):q.opts[q.ans],type:q.type});
+  var fb=ok?'<div class="fb ok"><h3>'+ico('ok','#4F6B00')+'Correcto</h3><ol class="steps">'+q.steps.map(function(s,i){return '<li><span class="k">'+(i+1)+'</span><span>'+s+'</span></li>'}).join('')+'</ol></div>'
+    :'<div class="fb no"><h3>'+ico('no','#C2387A')+'<span>La respuesta es '+(q.type==='num'?NF(q.ans):q.opts[q.ans])+'</span></h3>'+
+      (tag&&TAGS[tag]?'<p style="font-size:14px;margin:0 0 6px">'+TAGS[tag].fix+'</p>':'')+
+      '<ol class="steps">'+q.steps.map(function(s,i){return '<li><span class="k">'+(i+1)+'</span><span>'+s+'</span></li>'}).join('')+'</ol></div>';
+  document.getElementById('fbz').innerHTML=fb;
+  var ck=document.getElementById('ck');ck.textContent=S.i===S.set.length-1?'Ver mis resultados':(q.k===q.n-1?'Continuar al siguiente tema':'Siguiente ejercicio');
+  ck.scrollIntoView({behavior:'smooth',block:'end'});
+}
+function next(){S.i++;if(S.i>=S.set.length){results();return}if(S.set[S.i].k===0){lesson(S.set[S.i].ti)}else question()}
+
+/* ---------- recuerda ---------- */
+function openRecuerda(tid){
+  var tp=TOPICS.filter(function(x){return x.id===tid})[0],L=LESSON[tid];
+  $sheetIn.innerHTML='<div class="qhead"><span class="tchip" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">'+ico('bulb')+'Recuerda</span></div><h2 style="margin-top:10px">'+tp.name+'</h2>'+
+    '<div class="visual">'+L.visual()+'</div>'+L.rules.map(function(r,i){return '<div class="rule"><span class="n" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">'+(i+1)+'</span><p>'+r+'</p></div>'}).join('')+
+    '<button class="btn" id="cl">Volver al ejercicio</button>';
+  $sheet.classList.add('on');document.getElementById('cl').focus();
+  document.getElementById('cl').onclick=closeSheet;
+}
+function closeSheet(){$sheet.classList.remove('on')}
+$sheet.onclick=function(e){if(e.target===$sheet)closeSheet()};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet()});
+
+/* ---------- resultados y retroalimentación ---------- */
+function results(){
+  var total=S.res.length,good=S.res.filter(function(r){return r.ok}).length,grade=Math.round(good/total*100)/10;
+  var per=TOPICS.map(function(tp){var r=S.res.filter(function(x){return x.topic===tp.id});var g=r.filter(function(x){return x.ok}).length;return{tp:tp,g:g,n:r.length,p:g/r.length}});
+  var tags={};S.res.forEach(function(r){if(!r.ok){if(!tags[r.tag])tags[r.tag]={n:0,ex:r};tags[r.tag].n++}});
+  var tagList=Object.keys(tags).sort(function(a,b){return tags[b].n-tags[a].n});
+  var strong=per.filter(function(x){return x.p>=.75}),weak=per.slice().sort(function(a,b){return a.p-b.p})[0];
+
+  /* carta en primera persona */
+  var L=[];
+  L.push(S.name+', ya revisé tu práctica.');
+  if(strong.length===TOPICS.length)L.push('Hiciste un trabajo excelente en todos los temas: se nota que entiendes las reglas y que las aplicas con cuidado.');
+  else if(strong.length)L.push('Me da mucho gusto ver que dominas '+strong.map(function(x){return x.tp.short.toLowerCase()}).join(' y ')+'; ahí trabajaste con mucha seguridad.');
+  else L.push('Veo que te esforzaste en cada ejercicio y no te rendiste; eso es justo lo que se necesita para mejorar.');
+  if(tagList.length){
+    var parts=tagList.slice(0,2).map(function(k,ix){var e=tags[k].ex,txt=(ix?'También noto que ':'Noto que ')+TAGS[k].say;
+      if(e.type==='num'&&!/<svg|<table/.test(e.disp)&&e.disp.replace(/<[^>]+>/g,'').length<45)txt+=': por ejemplo, en '+E(e.disp)+' respondiste '+E(e.given)+' y el resultado es '+E(e.ans);
+      return txt+'. '+TAGS[k].fix});
+    L.push(parts.join(' '));
+  }else L.push('No tuviste ningún error. Te felicito.');
+  var recP,recG,LV=function(l){return l==='base'?'Nivelación':'Mi grado'};
+  if(grade>=9&&S.level==='base'){L.push('Ya puedes pasar al nivel Mi grado. Mi recomendación es que lo hagas en tu siguiente práctica.');recP={t:CONF.short+' · Mi grado',d:CONF.upTxt,l:'grado'}}
+  else if(grade>=9){L.push(CONF.readyTxt);recP={t:CONF.short+' · Mi grado',d:'Repítela con ejercicios nuevos para mantener la práctica.',l:'grado'}}
+  else{L.push('Mi recomendación es que repitas esta práctica poniendo especial atención en '+weak.tp.short.toLowerCase()+'. Los ejercicios cambian cada vez, así que vas a practicar con ejercicios nuevos.');recP={t:CONF.short+' · '+LV(S.level),d:'Ejercicios nuevos, enfocándote en '+weak.tp.short.toLowerCase()+'.',l:S.level}}
+  recG=CONF.game(weak.tp.id);
+  L.push('Y para practicar jugando, te recomiendo '+recG.t+'. ¡Vas por muy buen camino!');
+
+  try{if(window.MovaAuth)MovaAuth.save(CONF.slug,CONF.short+' · '+(S.level==='base'?'Nivelación':'Mi grado'),good,total,{area:'math',level:S.level,grade:S.from||null,topics:per.map(function(x){return {t:x.tp.id,ok:x.g,n:x.n}}),errors:tagList})}catch(e){}
+  var msg=grade>=9?'Excelente trabajo':grade>=7?'Muy buen avance':grade>=5?'Vamos por buen camino':'Vamos a reforzarlo juntos';
+  var ringCol=grade>=8?'#D3F36B':grade>=6?'#9C8BFF':'#FF8FC0',C=2*Math.PI*48;
+  var ring='<svg class="ring" viewBox="0 0 118 118" role="img" aria-label="Calificación '+grade+' de 10"><circle cx="59" cy="59" r="48" fill="none" stroke="#F5F3FA" stroke-width="13"/><circle cx="59" cy="59" r="48" fill="none" stroke="'+ringCol+'" stroke-width="13" stroke-linecap="round" stroke-dasharray="'+(C*good/total)+' '+C+'" transform="rotate(-90 59 59)"/><text x="59" y="66" text-anchor="middle" font-family="Plus Jakarta Sans" font-size="30" font-weight="800" fill="#15192B">'+(grade%1?grade.toFixed(1):grade)+'</text></svg>';
+
+  render('<div class="card"><span class="tchip" style="background:var(--cream)">Resultados</span>'+
+    '<div class="score">'+ring+'<div><h2 style="margin:0">'+msg+', '+esc(S.name)+'</h2><p class="muted" style="margin:4px 0 0">'+good+' de '+total+' ejercicios correctos</p></div></div>'+
+    '<div class="bars">'+per.map(function(x){return '<div class="bar"><div class="l"><span>'+x.tp.short+'</span><span>'+x.g+'/'+x.n+'</span></div><div class="t"><i style="width:'+Math.max(x.p*100,2)+'%;background:'+cv(x.tp.c)+'"></i></div></div>'}).join('')+'</div></div>'+
+    '<div class="card"><h3>Retroalimentación</h3><div class="letter">'+L.map(function(p){return '<p>'+p+'</p>'}).join('')+'<div class="sign">Miss Karla Rodríguez · Academic Coordinator</div></div></div>'+
+    '<div class="card"><h3>Te recomiendo</h3>'+
+     '<button class="rec" id="rp" style="width:100%;text-align:left;background:#fff"><span class="ic" style="background:var(--lilaS);color:var(--lilaD)">'+ico(recP.l!==S.level?'up':'redo')+'</span><span><b>'+recP.t+'</b><span>'+recP.d+'</span></span></button>'+
+     '<div class="rec"><span class="ic" style="background:var(--rosaS);color:var(--rosaD)">'+ico('vault')+'</span><span><b>'+recG.t+'</b><span>'+recG.d+'</span></span></div>'+
+     '<button class="btn ghost" id="hm">Volver a mis prácticas</button></div>');
+  document.getElementById('rp').onclick=function(){start(recP.l)};
+  document.getElementById('hm').onclick=toList;
+}
+
+S.from=Q.g||null;practiceHome(Q.nivel==='base'||Q.nivel==='grado'?Q.nivel:null);
+})();
+</script>
+<script src="mova-auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Productos notables y factorización · MOVA</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script src="mova-gate.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F3FA; --surface:#fff; --surface2:#ECE9F3; --navy:#15192B; --ink:#15192B; --ink2:#4E5268; --muted:#6A6F85; --line:#E4E0EE;
+  --lime:#D3F36B; --limeS:#F1FBD0; --limeD:#4F6B00;
+  --lila:#9C8BFF; --lilaS:#E6E2FF; --lilaD:#4B3BB0;
+  --rosa:#FF8FC0; --rosaS:#FFE6F2; --rosaD:#A3345C;
+  --yel:#FFD54A; --yelS:#FFF1C2; --yelD:#7A5A00;
+  --cream:#F5F3FA; --white:#fff;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0;min-height:100%}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased}
+h1,h2,h3,.big,.ttl{font-family:'Bricolage Grotesque','Plus Jakarta Sans',sans-serif;letter-spacing:-.02em}
+button{font-family:inherit;cursor:pointer;border:0;color:inherit;background:none}
+a{color:inherit}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--lila);outline-offset:3px}
+.app{max-width:560px;margin:0 auto;padding:16px 16px 48px}
+/* encabezado */
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 14px;min-height:56px}
+.bkw{display:flex;align-items:center;gap:12px;text-align:left}
+.bk{flex:none;width:52px;height:52px;border-radius:50%;border:2.5px solid var(--ink);display:grid;place-items:center;background:transparent}
+.bkw small{display:block;font-size:13px;color:var(--muted);font-weight:500;line-height:1.1}
+.bkw b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:21px;line-height:1.15}
+.pill{font-size:12px;font-weight:800;padding:8px 14px;border-radius:999px;background:var(--navy);color:#fff}
+/* vitrina principal, igual a la app */
+.ms-hero{position:relative;overflow:hidden;background:var(--c,#C7B5FF);color:#15192B;border-radius:30px;padding:24px 22px 26px;min-height:200px;margin:0 0 18px}
+.ms-hero h1{font-size:clamp(34px,9.5vw,46px);line-height:.98;letter-spacing:-.03em;margin:14px 0 10px;color:#15192B}
+.ms-hero p{margin:0;font-size:15px;line-height:1.55;color:#2B2F45;max-width:30ch}
+.ms-hx{position:relative;z-index:2;max-width:64%}
+.ms-art{position:absolute;right:-6px;bottom:-12px;width:44%;max-width:210px;z-index:1;pointer-events:none}
+.ms-art svg{width:100%;height:auto;display:block}
+.ms-dot{position:absolute;border-radius:50%;background:#fff;opacity:.45}
+.ms-dot.a{width:120px;height:120px;right:-32px;top:-36px}
+.ms-dot.b{width:14px;height:14px;right:46%;top:28px;opacity:.8}
+.ms-dot.c{width:9px;height:9px;right:36%;top:66px;background:#15192B;opacity:.18}
+.ms-dk{background:#15192B;color:#fff}
+.ms-dk h1{color:#fff}.ms-dk p{color:#C9CCE0}
+.ms-dk .ms-dot.a{background:#2A3150;opacity:1}.ms-dk .ms-dot.b{background:#FFD54A;opacity:1}.ms-dk .ms-dot.c{background:#FF8FC0;opacity:1}
+.mp-k{display:inline-block;background:#fff;color:#15192B;font-size:12.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:8px 15px;border-radius:999px}
+.ms-dk .mp-k{background:var(--lime)}
+.ms-h{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;margin:22px 4px 4px}
+.ms-sub{margin:0 4px 14px;color:var(--muted);font-size:14px;line-height:1.45}
+/* vitrinas de Prácticas y Juegos */
+.vit{display:block;background:#fff;border-radius:28px;padding:8px 8px 18px;text-decoration:none;color:var(--ink);box-shadow:0 10px 30px -18px rgba(54,40,120,.45);margin-bottom:14px;width:100%;text-align:left}
+.vit:active{transform:scale(.985)}
+.vit .th{display:block;position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:var(--lilaS)}
+.vit .th img{width:100%;height:100%;object-fit:cover;display:block}
+.vit .th .k{position:absolute;left:14px;top:14px;background:#15192B;color:var(--lime);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;border-radius:999px}
+.vit .tx{display:block;padding:14px 12px 0}
+.vit b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:28px;line-height:1.05;letter-spacing:-.02em}
+.vit .d{display:block;font-size:15px;color:var(--muted);line-height:1.5;margin-top:6px}
+.vit .ft{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips em{font-style:normal;font-size:11.5px;font-weight:700;border-radius:999px;padding:5px 10px}
+.c1{background:#FFE1EA;color:#A3345C}.c2{background:#E6E2FF;color:#4B3BB0}.c3{background:#DCF4EA;color:#1F6E4E}.c4{background:#FFF1C2;color:#7A5A00}
+.goB{flex:none;width:44px;height:44px;border-radius:50%;background:#15192B;color:#fff;display:grid;place-items:center}
+.mini{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#fff;border-radius:24px;padding:14px 16px;box-shadow:0 10px 30px -18px rgba(54,40,120,.45);text-decoration:none;color:var(--ink)}
+.mini .ic{flex:none;width:50px;height:50px;border-radius:16px;display:grid;place-items:center;background:var(--yelS);color:var(--ink)}
+.mini b{display:block;font-size:16px;color:var(--ink)}.mini span{display:block;font-size:13px;color:var(--muted);line-height:1.4;margin-top:2px}
+/* grados */
+.sect{font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:700;margin:22px 4px 10px;display:flex;align-items:center;gap:10px}
+.sect i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.sect small{display:block;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:500;color:var(--muted);margin-top:2px}
+.grades{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gr{border-radius:22px;padding:16px 8px 14px;text-align:center;background:#fff;box-shadow:0 10px 26px -18px rgba(54,40,120,.5)}
+.gr b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:32px;line-height:1}
+.gr span{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-top:5px}
+.pc{display:flex;gap:14px;align-items:center;width:100%;text-align:left;background:#fff;border-radius:24px;padding:16px;margin-bottom:10px;box-shadow:0 10px 30px -18px rgba(54,40,120,.45)}
+.pc .ic{flex:none;width:56px;height:56px;border-radius:18px;display:grid;place-items:center}
+.pc b{display:block;font-size:16px;line-height:1.3;color:var(--ink)}
+.pc span{display:block;font-size:13px;color:var(--muted);line-height:1.4;margin-top:3px}
+.pc .tg{display:inline-block;font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;margin-top:8px}
+.pc[disabled]{cursor:default}
+.ggrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gm{display:flex;flex-direction:column;background:#fff;border-radius:22px;padding:7px 7px 12px;text-decoration:none;color:var(--ink);box-shadow:0 8px 24px -16px rgba(54,40,120,.4)}
+.gm img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:16px;background:#EEE9FB}
+.gm b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;line-height:1.15;padding:10px 6px 0}
+.gm span{display:block;font-size:12.5px;color:var(--muted);padding:4px 6px 0;line-height:1.35}
+.empty{background:#fff;border-radius:24px;padding:20px;color:var(--muted);font-size:14px;line-height:1.5}
+/* tarjetas de práctica */
+.card{background:#fff;border-radius:30px;padding:24px 20px;box-shadow:0 10px 30px -18px rgba(54,40,120,.45);margin-bottom:16px}
+h1{font-size:30px;line-height:1.05;margin:6px 0 10px;font-weight:800}
+h2{font-size:23px;line-height:1.15;margin:0 0 8px;font-weight:700}
+h3{font-size:18px;margin:0 0 6px;font-weight:700}
+p{margin:0 0 12px;line-height:1.6;font-size:15px}
+.muted{color:var(--muted)}
+.signs{display:flex;gap:8px;margin-bottom:14px}
+.sg{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:22px;color:var(--navy)}
+.facts{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
+.fact{font-size:13px;font-weight:700;padding:8px 12px;border-radius:14px;background:var(--paper)}
+label.f{display:block;font-size:14px;font-weight:700;margin:18px 0 8px}
+input.name{width:100%;font:inherit;font-size:16px;padding:14px 16px;border-radius:16px;border:2px solid var(--line);background:#fff;color:var(--ink)}
+.levels{display:grid;gap:10px;margin-top:4px}
+.lvl{text-align:left;padding:16px;border-radius:20px;background:#fff;border:2px solid var(--line);display:flex;gap:14px;align-items:center}
+.lvl .dot{flex:none;width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-weight:800}
+.lvl b{display:block;font-size:15px;color:var(--ink)}
+.lvl span{display:block;font-size:13px;color:var(--muted);line-height:1.4}
+.lvl[aria-pressed="true"]{border-color:var(--navy);box-shadow:0 0 0 3px rgba(21,25,43,.08)}
+.btn{display:block;width:100%;padding:17px;border-radius:999px;background:var(--navy);color:#fff;font-weight:800;font-size:16px;margin-top:18px;box-shadow:0 4px 0 var(--lime)}
+.btn:disabled{opacity:.35;cursor:default;box-shadow:none}
+.btn.ghost{background:#fff;color:var(--navy);border:2.5px solid var(--navy);box-shadow:none}
+.err{color:var(--rosaD);font-size:13px;margin-top:8px;min-height:18px}
+.tchip{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;padding:7px 12px;border-radius:999px}
+.rule{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1.5px dashed var(--line)}
+.rule:first-of-type{border-top:0}
+.rule .n{flex:none;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:14px}
+.rule p{margin:0;font-size:14.5px}
+.visual{background:var(--paper);border-radius:20px;padding:14px;margin:14px 0}
+.visual svg{display:block;width:100%;height:auto}
+.steps{margin:6px 0 0;padding:0;list-style:none}
+.steps li{display:flex;gap:12px;padding:10px 0;border-top:1.5px dashed var(--line);font-size:15px;line-height:1.5}
+.steps li:first-child{border-top:0}
+.steps .k{flex:none;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center;margin-top:1px}
+.expr{font-weight:800;white-space:nowrap}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05;margin:0 .1em}.fr b{font-weight:inherit;border-bottom:.07em solid currentColor;padding:0 .14em}.fr i{font-style:normal;padding:0 .14em}
+.big svg{max-width:100%;height:auto;display:block;margin-top:8px}
+.tb{border-collapse:separate;border-spacing:0;font-size:18px;margin-top:6px;border-radius:14px;overflow:hidden;border:2px solid var(--line)}.tb td,.tb th{padding:8px 16px;text-align:center;border-bottom:1.5px solid var(--line)}.tb th{background:var(--paper);font-size:14px}.tb tr:last-child td{border-bottom:0}.tb .q{background:var(--yelS);font-weight:800}
+.opt .fr{font-size:1.15em}
+.big.wrap{white-space:normal;font-size:clamp(20px,5.4vw,26px);line-height:1.35}
+.progress{height:10px;border-radius:999px;background:var(--surface2);overflow:hidden;margin-bottom:14px}
+.progress i{display:block;height:100%;border-radius:999px;transition:width .35s ease}
+.qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.qnum{font-size:13px;color:var(--muted);font-weight:700}
+.recuerda{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;padding:8px 12px;border-radius:999px;background:var(--yelS)}
+.prompt{font-size:15px;color:var(--muted);margin:14px 0 4px}
+.big{font-size:clamp(28px,8vw,40px);font-weight:800;margin:4px 0 16px;overflow-x:auto;white-space:nowrap}
+.ansbox{display:flex;align-items:center;justify-content:center;height:64px;border-radius:18px;border:2.5px solid var(--line);font-size:30px;font-weight:800;margin-bottom:12px;background:#fff;font-family:'Bricolage Grotesque',sans-serif}
+.ansbox.empty{color:#B9B5C9;font-size:16px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif}
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pad button{height:56px;border-radius:16px;background:var(--paper);font-size:22px;font-weight:800}
+.pad button.sp{font-size:15px}
+.vt{display:inline-block;text-align:right;font-variant-numeric:tabular-nums;line-height:1.12;letter-spacing:.06em;margin:4px 0}.vt div:last-child{border-bottom:.09em solid currentColor;padding-bottom:2px}.vt span{float:left;margin-right:.45em}
+.pad button:active{transform:scale(.97)}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;padding:16px;border-radius:18px;border:2px solid var(--line);background:#fff;font-size:16px;font-weight:700}
+.opt[aria-pressed="true"]{border-color:var(--navy);background:var(--paper)}
+.fb{border-radius:22px;padding:18px;margin-top:14px}
+.fb.ok{background:var(--limeS)} .fb.no{background:var(--rosaS)}
+.fb h3{display:flex;align-items:center;gap:8px}
+.fb .steps li{border-color:rgba(21,25,43,.12)}
+.sheet{position:fixed;inset:0;background:rgba(21,25,43,.45);display:none;align-items:flex-end;justify-content:center;z-index:30}
+.sheet.on{display:flex}
+.sheet .in{background:#fff;width:100%;max-width:560px;border-radius:30px 30px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom,0px));max-height:85vh;overflow:auto;animation:up .25s ease}
+@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.score{display:flex;align-items:center;gap:18px;margin:8px 0 6px}
+.ring{flex:none;width:118px;height:118px}
+.bars{margin-top:8px}
+.bar{margin:12px 0}
+.bar .l{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:6px}
+.bar .t{height:12px;border-radius:999px;background:var(--paper);overflow:hidden}
+.bar .t i{display:block;height:100%;border-radius:999px}
+.letter{background:var(--paper);border-radius:22px;padding:20px}
+.letter p{font-size:15px}
+.sign{font-weight:800;font-size:14px;margin-top:6px}
+.rec{display:flex;gap:14px;align-items:center;padding:14px;border-radius:20px;border:2px solid var(--line);margin-top:10px}
+.rec .ic{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center}
+.rec b{display:block;font-size:15px;color:var(--ink)}
+.rec span{display:block;font-size:13px;color:var(--muted);line-height:1.4}
+.foot{display:none}
+/* barra inferior de la app (solo vista previa) */
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom,0px));width:calc(100% - 24px);max-width:536px;background:#15192B;border-radius:30px;padding:8px;display:grid;grid-template-columns:repeat(6,1fr);gap:2px;z-index:20;pointer-events:none}
+.nav span{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0;border-radius:22px;color:#A9ADC4;font-size:11px;font-weight:700}
+.nav span.on{background:var(--lime);color:#15192B}
+.nav svg{width:22px;height:22px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Recuerda"><div class="in" id="sheetIn"></div></div>
+
+<script>
+(function(){
+"use strict";
+var $app=document.getElementById('app'), $sheet=document.getElementById('sheet'), $sheetIn=document.getElementById('sheetIn');
+
+/* ---------- utilidades ---------- */
+function W(obj,val,tag,ans){if(Math.abs(val-ans)>1e-9&&obj[KEY(val)]===undefined)obj[KEY(val)]=tag}
+function R(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function NZ(a,b){var n;do{n=R(a,b)}while(n===0);return n}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+var M='\u2212';
+function f(n){return n<0?M+Math.abs(n):String(n)}
+function t(n){return n<0?'('+M+Math.abs(n)+')':String(n)}
+function E(s){return '<span class="expr">'+s+'</span>'}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function sgnW(n){return n<0?'negativo':'positivo'}
+function KEY(v){return String(Math.round(v*1e6)/1e6)}
+function NF(n){if(typeof n!=='number'||isNaN(n))return String(n);var r=Math.round(n*1e6)/1e6;return (r<0?M:'')+Math.abs(r).toLocaleString('es-MX',{maximumFractionDigits:6})}
+
+/* ---------- temas ---------- */
+var TOPICS=[
+ {id:'mul',name:'Multiplicación algebraica',short:'Multiplicación',c:'--lime',s:'--limeS',d:'--limeD'},
+ {id:'pn',name:'Productos notables',short:'Productos notables',c:'--lila',s:'--lilaS',d:'--lilaD'},
+ {id:'fc',name:'Factorización: factor común',short:'Factor común',c:'--rosa',s:'--rosaS',d:'--rosaD'},
+ {id:'dc',name:'Factorización: diferencia de cuadrados',short:'Diferencia de cuadrados',c:'--yel',s:'--yelS',d:'--yelD'},
+ {id:'tri',name:'Factorización: trinomios de segundo grado',short:'Trinomios',c:'--lime',s:'--limeS',d:'--limeD'},
+ {id:'cub',name:'Factorización: suma o diferencia de cubos',short:'Suma y diferencia de cubos',c:'--lila',s:'--lilaS',d:'--lilaD'}
+];
+function cv(v){return 'var('+v+')'}
+var TAGS={
+ expSuma:{topic:'mul',say:'al multiplicar potencias de la misma letra, a veces multiplicas los exponentes en lugar de sumarlos',fix:'x² · x³ = x⁵: los exponentes se suman.'},
+ coefMult:{topic:'mul',say:'a veces sumas los coeficientes cuando hay que multiplicarlos',fix:'En (3x²)(4x) los números se multiplican: 3 × 4 = 12.'},
+ distrib:{topic:'mul',say:'al multiplicar polinomios a veces no multiplicas todos los términos',fix:'Cada término del primero multiplica a cada término del segundo. En (a + b)(c + d) salen 4 productos.'},
+ signo:{topic:null,say:'en algunos ejercicios se pierde un signo',fix:'Aplica la ley de los signos en cada producto: (−)(+) = −, (−)(−) = +.'},
+ pnDoble:{topic:'pn',say:'en el binomio al cuadrado a veces falta el doble producto',fix:'(a + b)² = a² + 2ab + b²: el término de en medio es dos veces el primero por el segundo.'},
+ pnCuad:{topic:'pn',say:'al elevar al cuadrado a veces multiplicas por 2 en lugar de multiplicar el número por sí mismo',fix:'Elevar al cuadrado es multiplicar el número por sí mismo: 3² = 9, no 6.'},
+ pnConj:{topic:'pn',say:'en los binomios conjugados a veces sale un término de en medio que no existe',fix:'(a + b)(a − b) = a² − b²: los términos de en medio se cancelan.'},
+ pnComun:{topic:'pn',say:'en los binomios con término común se intercambian la suma y el producto',fix:'(x + a)(x + b) = x² + (a + b)x + ab: en medio va la suma y al final el producto.'},
+ pnCubo:{topic:'pn',say:'en el binomio al cubo faltan términos',fix:'(a + b)³ = a³ + 3a²b + 3ab² + b³: son cuatro términos.'},
+ fcMax:{topic:'fc',say:'al sacar factor común a veces no sacas el máximo',fix:'Saca el MCD de los coeficientes y la letra con el menor exponente. Dentro del paréntesis ya no debe quedar nada en común.'},
+ fcDiv:{topic:'fc',say:'después de sacar el factor común, a veces no divides todos los términos',fix:'Cada término se divide entre el factor común. Comprueba multiplicando.'},
+ dcForma:{topic:'dc',say:'la diferencia de cuadrados se confunde con otros casos',fix:'a² − b² = (a + b)(a − b). Solo funciona con resta; una suma de cuadrados como x² + 25 no se factoriza así.'},
+ dcRaiz:{topic:'dc',say:'al factorizar una diferencia de cuadrados a veces no sacas la raíz',fix:'Saca la raíz cuadrada de cada término: √(16x²) = 4x y √81 = 9.'},
+ triBusca:{topic:'tri',say:'en los trinomios cuesta encontrar los dos números',fix:'Busca dos números que multiplicados den c y sumados den b. Empieza por los pares que multiplicados dan c.'},
+ triSigno:{topic:'tri',say:'en los trinomios a veces los signos de los factores quedan al revés',fix:'Si c es positivo, los dos números tienen el mismo signo que b. Si c es negativo, tienen signos diferentes.'},
+ tcp:{topic:'tri',say:'el trinomio cuadrado perfecto todavía se confunde',fix:'Si el primero y el último son cuadrados y el de en medio es su doble producto, es (a + b)².'},
+ cubForma:{topic:'cub',say:'en la suma o diferencia de cubos se confunden las fórmulas',fix:'a³ + b³ = (a + b)(a² − ab + b²) y a³ − b³ = (a − b)(a² + ab + b²).'},
+ cubSigno:{topic:'cub',say:'en los cubos los signos del segundo factor quedan cambiados',fix:'El signo del binomio es el mismo que el del problema; en el trinomio, el de en medio es el contrario y el último siempre es +.'},
+ cubRaiz:{topic:'cub',say:'la raíz cúbica todavía cuesta',fix:'La raíz cúbica es el número que multiplicado tres veces por sí mismo da el número: ∛64 = 4, porque 4 × 4 × 4 = 64.'},
+ calculo:{topic:null,say:'hubo algunos errores pequeños de cálculo',fix:'Haz cada operación con calma y revisa antes de comprobar.'}
+};
+
+/* ---------- ayudas ---------- */
+function NZ(a,b){var v=0;while(v===0)v=R(a,b);return v}
+function SG(n){return n<0?M+Math.abs(n):String(n)}
+function PAR(n){return n<0?'('+M+Math.abs(n)+')':String(n)}
+function lit(e,v){v=v||'x';return e===0?'':e===1?v:v+'<sup>'+e+'</sup>'}
+function poly(ts){/* ts: [[coef, literal]] */
+  var o='';ts.filter(function(t){return t[0]!==0}).forEach(function(t,i){var c=t[0],l=t[1],a=Math.abs(c),cs=(a===1&&l)?'':String(a);
+    o+=(i===0?(c<0?M:''):(c<0?' '+M+' ':' + '))+cs+l});
+  return o||'0';
+}
+function P2(a,b,c,v){v=v||'x';return poly([[a,lit(2,v)],[b,lit(1,v)],[c,'']])}
+function bin(k,a){return '('+poly([[k,'x'],[a,'']])+')'}
+function optsFrom(correct,wrongs){
+  var all=[{t:correct,c:1}].concat(wrongs.filter(function(w,i,a){return w.t!==correct&&a.findIndex(function(x){return x.t===w.t})===i}));
+  all=shuffle(all);return{opts:all.map(function(x){return x.t}),ans:all.findIndex(function(x){return x.c})};
+}
+function OPT(o){var x=optsFrom(o.correct,o.wrongs);o.type='opt';o.opts=x.opts;o.ans=x.ans;return o}
+
+var TXT='font-family="Plus Jakarta Sans" font-weight="800"';
+function plane(pts,opt){opt=opt||{};var S=20,C=130,s='<svg viewBox="0 0 260 260" width="260" role="img" aria-label="Plano cartesiano">';
+  for(var i=-6;i<=6;i++){var p=C+i*S;s+='<line x1="'+p+'" y1="10" x2="'+p+'" y2="250" stroke="#E7E4F0" stroke-width="1.5"/><line x1="10" y1="'+p+'" x2="250" y2="'+p+'" stroke="#E7E4F0" stroke-width="1.5"/>'}
+  s+='<line x1="10" y1="'+C+'" x2="250" y2="'+C+'" stroke="#15192B" stroke-width="2.5"/><line x1="'+C+'" y1="10" x2="'+C+'" y2="250" stroke="#15192B" stroke-width="2.5"/>';
+  [-6,-4,-2,2,4,6].forEach(function(i){s+='<text x="'+(C+i*S)+'" y="'+(C+16)+'" text-anchor="middle" '+TXT+' font-size="10" fill="#4E5268">'+SG(i)+'</text><text x="'+(C-6)+'" y="'+(C-i*S+4)+'" text-anchor="end" '+TXT+' font-size="10" fill="#4E5268">'+SG(i)+'</text>'});
+  s+='<text x="246" y="'+(C-8)+'" text-anchor="end" '+TXT+' font-size="13" fill="#15192B">x</text><text x="'+(C+8)+'" y="22" '+TXT+' font-size="13" fill="#15192B">y</text>';
+  if(opt.quad)[['I',190,70],['II',70,70],['III',70,200],['IV',190,200]].forEach(function(q){s+='<text x="'+q[1]+'" y="'+q[2]+'" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="30" fill="#9C8BFF" opacity=".75">'+q[0]+'</text>'});
+  if(opt.line){var m=opt.line[0],b=opt.line[1],x1=-6,x2=6;s+='<line x1="'+(C+x1*S)+'" y1="'+(C-(m*x1+b)*S)+'" x2="'+(C+x2*S)+'" y2="'+(C-(m*x2+b)*S)+'" stroke="#9C8BFF" stroke-width="4" stroke-linecap="round" clip-path="inset(0)"/>'}
+  if(opt.par){var d='',a=opt.par;for(var x=-3.2;x<=3.21;x+=.2){var y=a[0]*x*x+a[1]*x+a[2];if(y>6.4||y<-6.4)continue;d+=(d?' L':'M')+(C+x*S).toFixed(1)+' '+(C-y*S).toFixed(1)}s+='<path d="'+d+'" fill="none" stroke="#FF8FC0" stroke-width="4" stroke-linecap="round"/>'}
+  (pts||[]).forEach(function(p){s+='<circle cx="'+(C+p[0]*S)+'" cy="'+(C-p[1]*S)+'" r="7" fill="#FF8FC0" stroke="#15192B" stroke-width="2.5"/>'});
+  return s+'</svg>';
+}
+function tri(a,b,c){/* a: base, b: altura, c: hipotenusa (pueden ser '?') */
+  var s='<svg viewBox="0 0 300 190" width="300" role="img" aria-label="Triángulo rectángulo"><path d="M50 160 H250 L50 30 Z" fill="#FFF1C2" stroke="#15192B" stroke-width="4" stroke-linejoin="round"/><path d="M50 140 H70 V160" fill="none" stroke="#15192B" stroke-width="2.5"/>';
+  var col=function(v){return v==='?'?'#C2387A':'#15192B'};
+  s+='<text x="150" y="182" text-anchor="middle" '+TXT+' font-size="18" fill="'+col(a)+'">'+a+'</text>';
+  s+='<text x="38" y="100" text-anchor="end" '+TXT+' font-size="18" fill="'+col(b)+'">'+b+'</text>';
+  s+='<text x="164" y="86" text-anchor="start" '+TXT+' font-size="18" fill="'+col(c)+'">'+c+'</text>';
+  return s+'</svg>';
+}
+
+function gcd(a,b){return b?gcd(b,a%b):Math.abs(a)}
+var GEN={mul:{},pn:{},fc:{},dc:{},tri:{},cub:{}};
+function both(topic,fn){GEN[topic].base=(GEN[topic].base||[]).concat([function(){return fn('base')}]);GEN[topic].grado=(GEN[topic].grado||[]).concat([function(){return fn('grado')}])}
+function mono(c,e,v){return poly([[c,lit(e,v||'x')]])}
+function fac(k,x){/* k·x? como texto: 3x, −x, 4 */return poly([[k,x?'x':'']])}
+
+/* Multiplicación algebraica */
+both('mul',function(lv){var a=NZ(-9,9),b=NZ(-9,9),m=R(1,lv==='base'?4:6),n=R(1,lv==='base'?4:6);while(m*n===m+n)n=R(2,6);
+  var y=lv==='grado'&&Math.random()<.5,ey1=y?R(1,3):0,ey2=y?R(1,3):0,L=function(e,ey){return lit(e)+(ey?lit(ey,'y'):'')};
+  var correct=poly([[a*b,L(m+n,ey1+ey2)]]);
+  return OPT({prompt:'Multiplica:',disp:'('+poly([[a,L(m,ey1)]])+')('+poly([[b,L(n,ey2)]])+')',correct:correct,wrongs:[{t:poly([[a*b,L(m*n,ey1*ey2||0)]])},{t:poly([[a+b||1,L(m+n,ey1+ey2)]])},{t:poly([[-a*b,L(m+n,ey1+ey2)]])}],tag:'expSuma',
+    steps:['Multiplico los coeficientes con su signo: '+E(PAR(a)+' × '+PAR(b)+' = '+SG(a*b))+'.','Misma letra: sumo los exponentes: '+E('x<sup>'+m+'</sup> · x<sup>'+n+'</sup> = x<sup>'+(m+n)+'</sup>')+(y?' y '+E('y<sup>'+ey1+'</sup> · y<sup>'+ey2+'</sup> = y<sup>'+(ey1+ey2)+'</sup>'):'')+'.','Resultado: '+E(correct)+'.']})});
+both('mul',function(lv){var k=NZ(-6,6),e=R(1,lv==='base'?1:3),a=NZ(-7,7),b=NZ(-9,9),t=lv==='grado'?NZ(-5,5):0;
+  var ts=lv==='grado'?[[a,lit(2)],[b,'x'],[t,'']]:[[a,'x'],[b,'']],correct=lv==='grado'?poly([[k*a,lit(2+e)],[k*b,lit(1+e)],[k*t,lit(e)]]):poly([[k*a,lit(1+e)],[k*b,lit(e)]]);
+  var w1=lv==='grado'?poly([[k*a,lit(2+e)],[b,'x'],[t,'']]):poly([[k*a,lit(1+e)],[b,'']]),w2=lv==='grado'?poly([[k*a,lit(2+e)],[-k*b,lit(1+e)],[-k*t,lit(e)]]):poly([[k*a,lit(1+e)],[-k*b,lit(e)]]),w3=lv==='grado'?poly([[k*a,lit(2*e)],[k*b,lit(e)],[k*t,lit(e)]]):poly([[k*a,lit(e)],[k*b,lit(e)]]);
+  return OPT({prompt:'Multiplica (propiedad distributiva):',disp:mono(k,e)+'('+poly(ts)+')',wrap:lv==='grado',correct:correct,wrongs:[{t:w1},{t:w2},{t:w3}],tag:'distrib',
+    steps:['El '+E(mono(k,e))+' multiplica a cada término del paréntesis.',ts.filter(function(x){return x[0]}).map(function(x){return E(mono(k,e)+' · '+poly([x]))}).join(', ')+'.','Resultado: '+E(correct)+'.']})});
+both('mul',function(lv){var a=lv==='base'?1:R(2,4),b=NZ(-9,9),c=lv==='base'?1:R(1,3),d=NZ(-9,9);while(a*d+b*c===0)d=NZ(-9,9);
+  var correct=P2(a*c,a*d+b*c,b*d);
+  return OPT({prompt:'Multiplica los binomios:',disp:bin(a,b)+bin(c,d),correct:correct,wrongs:[{t:P2(a*c,0,b*d)},{t:P2(a*c,b+d,b*d)},{t:P2(a*c,a*d+b*c,-b*d)}],tag:'distrib',
+    steps:['Cada término del primero por cada término del segundo: '+E(poly([[a,'x']])+' · '+poly([[c,'x']]))+', '+E(poly([[a,'x']])+' · '+PAR(d))+', '+E(SG(b)+' · '+poly([[c,'x']]))+' y '+E(PAR(b)+' · '+PAR(d))+'.','Queda '+E(poly([[a*c,lit(2)],[a*d,'x'],[b*c,'x'],[b*d,'']]))+'.','Junto los términos en x: '+E(correct)+'.']})});
+both('mul',function(lv){var a=NZ(-9,9),b=NZ(-9,9),m=R(2,6),n=R(2,6),ask=pick(['exp','coef']),ans=ask==='exp'?m+n:a*b,w={};if(ask==='exp'){W(w,m*n,'expSuma',ans)}else{W(w,a+b,'coefMult',ans);W(w,-a*b,'signo',ans)}
+  return{type:'num',prompt:'Al multiplicar, ¿cuál es '+(ask==='exp'?'el exponente de x':'el coeficiente')+' del resultado?',disp:'('+mono(a,m)+')('+mono(b,n)+')',noEq:true,ans:ans,w:w,def:ask==='exp'?'expSuma':'coefMult',steps:[ask==='exp'?'Misma letra: los exponentes se suman: '+E(m+' + '+n+' = '+(m+n))+'.':'Los coeficientes se multiplican: '+E(PAR(a)+' × '+PAR(b)+' = '+SG(a*b))+'.']}});
+
+/* Productos notables */
+both('pn',function(lv){var k=lv==='base'?1:R(2,5),a=NZ(-9,9),B=bin(k,a)+'<sup>2</sup>',correct=P2(k*k,2*k*a,a*a);
+  var wr=[{t:P2(k*k,0,a*a)},{t:P2(k*k,k*a,a*a)},{t:P2(k*k,2*k*a,2*a)},{t:P2(k*k,-2*k*a,a*a)}];
+  return OPT({prompt:'Desarrolla el binomio al cuadrado:',disp:B,correct:correct,wrongs:wr.slice(0,3).concat(a<0?[wr[3]]:[]).slice(0,3),tag:'pnDoble',
+    steps:['Uso (a + b)² = a² + 2ab + b², con a = '+E(lit(1).replace('x',k===1?'x':k+'x'))+' y b = '+E(SG(a))+'.','Cuadrado del primero: '+E(P2(k*k,0,0))+'. Doble producto: '+E('2('+(k===1?'x':k+'x')+')('+SG(a)+') = '+poly([[2*k*a,'x']]))+'.','Cuadrado del segundo: '+E(PAR(a)+'² = '+(a*a))+'. Resultado: '+E(correct)+'.']})});
+both('pn',function(lv){var k=lv==='base'?1:R(2,5),a=R(1,9),correct=P2(k*k,0,-a*a);
+  return OPT({prompt:'Multiplica los binomios conjugados:',disp:bin(k,a)+bin(k,-a),correct:correct,wrongs:[{t:P2(k*k,0,a*a)},{t:P2(k*k,-2*k*a,-a*a)},{t:P2(k*k,0,-2*a)}],tag:'pnConj',
+    steps:['Son conjugados: mismos términos, uno con + y otro con '+M+'.','Uso (a + b)(a '+M+' b) = a² '+M+' b²: '+E(P2(k*k,0,0))+' '+M+' '+E(String(a*a))+'.','Resultado: '+E(correct)+'.']})});
+both('pn',function(lv){var a=NZ(-9,9),b=NZ(-9,9);while(a+b===0||a===b)b=NZ(-9,9);var correct=P2(1,a+b,a*b);
+  return OPT({prompt:'Multiplica los binomios con término común:',disp:bin(1,a)+bin(1,b),correct:correct,wrongs:[{t:P2(1,a*b,a+b)},{t:P2(1,0,a*b)},{t:P2(1,a+b,-a*b)}],tag:'pnComun',
+    steps:['Uso (x + a)(x + b) = x² + (a + b)x + ab.','Suma: '+E(SG(a)+' + '+PAR(b)+' = '+SG(a+b))+'. Producto: '+E(PAR(a)+'('+SG(b)+') = '+SG(a*b))+'.','Resultado: '+E(correct)+'.']})});
+both('pn',function(lv){var k=lv==='base'?1:R(2,5),a=NZ(-9,9),ans=2*k*a,w={};W(w,k*a,'pnDoble',ans);W(w,a*a,'pnCuad',ans);W(w,-ans,'signo',ans);
+  return{type:'num',prompt:'Al desarrollar el binomio, ¿cuál es el coeficiente del término de en medio (el término en x)?',disp:bin(k,a)+'<sup>2</sup>',noEq:true,ans:ans,w:w,def:'pnDoble',steps:['El término de en medio es el doble producto: 2 × primero × segundo.',E('2 × '+k+' × '+PAR(a)+' = '+SG(ans))+'.']}});
+
+/* Binomio al cubo (solo Mi grado) */
+GEN.pn.grado.push(function(){var a=NZ(-4,4),correct=poly([[1,lit(3)],[3*a,lit(2)],[3*a*a,'x'],[a*a*a,'']]);
+  return OPT({prompt:'Desarrolla el binomio al cubo:',disp:bin(1,a)+'<sup>3</sup>',correct:correct,wrongs:[{t:poly([[1,lit(3)],[a*a*a,'']])},{t:poly([[1,lit(3)],[3*a,lit(2)],[3*a,'x'],[a*a*a,'']])},{t:poly([[1,lit(3)],[a,lit(2)],[a*a,'x'],[a*a*a,'']])}],tag:'pnCubo',
+    steps:['Uso (a + b)³ = a³ + 3a²b + 3ab² + b³, con a = x y b = '+E(SG(a))+'.','3a²b = '+E(poly([[3*a,lit(2)]]))+' y 3ab² = '+E(poly([[3*a*a,'x']]))+'; b³ = '+E(PAR(a)+'³ = '+SG(a*a*a))+'.','Resultado: '+E(correct)+'.']})});
+
+/* Factor común */
+both('fc',function(lv){var g=R(2,lv==='base'?6:9),p=R(1,6),q=R(1,7);while(gcd(p,q)!==1)q=R(1,7);var sp=Math.random()<.5?-1:1,e=lv==='base'?1:R(1,3);
+  var orig=poly([[g*p,lit(e+1)],[sp*g*q,lit(e)]]),f=mono(g,e),correct=f+'('+poly([[p,'x'],[sp*q,'']])+')';
+  var wr=[{t:g+'('+poly([[p,lit(e+1)],[sp*q,lit(e)]])+')'},{t:lit(e)+'('+poly([[g*p,'x'],[sp*g*q,'']])+')'},{t:f+'('+poly([[p,'x'],[sp*g*q,'']])+')'}];
+  return OPT({prompt:'Factoriza sacando el factor común:',disp:orig,correct:correct,wrongs:wr,tag:'fcMax',
+    steps:['MCD de los coeficientes: '+E('MCD('+g*p+', '+g*q+') = '+g)+'. Letra con el menor exponente: '+E(lit(e))+'.','Factor común: '+E(f)+'. Divido cada término: '+E(poly([[g*p,lit(e+1)]])+' ÷ '+f+' = '+poly([[p,'x']]))+' y '+E(poly([[sp*g*q,lit(e)]])+' ÷ '+f+' = '+SG(sp*q))+'.','Resultado: '+E(correct)+'.']})});
+both('fc',function(lv){var g=R(2,lv==='base'?5:8),a=R(1,5),b=NZ(-6,6),c=NZ(-7,7);while(gcd(gcd(a,Math.abs(b)),Math.abs(c))!==1)c=NZ(-7,7);var e=lv==='base'?0:1;
+  var orig=poly([[g*a,lit(2+e)],[g*b,lit(1+e)],[g*c,lit(e)]]),f=mono(g,e),inner=poly([[a,lit(2)],[b,'x'],[c,'']]),correct=f+'('+inner+')';
+  var wr=[{t:f+'('+poly([[a,lit(2)],[g*b,'x'],[c,'']])+')'},{t:(e?mono(1,e):'1')+'('+poly([[g*a,lit(2)],[g*b,'x'],[g*c,'']])+')'},{t:f+'('+poly([[a,lit(2)],[-b,'x'],[c,'']])+')'}];
+  return OPT({prompt:'Factoriza sacando el factor común:',disp:orig,wrap:true,correct:correct,wrongs:wr,tag:'fcDiv',
+    steps:['El factor común es '+E(f)+(e?' (el '+g+' y la x con menor exponente)':'')+'.','Divido cada término entre '+E(f)+' y queda '+E(inner)+'.','Resultado: '+E(correct)+'. Compruebo multiplicando.']})});
+both('fc',function(lv){var g=R(2,lv==='base'?6:12),p=R(1,7),q=R(1,7);while(gcd(p,q)!==1||p===q)q=R(1,7);var w={};W(w,g*Math.min(p,q),'fcMax',g);W(w,1,'fcMax',g);if(g%2===0)W(w,g/2,'fcMax',g);
+  return{type:'num',prompt:'¿Cuál es el factor común numérico (el MCD de los coeficientes)?',disp:poly([[g*p,lit(2)],[g*q,'x']]),noEq:true,ans:g,w:w,def:'fcMax',steps:['Busco el número más grande que divide a '+g*p+' y a '+g*q+'.',E('MCD('+g*p+', '+g*q+') = '+g)+'.']}});
+
+/* Diferencia de cuadrados */
+both('dc',function(lv){var k=lv==='base'?1:R(2,6),a=R(1,lv==='base'?9:11);while(gcd(k,a)!==1)a=R(1,11);var K=k===1?'x':k+'x',correct='('+K+' + '+a+')('+K+' '+M+' '+a+')';
+  return OPT({prompt:'Factoriza la diferencia de cuadrados:',disp:P2(k*k,0,-a*a),correct:correct,wrongs:[{t:'('+K+' '+M+' '+a+')<sup>2</sup>'},{t:'('+K+' + '+a+')<sup>2</sup>'},{t:'('+(k*k===1?'x':k*k+'x')+' + '+a+')('+(k*k===1?'x':k*k+'x')+' '+M+' '+a+')'}].filter(function(x,i){return !(k===1&&i===2)}).concat(k===1?[{t:'(x + '+a*a+')(x '+M+' '+a*a+')'}]:[]),tag:k===1?'dcForma':'dcRaiz',
+    steps:['Es una resta de dos cuadrados: '+E(P2(k*k,0,0))+' y '+E(String(a*a))+'.','Raíces: '+E('√'+(k===1?'x²':k*k+'x²')+' = '+K)+' y '+E('√'+(a*a)+' = '+a)+'.','Uso a² '+M+' b² = (a + b)(a '+M+' b): '+E(correct)+'.']})});
+both('dc',function(lv){var a=R(2,10),sum=Math.random()<.5,e=sum?P2(1,0,a*a):P2(1,0,-a*a);if(lv==='grado'&&!sum&&Math.random()<.5)e=P2(1,0,-(a*a+R(1,a)));var isDC=e===P2(1,0,-a*a);
+  return OPT({prompt:'¿Se puede factorizar como diferencia de cuadrados?',disp:e,correct:isDC?'Sí':'No',wrongs:[{t:isDC?'No':'Sí'}],tag:'dcForma',
+    steps:[sum?'Es una suma, no una resta: la diferencia de cuadrados necesita un menos.':isDC?'Es una resta y los dos términos son cuadrados perfectos: sí.':'Es una resta, pero el número no es un cuadrado perfecto.',isDC?'Queda '+E('(x + '+a+')(x '+M+' '+a+')')+'.':'No se factoriza como diferencia de cuadrados.']})});
+both('dc',function(lv){if(lv==='base'){var a=R(2,12),w={};W(w,a*a,'dcRaiz',a);W(w,a*a/2,'dcRaiz',a);
+    return{type:'num',prompt:'Si '+E(P2(1,0,-a*a)+' = (x + a)(x '+M+' a)')+', ¿cuánto vale a?',disp:P2(1,0,-a*a),noEq:true,ans:a,w:w,def:'dcRaiz',steps:['a es la raíz cuadrada del número: '+E('√'+(a*a)+' = '+a)+'.']}}
+  var k=R(2,9),b=R(1,11);while(gcd(k,b)!==1)b=R(1,11);var w2={};W(w2,k*k,'dcRaiz',k);W(w2,k*k/2,'dcRaiz',k);
+  return{type:'num',prompt:'Al factorizar, queda (?x + '+b+')(?x '+M+' '+b+'). ¿Qué número va en el lugar del signo ?',disp:P2(k*k,0,-b*b),noEq:true,ans:k,w:w2,def:'dcRaiz',steps:['Saco la raíz cuadrada de '+E(k*k+'x²')+': '+E(k+'x')+'.','Resultado: '+E('('+k+'x + '+b+')('+k+'x '+M+' '+b+')')+'.']}});
+
+/* Trinomios */
+function pq(lv){var p=NZ(-9,9),q=NZ(-9,9);while(p+q===0||p===q)q=NZ(-9,9);if(lv==='base'&&Math.random()<.5){p=Math.abs(p);q=Math.abs(q)}return[p,q]}
+function bx(p){return '(x '+(p<0?M+' '+(-p):'+ '+p)+')'}
+both('tri',function(lv){var r=pq(lv),p=r[0],q=r[1],correct=bx(p)+bx(q);
+  var alt=[1,p*q].filter(function(v){return v!==p&&v!==q});
+  return OPT({prompt:'Factoriza el trinomio:',disp:P2(1,p+q,p*q),correct:correct,wrongs:[{t:bx(-p)+bx(-q)},{t:bx(p+q)+bx(1)},{t:bx(-p)+bx(q)}],tag:'triBusca',
+    steps:['Busco dos números que multiplicados den '+E(SG(p*q))+' y sumados den '+E(SG(p+q))+'.','Son '+E(SG(p))+' y '+E(SG(q))+': '+E(PAR(p)+' × '+PAR(q)+' = '+SG(p*q))+' y '+E(SG(p)+' + '+PAR(q)+' = '+SG(p+q))+'.','Resultado: '+E(correct)+'.']})});
+both('tri',function(lv){var r=pq(lv),p=r[0],q=r[1],ans=Math.max(p,q),w={};W(w,-ans,'triSigno',ans);W(w,Math.min(p,q),'triBusca',ans);W(w,p+q,'triBusca',ans);
+  return{type:'num',prompt:'Busca los dos números que multiplicados den '+E(SG(p*q))+' y sumados den '+E(SG(p+q))+'. Escribe el mayor.',disp:P2(1,p+q,p*q),noEq:true,ans:ans,w:w,def:'triBusca',steps:['Pruebo pares que multiplicados den '+SG(p*q)+'.','Los números son '+E(SG(p))+' y '+E(SG(q))+'. El mayor es '+E(SG(ans))+'.']}});
+both('tri',function(lv){var k=lv==='base'?1:R(2,5),a=NZ(-9,9);while(gcd(k,Math.abs(a))!==1)a=NZ(-9,9);var K=k===1?'x':k+'x',correct='('+K+(a<0?' '+M+' '+(-a):' + '+a)+')<sup>2</sup>';
+  return OPT({prompt:'Factoriza el trinomio cuadrado perfecto:',disp:P2(k*k,2*k*a,a*a),correct:correct,wrongs:[{t:'('+K+' + '+Math.abs(a)+')('+K+' '+M+' '+Math.abs(a)+')'},{t:'('+K+(a<0?' '+M+' '+(-2*a):' + '+2*a)+')<sup>2</sup>'},{t:'('+K+(a<0?' + '+(-a):' '+M+' '+a)+')<sup>2</sup>'}],tag:'tcp',
+    steps:['Raíz del primero: '+E(K)+'. Raíz del último: '+E(String(Math.abs(a)))+'.','Compruebo el de en medio: '+E('2 × '+K+' × '+Math.abs(a)+' = '+poly([[2*k*Math.abs(a),'x']]))+'. El signo de en medio dice el signo del binomio.','Resultado: '+E(correct)+'.']})});
+both('tri',function(lv){if(lv==='base'){var r=pq('grado'),p=-Math.abs(r[0]),q=Math.abs(r[1]);while(p+q===0)q++;var correct0=bx(p)+bx(q);
+    return OPT({prompt:'Factoriza el trinomio:',disp:P2(1,p+q,p*q),correct:correct0,wrongs:[{t:bx(-p)+bx(-q)},{t:bx(Math.abs(p))+bx(q)},{t:bx(p+q)+bx(1)}],tag:'triSigno',
+      steps:['c es negativo ('+E(SG(p*q))+'): los dos números tienen signos diferentes.','Multiplicados dan '+SG(p*q)+' y sumados '+SG(p+q)+': '+E(SG(p))+' y '+E(SG(q))+'.','Resultado: '+E(correct0)+'.']})}
+  var a=pick([2,3]),p=NZ(-7,7),q=NZ(-7,7);while(a*q+p===0||p===q*a||p%a===0)p=NZ(-7,7);var b=a*q+p,c=p*q,ax='('+a+'x '+(p<0?M+' '+(-p):'+ '+p)+')',correct=ax+bx(q);
+  return OPT({prompt:'Factoriza el trinomio:',disp:P2(a,b,c),correct:correct,wrongs:[{t:'('+a+'x '+(q<0?M+' '+(-q):'+ '+q)+')'+bx(p)},{t:'('+a+'x '+(p<0?'+ '+(-p):M+' '+p)+')'+bx(-q)},{t:ax+bx(-q)}],tag:'triBusca',
+    steps:['Como a = '+a+', el primer factor empieza con '+E(a+'x')+' y el segundo con '+E('x')+'.','Busco números que multiplicados den '+E(SG(c))+' y que al multiplicar en cruz sumen '+E(SG(b))+': '+E(a+' × '+PAR(q)+' + '+PAR(p)+' = '+SG(b))+'.','Resultado: '+E(correct)+'. Compruebo multiplicando.']})});
+
+/* Suma y diferencia de cubos */
+both('cub',function(lv){var k=lv==='base'?1:pick([1,2,3]),a=R(1,lv==='base'?5:4);while(gcd(k,a)!==1)a=R(1,4);var sum=Math.random()<.5,K=k===1?'x':k+'x',K2=k===1?'x<sup>2</sup>':(k*k)+'x<sup>2</sup>',s1=sum?' + ':' '+M+' ',mid=poly([[k*a,'x']]);
+  var correct='('+K+s1+a+')('+K2+(sum?' '+M+' ':' + ')+mid+' + '+a*a+')';
+  var wr=[{t:'('+K+s1+a+')('+K2+(sum?' + ':' '+M+' ')+mid+' + '+a*a+')'},{t:'('+K+s1+a+')<sup>3</sup>'},{t:'('+K+s1+a+')('+K2+' + '+a*a+')'}];
+  return OPT({prompt:'Factoriza la '+(sum?'suma':'diferencia')+' de cubos:',disp:poly([[k*k*k,lit(3)],[(sum?1:-1)*a*a*a,'']]),wrap:true,correct:correct,wrongs:wr,tag:'cubSigno',
+    steps:['Raíces cúbicas: '+E('∛'+(k===1?'x³':k*k*k+'x³')+' = '+K)+' y '+E('∛'+a*a*a+' = '+a)+'.',sum?'Uso a³ + b³ = (a + b)(a² '+M+' ab + b²).':'Uso a³ '+M+' b³ = (a '+M+' b)(a² + ab + b²).','Resultado: '+E(correct)+'.']})});
+both('cub',function(lv){var a=R(2,lv==='base'?5:10),w={};W(w,a*a*a/3,'cubRaiz',a);W(w,a*a,'cubRaiz',a);W(w,Math.round(Math.sqrt(a*a*a)*100)/100,'cubRaiz',a);
+  return{type:'num',prompt:'¿Cuál es la raíz cúbica?',disp:'∛'+a*a*a,ans:a,w:w,def:'cubRaiz',steps:['Busco el número que multiplicado tres veces da '+a*a*a+'.',E(a+' × '+a+' × '+a+' = '+a*a*a)+', así que '+E('∛'+a*a*a+' = '+a)+'.']}});
+both('cub',function(lv){var types=['Factor común','Diferencia de cuadrados','Trinomio','Suma o diferencia de cubos'],t=R(0,3),e,why;
+  if(t===0){var g=R(2,6);e=poly([[g*R(1,4),lit(2)],[g*R(1,5)*(Math.random()<.5?-1:1),'x']]);why='Todos los términos tienen algo en común (un número y la x).'}
+  else if(t===1){var a=R(2,9);e=P2(1,0,-a*a);why='Es una resta de dos cuadrados perfectos.'}
+  else if(t===2){var r=pq(lv);e=P2(1,r[0]+r[1],r[0]*r[1]);why='Tiene tres términos: x², x y un número.'}
+  else{var b=R(1,5);e=poly([[1,lit(3)],[(Math.random()<.5?1:-1)*b*b*b,'']]);why='Son dos términos con exponente 3: x³ y un cubo perfecto.'}
+  return OPT({prompt:'¿Qué caso de factorización se usa?',disp:e,correct:types[t],wrongs:types.filter(function(x,i){return i!==t}).map(function(x){return{t:x}}),tag:'cubForma',steps:[why,'El caso es '+E(types[t].toLowerCase())+'.']})});
+
+/* ---------- configuración de la práctica ---------- */
+var CONF={slug:'productos-notables-factorizacion',short:'Productos notables y factorización',per:6,padCols:4,
+  keys:['7','8','9','⌫','4','5','6',M,'1','2','3','.','0'],
+  lvBase:'Los mismos temas con números sencillos, paso a paso.',lvGrado:'Como en la Unidad 2 de tu libro de Álgebra en Movimiento.',
+  upTxt:'Ya dominas la base; ahora como en tu libro.',readyTxt:'Con este resultado ya dominas la Unidad 2. Sigue practicando para no perder el ritmo.',
+  home:function(){return '<div class="signs"><div class="sg" style="background:var(--lime);font-size:15px">(a+b)²</div><div class="sg" style="background:var(--lila);font-size:14px">MCD</div><div class="sg" style="background:var(--rosa);font-size:16px">a²−b²</div><div class="sg" style="background:var(--yel);font-size:17px">x³</div></div>'+
+    '<h1>Productos notables y factorización</h1>'+
+    '<p class="muted">La Unidad 2 de Álgebra en Movimiento: multiplicar polinomios, productos notables y los casos de factorización. Cada tema empieza con una explicación corta y un ejemplo resuelto paso a paso.</p>'+
+    '<div class="facts"><span class="fact">6 temas</span><span class="fact">36 ejercicios</span><span class="fact">35 minutos aprox.</span></div>'},
+  game:function(t){return t==='mul'?{t:'La Bóveda · Nivel 2, Signos',d:'Para practicar los signos jugando.'}:{t:'La Balanza',d:'Para practicar álgebra jugando.'}}
+};
+
+/* ---------- contenido de cada tema ---------- */
+function chips(items){return '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px">'+items.map(function(it,i){var bg=['#D3F36B','#E6E2FF','#FFE6F2','#FFF1C2'][i%4];return '<div style="background:'+bg+';border-radius:14px;padding:12px;text-align:center;font-family:Bricolage Grotesque,sans-serif;font-weight:800;font-size:16px;color:#15192B">'+it[0]+(it[1]?'<div style="font-family:Plus Jakarta Sans,sans-serif;font-size:12px;font-weight:700;color:#4E5268;margin-top:4px">'+it[1]+'</div>':'')+'</div>'}).join('')+'</div>'}
+var LESSON={
+ mul:{intro:'Para multiplicar expresiones algebraicas se multiplican los números y se suman los exponentes de la misma letra.',
+  rules:['<b>Monomio por monomio:</b> multiplica los coeficientes (con su signo) y suma los exponentes: (3x²)(4x³) = 12x⁵.','<b>Monomio por polinomio:</b> el monomio multiplica a cada término del paréntesis.','<b>Polinomio por polinomio:</b> cada término del primero por cada término del segundo, y al final se juntan los semejantes.'],
+  example:{disp:'(x + 3)(2x '+M+' 5)',steps:['x · 2x = 2x², x · ('+M+'5) = '+M+'5x, 3 · 2x = 6x y 3 · ('+M+'5) = '+M+'15.','Queda '+E('2x² '+M+' 5x + 6x '+M+' 15')+'.','Junto los semejantes: '+E('2x² + x '+M+' 15')+'.']},
+  visual:function(){return '<svg viewBox="0 0 400 170" role="img" aria-label="Modelo de área"><rect x="120" y="20" width="140" height="80" fill="#D3F36B" stroke="#15192B" stroke-width="3"/><rect x="260" y="20" width="60" height="80" fill="#E6E2FF" stroke="#15192B" stroke-width="3"/><rect x="120" y="100" width="140" height="50" fill="#E6E2FF" stroke="#15192B" stroke-width="3"/><rect x="260" y="100" width="60" height="50" fill="#FFE6F2" stroke="#15192B" stroke-width="3"/><text x="190" y="66" text-anchor="middle" '+TXT+' font-size="16">2x²</text><text x="290" y="66" text-anchor="middle" '+TXT+' font-size="15">'+M+'5x</text><text x="190" y="131" text-anchor="middle" '+TXT+' font-size="15">6x</text><text x="290" y="131" text-anchor="middle" '+TXT+' font-size="15">'+M+'15</text><text x="190" y="14" text-anchor="middle" '+TXT+' font-size="13" fill="#4E5268">2x</text><text x="290" y="14" text-anchor="middle" '+TXT+' font-size="13" fill="#4E5268">'+M+'5</text><text x="108" y="64" text-anchor="end" '+TXT+' font-size="13" fill="#4E5268">x</text><text x="108" y="130" text-anchor="end" '+TXT+' font-size="13" fill="#4E5268">3</text></svg>'}},
+ fc:{intro:'Factorizar es lo contrario de multiplicar: escribir una expresión como producto. El primer caso que siempre se revisa es el factor común.',
+  rules:['<b>Busca el MCD</b> de los coeficientes.','<b>Toma la letra</b> que aparece en todos los términos, con su menor exponente.','<b>Divide cada término</b> entre el factor común y escribe el resultado dentro del paréntesis. Comprueba multiplicando.'],
+  example:{disp:'6x³ + 9x²',steps:['MCD(6, 9) = 3 y la letra con menor exponente es x². Factor común: '+E('3x²')+'.','Divido: '+E('6x³ ÷ 3x² = 2x')+' y '+E('9x² ÷ 3x² = 3')+'.','Resultado: '+E('3x²(2x + 3)')+'.']},
+  visual:function(){return chips([['6x³ = 3x² · 2x',''],['9x² = 3x² · 3',''],['3x²(2x + 3)','factor común']])}},
+ dc:{intro:'Una diferencia de cuadrados es una resta de dos términos que son cuadrados perfectos.',
+  rules:['<b>Fórmula:</b> a² '+M+' b² = (a + b)(a '+M+' b).','<b>Saca la raíz cuadrada</b> de cada término: √(16x²) = 4x y √81 = 9.','<b>Solo con resta:</b> una suma como x² + 25 no se factoriza así.'],
+  example:{disp:'16x² '+M+' 81',steps:['Los dos son cuadrados: '+E('16x² = (4x)²')+' y '+E('81 = 9²')+'.','Uso (a + b)(a '+M+' b) con a = 4x y b = 9.','Resultado: '+E('(4x + 9)(4x '+M+' 9)')+'.']},
+  visual:function(){return '<svg viewBox="0 0 400 150" role="img" aria-label="Cuadrado al que se le quita un cuadrado"><rect x="60" y="15" width="120" height="120" fill="#FFF1C2" stroke="#15192B" stroke-width="3"/><rect x="130" y="15" width="50" height="50" fill="#fff" stroke="#15192B" stroke-width="3" stroke-dasharray="6 5"/><text x="100" y="95" text-anchor="middle" '+TXT+' font-size="16">a² '+M+' b²</text><text x="155" y="46" text-anchor="middle" '+TXT+' font-size="14" fill="#C2387A">b²</text><text x="270" y="70" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="22" fill="#15192B">= (a + b)(a '+M+' b)</text></svg>'}},
+ tri:{intro:'Un trinomio de segundo grado tiene la forma x² + bx + c. Se factoriza buscando dos números.',
+  rules:['<b>x² + bx + c = (x + p)(x + q)</b>, donde p × q = c y p + q = b.','<b>Signos:</b> si c es positivo, p y q tienen el signo de b; si c es negativo, tienen signos diferentes.','<b>Trinomio cuadrado perfecto:</b> si el primero y el último son cuadrados y el de en medio es su doble producto, es (a + b)².'],
+  example:{disp:'x² + 2x '+M+' 15',steps:['Busco dos números que multiplicados den '+M+'15 y sumados den 2.','Son 5 y '+M+'3: '+E('5 × ('+M+'3) = '+M+'15')+' y '+E('5 + ('+M+'3) = 2')+'.','Resultado: '+E('(x + 5)(x '+M+' 3)')+'.']},
+  visual:function(){return chips([['× = c','producto'],['+ = b','suma'],['(x + p)(x + q)','resultado']])}},
+ cub:{intro:'La suma y la diferencia de cubos tienen su propia fórmula. Primero se sacan las raíces cúbicas.',
+  rules:['<b>Suma:</b> a³ + b³ = (a + b)(a² '+M+' ab + b²).','<b>Diferencia:</b> a³ '+M+' b³ = (a '+M+' b)(a² + ab + b²).','<b>Truco de signos:</b> el binomio lleva el mismo signo del problema; en el trinomio el de en medio es el contrario y el último siempre es +.'],
+  example:{disp:'x³ + 27',steps:['Raíces cúbicas: '+E('∛x³ = x')+' y '+E('∛27 = 3')+'.','Uso a³ + b³ = (a + b)(a² '+M+' ab + b²) con a = x y b = 3.','Resultado: '+E('(x + 3)(x² '+M+' 3x + 9)')+'.']},
+  visual:function(){return chips([['a³ + b³','(a + b)(a² '+M+' ab + b²)'],['a³ '+M+' b³','(a '+M+' b)(a² + ab + b²)']])}}
+};
+
+LESSON.pn={intro:'Los productos notables son multiplicaciones que siguen siempre la misma regla, así que se resuelven sin multiplicar término por término.',
+  rules:['<b>Binomio al cuadrado:</b> (a + b)² = a² + 2ab + b².','<b>Binomios conjugados:</b> (a + b)(a '+M+' b) = a² '+M+' b².','<b>Término común:</b> (x + a)(x + b) = x² + (a + b)x + ab.'],
+  example:{disp:'(2x + 3)<sup>2</sup>',steps:['Cuadrado del primero: '+E('(2x)² = 4x²')+'.','Doble producto: '+E('2(2x)(3) = 12x')+'.','Cuadrado del segundo: '+E('3² = 9')+'. Resultado: '+E('4x² + 12x + 9')+'.']},
+  visual:function(){return '<svg viewBox="0 0 400 190" role="img" aria-label="Área de un binomio al cuadrado"><rect x="110" y="10" width="110" height="110" fill="#D3F36B" stroke="#15192B" stroke-width="3"/><rect x="220" y="10" width="60" height="110" fill="#E6E2FF" stroke="#15192B" stroke-width="3"/><rect x="110" y="120" width="110" height="60" fill="#E6E2FF" stroke="#15192B" stroke-width="3"/><rect x="220" y="120" width="60" height="60" fill="#FFE6F2" stroke="#15192B" stroke-width="3"/><text x="165" y="72" text-anchor="middle" '+TXT+' font-size="20" fill="#15192B">a²</text><text x="250" y="72" text-anchor="middle" '+TXT+' font-size="18" fill="#15192B">ab</text><text x="165" y="157" text-anchor="middle" '+TXT+' font-size="18" fill="#15192B">ab</text><text x="250" y="157" text-anchor="middle" '+TXT+' font-size="18" fill="#15192B">b²</text><text x="96" y="70" text-anchor="end" '+TXT+' font-size="16" fill="#4E5268">a</text><text x="96" y="156" text-anchor="end" '+TXT+' font-size="16" fill="#4E5268">b</text></svg>'}};
+function buildSet(level){
+  var set=[];
+  TOPICS.forEach(function(tp,ti){
+    var gens=GEN[tp.id][level],N=CONF.per,list=[],pool=[];
+    for(var i=0;i<N;i++){if(!pool.length)pool=shuffle(gens);list.push(pool.pop())}
+    list.forEach(function(g,k){var q=g();q.topic=tp.id;q.ti=ti;q.k=k;q.n=N;set.push(q)});
+  });
+  return set;
+}
+
+/* ---------- estado ---------- */
+var S={inPractice:false,from:null,name:'',level:null,set:[],i:0,topicIdx:0,res:[],entry:'',choice:null,answered:false};
+
+function header(back,label){
+  return '<div class="top">'+(back?'<button class="bkw" id="bk" aria-label="Regresar a '+(label||'')+'"><span class="bk">'+ico('back')+'</span><span><small>Regresar a</small><b>'+(label||'')+'</b></span></button>':'<span></span>')+
+    (S.inPractice&&S.level?'<span class="pill">'+(S.level==='base'?'Nivelación':'Mi grado')+'</span>':'')+'</div>';
+}
+var NAVI={Home:'<path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/>','Game On':'<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>',Read:'<path d="M3 6c3-1.5 6-1.5 9 0v13c-3-1.5-6-1.5-9 0zM21 6c-3-1.5-6-1.5-9 0v13c3-1.5 6-1.5 9 0z"/>',Learn:'<path d="M2 9l10-5 10 5-10 5zM6 11v5c3 2.5 9 2.5 12 0v-5"/>',Play:'<rect x="2.5" y="7" width="19" height="11" rx="5.5"/><path d="M7 12.5h4M9 10.5v4"/><circle cx="16" cy="11.5" r=".6"/><circle cx="17.5" cy="13.5" r=".6"/>',Me:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>'};
+function navbar(){return '';return '<nav class="nav" aria-hidden="true">'+Object.keys(NAVI).map(function(k){return '<span class="'+(k==='Learn'?'on':'')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+NAVI[k]+'</svg>'+k+'</span>'}).join('')+'</nav>'}
+function ico(name,col){
+  var p={bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V17h5.2v-1.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/>',
+    ok:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',no:'<path d="M7 7l10 10M17 7L7 17"/>',
+    redo:'<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/>',vault:'<rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="12" cy="12" r="3.5"/><path d="M12 8.5V7M15.5 12H17"/>',
+    up:'<path d="M12 19V5M6 11l6-6 6 6"/>',back:'<path d="M15 5l-7 7 7 7"/>',arrow:'<path d="M9 5l7 7-7 7"/>'}[name];
+  return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="'+(col||'currentColor')+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';
+}
+function render(h,back,label){$app.innerHTML=header(back,label)+h+navbar();var bk=document.getElementById('bk');if(bk)bk.onclick=back;window.scrollTo(0,0)}
+
+/* ---------- catálogo ---------- */
+var BASE=/heymova\.mx$/.test(location.hostname)?'':'https://heymova.mx/';
+var PR={
+ signos:{title:'Signos y jerarquía de operaciones',desc:'Suma y resta con signo, multiplicación y división, y orden de las operaciones.',ready:true,ic:'signs',c:'--lilaS',d:'--lilaD'},
+ num:{title:'Números y operaciones',desc:'Valor posicional, sumas y restas, tablas de multiplicar y problemas.',ic:'blocks',c:'--limeS',d:'--limeD'},
+ ex5:{title:'Repaso para tu examen',desc:'Fracciones, divisiones, ángulos, conversiones, números romanos y más.',ic:'star',c:'--yelS',d:'--navy'},
+ ex2s:{title:'Repaso para tu examen',desc:'En tres partes: números; divisibilidad y potencias; álgebra, geometría y datos.',ic:'star',c:'--yelS',d:'--navy'},
+ ex3s:{title:'Repaso para tu examen',desc:'Productos notables, fórmula general, Pitágoras y funciones.',ic:'star',c:'--yelS',d:'--navy'},
+ pn:{title:'Productos notables',desc:'Cuadrado de una suma y de una diferencia, binomios conjugados y con término común.',ic:'square',c:'--rosaS',d:'--rosaD'}
+};
+var SECS={exam:['Para tu examen','Lo que viene en tu examen del trimestre.'],grado:['Temas de tu grado','Practica lo que estás viendo en clase.'],nivel:['Nivelación','Repasa la base para avanzar con seguridad.']};
+var GR=[
+ {g:'1p',n:'1°',sub:'primaria',lv:'Primaria',full:'1° de primaria',plan:[['grado','num']]},
+ {g:'2p',n:'2°',sub:'primaria',lv:'Primaria',full:'2° de primaria',plan:[['grado','num']]},
+ {g:'3p',n:'3°',sub:'primaria',lv:'Primaria',full:'3° de primaria',plan:[['grado','num']]},
+ {g:'4p',n:'4°',sub:'primaria',lv:'Primaria',full:'4° de primaria',plan:[['nivel','num']]},
+ {g:'5p',n:'5°',sub:'primaria',lv:'Primaria',full:'5° de primaria',plan:[['exam','ex5']]},
+ {g:'6p',n:'6°',sub:'primaria',lv:'Primaria',full:'6° de primaria',plan:[]},
+ {g:'1s',n:'1°',sub:'secundaria',lv:'Secundaria',full:'1° de secundaria',plan:[['grado','signos']]},
+ {g:'2s',n:'2°',sub:'secundaria',lv:'Secundaria',full:'2° de secundaria',plan:[['exam','ex2s'],['nivel','signos']]},
+ {g:'3s',n:'3°',sub:'secundaria',lv:'Secundaria',full:'3° de secundaria',plan:[['exam','ex3s'],['nivel','signos']]},
+ {g:'1b',n:'1er',sub:'semestre',lv:'Preparatoria',full:'1er semestre de prepa',plan:[['grado','pn'],['nivel','signos']]}
+];
+var LVC={Primaria:['--lime','--limeD'],Secundaria:['--lila','--lilaD'],Preparatoria:['--rosa','--rosaD']};
+var GAMES=[
+ ['mision-matematica','Misión Matemática','De 1° de primaria a prepa'],
+ ['la-tiendita','La Tiendita','Sumas, dinero y cambio'],
+ ['que-hora-es','¿Qué hora es?','Leer el reloj'],
+ ['detective-patrones','Detective de patrones','Patrones y secuencias'],
+ ['pizzeria-fracciones','Pizzería de fracciones','Fracciones'],
+ ['lluvia-de-numeros','Lluvia de números','Las cuatro operaciones'],
+ ['la-balanza','La Balanza','Ecuaciones'],
+ ['la-boveda','La Bóveda','Jerarquía, signos y porcentajes']
+];
+var TRI_DK='<svg viewBox="0 0 220 220" aria-hidden="true"><path d="M98 152 C96 170.0 90 180.0 92 192" stroke="#FFFFFF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="89" cy="194" rx="6.2" ry="4" fill="#FFFFFF"/><path d="M122 152 C124 170.0 128 180.0 127 192" stroke="#FFFFFF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="130" cy="194" rx="6.2" ry="4" fill="#FFFFFF"/><path d="M70 128 C56 130 46 120 46 104" stroke="#FFFFFF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="46" cy="104" r="3.6" fill="#FFFFFF"/><path d="M150 128 C158 128 164 124 168 118" stroke="#FFFFFF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="168" cy="118" r="3.6" fill="#FFFFFF"/><path d="M110 44 L168 146 L52 146Z" fill="#FF9FCB" stroke="#FF9FCB" stroke-width="26" stroke-linejoin="round"/><circle cx="104" cy="76" r="6" fill="#fff" opacity=".28"/><path d="M88 108 h20 q0 12 -10 12 q-10 0 -10 -12z" fill="#1A1B2E"/><path d="M93 111 q3 -1.6 6 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".6"/><path d="M112 108 h20 q0 12 -10 12 q-10 0 -10 -12z" fill="#1A1B2E"/><path d="M117 111 q3 -1.6 6 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".6"/><path d="M108 109 q2 -4 4 0" stroke="#1A1B2E" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M104 126 q0 6 6 6 q6 0 6 -6" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="86" cy="126" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><ellipse cx="134" cy="126" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><g transform="translate(170 118) rotate(-35)"><rect x="-4" y="-30" width="8" height="30" rx="2" fill="#FFD54A"/><rect x="-4" y="-35" width="8" height="6" rx="2" fill="#FF8FC8"/><path d="M-4 0 L0 8 L4 0z" fill="#F4E1C1"/><path d="M-1.3 5.4 L0 8 L1.3 5.4z" fill="#1A1B2E"/></g></svg>', TRI='<svg viewBox="0 0 220 220" aria-hidden="true"><path d="M98 152 C96 170.0 90 180.0 92 192" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="89" cy="194" rx="6.2" ry="4" fill="#1A1B2E"/><path d="M122 152 C124 170.0 128 180.0 127 192" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="130" cy="194" rx="6.2" ry="4" fill="#1A1B2E"/><path d="M70 128 C56 130 46 120 46 104" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="46" cy="104" r="3.6" fill="#1A1B2E"/><path d="M150 128 C158 128 164 124 168 118" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="168" cy="118" r="3.6" fill="#1A1B2E"/><path d="M110 44 L168 146 L52 146Z" fill="#FF9FCB" stroke="#FF9FCB" stroke-width="26" stroke-linejoin="round"/><circle cx="104" cy="76" r="6" fill="#fff" opacity=".28"/><path d="M88 108 h20 q0 12 -10 12 q-10 0 -10 -12z" fill="#1A1B2E"/><path d="M93 111 q3 -1.6 6 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".6"/><path d="M112 108 h20 q0 12 -10 12 q-10 0 -10 -12z" fill="#1A1B2E"/><path d="M117 111 q3 -1.6 6 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".6"/><path d="M108 109 q2 -4 4 0" stroke="#1A1B2E" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M104 126 q0 6 6 6 q6 0 6 -6" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="86" cy="126" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><ellipse cx="134" cy="126" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><g transform="translate(170 118) rotate(-35)"><rect x="-4" y="-30" width="8" height="30" rx="2" fill="#FFD54A"/><rect x="-4" y="-35" width="8" height="6" rx="2" fill="#FF8FC8"/><path d="M-4 0 L0 8 L4 0z" fill="#F4E1C1"/><path d="M-1.3 5.4 L0 8 L1.3 5.4z" fill="#1A1B2E"/></g></svg>';
+function hero(o){return '<div class="ms-hero'+(o.dark?' ms-dk':'')+'" style="--c:'+(o.c||'#C7B5FF')+'"><span class="ms-dot a"></span><span class="ms-dot b"></span><span class="ms-dot c"></span><div class="ms-hx">'+(o.k?'<span class="mp-k">'+o.k+'</span>':'')+'<h1>'+o.h+'</h1>'+(o.p?'<p>'+o.p+'</p>':'')+'</div>'+(o.art?'<span class="ms-art">'+o.art+'</span>':'')+'</div>'}
+function pico(k,col){
+  var P={signs:'<text x="12" y="17" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="15" fill="'+col+'">±×</text>',
+    blocks:'<rect x="3" y="12" width="6" height="8" rx="1.5" fill="'+col+'"/><rect x="9.5" y="7" width="6" height="13" rx="1.5" fill="'+col+'" opacity=".7"/><rect x="16" y="3" width="5" height="17" rx="1.5" fill="'+col+'" opacity=".45"/>',
+    star:'<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z" fill="'+col+'"/>',
+    square:'<text x="12" y="17" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="14" fill="'+col+'">(a+b)²</text>'};
+  return '<svg width="'+(k==='square'?44:30)+'" height="30" viewBox="0 0 24 24" aria-hidden="true">'+P[k]+'</svg>';
+}
+function arrowB(){return '<span class="goB">'+ico('arrow')+'</span>'}
+
+/* ---------- Matemáticas: vitrina principal ---------- */
+function mathHub(){
+  S.inPractice=false;
+  render(hero({dark:true,k:'MOVA Math',h:'Matemáticas',p:'Explicaciones claras, ejemplos paso a paso y ejercicios pensados para tu grado.',art:TRI_DK})+
+    '<h2 class="ms-h">¿Qué quieres hacer hoy?</h2><p class="ms-sub">Elige cómo quieres practicar.</p>'+
+    '<button class="vit" id="dP"><span class="th" style="background:#E6E2FF"><img src="'+BASE+'math-signos.webp" alt=""><span class="k">Prácticas</span></span><span class="tx"><b>Prácticas</b><span class="d">Explicación, ejemplos y ejercicios con calificación y retroalimentación de tu maestra.</span>'+
+      '<span class="ft"><span class="chips"><em class="c2">Por grado</em><em class="c3">Para tu examen</em><em class="c1">Nivelación</em></span>'+arrowB()+'</span></span></button>'+
+    '<button class="vit" id="dG"><span class="th" style="background:#DCF4EA"><img src="'+BASE+'thumb-mision-matematica.webp" alt=""><span class="k">Juegos</span></span><span class="tx"><b>Juegos</b><span class="d">Aprende jugando, por nivel y a tu ritmo.</span>'+
+      '<span class="ft"><span class="chips"><em class="c4">8 juegos</em><em class="c2">De primaria a prepa</em></span>'+arrowB()+'</span></span></button>'+
+    '<button class="mini" id="dI"><span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#15192B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/></svg></span><span><b>Hojas para imprimir</b><span>Genera hojas por grado y tema, con clave de respuestas.</span></span></button>',
+    function(){},'Learn');
+  document.getElementById('dP').onclick=practicas;
+  document.getElementById('dG').onclick=games;
+}
+function games(){
+  render(hero({k:'MOVA Math',h:'Juegos',p:'Elige un juego y empieza.',c:'#D3F36B',art:TRI})+'<div class="ggrid">'+
+    GAMES.map(function(g){return '<a class="gm" href="'+BASE+'juego-'+g[0]+'.html"><img src="'+BASE+'thumb-'+g[0]+'.webp" alt="" loading="lazy"><b>'+g[1]+'</b><span>'+g[2]+'</span></a>'}).join('')+'</div>',mathHub,'Matemáticas');
+}
+function practicas(){
+  S.inPractice=false;
+  var h=hero({k:'MOVA Math',h:'Prácticas',p:'Elige tu grado y encuentra lo que necesitas practicar.',c:'#C7B5FF',art:TRI});
+  ['Primaria','Secundaria','Preparatoria'].forEach(function(lv){
+    var c=LVC[lv];
+    h+='<div class="sect"><i style="background:'+cv(c[0])+'"></i>'+lv+'</div><div class="grades">'+GR.filter(function(x){return x.lv===lv}).map(function(x){
+      return '<button class="gr" data-g="'+x.g+'" style="box-shadow:inset 0 -6px 0 '+cv(c[0])+',0 10px 26px -18px rgba(54,40,120,.5)"><b>'+x.n+'</b><span>'+x.sub+'</span></button>'}).join('')+'</div>';
+  });
+  render(h,mathHub,'Matemáticas');
+  [].forEach.call(document.querySelectorAll('.gr'),function(b){b.onclick=function(){grade(b.dataset.g)}});
+}
+var HC={Primaria:'#D3F36B',Secundaria:'#C7B5FF',Preparatoria:'#FFC7E2'};
+function grade(g){
+  S.inPractice=false;
+  var G=GR.filter(function(x){return x.g===g})[0];
+  var h=hero({k:G.lv,h:G.full,p:'Tus prácticas de matemáticas.',c:HC[G.lv],art:TRI});
+  if(!G.plan.length)h+='<div class="empty">Estamos preparando las prácticas de este grado. Muy pronto las vas a encontrar aquí.</div>';
+  ['exam','grado','nivel'].forEach(function(sk){
+    var items=G.plan.filter(function(x){return x[0]===sk});if(!items.length)return;
+    h+='<div class="sect" style="display:block">'+SECS[sk][0]+'<small>'+SECS[sk][1]+'</small></div>';
+    items.forEach(function(it){var P=PR[it[1]];
+      h+='<button class="pc" data-p="'+it[1]+'" data-s="'+sk+'"'+(P.ready?'':' disabled')+'><span class="ic" style="background:'+cv(P.c)+'">'+pico(P.ic,P.d==='--navy'?'#15192B':getComputedStyle(document.documentElement).getPropertyValue(P.d).trim())+'</span><span><b>'+P.title+'</b><span>'+P.desc+'</span>'+
+        (P.ready?'<span class="tg" style="background:var(--limeS);color:var(--limeD)">Lista para practicar</span>':'<span class="tg" style="background:var(--paper);color:var(--muted)">En preparación</span>')+'</span></button>'});
+  });
+  render(h,practicas,'Prácticas');
+  [].forEach.call(document.querySelectorAll('.pc:not([disabled])'),function(b){b.onclick=function(){S.from=g;practiceHome(b.dataset.s==='nivel'?'base':'grado')}});
+}
+
+/* ---------- inicio de la práctica ---------- */
+function who(){try{var u=(window.MovaAuth&&MovaAuth.user())||JSON.parse(localStorage.getItem('mova_student')||'null');if(u&&u.name)return String(u.name).trim().split(/\s+/)[0]}catch(e){}return ''}
+var Q=(function(){var o={};location.search.replace(/^\?/,'').split('&').forEach(function(kv){var p=kv.split('=');if(p[0])o[decodeURIComponent(p[0])]=decodeURIComponent(p[1]||'')});return o})();
+function toList(){location.href='index.html#/matematicas/practicas'+(S.from?'/'+S.from:'')}
+function practiceHome(pre){
+  S.inPractice=false;S.level=null;var lv=pre||null,pt=S.part||(CONF.parts&&CONF.parts[Q.parte]?Q.parte:null);
+  render('<div class="card">'+
+    CONF.home()+
+    '<label class="f" for="nm">¿Cómo te llamas?</label><input class="name" id="nm" autocomplete="given-name" placeholder="Escribe tu nombre" value="'+esc(S.name)+'">'+
+    (CONF.parts?'<label class="f">Elige la parte</label><div class="levels">'+Object.keys(CONF.parts).map(function(k,i){var P=CONF.parts[k],c=['lime','lila','rosa'][i%3];return '<button class="lvl prt" data-p="'+k+'" aria-pressed="'+(pt===k)+'"><span class="dot" style="background:var(--'+c+'S);color:var(--'+c+'D)">'+k+'</span><span><b>'+P.name+'</b><span>'+P.desc+'</span></span></button>'}).join('')+'</div>':'')+
+    '<label class="f">Elige tu nivel</label><div class="levels">'+
+     '<button class="lvl" data-l="base" aria-pressed="'+(lv==='base')+'"><span class="dot" style="background:var(--limeS);color:var(--limeD)">1</span><span><b>Nivelación</b><span>'+CONF.lvBase+'</span></span></button>'+
+     '<button class="lvl" data-l="grado" aria-pressed="'+(lv==='grado')+'"><span class="dot" style="background:var(--lilaS);color:var(--lilaD)">2</span><span><b>Mi grado</b><span>'+CONF.lvGrado+'</span></span></button>'+
+    '</div><div class="err" id="er"></div>'+
+    '<button class="btn" id="go">Empezar la práctica</button></div>',toList,'Prácticas');
+  var w=who();if(w){S.name=w;var nm=document.getElementById('nm');nm.value=w;nm.parentNode.removeChild(nm.previousElementSibling);nm.parentNode.removeChild(nm);}
+  [].forEach.call(document.querySelectorAll('.lvl:not(.prt)'),function(b){b.onclick=function(){lv=b.dataset.l;[].forEach.call(document.querySelectorAll('.lvl:not(.prt)'),function(x){x.setAttribute('aria-pressed',x===b)})}});
+  [].forEach.call(document.querySelectorAll('.prt'),function(b){b.onclick=function(){pt=b.dataset.p;[].forEach.call(document.querySelectorAll('.prt'),function(x){x.setAttribute('aria-pressed',x===b)})}});
+  document.getElementById('go').onclick=function(){
+    var ne=document.getElementById('nm'),n=ne?ne.value.trim():S.name;
+    if(!n){document.getElementById('er').textContent='Escribe tu nombre para empezar.';return}
+    if(CONF.parts&&!pt){document.getElementById('er').textContent='Elige una parte para empezar.';return}
+    if(!lv){document.getElementById('er').textContent='Elige un nivel para empezar.';return}
+    if(CONF.parts){S.part=pt;CONF.setPart(pt)}
+    S.name=n.split(/\s+/)[0];S.name=S.name.charAt(0).toUpperCase()+S.name.slice(1);
+    start(lv);
+  };
+}
+function start(lv){S.inPractice=true;S.level=lv;S.set=buildSet(lv);S.i=0;S.res=[];S.topicIdx=0;lesson(0)}
+
+/* ---------- lección ---------- */
+function lesson(ti){
+  var tp=TOPICS[ti],L=LESSON[tp.id];
+  var shown=1;
+  function draw(){
+    var st=L.example.steps.map(function(s,i){return i<shown?'<li><span class="k">'+(i+1)+'</span><span>'+s+'</span></li>':''}).join('');
+    render(progress()+'<div class="card">'+
+      '<span class="tchip" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">Tema '+(ti+1)+' de '+TOPICS.length+'</span>'+
+      '<h2 style="margin-top:12px">'+tp.name+'</h2><p class="muted">'+L.intro+'</p>'+
+      '<div class="visual">'+L.visual()+'</div>'+
+      L.rules.map(function(r,i){return '<div class="rule"><span class="n" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">'+(i+1)+'</span><p>'+r+'</p></div>'}).join('')+
+      '</div><div class="card"><h3>Ejemplo paso a paso</h3><div class="big" style="font-size:30px;margin:8px 0 6px">'+L.example.disp+'</div><ol class="steps">'+st+'</ol>'+
+      (shown<L.example.steps.length?'<button class="btn ghost" id="nx">Ver el siguiente paso</button>':'<button class="btn" id="pr">Practicar este tema</button>')+'</div>');
+    var nx=document.getElementById('nx');if(nx)nx.onclick=function(){shown++;draw()};
+    var pr=document.getElementById('pr');if(pr)pr.onclick=function(){S.topicIdx=ti;question()};
+  }
+  draw();
+}
+function progress(){
+  var pct=Math.round(S.i/S.set.length*100),col=cv(TOPICS[S.set[Math.min(S.i,S.set.length-1)].ti].c);
+  return '<div class="progress" aria-label="Avance '+pct+'%"><i style="width:'+Math.max(pct,3)+'%;background:'+col+'"></i></div>';
+}
+
+/* ---------- ejercicio ---------- */
+function question(){
+  var q=S.set[S.i],tp=TOPICS.filter(function(x){return x.id===q.topic})[0],inTopic=q.k+1;
+  S.entry='';S.choice=null;S.answered=false;
+  var body='<div class="card"><div class="qhead"><span class="tchip" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">'+tp.short+'</span>'+
+    '<button class="recuerda" id="rc">'+ico('bulb')+'Recuerda</button></div>'+
+    '<div class="qnum">Ejercicio '+inTopic+' de '+q.n+'</div>'+
+    '<div class="prompt">'+(q.prompt||'Resuelve:')+'</div><div class="big'+(q.wrap?' wrap':'')+'">'+q.disp+(q.type==='num'&&!q.noEq?' =':'')+'</div>';
+  if(q.type==='num'){
+    body+='<div class="ansbox empty" id="ab" aria-live="polite">Tu respuesta</div><div class="pad" id="pad"'+(CONF.padCols?' style="grid-template-columns:repeat('+CONF.padCols+',1fr)"':'')+'>'+
+      (CONF.keys||['7','8','9','⌫','4','5','6',M,'1','2','3','0']).map(function(k){return '<button data-k="'+k+'" class="'+(k==='⌫'||k===M?'sp':'')+'" aria-label="'+(k==='⌫'?'Borrar':k===M?'Cambiar signo':k==='.'?'Punto decimal':k)+'">'+(k===M?'+/'+M:k)+'</button>'}).join('')+'</div>';
+  }else{
+    body+='<div class="opts">'+q.opts.map(function(o,i){return '<button class="opt" data-o="'+i+'" aria-pressed="false">'+o+'</button>'}).join('')+'</div>';
+  }
+  body+='<div id="fbz"></div><button class="btn" id="ck" disabled>Comprobar</button></div>';
+  render(progress()+body);
+  document.getElementById('rc').onclick=function(){openRecuerda(q.topic)};
+  var ck=document.getElementById('ck');
+  if(q.type==='num'){
+    var ab=document.getElementById('ab');
+    var upd=function(){if(!S.entry||S.entry===M){ab.className='ansbox'+(S.entry?'':' empty');ab.textContent=S.entry||'Tu respuesta';ck.disabled=true}else{ab.className='ansbox';ab.textContent=S.entry;ck.disabled=false}};
+    [].forEach.call(document.querySelectorAll('#pad button'),function(b){b.onclick=function(){if(S.answered)return;var k=b.dataset.k;
+      if(k==='⌫')S.entry=S.entry.slice(0,-1);
+      else if(k===M)S.entry=S.entry.charAt(0)===M?S.entry.slice(1):M+S.entry;
+      else if(k==='.'){if(S.entry.indexOf('.')<0)S.entry=(S.entry||'0')+'.'}
+      else if(S.entry.replace(M,'').length<7)S.entry=(S.entry===M+'0'||S.entry==='0')?S.entry.replace('0',k):S.entry+k;
+      upd()}});
+  }else{
+    [].forEach.call(document.querySelectorAll('.opt'),function(b){b.onclick=function(){if(S.answered)return;S.choice=+b.dataset.o;
+      [].forEach.call(document.querySelectorAll('.opt'),function(x){x.setAttribute('aria-pressed',x===b)});ck.disabled=false}});
+  }
+  ck.onclick=function(){if(S.answered){next();return}check(q)};
+}
+function check(q){
+  S.answered=true;var ok,given,tag=null;
+  if(q.type==='num'){given=parseFloat(S.entry.replace(M,'-'));ok=Math.abs(given-q.ans)<1e-9;
+    if(!ok){tag=q.w[KEY(given)]||q.w[given]||q.def||null;
+      if(!tag&&q.tagAbs){tag=(Math.sign(given)===Math.sign(q.ans))?q.tagAbs:'calculo'}
+      if(!tag)tag='calculo';}}
+  else{given=S.choice;ok=given===q.ans;if(!ok)tag=q.tag}
+  S.res.push({topic:q.topic,ok:ok,tag:tag,disp:q.disp,given:q.type==='num'?NF(given):q.opts[given],ans:q.type==='num'?NF(q.ans):q.opts[q.ans],type:q.type});
+  var fb=ok?'<div class="fb ok"><h3>'+ico('ok','#4F6B00')+'Correcto</h3><ol class="steps">'+q.steps.map(function(s,i){return '<li><span class="k">'+(i+1)+'</span><span>'+s+'</span></li>'}).join('')+'</ol></div>'
+    :'<div class="fb no"><h3>'+ico('no','#C2387A')+'<span>La respuesta es '+(q.type==='num'?NF(q.ans):q.opts[q.ans])+'</span></h3>'+
+      (tag&&TAGS[tag]?'<p style="font-size:14px;margin:0 0 6px">'+TAGS[tag].fix+'</p>':'')+
+      '<ol class="steps">'+q.steps.map(function(s,i){return '<li><span class="k">'+(i+1)+'</span><span>'+s+'</span></li>'}).join('')+'</ol></div>';
+  document.getElementById('fbz').innerHTML=fb;
+  var ck=document.getElementById('ck');ck.textContent=S.i===S.set.length-1?'Ver mis resultados':(q.k===q.n-1?'Continuar al siguiente tema':'Siguiente ejercicio');
+  ck.scrollIntoView({behavior:'smooth',block:'end'});
+}
+function next(){S.i++;if(S.i>=S.set.length){results();return}if(S.set[S.i].k===0){lesson(S.set[S.i].ti)}else question()}
+
+/* ---------- recuerda ---------- */
+function openRecuerda(tid){
+  var tp=TOPICS.filter(function(x){return x.id===tid})[0],L=LESSON[tid];
+  $sheetIn.innerHTML='<div class="qhead"><span class="tchip" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">'+ico('bulb')+'Recuerda</span></div><h2 style="margin-top:10px">'+tp.name+'</h2>'+
+    '<div class="visual">'+L.visual()+'</div>'+L.rules.map(function(r,i){return '<div class="rule"><span class="n" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">'+(i+1)+'</span><p>'+r+'</p></div>'}).join('')+
+    '<button class="btn" id="cl">Volver al ejercicio</button>';
+  $sheet.classList.add('on');document.getElementById('cl').focus();
+  document.getElementById('cl').onclick=closeSheet;
+}
+function closeSheet(){$sheet.classList.remove('on')}
+$sheet.onclick=function(e){if(e.target===$sheet)closeSheet()};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet()});
+
+/* ---------- resultados y retroalimentación ---------- */
+function results(){
+  var total=S.res.length,good=S.res.filter(function(r){return r.ok}).length,grade=Math.round(good/total*100)/10;
+  var per=TOPICS.map(function(tp){var r=S.res.filter(function(x){return x.topic===tp.id});var g=r.filter(function(x){return x.ok}).length;return{tp:tp,g:g,n:r.length,p:g/r.length}});
+  var tags={};S.res.forEach(function(r){if(!r.ok){if(!tags[r.tag])tags[r.tag]={n:0,ex:r};tags[r.tag].n++}});
+  var tagList=Object.keys(tags).sort(function(a,b){return tags[b].n-tags[a].n});
+  var strong=per.filter(function(x){return x.p>=.75}),weak=per.slice().sort(function(a,b){return a.p-b.p})[0];
+
+  /* carta en primera persona */
+  var L=[];
+  L.push(S.name+', ya revisé tu práctica.');
+  if(strong.length===TOPICS.length)L.push('Hiciste un trabajo excelente en todos los temas: se nota que entiendes las reglas y que las aplicas con cuidado.');
+  else if(strong.length)L.push('Me da mucho gusto ver que dominas '+strong.map(function(x){return x.tp.short.toLowerCase()}).join(' y ')+'; ahí trabajaste con mucha seguridad.');
+  else L.push('Veo que te esforzaste en cada ejercicio y no te rendiste; eso es justo lo que se necesita para mejorar.');
+  if(tagList.length){
+    var parts=tagList.slice(0,2).map(function(k,ix){var e=tags[k].ex,txt=(ix?'También noto que ':'Noto que ')+TAGS[k].say;
+      if(e.type==='num'&&!/<svg|<table/.test(e.disp)&&e.disp.replace(/<[^>]+>/g,'').length<45)txt+=': por ejemplo, en '+E(e.disp)+' respondiste '+E(e.given)+' y el resultado es '+E(e.ans);
+      return txt+'. '+TAGS[k].fix});
+    L.push(parts.join(' '));
+  }else L.push('No tuviste ningún error. Te felicito.');
+  var recP,recG,LV=function(l){return l==='base'?'Nivelación':'Mi grado'};
+  if(grade>=9&&S.level==='base'){L.push('Ya puedes pasar al nivel Mi grado. Mi recomendación es que lo hagas en tu siguiente práctica.');recP={t:CONF.short+' · Mi grado',d:CONF.upTxt,l:'grado'}}
+  else if(grade>=9){L.push(CONF.readyTxt);recP={t:CONF.short+' · Mi grado',d:'Repítela con ejercicios nuevos para mantener la práctica.',l:'grado'}}
+  else{L.push('Mi recomendación es que repitas esta práctica poniendo especial atención en '+weak.tp.short.toLowerCase()+'. Los ejercicios cambian cada vez, así que vas a practicar con ejercicios nuevos.');recP={t:CONF.short+' · '+LV(S.level),d:'Ejercicios nuevos, enfocándote en '+weak.tp.short.toLowerCase()+'.',l:S.level}}
+  recG=CONF.game(weak.tp.id);
+  L.push('Y para practicar jugando, te recomiendo '+recG.t+'. ¡Vas por muy buen camino!');
+
+  try{if(window.MovaAuth)MovaAuth.save(CONF.slug,CONF.short+' · '+(S.level==='base'?'Nivelación':'Mi grado'),good,total,{area:'math',level:S.level,grade:S.from||null,topics:per.map(function(x){return {t:x.tp.id,ok:x.g,n:x.n}}),errors:tagList})}catch(e){}
+  var msg=grade>=9?'Excelente trabajo':grade>=7?'Muy buen avance':grade>=5?'Vamos por buen camino':'Vamos a reforzarlo juntos';
+  var ringCol=grade>=8?'#D3F36B':grade>=6?'#9C8BFF':'#FF8FC0',C=2*Math.PI*48;
+  var ring='<svg class="ring" viewBox="0 0 118 118" role="img" aria-label="Calificación '+grade+' de 10"><circle cx="59" cy="59" r="48" fill="none" stroke="#F5F3FA" stroke-width="13"/><circle cx="59" cy="59" r="48" fill="none" stroke="'+ringCol+'" stroke-width="13" stroke-linecap="round" stroke-dasharray="'+(C*good/total)+' '+C+'" transform="rotate(-90 59 59)"/><text x="59" y="66" text-anchor="middle" font-family="Plus Jakarta Sans" font-size="30" font-weight="800" fill="#15192B">'+(grade%1?grade.toFixed(1):grade)+'</text></svg>';
+
+  render('<div class="card"><span class="tchip" style="background:var(--cream)">Resultados</span>'+
+    '<div class="score">'+ring+'<div><h2 style="margin:0">'+msg+', '+esc(S.name)+'</h2><p class="muted" style="margin:4px 0 0">'+good+' de '+total+' ejercicios correctos</p></div></div>'+
+    '<div class="bars">'+per.map(function(x){return '<div class="bar"><div class="l"><span>'+x.tp.short+'</span><span>'+x.g+'/'+x.n+'</span></div><div class="t"><i style="width:'+Math.max(x.p*100,2)+'%;background:'+cv(x.tp.c)+'"></i></div></div>'}).join('')+'</div></div>'+
+    '<div class="card"><h3>Retroalimentación</h3><div class="letter">'+L.map(function(p){return '<p>'+p+'</p>'}).join('')+'<div class="sign">Miss Karla Rodríguez · Academic Coordinator</div></div></div>'+
+    '<div class="card"><h3>Te recomiendo</h3>'+
+     '<button class="rec" id="rp" style="width:100%;text-align:left;background:#fff"><span class="ic" style="background:var(--lilaS);color:var(--lilaD)">'+ico(recP.l!==S.level?'up':'redo')+'</span><span><b>'+recP.t+'</b><span>'+recP.d+'</span></span></button>'+
+     '<div class="rec"><span class="ic" style="background:var(--rosaS);color:var(--rosaD)">'+ico('vault')+'</span><span><b>'+recG.t+'</b><span>'+recG.d+'</span></span></div>'+
+     '<button class="btn ghost" id="hm">Volver a mis prácticas</button></div>');
+  document.getElementById('rp').onclick=function(){start(recP.l)};
+  document.getElementById('hm').onclick=toList;
+}
+
+S.from=Q.g||null;practiceHome(Q.nivel==='base'||Q.nivel==='grado'?Q.nivel:null);
+})();
+</script>
+<script src="mova-auth.js"></script>
+</body>
+</html>
