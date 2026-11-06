@@ -25,7 +25,7 @@
     "verb-memory": "Verb Memory", "sentence-builder": "Sentence Builder", "locked-library": "Locked Library",
     "toefl-practice": "TOEFL Practice", "word-forms": "Word Forms", "sentence-scramble": "Sentence Scramble",
     "lee-con-mochi": "Aprende a leer con Mochi", "sopa-de-letras": "Sopa de letras", "crucigrama": "Crucigrama", "retos": "Retos multijugador", "craftland": "CraftLand",
-    "sugar-town": "Sugar Town", "mova-park": "Sugar Town", "speaking": "Speaking Lab", "ruta": "My Path"
+    "sugar-town": "Sugar Town", "mova-park": "Sugar Town", "speaking": "Speaking Lab", "feria-mochi": "La Feria de Mochi", "ruta": "My Path"
   };
 
   function get(k) { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } }
@@ -48,8 +48,7 @@
     var row = { p_token: user.token, p_activity: activity, p_item: item || null,
       p_score: score == null ? null : Math.round(score), p_total: total == null ? null : Math.round(total), p_detail: detail || {} };
     row.p_detail.uid = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-    try { if (window.__movaLiveHook) window.__movaLiveHook(activity, item, score, total, detail); } catch (e) {}
-    if (window.__movaTaskId && (gameSlug() ? activity === gameSlug() : activity === "ruta" || /^app-(library|lecturas)$/.test(activity) && detail && detail.kind === "done")) {
+    if (window.__movaTaskId && (gameSlug() ? activity === gameSlug() : /^app-(library|lecturas)$/.test(activity) && detail && detail.kind === "done")) {
       if (score != null || (detail && detail.kind && detail.kind !== "time")) {
         if (row.p_detail.task == null) row.p_detail.task = window.__movaTaskId;
         window.__movaTaskMark();
@@ -147,10 +146,10 @@
         if (!slug) { if (k === K_APP) onAppStore(before, v); return; }
         if (k === "mova-levelup") {
           var arr = JSON.parse(v), last = arr[arr.length - 1];
-          if (last) save("level-up", "Placement test result: level " + last.l, last.r, last.t, { level: last.l, stage: last.s, folio: last.f });
+          if (last) save("level-up", "Resultado del examen: nivel " + last.l, last.r, last.t, { level: last.l, stage: last.s, folio: last.f });
         } else if (/^(mova-wq2-|mova-ss-|mova-mm-best-|mova-mochi-best|wf_sort_best)/.test(k)) {
           var n = Number(String(v).replace(/[^0-9.-]/g, ""));
-          if (!isNaN(n)) save(slug, "New record", n, null, { key: k });
+          if (!isNaN(n)) save(slug, "Nuevo récord", n, null, { key: k });
         }
       } catch (e) {}
     };
@@ -235,7 +234,7 @@
     chip.innerHTML = user
       ? '<span class="mva-dot">' + esc(initials(user.name)) + '</span><span class="mva-lbl">' + esc(first(user.name)) + "</span>"
       : '<span class="mva-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span><span class="mva-lbl">Alumnos MOVA</span>';
-    chip.setAttribute("aria-label", user ? "My Progress" : "MOVA student sign in");
+    chip.setAttribute("aria-label", user ? "My Progress" : "Iniciar sesión de alumno MOVA");
   }
   function dots() {
     var pal = ["#F6D776", "#8EC9EE", "#9DDCC0", "#B9A6E8", "#E8846B", "#FFFFFF"], h = "";
@@ -254,32 +253,32 @@
   function close() { var m = document.getElementById("mva-modal"); if (m) m.remove(); }
 
   function showLogin() {
-    var b = open('<div class="mva-badge logo"><img src="icon-192.png" alt="MOVA"></div><h2>Hi, MOVA student!</h2>' +
-      "<p>Sign in with the username and password your teacher gave you to save your progress.</p>" +
-      '<form id="mva-form" autocomplete="on"><label for="mva-u">Username</label>' +
-      '<input id="mva-u" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" placeholder="example: luciae.m">' +
-      '<label for="mva-p">Password</label><input id="mva-p" type="password" autocomplete="current-password">' +
-      '<button class="mva-btn" type="submit" id="mva-go">Sign in</button><div class="mva-err" id="mva-err"></div></form>' +
-      '<p class="mva-legal">By signing in, you accept the <a href="aviso-privacidad.html">privacy notice</a>.</p>');
+    var b = open('<div class="mva-badge logo"><img src="icon-192.png" alt="MOVA"></div><h2>Hola, alumno MOVA</h2>' +
+      "<p>Entra con el usuario y la contraseña que te dio tu maestra para guardar tu avance.</p>" +
+      '<form id="mva-form" autocomplete="on"><label for="mva-u">Usuario</label>' +
+      '<input id="mva-u" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" placeholder="ejemplo: luciae.m">' +
+      '<label for="mva-p">Contraseña</label><input id="mva-p" type="password" autocomplete="current-password">' +
+      '<button class="mva-btn" type="submit" id="mva-go">Entrar</button><div class="mva-err" id="mva-err"></div></form>' +
+      '<p class="mva-legal">Al entrar, aceptas el <a href="aviso-privacidad.html">aviso de privacidad</a>.</p>');
     b.querySelector("#mva-u").focus();
     b.querySelector("#mva-form").onsubmit = function (e) {
       e.preventDefault();
       var u = b.querySelector("#mva-u").value.trim().toLowerCase(), p = b.querySelector("#mva-p").value, err = b.querySelector("#mva-err"), go = b.querySelector("#mva-go");
       err.textContent = "";
-      if (!u || !p) { err.textContent = "Type your username and password."; return; }
-      go.disabled = true; go.textContent = "Signing in…";
+      if (!u || !p) { err.textContent = "Escribe tu usuario y tu contraseña."; return; }
+      go.disabled = true; go.textContent = "Entrando…";
       rpc("student_login", { p_username: u, p_password: p }).then(function (r) {
         if (r && r.ok) {
           user = { token: r.token, name: r.name, stage: r.stage, username: r.username };
-          set(K_USER, user); renderChip(); close(); toast("Welcome, " + first(user.name) + "!"); flushQueue(); beginScreen(); taskShown = false; setTimeout(checkTasks, 1200);
+          set(K_USER, user); renderChip(); close(); toast("¡Bienvenido, " + first(user.name) + "!"); flushQueue(); beginScreen(); taskShown = false; setTimeout(checkTasks, 1200);
         } else {
           var e2 = r && r.error;
-          err.textContent = e2 === "locked" ? "Too many tries. Wait 15 minutes and try again."
-            : e2 === "inactive" ? "Your account is paused. Ask your teacher."
-            : "Wrong username or password.";
+          err.textContent = e2 === "locked" ? "Demasiados intentos. Espera 15 minutos e inténtalo de nuevo."
+            : e2 === "inactive" ? "Tu cuenta está pausada. Pregunta a tu maestra."
+            : "Usuario o contraseña incorrectos.";
         }
-      }).catch(function () { err.textContent = "No connection. Check your internet and try again."; })
-        .then(function () { go.disabled = false; go.textContent = "Sign in"; });
+      }).catch(function () { err.textContent = "Sin conexión. Revisa tu internet e inténtalo de nuevo."; })
+        .then(function () { go.disabled = false; go.textContent = "Entrar"; });
     };
   }
   /* ---------- My Progress ---------- */
@@ -313,8 +312,8 @@
       } else if (r.activity === "level-up" && d.level && !lvl) {
         lvl = { level: d.level, score: r.score, total: r.total, at: r.created_at };
       } else if (!/^app-/.test(r.activity)) {
-        if (secs) { games[r.activity] = 1; plays++; if (r.item && r.item !== "New record") gameNames[r.activity] = r.item; }
-        if (r.item === "New record" && r.score != null) records[r.activity] = Math.max(records[r.activity] || 0, r.score);
+        if (secs) { games[r.activity] = 1; plays++; if (r.item && r.item !== "Nuevo récord") gameNames[r.activity] = r.item; }
+        if (r.item === "Nuevo récord" && r.score != null) records[r.activity] = Math.max(records[r.activity] || 0, r.score);
       }
     });
     var readList = Object.keys(reads).filter(function (k) { return reads[k].done || reads[k].s >= 60; })
@@ -467,13 +466,11 @@
     var pg = document.createElement("div"); pg.id = "mvp-page"; pg.setAttribute("role", "dialog"); pg.setAttribute("aria-label", "My Progress");
     pg.innerHTML = '<div class="in"><div class="bk"><button class="back" type="button" aria-label="Back to Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><div class="tt"><small>Home</small><b>My Progress</b></div></div>' +
       '<div class="prof"><div class="row"><span class="big">' + esc(initials(user.name)) + '</span><div><b>' + esc(user.name) + "</b><small>" + esc(user.stage || "MOVA Student") + '</small></div><span class="bl">' + BLOOM_LT + '</span></div><div class="st" id="mvp-st"><div><b>–</b><span>DAY STREAK</span></div><div><b>–</b><span>ACTIVITIES</span></div><div><b>–</b><span>BADGES</span></div></div></div>' +
-      '<div id="mvp-asg"></div>' +
       '<div class="sk"><h4>This month <span>' + new Date().toLocaleDateString("en-US", { month: "long" }) + '</span></h4><div id="mvp-month"><p class="none">Loading your progress…</p></div></div>' +
       '<div class="bdg" id="mvp-chips"></div><div class="more" id="mvp-body"></div>' +
       '<div class="acts"><button class="p" type="button" id="mvp-ok">Keep practicing</button><button class="s" type="button" id="mvp-out">Log out</button></div>' +
       '<p class="usr">User: ' + esc(user.username) + "</p></div>";
     document.body.appendChild(pg); document.documentElement.style.overflow = "hidden";
-    asgAt = 0; asgProgress(pg.querySelector("#mvp-asg"));
     pg.addEventListener("click", function (e) { if (e.target.closest && e.target.closest(".mvp-rl a")) closePage(); });
     function paint(rows) {
       var d = pageBody(computeProgress(rows), rows);
@@ -500,7 +497,7 @@
       tick(); flushPending(); cur = null;
       setTimeout(function () { rpc("student_logout", { p_token: tok2 }).catch(function () {}); }, 2500);
       try { if (window.MovaOnline) MovaOnline.leave(); } catch (e) {}
-      user = null; set(K_USER, null); set(K_PEND, null); set(K_PROG, null); renderChip(); closePage(); toast("Signed out");
+      user = null; set(K_USER, null); set(K_PEND, null); set(K_PROG, null); renderChip(); closePage(); toast("Sesión cerrada");
     };
   }
 
@@ -566,7 +563,7 @@
       var a = anchor(); if (!a || !a.parentNode) return;
       var sib = a.nextElementSibling; if (sib && sib.classList.contains("mva-mode")) return;
       var d = document.createElement("div"); d.className = "mva-mode";
-      d.innerHTML = '<span class="on">Solo practice</span><a href="juego-retos.html?juego=' + slug + '">' + USERS_IC + "Multiplayer challenge</a>";
+      d.innerHTML = '<span class="on">Práctica individual</span><a href="juego-retos.html?juego=' + slug + '">' + USERS_IC + "Reto multijugador</a>";
       a.parentNode.insertBefore(d, a.nextSibling);
     };
     place(); setInterval(place, 1200);
@@ -585,15 +582,9 @@
   var taskShown = false;
   /* La tarea puede traer las opciones elegidas por la maestra: "crucigrama~<opciones>" */
   function taskKey(t) { return String(t.task || "").split("~")[0]; }
-  function tkClean(a) { return (a || []).map(function (t) { var m = String(t.title || "").match(/^(.*?)\s+·\s+by\s+(Miss\s+[A-Za-zÁÉÍÓÚáéíóú]+)$/); if (m) { t = Object.assign({}, t, { title: m[1], by: m[2] }); } return t; }); }
   function taskUrl(t) {
     var q = "?task=" + encodeURIComponent(t.id), parts = String(t.task || "").split("~"), k = parts[0];
     if (parts[1]) q += "&pick=" + encodeURIComponent(parts[1]);
-    if (k.indexOf("t:") === 0) return "ruta.html" + q + "#/t/" + encodeURIComponent(k.slice(2));
-    if (k.indexOf("v:") === 0) { var va = k.slice(2).split("|"); return "ruta.html" + q + "#/vocab/" + va[0] + "/" + encodeURIComponent(va[1]) + "/" + va[2]; }
-    if (k.indexOf("xv:") === 0) return "ruta.html" + q + "#/xv/" + encodeURIComponent(k.slice(3));
-    if (k.indexOf("r:") === 0) return "index.html" + q + "#/library/" + encodeURIComponent(k.slice(2));
-    if (k.indexOf("e:") === 0) return "index.html" + q + "#/lecturas/" + encodeURIComponent(k.slice(2));
     if (k === "toefl-sim") return "juego-toefl-practice.html" + q + "#sim";
     if (k === "lectura") return "index.html" + q + "#/library";
     return "juego-" + k + ".html" + q;
@@ -611,7 +602,7 @@
   function checkTasks() {
     if (!user || gameSlug() || taskShown) return;
     var me = user.username;
-    rpc("student_tasks", { p_username: me }).then(function (tasks) { tasks = tkClean(tasks);
+    rpc("student_tasks", { p_username: me }).then(function (tasks) {
       if (!Array.isArray(tasks) || !tasks.length || !user || user.username !== me) return;
       return rpc("student_my_progress", { p_token: user.token }).catch(function () { return []; }).then(function (rows) {
         rows = Array.isArray(rows) ? rows : [];
@@ -641,77 +632,13 @@
       "#mva-task .m{margin-left:auto;font-size:12px;font-weight:700;color:#B9A6FF}";
     document.head.appendChild(st);
     var d = document.createElement("div"); d.id = "mva-task";
-    d.innerHTML = '<span class="k">Assigned by ' + (t.by ? String(t.by).replace(/[<>&]/g, "") : "your teacher") + '</span><b>' + String(t.title || "Activity").replace(/[<>&]/g, "") + "</b>" +
+    d.innerHTML = '<span class="k">Assigned by your teacher</span><b>' + String(t.title || "Activity").replace(/[<>&]/g, "") + "</b>" +
       "<p>" + (TASK_SUB[taskKey(t)] || "Your teacher assigned you this activity. Complete it when you can.") + "</p>" +
       '<div class="r"><a href="' + taskUrl(t) + '">Start now</a><button type="button">Later</button>' +
       (list.length > 1 ? '<span class="m">+' + (list.length - 1) + " more</span>" : "") + "</div>";
     d.querySelector("button").onclick = function () { d.remove(); };
     document.body.appendChild(d);
   }
-  /* ---------- Assigned activities: tarjeta fija en el inicio, en My Progress y número en "Me" ---------- */
-  var asgCache = null, asgAt = 0, asgBusy = false;
-  function asgKind(t) { var k = taskKey(t); return /^t:/.test(k) ? ["G", "#D3F36B", "Grammar"] : /^(v|xv):/.test(k) ? ["F", "#FFC7E2", "Vocabulary"] : /^e:/.test(k) ? ["L", "#FFE58A", "Lectura"] : /^r:|^lectura$/.test(k) ? ["R", "#FFE58A", "Reading"] : k === "toefl-sim" || k === "level-up" ? ["E", "#C9D2FF", "Exam"] : ["P", "#BDF0D8", "Game"]; }
-  function asgLoad(cb) {
-    if (!user) return cb(null);
-    if (asgCache && Date.now() - asgAt < 60000) return cb(asgCache);
-    if (asgBusy) return; asgBusy = true; var me = user.username;
-    rpc("student_tasks", { p_username: me }).then(function (tasks) { tasks = tkClean(tasks);
-      tasks = Array.isArray(tasks) ? tasks : [];
-      if (!tasks.length) return { pend: [], done: [] };
-      return rpc("student_my_progress", { p_token: user.token }).catch(function () { return []; }).then(function (rows) {
-        rows = Array.isArray(rows) ? rows : []; var pend = [], done = [];
-        tasks.forEach(function (t) {
-          var m = rows.filter(function (r) { return taskRowMatch(t, r); });
-          if (m.length || get("mova-task-done-" + t.id)) { var best = m.filter(function (r) { return r.total; })[0] || m[0] || null; done.push({ t: t, r: best }); } else pend.push(t);
-        });
-        pend.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); });
-        done.sort(function (a, b) { return new Date((b.r || b.t).created_at) - new Date((a.r || a.t).created_at); });
-        return { pend: pend, done: done };
-      });
-    }).then(function (o) { asgBusy = false; if (!o || !user || user.username !== me) return cb(null); asgCache = o; asgAt = Date.now(); cb(o); })
-      .catch(function () { asgBusy = false; cb(null); });
-  }
-  function fdt(x) { try { return new Date(x).toLocaleDateString("en-US", { month: "short", day: "numeric" }); } catch (e) { return ""; } }
-  function asgHtml(o, compact) {
-    var esc2 = function (x) { return String(x == null ? "" : x).replace(/[<>&"]/g, ""); };
-    var row = function (t, r) {
-      var k = asgKind(t), done = !!r || r === null && false;
-      return '<div class="asg-it"><span class="asg-ic" style="background:' + k[1] + '">' + k[0] + '</span><div><b>' + esc2(t.title || "Activity") + "</b><small>" + k[2] + " · " +
-        (r !== undefined ? "done" + (r && r.created_at ? " " + fdt(r.created_at) : "") + (r && r.total ? " · " + r.score + "/" + r.total : "") : "assigned " + fdt(t.created_at)) + (t.by ? " · " + esc2(t.by) : "") + "</small></div>" +
-        (r !== undefined ? '<span class="asg-dn">Done ✓</span>' : '<a class="asg-go" href="' + taskUrl(t) + '">Start</a>') + "</div>";
-    };
-    var h = '<div class="asg-hd"><h3>Assigned activities</h3>' + (o.pend.length ? '<span class="asg-n">' + o.pend.length + " to do</span>" : '<span class="asg-n ok">All done</span>') + "</div><small class=\"asg-sub\">From your teachers</small>";
-    h += o.pend.map(function (t) { return row(t); }).join("");
-    h += o.done.slice(0, compact ? 2 : 5).map(function (d) { return row(d.t, d.r || null); }).join("");
-    return h;
-  }
-  var ASG_CSS = ".asg-card{background:#fff;border-radius:26px;padding:16px;margin-top:12px;box-shadow:0 10px 26px -18px rgba(54,40,120,.45);color:#15192B;font-family:'Plus Jakarta Sans',system-ui,sans-serif}" +
-    "#mvp-asg .asg-card{margin:0 0 14px;box-shadow:none;background:#F5F3FA}" +
-    ".asg-hd{display:flex;align-items:center;gap:8px}.asg-hd h3{font:800 20px/1.1 'Bricolage Grotesque',sans-serif;margin:0;color:#15192B}" +
-    ".asg-n{background:#FF8FC0;color:#15192B;font-weight:800;font-size:12px;border-radius:999px;padding:3px 9px}.asg-n.ok{background:#E4F8B0}" +
-    ".asg-sub{display:block;color:#6A6F85;font-weight:600;font-size:12px;margin:2px 0 4px}" +
-    ".asg-it{display:flex;align-items:center;gap:10px;padding:10px;border-radius:16px;background:#F5F3FA;margin-top:7px}#mvp-asg .asg-it{background:#fff}" +
-    ".asg-ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font:800 14px 'Bricolage Grotesque',sans-serif;flex:none;color:#15192B}" +
-    ".asg-it>div{min-width:0}.asg-it b{display:block;font-size:14px;line-height:1.25}.asg-it small{color:#6A6F85;font-weight:600;font-size:11.5px}" +
-    ".asg-go{margin-left:auto;flex:none;background:#15192B;color:#D3F36B;font-weight:800;font-size:12.5px;padding:8px 13px;border-radius:999px;text-decoration:none}" +
-    ".asg-dn{margin-left:auto;flex:none;background:#E4F8B0;color:#15192B;font-weight:800;font-size:12px;padding:7px 10px;border-radius:999px}" +
-    ".asg-badge{position:relative}.asg-badge::before{content:attr(data-asg);position:absolute;top:3px;left:calc(50% + 6px);min-width:17px;height:17px;padding:0 4px;box-sizing:border-box;border-radius:999px;background:#FF8FC0;color:#15192B;font:800 10.5px/17px 'Plus Jakarta Sans',sans-serif;text-align:center;z-index:2}";
-  function asgCss() { if (document.getElementById("asg-css")) return; var st = document.createElement("style"); st.id = "asg-css"; st.textContent = ASG_CSS; document.head.appendChild(st); }
-  function asgPlace() {
-    if (!user || gameSlug()) { document.querySelectorAll(".asg-card.home").forEach(function (c) { c.remove(); }); document.querySelectorAll(".asg-badge").forEach(function (b) { b.classList.remove("asg-badge"); }); return; }
-    asgLoad(function (o) {
-      if (!o) return; asgCss();
-      document.querySelectorAll('.tabbar [data-mr="me"]').forEach(function (b) { if (o.pend.length) { b.classList.add("asg-badge"); b.setAttribute("data-asg", o.pend.length); } else b.classList.remove("asg-badge"); });
-      var home = document.querySelector(".mr-home"); if (!home) return;
-      var old = home.querySelector(".asg-card.home");
-      if (!o.pend.length && !o.done.length) { if (old) old.remove(); return; }
-      var html = asgHtml(o, true);
-      if (old) { if (old.__h !== html) { old.innerHTML = html; old.__h = html; } return; }
-      var g = home.querySelector(".mr-grid2"); if (!g) return;
-      var c = document.createElement("div"); c.className = "asg-card home"; c.innerHTML = html; c.__h = html; g.after(c);
-    });
-  }
-  function asgProgress(box) { if (!box) return; asgLoad(function (o) { if (!o || (!o.pend.length && !o.done.length)) return; asgCss(); box.innerHTML = '<div class="asg-card">' + asgHtml(o, false) + "</div>"; }); }
   /* Marca la tarea como hecha en este dispositivo cuando la alumna la trabaja */
   function taskContext() {
     var id = new URLSearchParams(location.search).get("task");
@@ -724,7 +651,6 @@
   window.MovaAuth = { save: save, user: function () { return user; }, login: showLogin };
   function boot() {
     /* Opciones de tareas: vista previa de la maestra o tarea del alumno */
-    if (gameSlug() && /[?&]live=\d{4}/.test(location.search) && !window.__movaLiveLoaded) { window.__movaLiveLoaded = 1; var ls = document.createElement("script"); ls.src = "mova-live-play.js?v=84"; document.head.appendChild(ls); }
     if (gameSlug() && /[?&](pick|pickmode)=/.test(location.search) && !window.__movaTaskLoaded) { window.__movaTaskLoaded = 1; var ts = document.createElement("script"); ts.src = "mova-task.js?v=65"; document.head.appendChild(ts); }
     /* En la vista previa del panel de maestras no se registra nada */
     if (/[?&]pickmode=1/.test(location.search)) return;
@@ -741,7 +667,6 @@
       window.addEventListener("hashchange", function () { setTimeout(privacyLink, 400); setTimeout(retoBanner, 120); setTimeout(retoBanner, 600); });
       setTimeout(privacyLink, 400); setTimeout(retoBanner, 150); setTimeout(retoBanner, 900);
       setTimeout(checkTasks, 1500);
-      setTimeout(asgPlace, 1800); setInterval(asgPlace, 1500);
     }
   }
   document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", boot) : boot();
