@@ -639,7 +639,7 @@ function check(q){
   else{given=S.choice;ok=given===q.ans;if(!ok)tag=q.tag}
   S.res.push({topic:q.topic,ok:ok,tag:tag,disp:q.disp,given:q.type==='num'?NF(given):q.opts[given],ans:q.type==='num'?NF(q.ans):q.opts[q.ans],type:q.type});
   var fb=ok?'<div class="fb ok"><h3>'+ico('ok','#4F6B00')+'Correcto</h3><ol class="steps">'+q.steps.map(function(s,i){return '<li><span class="k">'+(i+1)+'</span><span>'+s+'</span></li>'}).join('')+'</ol></div>'
-    :'<div class="fb no"><h3>'+ico('no','#C2387A')+'La respuesta es '+(q.type==='num'?NF(q.ans):q.opts[q.ans])+'</h3>'+
+    :'<div class="fb no"><h3>'+ico('no','#C2387A')+'<span>La respuesta es '+(q.type==='num'?NF(q.ans):q.opts[q.ans])+'</span></h3>'+
       (tag&&TAGS[tag]?'<p style="font-size:14px;margin:0 0 6px">'+TAGS[tag].fix+'</p>':'')+
       '<ol class="steps">'+q.steps.map(function(s,i){return '<li><span class="k">'+(i+1)+'</span><span>'+s+'</span></li>'}).join('')+'</ol></div>';
   document.getElementById('fbz').innerHTML=fb;

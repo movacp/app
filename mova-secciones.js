@@ -121,11 +121,12 @@
     { g: "6p", n: "6°", sub: "primaria", lv: "Primaria", full: "6° de primaria", q: 2, plan: [["nivel", "ex5", "grado"]] },
     { g: "1s", n: "1°", sub: "secundaria", lv: "Secundaria", full: "1° de secundaria", q: 3, plan: [["grado", "signos", "grado"]] },
     { g: "2s", n: "2°", sub: "secundaria", lv: "Secundaria", full: "2° de secundaria", q: 3, plan: [["nivel", "signos", "base"]] },
-    { g: "3s", n: "3°", sub: "secundaria", lv: "Secundaria", full: "3° de secundaria", q: 3, plan: [["nivel", "signos", "base"]] },
-    { g: "1b", n: "1er", sub: "semestre", lv: "Preparatoria", full: "1er semestre de prepa", q: 4, plan: [["nivel", "signos", "base"]] }
+    { g: "3s", n: "3°", sub: "secundaria", lv: "Secundaria", full: "3° de secundaria", q: 3, plan: [["exam", "ex3s", "grado"], ["nivel", "ex3s", "base"], ["nivel", "signos", "base"]] },
+    { g: "1b", n: "1er", sub: "semestre", lv: "Preparatoria", full: "1er semestre de prepa", q: 4, plan: [["nivel", "signos", "base"], ["nivel", "ex3s", "grado"]] }
   ];
   var MPR = { signos: { file: "juego-signos-jerarquia.html", img: "math-signos.webp", title: "Signos y jerarquía de operaciones", desc: "Suma y resta con signo, multiplicación y división, y orden de las operaciones.", n: 24 },
-    ex5: { file: "juego-repaso-5-primaria.html", img: "math-fracciones.webp", title: "Repaso de 5° de primaria", desc: "Fracciones, división con residuo, ángulos, conversiones, romanos y siglos, proporcionalidad y tiempo.", n: 42 } };
+    ex5: { file: "juego-repaso-5-primaria.html", img: "math-fracciones.webp", title: "Repaso de 5° de primaria", desc: "Fracciones, división con residuo, ángulos, conversiones, romanos y siglos, proporcionalidad y tiempo.", n: 42 },
+    ex3s: { file: "juego-repaso-3-secundaria.html", img: "math-geometria.webp", title: "Repaso de 3° de secundaria", desc: "Lenguaje algebraico, productos notables, fórmula general, Pitágoras, funciones lineales y cuadráticas.", n: 36 } };
   var MSEC = { exam: ["Para tu examen", "Los temas de tu guía de estudio, con calificación."], grado: ["Temas de tu grado", "Explicación, ejemplos paso a paso y ejercicios con calificación."], nivel: ["Nivelación", "Repasa la base para avanzar con seguridad."] };
   var MLVC = { Primaria: "#D3F36B", Secundaria: "#9C8BFF", Preparatoria: "#FF8FC0" };
   var MHC = { Primaria: "#D3F36B", Secundaria: "#C7B5FF", Preparatoria: "#FFC7E2" };
