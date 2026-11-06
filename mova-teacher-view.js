@@ -160,7 +160,7 @@
     go.onclick = function () {
       var arr = Object.keys(sel).map(function (k) { return sel[k]; }); if (!arr.length) return;
       go.disabled = true; go.textContent = "Assigning…";
-      Promise.all(arr.map(function (x) { return rpc("admin_assign_task", { p_student: String(x.id), p_username: x.username, p_task: it.key, p_title: it.title }).then(function () { return 1; }, function () { return 0; }); }))
+      Promise.all(arr.map(function (x) { return rpc("admin_assign_task", { p_student: String(x.id), p_username: x.username, p_task: it.key, p_title: it.title + " · by " + tName(localStorage.getItem("mova_teacher_email")) }).then(function () { return 1; }, function () { return 0; }); }))
         .then(function (r) { var ok = r.reduce(function (a, b) { return a + b; }, 0); close(); toast(ok === arr.length ? "“" + it.name + "” assigned to " + ok + (ok === 1 ? " student" : " students") : ok + " of " + arr.length + " assigned. Check your connection and try again."); });
     };
     if (students) paint();

@@ -585,6 +585,7 @@
   var taskShown = false;
   /* La tarea puede traer las opciones elegidas por la maestra: "crucigrama~<opciones>" */
   function taskKey(t) { return String(t.task || "").split("~")[0]; }
+  function tkClean(a) { return (a || []).map(function (t) { var m = String(t.title || "").match(/^(.*?)\s+·\s+by\s+(Miss\s+[A-Za-zÁÉÍÓÚáéíóú]+)$/); if (m) { t = Object.assign({}, t, { title: m[1], by: m[2] }); } return t; }); }
   function taskUrl(t) {
     var q = "?task=" + encodeURIComponent(t.id), parts = String(t.task || "").split("~"), k = parts[0];
     if (parts[1]) q += "&pick=" + encodeURIComponent(parts[1]);
@@ -610,7 +611,7 @@
   function checkTasks() {
     if (!user || gameSlug() || taskShown) return;
     var me = user.username;
-    rpc("student_tasks", { p_username: me }).then(function (tasks) {
+    rpc("student_tasks", { p_username: me }).then(function (tasks) { tasks = tkClean(tasks);
       if (!Array.isArray(tasks) || !tasks.length || !user || user.username !== me) return;
       return rpc("student_my_progress", { p_token: user.token }).catch(function () { return []; }).then(function (rows) {
         rows = Array.isArray(rows) ? rows : [];
@@ -640,7 +641,7 @@
       "#mva-task .m{margin-left:auto;font-size:12px;font-weight:700;color:#B9A6FF}";
     document.head.appendChild(st);
     var d = document.createElement("div"); d.id = "mva-task";
-    d.innerHTML = '<span class="k">Assigned by your teacher</span><b>' + String(t.title || "Activity").replace(/[<>&]/g, "") + "</b>" +
+    d.innerHTML = '<span class="k">Assigned by ' + (t.by ? String(t.by).replace(/[<>&]/g, "") : "your teacher") + '</span><b>' + String(t.title || "Activity").replace(/[<>&]/g, "") + "</b>" +
       "<p>" + (TASK_SUB[taskKey(t)] || "Your teacher assigned you this activity. Complete it when you can.") + "</p>" +
       '<div class="r"><a href="' + taskUrl(t) + '">Start now</a><button type="button">Later</button>' +
       (list.length > 1 ? '<span class="m">+' + (list.length - 1) + " more</span>" : "") + "</div>";
@@ -654,7 +655,7 @@
     if (!user) return cb(null);
     if (asgCache && Date.now() - asgAt < 60000) return cb(asgCache);
     if (asgBusy) return; asgBusy = true; var me = user.username;
-    rpc("student_tasks", { p_username: me }).then(function (tasks) {
+    rpc("student_tasks", { p_username: me }).then(function (tasks) { tasks = tkClean(tasks);
       tasks = Array.isArray(tasks) ? tasks : [];
       if (!tasks.length) return { pend: [], done: [] };
       return rpc("student_my_progress", { p_token: user.token }).catch(function () { return []; }).then(function (rows) {
@@ -676,10 +677,10 @@
     var row = function (t, r) {
       var k = asgKind(t), done = !!r || r === null && false;
       return '<div class="asg-it"><span class="asg-ic" style="background:' + k[1] + '">' + k[0] + '</span><div><b>' + esc2(t.title || "Activity") + "</b><small>" + k[2] + " · " +
-        (r !== undefined ? "done" + (r && r.created_at ? " " + fdt(r.created_at) : "") + (r && r.total ? " · " + r.score + "/" + r.total : "") : "assigned " + fdt(t.created_at)) + "</small></div>" +
+        (r !== undefined ? "done" + (r && r.created_at ? " " + fdt(r.created_at) : "") + (r && r.total ? " · " + r.score + "/" + r.total : "") : "assigned " + fdt(t.created_at)) + (t.by ? " · " + esc2(t.by) : "") + "</small></div>" +
         (r !== undefined ? '<span class="asg-dn">Done ✓</span>' : '<a class="asg-go" href="' + taskUrl(t) + '">Start</a>') + "</div>";
     };
-    var h = '<div class="asg-hd"><h3>Assigned activities</h3>' + (o.pend.length ? '<span class="asg-n">' + o.pend.length + " to do</span>" : '<span class="asg-n ok">All done</span>') + "</div><small class=\"asg-sub\">From your teacher</small>";
+    var h = '<div class="asg-hd"><h3>Assigned activities</h3>' + (o.pend.length ? '<span class="asg-n">' + o.pend.length + " to do</span>" : '<span class="asg-n ok">All done</span>') + "</div><small class=\"asg-sub\">From your teachers</small>";
     h += o.pend.map(function (t) { return row(t); }).join("");
     h += o.done.slice(0, compact ? 2 : 5).map(function (d) { return row(d.t, d.r || null); }).join("");
     return h;

@@ -301,11 +301,15 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
 .chips button.on{background:#15192B;border-color:#15192B;color:#fff}
 .st{padding:12px 14px;border-radius:20px}.st .nm{font-weight:800;font-size:14.5px}.av{width:42px;height:42px;font-weight:800;color:#15192B}
 .fab{display:none}
-.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));width:calc(100% - 24px);max-width:520px;height:68px;background:#15192B;border-radius:24px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;z-index:15;box-shadow:0 12px 30px rgba(21,25,43,.25)}
+.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));width:calc(100% - 24px);max-width:520px;height:68px;background:#15192B;border-radius:24px;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;z-index:15;box-shadow:0 12px 30px rgba(21,25,43,.25)}
 .tabbar a,.tabbar button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:4px;color:#8C91AD;font-size:10.5px;font-weight:700;font-family:inherit;text-decoration:none;padding:0}
 .tabbar i{display:flex;padding:5px 14px;border-radius:14px}.tabbar svg{width:22px;height:22px}
 .tabbar .on{color:#D3F36B}.tabbar .on i{background:#D3F36B;color:#15192B}
 .logout{height:36px;padding:0 15px}
+/* Tareas */ .tkr .pill{border-radius:999px;padding:6px 10px;font-size:11.5px;font-weight:800;white-space:nowrap}.tkr .pill.pend{background:#FFE6F2;color:#A3245E}.tkr .pill.done{background:#ECFBC8;color:#3E5A07} .tabbar i{padding:5px 10px!important} .tkf{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 10px}.tkf button{border:0;border-radius:999px;padding:9px 14px;background:#fff;color:#15192B;font:700 13px 'Plus Jakarta Sans',sans-serif;box-shadow:0 0 0 1.5px #E3E0EF inset}.tkf button.on{background:#15192B;color:#fff;box-shadow:none}
+.tks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}.tks div{border-radius:18px;padding:12px 10px;text-align:center}.tks b{display:block;font:800 24px 'Bricolage Grotesque',sans-serif}.tks span{font-size:11.5px;font-weight:700;color:#5A5F75}
+.tkc{background:#fff;border-radius:22px;padding:14px;margin-bottom:10px;box-shadow:0 1px 0 #ECE9F5}.tkc .tkh{display:flex;align-items:center;gap:10px;margin-bottom:6px;cursor:pointer}.tkc .tkh .av2{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#E6E2FF;font-weight:800;font-size:13px;flex:none}.tkc .tkh b{font-size:15px}.tkc .tkh small{display:block;color:#6A6F85;font-weight:600;font-size:12px}.tkc .tkh .go{margin-left:auto;font-weight:800;font-size:12.5px;color:#15192B;background:#D3F36B;border-radius:999px;padding:7px 12px;white-space:nowrap}
+.tkr{display:flex;align-items:center;gap:10px;padding:9px 2px;border-top:1px solid #F0EDF7}.tkr div{flex:1;min-width:0}.tkr b{display:block;font-size:13.5px;line-height:1.25}.tkr small{color:#6A6F85;font-size:11.5px;font-weight:600}.tkr .pill{flex:none}.tkby{display:inline-block;border-radius:999px;padding:1px 7px;font-size:10.5px;font-weight:800;margin-right:4px}
 /* Level Up */
 .lur{display:flex;align-items:center;gap:12px;background:#fff;border:0;border-radius:20px;padding:12px 14px;text-align:left;width:100%;font-family:inherit;color:#15192B}
 .lvb{width:48px;height:48px;border-radius:14px;background:#D3F36B;display:grid;place-items:center;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:17px;flex:none}.lvb.sm{font-size:12.5px}
@@ -387,6 +391,7 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
       <div class="sech"><h3>Exámenes recientes</h3><button class="lnk" id="expLu">Exportar a Excel</button></div>
       <div class="list" id="luList"></div>
     </div>
+    <div id="v-tasks" class="hidden"><div id="tkAll"></div></div>
     <div class="view hidden" id="v-insights">
       <div class="visits" id="luIns" style="margin-top:0"></div>
       <div class="visits" id="visits"><h2>Visitas a la app</h2><p class="vs">Cargando…</p></div>
@@ -394,6 +399,7 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
   </main>
   <nav class="tabbar" id="tabbar">
     <button data-v="students" class="on"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.4c3 .2 5.5 2.4 5.5 5.6"/></svg></i>Alumnos</button>
+    <button data-v="tasks"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 4.5h6v2.5H9zM8.5 12l2 2 4-4M8.5 17.5h7"/></svg></i>Tareas</button>
     <button data-v="levelup"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4v-6H4zM10 20h4V9h-4zM16 20h4V4h-4z"/></svg></i>Level Up</button>
     <button data-v="insights"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 4 8-8"/><path d="M15 8h5v5"/></svg></i>Estadísticas</button>
     <a href="mova-live.html"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M6.3 6.3a8 8 0 0 0 0 11.4M17.7 6.3a8 8 0 0 1 0 11.4"/></svg></i>En vivo</a>
@@ -491,15 +497,17 @@ $("#logoutBtn").onclick = () => { logout(); toast("Sesión cerrada"); };
 
 /* ---------- Students ---------- */
 async function showApp(){ $("#login").classList.add("hidden"); $("#app").classList.remove("hidden"); setTab(location.hash.replace("#","")||"students"); loadVisits(); loadLevelUp(); await loadStudents(); }
+function tkClean(a){ return (a||[]).map(t=>{ const m=String(t.title||"").match(/^(.*?)\s+·\s+by\s+(Miss\s+[A-Za-zÁÉÍÓÚáéíóú]+)$/); return m?Object.assign({},t,{title:m[1],by:m[2]}):t; }); }
 function tName(){ let em=""; try{ em=(localStorage.getItem("mova_teacher_email")||"").toLowerCase(); }catch(e){} const u=em.split("@")[0]; if(/let/.test(u)) return "Miss Letty"; if(/claud/.test(u)) return "Miss Claudia"; if(/mayte|teresa/.test(u)) return "Miss Mayte"; return "Miss Karla"; }
 function setTab(v){
-  if(!["students","levelup","insights"].includes(v)) v="students";
-  ["students","levelup","insights"].forEach(k => $("#v-"+k).classList.toggle("hidden", k!==v));
+  if(!["students","tasks","levelup","insights"].includes(v)) v="students";
+  ["students","tasks","levelup","insights"].forEach(k => $("#v-"+k).classList.toggle("hidden", k!==v));
   document.querySelectorAll("#tabbar button").forEach(b => b.classList.toggle("on", b.dataset.v===v));
   const h=new Date().getHours(), hi=h<12?"Buenos días":h<19?"Buenas tardes":"Buenas noches";
-  const T={students:[hi+", "+tName(),"Panel de maestra"],levelup:["Resultados del examen de ubicación","Level Up"],insights:["Uso de la app","Estadísticas"]}[v];
+  const T={students:[hi+", "+tName(),"Panel de maestra"],tasks:["Actividades asignadas","Tareas"],levelup:["Resultados del examen de ubicación","Level Up"],insights:["Uso de la app","Estadísticas"]}[v];
   $("#hdSmall").textContent=T[0]; $("#hdTitle").textContent=T[1];
   history.replaceState(null,"",v==="students"?location.pathname:"#"+v); window.scrollTo(0,0);
+  if(v==="tasks") loadAllTasks();
 }
 document.querySelectorAll("#tabbar button").forEach(b => b.onclick = () => setTab(b.dataset.v));
 
@@ -1161,7 +1169,7 @@ function openReport(s, rows){
   if(!(navigator.canShare)) w.querySelector("#rShare").remove();
 }
 async function buildReport(s, all, y, mo, note){
-  let tasksAll=[]; try{ tasksAll=await rpc("admin_list_tasks",{p_student:String(s.id)})||[]; }catch(e){}
+  let tasksAll=[]; try{ tasksAll=await rpc("admin_list_tasks",{p_student:String(s.id)}).then(tkClean)||[]; }catch(e){}
   await Promise.all([loadScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"),
                      loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js")]);
   const rows = all.filter(r=>{ const d=new Date(r.created_at); return d.getFullYear()===y && d.getMonth()===mo; });
@@ -1275,6 +1283,47 @@ function taskMatch(t0,r){
   if(t.task==="toefl-practice" && r.detail && r.detail.kind==="toefl-sim") return false;
   return r.total!=null || secsOf(r)>=60 || !!(r.detail && r.detail.kind && r.detail.kind!=="time");
 }
+let tkCache=null, tkF={st:"pend",by:"all",q:""};
+async function loadAllTasks(force){
+  const box=$("#tkAll"); if(!box) return;
+  if(tkCache && !force) return drawAllTasks();
+  box.innerHTML=`<p class="sub" style="padding:20px 4px">Cargando las actividades de todos los alumnos…</p>`;
+  let list=(typeof students!=="undefined"&&students)||[]; if(!list.length){ try{ list=await rpc("admin_list_students")||[]; }catch(e){} }
+  const out=[], q=list.slice();
+  async function work(){ while(q.length){ const s=q.shift(); let t=[]; try{ t=tkClean(await rpc("admin_list_tasks",{p_student:String(s.id)})||[]); }catch(e){}
+    if(!t.length) continue; let rows=[]; try{ rows=await rpc("admin_student_progress",{p_student:s.id,p_limit:500})||[]; }catch(e){}
+    out.push({s,items:t.map(x=>({t:x,done:taskDoneRow(x,rows)}))}); } }
+  await Promise.all([1,2,3,4,5,6].map(work));
+  tkCache=out; drawAllTasks();
+}
+function drawAllTasks(){
+  const box=$("#tkAll"); if(!box||!tkCache) return;
+  const d=x=>new Date(x).toLocaleDateString("es-MX",{day:"numeric",month:"short"});
+  const BYC={"Miss Karla":"#FFE6F2","Miss Letty":"#E5E9FF","Miss Claudia":"#ECFBC8","Miss Mayte":"#FFF1C9"};
+  const name=t=>String(t.task).includes("~")?t.title:(TASK_NAME[t.task]||t.title);
+  const all=[].concat(...tkCache.map(g=>g.items)), pend=all.filter(x=>!x.done).length;
+  const bys=[...new Set(all.map(x=>x.t.by).filter(Boolean))].sort();
+  const okBy=x=>tkF.by==="all"||(x.t.by||"")===tkF.by, okSt=x=>tkF.st==="all"||(tkF.st==="pend"?!x.done:!!x.done);
+  const qq=tkF.q.trim().toLowerCase();
+  const groups=tkCache.filter(g=>!qq||g.s.full_name.toLowerCase().includes(qq)).map(g=>({s:g.s,items:g.items.filter(x=>okBy(x)&&okSt(x)).sort((a,b)=>new Date(b.t.created_at)-new Date(a.t.created_at))})).filter(g=>g.items.length)
+    .sort((a,b)=>a.s.full_name.localeCompare(b.s.full_name,"es"));
+  const chip=(k,v,l)=>`<button data-tk="${k}" data-v="${esc(v)}" class="${tkF[k]===v?"on":""}">${esc(l)}</button>`;
+  box.innerHTML=`<div class="tks"><div style="background:#FFE6F2"><b>${pend}</b><span>Pendientes</span></div><div style="background:#ECFBC8"><b>${all.length-pend}</b><span>Completadas</span></div><div style="background:#E5E9FF"><b>${tkCache.length}</b><span>Alumnos con tareas</span></div></div>
+    <input class="in" id="tkQ" placeholder="Buscar alumno" value="${esc(tkF.q)}" style="margin-bottom:10px">
+    <div class="tkf">${chip("st","pend","Pendientes")}${chip("st","done","Completadas")}${chip("st","all","Todas")}</div>
+    ${bys.length?`<div class="tkf">${chip("by","all","Todas las maestras")}${bys.map(b=>chip("by",b,b)).join("")}</div>`:""}
+    ${groups.length?groups.map(g=>{ const p=g.items.filter(x=>!x.done).length, c=g.items.length-p;
+      return `<div class="tkc"><div class="tkh" data-open="${esc(g.s.id)}"><div class="av2">${esc(initials(g.s.full_name))}</div><div><b>${esc(g.s.full_name)}</b><small>${g.s.stage?esc(g.s.stage)+" · ":""}${p?p+" pendiente"+(p>1?"s":""):""}${p&&c?" · ":""}${c?c+" completada"+(c>1?"s":""):""}</small></div><span class="go">Ver perfil →</span></div>
+      ${g.items.map(x=>{ const r=x.done, pc=r&&r.total?Math.round(r.score/r.total*100):null;
+        return `<div class="tkr"><div><b>${esc(name(x.t))}</b><small>${x.t.by?`<span class="tkby" style="background:${BYC[x.t.by]||"#EEE"}">${esc(x.t.by)}</span>`:""}Asignada ${esc(d(x.t.created_at))}${r?" · terminada "+esc(d(r.created_at)):""}</small></div>${r?`<span class="pill done">${pc!=null?pc+"% · "+r.score+"/"+r.total:"Completada"}</span>`:`<span class="pill pend">Pendiente</span>`}</div>`; }).join("")}</div>`; }).join("")
+      :`<p class="sub" style="padding:14px 4px">${all.length?"No hay actividades con este filtro.":"Todavía no hay actividades asignadas."}</p>`}
+    <p class="note" style="color:#8C91AD;font-size:12px;margin:8px 4px 0">Las actividades asignadas antes de hoy no muestran qué maestra las asignó.</p>
+    <div style="text-align:center;margin:12px 0 90px"><button class="btn" id="tkRe" style="background:#fff">Actualizar</button></div>`;
+  box.querySelectorAll("[data-tk]").forEach(b=>b.onclick=()=>{ tkF[b.dataset.tk]=b.dataset.v; drawAllTasks(); });
+  box.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{ const g=tkCache.find(x=>String(x.s.id)===b.dataset.open); if(g) openStudent(g.s.id); });
+  const qi=$("#tkQ"); qi.oninput=()=>{ tkF.q=qi.value; const pos=qi.selectionStart; drawAllTasks(); const n=$("#tkQ"); n.focus(); try{ n.setSelectionRange(pos,pos); }catch(e){} };
+  $("#tkRe").onclick=()=>loadAllTasks(true);
+}
 function taskDoneRow(t,rows){ const m=rows.filter(r=>taskMatch(t,r)).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at)); return m.find(r=>r.total)||m[0]||null; }
 
 const PCOL={"Listening":"#B9A6FF","Structure":"#8FA2FF","Written Expression":"#FF8FC8","Reading":"#D3F36B"};
@@ -1287,7 +1336,7 @@ async function loadTasks(s){
   box.innerHTML=`<div class="tk"><h3>Tareas</h3><p class="sub">Cargando…</p></div>`;
   let tasks=[], rows=[];
   let tErr="";
-  [tasks,rows]=await Promise.all([rpc("admin_list_tasks",{p_student:String(s.id)}).catch(e=>{ tErr=/admin_list_tasks|function/.test(e.message||"")?"Falta pegar el SQL de tareas en Supabase.":(e.message||"No se pudieron cargar las tareas."); return []; }),
+  [tasks,rows]=await Promise.all([rpc("admin_list_tasks",{p_student:String(s.id)}).then(tkClean).catch(e=>{ tErr=/admin_list_tasks|function/.test(e.message||"")?"Falta pegar el SQL de tareas en Supabase.":(e.message||"No se pudieron cargar las tareas."); return []; }),
     rpc("admin_student_progress",{p_student:s.id,p_limit:1000}).catch(()=>[])]);
   tasks=tasks||[]; rows=rows||[];
   const seen=new Set();
@@ -1298,7 +1347,7 @@ async function loadTasks(s){
     const done=taskDoneRow(t,rows);
     const res=done&&done.total?` · ${Math.round(done.score/done.total*100)}%`:"";
     const see=done&&isSim(done)?`<button class="see" data-r="${esc(simKey(done))}">Ver reporte</button>`:"";
-    return `<div class="row"><div><b>${esc(String(t.task).includes("~")?t.title:(TASK_NAME[t.task]||t.title))}</b><small>Asignada ${esc(d(t.created_at))}${done?" · terminada "+esc(d(done.created_at)):""}</small></div>
+    return `<div class="row"><div><b>${esc(String(t.task).includes("~")?t.title:(TASK_NAME[t.task]||t.title))}</b><small>Asignada ${esc(d(t.created_at))}${t.by?" por "+esc(t.by):""}${done?" · terminada "+esc(d(done.created_at)):""}</small></div>
       ${done?`<span class="pill done">Completada${res}</span>${see}`:`<span class="pill pend">Pendiente</span>`}
       <button class="rm" data-t="${t.id}" aria-label="Quitar tarea">×</button></div>`;}).join("");
   const sHtml=sims.length?`<h3 style="margin-top:16px">Simulaciones TOEFL</h3>`+sims.map(r=>`<div class="row"><div><b>${r.score}/${r.total} · ${Math.round(r.score/r.total*100)}%</b><small>${esc(d(r.created_at))} · ${r.detail&&r.detail.secs?fmtT(r.detail.secs)+" min":"Quick Simulation"}</small></div><button class="see" style="margin-left:auto" data-r="${esc(simKey(r))}">Ver reporte</button></div>`).join(""):"";
@@ -1310,7 +1359,7 @@ async function loadTasks(s){
   $("#asgBtn").onclick=async()=>{ const b=$("#asgBtn"), k=$("#asgSel").value; b.disabled=true; b.textContent="Asignando…";
     const picks=NO_PICK.has(k)?[]:curPicks.slice(), labs=picks.map(x=>x.l).filter(Boolean);
     const task=picks.length?k+"~"+b64url({p:picks.map(x=>({a:x.a,t:x.t,l:x.l})),l:labs}):k, title=(TASK_NAME[k]||k)+(labs.length?" · "+labs.join(" · "):"");
-    try{ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:task,p_title:title}); toast(`${title} asignada a ${s.full_name.split(" ")[0]}`); curPicks=[]; loadTasks(s); }
+    try{ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:task,p_title:title+" · by "+tName()}); toast(`${title} asignada a ${s.full_name.split(" ")[0]}`); curPicks=[]; loadTasks(s); }
     catch(e){ toast(e.message); b.disabled=false; b.textContent="Asignar actividad"; } };
   box.querySelectorAll(".rm").forEach(b=>b.onclick=async()=>{ if(!confirm("¿Quitar esta tarea?")) return; try{ await rpc("admin_remove_task",{p_id:+b.dataset.t}); loadTasks(s); }catch(e){ toast(e.message); } });
   box.querySelectorAll(".see").forEach(b=>b.onclick=()=>{ const r=sims.find(x=>simKey(x)===b.dataset.r)||rows.find(x=>simKey(x)===b.dataset.r); if(r) openSimReport(s,r); });
