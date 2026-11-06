@@ -114,9 +114,9 @@
   /* Grados: nivel de práctica rápida (1 Prim. 1°–3°, 2 Prim. 4°–6°, 3 Secundaria, 4 Prepa) y prácticas completas */
   var MG = [
     { g: "1p", n: "1°", sub: "primaria", lv: "Primaria", full: "1° de primaria", q: 1, plan: [] },
-    { g: "2p", n: "2°", sub: "primaria", lv: "Primaria", full: "2° de primaria", q: 1, plan: [] },
-    { g: "3p", n: "3°", sub: "primaria", lv: "Primaria", full: "3° de primaria", q: 1, plan: [] },
-    { g: "4p", n: "4°", sub: "primaria", lv: "Primaria", full: "4° de primaria", q: 2, plan: [] },
+    { g: "2p", n: "2°", sub: "primaria", lv: "Primaria", full: "2° de primaria", q: 1, plan: [["grado", "numops", ""]] },
+    { g: "3p", n: "3°", sub: "primaria", lv: "Primaria", full: "3° de primaria", q: 1, plan: [["grado", "numops", ""]] },
+    { g: "4p", n: "4°", sub: "primaria", lv: "Primaria", full: "4° de primaria", q: 2, plan: [["grado", "numops", ""]] },
     { g: "5p", n: "5°", sub: "primaria", lv: "Primaria", full: "5° de primaria", q: 2, plan: [["exam", "ex5", ""]] },
     { g: "6p", n: "6°", sub: "primaria", lv: "Primaria", full: "6° de primaria", q: 2, plan: [["nivel", "ex5", "grado"]] },
     { g: "1s", n: "1°", sub: "secundaria", lv: "Secundaria", full: "1° de secundaria", q: 3, plan: [["grado", "signos", "grado"]] },
@@ -127,7 +127,8 @@
   var MPR = { signos: { file: "juego-signos-jerarquia.html", img: "math-signos.webp", title: "Signos y jerarquía de operaciones", desc: "Suma y resta con signo, multiplicación y división, y orden de las operaciones.", n: 24 },
     ex5: { file: "juego-repaso-5-primaria.html", img: "math-repaso-5p.webp", fb: "math-fracciones.webp", title: "Repaso de 5° de primaria", desc: "Fracciones, división con residuo, ángulos, conversiones, romanos y siglos, proporcionalidad y tiempo.", n: 42 },
     ex3s: { file: "juego-repaso-3-secundaria.html", img: "math-repaso-3s.webp", fb: "math-geometria.webp", title: "Repaso de 3° de secundaria", desc: "Lenguaje algebraico, productos notables, fórmula general, Pitágoras, funciones lineales y cuadráticas.", n: 36 },
-    ex2s: { file: "juego-repaso-2-secundaria.html", img: "math-repaso-2s.webp", fb: "math-jerarquia.webp", title: "Repaso de 2° de secundaria", desc: "En tres partes: números y porcentajes; divisibilidad y potencias; ecuaciones, polígonos y estadística.", n: 72, chip: "3 partes · 72 ejercicios" } };
+    ex2s: { file: "juego-repaso-2-secundaria.html", img: "math-repaso-2s.webp", fb: "math-jerarquia.webp", title: "Repaso de 2° de secundaria", desc: "En tres partes: números y porcentajes; divisibilidad y potencias; ecuaciones, polígonos y estadística.", n: 72, chip: "3 partes · 72 ejercicios" },
+    numops: { file: "juego-numeros-operaciones.html", img: "math-numeros-operaciones.webp", fb: "vitrina-practicas.webp", title: "Números y operaciones", desc: "Valor posicional, sumas y restas con transformación, tablas de multiplicar y problemas.", n: 30 } };
   var MSEC = { exam: ["Para tu examen", "Los temas de tu guía de estudio, con calificación."], grado: ["Temas de tu grado", "Explicación, ejemplos paso a paso y ejercicios con calificación."], nivel: ["Nivelación", "Repasa la base para avanzar con seguridad."] };
   var MLVC = { Primaria: "#D3F36B", Secundaria: "#9C8BFF", Preparatoria: "#FF8FC0" };
   var MHC = { Primaria: "#D3F36B", Secundaria: "#C7B5FF", Preparatoria: "#FFC7E2" };
