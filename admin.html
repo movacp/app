@@ -930,9 +930,11 @@ async function loadVisits(){
       <div class="vchart">${days.map(([d,n])=>`<div>${n?`<small>${n}</small>`:""}<i style="height:${Math.round(n/mx*60)}px"></i><em>${d}</em></div>`).join("")}</div>`;
   }catch(err){ box.innerHTML=`<h2>Visitas a la app</h2><p class="vs" style="margin:0">Aún no hay datos de visitas.</p>`; }
 }
-/* Cambiar la contraseña de todos los alumnos de una sola vez */
+/* Cambiar la contraseña de todos los alumnos de una sola vez (menos Miss Karla y Miss Letty) */
+function STU_ALL(){ return students; }
 document.addEventListener("click", async e => {
   const b = e.target.closest && e.target.closest("#allPassBtn"); if (!b || b.disabled) return;
+  const students = STU_ALL().filter(x=>!/^(missk\.m|missletty)$/i.test(x.username||""));
   if (!students.length) { toast("No hay alumnos en la lista"); return; }
   const pass = (prompt("Nueva contraseña para TODOS los alumnos (mínimo 6 caracteres):", "MOVA2027") || "").trim();
   if (!pass) return;

@@ -99,7 +99,8 @@ button{cursor:pointer}
 main{display:block;padding-bottom:calc(var(--tabbar-h) + 40px);outline:none}
 .site-foot{padding:28px 0 calc(var(--tabbar-h) + 28px);border-top:1px solid var(--line);color:var(--ink-3);font-size:13px;margin-top:-20px}
 .site-foot .wrap{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
-@media (min-width:860px){
+@media (min-width:700px) and (max-width:1399px){.tabbar ul{max-width:620px;margin:0 auto!important}}
+@media (min-width:1400px){
   .nav{display:flex}
   .tabbar{display:none}
   main{padding-bottom:64px}
