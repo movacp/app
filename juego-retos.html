@@ -1569,6 +1569,11 @@ function liveOnState() {
   if (live.status === "closed") { liveForget(); toast("Your teacher ended the session."); screenHome(); return; }
   var meP = lplayers.find(function (p) { return p.id === me; }) || {};
   var playing = live.status === "playing" && serverNow() < live.ends_at;
+  if (liveGame() === "arcade") {
+    if (playing && meP.round === live.round) return arcadePlay();
+    if ((live.status === "ended" || (live.status === "playing" && serverNow() >= live.ends_at)) && live.round > 0) { liveResults(); return; }
+    liveLobby(); return;
+  }
   if (playing && meP.round === live.round) {
     if (!park || park.round !== live.round) { if (park) park.stop(); park = (liveGame() === "bingo" ? bingoGame : parkGame)(live, meP); liveScreen = "play"; }
     else park.onState();
@@ -1583,7 +1588,8 @@ function liveLobby() {
   if (liveScreen !== "lobby" + liveGame()) {
     liveScreen = "lobby" + liveGame();
     var isB = liveGame() === "bingo";
-    render(topBar(true) + '<div class="center"><span class="pkbadge">MOVA LIVE</span></div>' + (isB ? '<h1>MOVA Bingo</h1><p class="lead">' + ((live.settings || {}).show === "read" ? "Read each word" : (live.settings || {}).show === "text" ? "Listen to and read each word" : "Listen to each word") + ', put a coin on your card and complete the pattern to win. BINGO!</p><div class="pkhero bhero">' + [0, 1, 2, 3].map(function (k) { return '<span>' + BG.chip + "</span>"; }).join("") + "</div>"
+    var isA = liveGame() === "arcade";
+    render(topBar(true) + '<div class="center"><span class="pkbadge">MOVA LIVE</span></div>' + (isA ? '<h1>' + esc(ARC_NAMES[arcSlug()] || "Live game") + '</h1><p class="lead">When your teacher starts, the game opens by itself. Every round you finish adds points to the class ranking.</p>' : isB ? '<h1>MOVA Bingo</h1><p class="lead">' + ((live.settings || {}).show === "read" ? "Read each word" : (live.settings || {}).show === "text" ? "Listen to and read each word" : "Listen to each word") + ', put a coin on your card and complete the pattern to win. BINGO!</p><div class="pkhero bhero">' + [0, 1, 2, 3].map(function (k) { return '<span>' + BG.chip + "</span>"; }).join("") + "</div>"
         : '<div class="center"><img class="st-lg" src="st-logo.webp" alt="Sugar Town"></div><p class="lead">Answer correctly to earn coins and build the sweetest amusement park in town.</p><div class="pkhero2">' + PK.scene(["popcorn", "cotton", "icecream", "prizes", "ducks", "rings", "teacups", "carousel", "wheel"], { small: true, noLots: true }) + "</div>") +
       '<div class="wait"><span class="dots3"><i></i><i></i><i></i></span> Waiting for your teacher to start</div>' +
       '<div class="label">In the session</div><div class="plist" id="lpl"></div>');
@@ -1942,8 +1948,34 @@ function sugarSoloEnd(r) {
   $("#b-again").onclick = function () { unlock(); sugarSolo(); };
   if (r.correct > 0) { confetti(n === N); sfx.go(); }
 }
+var ARC_NAMES = { "word-quest": "Word Quest", "sentence-builder": "Sentence Builder", "sentence-scramble": "Sentence Scramble", "verb-memory": "Verb Memory", "word-forms": "Word Forms", "likes-dislikes": "Likes & Dislikes", "sopa-de-letras": "Word Search", "crucigrama": "Crossword", "craftland": "CraftLand", "toefl-practice": "TOEFL Practice", "locked-library": "Locked Library", "haunted-mansion": "Haunted Mansion", "lost-in-the-museum": "Lost in the Museum", "pirate-treasure-island": "Pirate Treasure Island", "space-station-rescue": "Space Station Rescue", "the-detectives-case": "The Detective’s Case", "trapped-in-the-train": "Trapped in the Train", "mision-matematica": "Misión Matemática", "lluvia-de-numeros": "Lluvia de números", "la-balanza": "La balanza", "la-tiendita": "La tiendita", "pizzeria-fracciones": "Pizzería de fracciones", "detective-patrones": "Detective de patrones", "la-boveda": "La bóveda", "que-hora-es": "¿Qué hora es?", "lee-con-mochi": "Lee con Mochi" };
+function arcSlug() { return String((live && live.settings && live.settings.slug) || "").replace(/[^a-z0-9-]/g, ""); }
+function arcadePlay() {
+  var slug = arcSlug(); if (!slug) return liveLobby();
+  var key = "mlp-go-" + liveCode + "-" + live.round, url = "juego-" + slug + ".html?live=" + liveCode;
+  var gone = false; try { gone = !!sessionStorage.getItem(key); sessionStorage.setItem(key, "1"); } catch (e) {}
+  if (!gone) { location.href = url; return; }
+  if (liveScreen === "arc" + live.round) return; liveScreen = "arc" + live.round;
+  render(topBar(true) + '<div class="center" style="margin-top:6px"><span class="pkbadge st">LIVE</span></div><h1>' + esc(ARC_NAMES[slug] || "Game") + ' is on!</h1><p class="lead">Keep playing to earn points for the class ranking.</p><div class="center" style="margin-top:18px"><a class="btn primary" href="' + url + '">Back to the game</a></div>');
+}
+function arcadeResults() {
+  var list = lplayers.filter(function (p) { return p.round === live.round; }).slice().sort(function (a, b) { return b.value - a.value || b.correct - a.correct; });
+  var pos = list.findIndex(function (p) { return p.id === me; }), mine = list[pos] || { value: 0, correct: 0, wrong: 0 };
+  var sig = "arcres" + live.round + "|" + list.map(function (p) { return p.id + ":" + p.value; }).join(",");
+  if (liveScreen === sig) return; var first = liveScreen.indexOf("arcres" + live.round + "|") !== 0; liveScreen = sig;
+  var top = [list[1], list[0], list[2]], cls = ["p2", "p1", "p3"], place = [2, 1, 3], pts = function (v) { return Number(v || 0).toLocaleString("en-US") + " pts"; };
+  sugarCss();
+  render(topBar(true) + '<div class="center" style="margin-top:6px"><span class="pkbadge st">' + esc((ARC_NAMES[arcSlug()] || "LIVE").toUpperCase()) + '</span></div><h1>' + (pos === 0 ? "You won!" : pos === 1 ? "2nd place!" : pos === 2 ? "3rd place!" : "Great job!") + "</h1>" +
+    '<div class="podium">' + top.map(function (p, i) { return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.id === me ? "You" : p.name) + '</b><div class="bar"><span>' + ordEn(place[i]) + "</span><small>" + pts(p.value) + "</small></div></div>" : "<div></div>"; }).join("") + "</div>" +
+    '<div class="pkstats"><span><b>' + pts(mine.value) + "</b>Your points</span><span><b>" + (mine.correct || 0) + "</b>Correct</span><span><b>" + (mine.wrong || 0) + "</b>Wrong</span></div>" +
+    (list.length > 3 ? '<div class="plist">' + list.slice(3).map(function (p, i) { return '<div class="prow' + (p.id === me ? " me" : "") + '"><b style="width:24px;text-align:center">' + (i + 4) + "</b>" + av(p) + "<span>" + esc(p.name) + '</span><span class="sc">' + pts(p.value) + "</span></div>"; }).join("") + "</div>" : "") +
+    '<div class="center" style="margin-top:16px"><button class="btn ghost" id="b-back" type="button">Leave</button></div><p class="lead" style="margin-top:16px">If your teacher starts another round, you’ll join automatically.</p>');
+  $("#b-back").onclick = function () { lcall("live_leave", { p_code: liveCode }).catch(function () {}); liveForget(); screenHome(); };
+  if (first && pos >= 0 && pos < 3) { try { confetti(pos === 0); sfx.go(); } catch (e) {} }
+}
 function liveResults() {
   if (liveGame() === "bingo") return bingoResults();
+  if (liveGame() === "arcade") return arcadeResults();
   sugarCss();
   var list = lplayers.filter(function (p) { return p.round === live.round; }).slice().sort(function (a, b) { return b.value - a.value || b.correct - a.correct; });
   var pos = list.findIndex(function (p) { return p.id === me; }), mine = list[pos] || { items: [], value: 0, correct: 0, wrong: 0 };

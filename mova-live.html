@@ -145,6 +145,9 @@ var SB_URL = "https://fclafxrkibvcjktrgznt.supabase.co", SB_KEY = "sb_publishabl
 var PK = window.MOVA_PARK, BG = window.MOVA_BINGO, app = document.getElementById("app"), session = null, live = null, players = [], offset = 0, poll = null, raf = 0, screen = "";
 var settings = { game: "park", cats: ["vocab", "grammar"], level: "each", secs: 480, topic: "days", size: 3, pattern: "line", show: "audio", interval: 8 };
 function gameOf(st) { return (st && st.game) || "park"; }
+var ARCADE = [["word-quest", "Word Quest", "Vocabulary"], ["sentence-builder", "Sentence Builder", "Grammar"], ["sentence-scramble", "Sentence Scramble", "Grammar"], ["verb-memory", "Verb Memory", "Irregular verbs"], ["word-forms", "Word Forms", "Vocabulary"], ["likes-dislikes", "Likes & Dislikes", "Kids"], ["sopa-de-letras", "Word Search", "Vocabulary"], ["crucigrama", "Crossword", "Vocabulary"], ["craftland", "CraftLand", "Missions"], ["toefl-practice", "TOEFL Practice", "Exam prep"], ["locked-library", "Locked Library", "Escape room"], ["mision-matematica", "Misión Matemática", "Math"], ["lee-con-mochi", "Lee con Mochi", "Lectoescritura"]];
+function arcadeName(st) { var a = ARCADE.filter(function (x) { return x[0] === (st && st.slug); })[0]; return a ? a[1] : "Game"; }
+function gameName(st) { var g = gameOf(st); return g === "bingo" ? "MOVA Bingo" : g === "arcade" ? arcadeName(st) : "Sugar Town"; }
 function fixBingo(st) { var ok = BG.sizesFor(st.topic); if (ok.indexOf(Number(st.size)) < 0) st.size = ok[ok.length - 1]; st.secs = BG.topic(st.topic).words.length * (Number(st.interval) || 8) + 15; }
 var muted = false, synth = window.speechSynthesis;
 function speak(t) { if (muted || !synth) return; try { synth.cancel(); var u = new SpeechSynthesisUtterance(t); u.lang = "en-US"; u.rate = .9; synth.speak(u); } catch (e) {} }
@@ -205,7 +208,12 @@ function screenSetup(edit) {
   function draw() {
     var g = gameOf(s), h = '<div class="label" style="margin-top:6px">Game</div><div class="grid c2">' +
       '<button class="choice" data-k="game" data-v="park" aria-pressed="' + (g === "park") + '"><small>Coins &amp; rides</small>Sugar Town</button>' +
-      '<button class="choice" data-k="game" data-v="bingo" aria-pressed="' + (g === "bingo") + '"><small>Listen &amp; mark</small>MOVA Bingo</button></div>';
+      '<button class="choice" data-k="game" data-v="bingo" aria-pressed="' + (g === "bingo") + '"><small>Listen &amp; mark</small>MOVA Bingo</button></div>' +
+      '<div class="label">More games · live leaderboard</div><div class="grid c3 cats">' + ARCADE.map(function (a) { return '<button class="choice" data-k="slug" data-v="' + a[0] + '" aria-pressed="' + (g === "arcade" && s.slug === a[0]) + '"><small>' + esc(a[2]) + "</small>" + esc(a[1]) + "</button>"; }).join("") + "</div>";
+    if (g === "arcade") {
+      h += '<div class="label">Duration</div><div class="grid c3">' + [300, 480, 600, 900].map(function (v) { return '<button class="choice" data-k="secs" data-v="' + v + '" aria-pressed="' + (Number(s.secs) === v) + '">' + v / 60 + " minutes</button>"; }).join("") + "</div>" +
+        '<p class="note">Each student plays ' + esc(arcadeName(s)) + ' on their own device. Every finished round adds points, and you see the ranking live.</p>';
+    } else
     if (g === "bingo") {
       fixBingo(s); var okS = BG.sizesFor(s.topic);
       h += '<div class="label">Topic</div>' + BG.GROUPS.map(function (g) { return '<div class="glab">' + esc(g[1]) + '</div><div class="grid c3 cats">' + BG.TOPICS.filter(function (t) { return t.g === g[0]; }).map(function (t) { return '<button class="choice" data-k="topic" data-v="' + t.id + '" aria-pressed="' + (s.topic === t.id) + '">' + esc(t.name) + (t.sub ? "<small>" + esc(t.sub) + "</small>" : "") + "</button>"; }).join("") + "</div>"; }).join("") +
@@ -226,6 +234,7 @@ function screenSetup(edit) {
       var k = t.dataset.k, v = t.dataset.v;
       if (t.disabled) return;
       if (k === "cat") { var i = s.cats.indexOf(v); if (i >= 0) { if (s.cats.length > 1) s.cats.splice(i, 1); } else s.cats.push(v); }
+      else if (k === "slug") { s.game = "arcade"; s.slug = v; if ([300, 480, 600, 900].indexOf(Number(s.secs)) < 0) s.secs = 600; }
       else if (k === "game") { s.game = v; s.secs = v === "park" ? 480 : s.secs; if (!s.cats) s.cats = ["vocab", "grammar"]; if (!s.topic) { s.topic = "days"; s.size = 3; s.pattern = "line"; s.show = "audio"; s.interval = 8; } }
       else if (k === "secs" || k === "size" || k === "interval") s[k] = Number(v); else s[k] = v;
       draw();
@@ -234,7 +243,7 @@ function screenSetup(edit) {
     $("#go").onclick = async function () {
       var b = this; b.disabled = true; app.onclick = null;
       try {
-        if (gameOf(s) === "bingo") { fixBingo(s); BG.pack(s); } else if ([300, 480, 600].indexOf(Number(s.secs)) < 0) s.secs = 480;
+        if (gameOf(s) === "bingo") { fixBingo(s); BG.pack(s); } else if (gameOf(s) === "arcade") { if ([300, 480, 600, 900].indexOf(Number(s.secs)) < 0) s.secs = 600; } else if ([300, 480, 600].indexOf(Number(s.secs)) < 0) s.secs = 480;
         settings = s;
         if (edit) await rpc("live_lobby", { p_code: live.code, p_settings: s }); else { await rpc("live_create", { p_settings: s }); try { localStorage.setItem(K_HOST, live.code); } catch (e) {} }
         screen = ""; start();
@@ -255,9 +264,9 @@ function screenLobby() {
     screen = "lobby";
     var s = live.settings || {}; if (gameOf(s) === "bingo") lobbyKey = "";
     render(top('<h1>Waiting room</h1><p class="lead">Ask your students to open the app → Game On → <b>Join with code</b>.</p>') +
-      '<div class="code-card"><small>SESSION CODE</small><div class="code">' + esc(live.code) + "</div><p>" + (gameOf(s) === "bingo" ? "MOVA Bingo · " + esc(BG.resolve(s).name) : "Sugar Town · " + Number(s.secs || 480) / 60 + " minutes") + "</p>" +
-      '<div class="chips">' + (gameOf(s) === "bingo" ? '<span class="chip">Card ' + s.size + "×" + s.size + '</span><span class="chip">' + esc(patLabel(s)) + '</span><span class="chip">' + showLabel(s) + "</span>" : '<span class="chip">' + esc(catsLabel(s)) + '</span><span class="chip">' + esc(levelLabel(s)) + "</span>") + "</div></div>" +
-      '<div class="row"><a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent("Let's play " + (gameOf(live.settings) === "bingo" ? "MOVA Bingo" : "Sugar Town") + "! Join here: " + link + " · Code: " + live.code) + '">Send by WhatsApp</a><button class="btn ghost" id="opts">Change options</button></div>' +
+      '<div class="code-card"><small>SESSION CODE</small><div class="code">' + esc(live.code) + "</div><p>" + (gameOf(s) === "bingo" ? "MOVA Bingo · " + esc(BG.resolve(s).name) : esc(gameName(s)) + " · " + Number(s.secs || 480) / 60 + " minutes") + "</p>" +
+      '<div class="chips">' + (gameOf(s) === "bingo" ? '<span class="chip">Card ' + s.size + "×" + s.size + '</span><span class="chip">' + esc(patLabel(s)) + '</span><span class="chip">' + showLabel(s) + "</span>" : gameOf(s) === "arcade" ? '<span class="chip">Live leaderboard</span>' : '<span class="chip">' + esc(catsLabel(s)) + '</span><span class="chip">' + esc(levelLabel(s)) + "</span>") + "</div></div>" +
+      '<div class="row"><a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent("Let's play " + gameName(live.settings) + "! Join here: " + link + " · Code: " + live.code) + '">Send by WhatsApp</a><button class="btn ghost" id="opts">Change options</button></div>' +
       '<div class="label" id="cnt">Students</div><div id="pl"></div>' +
       '<div class="row" style="margin-top:20px"><button class="btn primary" id="start">Start</button></div>' +
       '<p class="note"><a href="#" id="close" style="color:var(--muted)">Close game session</a></p>');
@@ -279,7 +288,8 @@ function drawLobby() {
 function screenPlay() {
   if (screen !== "play" + live.round) {
     screen = "play" + live.round;
-    render(top() + '<div class="hud"><div><h2>Sugar Town</h2><div style="color:var(--muted);font-size:13px;font-weight:600">' + esc(catsLabel(live.settings || {})) + '</div></div><span class="spacer"></span><div class="clock" id="clk">--:--</div></div>' +
+    var arc = gameOf(live.settings) === "arcade";
+    render(top() + '<div class="hud"><div><h2>' + esc(gameName(live.settings)) + '</h2><div style="color:var(--muted);font-size:13px;font-weight:600">' + esc(arc ? "Live leaderboard" : catsLabel(live.settings || {})) + '</div></div><span class="spacer"></span><div class="clock" id="clk">--:--</div></div>' +
       '<div class="tbar"><i id="tb"></i></div><div class="stat"><span><b id="s1">0</b>Playing</span><span><b id="s2">0</b>Answers</span><span><b id="s3">0%</b>Class accuracy</span></div>' +
       '<div id="tbl"></div><div class="row" style="margin-top:18px"><button class="btn ghost" id="end">End now</button></div>');
     $("#end").onclick = async function () { if (!confirm("End the round for everyone?")) return; try { await rpc("live_end", { p_code: live.code }); } catch (e) { toast(e.message); } };
@@ -298,6 +308,13 @@ function accCls(a) { return a >= 80 ? "g" : a >= 60 ? "m" : "r"; }
 function drawTable(box, final) {
   if (!box) return;
   var list = players.filter(function (p) { return p.round === live.round; }).slice().sort(function (a, b) { return b.value - a.value || b.correct - a.correct; });
+  if (gameOf(live.settings) === "arcade") {
+    box.style.overflowX = "auto";
+    box.innerHTML = '<table><thead><tr><th></th><th>Student</th><th style="text-align:right">Points</th><th style="text-align:right">✓ / ✗</th><th style="text-align:right">Accuracy</th></tr></thead><tbody>' +
+      list.map(function (p, i) { var t = p.correct + p.wrong, a = t ? Math.round(p.correct / t * 100) : 0;
+        return "<tr" + (p.online || final ? "" : ' style="opacity:.5"') + "><td>" + (i + 1) + '</td><td><div class="who">' + av(p) + "<span>" + esc(p.name) + '</span><span class="hide-sm">' + chipStage(p) + '</span></div></td><td style="text-align:right;font-weight:800">' + Number(p.value || 0).toLocaleString("en-US") + '</td><td style="text-align:right">' + p.correct + " / " + p.wrong + '</td><td style="text-align:right">' + (t ? '<span class="acc ' + accCls(a) + '">' + a + "%</span>" : "–") + "</td></tr>"; }).join("") + "</tbody></table>";
+    return;
+  }
   box.style.overflowX = "auto";
   box.innerHTML = '<table><thead><tr><th></th><th>Student</th><th>Level</th><th class="hide-sm">Park</th><th style="text-align:right">Value</th><th style="text-align:right">✓ / ✗</th><th style="text-align:right">Accuracy</th></tr></thead><tbody>' +
     list.map(function (p, i) {
@@ -327,11 +344,12 @@ function screenResults() {
   screen = "res"; finalKey = key;
   var topL = [list[1], list[0], list[2]], cls = ["p2", "p1", "p3"], place = [2, 1, 3], c = 0, w = 0;
   list.forEach(function (p) { c += p.correct; w += p.wrong; });
-  render(top('<h1>Round over!</h1><p class="lead">Sugar Town · ' + esc(catsLabel(live.settings || {})) + "</p>") +
-    '<div class="podium">' + topL.map(function (p, i) { return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.name) + '</b><div class="bar"><span>' + ["", "1st", "2nd", "3rd"][place[i]] + "</span><small>" + money(p.value) + "</small></div></div>" : "<div></div>"; }).join("") + "</div>" +
+  var arcR = gameOf(live.settings) === "arcade";
+  render(top('<h1>Round over!</h1><p class="lead">' + esc(gameName(live.settings)) + " · " + esc(arcR ? "Live leaderboard" : catsLabel(live.settings || {})) + "</p>") +
+    '<div class="podium">' + topL.map(function (p, i) { return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.name) + '</b><div class="bar"><span>' + ["", "1st", "2nd", "3rd"][place[i]] + "</span><small>" + (arcR ? Number(p.value || 0).toLocaleString("en-US") + " pts" : money(p.value)) + "</small></div></div>" : "<div></div>"; }).join("") + "</div>" +
     '<div class="stat"><span><b>' + list.length + "</b>Students</span><span><b>" + (c + w) + "</b>Answers</span><span><b>" + (c + w ? Math.round(c / (c + w) * 100) + "%" : "–") + '</b>Class accuracy</span></div>' +
     '<div class="label">Report</div><div id="tbl"></div>' +
-    '<p class="note">Level shows how far each student climbed inside their stage. Lime = levels reached · outlined = where they finished.</p><p class="note">Students below 60% accuracy are shown in red: a good idea to review with them.</p>' +
+    (arcR ? "" : '<p class="note">Level shows how far each student climbed inside their stage. Lime = levels reached · outlined = where they finished.</p>') + '<p class="note">Students below 60% accuracy are shown in red: a good idea to review with them.</p>' +
     '<div class="row"><button class="btn primary" id="again">Play again</button><button class="btn ghost" id="opts">Change options</button></div>' +
     '<p class="note"><a href="#" id="close" style="color:var(--muted)">Close game session</a></p>');
   drawTable($("#tbl"), true);

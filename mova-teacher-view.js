@@ -10,7 +10,8 @@
   function on() { var s = sess(); return !!(s && s.refresh); }
   if (!on()) return;
   var page = (location.pathname.split("/").pop() || "index.html").toLowerCase();
-  if (page !== "" && page !== "index.html") return;
+  var RUTA = page === "ruta.html";
+  if (page !== "" && page !== "index.html" && !RUTA) return;
 
   /* ---------- sesión compartida con el panel (nunca cierra sola) ---------- */
   var refreshing = null;
@@ -83,28 +84,49 @@
 
   /* ---------- qué es cada enlace ---------- */
   function PATH() { return window.MOVA_PATH || {}; }
-  function findTopic(id) { var D = PATH(); for (var s in D) for (var l in D[s]) { var t = (D[s][l].topics || []).filter(function (x) { return x.id === id; })[0]; if (t) return { t: t, s: s, l: l }; } return null; }
+  var KN = { topics: "Grammar", writing: "Writing", phonics: "Phonics" };
+  function findTopic(id) { var D = PATH(); for (var s in D) for (var l in D[s]) for (var k in KN) { var t = (D[s][l][k] || []).filter(function (x) { return x.id === id; })[0]; if (t) return { t: t, s: s, l: l, k: KN[k] }; } return null; }
   var SN = { kids: "Kids", children: "Children", teens: "Teens" };
   function itemOf(a) {
     var h = a.getAttribute("href") || "", m;
-    if ((m = h.match(/^ruta\.html#\/t\/([^\/?#]+)/))) { var id = decodeURIComponent(m[1]), f = findTopic(id); if (!f) return null; return { key: "t:" + id, title: f.t.t + " · Grammar " + SN[f.s] + " " + f.l, name: f.t.t, sub: "Grammar · " + SN[f.s] + " " + f.l }; }
+    if (RUTA && /^#\//.test(h)) h = "ruta.html" + h;
+    if ((m = h.match(/^ruta\.html#\/t\/([^\/?#]+)/))) { var id = decodeURIComponent(m[1]), f = findTopic(id); if (!f) return null; return { key: "t:" + id, title: f.t.t + " · " + f.k + " " + SN[f.s] + " " + f.l, name: f.t.t, sub: f.k + " · " + SN[f.s] + " " + f.l }; }
+    if ((m = h.match(/^#\/lecturas\/([a-z0-9-]+)$/))) { var art = a.closest("article"), tt = (a.textContent || "").trim(), gr = art && art.querySelector(".chip") ? art.querySelector(".chip").textContent.trim() : ""; if (!tt || /^(anterior|siguiente|previous|next)/i.test(tt)) return null; return { key: "e:" + m[1], title: tt + " · Lectura" + (gr ? " " + gr : ""), name: tt, sub: "Lectura en español" + (gr ? " · " + gr : "") }; }
     if ((m = h.match(/^ruta\.html#\/vocab\/([a-z]+)\/([^\/]+)\/(\d+)/))) { var st2 = m[1], lv = decodeURIComponent(m[2]), D = PATH(), V = D[st2] && D[st2][lv] && D[st2][lv].vocab[+m[3]]; if (!V) return null; return { key: "v:" + st2 + "|" + lv + "|" + m[3], title: V.n + " · Flashcards " + SN[st2] + " " + lv, name: V.n, sub: "Flashcards · " + SN[st2] + " " + lv }; }
     if ((m = h.match(/^ruta\.html#\/xv\/([^\/?#]+)/))) { var X = (window.MOVA_FC_EXTRA || []).filter(function (x) { return x.id === m[1]; })[0]; if (!X) return null; return { key: "xv:" + X.id, title: X.n + " · Flashcards", name: X.n, sub: "Flashcards · bonus deck" }; }
     if ((m = h.match(/^#\/library\/([a-z0-9-]+)$/))) { var R = null; try { R = (typeof READINGS !== "undefined" ? READINGS : []).filter(function (x) { return x.id === m[1]; })[0]; } catch (e) {} if (!R) return null; return { key: "r:" + R.id, title: R.title + " · Reading " + (R.level || ""), name: R.title, sub: "Reading · " + (R.level || "") }; }
     if ((m = h.match(/^(?:\.\/)?juego-([a-z0-9-]+)\.html/))) { var sl = m[1]; if (/^(retos|live)$/.test(sl)) return null; var nm = ((a.querySelector("b, h3, strong") || a).textContent || sl).trim().split("\n")[0].slice(0, 60); return { key: sl, title: nm, name: nm, sub: "Game" }; }
     return null;
   }
+  function scanRuta() {
+    if (!RUTA) return;
+    document.querySelectorAll("button.u[data-id]").forEach(function (b0) {
+      if (b0.__tvh) return; b0.__tvh = 1;
+      var f = findTopic(b0.dataset.id); if (!f) return;
+      var it = { key: "t:" + f.t.id, title: f.t.t + " · " + f.k + " " + SN[f.s] + " " + f.l, name: f.t.t, sub: f.k + " · " + SN[f.s] + " " + f.l };
+      if (getComputedStyle(b0).position === "static") b0.style.position = "relative";
+      var x = document.createElement("span"); x.className = "tvasg"; x.setAttribute("role", "button"); x.textContent = "+ Assign"; x.style.top = "50%"; x.style.transform = "translateY(-50%)";
+      x.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation(); openSheet(it); }, true);
+      b0.appendChild(x);
+    });
+  }
   function scan() {
     if (!on()) return;
-    bar();
+    bar(); scanRuta();
     var root = document.getElementById("main") || document.getElementById("app") || document.body;
     root.querySelectorAll("a[href]").forEach(function (a) {
       if (a.__tv || a.closest(".tvbar, .tvs, .tabbar, .mr-back, .mva-retos")) return; a.__tv = 1;
       var it = itemOf(a); if (!it) return;
-      if (getComputedStyle(a).position === "static") a.style.position = "relative";
-      var b = document.createElement("button"); b.type = "button"; b.className = "tvasg"; b.textContent = "+ Assign";
-      b.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation(); openSheet(it); });
-      a.appendChild(b);
+      var host = a.classList.contains("stretch") && a.closest("article") ? a.closest("article") : a;
+      if (host.__tvh) return; host.__tvh = 1;
+      if (getComputedStyle(host).position === "static") host.style.position = "relative";
+      var add = function (item, label, top) {
+        var b = document.createElement("button"); b.type = "button"; b.className = "tvasg"; b.textContent = label; if (top) b.style.top = top;
+        b.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation(); openSheet(item); });
+        host.appendChild(b);
+      };
+      add(it, "+ Assign");
+      if (it.key === "toefl-practice") add({ key: "toefl-sim", title: "TOEFL Quick Simulation", name: "TOEFL Quick Simulation", sub: "Exam · 4 parts · 25 questions · 18 minutes" }, "+ Assign simulation", "44px");
     });
   }
 

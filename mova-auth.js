@@ -48,6 +48,7 @@
     var row = { p_token: user.token, p_activity: activity, p_item: item || null,
       p_score: score == null ? null : Math.round(score), p_total: total == null ? null : Math.round(total), p_detail: detail || {} };
     row.p_detail.uid = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    try { if (window.__movaLiveHook) window.__movaLiveHook(activity, item, score, total, detail); } catch (e) {}
     if (window.__movaTaskId && (gameSlug() ? activity === gameSlug() : activity === "ruta" || /^app-(library|lecturas)$/.test(activity) && detail && detail.kind === "done")) {
       if (score != null || (detail && detail.kind && detail.kind !== "time")) {
         if (row.p_detail.task == null) row.p_detail.task = window.__movaTaskId;
@@ -591,6 +592,7 @@
     if (k.indexOf("v:") === 0) { var va = k.slice(2).split("|"); return "ruta.html" + q + "#/vocab/" + va[0] + "/" + encodeURIComponent(va[1]) + "/" + va[2]; }
     if (k.indexOf("xv:") === 0) return "ruta.html" + q + "#/xv/" + encodeURIComponent(k.slice(3));
     if (k.indexOf("r:") === 0) return "index.html" + q + "#/library/" + encodeURIComponent(k.slice(2));
+    if (k.indexOf("e:") === 0) return "index.html" + q + "#/lecturas/" + encodeURIComponent(k.slice(2));
     if (k === "toefl-sim") return "juego-toefl-practice.html" + q + "#sim";
     if (k === "lectura") return "index.html" + q + "#/library";
     return "juego-" + k + ".html" + q;
@@ -647,7 +649,7 @@
   }
   /* ---------- Assigned activities: tarjeta fija en el inicio, en My Progress y número en "Me" ---------- */
   var asgCache = null, asgAt = 0, asgBusy = false;
-  function asgKind(t) { var k = taskKey(t); return /^t:/.test(k) ? ["G", "#D3F36B", "Grammar"] : /^(v|xv):/.test(k) ? ["F", "#FFC7E2", "Vocabulary"] : /^r:|^lectura$/.test(k) ? ["R", "#FFE58A", "Reading"] : k === "toefl-sim" || k === "level-up" ? ["E", "#C9D2FF", "Exam"] : ["P", "#BDF0D8", "Game"]; }
+  function asgKind(t) { var k = taskKey(t); return /^t:/.test(k) ? ["G", "#D3F36B", "Grammar"] : /^(v|xv):/.test(k) ? ["F", "#FFC7E2", "Vocabulary"] : /^e:/.test(k) ? ["L", "#FFE58A", "Lectura"] : /^r:|^lectura$/.test(k) ? ["R", "#FFE58A", "Reading"] : k === "toefl-sim" || k === "level-up" ? ["E", "#C9D2FF", "Exam"] : ["P", "#BDF0D8", "Game"]; }
   function asgLoad(cb) {
     if (!user) return cb(null);
     if (asgCache && Date.now() - asgAt < 60000) return cb(asgCache);
@@ -721,6 +723,7 @@
   window.MovaAuth = { save: save, user: function () { return user; }, login: showLogin };
   function boot() {
     /* Opciones de tareas: vista previa de la maestra o tarea del alumno */
+    if (gameSlug() && /[?&]live=\d{4}/.test(location.search) && !window.__movaLiveLoaded) { window.__movaLiveLoaded = 1; var ls = document.createElement("script"); ls.src = "mova-live-play.js?v=84"; document.head.appendChild(ls); }
     if (gameSlug() && /[?&](pick|pickmode)=/.test(location.search) && !window.__movaTaskLoaded) { window.__movaTaskLoaded = 1; var ts = document.createElement("script"); ts.src = "mova-task.js?v=65"; document.head.appendChild(ts); }
     /* En la vista previa del panel de maestras no se registra nada */
     if (/[?&]pickmode=1/.test(location.search)) return;
