@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Signos y jerarquía · MOVA</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script src="mova-gate.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F3FA; --surface:#fff; --surface2:#ECE9F3; --navy:#15192B; --ink:#15192B; --ink2:#4E5268; --muted:#6A6F85; --line:#E4E0EE;
+  --lime:#D3F36B; --limeS:#F1FBD0; --limeD:#4F6B00;
+  --lila:#9C8BFF; --lilaS:#E6E2FF; --lilaD:#4B3BB0;
+  --rosa:#FF8FC0; --rosaS:#FFE6F2; --rosaD:#A3345C;
+  --yel:#FFD54A; --yelS:#FFF1C2; --yelD:#7A5A00;
+  --cream:#F5F3FA; --white:#fff;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0;min-height:100%}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased}
+h1,h2,h3,.big,.ttl{font-family:'Bricolage Grotesque','Plus Jakarta Sans',sans-serif;letter-spacing:-.02em}
+button{font-family:inherit;cursor:pointer;border:0;color:inherit;background:none}
+a{color:inherit}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--lila);outline-offset:3px}
+.app{max-width:560px;margin:0 auto;padding:16px 16px 48px}
+/* encabezado */
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 14px;min-height:56px}
+.bkw{display:flex;align-items:center;gap:12px;text-align:left}
+.bk{flex:none;width:52px;height:52px;border-radius:50%;border:2.5px solid var(--ink);display:grid;place-items:center;background:transparent}
+.bkw small{display:block;font-size:13px;color:var(--muted);font-weight:500;line-height:1.1}
+.bkw b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:21px;line-height:1.15}
+.pill{font-size:12px;font-weight:800;padding:8px 14px;border-radius:999px;background:var(--navy);color:#fff}
+/* vitrina principal, igual a la app */
+.ms-hero{position:relative;overflow:hidden;background:var(--c,#C7B5FF);color:#15192B;border-radius:30px;padding:24px 22px 26px;min-height:200px;margin:0 0 18px}
+.ms-hero h1{font-size:clamp(34px,9.5vw,46px);line-height:.98;letter-spacing:-.03em;margin:14px 0 10px;color:#15192B}
+.ms-hero p{margin:0;font-size:15px;line-height:1.55;color:#2B2F45;max-width:30ch}
+.ms-hx{position:relative;z-index:2;max-width:64%}
+.ms-art{position:absolute;right:-6px;bottom:-12px;width:44%;max-width:210px;z-index:1;pointer-events:none}
+.ms-art svg{width:100%;height:auto;display:block}
+.ms-dot{position:absolute;border-radius:50%;background:#fff;opacity:.45}
+.ms-dot.a{width:120px;height:120px;right:-32px;top:-36px}
+.ms-dot.b{width:14px;height:14px;right:46%;top:28px;opacity:.8}
+.ms-dot.c{width:9px;height:9px;right:36%;top:66px;background:#15192B;opacity:.18}
+.ms-dk{background:#15192B;color:#fff}
+.ms-dk h1{color:#fff}.ms-dk p{color:#C9CCE0}
+.ms-dk .ms-dot.a{background:#2A3150;opacity:1}.ms-dk .ms-dot.b{background:#FFD54A;opacity:1}.ms-dk .ms-dot.c{background:#FF8FC0;opacity:1}
+.mp-k{display:inline-block;background:#fff;color:#15192B;font-size:12.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:8px 15px;border-radius:999px}
+.ms-dk .mp-k{background:var(--lime)}
+.ms-h{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;margin:22px 4px 4px}
+.ms-sub{margin:0 4px 14px;color:var(--muted);font-size:14px;line-height:1.45}
+/* vitrinas de Prácticas y Juegos */
+.vit{display:block;background:#fff;border-radius:28px;padding:8px 8px 18px;text-decoration:none;color:var(--ink);box-shadow:0 10px 30px -18px rgba(54,40,120,.45);margin-bottom:14px;width:100%;text-align:left}
+.vit:active{transform:scale(.985)}
+.vit .th{display:block;position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:var(--lilaS)}
+.vit .th img{width:100%;height:100%;object-fit:cover;display:block}
+.vit .th .k{position:absolute;left:14px;top:14px;background:#15192B;color:var(--lime);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;border-radius:999px}
+.vit .tx{display:block;padding:14px 12px 0}
+.vit b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:28px;line-height:1.05;letter-spacing:-.02em}
+.vit .d{display:block;font-size:15px;color:var(--muted);line-height:1.5;margin-top:6px}
+.vit .ft{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips em{font-style:normal;font-size:11.5px;font-weight:700;border-radius:999px;padding:5px 10px}
+.c1{background:#FFE1EA;color:#A3345C}.c2{background:#E6E2FF;color:#4B3BB0}.c3{background:#DCF4EA;color:#1F6E4E}.c4{background:#FFF1C2;color:#7A5A00}
+.goB{flex:none;width:44px;height:44px;border-radius:50%;background:#15192B;color:#fff;display:grid;place-items:center}
+.mini{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#fff;border-radius:24px;padding:14px 16px;box-shadow:0 10px 30px -18px rgba(54,40,120,.45);text-decoration:none;color:var(--ink)}
+.mini .ic{flex:none;width:50px;height:50px;border-radius:16px;display:grid;place-items:center;background:var(--yelS);color:var(--ink)}
+.mini b{display:block;font-size:16px;color:var(--ink)}.mini span{display:block;font-size:13px;color:var(--muted);line-height:1.4;margin-top:2px}
+/* grados */
+.sect{font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:700;margin:22px 4px 10px;display:flex;align-items:center;gap:10px}
+.sect i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.sect small{display:block;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:500;color:var(--muted);margin-top:2px}
+.grades{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gr{border-radius:22px;padding:16px 8px 14px;text-align:center;background:#fff;box-shadow:0 10px 26px -18px rgba(54,40,120,.5)}
+.gr b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:32px;line-height:1}
+.gr span{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-top:5px}
+.pc{display:flex;gap:14px;align-items:center;width:100%;text-align:left;background:#fff;border-radius:24px;padding:16px;margin-bottom:10px;box-shadow:0 10px 30px -18px rgba(54,40,120,.45)}
+.pc .ic{flex:none;width:56px;height:56px;border-radius:18px;display:grid;place-items:center}
+.pc b{display:block;font-size:16px;line-height:1.3;color:var(--ink)}
+.pc span{display:block;font-size:13px;color:var(--muted);line-height:1.4;margin-top:3px}
+.pc .tg{display:inline-block;font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;margin-top:8px}
+.pc[disabled]{cursor:default}
+.ggrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gm{display:flex;flex-direction:column;background:#fff;border-radius:22px;padding:7px 7px 12px;text-decoration:none;color:var(--ink);box-shadow:0 8px 24px -16px rgba(54,40,120,.4)}
+.gm img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:16px;background:#EEE9FB}
+.gm b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;line-height:1.15;padding:10px 6px 0}
+.gm span{display:block;font-size:12.5px;color:var(--muted);padding:4px 6px 0;line-height:1.35}
+.empty{background:#fff;border-radius:24px;padding:20px;color:var(--muted);font-size:14px;line-height:1.5}
+/* tarjetas de práctica */
+.card{background:#fff;border-radius:30px;padding:24px 20px;box-shadow:0 10px 30px -18px rgba(54,40,120,.45);margin-bottom:16px}
+h1{font-size:30px;line-height:1.05;margin:6px 0 10px;font-weight:800}
+h2{font-size:23px;line-height:1.15;margin:0 0 8px;font-weight:700}
+h3{font-size:18px;margin:0 0 6px;font-weight:700}
+p{margin:0 0 12px;line-height:1.6;font-size:15px}
+.muted{color:var(--muted)}
+.signs{display:flex;gap:8px;margin-bottom:14px}
+.sg{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:22px;color:var(--navy)}
+.facts{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
+.fact{font-size:13px;font-weight:700;padding:8px 12px;border-radius:14px;background:var(--paper)}
+label.f{display:block;font-size:14px;font-weight:700;margin:18px 0 8px}
+input.name{width:100%;font:inherit;font-size:16px;padding:14px 16px;border-radius:16px;border:2px solid var(--line);background:#fff;color:var(--ink)}
+.levels{display:grid;gap:10px;margin-top:4px}
+.lvl{text-align:left;padding:16px;border-radius:20px;background:#fff;border:2px solid var(--line);display:flex;gap:14px;align-items:center}
+.lvl .dot{flex:none;width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-weight:800}
+.lvl b{display:block;font-size:15px;color:var(--ink)}
+.lvl span{display:block;font-size:13px;color:var(--muted);line-height:1.4}
+.lvl[aria-pressed="true"]{border-color:var(--navy);box-shadow:0 0 0 3px rgba(21,25,43,.08)}
+.btn{display:block;width:100%;padding:17px;border-radius:999px;background:var(--navy);color:#fff;font-weight:800;font-size:16px;margin-top:18px;box-shadow:0 4px 0 var(--lime)}
+.btn:disabled{opacity:.35;cursor:default;box-shadow:none}
+.btn.ghost{background:#fff;color:var(--navy);border:2.5px solid var(--navy);box-shadow:none}
+.err{color:var(--rosaD);font-size:13px;margin-top:8px;min-height:18px}
+.tchip{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;padding:7px 12px;border-radius:999px}
+.rule{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1.5px dashed var(--line)}
+.rule:first-of-type{border-top:0}
+.rule .n{flex:none;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:14px}
+.rule p{margin:0;font-size:14.5px}
+.visual{background:var(--paper);border-radius:20px;padding:14px;margin:14px 0}
+.visual svg{display:block;width:100%;height:auto}
+.steps{margin:6px 0 0;padding:0;list-style:none}
+.steps li{display:flex;gap:12px;padding:10px 0;border-top:1.5px dashed var(--line);font-size:15px;line-height:1.5}
+.steps li:first-child{border-top:0}
+.steps .k{flex:none;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center;margin-top:1px}
+.expr{font-weight:800;white-space:nowrap}
+.progress{height:10px;border-radius:999px;background:var(--surface2);overflow:hidden;margin-bottom:14px}
+.progress i{display:block;height:100%;border-radius:999px;transition:width .35s ease}
+.qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.qnum{font-size:13px;color:var(--muted);font-weight:700}
+.recuerda{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;padding:8px 12px;border-radius:999px;background:var(--yelS)}
+.prompt{font-size:15px;color:var(--muted);margin:14px 0 4px}
+.big{font-size:clamp(28px,8vw,40px);font-weight:800;margin:4px 0 16px;overflow-x:auto;white-space:nowrap}
+.ansbox{display:flex;align-items:center;justify-content:center;height:64px;border-radius:18px;border:2.5px solid var(--line);font-size:30px;font-weight:800;margin-bottom:12px;background:#fff;font-family:'Bricolage Grotesque',sans-serif}
+.ansbox.empty{color:#B9B5C9;font-size:16px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif}
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pad button{height:56px;border-radius:16px;background:var(--paper);font-size:22px;font-weight:800}
+.pad button.sp{font-size:15px}
+.pad button:active{transform:scale(.97)}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;padding:16px;border-radius:18px;border:2px solid var(--line);background:#fff;font-size:16px;font-weight:700}
+.opt[aria-pressed="true"]{border-color:var(--navy);background:var(--paper)}
+.fb{border-radius:22px;padding:18px;margin-top:14px}
+.fb.ok{background:var(--limeS)} .fb.no{background:var(--rosaS)}
+.fb h3{display:flex;align-items:center;gap:8px}
+.fb .steps li{border-color:rgba(21,25,43,.12)}
+.sheet{position:fixed;inset:0;background:rgba(21,25,43,.45);display:none;align-items:flex-end;justify-content:center;z-index:30}
+.sheet.on{display:flex}
+.sheet .in{background:#fff;width:100%;max-width:560px;border-radius:30px 30px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom,0px));max-height:85vh;overflow:auto;animation:up .25s ease}
+@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.score{display:flex;align-items:center;gap:18px;margin:8px 0 6px}
+.ring{flex:none;width:118px;height:118px}
+.bars{margin-top:8px}
+.bar{margin:12px 0}
+.bar .l{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:6px}
+.bar .t{height:12px;border-radius:999px;background:var(--paper);overflow:hidden}
+.bar .t i{display:block;height:100%;border-radius:999px}
+.letter{background:var(--paper);border-radius:22px;padding:20px}
+.letter p{font-size:15px}
+.sign{font-weight:800;font-size:14px;margin-top:6px}
+.rec{display:flex;gap:14px;align-items:center;padding:14px;border-radius:20px;border:2px solid var(--line);margin-top:10px}
+.rec .ic{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center}
+.rec b{display:block;font-size:15px;color:var(--ink)}
+.rec span{display:block;font-size:13px;color:var(--muted);line-height:1.4}
+.foot{display:none}
+/* barra inferior de la app (solo vista previa) */
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom,0px));width:calc(100% - 24px);max-width:536px;background:#15192B;border-radius:30px;padding:8px;display:grid;grid-template-columns:repeat(6,1fr);gap:2px;z-index:20;pointer-events:none}
+.nav span{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0;border-radius:22px;color:#A9ADC4;font-size:11px;font-weight:700}
+.nav span.on{background:var(--lime);color:#15192B}
+.nav svg{width:22px;height:22px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Recuerda"><div class="in" id="sheetIn"></div></div>
+
+<script>
+(function(){
+"use strict";
+var $app=document.getElementById('app'), $sheet=document.getElementById('sheet'), $sheetIn=document.getElementById('sheetIn');
+
+/* ---------- utilidades ---------- */
+function R(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function NZ(a,b){var n;do{n=R(a,b)}while(n===0);return n}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+var M='\u2212';
+function f(n){return n<0?M+Math.abs(n):String(n)}
+function t(n){return n<0?'('+M+Math.abs(n)+')':String(n)}
+function E(s){return '<span class="expr">'+s+'</span>'}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function sgnW(n){return n<0?'negativo':'positivo'}
+
+/* ---------- temas ---------- */
+var TOPICS=[
+ {id:'suma',name:'Suma y resta de números con signo',short:'Suma y resta con signo',c:'--lime',s:'--limeS',d:'--limeD'},
+ {id:'mult',name:'Multiplicación y división con signos',short:'Multiplicación y división',c:'--lila',s:'--lilaS',d:'--lilaD'},
+ {id:'jer',name:'Jerarquía de operaciones',short:'Jerarquía de operaciones',c:'--rosa',s:'--rosaS',d:'--rosaD'}
+];
+function cv(v){return 'var('+v+')'}
+
+/* Errores típicos: texto de retroalimentación en primera persona */
+var TAGS={
+ signo:{topic:'suma',say:'a veces obtienes la cantidad correcta, pero el signo del resultado no',fix:'Fíjate en cuál número es mayor sin su signo: ese signo es el que se queda.'},
+ difSigns:{topic:'suma',say:'cuando los números tienen signos diferentes, en algunos casos los sumas',fix:'Con signos diferentes se restan los valores y se queda el signo del mayor.'},
+ noCambio:{topic:'suma',say:'al restar un número negativo, se te olvida cambiarle el signo',fix:'Restar un negativo es lo mismo que sumar: 5 '+M+' ('+M+'3) = 5 + 3.'},
+ leySignos:{topic:'mult',say:'en la ley de los signos todavía hay confusión al decidir si el resultado es positivo o negativo',fix:'Signos iguales dan positivo; signos diferentes dan negativo. Cuenta cuántos negativos hay: si son pares, el resultado es positivo.'},
+ tablas:{topic:'mult',say:'el signo lo pones bien, pero hay errores en la multiplicación o la división',fix:'Vale la pena repasar las tablas de multiplicar del 6 al 9.'},
+ izqDer:{topic:'jer',say:'resuelves de izquierda a derecha sin respetar la jerarquía',fix:'Las multiplicaciones y divisiones van antes que las sumas y restas, aunque estén a la derecha.'},
+ parentesis:{topic:'jer',say:'a veces no resuelves primero lo que está dentro del paréntesis',fix:'El paréntesis siempre es lo primero: resuélvelo y luego continúa.'},
+ potencia:{topic:'jer',say:'las potencias todavía te confunden',fix:'Una potencia es multiplicar el número por sí mismo: 3² = 3 × 3 = 9, no 3 × 2. Va antes que la multiplicación.'},
+ calculo:{topic:null,say:'hubo algunos errores pequeños de cálculo',fix:'Haz cada operación con calma y revisa antes de comprobar.'}
+};
+
+/* ---------- pasos para una suma con signo ---------- */
+function sumSteps(a,b){
+  var s=[], ans=a+b;
+  if((a<0)===(b<0)){
+    s.push('Los dos números tienen el mismo signo ('+(a<0?'negativo':'positivo')+'), así que se suman: '+E(Math.abs(a)+' + '+Math.abs(b)+' = '+(Math.abs(a)+Math.abs(b)))+'.');
+    s.push('El resultado conserva ese signo: '+E(f(ans))+'.');
+  }else{
+    var big=Math.abs(a)>=Math.abs(b)?a:b, sm=big===a?b:a;
+    s.push('Los signos son diferentes, así que se restan: '+E(Math.abs(big)+' '+M+' '+Math.abs(sm)+' = '+Math.abs(ans))+'.');
+    s.push(ans===0?'Como valen lo mismo, el resultado es '+E('0')+'.':'Se queda el signo del número mayor ('+f(big)+'), que es '+sgnW(big)+': '+E(f(ans))+'.');
+  }
+  return s;
+}
+
+/* ---------- generadores ---------- */
+function W(obj,val,tag,ans){if(val!==ans&&obj[val]===undefined)obj[val]=tag}
+
+var GEN={
+ suma:{
+  base:[
+   function(){var a=NZ(-9,9),b=NZ(-9,9);if(a>0&&b>0)a=-a;var ans=a+b,w={};W(w,-ans,'signo',ans);
+     if((a<0)!==(b<0)){var m=Math.abs(a)+Math.abs(b);W(w,m,'difSigns',ans);W(w,-m,'difSigns',ans)}
+     return{type:'num',disp:t(a).replace(/^\((.*)\)$/,'$1')+' + '+t(b),ans:ans,w:w,steps:sumSteps(a,b)}},
+   function(){var a=NZ(-9,9),b=NZ(-9,9);if(b>0&&Math.random()<.6)b=-b;var ans=a-b,w={};W(w,a+b,'noCambio',ans);W(w,-ans,'signo',ans);
+     var st=['Restar es sumar el opuesto: '+E(f(a)+' '+M+' '+t(b))+' se convierte en '+E(f(a)+' + '+t(-b))+'.'].concat(sumSteps(a,-b));
+     return{type:'num',disp:f(a)+' '+M+' '+t(b),ans:ans,w:w,steps:st}},
+   function(){var a=NZ(-15,15),b=NZ(-15,15);if((a<0)===(b<0))b=-b;if(Math.abs(a)===Math.abs(b))b+=b>0?1:-1;var ans=a+b;
+     return{type:'opt',prompt:'Sin resolver toda la operación, ¿qué signo tendrá el resultado?',disp:f(a)+' + '+t(b),
+       opts:['Positivo','Negativo'],ans:ans>0?0:1,tag:'signo',
+       steps:['Los signos son diferentes, así que manda el número mayor sin su signo: '+E(String(Math.max(Math.abs(a),Math.abs(b))))+'.','Ese número es '+sgnW(Math.abs(a)>Math.abs(b)?a:b)+', así que el resultado es '+(ans>0?'positivo':'negativo')+' ('+E(f(ans))+').']}}
+  ],
+  grado:[
+   function(){var a=NZ(-25,25),b=NZ(-25,25);if(a>0&&b>0)b=-b;var ans=a+b,w={};W(w,-ans,'signo',ans);
+     if((a<0)!==(b<0)){var m=Math.abs(a)+Math.abs(b);W(w,m,'difSigns',ans);W(w,-m,'difSigns',ans)}
+     return{type:'num',disp:f(a)+' + '+t(b),ans:ans,w:w,steps:sumSteps(a,b)}},
+   function(){var a=NZ(-20,20),b=-R(3,20);var ans=a-b,w={};W(w,a+b,'noCambio',ans);W(w,-ans,'signo',ans);
+     var st=['Restar un negativo es sumar: '+E(f(a)+' '+M+' '+t(b))+' se convierte en '+E(f(a)+' + '+(-b))+'.'].concat(sumSteps(a,-b));
+     return{type:'num',disp:f(a)+' '+M+' '+t(b),ans:ans,w:w,steps:st}},
+   function(){var a=NZ(-15,15),b=NZ(-15,15),c=NZ(-15,15);var ans=a+b-c,w={};W(w,a+b+c,'noCambio',ans);W(w,-ans,'signo',ans);
+     var terms=[a,b,-c],p=0,n=0;terms.forEach(function(x){if(x>0)p+=x;else n+=x});
+     var st=['Convierto la resta en suma del opuesto: '+E(f(a)+' + '+t(b)+' + '+t(-c))+'.',
+       'Sumo los positivos: '+E(String(p))+'. Sumo los negativos: '+E(f(n))+'.'].concat(sumSteps(p,n).slice(-1).map(function(x){return 'Ahora '+E(p+' + '+t(n))+': '+x.charAt(0).toLowerCase()+x.slice(1)}));
+     return{type:'num',disp:f(a)+' + '+t(b)+' '+M+' '+t(c),ans:ans,w:w,steps:st}},
+   function(){var a=NZ(-30,30),b=NZ(-30,30);if((a<0)===(b<0))b=-b;if(Math.abs(a)===Math.abs(b))b+=b>0?2:-2;var ans=a+b;
+     return{type:'opt',prompt:'Sin resolver toda la operación, ¿qué signo tendrá el resultado?',disp:f(a)+' + '+t(b),
+       opts:['Positivo','Negativo'],ans:ans>0?0:1,tag:'signo',
+       steps:['Los signos son diferentes, así que manda el número mayor sin su signo: '+E(String(Math.max(Math.abs(a),Math.abs(b))))+'.','Ese número es '+sgnW(Math.abs(a)>Math.abs(b)?a:b)+', así que el resultado es '+(ans>0?'positivo':'negativo')+' ('+E(f(ans))+').']}}
+  ]
+ },
+ mult:{
+  base:[
+   function(){var a=NZ(-9,9),b=NZ(-9,9);if(a>0&&b>0)(Math.random()<.5?a=-a:b=-b);var ans=a*b,w={};W(w,-ans,'leySignos',ans);
+     return{type:'num',disp:f(a)+' × '+t(b),ans:ans,w:w,tagAbs:'tablas',steps:[
+      'Primero multiplico sin signos: '+E(Math.abs(a)+' × '+Math.abs(b)+' = '+Math.abs(ans))+'.',
+      'Signos: '+((a<0)===(b<0)?'iguales, el resultado es positivo':'diferentes, el resultado es negativo')+'.',
+      'Resultado: '+E(f(ans))+'.']}},
+   function(){var b=NZ(-9,9),q=NZ(-9,9);if(b>0&&q>0)b=-b;var a=b*q,w={};W(w,-q,'leySignos',q);
+     return{type:'num',disp:f(a)+' ÷ '+t(b),ans:q,w:w,tagAbs:'tablas',steps:[
+      'Primero divido sin signos: '+E(Math.abs(a)+' ÷ '+Math.abs(b)+' = '+Math.abs(q))+'.',
+      'Signos: '+((a<0)===(b<0)?'iguales, el resultado es positivo':'diferentes, el resultado es negativo')+'.',
+      'Resultado: '+E(f(q))+'.']}},
+   function(){var k=R(2,3),fs=[],neg=0;for(var i=0;i<k;i++){var x=NZ(-5,5);if(x<0)neg++;fs.push(x)}
+     return{type:'opt',prompt:'¿Qué signo tiene el resultado?',disp:fs.map(t).join(' × '),opts:['Positivo','Negativo'],ans:neg%2===0?0:1,tag:'leySignos',
+      steps:['Cuento los factores negativos: hay '+E(String(neg))+'.',(neg%2===0?'Es un número par, así que el resultado es positivo.':'Es un número impar, así que el resultado es negativo.')]}}
+  ],
+  grado:[
+   function(){var a=NZ(-12,12),b=NZ(-9,9);if(a>0&&b>0)a=-a;var ans=a*b,w={};W(w,-ans,'leySignos',ans);
+     return{type:'num',disp:f(a)+' × '+t(b),ans:ans,w:w,tagAbs:'tablas',steps:[
+      'Multiplico sin signos: '+E(Math.abs(a)+' × '+Math.abs(b)+' = '+Math.abs(ans))+'.',
+      'Signos '+((a<0)===(b<0)?'iguales: positivo':'diferentes: negativo')+'. Resultado: '+E(f(ans))+'.']}},
+   function(){var a=NZ(-6,6),b=NZ(-5,5),c=NZ(-4,4);if(a>0&&b>0&&c>0)c=-c;var ans=a*b*c,neg=[a,b,c].filter(function(x){return x<0}).length,w={};W(w,-ans,'leySignos',ans);
+     return{type:'num',disp:t(a)+' × '+t(b)+' × '+t(c),ans:ans,w:w,tagAbs:'tablas',steps:[
+      'Multiplico sin signos: '+E(Math.abs(a)+' × '+Math.abs(b)+' × '+Math.abs(c)+' = '+Math.abs(ans))+'.',
+      'Hay '+neg+' factor'+(neg===1?'':'es')+' negativo'+(neg===1?'':'s')+': '+(neg%2===0?'par, el resultado es positivo':'impar, el resultado es negativo')+'.',
+      'Resultado: '+E(f(ans))+'.']}},
+   function(){var b=NZ(-12,12),q=NZ(-9,9);if((b<0)===(q<0))q=-q;var a=b*q,w={};W(w,-q,'leySignos',q);
+     return{type:'num',disp:f(a)+' ÷ '+t(b),ans:q,w:w,tagAbs:'tablas',steps:[
+      'Divido sin signos: '+E(Math.abs(a)+' ÷ '+Math.abs(b)+' = '+Math.abs(q))+'.',
+      'Signos '+((a<0)===(b<0)?'iguales: positivo':'diferentes: negativo')+'. Resultado: '+E(f(q))+'.']}},
+   function(){var k=R(3,5),fs=[],neg=0;for(var i=0;i<k;i++){var x=NZ(-6,6);if(x<0)neg++;fs.push(x)}
+     return{type:'opt',prompt:'¿Qué signo tiene el resultado?',disp:fs.map(t).join(''),opts:['Positivo','Negativo'],ans:neg%2===0?0:1,tag:'leySignos',
+      steps:['Cuento los factores negativos: hay '+E(String(neg))+'.',(neg%2===0?'Es un número par, así que el resultado es positivo.':'Es un número impar, así que el resultado es negativo.')]}}
+  ]
+ },
+ jer:{
+  base:[
+   function(){var a=R(2,12),b=R(2,9),c=R(2,9),ans=a+b*c,w={};W(w,(a+b)*c,'izqDer',ans);
+     return{type:'num',disp:a+' + '+b+' × '+c,ans:ans,w:w,steps:['Primero la multiplicación: '+E(b+' × '+c+' = '+(b*c))+'.','Después la suma: '+E(a+' + '+(b*c)+' = '+ans)+'.']}},
+   function(){var b=R(2,6),c=R(2,6),a=b*c+R(3,20),ans=a-b*c,w={};W(w,(a-b)*c,'izqDer',ans);
+     return{type:'num',disp:a+' '+M+' '+b+' × '+c,ans:ans,w:w,steps:['Primero la multiplicación: '+E(b+' × '+c+' = '+(b*c))+'.','Después la resta: '+E(a+' '+M+' '+(b*c)+' = '+ans)+'.']}},
+   function(){var a=R(2,9),b=R(2,9),c=R(2,6),ans=(a+b)*c,w={};W(w,a+b*c,'parentesis',ans);
+     return{type:'num',disp:'('+a+' + '+b+') × '+c,ans:ans,w:w,steps:['Primero el paréntesis: '+E(a+' + '+b+' = '+(a+b))+'.','Después la multiplicación: '+E((a+b)+' × '+c+' = '+ans)+'.']}},
+   function(){var c=R(2,6),k=R(2,8),b=c*k,a=R(2,15),ans=a+k,w={};var wr=(a+b)/c;if(wr===Math.floor(wr))W(w,wr,'izqDer',ans);
+     return{type:'num',disp:a+' + '+b+' ÷ '+c,ans:ans,w:w,steps:['Primero la división: '+E(b+' ÷ '+c+' = '+k)+'.','Después la suma: '+E(a+' + '+k+' = '+ans)+'.']}},
+   function(){var a=R(2,6),b=R(2,9),c=R(2,6),d=R(1,b-1>1?b-1:1);var ans=a*(b-d)+c,w={};W(w,a*b-d+c,'parentesis',ans);
+     return{type:'num',disp:a+' × ('+b+' '+M+' '+d+') + '+c,ans:ans,w:w,steps:['Primero el paréntesis: '+E(b+' '+M+' '+d+' = '+(b-d))+'.','Después la multiplicación: '+E(a+' × '+(b-d)+' = '+(a*(b-d)))+'.','Al final la suma: '+E((a*(b-d))+' + '+c+' = '+ans)+'.']}},
+   function(){var a=R(3,12),b=R(2,6),c=R(2,9);
+     return{type:'opt',prompt:'¿Qué operación resuelves primero?',disp:a+' + '+b+' × '+c,opts:['La suma: '+a+' + '+b,'La multiplicación: '+b+' × '+c],ans:1,tag:'izqDer',
+      steps:['La multiplicación va antes que la suma, aunque esté a la derecha.','Así queda: '+E(a+' + '+(b*c)+' = '+(a+b*c))+'.']}}
+  ],
+  grado:[
+   function(){var a=R(2,12),b=R(2,7),c=R(2,7),ans=-a-b*c,w={};W(w,(-a+b)*(-c),'izqDer',ans);W(w,-a+b*c,'leySignos',ans);
+     return{type:'num',disp:M+a+' + '+b+' × '+t(-c),ans:ans,w:w,steps:['Primero la multiplicación: '+E(b+' × '+t(-c)+' = '+f(-b*c))+' (signos diferentes, negativo).','Después la suma: '+E(M+a+' + '+t(-b*c)+' = '+f(ans))+'.']}},
+   function(){var a=R(1,10),b=R(2,5),c=R(2,4),ans=a+b*b*c,w={};W(w,(a+b*b)*c,'izqDer',ans);W(w,a+2*b*c,'potencia',ans);
+     return{type:'num',disp:a+' + '+b+'² × '+c,ans:ans,w:w,steps:['Primero la potencia: '+E(b+'² = '+b+' × '+b+' = '+(b*b))+'.','Después la multiplicación: '+E((b*b)+' × '+c+' = '+(b*b*c))+'.','Al final la suma: '+E(a+' + '+(b*b*c)+' = '+ans)+'.']}},
+   function(){var c=R(2,4),b=R(1,6),a=b+NZ(-4,4);var d=a-b,ans=c*d*d,w={};W(w,c*a-b*b,'parentesis',ans);W(w,c*d*2,'potencia',ans);
+     return{type:'num',disp:c+' × ('+a+' '+M+' '+b+')²',ans:ans,w:w,steps:['Primero el paréntesis: '+E(a+' '+M+' '+b+' = '+f(d))+'.','Después la potencia: '+E(t(d)+'² = '+(d*d))+' (un número negativo al cuadrado es positivo).','Al final la multiplicación: '+E(c+' × '+(d*d)+' = '+ans)+'.']}},
+   function(){var a=R(2,6),b=R(2,6),c=R(2,5),ans=a*a-b*c,w={};W(w,(a*a-b)*c,'izqDer',ans);W(w,-a*a-b*c,'signo',ans);W(w,-2*a-b*c,'potencia',ans);
+     return{type:'num',disp:'('+M+a+')² '+M+' '+b+' × '+c,ans:ans,w:w,steps:['Primero la potencia: '+E('('+M+a+')² = ('+M+a+') × ('+M+a+') = '+(a*a))+'.','Después la multiplicación: '+E(b+' × '+c+' = '+(b*c))+'.','Al final la resta: '+E((a*a)+' '+M+' '+(b*c)+' = '+f(ans))+'.']}},
+   function(){var a=R(2,5),b=R(1,6),c=R(b+1,b+6),e=R(1,15),d=b-c,ans=-a*d+e,w={};W(w,-a*b-c+e,'parentesis',ans);W(w,a*d+e,'leySignos',ans);
+     return{type:'num',disp:M+a+' × ('+b+' '+M+' '+c+') + '+e,ans:ans,w:w,steps:['Primero el paréntesis: '+E(b+' '+M+' '+c+' = '+f(d))+'.','Después la multiplicación: '+E(M+a+' × '+t(d)+' = '+f(-a*d))+' (signos iguales, positivo).','Al final la suma: '+E(f(-a*d)+' + '+e+' = '+f(ans))+'.']}},
+   function(){var a=R(2,9),b=R(2,4),c=R(2,6);
+     return{type:'opt',prompt:'¿Qué operación resuelves primero?',disp:a+' + '+t(-b)+'² × '+c,opts:['La suma','La potencia','La multiplicación'],ans:1,tag:'potencia',
+      steps:['El orden es: paréntesis, potencias, multiplicaciones y divisiones, y al final sumas y restas.','Aquí no hay operación dentro del paréntesis, así que va primero la potencia: '+E(t(-b)+'² = '+(b*b))+'.']}}
+  ]
+ }
+};
+
+function buildSet(level){
+  var set=[];
+  TOPICS.forEach(function(tp){
+    var gens=GEN[tp.id][level], nums=gens.filter(function(g){return g().type==='num'}), opts=gens.filter(function(g){return g().type==='opt'});
+    var list=[];for(var i=0;i<6;i++)list.push(nums[i%nums.length]);
+    list=shuffle(list);list.splice(2,0,pick(opts));list.splice(6,0,pick(opts));
+    list.forEach(function(g){var q=g();q.topic=tp.id;set.push(q)});
+  });
+  return set;
+}
+
+/* ---------- contenido de cada tema ---------- */
+var LESSON={
+ suma:{
+  intro:'Los números con signo nos dicen hacia dónde nos movemos: los positivos a la derecha y los negativos a la izquierda.',
+  rules:['Si tienen el <b>mismo signo</b>, se suman y el resultado conserva ese signo.','Si tienen <b>signos diferentes</b>, se restan y se queda el signo del número mayor.','<b>Restar es sumar el opuesto:</b> '+E('5 '+M+' ('+M+'3) = 5 + 3 = 8')+'.'],
+  example:{disp:M+'3 + 5',steps:['Los signos son diferentes, así que se restan: '+E('5 '+M+' 3 = 2')+'.','El número mayor es 5 y es positivo, así que el resultado es positivo.','Resultado: '+E('2')+'. En la recta: empiezo en '+M+'3 y avanzo 5 lugares a la derecha.']},
+  visual:function(){
+    var x=function(n){return 30+(n+6)*25},s='<svg viewBox="0 0 360 110" role="img" aria-label="Recta numérica: de menos tres avanzo cinco lugares y llego a dos">';
+    s+='<line x1="18" y1="70" x2="342" y2="70" stroke="#15192B" stroke-width="2.5" stroke-linecap="round"/>';
+    for(var n=-6;n<=6;n++){s+='<line x1="'+x(n)+'" y1="63" x2="'+x(n)+'" y2="77" stroke="#15192B" stroke-width="2"/><text x="'+x(n)+'" y="98" text-anchor="middle" font-size="12" font-weight="600" fill="'+(n<0?'#C2387A':n>0?'#4F6B00':'#15192B')+'" font-family="Plus Jakarta Sans">'+(n<0?M+(-n):n)+'</text>'}
+    s+='<path d="M'+x(-3)+' 58 Q '+((x(-3)+x(2))/2)+' 8 '+x(2)+' 58" fill="none" stroke="#9C8BFF" stroke-width="3.5" stroke-linecap="round"/>';
+    s+='<polygon points="'+(x(2)-8)+',50 '+(x(2)+2)+',60 '+(x(2)+5)+',47" fill="#9C8BFF"/>';
+    s+='<circle cx="'+x(-3)+'" cy="70" r="8" fill="#FF8FC0"/><circle cx="'+x(2)+'" cy="70" r="8" fill="#D3F36B"/>';
+    s+='<text x="'+((x(-3)+x(2))/2)+'" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#5B45D6" font-family="Plus Jakarta Sans">+5</text></svg>';
+    return s}
+ },
+ mult:{
+  intro:'Al multiplicar o dividir, primero resuelves la operación como siempre y al final decides el signo.',
+  rules:['Signos <b>iguales</b> dan positivo: (+)(+) = + y ('+M+')('+M+') = +.','Signos <b>diferentes</b> dan negativo: (+)('+M+') = '+M+' y ('+M+')(+) = '+M+'.','Con varios factores, <b>cuenta los negativos</b>: si son pares, positivo; si son impares, negativo.'],
+  example:{disp:'('+M+'4) × ('+M+'6)',steps:['Multiplico sin signos: '+E('4 × 6 = 24')+'.','Los dos son negativos: signos iguales, el resultado es positivo.','Resultado: '+E('24')+'.']},
+  visual:function(){
+    var cells=[['+','+','+','#F1FBD0','#4F6B00'],['+',M,M,'#FFE6F2','#C2387A'],[M,'+',M,'#FFE6F2','#C2387A'],[M,M,'+','#F1FBD0','#4F6B00']];
+    var s='<svg viewBox="0 0 360 150" role="img" aria-label="Tabla de la ley de los signos">';
+    cells.forEach(function(c,i){var cx=i%2*180,cy=Math.floor(i/2)*75;
+      s+='<rect x="'+(cx+4)+'" y="'+(cy+4)+'" width="172" height="67" rx="18" fill="'+c[3]+'"/>';
+      s+='<text x="'+(cx+90)+'" y="'+(cy+47)+'" text-anchor="middle" font-family="Plus Jakarta Sans" font-size="26" font-weight="800" fill="#15192B">('+c[0]+')('+c[1]+') = <tspan fill="'+c[4]+'">'+c[2]+'</tspan></text>'});
+    return s+'</svg>'}
+ },
+ jer:{
+  intro:'Cuando una operación tiene varias partes, hay un orden para resolverla. Si lo cambias, el resultado cambia.',
+  rules:['<b>Paréntesis</b>: siempre primero.','<b>Potencias</b>: 3² = 3 × 3.','<b>Multiplicaciones y divisiones</b>, de izquierda a derecha.','<b>Sumas y restas</b>, de izquierda a derecha.'],
+  example:{disp:'8 + 3 × (5 '+M+' 1)',steps:['Primero el paréntesis: '+E('5 '+M+' 1 = 4')+'.','Después la multiplicación: '+E('3 × 4 = 12')+'.','Al final la suma: '+E('8 + 12 = 20')+'.']},
+  visual:function(){
+    var st=[['Paréntesis','( )','#9C8BFF'],['Potencias','x²','#FF8FC0'],['× y ÷','× ÷','#D3F36B'],['+ y '+M,'+ '+M,'#15192B']];
+    var s='<svg viewBox="0 0 360 170" role="img" aria-label="Escalera del orden de las operaciones">';
+    st.forEach(function(v,i){var y=10+i*40,w=340-i*40;
+      s+='<rect x="10" y="'+y+'" width="'+w+'" height="34" rx="12" fill="'+v[2]+'"/>';
+      s+='<text x="26" y="'+(y+23)+'" font-family="Plus Jakarta Sans" font-size="15" font-weight="700" fill="'+(i===3?'#fff':'#15192B')+'">'+(i+1)+'.  '+v[0]+'</text>';
+      s+='<text x="'+(w-6)+'" y="'+(y+23)+'" text-anchor="end" font-family="Plus Jakarta Sans" font-size="15" font-weight="800" fill="'+(i===3?'#fff':'#15192B')+'">'+v[1]+'</text>'});
+    return s+'</svg>'}
+ }
+};
+
+/* ---------- estado ---------- */
+var S={inPractice:false,from:null,name:'',level:null,set:[],i:0,topicIdx:0,res:[],entry:'',choice:null,answered:false};
+
+function header(back,label){
+  return '<div class="top">'+(back?'<button class="bkw" id="bk" aria-label="Regresar a '+(label||'')+'"><span class="bk">'+ico('back')+'</span><span><small>Regresar a</small><b>'+(label||'')+'</b></span></button>':'<span></span>')+
+    (S.inPractice&&S.level?'<span class="pill">'+(S.level==='base'?'Nivelación':'Mi grado')+'</span>':'')+'</div>';
+}
+var NAVI={Home:'<path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/>','Game On':'<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>',Read:'<path d="M3 6c3-1.5 6-1.5 9 0v13c-3-1.5-6-1.5-9 0zM21 6c-3-1.5-6-1.5-9 0v13c3-1.5 6-1.5 9 0z"/>',Learn:'<path d="M2 9l10-5 10 5-10 5zM6 11v5c3 2.5 9 2.5 12 0v-5"/>',Play:'<rect x="2.5" y="7" width="19" height="11" rx="5.5"/><path d="M7 12.5h4M9 10.5v4"/><circle cx="16" cy="11.5" r=".6"/><circle cx="17.5" cy="13.5" r=".6"/>',Me:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>'};
+function navbar(){return '';return '<nav class="nav" aria-hidden="true">'+Object.keys(NAVI).map(function(k){return '<span class="'+(k==='Learn'?'on':'')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+NAVI[k]+'</svg>'+k+'</span>'}).join('')+'</nav>'}
+function ico(name,col){
+  var p={bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V17h5.2v-1.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/>',
+    ok:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',no:'<path d="M7 7l10 10M17 7L7 17"/>',
+    redo:'<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/>',vault:'<rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="12" cy="12" r="3.5"/><path d="M12 8.5V7M15.5 12H17"/>',
+    up:'<path d="M12 19V5M6 11l6-6 6 6"/>',back:'<path d="M15 5l-7 7 7 7"/>',arrow:'<path d="M9 5l7 7-7 7"/>'}[name];
+  return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="'+(col||'currentColor')+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';
+}
+function render(h,back,label){$app.innerHTML=header(back,label)+h+navbar();var bk=document.getElementById('bk');if(bk)bk.onclick=back;window.scrollTo(0,0)}
+
+/* ---------- catálogo ---------- */
+var BASE=/heymova\.mx$/.test(location.hostname)?'':'https://heymova.mx/';
+var PR={
+ signos:{title:'Signos y jerarquía de operaciones',desc:'Suma y resta con signo, multiplicación y división, y orden de las operaciones.',ready:true,ic:'signs',c:'--lilaS',d:'--lilaD'},
+ num:{title:'Números y operaciones',desc:'Valor posicional, sumas y restas, tablas de multiplicar y problemas.',ic:'blocks',c:'--limeS',d:'--limeD'},
+ ex5:{title:'Repaso para tu examen',desc:'Fracciones, divisiones, ángulos, conversiones, números romanos y más.',ic:'star',c:'--yelS',d:'--navy'},
+ ex2s:{title:'Repaso para tu examen',desc:'En tres partes: números; divisibilidad y potencias; álgebra, geometría y datos.',ic:'star',c:'--yelS',d:'--navy'},
+ ex3s:{title:'Repaso para tu examen',desc:'Productos notables, fórmula general, Pitágoras y funciones.',ic:'star',c:'--yelS',d:'--navy'},
+ pn:{title:'Productos notables',desc:'Cuadrado de una suma y de una diferencia, binomios conjugados y con término común.',ic:'square',c:'--rosaS',d:'--rosaD'}
+};
+var SECS={exam:['Para tu examen','Lo que viene en tu examen del trimestre.'],grado:['Temas de tu grado','Practica lo que estás viendo en clase.'],nivel:['Nivelación','Repasa la base para avanzar con seguridad.']};
+var GR=[
+ {g:'1p',n:'1°',sub:'primaria',lv:'Primaria',full:'1° de primaria',plan:[['grado','num']]},
+ {g:'2p',n:'2°',sub:'primaria',lv:'Primaria',full:'2° de primaria',plan:[['grado','num']]},
+ {g:'3p',n:'3°',sub:'primaria',lv:'Primaria',full:'3° de primaria',plan:[['grado','num']]},
+ {g:'4p',n:'4°',sub:'primaria',lv:'Primaria',full:'4° de primaria',plan:[['nivel','num']]},
+ {g:'5p',n:'5°',sub:'primaria',lv:'Primaria',full:'5° de primaria',plan:[['exam','ex5']]},
+ {g:'6p',n:'6°',sub:'primaria',lv:'Primaria',full:'6° de primaria',plan:[]},
+ {g:'1s',n:'1°',sub:'secundaria',lv:'Secundaria',full:'1° de secundaria',plan:[['grado','signos']]},
+ {g:'2s',n:'2°',sub:'secundaria',lv:'Secundaria',full:'2° de secundaria',plan:[['exam','ex2s'],['nivel','signos']]},
+ {g:'3s',n:'3°',sub:'secundaria',lv:'Secundaria',full:'3° de secundaria',plan:[['exam','ex3s'],['nivel','signos']]},
+ {g:'1b',n:'1er',sub:'semestre',lv:'Preparatoria',full:'1er semestre de prepa',plan:[['grado','pn'],['nivel','signos']]}
+];
+var LVC={Primaria:['--lime','--limeD'],Secundaria:['--lila','--lilaD'],Preparatoria:['--rosa','--rosaD']};
+var GAMES=[
+ ['mision-matematica','Misión Matemática','De 1° de primaria a prepa'],
+ ['la-tiendita','La Tiendita','Sumas, dinero y cambio'],
+ ['que-hora-es','¿Qué hora es?','Leer el reloj'],
+ ['detective-patrones','Detective de patrones','Patrones y secuencias'],
+ ['pizzeria-fracciones','Pizzería de fracciones','Fracciones'],
+ ['lluvia-de-numeros','Lluvia de números','Las cuatro operaciones'],
+ ['la-balanza','La Balanza','Ecuaciones'],
+ ['la-boveda','La Bóveda','Jerarquía, signos y porcentajes']
+];
+var TRI_DK='<svg viewBox="0 0 220 220" aria-hidden="true"><path d="M98 152 C96 170.0 90 180.0 92 192" stroke="#FFFFFF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="89" cy="194" rx="6.2" ry="4" fill="#FFFFFF"/><path d="M122 152 C124 170.0 128 180.0 127 192" stroke="#FFFFFF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="130" cy="194" rx="6.2" ry="4" fill="#FFFFFF"/><path d="M70 128 C56 130 46 120 46 104" stroke="#FFFFFF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="46" cy="104" r="3.6" fill="#FFFFFF"/><path d="M150 128 C158 128 164 124 168 118" stroke="#FFFFFF" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="168" cy="118" r="3.6" fill="#FFFFFF"/><path d="M110 44 L168 146 L52 146Z" fill="#FF9FCB" stroke="#FF9FCB" stroke-width="26" stroke-linejoin="round"/><circle cx="104" cy="76" r="6" fill="#fff" opacity=".28"/><path d="M88 108 h20 q0 12 -10 12 q-10 0 -10 -12z" fill="#1A1B2E"/><path d="M93 111 q3 -1.6 6 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".6"/><path d="M112 108 h20 q0 12 -10 12 q-10 0 -10 -12z" fill="#1A1B2E"/><path d="M117 111 q3 -1.6 6 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".6"/><path d="M108 109 q2 -4 4 0" stroke="#1A1B2E" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M104 126 q0 6 6 6 q6 0 6 -6" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="86" cy="126" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><ellipse cx="134" cy="126" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><g transform="translate(170 118) rotate(-35)"><rect x="-4" y="-30" width="8" height="30" rx="2" fill="#FFD54A"/><rect x="-4" y="-35" width="8" height="6" rx="2" fill="#FF8FC8"/><path d="M-4 0 L0 8 L4 0z" fill="#F4E1C1"/><path d="M-1.3 5.4 L0 8 L1.3 5.4z" fill="#1A1B2E"/></g></svg>', TRI='<svg viewBox="0 0 220 220" aria-hidden="true"><path d="M98 152 C96 170.0 90 180.0 92 192" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="89" cy="194" rx="6.2" ry="4" fill="#1A1B2E"/><path d="M122 152 C124 170.0 128 180.0 127 192" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="130" cy="194" rx="6.2" ry="4" fill="#1A1B2E"/><path d="M70 128 C56 130 46 120 46 104" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="46" cy="104" r="3.6" fill="#1A1B2E"/><path d="M150 128 C158 128 164 124 168 118" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="168" cy="118" r="3.6" fill="#1A1B2E"/><path d="M110 44 L168 146 L52 146Z" fill="#FF9FCB" stroke="#FF9FCB" stroke-width="26" stroke-linejoin="round"/><circle cx="104" cy="76" r="6" fill="#fff" opacity=".28"/><path d="M88 108 h20 q0 12 -10 12 q-10 0 -10 -12z" fill="#1A1B2E"/><path d="M93 111 q3 -1.6 6 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".6"/><path d="M112 108 h20 q0 12 -10 12 q-10 0 -10 -12z" fill="#1A1B2E"/><path d="M117 111 q3 -1.6 6 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".6"/><path d="M108 109 q2 -4 4 0" stroke="#1A1B2E" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M104 126 q0 6 6 6 q6 0 6 -6" stroke="#1A1B2E" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="86" cy="126" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><ellipse cx="134" cy="126" rx="5" ry="3" fill="#FF8FC0" opacity=".55"/><g transform="translate(170 118) rotate(-35)"><rect x="-4" y="-30" width="8" height="30" rx="2" fill="#FFD54A"/><rect x="-4" y="-35" width="8" height="6" rx="2" fill="#FF8FC8"/><path d="M-4 0 L0 8 L4 0z" fill="#F4E1C1"/><path d="M-1.3 5.4 L0 8 L1.3 5.4z" fill="#1A1B2E"/></g></svg>';
+function hero(o){return '<div class="ms-hero'+(o.dark?' ms-dk':'')+'" style="--c:'+(o.c||'#C7B5FF')+'"><span class="ms-dot a"></span><span class="ms-dot b"></span><span class="ms-dot c"></span><div class="ms-hx">'+(o.k?'<span class="mp-k">'+o.k+'</span>':'')+'<h1>'+o.h+'</h1>'+(o.p?'<p>'+o.p+'</p>':'')+'</div>'+(o.art?'<span class="ms-art">'+o.art+'</span>':'')+'</div>'}
+function pico(k,col){
+  var P={signs:'<text x="12" y="17" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="15" fill="'+col+'">±×</text>',
+    blocks:'<rect x="3" y="12" width="6" height="8" rx="1.5" fill="'+col+'"/><rect x="9.5" y="7" width="6" height="13" rx="1.5" fill="'+col+'" opacity=".7"/><rect x="16" y="3" width="5" height="17" rx="1.5" fill="'+col+'" opacity=".45"/>',
+    star:'<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z" fill="'+col+'"/>',
+    square:'<text x="12" y="17" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="14" fill="'+col+'">(a+b)²</text>'};
+  return '<svg width="'+(k==='square'?44:30)+'" height="30" viewBox="0 0 24 24" aria-hidden="true">'+P[k]+'</svg>';
+}
+function arrowB(){return '<span class="goB">'+ico('arrow')+'</span>'}
+
+/* ---------- Matemáticas: vitrina principal ---------- */
+function mathHub(){
+  S.inPractice=false;
+  render(hero({dark:true,k:'MOVA Math',h:'Matemáticas',p:'Explicaciones claras, ejemplos paso a paso y ejercicios pensados para tu grado.',art:TRI_DK})+
+    '<h2 class="ms-h">¿Qué quieres hacer hoy?</h2><p class="ms-sub">Elige cómo quieres practicar.</p>'+
+    '<button class="vit" id="dP"><span class="th" style="background:#E6E2FF"><img src="'+BASE+'math-signos.webp" alt=""><span class="k">Prácticas</span></span><span class="tx"><b>Prácticas</b><span class="d">Explicación, ejemplos y ejercicios con calificación y retroalimentación de tu maestra.</span>'+
+      '<span class="ft"><span class="chips"><em class="c2">Por grado</em><em class="c3">Para tu examen</em><em class="c1">Nivelación</em></span>'+arrowB()+'</span></span></button>'+
+    '<button class="vit" id="dG"><span class="th" style="background:#DCF4EA"><img src="'+BASE+'thumb-mision-matematica.webp" alt=""><span class="k">Juegos</span></span><span class="tx"><b>Juegos</b><span class="d">Aprende jugando, por nivel y a tu ritmo.</span>'+
+      '<span class="ft"><span class="chips"><em class="c4">8 juegos</em><em class="c2">De primaria a prepa</em></span>'+arrowB()+'</span></span></button>'+
+    '<button class="mini" id="dI"><span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#15192B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/></svg></span><span><b>Hojas para imprimir</b><span>Genera hojas por grado y tema, con clave de respuestas.</span></span></button>',
+    function(){},'Learn');
+  document.getElementById('dP').onclick=practicas;
+  document.getElementById('dG').onclick=games;
+}
+function games(){
+  render(hero({k:'MOVA Math',h:'Juegos',p:'Elige un juego y empieza.',c:'#D3F36B',art:TRI})+'<div class="ggrid">'+
+    GAMES.map(function(g){return '<a class="gm" href="'+BASE+'juego-'+g[0]+'.html"><img src="'+BASE+'thumb-'+g[0]+'.webp" alt="" loading="lazy"><b>'+g[1]+'</b><span>'+g[2]+'</span></a>'}).join('')+'</div>',mathHub,'Matemáticas');
+}
+function practicas(){
+  S.inPractice=false;
+  var h=hero({k:'MOVA Math',h:'Prácticas',p:'Elige tu grado y encuentra lo que necesitas practicar.',c:'#C7B5FF',art:TRI});
+  ['Primaria','Secundaria','Preparatoria'].forEach(function(lv){
+    var c=LVC[lv];
+    h+='<div class="sect"><i style="background:'+cv(c[0])+'"></i>'+lv+'</div><div class="grades">'+GR.filter(function(x){return x.lv===lv}).map(function(x){
+      return '<button class="gr" data-g="'+x.g+'" style="box-shadow:inset 0 -6px 0 '+cv(c[0])+',0 10px 26px -18px rgba(54,40,120,.5)"><b>'+x.n+'</b><span>'+x.sub+'</span></button>'}).join('')+'</div>';
+  });
+  render(h,mathHub,'Matemáticas');
+  [].forEach.call(document.querySelectorAll('.gr'),function(b){b.onclick=function(){grade(b.dataset.g)}});
+}
+var HC={Primaria:'#D3F36B',Secundaria:'#C7B5FF',Preparatoria:'#FFC7E2'};
+function grade(g){
+  S.inPractice=false;
+  var G=GR.filter(function(x){return x.g===g})[0];
+  var h=hero({k:G.lv,h:G.full,p:'Tus prácticas de matemáticas.',c:HC[G.lv],art:TRI});
+  if(!G.plan.length)h+='<div class="empty">Estamos preparando las prácticas de este grado. Muy pronto las vas a encontrar aquí.</div>';
+  ['exam','grado','nivel'].forEach(function(sk){
+    var items=G.plan.filter(function(x){return x[0]===sk});if(!items.length)return;
+    h+='<div class="sect" style="display:block">'+SECS[sk][0]+'<small>'+SECS[sk][1]+'</small></div>';
+    items.forEach(function(it){var P=PR[it[1]];
+      h+='<button class="pc" data-p="'+it[1]+'" data-s="'+sk+'"'+(P.ready?'':' disabled')+'><span class="ic" style="background:'+cv(P.c)+'">'+pico(P.ic,P.d==='--navy'?'#15192B':getComputedStyle(document.documentElement).getPropertyValue(P.d).trim())+'</span><span><b>'+P.title+'</b><span>'+P.desc+'</span>'+
+        (P.ready?'<span class="tg" style="background:var(--limeS);color:var(--limeD)">Lista para practicar</span>':'<span class="tg" style="background:var(--paper);color:var(--muted)">En preparación</span>')+'</span></button>'});
+  });
+  render(h,practicas,'Prácticas');
+  [].forEach.call(document.querySelectorAll('.pc:not([disabled])'),function(b){b.onclick=function(){S.from=g;practiceHome(b.dataset.s==='nivel'?'base':'grado')}});
+}
+
+/* ---------- inicio de la práctica ---------- */
+function who(){try{var u=(window.MovaAuth&&MovaAuth.user())||JSON.parse(localStorage.getItem('mova_student')||'null');if(u&&u.name)return String(u.name).trim().split(/\s+/)[0]}catch(e){}return ''}
+var Q=(function(){var o={};location.search.replace(/^\?/,'').split('&').forEach(function(kv){var p=kv.split('=');if(p[0])o[decodeURIComponent(p[0])]=decodeURIComponent(p[1]||'')});return o})();
+function toList(){location.href='index.html#/matematicas/practicas'+(S.from?'/'+S.from:'')}
+function practiceHome(pre){
+  S.inPractice=false;S.level=null;var lv=pre||null;
+  render('<div class="card">'+
+    '<div class="signs"><div class="sg" style="background:var(--lime)">+</div><div class="sg" style="background:var(--rosa)">'+M+'</div><div class="sg" style="background:var(--lila)">×</div><div class="sg" style="background:var(--navy);color:#fff">( )</div></div>'+
+    '<h1>Leyes de los signos y jerarquía de operaciones</h1>'+
+    '<p class="muted">Una práctica para dominar la base de toda el álgebra. Cada tema empieza con una explicación corta y un ejemplo resuelto paso a paso.</p>'+
+    '<div class="facts"><span class="fact">3 temas</span><span class="fact">24 ejercicios</span><span class="fact">20 minutos aprox.</span></div>'+
+    '<label class="f" for="nm">¿Cómo te llamas?</label><input class="name" id="nm" autocomplete="given-name" placeholder="Escribe tu nombre" value="'+esc(S.name)+'">'+
+    '<label class="f">Elige tu nivel</label><div class="levels">'+
+     '<button class="lvl" data-l="base" aria-pressed="'+(lv==='base')+'"><span class="dot" style="background:var(--limeS);color:var(--limeD)">1</span><span><b>Nivelación</b><span>Para repasar desde la base, con números pequeños.</span></span></button>'+
+     '<button class="lvl" data-l="grado" aria-pressed="'+(lv==='grado')+'"><span class="dot" style="background:var(--lilaS);color:var(--lilaD)">2</span><span><b>Mi grado</b><span>Con números más grandes, potencias y paréntesis.</span></span></button>'+
+    '</div><div class="err" id="er"></div>'+
+    '<button class="btn" id="go">Empezar la práctica</button></div>',toList,'Prácticas');
+  var w=who();if(w){S.name=w;var nm=document.getElementById('nm');nm.value=w;nm.parentNode.removeChild(nm.previousElementSibling);nm.parentNode.removeChild(nm);}
+  [].forEach.call(document.querySelectorAll('.lvl'),function(b){b.onclick=function(){lv=b.dataset.l;[].forEach.call(document.querySelectorAll('.lvl'),function(x){x.setAttribute('aria-pressed',x===b)})}});
+  document.getElementById('go').onclick=function(){
+    var ne=document.getElementById('nm'),n=ne?ne.value.trim():S.name;
+    if(!n){document.getElementById('er').textContent='Escribe tu nombre para empezar.';return}
+    if(!lv){document.getElementById('er').textContent='Elige un nivel para empezar.';return}
+    S.name=n.split(/\s+/)[0];S.name=S.name.charAt(0).toUpperCase()+S.name.slice(1);
+    start(lv);
+  };
+}
+function start(lv){S.inPractice=true;S.level=lv;S.set=buildSet(lv);S.i=0;S.res=[];S.topicIdx=0;lesson(0)}
+
+/* ---------- lección ---------- */
+function lesson(ti){
+  var tp=TOPICS[ti],L=LESSON[tp.id];
+  var shown=1;
+  function draw(){
+    var st=L.example.steps.map(function(s,i){return i<shown?'<li><span class="k">'+(i+1)+'</span><span>'+s+'</span></li>':''}).join('');
+    render(progress()+'<div class="card">'+
+      '<span class="tchip" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">Tema '+(ti+1)+' de 3</span>'+
+      '<h2 style="margin-top:12px">'+tp.name+'</h2><p class="muted">'+L.intro+'</p>'+
+      '<div class="visual">'+L.visual()+'</div>'+
+      L.rules.map(function(r,i){return '<div class="rule"><span class="n" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">'+(i+1)+'</span><p>'+r+'</p></div>'}).join('')+
+      '</div><div class="card"><h3>Ejemplo paso a paso</h3><div class="big" style="font-size:30px;margin:8px 0 6px">'+L.example.disp+'</div><ol class="steps">'+st+'</ol>'+
+      (shown<L.example.steps.length?'<button class="btn ghost" id="nx">Ver el siguiente paso</button>':'<button class="btn" id="pr">Practicar este tema</button>')+'</div>');
+    var nx=document.getElementById('nx');if(nx)nx.onclick=function(){shown++;draw()};
+    var pr=document.getElementById('pr');if(pr)pr.onclick=function(){S.topicIdx=ti;question()};
+  }
+  draw();
+}
+function progress(){
+  var pct=Math.round(S.i/S.set.length*100),col=cv(TOPICS[Math.min(Math.floor(S.i/8),2)].c);
+  return '<div class="progress" aria-label="Avance '+pct+'%"><i style="width:'+Math.max(pct,3)+'%;background:'+col+'"></i></div>';
+}
+
+/* ---------- ejercicio ---------- */
+function question(){
+  var q=S.set[S.i],tp=TOPICS.filter(function(x){return x.id===q.topic})[0],inTopic=S.i%8+1;
+  S.entry='';S.choice=null;S.answered=false;
+  var body='<div class="card"><div class="qhead"><span class="tchip" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">'+tp.short+'</span>'+
+    '<button class="recuerda" id="rc">'+ico('bulb')+'Recuerda</button></div>'+
+    '<div class="qnum">Ejercicio '+inTopic+' de 8</div>'+
+    '<div class="prompt">'+(q.prompt||'Resuelve:')+'</div><div class="big">'+q.disp+(q.type==='num'?' =':'')+'</div>';
+  if(q.type==='num'){
+    body+='<div class="ansbox empty" id="ab" aria-live="polite">Tu respuesta</div><div class="pad" id="pad">'+
+      ['7','8','9','⌫','4','5','6',M,'1','2','3','0'].map(function(k){return '<button data-k="'+k+'" class="'+(k==='⌫'||k===M?'sp':'')+'" aria-label="'+(k==='⌫'?'Borrar':k===M?'Cambiar signo':k)+'">'+(k===M?'+/'+M:k)+'</button>'}).join('')+'</div>';
+  }else{
+    body+='<div class="opts">'+q.opts.map(function(o,i){return '<button class="opt" data-o="'+i+'" aria-pressed="false">'+o+'</button>'}).join('')+'</div>';
+  }
+  body+='<div id="fbz"></div><button class="btn" id="ck" disabled>Comprobar</button></div>';
+  render(progress()+body);
+  document.getElementById('rc').onclick=function(){openRecuerda(q.topic)};
+  var ck=document.getElementById('ck');
+  if(q.type==='num'){
+    var ab=document.getElementById('ab');
+    var upd=function(){if(!S.entry||S.entry===M){ab.className='ansbox'+(S.entry?'':' empty');ab.textContent=S.entry||'Tu respuesta';ck.disabled=true}else{ab.className='ansbox';ab.textContent=S.entry;ck.disabled=false}};
+    [].forEach.call(document.querySelectorAll('#pad button'),function(b){b.onclick=function(){if(S.answered)return;var k=b.dataset.k;
+      if(k==='⌫')S.entry=S.entry.slice(0,-1);
+      else if(k===M)S.entry=S.entry.charAt(0)===M?S.entry.slice(1):M+S.entry;
+      else if(S.entry.replace(M,'').length<5)S.entry=(S.entry===M+'0'||S.entry==='0')?S.entry.replace('0',k):S.entry+k;
+      upd()}});
+  }else{
+    [].forEach.call(document.querySelectorAll('.opt'),function(b){b.onclick=function(){if(S.answered)return;S.choice=+b.dataset.o;
+      [].forEach.call(document.querySelectorAll('.opt'),function(x){x.setAttribute('aria-pressed',x===b)});ck.disabled=false}});
+  }
+  ck.onclick=function(){if(S.answered){next();return}check(q)};
+}
+function check(q){
+  S.answered=true;var ok,given,tag=null;
+  if(q.type==='num'){given=parseInt(S.entry.replace(M,'-'),10);ok=given===q.ans;
+    if(!ok){tag=q.w[given]||null;
+      if(!tag&&q.tagAbs){tag=(Math.sign(given)===Math.sign(q.ans))?q.tagAbs:'calculo'}
+      if(!tag)tag='calculo';}}
+  else{given=S.choice;ok=given===q.ans;if(!ok)tag=q.tag}
+  S.res.push({topic:q.topic,ok:ok,tag:tag,disp:q.disp,given:q.type==='num'?f(given):q.opts[given],ans:q.type==='num'?f(q.ans):q.opts[q.ans],type:q.type});
+  var fb=ok?'<div class="fb ok"><h3>'+ico('ok','#4F6B00')+'Correcto</h3><ol class="steps">'+q.steps.map(function(s,i){return '<li><span class="k">'+(i+1)+'</span><span>'+s+'</span></li>'}).join('')+'</ol></div>'
+    :'<div class="fb no"><h3>'+ico('no','#C2387A')+'La respuesta es '+(q.type==='num'?f(q.ans):q.opts[q.ans])+'</h3>'+
+      (tag&&TAGS[tag]?'<p style="font-size:14px;margin:0 0 6px">'+TAGS[tag].fix+'</p>':'')+
+      '<ol class="steps">'+q.steps.map(function(s,i){return '<li><span class="k">'+(i+1)+'</span><span>'+s+'</span></li>'}).join('')+'</ol></div>';
+  document.getElementById('fbz').innerHTML=fb;
+  var ck=document.getElementById('ck');ck.textContent=S.i===S.set.length-1?'Ver mis resultados':(S.i%8===7?'Continuar al siguiente tema':'Siguiente ejercicio');
+  ck.scrollIntoView({behavior:'smooth',block:'end'});
+}
+function next(){S.i++;if(S.i>=S.set.length){results();return}if(S.i%8===0){lesson(S.i/8)}else question()}
+
+/* ---------- recuerda ---------- */
+function openRecuerda(tid){
+  var tp=TOPICS.filter(function(x){return x.id===tid})[0],L=LESSON[tid];
+  $sheetIn.innerHTML='<div class="qhead"><span class="tchip" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">'+ico('bulb')+'Recuerda</span></div><h2 style="margin-top:10px">'+tp.name+'</h2>'+
+    '<div class="visual">'+L.visual()+'</div>'+L.rules.map(function(r,i){return '<div class="rule"><span class="n" style="background:'+cv(tp.s)+';color:'+cv(tp.d)+'">'+(i+1)+'</span><p>'+r+'</p></div>'}).join('')+
+    '<button class="btn" id="cl">Volver al ejercicio</button>';
+  $sheet.classList.add('on');document.getElementById('cl').focus();
+  document.getElementById('cl').onclick=closeSheet;
+}
+function closeSheet(){$sheet.classList.remove('on')}
+$sheet.onclick=function(e){if(e.target===$sheet)closeSheet()};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet()});
+
+/* ---------- resultados y retroalimentación ---------- */
+function results(){
+  var total=S.res.length,good=S.res.filter(function(r){return r.ok}).length,grade=Math.round(good/total*100)/10;
+  var per=TOPICS.map(function(tp){var r=S.res.filter(function(x){return x.topic===tp.id});var g=r.filter(function(x){return x.ok}).length;return{tp:tp,g:g,n:r.length,p:g/r.length}});
+  var tags={};S.res.forEach(function(r){if(!r.ok){if(!tags[r.tag])tags[r.tag]={n:0,ex:r};tags[r.tag].n++}});
+  var tagList=Object.keys(tags).sort(function(a,b){return tags[b].n-tags[a].n});
+  var strong=per.filter(function(x){return x.p>=.75}),weak=per.slice().sort(function(a,b){return a.p-b.p})[0];
+
+  /* carta en primera persona */
+  var L=[];
+  L.push(S.name+', ya revisé tu práctica.');
+  if(strong.length===3)L.push('Hiciste un trabajo excelente en los tres temas: se nota que entiendes las reglas y que las aplicas con cuidado.');
+  else if(strong.length)L.push('Me da mucho gusto ver que dominas '+strong.map(function(x){return x.tp.short.toLowerCase()}).join(' y ')+'; ahí trabajaste con mucha seguridad.');
+  else L.push('Veo que te esforzaste en cada ejercicio y no te rendiste; eso es justo lo que se necesita para mejorar.');
+  if(tagList.length){
+    var parts=tagList.slice(0,2).map(function(k,ix){var e=tags[k].ex,txt=(ix?'También noto que ':'Noto que ')+TAGS[k].say;
+      if(e.type==='num')txt+=': por ejemplo, en '+E(e.disp)+' respondiste '+E(e.given)+' y el resultado es '+E(e.ans);
+      return txt+'. '+TAGS[k].fix});
+    L.push(parts.join(' '));
+  }else L.push('No tuviste ningún error. Te felicito.');
+  var recP,recG;
+  if(grade>=9&&S.level==='base'){L.push('Ya puedes pasar al nivel Mi grado. Mi recomendación es que lo hagas en tu siguiente práctica.');recP={t:'Signos y jerarquía · Mi grado',d:'Ya dominas la base; ahora con potencias y números más grandes.',l:'grado'}}
+  else if(grade>=9){L.push('En este tema ya tienes lo necesario para tu examen. Sigue practicando para no perder el ritmo.');recP={t:'Signos y jerarquía · Mi grado',d:'Repítela con ejercicios nuevos para mantener la práctica.',l:'grado'}}
+  else{L.push('Mi recomendación es que repitas esta práctica poniendo especial atención en '+weak.tp.short.toLowerCase()+'. Los ejercicios cambian cada vez, así que vas a practicar con operaciones nuevas.');recP={t:'Signos y jerarquía · '+(S.level==='base'?'Nivelación':'Mi grado'),d:'Ejercicios nuevos, enfocándote en '+weak.tp.short.toLowerCase()+'.',l:S.level}}
+  var jerWeak=per[2].p<=Math.min(per[0].p,per[1].p);
+  recG=jerWeak?{t:'La Bóveda · Nivel 1, Jerarquía',d:'Para practicar el orden de las operaciones jugando.'}:{t:'La Bóveda · Nivel 2, Signos',d:'Para practicar los signos jugando.'};
+  L.push('Y para practicar jugando, te recomiendo '+recG.t+'. ¡Vas por muy buen camino!');
+
+  try{if(window.MovaAuth)MovaAuth.save('signos-jerarquia','Signos y jerarquía · '+(S.level==='base'?'Nivelación':'Mi grado'),good,total,{area:'math',level:S.level,grade:S.from||null,topics:per.map(function(x){return {t:x.tp.id,ok:x.g,n:x.n}}),errors:tagList})}catch(e){}
+  var msg=grade>=9?'Excelente trabajo':grade>=7?'Muy buen avance':grade>=5?'Vamos por buen camino':'Vamos a reforzarlo juntos';
+  var ringCol=grade>=8?'#D3F36B':grade>=6?'#9C8BFF':'#FF8FC0',C=2*Math.PI*48;
+  var ring='<svg class="ring" viewBox="0 0 118 118" role="img" aria-label="Calificación '+grade+' de 10"><circle cx="59" cy="59" r="48" fill="none" stroke="#F5F3FA" stroke-width="13"/><circle cx="59" cy="59" r="48" fill="none" stroke="'+ringCol+'" stroke-width="13" stroke-linecap="round" stroke-dasharray="'+(C*good/total)+' '+C+'" transform="rotate(-90 59 59)"/><text x="59" y="66" text-anchor="middle" font-family="Plus Jakarta Sans" font-size="30" font-weight="800" fill="#15192B">'+(grade%1?grade.toFixed(1):grade)+'</text></svg>';
+
+  render('<div class="card"><span class="tchip" style="background:var(--cream)">Resultados</span>'+
+    '<div class="score">'+ring+'<div><h2 style="margin:0">'+msg+', '+esc(S.name)+'</h2><p class="muted" style="margin:4px 0 0">'+good+' de '+total+' ejercicios correctos</p></div></div>'+
+    '<div class="bars">'+per.map(function(x){return '<div class="bar"><div class="l"><span>'+x.tp.short+'</span><span>'+x.g+'/'+x.n+'</span></div><div class="t"><i style="width:'+Math.max(x.p*100,2)+'%;background:'+cv(x.tp.c)+'"></i></div></div>'}).join('')+'</div></div>'+
+    '<div class="card"><h3>Retroalimentación</h3><div class="letter">'+L.map(function(p){return '<p>'+p+'</p>'}).join('')+'<div class="sign">Miss Karla Rodríguez · Academic Coordinator</div></div></div>'+
+    '<div class="card"><h3>Te recomiendo</h3>'+
+     '<button class="rec" id="rp" style="width:100%;text-align:left;background:#fff"><span class="ic" style="background:var(--lilaS);color:var(--lilaD)">'+ico(recP.l!==S.level?'up':'redo')+'</span><span><b>'+recP.t+'</b><span>'+recP.d+'</span></span></button>'+
+     '<div class="rec"><span class="ic" style="background:var(--rosaS);color:var(--rosaD)">'+ico('vault')+'</span><span><b>'+recG.t+'</b><span>'+recG.d+'</span></span></div>'+
+     '<button class="btn ghost" id="hm">Volver a mis prácticas</button></div>');
+  document.getElementById('rp').onclick=function(){start(recP.l)};
+  document.getElementById('hm').onclick=toList;
+}
+
+S.from=Q.g||null;practiceHome(Q.nivel==='base'||Q.nivel==='grado'?Q.nivel:null);
+})();
+</script>
+<script src="mova-auth.js"></script>
+</body>
+</html>
