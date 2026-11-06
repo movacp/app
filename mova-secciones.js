@@ -145,9 +145,9 @@
       html: '<section class="wrap ms">' +
         hero({ dark: true, k: "MOVA Math", h: "Matemáticas", p: "Explicaciones claras, ejemplos paso a paso y ejercicios pensados para tu grado.", art: { ch: "triDk" } }) +
         '<div class="mv-sh"><b>¿Qué quieres hacer hoy?</b><small>Elige cómo quieres practicar.</small></div>' +
-        '<a class="mv-v" href="#/matematicas/practicas"><span class="mv-th" style="background:#E6E2FF"><img src="math-signos.webp" alt="" loading="lazy"><span class="mv-k">Prácticas</span></span><span class="mv-tx"><b>Prácticas</b><small>Explicación, ejemplos y ejercicios con calificación y retroalimentación de tu maestra.</small>' +
+        '<a class="mv-v" href="#/matematicas/practicas"><span class="mv-th" style="background:#E6E2FF"><img src="vitrina-practicas.webp" alt="" loading="lazy"><span class="mv-k">Prácticas</span></span><span class="mv-tx"><b>Prácticas</b><small>Explicación, ejemplos y ejercicios con calificación y retroalimentación de tu maestra.</small>' +
           '<span class="mv-ft"><span class="mp-chips ms-chips"><em class="c2">Por grado</em><em class="c1">Nivelación</em><em class="c3">Con calificación</em></span><span class="mv-go">' + MV_GO + '</span></span></span></a>' +
-        '<a class="mv-v" href="#/matematicas/juegos"><span class="mv-th" style="background:#DCF4EA"><img src="thumb-mision-matematica.webp" alt="" loading="lazy"><span class="mv-k">Juegos</span></span><span class="mv-tx"><b>Juegos</b><small>Aprende jugando, por nivel y a tu ritmo.</small>' +
+        '<a class="mv-v" href="#/matematicas/juegos"><span class="mv-th" style="background:#DCF4EA"><img src="vitrina-juegos.webp" alt="" loading="lazy"><span class="mv-k">Juegos</span></span><span class="mv-tx"><b>Juegos</b><small>Aprende jugando, por nivel y a tu ritmo.</small>' +
           '<span class="mv-ft"><span class="mp-chips ms-chips"><em class="c4">' + MGAMES.length + ' juegos</em><em class="c2">De primaria a prepa</em></span><span class="mv-go">' + MV_GO + '</span></span></span></a>' +
         '<a class="mv-mini" href="#/matematicas/imprimir"><span class="ic">' + MV_PRINT + '</span><span><b>Hojas para imprimir</b><small>Genera hojas por grado y tema, con clave de respuestas.</small></span></a>' +
         "</section>"
