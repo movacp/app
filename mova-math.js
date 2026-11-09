@@ -585,6 +585,31 @@
   function key() { var u = who(); return "mova_math_lu_" + (u && u.username ? u.username : "local"); }
   function load() { try { return JSON.parse(localStorage.getItem(key()) || "null"); } catch (e) { return null; } }
   function store(d) { try { localStorage.setItem(key(), JSON.stringify(d)); } catch (e) {} }
+  /* Sincroniza el mapa con la nube: si el alumno presentó Math Level Up en otro dispositivo,
+     se reconstruye aquí con su último resultado y las comprobaciones aprobadas después. */
+  var syncing = false, synced = {};
+  function syncCloud() {
+    var u = who(); if (!u || !u.token || syncing || synced[u.username]) return;
+    syncing = true;
+    fetch("https://fclafxrkibvcjktrgznt.supabase.co/rest/v1/rpc/student_my_progress", { method: "POST", headers: { apikey: "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6", "Content-Type": "application/json" }, body: JSON.stringify({ p_token: u.token }) })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (rows) {
+        syncing = false; if (!Array.isArray(rows)) return; synced[u.username] = 1;
+        var lus = rows.filter(function (r) { return r.activity === "math-level-up" && r.detail && r.detail.skills && r.detail.ejes; })
+          .sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); });
+        if (!lus.length) return;
+        var last = lus[0], cd = last.detail, local = load();
+        if (local && new Date(local.date) >= new Date(last.created_at) - 60000) return;
+        var G = +cd.grade || 1, res = cd.skills, done = {};
+        rows.forEach(function (r) { if (r.activity === "math-comprueba" && r.detail && r.detail.pass && SKI[r.item] && new Date(r.created_at) > new Date(last.created_at)) { res[r.item] = "dom"; done[r.item] = 1; } });
+        var d = { v: 1, date: last.created_at, next: cd.next || addMonths(last.created_at, 3).toISOString(), grade: G, stage: cd.stage || (GRADES[G] && GRADES[G].s), skills: res, ejes: cd.ejes, rz: cd.rz || null,
+          errors: (cd.errors || []).map(function (x) { var id = Object.keys(SKI).filter(function (k) { return SKI[k].n === x.skill; })[0]; return id ? { s: id, t: x.txt } : null; }).filter(Boolean),
+          pro: SK.filter(function (k) { return k.g === G && !k.t && !res[k.id]; }).map(function (k) { return k.id; }), done: done,
+          history: lus.slice(1, 7).map(function (r) { return { date: r.created_at, grade: r.detail.grade, ejes: r.detail.ejes }; }).reverse() };
+        recompute(d); store(d);
+        if (/^#\/matematicas/.test(location.hash) && typeof router === "function") router();
+      }).catch(function () { syncing = false; });
+  }
   function addMonths(d, m) { var x = new Date(d); x.setMonth(x.getMonth() + m); return x; }
   function fdate(d) { d = new Date(d); return d.getDate() + " de " + MONTHS[d.getMonth()] + " de " + d.getFullYear(); }
   function fmonth(d) { d = new Date(d); return MONTHS[d.getMonth()] + " de " + d.getFullYear(); }
@@ -944,6 +969,7 @@
     var w = function (p) {
       p = p || []; var k = p[0];
       try {
+        syncCloud();
         if (!k) return vHome();
         if (k === "levelup") return vLevelUp();
         if (k === "mapa") return vMapa();
