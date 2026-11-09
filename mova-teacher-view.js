@@ -11,7 +11,8 @@
   if (!on()) return;
   var page = (location.pathname.split("/").pop() || "index.html").toLowerCase();
   var RUTA = page === "ruta.html";
-  if (page !== "" && page !== "index.html" && !RUTA) return;
+  var WLP = page === "juego-writing.html";
+  if (page !== "" && page !== "index.html" && !RUTA && !WLP) return;
 
   /* ---------- sesión compartida con el panel (nunca cierra sola) ---------- */
   var refreshing = null;
@@ -93,6 +94,7 @@
   function itemOf(a) {
     var h = a.getAttribute("href") || "", m;
     if (RUTA && /^#\//.test(h)) h = "ruta.html" + h;
+    if (WLP && (m = h.match(/^#([kct]\d+)$/))) { var W = (window.WL || []).filter(function (x) { return x.id === m[1]; })[0]; if (!W) return null; var SNW = { kids: "MOVA Kids", children: "MOVA Children", teens: "MOVA Teens" }; return { key: "w:" + W.id, title: W.title + " · Writing Lab · " + SNW[W.st] + " " + W.lv, name: W.title, sub: "Writing Lab · " + SNW[W.st] + " " + W.lv }; }
     if ((m = h.match(/^ruta\.html#\/t\/([^\/?#]+)/))) { var id = decodeURIComponent(m[1]), f = findTopic(id); if (!f) return null; return { key: "t:" + id, title: f.t.t + " · " + f.k + " " + SN[f.s] + " " + f.l, name: f.t.t, sub: f.k + " · " + SN[f.s] + " " + f.l }; }
     if ((m = h.match(/^#\/lecturas\/([a-z0-9-]+)$/))) { var art = a.closest("article"), tt = (a.textContent || "").trim(), gr = art && art.querySelector(".chip") ? art.querySelector(".chip").textContent.trim() : ""; if (!tt || /^(anterior|siguiente|previous|next)/i.test(tt)) return null; return { key: "e:" + m[1], title: tt + " · Lectura" + (gr ? " " + gr : ""), name: tt, sub: "Lectura en español" + (gr ? " · " + gr : "") }; }
     if ((m = h.match(/^ruta\.html#\/vocab\/([a-z]+)\/([^\/]+)\/(\d+)/))) { var st2 = m[1], lv = decodeURIComponent(m[2]), D = PATH(), V = D[st2] && D[st2][lv] && D[st2][lv].vocab[+m[3]]; if (!V) return null; return { key: "v:" + st2 + "|" + lv + "|" + m[3], title: V.n + " · Flashcards " + SN[st2] + " " + lv, name: V.n, sub: "Flashcards · " + SN[st2] + " " + lv }; }

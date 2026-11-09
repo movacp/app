@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="mova-gate.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Writing Lab · MOVA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#F5F3FA;--ink:#15192B;--navy:#1A1B2E;--navy2:#2C3060;--muted:#6A6F85;--line:#ECE9F3;--lime:#D3F36B;--lilac:#E6E2FF;--peri:#C9D2FF;--pink:#FF8FC0;--butter:#FFE58A;--mint:#BDF0D8;
+  color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{min-height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+:focus-visible{outline:3px solid #8FA2FF;outline-offset:3px;border-radius:14px}
+[hidden]{display:none!important}
+.wrap{max-width:640px;margin:0 auto;padding:18px 16px 60px}
+.top{display:flex;align-items:center;gap:10px;margin:2px 0 14px}
+.home{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.6px solid var(--ink);border-radius:999px;padding:8px 14px;font-weight:800;font-size:14px;text-decoration:none;color:var(--ink)}
+.home svg{width:16px;height:16px}
+.brand{margin-left:auto;font-size:12px;font-weight:700;color:var(--muted)}
+.cover{position:relative;overflow:hidden;background:var(--navy);color:#fff;border-radius:30px;padding:24px 22px 22px;min-height:260px}
+.cover .ring{position:absolute;right:-70px;top:-70px;width:230px;height:230px;border-radius:50%;border:36px solid var(--navy2)}
+.cover .k{position:relative;display:inline-block;background:var(--lime);color:var(--navy);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:800}
+.cover h1{position:relative;font-family:"Bricolage Grotesque",sans-serif;font-size:46px;line-height:.92;letter-spacing:-.02em;margin:14px 0 10px;max-width:240px}
+.cover p{position:relative;margin:0;font-size:14px;line-height:1.55;color:#C9C3F2;max-width:58%}
+.cover .art{position:absolute;right:4px;bottom:-4px;width:200px;height:210px}
+@media (max-width:420px){.cover .art{width:150px;height:160px;right:-14px}.cover h1{font-size:40px}}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 4px}
+.how div{background:#fff;border-radius:20px;padding:12px 10px;text-align:center}
+.how b{display:grid;place-items:center;width:30px;height:30px;margin:0 auto 6px;border-radius:50%;font-family:"Bricolage Grotesque",sans-serif;font-size:15px}
+.how span{display:block;font-size:12.5px;line-height:1.35;font-weight:700}
+.how small{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;font-weight:600}
+h2.sec{font-family:"Bricolage Grotesque",sans-serif;font-size:21px;letter-spacing:-.01em;margin:24px 4px 10px}
+.stages{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stg{border-radius:20px;padding:12px 10px;text-align:left;border:2px solid transparent;background:#fff;transition:transform .15s}
+.stg:active{transform:scale(.97)}
+.stg b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:17px}
+.stg small{display:block;font-size:12px;color:var(--muted);font-weight:700;margin-top:2px}
+.stg.on{border-color:var(--ink)}
+.stg[data-s="kids"]{background:#ECFBC8}.stg[data-s="children"]{background:var(--lilac)}.stg[data-s="teens"]{background:#FFE6F2}
+.lvh{font:800 12px "Plus Jakarta Sans",sans-serif;letter-spacing:.08em;color:var(--muted);margin:18px 6px 8px;text-transform:uppercase}
+.tl{display:grid;gap:8px}
+.tc{display:flex;align-items:center;gap:12px;background:#fff;border-radius:22px;padding:12px;text-decoration:none;color:var(--ink);position:relative}
+.tc .th{width:62px;height:62px;border-radius:16px;flex:none;overflow:hidden;display:grid;place-items:center}
+.tc .th img{width:100%;height:100%;object-fit:cover}
+.tc .th svg{width:34px;height:34px}
+.tc b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:17px;line-height:1.1}
+.tc small{display:block;color:var(--muted);font-size:12.5px;font-weight:600;margin-top:3px;line-height:1.35}
+.tc .stt{margin-left:auto;flex:none;font-size:11.5px;font-weight:800;border-radius:999px;padding:6px 10px;white-space:nowrap}
+.stt.new{background:var(--line);color:var(--muted)}.stt.sent{background:#FFF1C9;color:#7A5A00}.stt.rev{background:#ECFBC8;color:#3E5A07}
+.card{background:#fff;border-radius:26px;padding:18px;margin-top:12px}
+.card h3{font-family:"Bricolage Grotesque",sans-serif;font-size:19px;margin:0 0 8px}
+.chip{display:inline-block;font-size:12px;font-weight:800;border-radius:999px;padding:5px 10px;background:var(--lilac)}
+.tt h1{font-family:"Bricolage Grotesque",sans-serif;font-size:34px;line-height:1;letter-spacing:-.02em;margin:10px 0 8px}
+.prompt{font-size:16px;line-height:1.55;font-weight:600}
+.pic{border-radius:24px;overflow:hidden;margin-top:12px;background:#fff;aspect-ratio:3/2;display:grid;place-items:center}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.model{white-space:pre-wrap;font-size:15px;line-height:1.65;background:#F5F3FA;border-radius:18px;padding:14px 16px;margin:0}
+.model mark{background:#E4F8B0;border-radius:6px;padding:0 3px;color:inherit}
+details summary{cursor:pointer;font-weight:800;list-style:none;display:flex;align-items:center;gap:8px}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"+";margin-left:auto;font-size:20px;color:var(--muted)}
+details[open] summary::after{content:"–"}
+.steps{margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.5;font-weight:600;margin-bottom:8px}
+.steps li::before{content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--lime);display:grid;place-items:center;font:800 13px "Plus Jakarta Sans",sans-serif}
+textarea{width:100%;min-height:220px;border:2px solid var(--line);border-radius:20px;padding:14px 16px;font:500 16px/1.6 "Plus Jakarta Sans",sans-serif;color:var(--ink);resize:vertical;background:#FDFCFF}
+textarea:focus{outline:none;border-color:#8FA2FF}
+.meter{display:flex;align-items:center;gap:10px;margin:10px 2px 0;font-size:13px;font-weight:700;color:var(--muted)}
+.meter .bar{flex:1;height:8px;border-radius:99px;background:var(--line);overflow:hidden}.meter .bar i{display:block;height:100%;background:var(--lime);border-radius:99px;transition:width .2s}
+.ck{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
+.ck li{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;color:var(--muted)}
+.ck li i{width:20px;height:20px;border-radius:50%;flex:none;border:2px solid #D6D2E6;display:grid;place-items:center}
+.ck li.ok{color:var(--ink)}.ck li.ok i{background:var(--lime);border-color:var(--lime)}
+.ck li.ok i::after{content:"";width:8px;height:5px;border-left:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);transform:rotate(-45deg) translate(1px,-1px)}
+.send{display:block;width:100%;margin-top:16px;background:var(--ink);color:var(--lime);border-radius:999px;padding:17px;font-weight:800;font-size:16px}
+.send:disabled{opacity:.35}
+.note{font-size:12.5px;color:var(--muted);text-align:center;margin:10px 0 0;font-weight:600}
+.done{text-align:center;padding:28px 20px}
+.done .big{width:84px;height:84px;margin:0 auto 14px;border-radius:28px;background:var(--lime);display:grid;place-items:center}
+.done h2{font-family:"Bricolage Grotesque",sans-serif;font-size:30px;margin:0 0 8px}
+.done p{color:var(--muted);font-weight:600;line-height:1.55;margin:0 0 18px}
+.fb{background:#fff;border-radius:26px;padding:18px;margin-top:12px;border:2px solid #E4F8B0}
+.fb .sc{display:flex;align-items:baseline;gap:8px}.fb .sc b{font:800 36px "Bricolage Grotesque",sans-serif}.fb .sc span{font-weight:700;color:var(--muted)}
+.rub{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 0}
+.rub div{background:#F5F3FA;border-radius:14px;padding:9px 11px;font-size:12px;font-weight:700;color:var(--muted)}.rub div b{display:block;color:var(--ink);font-size:15px}
+.fb p{font-size:14.5px;line-height:1.6;margin:0}
+.sig{display:flex;align-items:flex-end;gap:12px;margin-top:14px}.sig img{height:46px}.sig span{font-size:12.5px;font-weight:700;color:var(--muted)}.sig b{display:block;color:var(--ink);font-size:14px}
+.mine{white-space:pre-wrap;font-size:14.5px;line-height:1.6;background:#F5F3FA;border-radius:16px;padding:12px 14px;margin:8px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script src="wl-data.js"></script>
+<script src="wl-check.js"></script>
+<script src="mova-auth.js"></script>
+<script src="mova-teacher-view.js"></script>
+<script>
+(function () {
+  "use strict";
+  var SB_URL = "https://fclafxrkibvcjktrgznt.supabase.co", SB_KEY = "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6";
+  var app = document.getElementById("app");
+  var STN = { kids: ["MOVA Kids", "6–8"], children: ["MOVA Children", "9–12"], teens: ["MOVA Teens", "12–17"] };
+  var LVS = { kids: ["Pre-A1", "A1", "A1+", "A2"], children: ["A1", "A1+", "A2", "A2+", "B1", "B1+"], teens: ["A1", "A1+", "A2", "A2+", "B1", "B1+", "B2", "C1"] };
+  var SIG = { "Miss Karla": "sig-karla.png", "Miss Letty": "sig-letty.png" };
+  var TITLE = { "Miss Karla": "Academic Coordinator", "Miss Letty": "ESL Instructor · TOEFL Specialist" };
+  function esc(x) { return String(x == null ? "" : x).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function me() { try { return JSON.parse(localStorage.getItem("mova_student") || "null"); } catch (e) { return null; } }
+  function rpc(fn, args) { return fetch(SB_URL + "/rest/v1/rpc/" + fn, { method: "POST", headers: { apikey: SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify(args || {}) }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw j; return j; }); }); }
+  function b64d(s) { try { return JSON.parse(decodeURIComponent(escape(atob(s)))); } catch (e) { return null; } }
+  var stage = (function () { var u = me(), s = u && String(u.stage || "").toLowerCase(); return STN[s] ? s : /toefl|adult|exci/.test(s) ? "teens" : "kids"; })();
+  var subs = {}, fbs = {}, loaded = false;
+  function loadStatus(cb) {
+    var u = me(); if (!u || !u.token) { loaded = true; return cb(); }
+    Promise.all([rpc("student_my_progress", { p_token: u.token }).catch(function () { return []; }), rpc("student_tasks", { p_username: u.username }).catch(function () { return []; })]).then(function (r) {
+      subs = {}; fbs = {};
+      (r[1] || []).slice().sort(function (a, b) { return new Date(a.created_at) - new Date(b.created_at); }).forEach(function (t) { var k = String(t.task || ""); if (k.indexOf("wfb:") === 0 && /^FB\|/.test(t.title || "")) { var j = b64d(String(t.title).slice(3)); if (j) fbs[k.slice(4)] = Object.assign(j, { at: t.created_at }); } });
+      (r[0] || []).filter(function (x) { return x.activity === "writing" && x.detail && x.detail.w; }).sort(function (a, b) { return new Date(a.created_at) - new Date(b.created_at); })
+        .forEach(function (x) { subs[x.detail.w] = { text: x.detail.text, at: x.created_at, uid: x.detail.uid }; });
+      loaded = true; cb();
+    });
+  }
+  function status(id) { var s = subs[id]; if (!s) return ["new", "Start"]; return fbs[s.uid] ? ["rev", fbs[s.uid].s + "/16"] : ["sent", "Sent"]; }
+  var PEN = '<svg viewBox="0 0 24 24" fill="none" stroke="#15192B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>';
+  var THBG = ["#ECFBC8", "#E6E2FF", "#FFE6F2", "#FFF1C9", "#D7F3EA", "#E4E9FF"];
+  function thumb(t, i) { return t.img ? '<img src="' + t.img + '.webp" alt="" onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),{innerHTML:\'' + PEN.replace(/"/g, "&quot;") + '\'}))">' : PEN; }
+  function back(href, label) { return '<div class="top"><a class="home" href="' + href + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>' + label + '</a><span class="brand">MOVA Learning Studio</span></div>'; }
+  var ART = '<svg class="art" viewBox="0 0 200 210" aria-hidden="true"><rect x="40" y="40" width="120" height="150" rx="16" fill="#fff" transform="rotate(-6 100 115)"/><g transform="rotate(-6 100 115)" stroke="#C9D2FF" stroke-width="6" stroke-linecap="round"><path d="M62 82h76M62 104h76M62 126h60M62 148h70"/></g><circle cx="58" cy="60" r="6" fill="#FF8FC0" transform="rotate(-6 100 115)"/><g transform="translate(120 20) rotate(32)"><rect x="0" y="0" width="22" height="120" rx="8" fill="#D3F36B"/><rect x="0" y="0" width="22" height="18" rx="6" fill="#FF8FC0"/><path d="M0 120l11 26 11-26z" fill="#FFE58A"/><path d="M7 136l4 10 4-10z" fill="#15192B"/></g><path d="M150 176l8-8M162 184l10-4M144 192l4 10" stroke="#FFE58A" stroke-width="5" stroke-linecap="round"/></svg>';
+  function home() {
+    var list = WL.filter(function (t) { return t.st === stage; });
+    var h = back("index.html#/learn", "Learn") +
+      '<section class="cover"><span class="ring"></span><span class="k">Writing Lab</span><h1>Write it your way</h1><p>Guided writing tasks by stage and level. Your teacher reads and reviews every text.</p>' + ART + "</section>" +
+      '<div class="how"><div><b style="background:#ECFBC8">1</b><span>Read the model</span><small>See an example</small></div><div><b style="background:#E6E2FF">2</b><span>Plan and write</span><small>Follow the steps</small></div><div><b style="background:#FFE6F2">3</b><span>Send it</span><small>Your teacher reviews it</small></div></div>' +
+      '<h2 class="sec">Choose your stage</h2><div class="stages">' + Object.keys(STN).map(function (s) { return '<button class="stg' + (s === stage ? " on" : "") + '" data-s="' + s + '"><b>' + STN[s][0].replace("MOVA ", "") + "</b><small>" + STN[s][1] + " years</small></button>"; }).join("") + "</div>";
+    LVS[stage].forEach(function (lv) {
+      var L = list.filter(function (t) { return t.lv === lv; }); if (!L.length) return;
+      h += '<div class="lvh">Level ' + lv + '</div><div class="tl">' + L.map(function (t, i) { var st = status(t.id);
+        return '<a class="tc" href="#' + t.id + '"><span class="th" style="background:' + THBG[(WL.indexOf(t)) % THBG.length] + '">' + thumb(t, i) + '</span><span><b>' + esc(t.title) + "</b><small>" + esc(t.prompt.length > 70 ? t.prompt.slice(0, 68) + "…" : t.prompt) + '</small></span><span class="stt ' + st[0] + '">' + (loaded ? st[1] : "") + "</span></a>"; }).join("") + "</div>";
+    });
+    app.innerHTML = h;
+    app.querySelectorAll(".stg").forEach(function (b) { b.onclick = function () { stage = b.dataset.s; home(); }; });
+  }
+  function hl(t) { var m = t.model; (t.need.rx || []).forEach(function (r) { try { m = m.replace(new RegExp("(" + r[0].replace(/^\^\\s\*/, "") + ")", "gim"), "\u0001$1\u0002"); } catch (e) {} });
+    return esc(m).replace(/\u0001/g, "<mark>").replace(/\u0002/g, "</mark>"); }
+  function draftKey(t) { var u = me(); return "wl-draft-" + (u ? u.username : "x") + "-" + t.id; }
+  function task(t) {
+    stage = t.st; var s = subs[t.id], fb = s && fbs[s.uid];
+    var h = back("#", "Writing Lab") + '<div class="tt"><span class="chip">' + STN[t.st][0] + " · " + t.lv + "</span><h1>" + esc(t.title) + '</h1><div class="prompt">' + esc(t.prompt) + "</div></div>" +
+      (t.img ? '<div class="pic"><img src="' + t.img + '.webp" alt="" onerror="this.parentNode.remove()"></div>' : "") +
+      (t.img2 ? '<div class="pic"><img src="' + t.img2 + '.webp" alt="" onerror="this.parentNode.remove()"></div>' : "");
+    if (fb) h += feedbackHtml(t, s, fb);
+    else if (s) h += '<div class="card"><h3>Sent to your teacher</h3><p style="margin:0;color:#6A6F85;font-weight:600;line-height:1.55">Your teacher will read your text and send you a grade and comments. You will see them here and in My Progress.</p><div class="mine">' + esc(s.text) + "</div></div>";
+    else {
+      h += '<details class="card"><summary><span class="chip" style="background:#ECFBC8">Example</span>See a model text</summary><p class="model" style="margin-top:12px">' + hl(t) + "</p></details>" +
+        '<div class="card"><h3>Plan your writing</h3><ol class="steps">' + t.steps.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ol></div>" +
+        '<div class="card"><h3>Write here</h3><textarea id="tx" placeholder="Start writing…" spellcheck="false" autocapitalize="off" autocorrect="off"></textarea>' +
+        '<div class="meter"><span id="wc">0 words</span><span class="bar"><i id="wb" style="width:0"></i></span><span>goal ' + t.need.min + "</span></div>" +
+        '<ul class="ck" id="ck"></ul><button class="send" id="go" disabled>Send to my teacher</button><p class="note">Read it once more before you send it. You can send each task one time.</p></div>';
+    }
+    app.innerHTML = h; window.scrollTo(0, 0);
+    var tx = document.getElementById("tx"); if (!tx) return;
+    try { tx.value = localStorage.getItem(draftKey(t)) || ""; } catch (e) {}
+    function upd() {
+      var r = WLC.check(t, tx.value);
+      document.getElementById("wc").textContent = r.words + (r.words === 1 ? " word" : " words");
+      document.getElementById("wb").style.width = Math.min(100, Math.round(r.words / t.need.min * 100)) + "%";
+      var items = [[r.words >= t.need.min, "At least " + t.need.min + " words"], [r.words > 2 && !r.errs.some(function (e) { return e.k === "cap" || e.k === "i"; }), "Capital letters at the start of sentences (and I)"], [r.words > 2 && !r.errs.some(function (e) { return e.k === "end"; }), "Punctuation at the end of sentences"]]
+        .concat((t.need.rx || []).map(function (x) { return [r.found.indexOf(x[1]) >= 0, "Use " + x[1]]; }));
+      document.getElementById("ck").innerHTML = items.map(function (x) { return '<li class="' + (x[0] ? "ok" : "") + '"><i></i>' + esc(x[1]) + "</li>"; }).join("");
+      document.getElementById("go").disabled = r.words < Math.ceil(t.need.min * 0.5);
+      try { localStorage.setItem(draftKey(t), tx.value); } catch (e) {}
+    }
+    tx.oninput = upd; upd();
+    document.getElementById("go").onclick = function () {
+      var b = this, u = me(); if (!confirm("Send your text to your teacher? You can't change it after sending.")) return;
+      var r = WLC.check(t, tx.value), first = u && (u.name || u.full_name || "").split(" ")[0];
+      var det = { kind: "writing", w: t.id, text: tx.value.trim(), rub: r.r, auto: WLC.comment(t, r, first), words: r.words, st: t.st, lv: t.lv };
+      b.disabled = true; b.textContent = "Sending…";
+      Promise.resolve(window.MovaAuth && MovaAuth.save("writing", t.title + " · " + STN[t.st][0] + " " + t.lv, r.score, 16, det)).then(function (ok) {
+        if (ok === false) { b.disabled = false; b.textContent = "Send to my teacher"; alert("Please log in with your MOVA user to send your writing."); return; }
+        try { localStorage.removeItem(draftKey(t)); } catch (e) {}
+        subs[t.id] = { text: det.text, at: new Date().toISOString(), uid: det.uid };
+        app.innerHTML = back("#", "Writing Lab") + '<div class="card done"><div class="big"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#15192B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div><h2>Sent!</h2><p>Great job finishing “' + esc(t.title) + '”. Your teacher will read it and send you a grade with comments.</p><a class="send" href="#" style="text-decoration:none">Back to Writing Lab</a></div>';
+      }).catch(function () { b.disabled = false; b.textContent = "Send to my teacher"; alert("We couldn't send it. Check your internet and try again."); });
+    };
+  }
+  function feedbackHtml(t, s, fb) {
+    var by = fb.by || "Your teacher";
+    return '<div class="fb"><span class="chip" style="background:#ECFBC8">Reviewed by ' + esc(by) + '</span><div class="sc" style="margin-top:10px"><b>' + fb.s + "/16</b><span>" + Math.round(fb.s / 16 * 100) + "%</span></div>" +
+      '<div class="rub">' + WLC.CRIT.map(function (c, i) { return "<div><b>" + (fb.r && fb.r[i] || "–") + "/4</b>" + c + "</div>"; }).join("") + "</div><p>" + esc(fb.c) + "</p>" +
+      '<div class="sig">' + (SIG[by] ? '<img src="' + SIG[by] + '" alt="">' : "") + "<span><b>" + esc(by) + "</b>" + esc(TITLE[by] || "MOVA Centro Pedagógico") + "</span></div></div>" +
+      '<details class="card"><summary>My text</summary><div class="mine">' + esc(s.text) + "</div></details>";
+  }
+  function route() { var id = location.hash.replace("#", ""), t = WL.filter(function (x) { return x.id === id; })[0]; if (t) task(t); else home(); }
+  window.addEventListener("hashchange", route);
+  route(); loadStatus(route);
+})();
+</script>
+</body>
+</html>
