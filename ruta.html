@@ -13,6 +13,7 @@
 <script src="mova-voice.js"></script>
 <script src="ruta-data.js"></script>
 <script src="wl-data.js"></script>
+<script src="mova-remember.js"></script>
 <script src="fc-extra.js"></script>
 <script src="kids-visual.js"></script>
 <script src="children-visual.js"></script>
@@ -62,6 +63,16 @@ h1.t{font-size:32px;margin:2px 4px 4px}
 .badgesBtn p{margin:0 0 0 10px;flex:1;font-weight:800;font-size:14.5px}.badgesBtn p small{display:block;color:#C9C3F2;font-size:12px;font-weight:700}
 .badgesBtn>svg{width:18px;height:18px;color:var(--lime)}
 
+
+
+.xq{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:25px;line-height:1.35;text-align:center;margin:6px 0 16px}
+.xgap{display:inline-block;min-width:70px;border-bottom:4px solid var(--ink);color:var(--pink)}.xgap.fill{color:#3E5A07}
+.xopts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.xopts.two .xopt{padding:18px 6px}
+.xopt{text-align:center;background:var(--bg);border:2.5px solid var(--line);border-radius:18px;padding:15px 8px;font-weight:800;font-size:16.5px}
+.xopt.good{background:var(--lime);border-color:var(--ink)}.xopt.bad{background:var(--pinkSoft);border-color:var(--pink)}
+.xwords{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:8px 0 6px}
+.xw{background:var(--bg);border:2.5px solid var(--line);border-radius:14px;padding:9px 13px;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:20px}
+.xw.bad{background:var(--pinkSoft);border-color:var(--pink);text-decoration:line-through}.xw.miss{border-color:var(--ink)}
 
 /* journey map */
 .jc{position:relative;overflow:hidden;background:var(--navy);color:#fff;border-radius:30px;padding:22px 20px 18px;min-height:250px}
@@ -294,6 +305,7 @@ function checkBadges(o,quizScore){
 function newBadgesHtml(ids){return ids.map(function(id){var b=BADGES.filter(function(x){return x[0]===id;})[0];return '<div class="newb">'+bArt(id)+'<p>New badge<b>'+b[1]+'</b>'+b[2]+'</p></div>';}).join("");}
 
 
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("#rmBtn");if(b&&window.MovaRemember&&window.__rmT)MovaRemember.open(window.__rmT);});
 /* ---------- journey map ---------- */
 var BUDS=[["beat","Beat"],["queenie","Queenie"],["bloom","Bloom"],["nova","Nova"],["mochi","Mochi"],["echo","Echo"],["tri","Tri"],["pop","Pop"],["daisy","Daisy"]];
 function wlSent(){try{return JSON.parse(localStorage.getItem("mova_wl_sent")||"{}");}catch(e){return {};}}
@@ -447,7 +459,8 @@ function topic(id,from){
   var t=f.t,es=STG[f.st].lang==="es",step=0,builtOk=0,qi=0,score=0,qs=null,bi=0;
   var tabName=f.kind==='topics'?'grammar':f.kind,lvlHref=from==="g"?"./#/structures":"#/lv/"+f.st+"/"+encodeURIComponent(f.code)+"/"+tabName,hasB=t.b&&t.b.length,NS=hasB?3:2;
   function steps(n){if(!hasB&&n===2)n=1;return '<div class="steps">'+(hasB?[0,1,2]:[0,1]).map(function(i){return '<i class="'+(i<=n?"on":"")+'"></i>';}).join("")+"</div>";}
-  function head(){return back(lvlHref,from==="g"?"Grammar":STG[f.st].name+" · "+f.code);}
+  function head(){return '<div class="rm-bar">'+back(lvlHref,from==="g"?"Grammar":STG[f.st].name+" · "+f.code)+(window.MovaRemember&&f.kind==="topics"?MovaRemember.button():"")+'</div>';}
+  window.__rmT=t;
   var VZ=(window.MOVA_KIDS_VIS&&MOVA_KIDS_VIS[id])||(window.MOVA_CHILDREN_VIS&&MOVA_CHILDREN_VIS[id])||(window.MOVA_TEENS_VIS&&MOVA_TEENS_VIS[id]);
   function learn(){
     app.innerHTML=head()+steps(0)+'<div class="card"><span class="kicker">'+(es?"1 · APRENDE":"1 · LEARN")+'</span><h2>'+esc(t.t)+'</h2>'+visHtml(VZ)+'<ul class="exp">'+((VZ&&VZ.exp)||t.exp).map(function(x){return "<li>"+x+"</li>";}).join("")+'</ul><div class="exs">'+t.ex.map(function(x,i){return '<div class="ex"><button data-i="'+i+'" aria-label="Listen">'+IC.spk+'</button><p>'+markEx(esc(x[0]),VZ&&VZ.mark)+(x[1]?"<small>"+esc(x[1])+"</small>":"")+'</p></div>';}).join("")+'</div><div class="row2">'+(f.kind!=='phonics'?'<button class="cta ghost" id="pr">'+(es?"Imprimir hoja":"Print worksheet")+'</button>':'')+'<button class="cta" id="nx">'+(es?"Practicar":"Practice")+'</button></div></div>';
@@ -477,9 +490,20 @@ function topic(id,from){
     }
     draw();
   }
-  function startQuiz(){qs=shuffle(t.q).map(function(q){var o=q[1].map(function(x,i){return {x:x,ok:i===q[2]};});return {q:q[0],o:shuffle(o),why:q[3],say:q[4]};});qi=0;score=0;quiz();}
+  function startQuiz(){var TY=["gap","mistake","rw"],k=0;qs=shuffle(t.q).map(function(q){var o=q[1].map(function(x,i){return {x:x,ok:i===q[2]};});var ty="mc";if(f.kind==="topics"&&!q[4]&&/___/.test(q[0])&&(q[0].match(/___/g)||[]).length===1){ty=TY[k%3];k++;}
+    var wrong=q[1].filter(function(x,i){return i!==q[2];});return {q:q[0],o:shuffle(o),why:q[3],say:q[4],ty:ty,right:q[1][q[2]],wrong:wrong[Math.floor(Math.random()*wrong.length)],rwOk:Math.random()<.5};});qi=0;score=0;quiz();}
+  function finishQ(ok,msg){if(ok)score++;document.getElementById("fbq").innerHTML='<div class="fb '+(ok?"good":"bad")+'"><b>'+(ok?(es?"¡Correcto!":"Correct!"):(es?"No exactamente.":"Not quite."))+'</b>'+msg+'</div><button class="cta" id="qn">'+(qi<qs.length-1?(es?"Siguiente":"Next"):(es?"Ver resultado":"See my result"))+'</button>';document.getElementById("qn").onclick=function(){qi++;if(qi<qs.length)quiz();else done();};}
   function quiz(){
     var q=qs[qi];
+    if(q.ty!=="mc"){var KN={gap:"FILL THE GAP",mistake:"FIND THE MISTAKE",rw:"RIGHT OR WRONG?"},full=function(w){return q.q.replace("___",w);},head2=head()+steps(2)+'<div class="card"><span class="kicker">'+NS+' · '+KN[q.ty]+' · '+(qi+1)+'/'+qs.length+'</span>';
+      if(q.ty==="gap"){app.innerHTML=head2+'<h2 style="font-size:20px">Choose the missing word.</h2><div class="xq">'+esc(q.q).replace("___",'<span class="xgap" id="xg">&nbsp;</span>')+'</div><div class="xopts">'+q.o.map(function(o,i){return '<button class="xopt" data-i="'+i+'">'+esc(o.x)+'</button>';}).join("")+'</div><div id="fbq"></div></div>';
+        app.querySelectorAll(".xopt").forEach(function(b){b.onclick=function(){var o=q.o[+b.dataset.i];app.querySelectorAll(".xopt").forEach(function(x,i){x.disabled=true;if(q.o[i].ok)x.classList.add("good");});if(!o.ok)b.classList.add("bad");var g=document.getElementById("xg");g.textContent=q.right;g.classList.add("fill");finishQ(o.ok,esc(q.why));};});}
+      else if(q.ty==="mistake"){var pre=q.q.split("___")[0].trim(),post=q.q.split("___")[1].trim(),toks=[].concat(pre?pre.split(/\s+/).map(function(w){return [w,0];}):[],[[q.wrong,1]],post?post.split(/\s+/).map(function(w){return [w,0];}):[]);
+        app.innerHTML=head2+'<h2 style="font-size:20px">Tap the wrong word.</h2><div class="xwords">'+toks.map(function(w,i){return '<button class="xw" data-i="'+i+'">'+esc(w[0])+'</button>';}).join("")+'</div><div id="fbq"></div></div>';
+        app.querySelectorAll(".xw").forEach(function(b){b.onclick=function(){var ok=toks[+b.dataset.i][1]===1;app.querySelectorAll(".xw").forEach(function(x,i){x.disabled=true;if(toks[i][1])x.classList.add("bad");});if(!ok)b.classList.add("miss");finishQ(ok,'<span style="display:block;margin:2px 0">'+esc(full(q.right))+'</span>'+esc(q.why));};});}
+      else{var shown=q.rwOk?q.right:q.wrong;app.innerHTML=head2+'<h2 style="font-size:20px">Is this sentence correct?</h2><div class="xq">'+esc(full(shown))+'</div><div class="xopts two"><button class="xopt" data-v="1">Right</button><button class="xopt" data-v="0">Wrong</button></div><div id="fbq"></div></div>';
+        app.querySelectorAll(".xopt").forEach(function(b){b.onclick=function(){var ok=(b.dataset.v==="1")===q.rwOk;app.querySelectorAll(".xopt").forEach(function(x){x.disabled=true;if((x.dataset.v==="1")===q.rwOk)x.classList.add("good");});if(!ok)b.classList.add("bad");finishQ(ok,(q.rwOk?"":'Correct: '+esc(full(q.right))+'<br>')+esc(q.why));};});}
+      return;}
     app.innerHTML=head()+steps(2)+'<div class="card"><span class="kicker">'+NS+' · QUIZ · '+(qi+1)+'/'+qs.length+'</span><div class="qtext">'+esc(q.q)+'</div>'+(q.say?'<button class="lk" id="hear" style="width:100%;background:var(--lav)"><span class="ic" style="background:#fff">'+IC.spk+'</span><b>'+(es?"Escuchar otra vez":"Listen again")+'</b></button>':'')+q.o.map(function(o,i){return '<button class="opt" data-i="'+i+'">'+esc(o.x)+"</button>";}).join("")+'<div id="fbq"></div></div>';
     if(q.say){say(q.say,.8);document.getElementById("hear").onclick=function(){say(q.say,.75);};}
     app.querySelectorAll(".opt").forEach(function(b){b.onclick=function(){
