@@ -1471,7 +1471,9 @@ function drawAllTasks(){
     ${wlR.length?`<button class="wlmore" id="wlMore">${wlOpen?"Ocultar":"Ver"} revisados (${wlR.length})</button>${wlOpen?wlR.map(wlRow).join(""):""}`:""}</div>`:"";
   const bnBox=bnCache.length?`<div class="wlbox" style="background:#FFE6F2"><div class="wlh"><h3>Listos para el siguiente nivel</h3><span>${bnCache.length} alumno${bnCache.length>1?"s":""}</span></div>
     ${bnCache.map((x,i)=>{ const D0=x.r.detail; return `<div class="wlr" data-bn="${i}"><div class="av2">${esc(initials(x.s.full_name))}</div><div><b>${esc(x.s.full_name)}</b><small>${esc(grpOf(x.s.stage)||"")} ${esc(D0.level)} → ${esc(D0.next)} · ${d(x.r.created_at)}</small></div><span class="wls">Ver evidencia</span></div>`; }).join("")}</div>`:"";
-  box.innerHTML=bnBox+wlBox+`<div class="tks"><div style="background:#FFE6F2"><b>${pend}</b><span>Pendientes</span></div><div style="background:#ECFBC8"><b>${all.length-pend}</b><span>Completadas</span></div><div style="background:#E5E9FF"><b>${tkCache.length}</b><span>Alumnos con tareas</span></div></div>
+  const mqW={}; tkCache.forEach(g=>g.items.forEach(x=>{ const k=String(x.t.task||""); if(!/^mq:/.test(k)) return; const p=(k.split("~")[1]||"").split("|"), a=p[2], b=p[3], hoy=new Date().toISOString().slice(0,10); if(a&&b&&b>=hoy) mqW[a]=b; }));
+  const mqBox=Object.keys(mqW).sort().map(a=>`<div class="wlbox" style="background:#15192B;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px"><div><b style="display:block;font-size:15px">Código de clase · Monthly Quiz</b><small style="color:#C9CBE0">Semana del ${esc(new Date(a+"T12:00:00").toLocaleDateString("es-MX",{day:"numeric",month:"short"}))} al ${esc(new Date(mqW[a]+"T12:00:00").toLocaleDateString("es-MX",{day:"numeric",month:"short"}))}</small></div><b style="font-size:30px;letter-spacing:.16em;color:#D3F36B">${mqCode(a)}</b></div>`).join("");
+  box.innerHTML=mqBox+bnBox+wlBox+`<div class="tks"><div style="background:#FFE6F2"><b>${pend}</b><span>Pendientes</span></div><div style="background:#ECFBC8"><b>${all.length-pend}</b><span>Completadas</span></div><div style="background:#E5E9FF"><b>${tkCache.length}</b><span>Alumnos con tareas</span></div></div>
     <input class="in" id="tkQ" placeholder="Buscar alumno" value="${esc(tkF.q)}" style="margin-bottom:10px">
     <div class="tkf">${chip("st","pend","Pendientes")}${chip("st","late","Atrasadas")}${chip("st","done","Completadas")}${chip("st","all","Todas")}</div>
     ${(()=>{ const ss=Object.keys(SUBJ).filter(k=>all.some(x=>tkSubj(x.t)===k)); return ss.length>1?`<div class="tkf">${chip("sub","all","Todas las materias")}${ss.map(k=>chip("sub",k,SUBJ[k][0])).join("")}</div>`:""; })()}
@@ -1508,6 +1510,7 @@ function openBonus(x){
     catch(e){ $("#bnMsg").textContent=e.message; b.disabled=false; b.textContent=`Subir a ${G} · ${D0.next}`; } };
 }
 /* ---------- Monthly Quiz: la maestra elige etapa, nivel, temas y semana ---------- */
+function mqCode(d){var h=7919;String(d||"").concat("·MOVA·aula").split("").forEach(function(c){h=(h*31+c.charCodeAt(0))%1000003;});return String(1000+h%9000);}
 function mqWeek(){ const t=new Date(), y=t.getFullYear(), m=t.getMonth(), last=new Date(y,m+1,0); let f=new Date(last); while(f.getDay()!==5) f.setDate(f.getDate()-1); const mo=new Date(f); mo.setDate(f.getDate()-4);
   if(mo<t){ const n=new Date(t); n.setDate(n.getDate()+((8-n.getDay())%7||7)); mo.setTime(n.getTime()); f=new Date(n); f.setDate(n.getDate()+4); }
   const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); return [iso(mo),iso(f)]; }
@@ -1536,7 +1539,10 @@ function openMQ(){
     const id=Date.now().toString(36), task="mq:"+id+"~"+[st,lv,a,b,n,ids.join(",")].join("|"), title=`${mes} Quiz · ${SN[st]} ${lv}`;
     const btn=$("#mqGo"); btn.disabled=true; btn.textContent="Asignando…"; let ok=0;
     for(const x of ss){ try{ await rpc("admin_assign_task",{p_student:String(x.id),p_username:x.username,p_task:task,p_title:title+" · due "+b+" · by "+tName()}); ok++; }catch(e){} }
-    closeModal(); toast(`${title} asignado a ${ok} alumno${ok===1?"":"s"}`); loadAllTasks(true); };
+    openModal(`<button class="x" aria-label="Cerrar">×</button><h2>Quiz asignado</h2><p class="sub">${esc(title)} · ${ok} alumno${ok===1?"":"s"} · abre ${esc(a)} y cierra ${esc(b)}</p>
+      <div style="background:#15192B;color:#fff;border-radius:22px;padding:22px;text-align:center;margin:12px 0"><span style="font-size:12px;font-weight:800;letter-spacing:.12em;color:#D3F36B">CÓDIGO DE CLASE DE ESA SEMANA</span><b style="display:block;font-size:46px;letter-spacing:.18em;margin-top:6px">${mqCode(a)}</b></div>
+      <p class="sub">Díganlo en voz alta en clase; sin este código el quiz no arranca. Es el mismo para todos los quizzes que abren esa semana y siempre lo encuentra arriba de Tareas.</p><button class="btn btn-primary btn-full" id="mqOk">Listo</button>`);
+    $("#mqOk").onclick=closeModal; loadAllTasks(true); };
 }
 document.addEventListener("click",e=>{ if(e.target&&e.target.id==="mqNew") openMQ(); });
 const WL_CRIT=["Contenido y tarea","Organización","Uso del idioma","Ortografía y puntuación"];
