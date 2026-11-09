@@ -160,7 +160,6 @@
     if (!user) return;
     rpc("student_me", { p_token: user.token }).then(function (r) {
       if (r && r.ok === false) { user = null; set(K_USER, null); renderChip(); }
-      else if (r && typeof r.stage === "string" && r.stage !== user.stage) { user.stage = r.stage; set(K_USER, user); }
     }).catch(function () {});
   }
 
@@ -649,27 +648,42 @@
     "level-up": "A placement test to see your English level. Take your time.", lectura: "Choose a story in the Reading Library and finish it.",
     "m-levelup": "Un examen adaptativo para descubrir tu mapa matemático. Tómate tu tiempo." };
   function showTask(list) {
-    var t = list[0];
-    if (taskShown || document.getElementById("mva-task")) return; taskShown = true;
+    if (taskShown || document.getElementById("mva-task")) return;
+    var day = new Date().toISOString().slice(0, 10);
+    if (get("mova-task-pop-day") === day) return;
+    if (!window.MovaCompanion) {
+      var sc = document.createElement("script"); sc.src = "mova-companion.js";
+      sc.onload = function () { showTask(list); }; sc.onerror = function () { window.MovaCompanion = null; };
+      document.head.appendChild(sc); return;
+    }
+    taskShown = true; set("mova-task-pop-day", day);
+    var MC = window.MovaCompanion, n = list.length;
     var st = document.createElement("style");
-    st.textContent = "#mva-task{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 28px));z-index:2147483630;" +
-      "background:#15192B;color:#fff;border-radius:24px;padding:18px 18px 16px;box-shadow:0 18px 40px rgba(21,25,43,.35);font-family:'Plus Jakarta Sans',Poppins,system-ui,sans-serif;animation:mvtk .4s ease}" +
-      "@keyframes mvtk{from{opacity:0;transform:translate(-50%,16px)}}" +
-      "#mva-task .k{display:inline-block;background:#FF8FC8;color:#15192B;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 10px}" +
-      "#mva-task b{display:block;font-family:'Bricolage Grotesque',Poppins,sans-serif;font-size:21px;line-height:1.1;margin:10px 0 4px}" +
-      "#mva-task p{margin:0;font-size:14px;line-height:1.5;color:#C9CCE0}" +
-      "#mva-task .r{display:flex;gap:10px;margin-top:14px;align-items:center}" +
-      "#mva-task a{background:#D3F36B;color:#15192B;font-weight:800;font-size:15px;border-radius:999px;padding:11px 20px;text-decoration:none}" +
-      "#mva-task button{background:none;border:0;color:#C9CCE0;font:600 14px inherit;padding:10px;cursor:pointer}" +
-      "#mva-task .m{margin-left:auto;font-size:12px;font-weight:700;color:#B9A6FF}";
+    st.textContent = "#mva-task-scrim{position:fixed;inset:0;z-index:2147483599;background:rgba(14,16,30,.55);opacity:0;transition:opacity .25s ease}" +
+      "#mva-task{position:fixed;left:50%;top:50%;z-index:2147483600;width:min(86vw,350px);transform:translate(-50%,-44%) scale(.96);opacity:0;transition:transform .35s cubic-bezier(.2,.9,.3,1.15),opacity .25s ease;" +
+      "background:#15192B;color:#fff;border-radius:24px;padding:16px;border:1.5px solid rgba(255,255,255,.16);box-shadow:0 20px 50px rgba(0,0,0,.4);font-family:'Plus Jakarta Sans',Poppins,system-ui,sans-serif;overflow:hidden}" +
+      "#mva-task.is-in{transform:translate(-50%,-50%) scale(1);opacity:1}#mva-task-scrim.is-in{opacity:1}" +
+      "#mva-task .rw{display:flex;gap:10px;align-items:center}" +
+      "#mva-task .ch{flex:none;width:84px;height:84px;margin:-4px 2px -4px -2px;border-radius:50%;overflow:hidden;display:flex;justify-content:center}#mva-task .ch svg{width:136px;height:136px;flex:none;margin-top:-4px}" +
+      "#mva-task .k{display:inline-block;background:#FF8FC0;color:#15192B;font:800 10.5px/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.08em;padding:5px 9px;border-radius:999px;margin-bottom:7px}" +
+      "#mva-task h3{margin:0;font-family:'Bricolage Grotesque','Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;line-height:1.15;color:#fff}" +
+      "#mva-task p{margin:5px 0 0;font-size:13.5px;line-height:1.4;color:#C9CBE0}" +
+      "#mva-task .wh{display:flex;align-items:center;gap:10px;margin-top:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:10px 12px;font-size:13px;color:#C9CBE0;font-weight:600}" +
+      "#mva-task .wh i{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#D3F36B;color:#15192B;flex:none}#mva-task .wh i svg{width:18px;height:18px}#mva-task .wh b{color:#fff;font-weight:800}" +
+      "#mva-task .go{display:block;width:100%;margin-top:14px;border:0;border-radius:999px;background:#D3F36B;color:#15192B;font:800 15px 'Plus Jakarta Sans',Poppins,sans-serif;padding:12px 16px;cursor:pointer}" +
+      "#mva-task .lt{display:block;width:100%;margin-top:6px;border:0;background:none;color:#C9CBE0;font:700 13.5px 'Plus Jakarta Sans',sans-serif;padding:6px;cursor:pointer}";
     document.head.appendChild(st);
-    var d = document.createElement("div"); d.id = "mva-task";
-    d.innerHTML = '<span class="k">Assigned by ' + (t.by ? String(t.by).replace(/[<>&]/g, "") : "your teacher") + '</span><b>' + String(t.title || "Activity").replace(/[<>&]/g, "") + "</b>" +
-      "<p>" + (TASK_SUB[taskKey(t)] || "Your teacher assigned you this activity.") + (t.due ? ' <b style="display:inline;font:800 14px \'Plus Jakarta Sans\',sans-serif;color:#D3F36B;margin:0">' + (dueLate(t.due) ? "It was due " : "Due ") + dueTxt(t.due) + ".</b>" : "") + "</p>" +
-      '<div class="r"><a href="' + taskUrl(t) + '">Start now</a><button type="button">Later</button>' +
-      (list.length > 1 ? '<span class="m">+' + (list.length - 1) + " more</span>" : "") + "</div>";
-    d.querySelector("button").onclick = function () { d.remove(); };
-    document.body.appendChild(d);
+    var scrim = document.createElement("div"); scrim.id = "mva-task-scrim";
+    var d = document.createElement("div"); d.id = "mva-task"; d.setAttribute("role", "dialog"); d.setAttribute("aria-label", "Tienes actividades pendientes");
+    d.innerHTML = '<div class="rw"><span class="ch" style="background:' + MC.bg() + '">' + MC.svg() + '</span><div><span class="k">' + n + (n === 1 ? " PENDIENTE" : " PENDIENTES") + '</span>' +
+      "<h3>Tienes actividades pendientes</h3><p>Complétalas para seguir avanzando.</p></div></div>" +
+      '<div class="wh"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></i><span>Siempre las encuentras en <b>Me › My Progress</b></span></div>' +
+      '<button class="go" type="button">Ver mis actividades</button><button class="lt" type="button">Más tarde</button>';
+    var bye = function () { d.remove(); scrim.remove(); };
+    d.querySelector(".go").onclick = function () { bye(); showAccount(); };
+    d.querySelector(".lt").onclick = bye; scrim.onclick = bye;
+    document.body.appendChild(scrim); document.body.appendChild(d);
+    requestAnimationFrame(function () { requestAnimationFrame(function () { scrim.classList.add("is-in"); d.classList.add("is-in"); }); });
   }
   /* ---------- Assigned activities: tarjeta fija en el inicio, en My Progress y número en "Me" ---------- */
   var asgCache = null, asgAt = 0, asgBusy = false;

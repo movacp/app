@@ -135,7 +135,7 @@
 .mab-vit .char{position:absolute;right:-18px;bottom:-22px;width:160px;height:160px}
 .pc{position:relative;display:block;margin:16px 0 4px;background:#fff;color:#15192B;border-radius:24px;padding:16px;text-decoration:none}
 .pc-new{position:absolute;top:-10px;right:14px;background:#FF8FC0;color:#15192B;font:800 11px/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.06em;padding:6px 10px;border-radius:999px}
-.pc-top{display:flex;align-items:center;gap:14px}.pc-ring{width:62px;height:62px;flex:none}
+.pc-top{display:flex;align-items:center;gap:16px}.pc-av{position:relative;width:76px;height:84px;flex:none}.pc-av .pc-ring{position:absolute;left:0;top:0;width:76px;height:76px}.pc-ch{position:absolute;left:9px;top:9px;width:58px;height:58px;border-radius:50%;overflow:hidden;display:flex;justify-content:center}.pc-ch svg{width:100px;height:100px;flex:none;margin-top:-6px}.pc-pct{position:absolute;left:50%;bottom:0;transform:translateX(-50%);background:#15192B;color:#fff;font:800 11.5px/1 \'Plus Jakarta Sans\',sans-serif;padding:4px 9px;border-radius:999px;white-space:nowrap}
 .pc-top small{display:block;font-size:11.5px;font-weight:800;color:#6A6F85;letter-spacing:.04em}.pc-top b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:21px;line-height:1.15;margin-top:2px}
 .pc-next{display:flex;align-items:center;gap:12px;margin-top:12px;background:#F5F3FA;border-radius:16px;padding:11px 12px;font-size:13.5px;font-weight:700;line-height:1.35}
 .pc-next i{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#15192B;color:#D3F36B;flex:none}.pc-next i svg{width:14px;height:14px}
@@ -216,7 +216,6 @@
   function pathCard() {
     var o = {}; try { o = JSON.parse(localStorage.getItem("mova_ruta_v1") || "{}"); } catch (e) {}
     var P = window.MOVA_PATH, st = o.stage || "children", lv = o.level, names = { kids: "Kids", children: "Children", teens: "Teens" };
-    try { var u = window.MovaAuth && MovaAuth.user(), pp = u && u.stage ? String(u.stage).split(" · ") : [], g = (pp[0] || "").toLowerCase(), ts = /kid/.test(g) ? "kids" : /child/.test(g) ? "children" : /teen/.test(g) ? "teens" : null; if (ts && pp[1] && P && P[ts] && P[ts][pp[1]]) { st = ts; lv = pp[1]; } } catch (e) {}
     var label = "Choose your stage and level", sub = "Grammar, vocabulary, practice and a final check for every level.", pct = 0, href = "ruta.html";
     if (P && P[st]) {
       if (!lv || !P[st][lv]) lv = Object.keys(P[st]).filter(function (k) { return P[st][k].topics.some(function (t) { return t.exp; }); })[0];
@@ -227,7 +226,9 @@
       sub = nxt ? "Up next · " + nxt.t : (ready.length ? "Level complete · Take the level check" : "Coming soon");
       var top = "MY PATH · MOVA " + names[st].toUpperCase();
     }
-    var C = 163, ring = '<svg class="pc-ring" viewBox="0 0 62 62" aria-hidden="true"><circle cx="31" cy="31" r="26" fill="none" stroke="#ECE9F3" stroke-width="8"/><circle cx="31" cy="31" r="26" fill="none" stroke="#15192B" stroke-width="8" stroke-linecap="round" stroke-dasharray="' + Math.round(C * pct / 100) + ' ' + C + '" transform="rotate(-90 31 31)"/><text x="31" y="36" text-anchor="middle" font-family="Bricolage Grotesque,sans-serif" font-weight="800" font-size="15" fill="#15192B">' + pct + '%</text></svg>';
+    var C = 163, ring = '<svg class="pc-ring" viewBox="0 0 62 62" aria-hidden="true"><circle cx="31" cy="31" r="26" fill="none" stroke="#ECE9F3" stroke-width="8"/><circle cx="31" cy="31" r="26" fill="none" stroke="#15192B" stroke-width="8" stroke-linecap="round" stroke-dasharray="' + Math.round(C * pct / 100) + ' ' + C + '" transform="rotate(-90 31 31)"/></svg>';
+    var MC = window.MovaCompanion, chBg = MC ? MC.bg() : "#EEF9C6";
+    ring = '<span class="pc-av">' + ring + '<span class="pc-ch" style="background:' + chBg + '">' + (MC ? MC.svg() : "") + '</span><span class="pc-pct">' + pct + '%</span></span>';
     return '<a class="pc" href="' + href + '"><span class="pc-new">NEW</span><span class="pc-top">' + ring + '<span><small>' + (top || "MY PATH") + '</small><b>' + label + '</b></span></span><span class="pc-next"><i><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i><span>' + sub + '</span></span><span class="pc-go">Continue my journey →</span></a>';
   }
 
