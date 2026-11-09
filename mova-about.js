@@ -227,7 +227,7 @@
       var top = "MY PATH · MOVA " + names[st].toUpperCase();
     }
     var C = 163, ring = '<svg class="pc-ring" viewBox="0 0 62 62" aria-hidden="true"><circle cx="31" cy="31" r="26" fill="none" stroke="#ECE9F3" stroke-width="8"/><circle cx="31" cy="31" r="26" fill="none" stroke="#15192B" stroke-width="8" stroke-linecap="round" stroke-dasharray="' + Math.round(C * pct / 100) + ' ' + C + '" transform="rotate(-90 31 31)"/><text x="31" y="36" text-anchor="middle" font-family="Bricolage Grotesque,sans-serif" font-weight="800" font-size="15" fill="#15192B">' + pct + '%</text></svg>';
-    return '<a class="pc" href="' + href + '"><span class="pc-new">NEW</span><span class="pc-top">' + ring + '<span><small>' + (top || "MY PATH") + '</small><b>' + label + '</b></span></span><span class="pc-next"><i><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i><span>' + sub + '</span></span><span class="pc-go">Open my path</span></a>';
+    return '<a class="pc" href="' + href + '"><span class="pc-new">NEW</span><span class="pc-top">' + ring + '<span><small>' + (top || "MY PATH") + '</small><b>' + label + '</b></span></span><span class="pc-next"><i><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i><span>' + sub + '</span></span><span class="pc-go">Continue my journey →</span></a>';
   }
 
   function learnHtml() {
