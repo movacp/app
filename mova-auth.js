@@ -160,6 +160,7 @@
     if (!user) return;
     rpc("student_me", { p_token: user.token }).then(function (r) {
       if (r && r.ok === false) { user = null; set(K_USER, null); renderChip(); }
+      else if (r && typeof r.stage === "string" && r.stage !== user.stage) { user.stage = r.stage; set(K_USER, user); }
     }).catch(function () {});
   }
 

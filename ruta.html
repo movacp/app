@@ -399,12 +399,14 @@ function drawJourney(st,code,tb){
 function go(h){location.hash=h;}
 window.addEventListener("hashchange",route);
 function back(href,label){return '<a class="back" href="'+href+'"><i>'+IC.back+'</i><span><small>Back to</small><b>'+label+'</b></span></a>';}
+function tLevel(){var u=user();if(!u||!u.stage)return null;var p=String(u.stage).split(" · "),g=p[0].toLowerCase(),st=/kid/.test(g)?"kids":/child/.test(g)?"children":/teen/.test(g)?"teens":null;return st&&p[1]&&D[st]&&D[st][p[1]]?{st:st,lv:p[1]}:null;}
 function curStage(){
+  var t=tLevel();if(t)return t.st;
   var o=S();if(o.stage)return o.stage;var u=user();
   if(u&&u.stage){var s=String(u.stage).toLowerCase();if(/kid/.test(s))return "kids";if(/child/.test(s))return "children";if(/teen/.test(s))return "teens";}
   return "children";
 }
-function curLevel(st){var o=S();if(o.stage===st&&o.level&&D[st][o.level])return o.level;var k=Object.keys(D[st]);for(var i=0;i<k.length;i++){if(D[st][k[i]].topics.some(ready))return k[i];}return k[0];}
+function curLevel(st){var t=tLevel();if(t&&t.st===st)return t.lv;var o=S();if(o.stage===st&&o.level&&D[st][o.level])return o.level;var k=Object.keys(D[st]);for(var i=0;i<k.length;i++){if(D[st][k[i]].topics.some(ready))return k[i];}return k[0];}
 function route(){
   try{window.speechSynthesis&&speechSynthesis.cancel();}catch(e){}
   var h=location.hash.replace(/^#\/?/,"").split("/").map(decodeURIComponent);

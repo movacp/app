@@ -1016,10 +1016,10 @@ function render(){
     $("#hSub").textContent = a ? "Toca un alumno para ver su avance y su reporte del mes." : "Cuando tus alumnos usen la app, aquí verás su avance."; }
   $("#sActs").textContent = students.reduce((a,s)=>a+Number(s.activities||0),0);
   const gf = window.__stF || "all";
-  const gs = [...new Set(students.map(s => s.stage).filter(Boolean))];
+  const gs = [...new Set(students.map(s => grpOf(s.stage)).filter(Boolean))];
   $("#stChips").innerHTML = [["all","Todos"],...GROUPS.filter(g => gs.includes(g)).map(g=>[g,g]),...(students.some(s=>!s.active)?[["off","Inactivos"]]:[])].map(([k,l])=>`<button data-k="${esc(k)}" class="${k===gf?"on":""}">${esc(l)}</button>`).join("");
   $("#stChips").querySelectorAll("button").forEach(b => b.onclick = () => { window.__stF = b.dataset.k; render(); });
-  const rows = students.filter(s => (!q || s.full_name.toLowerCase().includes(q) || s.username.includes(q)) && (gf==="all" || (gf==="off" ? !s.active : s.stage===gf)));
+  const rows = students.filter(s => (!q || s.full_name.toLowerCase().includes(q) || s.username.includes(q)) && (gf==="all" || (gf==="off" ? !s.active : grpOf(s.stage)===gf)));
   if(!students.length){ $("#list").innerHTML = `<div class="empty"><b>Aún no hay alumnos</b>Toca “Agregar alumno” para crear la primera cuenta.</div>`; return; }
   if(!rows.length){ $("#list").innerHTML = `<div class="empty"><b>Sin resultados</b>Prueba con otro nombre.</div>`; return; }
   $("#list").innerHTML = rows.map((s,i) => `
@@ -1043,7 +1043,15 @@ function makePass(){
   const w = ["sol","luna","mar","rio","nube","flor","pino","lago","cielo","estrella","arbol","faro"];
   return w[Math.floor(Math.random()*w.length)] + (1000+Math.floor(Math.random()*9000));
 }
-function groupOptions(sel){ return `<option value="">Sin grupo</option>` + GROUPS.map(g=>`<option ${g===sel?"selected":""}>${g}</option>`).join(""); }
+function groupOptions(sel){ sel=grpOf(sel); return `<option value="">Sin grupo</option>` + GROUPS.map(g=>`<option ${g===sel?"selected":""}>${g}</option>`).join(""); }
+/* Nivel del alumno: se guarda junto con el grupo, p. ej. "Kids · A1+" */
+const LV_ALL=["Pre-A1","A1","A1+","A2","A2+","B1","B1+","B2","C1","C2"];
+const LV_BY={Kids:["Pre-A1","A1","A1+","A2"],Children:["A1","A1+","A2","A2+","B1","B1+"],Teens:["A1","A1+","A2","A2+","B1","B1+","B2","C1"],Adultos:LV_ALL,TOEFL:LV_ALL};
+function grpOf(st){ return st ? String(st).split(" · ")[0] : ""; }
+function lvOf(st){ const p=String(st||"").split(" · "); return p[1]||""; }
+function levelOptions(g,sel){ const L=LV_BY[g]; if(!L) return ""; return `<option value="">Sin nivel</option>`+L.map(l=>`<option ${l===sel?"selected":""}>${l}</option>`).join(""); }
+function bindLevel(gs,ls,wrap,cur){ const paint=()=>{ const h=levelOptions(gs.value,ls.value||cur); wrap.style.display=h?"":"none"; ls.innerHTML=h; }; gs.addEventListener("change",paint); paint(); }
+function stageVal(g,l){ return g ? (l&&LV_BY[g] ? g+" · "+l : g) : null; }
 function closeModal(){ $("#modal").innerHTML=""; }
 function openModal(html){
   $("#modal").innerHTML = `<div class="backdrop"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`;
@@ -1070,6 +1078,7 @@ $("#addBtn").onclick = () => {
     <label class="f" for="aName">Nombre completo</label><input class="in" id="aName" autocomplete="off">
     <label class="f" for="aUser">Usuario</label><input class="in" id="aUser" autocapitalize="none" autocomplete="off">
     <label class="f" for="aStage">Grupo</label><select class="in" id="aStage">${groupOptions("")}</select>
+    <div id="aLvW"><label class="f" for="aLv">Nivel</label><select class="in" id="aLv"></select><p class="sub" style="margin:6px 0 0;font-size:12.5px">My path abre directo en este nivel.</p></div>
     <label class="f" for="aPass">Contraseña</label>
     <div class="pwrow"><input class="in" id="aPass" value="${makePass()}" autocomplete="off"><button class="btn btn-soft" id="aGen" type="button">Otra</button></div>
     <button class="btn btn-primary btn-full" id="aSave">Crear cuenta</button><div class="msg err" id="aMsg"></div>`);
@@ -1077,9 +1086,10 @@ $("#addBtn").onclick = () => {
   $("#aUser").addEventListener("input", ()=> touched = true);
   $("#aName").addEventListener("input", ()=> { if(!touched) $("#aUser").value = makeUser($("#aName").value); });
   $("#aGen").onclick = () => $("#aPass").value = makePass();
+  bindLevel($("#aStage"),$("#aLv"),$("#aLvW"),"");
   $("#aName").focus();
   $("#aSave").onclick = async () => {
-    const name=$("#aName").value.trim(), user=$("#aUser").value.trim().toLowerCase(), pass=$("#aPass").value.trim(), stage=$("#aStage").value||null;
+    const name=$("#aName").value.trim(), user=$("#aUser").value.trim().toLowerCase(), pass=$("#aPass").value.trim(), stage=stageVal($("#aStage").value,$("#aLv").value);
     const m=$("#aMsg"); m.textContent="";
     if(name.length<3){ m.textContent="Escribe el nombre completo."; return; }
     if(!/^[a-z0-9._-]{3,40}$/.test(user)){ m.textContent="El usuario solo puede llevar minúsculas, números, punto o guion."; return; }
@@ -1134,6 +1144,7 @@ async function openStudent(id){
     <details class="sec" style="margin-top:22px"><summary style="font-weight:600;cursor:pointer">Ajustes de la cuenta</summary>
       <label class="f" for="eName">Nombre completo</label><input class="in" id="eName" value="${esc(s.full_name)}">
       <label class="f" for="eStage">Grupo</label><select class="in" id="eStage">${groupOptions(s.stage)}</select>
+      <div id="eLvW"><label class="f" for="eLv">Nivel</label><select class="in" id="eLv"></select></div>
       <label class="toggle"><input type="checkbox" id="eActive" ${s.active?"checked":""}> Cuenta activa</label>
       <div class="actions"><button class="btn btn-primary" id="eSave">Guardar cambios</button></div><div class="msg" id="eMsg"></div>
       <h3 style="font-size:15px;margin:22px 0 4px">Contraseña</h3>
@@ -1143,6 +1154,7 @@ async function openStudent(id){
       <button class="btn btn-danger" id="dBtn" style="width:100%;margin-top:22px">Eliminar alumno</button><div class="msg err" id="dMsg"></div>
     </details>`);
 
+  bindLevel($("#eStage"),$("#eLv"),$("#eLvW"),lvOf(s.stage));
   loadTasks(s);
   rpc("admin_student_progress",{p_student:id,p_limit:1000}).then(raw => {
     const seen=new Set(), rows=(raw||[]).filter(r=>{ const u=r.detail&&r.detail.uid; if(!u) return true; if(seen.has(u)) return false; seen.add(u); return true; });
@@ -1186,7 +1198,7 @@ async function openStudent(id){
 
   $("#eSave").onclick = async () => {
     const m=$("#eMsg"); m.className="msg";
-    try{ await rpc("admin_update_student",{p_student:id,p_full_name:$("#eName").value,p_stage:$("#eStage").value||null,p_active:$("#eActive").checked});
+    try{ await rpc("admin_update_student",{p_student:id,p_full_name:$("#eName").value,p_stage:stageVal($("#eStage").value,$("#eLv").value),p_active:$("#eActive").checked});
       m.className="msg ok"; m.textContent="Cambios guardados"; loadStudents(); }
     catch(err){ m.className="msg err"; m.textContent=err.message; }
   };

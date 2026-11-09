@@ -216,6 +216,7 @@
   function pathCard() {
     var o = {}; try { o = JSON.parse(localStorage.getItem("mova_ruta_v1") || "{}"); } catch (e) {}
     var P = window.MOVA_PATH, st = o.stage || "children", lv = o.level, names = { kids: "Kids", children: "Children", teens: "Teens" };
+    try { var u = window.MovaAuth && MovaAuth.user(), pp = u && u.stage ? String(u.stage).split(" · ") : [], g = (pp[0] || "").toLowerCase(), ts = /kid/.test(g) ? "kids" : /child/.test(g) ? "children" : /teen/.test(g) ? "teens" : null; if (ts && pp[1] && P && P[ts] && P[ts][pp[1]]) { st = ts; lv = pp[1]; } } catch (e) {}
     var label = "Choose your stage and level", sub = "Grammar, vocabulary, practice and a final check for every level.", pct = 0, href = "ruta.html";
     if (P && P[st]) {
       if (!lv || !P[st][lv]) lv = Object.keys(P[st]).filter(function (k) { return P[st][k].topics.some(function (t) { return t.exp; }); })[0];

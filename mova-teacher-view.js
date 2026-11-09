@@ -168,9 +168,9 @@
     dch.onclick = function (e) { var b = e.target.closest("button"); if (!b) return; due = b.dataset.d; paintDue(); };
     paintDue();
     var ls = s.querySelector(".ls"), ch = s.querySelector(".ch"), go = s.querySelector(".go"), inp = s.querySelector("input");
-    function list() { return (students || []).filter(function (x) { return x.active !== false && (grp === "all" || x.stage === grp) && (!q || (x.full_name + " " + x.username).toLowerCase().indexOf(q) >= 0); }); }
+    function list() { return (students || []).filter(function (x) { return x.active !== false && (grp === "all" || String(x.stage || "").split(" · ")[0] === grp) && (!q || (x.full_name + " " + x.username).toLowerCase().indexOf(q) >= 0); }); }
     function paint() {
-      var gs = []; (students || []).forEach(function (x) { if (x.stage && gs.indexOf(x.stage) < 0) gs.push(x.stage); });
+      var gs = []; (students || []).forEach(function (x) { var g0 = x.stage && String(x.stage).split(" · ")[0]; if (g0 && gs.indexOf(g0) < 0) gs.push(g0); });
       ch.innerHTML = '<button type="button" data-g="all" class="' + (grp === "all" ? "on" : "") + '">All</button>' + gs.map(function (g) { return '<button type="button" data-g="' + esc(g) + '" class="' + (grp === g ? "on" : "") + '">' + esc(g) + "</button>"; }).join("") + '<button type="button" data-g="__sel">Select all shown</button>';
       var L = list();
       ls.innerHTML = L.length ? L.map(function (x, i) { return '<div class="li' + (sel[x.id] ? " on" : "") + '" data-id="' + esc(x.id) + '"><span class="av" style="background:' + COLORS[i % COLORS.length] + '">' + esc(ini(x.full_name)) + "</span><div><b>" + esc(x.full_name) + "</b><small>" + esc(x.stage || x.username) + '</small></div><span class="c"></span></div>'; }).join("") : '<p class="sub" style="padding:10px 0">No students found.</p>';
