@@ -141,6 +141,9 @@ h1.t{font-size:32px;margin:2px 4px 4px}
 .js.bdg.lock img{filter:grayscale(1);opacity:.45}
 .js.wr{background:var(--butter)}.js.wr.lock{background:#FFF6D6}
 .js.ph{background:var(--peri)}.js.ph.lock{background:#EEF1FF}
+.js.bon{background:var(--pink)}.js.bon.lock{background:#FFE6F2;border-color:#FF8FC0}.js.bon.lock svg{opacity:.8}.js.bon.done{background:var(--lime)}
+.jbon{margin:0 18px 14px;border-radius:18px;background:#FFE6F2;padding:12px 14px;font-size:13px;line-height:1.4}.jbon b{display:block;font-size:14px}
+.bnu{margin:12px 0 4px;border-radius:20px;background:#FFE6F2;padding:16px;text-align:center}.bnu b{display:block;font-size:17px;margin-bottom:4px}.bnu p{margin:0;font-size:13.5px;line-height:1.45}
 .js.flag{width:84px;height:84px;background:var(--navy)}.js.flag.done{background:var(--lime)}
 .jlab{position:absolute;transform:translateY(-50%);width:132px;cursor:pointer}
 .jlab b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:16px;line-height:1.05}
@@ -299,6 +302,14 @@ var KEY="mova_ruta_v1";
 function S(){try{var o=JSON.parse(localStorage.getItem(KEY)||"{}");o.done=o.done||{};o.vocab=o.vocab||{};o.checks=o.checks||{};o.badges=o.badges||{};o.built=o.built||0;return o;}catch(e){return {done:{},vocab:{},checks:{},badges:{},built:0};}}
 function W(o){try{localStorage.setItem(KEY,JSON.stringify(o));}catch(e){}}
 function user(){try{return window.MovaAuth&&MovaAuth.user();}catch(e){return null;}}
+/* Paradas bonus: 5 temas seguidos de su nivel con 90%+ al primer intento, sin ayuda y en al menos 2 días */
+function nextCode(st,code){var k=Object.keys(D[st]),i=k.indexOf(code);return i>=0&&i<k.length-1?k[i+1]:null;}
+function bonusCheck(o,st,code){var t=tLevel();if(t&&(t.st!==st||t.lv!==code))return null;var key=st+"|"+code,nx=nextCode(st,code);o.bonus=o.bonus||{};if(o.bonus[key]||!nx)return null;
+  var F=Object.keys(o.first||{}).map(function(k){return o.first[k];}).filter(function(x){return x.st===st&&x.lv===code;}).sort(function(a,b){return a.d-b.d;}).slice(-5);
+  if(F.length<5||!F.every(function(x){return x.p>=90&&!x.h;}))return null;
+  var days={};F.forEach(function(x){days[new Date(x.d).toDateString()]=1;});if(Object.keys(days).length<2)return null;
+  o.bonus[key]={d:Date.now(),next:nx};return {next:nx,ev:F.map(function(x){return {t:x.t,p:x.p,d:new Date(x.d).toISOString()};})};}
+function bonusStops(st,code){var o=S(),b=o.bonus&&o.bonus[st+"|"+code];if(!b||!D[st][b.next])return [];return D[st][b.next].topics.filter(ready).slice(0,3).map(function(t){var d=o.done[t.id];return {k:"x",id:t.id,t:t.t,s:"Bonus · "+b.next+" preview",done:!!d,st:d&&d.stars};});}
 function saveCloud(title,score,total,extra){if(!user())return false;try{MovaAuth.save("ruta",title,score,total,extra);return true;}catch(e){return false;}}
 
 function ready(t){return !!t.exp;}
@@ -332,7 +343,7 @@ function checkBadges(o,quizScore){
 function newBadgesHtml(ids){return ids.map(function(id){var b=BADGES.filter(function(x){return x[0]===id;})[0];return '<div class="newb">'+bArt(id)+'<p>New badge<b>'+b[1]+'</b>'+b[2]+'</p></div>';}).join("");}
 
 
-document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("#rmBtn");if(b&&window.MovaRemember&&window.__rmT)MovaRemember.open(window.__rmT);});
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("#rmBtn");if(b&&window.MovaRemember&&window.__rmT){window.__rmUsed=true;MovaRemember.open(window.__rmT);}});
 var BEE='<svg viewBox="0 0 120 100" aria-hidden="true"><g stroke="#15192B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="46" cy="22" rx="16" ry="20" fill="#E6E2FF" transform="rotate(-20 46 22)"/><ellipse cx="72" cy="20" rx="15" ry="19" fill="#E6E2FF" transform="rotate(20 72 20)"/><ellipse cx="60" cy="58" rx="38" ry="30" fill="#FFE58A"/><path d="M52 30c-4 18-4 38 0 56M70 30c4 18 4 38 0 56" fill="none" stroke-width="9"/><path d="M28 34c-6-10-4-20 2-24M40 30c0-10 4-18 10-20" fill="none"/><circle cx="30" cy="9" r="3.5" fill="#15192B"/><circle cx="51" cy="9" r="3.5" fill="#15192B"/><path d="M98 58l14 0"/></g><circle cx="34" cy="52" r="3.6" fill="#15192B"/><circle cx="35" cy="51" r="1.2" fill="#fff"/><path d="M28 64c4 4 10 4 13 0" fill="none" stroke="#15192B" stroke-width="3" stroke-linecap="round"/><ellipse cx="27" cy="60" rx="4" ry="2.6" fill="#FF8FC0" opacity=".7"/></svg>';
 /* ---------- journey map ---------- */
 var BUDS=[["beat","Beat"],["queenie","Queenie"],["bloom","Bloom"],["nova","Nova"],["mochi","Mochi"],["echo","Echo"],["tri","Tri"],["pop","Pop"],["daisy","Daisy"]];
@@ -348,12 +359,13 @@ function journey(st,code){
     if(gi%every===0&&ex.length&&i<G.length-1)out.push(ex.shift());});
   ex.forEach(function(e){out.push(e);});
   out.push({k:"f",t:"Level check",s:"Pass 75% to finish "+code,done:(o.checks[st+"|"+code]||0)>=75});
+  var BX=bonusStops(st,code);
   var earned=Object.keys(o.badges).sort(function(a,b){return o.badges[a]-o.badges[b];}),un=BADGES.map(function(b){return b[0];}).filter(function(id){return !o.badges[id];}),bk=0;
   out.forEach(function(x){if(x.k!=="b")return;x.bid=bk<earned.length?earned[bk]:un[bk-earned.length]||"stage-star";x.done=bk<earned.length;var B=BADGES.filter(function(y){return y[0]===x.bid;})[0];x.t=B?B[1]:"Badge";x.s=x.done?"Badge earned":(B?B[2]:"");bk++;});
-  var cur=out.findIndex(function(x){return x.k!=="b"&&!x.done;});if(cur<0)cur=out.length-1;
+  var cur=out.findIndex(function(x){return x.k!=="b"&&!x.done;});if(cur<0)cur=out.length-1;BX.forEach(function(x){out.push(x);});
   var nb=out.slice(cur).findIndex(function(x){return x.k==="b"&&!x.done;});
   var stars=0;Object.keys(o.done).forEach(function(k){if(G.some(function(t){return t.id===k;})||(L.writing||[]).some(function(t){return t.id===k;})||(L.phonics||[]).some(function(t){return t.id===k;}))stars+=(o.done[k].stars||0);});
-  return {stops:out,cur:cur,toNext:nb<0?0:nb,stars:stars,badges:earned.length,topicsDone:G.filter(function(t){return o.done[t.id];}).length,topics:G.length};
+  return {stops:out,cur:cur,bonus:BX.length?o.bonus[st+"|"+code].next:null,toNext:nb<0?0:nb,stars:stars,badges:earned.length,topicsDone:G.filter(function(t){return o.done[t.id];}).length,topics:G.length};
 }
 var JI={check:'<svg viewBox="0 0 24 24" fill="none" stroke="#15192B" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
 play:'<svg viewBox="0 0 24 24"><path d="M8 5.5l11 6.5-11 6.5z" fill="#15192B"/></svg>',
@@ -361,16 +373,17 @@ book:'<svg viewBox="0 0 24 24" fill="none" stroke="#15192B" stroke-width="2.4" s
 pen:'<svg viewBox="0 0 24 24" fill="none" stroke="#15192B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>',
 abc:'<svg viewBox="0 0 24 24" fill="none" stroke="#15192B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 17l3-9 3 9M4.6 14h3.8M12 8v9h3a2.2 2.2 0 0 0 0-4.5H12M12 8h2.6a2 2 0 0 1 0 4.5"/><path d="M21 9.5a3 3 0 1 0 0 5"/></svg>',
 ear:'<svg viewBox="0 0 24 24" fill="none" stroke="#15192B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 9a5 5 0 0 1 10 0c0 3-3 4-3 7a3 3 0 0 1-6 0"/><path d="M10 9.5a2 2 0 0 1 4 0"/></svg>',
+star:'<svg viewBox="0 0 24 24" fill="#fff" stroke="#15192B" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>',
 flag:'<svg viewBox="0 0 24 24" fill="none" stroke="#D3F36B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4M6 4h11l-2.5 4L17 12H6"/></svg>'};
 function jStars(n){var h="";for(var i=0;i<3;i++)h+='<svg viewBox="0 0 24 24" width="15" height="15" fill="'+(i<n?"#FFC93C":"#E3DFEF")+'" stroke="#15192B" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/></svg>';return '<div class="stars">'+h+'</div>';}
 function drawJourney(st,code,tb){
   var o=S(),bud=o.buddy||"beat",J=journey(st,code);
   tb.innerHTML='<section class="jpick"><h3>Choose your buddy</h3><p>Your buddy walks the path with you.</p><div class="jbud">'+BUDS.map(function(b){return '<button data-b="'+b[0]+'" class="'+(b[0]===bud?"on":"")+'"><img src="buddy-'+b[0]+'.webp" alt=""><span>'+b[1]+'</span></button>';}).join("")+'</div></section>'+
-    '<section class="jmap"><div class="jl"><b>'+esc(code)+' · '+esc(D[st][code].name)+'</b><span>'+J.topicsDone+' of '+J.topics+' topics</span></div><div id="jm"></div><div class="jleg"><span><i style="background:#D3F36B"></i>Grammar</span><span><i style="background:#FFE58A"></i>Writing</span>'+(st==="kids"?'<span><i style="background:#C9D2FF"></i>Phonics</span>':'')+'<span><i style="background:#E6E2FF"></i>Badge</span><span><i style="background:#1A1B2E"></i>Level check</span></div></section>'+
+    '<section class="jmap"><div class="jl"><b>'+esc(code)+' · '+esc(D[st][code].name)+'</b><span>'+J.topicsDone+' of '+J.topics+' topics</span></div>'+(J.bonus?'<div class="jbon"><b>Bonus stops unlocked!</b>You aced 5 topics in a row, so you can preview '+esc(J.bonus)+'. Your teacher will decide when you move up.</div>':'')+'<div id="jm"></div><div class="jleg"><span><i style="background:#D3F36B"></i>Grammar</span><span><i style="background:#FFE58A"></i>Writing</span>'+(st==="kids"?'<span><i style="background:#C9D2FF"></i>Phonics</span>':'')+'<span><i style="background:#E6E2FF"></i>Badge</span>'+(J.bonus?'<span><i style="background:#FF8FC0"></i>Bonus</span>':'')+'<span><i style="background:#1A1B2E"></i>Level check</span></div></section>'+
     '<button class="jgo" id="jgo">'+(J.stops[J.cur].k==="f"?"Take the Level check →":"Continue: "+esc(J.stops[J.cur].t)+" →")+'</button>';
   tb.querySelectorAll(".jbud button").forEach(function(b){b.onclick=function(){var m=S();m.buddy=b.dataset.b;W(m);drawJourney(st,code,tb);};});
   var m=document.getElementById("jm");
-  function open(x){if(x.k==="g"||x.k==="p"||x.k==="ph")go("t/"+x.id);else if(x.k==="w")location.href="juego-writing.html#"+x.id;else if(x.k==="b")go("badges");else if(x.k==="f")go("check/"+st+"/"+encodeURIComponent(code));}
+  function open(x){if(x.k==="g"||x.k==="p"||x.k==="ph"||x.k==="x")go("t/"+x.id);else if(x.k==="w")location.href="juego-writing.html#"+x.id;else if(x.k==="b")go("badges");else if(x.k==="f")go("check/"+st+"/"+encodeURIComponent(code));}
   function paint(){
     var Wd=m.clientWidth||340,P=[],y=70,S2=J.stops;
     S2.forEach(function(x,i){var px=Wd*(i%2?0.7:0.32);if(x.k==="b")px=Wd*0.5;P.push([px,y]);y+=x.k==="b"?95:88;});
@@ -380,7 +393,7 @@ function drawJourney(st,code,tb){
     S2.forEach(function(x,i){var stt=x.done?"done":i===J.cur?"cur":"lock",cls="js "+stt,ic;
       if(x.k==="b"){cls="js bdg"+(x.done?"":" lock");ic=bArt(x.bid);}
       else if(x.k==="f"){cls="js flag"+(x.done?" done":"");ic=x.done?JI.check:JI.flag;}
-      else{if(x.k==="w")cls+=" wr";if(x.k==="p")cls+=" wr";if(x.k==="ph")cls+=" ph";ic=x.done?JI.check:i===J.cur?JI.play:(x.k==="w"?JI.pen:x.k==="p"?JI.abc:x.k==="ph"?JI.ear:JI.book);}
+      else{if(x.k==="w")cls+=" wr";if(x.k==="p")cls+=" wr";if(x.k==="ph")cls+=" ph";if(x.k==="x")cls+=" bon";ic=x.done?JI.check:i===J.cur?JI.play:(x.k==="w"?JI.pen:x.k==="p"?JI.abc:x.k==="ph"?JI.ear:x.k==="x"?JI.star:JI.book);}
       h+='<button class="'+cls+'" data-i="'+i+'" style="left:'+P[i][0]+'px;top:'+P[i][1]+'px" aria-label="'+esc(x.t)+'">'+ic+'</button>';
       if(x.k==="p")h+='<span class="jbz" style="left:'+P[i][0]+'px;top:'+P[i][1]+'px">'+BEE+'</span>';
       var side=(P[i][0]<Wd/2||x.k==="b")?"r":"l",lx=side==="r"?P[i][0]+(x.k==="b"?52:48):P[i][0]-48-132;
@@ -487,7 +500,7 @@ function findTopic(id){for(var st in D)for(var code in D[st])for(var kind in KIN
 /* ---------- tema: explicación → construir → quiz ---------- */
 function topic(id,from){
   var f=findTopic(id);if(!f||!ready(f.t))return go("");
-  var t=f.t,es=STG[f.st].lang==="es",step=0,builtOk=0,qi=0,score=0,qs=null,bi=0;
+  var t=f.t,es=STG[f.st].lang==="es",step=0,builtOk=0,qi=0,score=0,qs=null,bi=0,helped=false;
   var tabName=f.kind==='topics'?'grammar':f.kind,lvlHref=from==="g"?"./#/structures":"#/lv/"+f.st+"/"+encodeURIComponent(f.code)+"/"+tabName,hasB=t.b&&t.b.length,NS=hasB?3:2;
   function steps(n){if(!hasB&&n===2)n=1;return '<div class="steps">'+(hasB?[0,1,2]:[0,1]).map(function(i){return '<i class="'+(i<=n?"on":"")+'"></i>';}).join("")+"</div>";}
   function head(){return '<div class="rm-bar">'+back(lvlHref,from==="g"?"Grammar":STG[f.st].name+" · "+f.code)+(window.MovaRemember&&(f.kind==="topics"||f.kind==="writing")?MovaRemember.button():"")+'</div>';}
@@ -521,7 +534,7 @@ function topic(id,from){
     }
     draw();
   }
-  function startQuiz(){var TY=["gap","mistake","rw"],k=0,FX=(t.fx||[]).slice(0,2),src=FX.length?shuffle(t.q).slice(0,6-FX.length):t.q;qs=shuffle(src).map(function(q){var o=q[1].map(function(x,i){return {x:x,ok:i===q[2]};});var ty="mc";if(f.kind==="topics"&&!q[4]&&/___/.test(q[0])&&(q[0].match(/___/g)||[]).length===1){ty=TY[k%3];k++;}
+  function startQuiz(){window.__rmUsed=false;helped=false;var TY=["gap","mistake","rw"],k=0,FX=(t.fx||[]).slice(0,2),src=FX.length?shuffle(t.q).slice(0,6-FX.length):t.q;qs=shuffle(src).map(function(q){var o=q[1].map(function(x,i){return {x:x,ok:i===q[2]};});var ty="mc";if(f.kind==="topics"&&!q[4]&&/___/.test(q[0])&&(q[0].match(/___/g)||[]).length===1){ty=TY[k%3];k++;}
     var wrong=q[1].filter(function(x,i){return i!==q[2];});return {q:q[0],o:shuffle(o),why:q[3],say:q[4],ty:ty,right:q[1][q[2]],wrong:wrong[Math.floor(Math.random()*wrong.length)],rwOk:Math.random()<.5};});
     FX.forEach(function(x,i){qs.splice(Math.min(qs.length,1+i*3),0,{ty:"fix",w:x[0].split(" "),r:x[1].split(" "),why:x[2]});});
     if(f.kind==="topics"){
@@ -551,7 +564,7 @@ function topic(id,from){
       app.innerHTML=head()+steps(2)+'<div class="card"><span class="kicker">'+NS+' · TAP TO FIX · '+(qi+1)+'/'+qs.length+'</span><h2 style="font-size:20px">Tap the words that need fixing.</h2><div class="xwords">'+q.w.map(function(w,i){return '<button class="xw" data-i="'+i+'">'+esc(w)+'</button>';}).join("")+'</div><div class="bzt">'+BEE+'<span><b>Buzz says:</b> '+esc(q.why)+'</span></div><div id="fbq"><button class="cta ghost" id="gv" style="margin-top:10px">Show me the answer</button></div></div>';
       var endFix=function(show){app.querySelectorAll(".xw").forEach(function(x,i){x.disabled=true;if(show&&need[i]&&!x.classList.contains("good")){x.textContent=q.r[i];x.classList.add("good");}});finishQ(!show&&miss<=1,esc(q.r.join(" ")));};
       app.querySelectorAll(".xw").forEach(function(b){b.onclick=function(){var i=+b.dataset.i;if(b.classList.contains("good"))return;if(need[i]){b.textContent=q.r[i];b.classList.add("good");got++;if(got===tot)endFix(false);}else{miss++;b.classList.add("miss");setTimeout(function(){b.classList.remove("miss");},500);}};});
-      document.getElementById("gv").onclick=function(){endFix(true);};
+      document.getElementById("gv").onclick=function(){helped=true;endFix(true);};
       return;}
     if(q.ty!=="mc"){var KN={gap:"FILL THE GAP",mistake:"FIND THE MISTAKE",rw:"RIGHT OR WRONG?"},full=function(w){return q.q.replace("___",w);},head2=head()+steps(2)+'<div class="card"><span class="kicker">'+NS+' · '+KN[q.ty]+' · '+(qi+1)+'/'+qs.length+'</span>';
       if(q.ty==="gap"){app.innerHTML=head2+'<h2 style="font-size:20px">Choose the missing word.</h2><div class="xq">'+esc(q.q).replace("___",'<span class="xgap" id="xg">&nbsp;</span>')+'</div><div class="xopts">'+q.o.map(function(o,i){return '<button class="xopt" data-i="'+i+'">'+esc(o.x)+'</button>';}).join("")+'</div><div id="fbq"></div></div>';
@@ -574,10 +587,13 @@ function topic(id,from){
   function done(){
     var st=score>=6?3:score>=4?2:1,o=S(),prev=o.done[t.id];
     if(!prev||score>prev.score)o.done[t.id]={score:score,stars:st,d:Date.now()};
-    o.built+=builtOk;var nb=checkBadges(o,score);W(o);
+    o.built+=builtOk;var nb=checkBadges(o,score),bn=null;
+    if(f.kind==="topics"){o.first=o.first||{};if(!o.first[t.id]){o.first[t.id]={p:Math.round(score/(qs.length||6)*100),h:helped||!!window.__rmUsed,d:Date.now(),st:f.st,lv:f.code,t:t.t};bn=bonusCheck(o,f.st,f.code);}}
+    W(o);
+    if(bn)saveCloud("My path · Bonus unlocked · "+STG[f.st].name+" "+f.code+" → "+bn.next,5,5,{kind:"bonus",stage:f.st,level:f.code,next:bn.next,ev:bn.ev});
     var saved=saveCloud("My path · "+STG[f.st].name+" "+f.code+" · "+(f.kind!=="topics"?KINDS[f.kind]+": ":"")+t.t,score,6,{kind:"score",stage:f.st,level:f.code,topic:t.t,sentences_first_try:builtOk});
     var nt=f.list.filter(function(x){return x.exp&&!S().done[x.id];})[0]||null;
-    app.innerHTML=head()+'<div class="res"><span class="ring"></span><span class="k">'+esc(t.t)+'</span><h2>'+score+'<small> / 6</small></h2>'+stars(st)+'<p>'+(score>=6?(es?"¡Perfecto! Dominas este tema.":"Perfect! You've mastered this topic."):score>=4?(es?"¡Muy bien! Un repaso más y será perfecto.":"Great work! One more review and it'll be perfect."):(es?"Buen intento. Vuelve a leer la explicación y repite el quiz.":"Good try. Read the explanation again and retake the quiz."))+'</p></div>'+newBadgesHtml(nb)+
+    app.innerHTML=head()+'<div class="res"><span class="ring"></span><span class="k">'+esc(t.t)+'</span><h2>'+score+'<small> / 6</small></h2>'+stars(st)+'<p>'+(score>=6?(es?"¡Perfecto! Dominas este tema.":"Perfect! You've mastered this topic."):score>=4?(es?"¡Muy bien! Un repaso más y será perfecto.":"Great work! One more review and it'll be perfect."):(es?"Buen intento. Vuelve a leer la explicación y repite el quiz.":"Good try. Read the explanation again and retake the quiz."))+'</p></div>'+newBadgesHtml(nb)+(bn?'<div class="bnu"><b>Bonus stops unlocked!</b><p>Five topics in a row at 90% or more on the first try. You can now preview '+esc(bn.next)+' on your map, and your teacher has been notified.</p></div>':'')+
       '<div class="row2" style="margin-top:6px"><button class="cta ghost" id="again">'+(es?"Repetir":"Try again")+'</button><button class="cta" id="nt">'+(nt?(es?"Siguiente tema":"Next topic"):(es?"Ir al nivel":"Back to level"))+'</button></div><p class="saved" id="sv"></p>';
     document.getElementById("again").onclick=function(){topic(id);};
     document.getElementById("nt").onclick=function(){if(nt)go("t/"+nt.id+(from==="g"?"/g":""));else if(from==="g")location.href=lvlHref;else location.hash=lvlHref.slice(1);};
