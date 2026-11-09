@@ -227,6 +227,7 @@ header.top .brand-mark{box-shadow:none;border-radius:50%}
 .rpA .sb li b{font-size:11.5px;border-radius:999px;padding:3px 10px;white-space:nowrap;background:#F2EFF8}
 .rpA .sb li>i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:12px;flex:none;background:#D3F36B}.rpA .sb li.pe>i{background:#FFE6F2;color:#A3216A}.rpA .sb li.pr>i{background:#E5E9FF;color:#3B3F57}
 .rpA .sb .map li>i{width:12px;height:12px;border:1.5px solid #15192B}.rpA .sb .map li b{background:none;padding:0;font-weight:700;color:#3B3F57}
+.rpA .sig{margin:18px 48px 0;text-align:center}.rpA .sig img{height:64px;display:block;margin:0 auto -10px}.rpA .sig .ln{display:inline-block;min-width:240px;border-top:1.5px solid #15192B;padding-top:7px}.rpA .sig b{display:block;font-size:14px}.rpA .sig small{font-size:12px;color:#6B6F86;font-weight:600}
 .rpA .nxt{margin:0 20px 16px;background:#FBF8EE;border-radius:14px;padding:10px 14px;font-size:12.5px;font-weight:700;color:#5B4A12}
 .rpA .ft{position:absolute;left:48px;right:48px;bottom:26px;display:flex;justify-content:space-between;font-size:11px;color:#8A8EA5}
 
@@ -440,7 +441,7 @@ const SB_KEY = "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6";
 const STORE = "mova_admin_session";
 const GROUPS = ["Kids","Children","Teens","Adultos","TOEFL","Matemáticas","Lectoescritura"];
 const COLORS = ["#F6D776","#8EC9EE","#9DDCC0","#B9A6E8","#F9B8AE"];
-const ACT_NAMES = {"math-level-up":"Math Level Up","math-comprueba":"Matemáticas · comprobación","math-practica":"Matemáticas · práctica guiada","word-quest":"Word Quest","mision-matematica":"Misión Matemática","level-up":"Level Up","verb-memory":"Verb Memory",
+const ACT_NAMES = {"math-level-up":"Math Level Up","math-comprueba":"Matemáticas · comprobación","math-practica":"Matemáticas · práctica guiada","math-leccion":"Matemáticas · lección","word-quest":"Word Quest","mision-matematica":"Misión Matemática","level-up":"Level Up","verb-memory":"Verb Memory",
   "sentence-builder":"Sentence Builder","locked-library":"Locked Library","toefl-practice":"TOEFL Practice","word-forms":"Word Forms",
   "sentence-scramble":"Sentence Scramble","lee-con-mochi":"Aprende a leer con Mochi","sopa-de-letras":"Sopa de letras","crucigrama":"Crucigrama","likes-dislikes":"Likes & Dislikes","speaking":"Speaking Lab","ruta":"My Path"};
 
@@ -1288,7 +1289,7 @@ async function buildReport(s, all, y, mo, note){
   const EST={dom:["#D3F36B","Dominado"],des:["#C7B5FF","En desarrollo"],ref:["#FF9CC9","Por reforzar"]};
   const li=(main,small,right,cls)=>`<li${cls?` class="${cls}"`:""}>${cls?`<i>${cls==="ok"?"✓":"•"}</i>`:""}<span>${esc(main)}${small?`<small>${esc(small)}</small>`:""}</span>${right?`<b>${esc(right)}</b>`:""}</li>`;
   const taskList=k=>{ const ts=mTasks.filter(x=>tSubj(x.t)===k); return ts.length?ts.map(x=>li(tName(x.t), x.done?"Completada el "+fd(x.done.created_at):"Asignada el "+fd(x.t.created_at), x.done?(x.done.total?Math.round(x.done.score/x.done.total*100)+"%":"Completada"):"Pendiente", x.done?"ok":"pe")).join(""):""; };
-  const practiced=k=>{ const by={}; ownRows.filter(r=>rowSubj(r)===k&&!/^math-(comprueba|level-up|practica)$/.test(r.activity)&&!isReading(r)).forEach(r=>{ const [n]=catOf(r.activity); by[n]=by[n]||{n,s:0,k:0,it:[],best:-1}; by[n].s+=secsOf(r); by[n].k++; if(r.total) by[n].best=Math.max(by[n].best,Math.round(r.score/r.total*100)); const t=rowTitle(r); if(t&&t!==n&&!/minuto/.test(t)&&by[n].it.length<2&&!by[n].it.includes(t)) by[n].it.push(t); });
+  const practiced=k=>{ const by={}; ownRows.filter(r=>rowSubj(r)===k&&!/^math-(comprueba|level-up|practica|leccion)$/.test(r.activity)&&!isReading(r)).forEach(r=>{ const [n]=catOf(r.activity); by[n]=by[n]||{n,s:0,k:0,it:[],best:-1}; by[n].s+=secsOf(r); by[n].k++; if(r.total) by[n].best=Math.max(by[n].best,Math.round(r.score/r.total*100)); const t=rowTitle(r); if(t&&t!==n&&!/minuto/.test(t)&&by[n].it.length<2&&!by[n].it.includes(t)) by[n].it.push(t); });
     const out=Object.values(by).sort((a,b)=>b.s-a.s||b.k-a.k).slice(0,k==="en"&&readings.length?2:3).map(c=>li(c.n, c.it.join(", "), c.best>=0?c.best+"%":c.s?fmtMin(c.s):c.k+(c.k===1?" vez":" veces")));
     if(k==="en"&&readings.length) out.unshift(li("Reading Library", readings.slice(0,2).join(", ")+(readings.length>2?` y ${readings.length-2} más`:""), readings.length+(readings.length===1?" lectura":" lecturas")));
     return out.join(""); };
@@ -1298,10 +1299,10 @@ async function buildReport(s, all, y, mo, note){
   const sb=(a,b)=>`<div class="sb${a&&b?"":" one"}">${a}${b}</div>`;
   const secs=subs.map(k=>{
     if(k==="mat"){
-      const per={}; rows.filter(r=>r.activity==="math-comprueba"||r.activity==="math-practica").sort((p,q)=>new Date(p.created_at)-new Date(q.created_at)).forEach(r=>{ const id=String(r.item); const o=per[id]=per[id]||{id,ses:0,secs:0,cp:null}; o.secs+=secsOf(r); if(r.activity==="math-practica") o.ses++; else o.cp=r; });
+      const per={}; rows.filter(r=>/^math-(comprueba|practica|leccion)$/.test(r.activity)).sort((p,q)=>new Date(p.created_at)-new Date(q.created_at)).forEach(r=>{ const id=String(r.item); const o=per[id]=per[id]||{id,ses:0,secs:0,cp:null,les:0}; o.secs+=secsOf(r); if(r.activity==="math-practica") o.ses++; else if(r.activity==="math-leccion") o.les++; else o.cp=r; });
       const cpl=Object.values(per).map(o=>{ const sk=MMx&&MMx.ski[o.id], nm=sk?sk.n:(o.cp&&o.cp.detail&&o.cp.detail.skill)||o.id, r=o.cp, pass=r&&r.detail&&r.detail.pass, was=mm&&mm.before[o.id];
         const tm=o.secs?" · "+fmtMin(o.secs):"";
-        if(!r) return li(nm, `Practicó ${o.ses} ${o.ses===1?"sesión":"sesiones"}${tm}`, "En práctica", "pr");
+        if(!r) return li(nm, (o.ses?`Practicó ${o.ses} ${o.ses===1?"sesión":"sesiones"}`:"Vio la lección")+tm, o.ses?"En práctica":"Lección", "pr");
         return li(nm, (pass?(was&&was!=="dom"?`Pasó de ${EST[was][1]} a Dominado`:"Comprobada el "+fd(r.created_at)):"Sigue practicando · "+fd(r.created_at))+tm, r.total?`${r.score}/${r.total}`:"", pass?"ok":"pe"); });
       const pend=mTasks.filter(x=>tSubj(x.t)==="mat"&&!x.done).map(x=>li(tName(x.t).replace(/^Matemáticas · /,""), "Asignada el "+fd(x.t.created_at)+" · en práctica", "Pendiente","pe"));
       const lvl=mTasks.filter(x=>x.t.task==="m-levelup"&&x.done).length||(mm&&mm.inMonth);
@@ -1334,6 +1335,7 @@ async function buildReport(s, all, y, mo, note){
     </div>
     ${secs}
     ${note?`<div class="note"><h3>Comentario de la maestra</h3><p>${esc(note).replace(/\n/g,"<br>")}</p></div>`:""}
+    <div class="sig">${window.MovaSig?`<img src="${window.MovaSig}" alt="">`:""}<div class="ln"><b>Miss Karla Rodríguez</b><small>Coordinación Académica</small></div></div>
     <div class="ft"><span>MOVA Centro Pedagógico · Monterrey · @movacp.mx</span><span>Generado el ${new Date().toLocaleDateString("es-MX",{day:"numeric",month:"long",year:"numeric"})}</span></div>
   </div>`;
   let stage=document.getElementById("repStage"); if(!stage){ stage=document.createElement("div"); stage.id="repStage"; document.body.appendChild(stage); }

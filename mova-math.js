@@ -889,7 +889,12 @@
   function vPract(id) {
     var s = SKI[id]; if (!s) return null;
     var html = '<div class="mm-hero" style="--c:' + EJES[s.e].c + ';min-height:0;padding:20px 22px"><span class="mm-dot a"></span><div class="mm-hx" style="max-width:100%"><span class="mm-k">' + EJES[s.e].n + " · " + level(s.g) + '</span><h1 style="font-size:28px">' + esc(s.n) + '</h1></div></div><div id="mm-pr"></div>';
-    return page(s.n, html, function (root) { practice(root.querySelector("#mm-pr"), s); });
+    return page(s.n, html, function (root) { var bx = root.querySelector("#mm-pr"); startSkill(bx, s); });
+  }
+  function lessonOf(s) { return window.MovaMathLessons && window.MovaMathLessons.get(s.id); }
+  function startSkill(box, s) {
+    if (lessonOf(s)) window.MovaMathLessons.render(box, s, function () { practice(box, s); }, cloud);
+    else practice(box, s);
   }
   function practice(box, s) {
     var HELP = 6, CHK = 5, i = 0, phase = "help", ok = 0, wrongs = [], hok = 0, t0 = Date.now();
@@ -900,8 +905,9 @@
         box.querySelector("[data-go]").onclick = function () { phase = "check"; i = 0; ok = 0; wrongs = []; step(); }; box.querySelector("[data-more]").onclick = function () { i = 0; t0 = Date.now(); step(); }; return; }
       if (phase === "check" && i >= CHK) return finish();
       var q = s.gen(), tot = phase === "help" ? HELP : CHK;
-      box.innerHTML = '<div class="mm-prog"><i style="width:' + Math.round(i / tot * 100) + '%"></i></div><div class="mm-sh" style="margin-top:0"><b>' + (phase === "help" ? "Practica con ayuda" : "Comprueba") + "</b><small>Ejercicio " + (i + 1) + " de " + tot + "</small></div>" +
+      box.innerHTML = (phase === "help" && lessonOf(s) ? '<button type="button" class="ls-back" data-les><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"/></svg>Ver la lección</button>' : "") + '<div class="mm-prog"><i style="width:' + Math.round(i / tot * 100) + '%"></i></div><div class="mm-sh" style="margin-top:0"><b>' + (phase === "help" ? "Practica con ayuda" : "Comprueba") + "</b><small>Ejercicio " + (i + 1) + " de " + tot + "</small></div>" +
         '<div class="mm-card" data-q>' + qHtml(q, phase === "help" ? "help" : "check") + '<div data-fb></div></div><div class="mm-stack"><button type="button" class="mm-btn dk" data-next disabled>' + (phase === "help" ? "Revisar" : "Siguiente") + "</button></div>";
+      var lb = box.querySelector("[data-les]"); if (lb) lb.onclick = function () { window.scrollTo(0, 0); window.MovaMathLessons.render(box, s, function () { step(); }, null); };
       var nx = box.querySelector("[data-next]"), card = box.querySelector("[data-q]"), get = wireQ(card, q, function (r) { nx.disabled = !r; }), revised = false;
       var go = function () {
         if (nx.disabled) return;
