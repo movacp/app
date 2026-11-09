@@ -609,6 +609,7 @@
     if (k.indexOf("r:") === 0) return "index.html" + q + "#/library/" + encodeURIComponent(k.slice(2));
     if (k.indexOf("e:") === 0) return "index.html" + q + "#/lecturas/" + encodeURIComponent(k.slice(2));
     if (k.indexOf("w:") === 0) return "juego-writing.html" + q + "#" + encodeURIComponent(k.slice(2));
+    if (k.indexOf("mq:") === 0) return "ruta.html" + q + "#/mq/" + encodeURIComponent(k.slice(3));
     if (k === "m-levelup") return "index.html" + q + "#/matematicas/levelup";
     if (k.indexOf("m:") === 0) return "index.html" + q + "#/matematicas/practica/" + encodeURIComponent(k.slice(2));
     if (k === "toefl-sim") return "juego-toefl-practice.html" + q + "#sim";
@@ -687,7 +688,7 @@
   }
   /* ---------- Assigned activities: tarjeta fija en el inicio, en My Progress y número en "Me" ---------- */
   var asgCache = null, asgAt = 0, asgBusy = false;
-  function asgKind(t) { var k = taskKey(t); return /^m(-levelup$|:)/.test(k) ? ["M", "#FFF1C9", "Matemáticas"] : /^t:/.test(k) ? ["G", "#D3F36B", "Grammar"] : /^(v|xv):/.test(k) ? ["F", "#FFC7E2", "Vocabulary"] : /^e:/.test(k) ? ["L", "#FFE58A", "Lectura"] : /^w:/.test(k) ? ["W", "#BDF0D8", "Writing"] : /^r:|^lectura$/.test(k) ? ["R", "#FFE58A", "Reading"] : k === "toefl-sim" || k === "level-up" ? ["E", "#C9D2FF", "Exam"] : ["P", "#BDF0D8", "Game"]; }
+  function asgKind(t) { var k = taskKey(t); return /^mq:/.test(k) ? ["Q", "#FF8FC0", "Monthly Quiz"] : /^m(-levelup$|:)/.test(k) ? ["M", "#FFF1C9", "Matemáticas"] : /^t:/.test(k) ? ["G", "#D3F36B", "Grammar"] : /^(v|xv):/.test(k) ? ["F", "#FFC7E2", "Vocabulary"] : /^e:/.test(k) ? ["L", "#FFE58A", "Lectura"] : /^w:/.test(k) ? ["W", "#BDF0D8", "Writing"] : /^r:|^lectura$/.test(k) ? ["R", "#FFE58A", "Reading"] : k === "toefl-sim" || k === "level-up" ? ["E", "#C9D2FF", "Exam"] : ["P", "#BDF0D8", "Game"]; }
   function asgLoad(cb) {
     if (!user) return cb(null);
     if (asgCache && Date.now() - asgAt < 60000) return cb(asgCache);

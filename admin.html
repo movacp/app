@@ -416,7 +416,7 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
       <div class="sech"><h3>Resultados por alumno</h3><button class="lnk" id="expLu">Exportar a Excel</button></div>
       <div class="list" id="luList"></div>
     </div>
-    <div id="v-tasks" class="hidden"><div id="tkAll"></div></div>
+    <div id="v-tasks" class="hidden"><button class="btn btn-primary btn-full" id="mqNew" style="margin:0 0 14px">+ Crear Monthly Quiz</button><div id="tkAll"></div></div>
     <div class="view hidden" id="v-insights">
       <div class="visits" id="luIns" style="margin-top:0"></div>
       <div class="visits" id="visits"><h2>Visitas a la app</h2><p class="vs">Cargando…</p></div>
@@ -435,6 +435,7 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
 <div id="toast" class="toast hidden"></div>
 
 <script src="wl-data.js"></script>
+<script src="ruta-data.js"></script>
 <script>
 const SB_URL = "https://fclafxrkibvcjktrgznt.supabase.co";
 const SB_KEY = "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6";
@@ -1108,7 +1109,7 @@ const CAT = {"app-lecturas":["Lecturas","#8EC9EE"],"app-library":["Lecturas","#8
   "app-games":["Juegos","#F9B8AE"],"app-flashcards":["Flashcards","#B9A6E8"],"app-wordsearch":["Sopa de letras","#9DDCC0"],
   "app-coloring":["Para colorear","#F6D776"],"app-holidays":["Festividades","#F9B8AE"],"app-learn":["Aprende","#8EC9EE"],
   "app-lectoescritura":["Lectoescritura","#9DDCC0"],"app-matematicas":["Matemáticas","#B9A6E8"],"app-familias":["Familias","#F6D776"],
-  "app-shop":["Tienda","#E3E7F0"],"app-mova":["MOVA","#E3E7F0"],"lee-con-mochi":["Lectoescritura","#9DDCC0"],"speaking":["Speaking","#FF8FC8"],"ruta":["Grammar","#C9D2FF"]};
+  "app-shop":["Tienda","#E3E7F0"],"app-mova":["MOVA","#E3E7F0"],"lee-con-mochi":["Lectoescritura","#9DDCC0"],"speaking":["Speaking","#FF8FC8"],"ruta":["Grammar","#C9D2FF"],"monthly-quiz":["Monthly Quiz","#FF8FC0"]};
 function catOf(a){ return CAT[a] || [ACT_NAMES[a] || (/^repaso-/.test(a)?"Repaso para exámenes":/^matematicas-/.test(a)?"Práctica de matemáticas":a), "#F2786B"]; }
 function secsOf(r){
   if(r.detail && r.detail.secs) return r.detail.secs;
@@ -1325,7 +1326,9 @@ async function buildReport(s, all, y, mo, note){
       const nxt=mm?`<p class="nxt">${lvl?"Este mes presentó su Math Level Up. ":""}Su próximo Math Level Up es en ${MESES[mm.next.getMonth()].toLowerCase()}${mm.next.getFullYear()!==y?" de "+mm.next.getFullYear():""}.</p>`:"";
       return `<section class="sub">${subHead(k,sub)}${sb(mm?`<div><h4>Su mapa matemático</h4><ul class="map">${map}</ul></div>`:"",col("Habilidades que trabajó este mes",right))}${nxt}</section>`;
     }
-    return `<section class="sub">${subHead(k,k==="en"?(s.stage||""):"Español · lectura y escritura")}${sb(col("Lo que más practicó",practiced(k)),col("Asignadas por la maestra",taskList(k)))}</section>`;
+    const mqR=k==="en"?rows.filter(r=>r.activity==="monthly-quiz"&&r.total).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at))[0]:null;
+    const mqH=mqR?`<p class="nxt" style="background:#FFE6F2;border-radius:14px;padding:10px 14px"><b>${esc(String(mqR.item||"Monthly Quiz").split(" · ")[0])}: ${(Math.round(mqR.score/mqR.total*100)/10).toFixed(1)}</b> · ${mqR.score} de ${mqR.total} aciertos${mqR.detail&&mqR.detail.by?" · "+Object.keys(mqR.detail.by).map(t=>esc(t)+" "+mqR.detail.by[t][0]+"/"+mqR.detail.by[t][1]).join(" · "):""}</p>`:"";
+    return `<section class="sub">${subHead(k,k==="en"?(s.stage||""):"Español · lectura y escritura")}${mqH}${sb(col("Lo que más practicó",practiced(k)),col("Asignadas por la maestra",taskList(k)))}</section>`;
   }).join("");
   const BC=["#B9A6FF","#FF8FC8","#C4EA4F","#8FA2FF","#FFD45E","#9BE7C4"];
   const stat=(v,l,bg)=>`<div style="background:${bg}"><b>${v}</b><span>${l}</span></div>`;
@@ -1504,6 +1507,38 @@ function openBonus(x){
       s.stage=G+" · "+D0.next; bnCache=bnCache.filter(y=>y!==x); closeModal(); toast(`${s.full_name.split(" ")[0]} ahora está en ${D0.next}`); drawAllTasks(); loadStudents(); }
     catch(e){ $("#bnMsg").textContent=e.message; b.disabled=false; b.textContent=`Subir a ${G} · ${D0.next}`; } };
 }
+/* ---------- Monthly Quiz: la maestra elige etapa, nivel, temas y semana ---------- */
+function mqWeek(){ const t=new Date(), y=t.getFullYear(), m=t.getMonth(), last=new Date(y,m+1,0); let f=new Date(last); while(f.getDay()!==5) f.setDate(f.getDate()-1); const mo=new Date(f); mo.setDate(f.getDate()-4);
+  if(mo<t){ const n=new Date(t); n.setDate(n.getDate()+((8-n.getDay())%7||7)); mo.setTime(n.getTime()); f=new Date(n); f.setDate(n.getDate()+4); }
+  const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); return [iso(mo),iso(f)]; }
+function openMQ(){
+  const P=window.MOVA_PATH||{}, SN={kids:"Kids",children:"Children",teens:"Teens"}, [w0,w1]=mqWeek();
+  openModal(`<button class="x" aria-label="Cerrar">×</button><h2>Crear Monthly Quiz</h2>
+    <p class="sub">Elija el nivel y los temas que vieron este mes. Se abre solo en la semana que indique, para que cada alumno lo presente en su día de clase.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label class="f" for="mqSt">Etapa</label><select class="in" id="mqSt">${Object.keys(SN).map(k=>`<option value="${k}">${SN[k]}</option>`).join("")}</select></div>
+    <div><label class="f" for="mqLv">Nivel</label><select class="in" id="mqLv"></select></div></div>
+    <label class="f">Temas del mes</label><div id="mqTp" style="display:flex;flex-direction:column;gap:6px;max-height:240px;overflow:auto;background:#F7F5FB;border-radius:14px;padding:10px 12px"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 0.8fr;gap:10px"><div><label class="f" for="mqA">Abre</label><input class="in" type="date" id="mqA" value="${w0}"></div><div><label class="f" for="mqB">Cierra</label><input class="in" type="date" id="mqB" value="${w1}"></div>
+    <div><label class="f" for="mqN">Preguntas</label><select class="in" id="mqN"><option>10</option><option selected>12</option><option>15</option></select></div></div>
+    <label class="f">Alumnos</label><div id="mqSs" style="display:flex;flex-direction:column;gap:6px;max-height:200px;overflow:auto;background:#F7F5FB;border-radius:14px;padding:10px 12px"></div>
+    <button class="btn btn-primary btn-full" id="mqGo" style="margin-top:14px">Asignar quiz</button><div class="msg err" id="mqMsg"></div>`);
+  const paintLv=()=>{ const st=$("#mqSt").value; $("#mqLv").innerHTML=Object.keys(P[st]||{}).map(l=>`<option>${l}</option>`).join(""); paint(); };
+  const paint=()=>{ const st=$("#mqSt").value, lv=$("#mqLv").value, L=(P[st]||{})[lv]; const ts=L?L.topics.filter(t=>t.exp&&t.q&&t.q.length):[];
+    $("#mqTp").innerHTML=ts.length?ts.map(t=>`<label style="display:flex;gap:10px;align-items:center;font-size:14px"><input type="checkbox" value="${esc(t.id)}"> ${esc(t.t)}</label>`).join(""):`<p class="sub" style="margin:0">Este nivel aún no tiene temas.</p>`;
+    const G=SN[st], list=(students||[]).filter(x=>x.active!==false&&grpOf(x.stage)===G).sort((a,b)=>a.full_name.localeCompare(b.full_name,"es"));
+    $("#mqSs").innerHTML=list.length?list.map(x=>{ const l=lvOf(x.stage); return `<label style="display:flex;gap:10px;align-items:center;font-size:14px"><input type="checkbox" value="${esc(x.id)}" ${l===lv?"checked":""}> ${esc(x.full_name)} <span class="sub" style="margin:0">${esc(l||"sin nivel")}</span></label>`; }).join(""):`<p class="sub" style="margin:0">No hay alumnos activos en ${G}.</p>`; };
+  $("#mqSt").onchange=paintLv; $("#mqLv").onchange=paint; paintLv();
+  $("#mqGo").onclick=async()=>{ const m=$("#mqMsg"); m.textContent="";
+    const st=$("#mqSt").value, lv=$("#mqLv").value, ids=[...$("#mqTp").querySelectorAll("input:checked")].map(i=>i.value), ss=[...$("#mqSs").querySelectorAll("input:checked")].map(i=>(students||[]).find(x=>String(x.id)===i.value)).filter(Boolean);
+    const a=$("#mqA").value, b=$("#mqB").value, n=$("#mqN").value;
+    if(!ids.length){ m.textContent="Elija al menos un tema."; return; } if(!a||!b||a>b){ m.textContent="Revise las fechas de la semana."; return; } if(!ss.length){ m.textContent="Elija al menos un alumno."; return; }
+    const MN=["January","February","March","April","May","June","July","August","September","October","November","December"], mes=MN[new Date(b+"T12:00:00").getMonth()];
+    const id=Date.now().toString(36), task="mq:"+id+"~"+[st,lv,a,b,n,ids.join(",")].join("|"), title=`${mes} Quiz · ${SN[st]} ${lv}`;
+    const btn=$("#mqGo"); btn.disabled=true; btn.textContent="Asignando…"; let ok=0;
+    for(const x of ss){ try{ await rpc("admin_assign_task",{p_student:String(x.id),p_username:x.username,p_task:task,p_title:title+" · due "+b+" · by "+tName()}); ok++; }catch(e){} }
+    closeModal(); toast(`${title} asignado a ${ok} alumno${ok===1?"":"s"}`); loadAllTasks(true); };
+}
+document.addEventListener("click",e=>{ if(e.target&&e.target.id==="mqNew") openMQ(); });
 const WL_CRIT=["Contenido y tarea","Organización","Uso del idioma","Ortografía y puntuación"];
 const WL_CRIT_EN=["Task & content","Organization","Language","Spelling & punctuation"];
 function openWriting(uid){
