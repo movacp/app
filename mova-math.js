@@ -892,10 +892,12 @@
     return page(s.n, html, function (root) { practice(root.querySelector("#mm-pr"), s); });
   }
   function practice(box, s) {
-    var HELP = 6, CHK = 5, i = 0, phase = "help", ok = 0, wrongs = [];
+    var HELP = 6, CHK = 5, i = 0, phase = "help", ok = 0, wrongs = [], hok = 0, t0 = Date.now();
+    function secs() { var x = Math.round((Date.now() - t0) / 1000); t0 = Date.now(); return Math.min(x, 3600); }
     function step() {
-      if (phase === "help" && i >= HELP) { box.innerHTML = '<div class="mm-card mm-res"><div class="big">Comprueba</div><p>Ahora resuelve ' + CHK + " ejercicios sin pistas. Si aciertas " + (CHK - 1) + " o más, este tema sube a <b>Dominado</b> en tu mapa.</p></div>" + '<div class="mm-stack"><button type="button" class="mm-btn dk" data-go>Empezar</button><button type="button" class="mm-btn gh" data-more>Practicar un poco más</button></div>';
-        box.querySelector("[data-go]").onclick = function () { phase = "check"; i = 0; ok = 0; wrongs = []; step(); }; box.querySelector("[data-more]").onclick = function () { i = 0; step(); }; return; }
+      if (phase === "help" && i >= HELP) { cloud("math-practica", s.id, hok, HELP, { kind: "math-practica", skill: s.n, eje: s.e, secs: secs() }); hok = 0;
+        box.innerHTML = '<div class="mm-card mm-res"><div class="big">Comprueba</div><p>Ahora resuelve ' + CHK + " ejercicios sin pistas. Si aciertas " + (CHK - 1) + " o más, este tema sube a <b>Dominado</b> en tu mapa.</p></div>" + '<div class="mm-stack"><button type="button" class="mm-btn dk" data-go>Empezar</button><button type="button" class="mm-btn gh" data-more>Practicar un poco más</button></div>';
+        box.querySelector("[data-go]").onclick = function () { phase = "check"; i = 0; ok = 0; wrongs = []; step(); }; box.querySelector("[data-more]").onclick = function () { i = 0; t0 = Date.now(); step(); }; return; }
       if (phase === "check" && i >= CHK) return finish();
       var q = s.gen(), tot = phase === "help" ? HELP : CHK;
       box.innerHTML = '<div class="mm-prog"><i style="width:' + Math.round(i / tot * 100) + '%"></i></div><div class="mm-sh" style="margin-top:0"><b>' + (phase === "help" ? "Practica con ayuda" : "Comprueba") + "</b><small>Ejercicio " + (i + 1) + " de " + tot + "</small></div>" +
@@ -905,7 +907,7 @@
         if (nx.disabled) return;
         if (phase === "check") { var r = check(q, get()); if (r.ok) ok++; else wrongs.push({ q: q, e: r.e }); i++; window.scrollTo(0, 0); return step(); }
         if (revised) { i++; window.scrollTo(0, 0); return step(); }
-        var res = check(q, get()); revised = true;
+        var res = check(q, get()); revised = true; if (res.ok) hok++;
         card.querySelectorAll("input,button.mm-opt,.mm-sign,[data-rec]").forEach(function (x) { x.disabled = true; });
         if (q.t === "mc") card.querySelectorAll("[data-o]").forEach(function (b) { var o = q.o[Number(b.dataset.o)]; if (o.ok) b.classList.add("ok"); else if (b.classList.contains("sel")) b.classList.add("no"); });
         card.querySelector("[data-fb]").innerHTML = res.ok ? '<div class="mm-fb ok"><b>¡Exacto!</b> ' + q.h + "</div>" : '<div class="mm-fb no">' + (res.e ? res.e + " " : "") + "La respuesta correcta es <b>" + showAns(q) + "</b>.<br>" + q.h + "</div>";
@@ -916,12 +918,12 @@
     function finish() {
       var pass = ok >= CHK - 1, d = load();
       if (pass && d) { d.skills[s.id] = "dom"; d.done = d.done || {}; d.done[s.id] = 1; recompute(d); store(d); }
-      cloud("math-comprueba", s.id, ok, CHK, { kind: "math-comprueba", skill: s.n, eje: s.e, pass: pass });
+      cloud("math-comprueba", s.id, ok, CHK, { kind: "math-comprueba", skill: s.n, eje: s.e, pass: pass, secs: secs() });
       var nextS = d ? route(d).filter(function (x) { return !(d.done && d.done[x.id]); })[0] : null;
       box.innerHTML = '<div class="mm-card mm-res"><div class="big">' + ok + " de " + CHK + "</div><p>" + (pass ? "¡Muy bien! Dominaste <b>" + esc(s.n) + "</b>." + (d ? " Tu mapa ya se actualizó." : "") : "Todavía no, pero vas avanzando. Revisa tus errores y vuelve a intentarlo: así se aprende.") + "</p></div>" +
         (wrongs.length ? '<div class="mm-sh"><b>Revisa estos ejercicios</b></div>' + wrongs.map(function (w) { return '<div class="mm-card" style="margin-bottom:10px"><p class="mm-q" style="margin-bottom:8px">' + w.q.q + '</p><div class="mm-fb no" style="margin-top:0">' + (w.e ? w.e + " " : "") + "Respuesta correcta: <b>" + showAns(w.q) + "</b>.<br>" + w.q.h + "</div></div>"; }).join("") : "") +
         '<div class="mm-stack">' + (pass && nextS ? '<a class="mm-btn dk" href="#/matematicas/practica/' + nextS.id + '">Siguiente tema: ' + esc(nextS.n) + "</a>" : "") + (!pass ? '<button type="button" class="mm-btn dk" data-again>Practicar de nuevo</button>' : "") + '<a class="mm-btn gh" href="#/matematicas/ruta">Volver a mi ruta</a></div>';
-      var ag = box.querySelector("[data-again]"); if (ag) ag.onclick = function () { phase = "help"; i = 0; step(); };
+      var ag = box.querySelector("[data-again]"); if (ag) ag.onclick = function () { phase = "help"; i = 0; hok = 0; t0 = Date.now(); step(); };
       window.scrollTo(0, 0);
     }
     step();

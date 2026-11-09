@@ -214,6 +214,20 @@ header.top .brand-mark{box-shadow:none;border-radius:50%}
 .rpA .asg li b{font-size:12px;border-radius:999px;padding:3px 11px;white-space:nowrap}.rpA .asg .ok b{background:#ECFBC8}.rpA .asg .pe b{background:#FFE6F2;color:#A3216A}
 .rpA .none{font-size:13px;color:#6B6F86;margin:0}
 .rpA .note{margin:14px 48px 0;background:#15192B;color:#fff;border-radius:22px;padding:16px 24px}.rpA .note h3{color:#D3F36B}.rpA .note p{margin:0;font-size:13.5px;line-height:1.55}
+.rpA .who .tags{margin-left:auto;display:flex;gap:6px}.rpA .who .tags em{margin-left:0;font-size:12.5px;padding:7px 13px}
+.rpA .sub{margin:14px 48px 0;background:#fff;border-radius:24px;overflow:hidden}
+.rpA .sub>header{display:flex;align-items:center;gap:14px;padding:14px 20px}
+.rpA .sub>header .ic{width:40px;height:40px;border-radius:13px;background:#fff;display:grid;place-items:center;flex:none}
+.rpA .sub>header h3{margin:0;font-size:21px}.rpA .sub>header p{margin:2px 0 0;font-size:12.5px;font-weight:600;color:#3B3F57}
+.rpA .kp{margin-left:auto;display:flex;gap:18px;text-align:right}.rpA .kp b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:22px;line-height:1}.rpA .kp span{font-size:11.5px;font-weight:700;color:#3B3F57}
+.rpA .sb{display:grid;grid-template-columns:1fr 1fr}.rpA .sb>div{padding:14px 20px 16px}.rpA .sb>div+div{border-left:1px dashed #E6E1F2}.rpA .sb.one{grid-template-columns:1fr}
+.rpA .sb h4{margin:0 0 8px;font-size:12.5px;font-weight:800;color:#6B6F86}
+.rpA .sb li{display:flex;align-items:center;gap:10px;padding:6px 0}.rpA .sb li:last-child{border-bottom:0}
+.rpA .sb li span{flex:1}.rpA .sb li small{display:block;font-weight:500;color:#6B6F86;font-size:11.5px}
+.rpA .sb li b{font-size:11.5px;border-radius:999px;padding:3px 10px;white-space:nowrap;background:#F2EFF8}
+.rpA .sb li>i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:12px;flex:none;background:#D3F36B}.rpA .sb li.pe>i{background:#FFE6F2;color:#A3216A}.rpA .sb li.pr>i{background:#E5E9FF;color:#3B3F57}
+.rpA .sb .map li>i{width:12px;height:12px;border:1.5px solid #15192B}.rpA .sb .map li b{background:none;padding:0;font-weight:700;color:#3B3F57}
+.rpA .nxt{margin:0 20px 16px;background:#FBF8EE;border-radius:14px;padding:10px 14px;font-size:12.5px;font-weight:700;color:#5B4A12}
 .rpA .ft{position:absolute;left:48px;right:48px;bottom:26px;display:flex;justify-content:space-between;font-size:11px;color:#8A8EA5}
 
 /* Tareas + reporte de simulación */
@@ -426,7 +440,7 @@ const SB_KEY = "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6";
 const STORE = "mova_admin_session";
 const GROUPS = ["Kids","Children","Teens","Adultos","TOEFL","Matemáticas","Lectoescritura"];
 const COLORS = ["#F6D776","#8EC9EE","#9DDCC0","#B9A6E8","#F9B8AE"];
-const ACT_NAMES = {"word-quest":"Word Quest","mision-matematica":"Misión Matemática","level-up":"Level Up","verb-memory":"Verb Memory",
+const ACT_NAMES = {"math-level-up":"Math Level Up","math-comprueba":"Matemáticas · comprobación","math-practica":"Matemáticas · práctica guiada","word-quest":"Word Quest","mision-matematica":"Misión Matemática","level-up":"Level Up","verb-memory":"Verb Memory",
   "sentence-builder":"Sentence Builder","locked-library":"Locked Library","toefl-practice":"TOEFL Practice","word-forms":"Word Forms",
   "sentence-scramble":"Sentence Scramble","lee-con-mochi":"Aprende a leer con Mochi","sopa-de-letras":"Sopa de letras","crucigrama":"Crucigrama","likes-dislikes":"Likes & Dislikes","speaking":"Speaking Lab","ruta":"My Path"};
 
@@ -1084,8 +1098,9 @@ const CAT = {"app-lecturas":["Lecturas","#8EC9EE"],"app-library":["Lecturas","#8
   "app-coloring":["Para colorear","#F6D776"],"app-holidays":["Festividades","#F9B8AE"],"app-learn":["Aprende","#8EC9EE"],
   "app-lectoescritura":["Lectoescritura","#9DDCC0"],"app-matematicas":["Matemáticas","#B9A6E8"],"app-familias":["Familias","#F6D776"],
   "app-shop":["Tienda","#E3E7F0"],"app-mova":["MOVA","#E3E7F0"],"lee-con-mochi":["Lectoescritura","#9DDCC0"],"speaking":["Speaking","#FF8FC8"],"ruta":["Grammar","#C9D2FF"]};
-function catOf(a){ return CAT[a] || [ACT_NAMES[a] || a, "#F2786B"]; }
+function catOf(a){ return CAT[a] || [ACT_NAMES[a] || (/^repaso-/.test(a)?"Repaso para exámenes":/^matematicas-/.test(a)?"Práctica de matemáticas":a), "#F2786B"]; }
 function secsOf(r){
+  if(r.detail && r.detail.secs) return r.detail.secs;
   if(r.detail && r.detail.kind==="time") return r.detail.seconds||0;
   if(r.detail && r.detail.seconds && /minuto/.test(r.item||"")) return r.detail.seconds;
   return 0;
@@ -1240,9 +1255,6 @@ async function buildReport(s, all, y, mo, note){
   const totalS = rows.reduce((a,r)=>a+secsOf(r),0);
   const activeDays = new Set(rows.map(r=>new Date(r.created_at).getDate()));
   const readings = []; rows.filter(isReading).forEach(r=>{ const t=r.item.replace(/^Lectura · /,""); if(!readings.includes(t)) readings.push(t); });
-  const by={}; ownRows.forEach(r=>{ const [n,c]=catOf(r.activity); by[n]=by[n]||{n,c,s:0,k:0}; by[n].s+=secsOf(r); by[n].k++; });
-  const cats=Object.values(by).sort((a,b)=>b.s-a.s||b.k-a.k).slice(0,6), maxS=Math.max(1,...cats.map(c=>c.s));
-  const results=rows.filter(r=>r.total || r.item==="Nuevo récord").slice(0,5);
   const first=new Date(y,mo,1), dim=new Date(y,mo+1,0).getDate(), lead=(first.getDay()+6)%7;
   let cal=["L","M","M","J","V","S","D"].map(d=>`<em>${d}</em>`).join("");
   for(let i=0;i<lead;i++) cal+="<u></u>";
@@ -1250,8 +1262,64 @@ async function buildReport(s, all, y, mo, note){
   let streak=0,run=0; for(let d=1; d<=dim; d++){ run=activeDays.has(d)?run+1:0; streak=Math.max(streak,run); }
   const nm=s.full_name, firstName=nm.split(/\s+/)[0];
   const n=activeDays.size, head = n>=8 ? `¡Gran mes, ${firstName}!` : n>0 ? `¡Buen trabajo, ${firstName}!` : `Tu mes en MOVA, ${firstName}`;
+  /* Reporte por materia: Inglés, Matemáticas y Lectoescritura. Solo aparecen las materias con actividad o tareas en el mes. */
+  const SJ={en:{n:"Inglés",c:"#E5E9FF",b:"#8FA2FF",ic:'<path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"/><path d="M8 9h6M8 13h4"/>'},
+            mat:{n:"Matemáticas",c:"#FFF1C9",b:"#F6D776",ic:'<path d="M12 4v6M9 7h6M5 16h5M15 14l4 4M19 14l-4 4"/>'},
+            lecto:{n:"Lectoescritura",c:"#ECFBC8",b:"#C4EA4F",ic:'<path d="M4 19l4-1 10-10-3-3L5 15z"/><path d="M13 7l3 3"/>'}};
+  const MMx=window.MovaMath;
+  const rowSubj=r=>{ const a=String(r.activity||""); if(/^math-/.test(a)||MATH_RX.test(a)) return "mat"; if(/^(lee-con-mochi|feria-mochi)$/.test(a)) return "lecto"; return "en"; };
+  const tSubj=t=>{ const k=tkSubj(t); return k==="toefl"?"en":k; };
+  const tName=t=>String(t.task).includes("~")?t.title:(TASK_NAME[t.task]||String(t.title||"").replace(/ · due .*$/,"").replace(/ · by .*$/,""));
+  const fd=d=>new Date(d).toLocaleDateString("es-MX",{day:"numeric",month:"short"});
+  const subs=Object.keys(SJ).filter(k=>rows.some(r=>rowSubj(r)===k)||mTasks.some(x=>tSubj(x.t)===k));
+  const subT={}; subs.forEach(k=>subT[k]=rows.filter(r=>rowSubj(r)===k).reduce((a,r)=>a+secsOf(r),0));
+  const subN={}; subs.forEach(k=>subN[k]=rows.filter(r=>rowSubj(r)===k).length);
+  const maxT=Math.max(1,...subs.map(k=>subT[k]||subN[k]));
+  const tDone=mTasks.filter(x=>x.done).length;
+  /* Mapa matemático vigente (último Math Level Up + comprobaciones aprobadas) */
+  let mm=null;
+  if(MMx){ const lus=all.filter(r=>r.activity==="math-level-up"&&r.detail&&r.detail.ejes&&new Date(r.created_at)<new Date(y,mo+1,1)).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+    if(lus.length){ const last=lus[lus.length-1], d=last.detail, sk=Object.assign({},d.skills||{});
+      all.filter(r=>r.activity==="math-comprueba"&&r.detail&&r.detail.pass&&MMx.ski[r.item]&&new Date(r.created_at)>new Date(last.created_at)&&new Date(r.created_at)<new Date(y,mo+1,1)).forEach(r=>sk[r.item]="dom");
+      const sc={dom:2,des:1,ref:0}, acc={}; Object.keys(sk).forEach(id=>{ const k=MMx.ski[id]; if(k) (acc[k.e]=acc[k.e]||[]).push(sc[sk[id]]); });
+      const ejes={}; Object.keys(acc).forEach(e=>{ const a=acc[e], m=a.reduce((p,q)=>p+q,0)/a.length; ejes[e]=m>=1.6?"dom":m>=.8?"des":"ref"; });
+      const nx=d.next?new Date(d.next):(()=>{ const t=new Date(last.created_at); t.setMonth(t.getMonth()+3); return t; })();
+      mm={G:+d.grade||1, ejes, before:d.skills||{}, next:nx, inMonth:new Date(last.created_at).getMonth()===mo&&new Date(last.created_at).getFullYear()===y}; } }
+  const EST={dom:["#D3F36B","Dominado"],des:["#C7B5FF","En desarrollo"],ref:["#FF9CC9","Por reforzar"]};
+  const li=(main,small,right,cls)=>`<li${cls?` class="${cls}"`:""}>${cls?`<i>${cls==="ok"?"✓":"•"}</i>`:""}<span>${esc(main)}${small?`<small>${esc(small)}</small>`:""}</span>${right?`<b>${esc(right)}</b>`:""}</li>`;
+  const taskList=k=>{ const ts=mTasks.filter(x=>tSubj(x.t)===k); return ts.length?ts.map(x=>li(tName(x.t), x.done?"Completada el "+fd(x.done.created_at):"Asignada el "+fd(x.t.created_at), x.done?(x.done.total?Math.round(x.done.score/x.done.total*100)+"%":"Completada"):"Pendiente", x.done?"ok":"pe")).join(""):""; };
+  const practiced=k=>{ const by={}; ownRows.filter(r=>rowSubj(r)===k&&!/^math-(comprueba|level-up|practica)$/.test(r.activity)&&!isReading(r)).forEach(r=>{ const [n]=catOf(r.activity); by[n]=by[n]||{n,s:0,k:0,it:[],best:-1}; by[n].s+=secsOf(r); by[n].k++; if(r.total) by[n].best=Math.max(by[n].best,Math.round(r.score/r.total*100)); const t=rowTitle(r); if(t&&t!==n&&!/minuto/.test(t)&&by[n].it.length<2&&!by[n].it.includes(t)) by[n].it.push(t); });
+    const out=Object.values(by).sort((a,b)=>b.s-a.s||b.k-a.k).slice(0,k==="en"&&readings.length?2:3).map(c=>li(c.n, c.it.join(", "), c.best>=0?c.best+"%":c.s?fmtMin(c.s):c.k+(c.k===1?" vez":" veces")));
+    if(k==="en"&&readings.length) out.unshift(li("Reading Library", readings.slice(0,2).join(", ")+(readings.length>2?` y ${readings.length-2} más`:""), readings.length+(readings.length===1?" lectura":" lecturas")));
+    return out.join(""); };
+  const kp=(k)=>{ const ts=mTasks.filter(x=>tSubj(x.t)===k); return `<div class="kp">${subT[k]?`<div><b>${esc(fmtMin(subT[k]))}</b><span>práctica</span></div>`:`<div><b>${subN[k]}</b><span>${subN[k]===1?"actividad":"actividades"}</span></div>`}${ts.length?`<div><b>${ts.filter(x=>x.done).length} de ${ts.length}</b><span>tareas</span></div>`:""}</div>`; };
+  const subHead=(k,sub)=>`<header style="background:${SJ[k].c}"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#15192B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${SJ[k].ic}</svg></div><div><h3>${SJ[k].n}</h3>${sub?`<p>${esc(sub)}</p>`:""}</div>${kp(k)}</header>`;
+  const col=(h,body)=>body?`<div><h4>${h}</h4><ul>${body}</ul></div>`:"";
+  const sb=(a,b)=>`<div class="sb${a&&b?"":" one"}">${a}${b}</div>`;
+  const secs=subs.map(k=>{
+    if(k==="mat"){
+      const per={}; rows.filter(r=>r.activity==="math-comprueba"||r.activity==="math-practica").sort((p,q)=>new Date(p.created_at)-new Date(q.created_at)).forEach(r=>{ const id=String(r.item); const o=per[id]=per[id]||{id,ses:0,secs:0,cp:null}; o.secs+=secsOf(r); if(r.activity==="math-practica") o.ses++; else o.cp=r; });
+      const cpl=Object.values(per).map(o=>{ const sk=MMx&&MMx.ski[o.id], nm=sk?sk.n:(o.cp&&o.cp.detail&&o.cp.detail.skill)||o.id, r=o.cp, pass=r&&r.detail&&r.detail.pass, was=mm&&mm.before[o.id];
+        const tm=o.secs?" · "+fmtMin(o.secs):"";
+        if(!r) return li(nm, `Practicó ${o.ses} ${o.ses===1?"sesión":"sesiones"}${tm}`, "En práctica", "pr");
+        return li(nm, (pass?(was&&was!=="dom"?`Pasó de ${EST[was][1]} a Dominado`:"Comprobada el "+fd(r.created_at)):"Sigue practicando · "+fd(r.created_at))+tm, r.total?`${r.score}/${r.total}`:"", pass?"ok":"pe"); });
+      const pend=mTasks.filter(x=>tSubj(x.t)==="mat"&&!x.done).map(x=>li(tName(x.t).replace(/^Matemáticas · /,""), "Asignada el "+fd(x.t.created_at)+" · en práctica", "Pendiente","pe"));
+      const lvl=mTasks.filter(x=>x.t.task==="m-levelup"&&x.done).length||(mm&&mm.inMonth);
+      const map=mm?Object.keys(mm.ejes).map(e=>`<li><i style="background:${EST[mm.ejes[e]][0]}"></i><span>${esc(MMx.ejes[e].n)}</span><b>${EST[mm.ejes[e]][1]}</b></li>`).join(""):"";
+      const otherMath=practiced("mat");
+      const right=cpl.concat(pend).join("")+otherMath;
+      const sub=mm&&MMx?`${MMx.grades[mm.G].n} · MOVA ${({kids:"Kids",children:"Children",teens:"Teens"})[MMx.grades[mm.G].s]||""}`:"";
+      const nxt=mm?`<p class="nxt">${lvl?"Este mes presentó su Math Level Up. ":""}Su próximo Math Level Up es en ${MESES[mm.next.getMonth()].toLowerCase()}${mm.next.getFullYear()!==y?" de "+mm.next.getFullYear():""}.</p>`:"";
+      return `<section class="sub">${subHead(k,sub)}${sb(mm?`<div><h4>Su mapa matemático</h4><ul class="map">${map}</ul></div>`:"",col("Habilidades que trabajó este mes",right))}${nxt}</section>`;
+    }
+    return `<section class="sub">${subHead(k,k==="en"?(s.stage||""):"Español · lectura y escritura")}${sb(col("Lo que más practicó",practiced(k)),col("Asignadas por la maestra",taskList(k)))}</section>`;
+  }).join("");
   const BC=["#B9A6FF","#FF8FC8","#C4EA4F","#8FA2FF","#FFD45E","#9BE7C4"];
   const stat=(v,l,bg)=>`<div style="background:${bg}"><b>${v}</b><span>${l}</span></div>`;
+  const left=subs.length>1
+    ? `<div class="bx"><h3>Su mes por materia</h3>${subs.map(k=>`<div class="bar"><div><b>${SJ[k].n}</b><span>${subT[k]?fmtMin(subT[k])+" · ":""}${subN[k]} ${subN[k]===1?"actividad":"actividades"}</span></div><div class="tr"><i style="width:${Math.max(6,Math.round((subT[k]||subN[k])/maxT*100))}%;background:${SJ[k].b}"></i></div></div>`).join("")}</div>`
+    : (()=>{ const by={}; ownRows.forEach(r=>{ const [n]=catOf(r.activity); by[n]=by[n]||{n,s:0,k:0}; by[n].s+=secsOf(r); by[n].k++; }); const cats=Object.values(by).sort((a,b)=>b.s-a.s||b.k-a.k).slice(0,6), mx=Math.max(1,...cats.map(c=>c.s));
+        return `<div class="bx"><h3>Practicó por su cuenta</h3>${cats.length?cats.map((c,i)=>`<div class="bar"><div><b>${esc(c.n)}</b><span>${c.s?fmtMin(c.s)+" · ":""}${c.k} ${c.k===1?"vez":"veces"}</span></div><div class="tr"><i style="width:${Math.max(6,Math.round(c.s/mx*100))}%;background:${BC[i%6]}"></i></div></div>`).join(""):`<p class="none">Sin actividad registrada este mes.</p>`}</div>`; })();
   const html=`<div class="rpA">
     <div class="hd">
       <div class="brand2"><div class="lg"><img src="icon-192.png" alt=""></div><div><b>MOVA Learning Studio</b><small>MOVA Centro Pedagógico</small></div></div>
@@ -1259,17 +1327,12 @@ async function buildReport(s, all, y, mo, note){
       <img class="bl" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMjAgMjIwIiBhcmlhLWhpZGRlbj0idHJ1ZSI+PHBhdGggZD0iTTk4IDEzOCBDOTYgMTU2LjAgOTAgMTY2LjAgOTIgMTc4IiBzdHJva2U9IiMxQTFCMkUiIHN0cm9rZS13aWR0aD0iMi4zIiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48ZWxsaXBzZSBjeD0iODkiIGN5PSIxODAiIHJ4PSI2LjIiIHJ5PSI0IiBmaWxsPSIjMUExQjJFIi8+PHBhdGggZD0iTTEyMiAxMzggQzEyNCAxNTYuMCAxMjggMTY2LjAgMTI3IDE3OCIgc3Ryb2tlPSIjMUExQjJFIiBzdHJva2Utd2lkdGg9IjIuMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PGVsbGlwc2UgY3g9IjEzMCIgY3k9IjE4MCIgcng9IjYuMiIgcnk9IjQiIGZpbGw9IiMxQTFCMkUiLz48cGF0aCBkPSJNODAgOTggQzYyIDEwNCA1MCA5MiA0OCA3NCIgc3Ryb2tlPSIjMUExQjJFIiBzdHJva2Utd2lkdGg9IjIuMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PGNpcmNsZSBjeD0iNDgiIGN5PSI3NCIgcj0iMy42IiBmaWxsPSIjMUExQjJFIi8+PHBhdGggZD0iTTE0MiAxMDAgQzE1MiAxMDQgMTYwIDEwMiAxNjggOTYiIHN0cm9rZT0iIzFBMUIyRSIgc3Ryb2tlLXdpZHRoPSIyLjMiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxjaXJjbGUgY3g9IjE2OCIgY3k9Ijk2IiByPSIzLjYiIGZpbGw9IiMxQTFCMkUiLz48Y2lyY2xlIGN4PSI4NiIgY3k9IjY4IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9IjEzNCIgY3k9IjY4IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9Ijg2IiBjeT0iMTE2IiByPSIzMCIgZmlsbD0iIzlDOEJGRiIvPjxjaXJjbGUgY3g9IjEzNCIgY3k9IjExNiIgcj0iMzAiIGZpbGw9IiM5QzhCRkYiLz48Y2lyY2xlIGN4PSIxMTAiIGN5PSI5MiIgcj0iMjYiIGZpbGw9IiM5QzhCRkYiLz48Y2lyY2xlIGN4PSI4MCIgY3k9IjYyIiByPSI3IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMjgiLz48cGF0aCBkPSJNOTQgMTA2IFExMTAgMTIyIDEyNiAxMDYiIHN0cm9rZT0iIzFBMUIyRSIgc3Ryb2tlLXdpZHRoPSIyLjMiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxlbGxpcHNlIGN4PSI4NCIgY3k9IjEwMCIgcng9IjUiIHJ5PSIzIiBmaWxsPSIjRkY4RkMwIiBvcGFjaXR5PSIuNTUiLz48ZWxsaXBzZSBjeD0iMTM2IiBjeT0iMTAwIiByeD0iNSIgcnk9IjMiIGZpbGw9IiNGRjhGQzAiIG9wYWNpdHk9Ii41NSIvPjxlbGxpcHNlIGN4PSI5NyIgY3k9Ijg4IiByeD0iNC4yIiByeT0iNS4yIiBmaWxsPSIjMUExQjJFIi8+PGVsbGlwc2UgY3g9IjEyMyIgY3k9Ijg4IiByeD0iNC4yIiByeT0iNS4yIiBmaWxsPSIjMUExQjJFIi8+PGNpcmNsZSBjeD0iOTguNCIgY3k9Ijg2LjIiIHI9IjEuNCIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjEyNC40IiBjeT0iODYuMiIgcj0iMS40IiBmaWxsPSIjZmZmIi8+PC9zdmc+" alt="">
       <svg class="wv" viewBox="0 0 794 46" preserveAspectRatio="none"><path d="M0 26 C 160 0 300 46 470 22 S 700 6 794 24 L794 46 L0 46Z" fill="#F5F3FA"/></svg>
     </div>
-    <div class="who"><div class="av2">${esc(initials(nm))}</div><div><h2>${esc(nm)}</h2><span>@${esc(s.username)}</span></div>${s.stage?`<em>${esc(s.stage)}</em>`:""}</div>
-    <div class="stats2">${stat(fmtMin(totalS)||"0 min","Tiempo de práctica","#ECFBC8")}${stat(n,n===1?"Día de práctica":"Días de práctica","#FFE6F2")}${stat(readings.length,readings.length===1?"Lectura":"Lecturas","#E5E9FF")}${stat(rows.length,"Actividades","#FFF6D1")}</div>
-    <div class="g2">
-      <div class="bx"><h3>Practicó por su cuenta</h3>${cats.length?cats.map((c,i)=>`<div class="bar"><div><b>${esc(c.n)}</b><span>${c.s?fmtMin(c.s)+" · ":""}${c.k} ${c.k===1?"vez":"veces"}</span></div><div class="tr"><i style="width:${Math.max(6,Math.round(c.s/maxS*100))}%;background:${BC[i%6]}"></i></div></div>`).join(""):`<p class="none">Sin actividad registrada este mes.</p>`}</div>
+    <div class="who"><div class="av2">${esc(initials(nm))}</div><div><h2>${esc(nm)}</h2><span>@${esc(s.username)}</span></div>${subs.length?`<div class="tags">${subs.map(k=>`<em style="background:${SJ[k].c}">${SJ[k].n}</em>`).join("")}</div>`:(s.stage?`<em>${esc(s.stage)}</em>`:"")}</div>
+    <div class="stats2">${stat(fmtMin(totalS)||"0 min","Tiempo de práctica","#ECFBC8")}${stat(n,n===1?"Día de práctica":"Días de práctica","#FFE6F2")}${mTasks.length?stat(`${tDone} de ${mTasks.length}`,"Tareas completadas","#E5E9FF"):stat(readings.length,readings.length===1?"Lectura":"Lecturas","#E5E9FF")}${stat(rows.length,"Actividades","#FFF6D1")}</div>
+    <div class="g2">${left}
       <div class="bx"><h3>Días que practicó</h3><div class="cal">${cal}</div>${streak>=2?`<p class="cap">Su mejor racha: ${streak} días seguidos</p>`:""}</div>
     </div>
-    ${mTasks.length?`<div class="bx asg"><h3>Asignadas por la maestra <span>${mTasks.filter(x=>x.done).length} de ${mTasks.length} completadas</span></h3><ul>${mTasks.map(x=>`<li class="${x.done?"ok":"pe"}"><i>${x.done?"✓":"•"}</i><span>${esc(String(x.t.task).includes("~")?x.t.title:(TASK_NAME[x.t.task]||x.t.title))}<small>Asignada el ${new Date(x.t.created_at).toLocaleDateString("es-MX",{day:"numeric",month:"short"})}${x.done?" · completada el "+new Date(x.done.created_at).toLocaleDateString("es-MX",{day:"numeric",month:"short"}):""}</small></span><b>${x.done?(x.done.total?Math.round(x.done.score/x.done.total*100)+"%":"Completada"):"Pendiente"}</b></li>`).join("")}</ul></div>`:""}
-    <div class="g2">
-      <div class="bx"><h3>Lecturas del mes</h3>${readings.length?`<ul>${readings.slice(0,6).map(t=>`<li>${esc(t)}</li>`).join("")}${readings.length>6?`<li class="more">y ${readings.length-6} más</li>`:""}</ul>`:`<p class="none">Este mes no registró lecturas.</p>`}</div>
-      <div class="bx res"><h3>Resultados</h3>${results.length?`<ul>${results.map(r=>`<li><span>${esc(ACT_NAMES[r.activity]||r.activity)} · ${esc(r.item==="Nuevo récord"?"récord":r.item.replace("Resultado del examen: ",""))}</span><b>${esc(rowRight(r))}</b></li>`).join("")}</ul>`:`<p class="none">Sin exámenes ni récords este mes.</p>`}</div>
-    </div>
+    ${secs}
     ${note?`<div class="note"><h3>Comentario de la maestra</h3><p>${esc(note).replace(/\n/g,"<br>")}</p></div>`:""}
     <div class="ft"><span>MOVA Centro Pedagógico · Monterrey · @movacp.mx</span><span>Generado el ${new Date().toLocaleDateString("es-MX",{day:"numeric",month:"long",year:"numeric"})}</span></div>
   </div>`;
