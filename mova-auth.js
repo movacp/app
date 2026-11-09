@@ -585,7 +585,20 @@
   var taskShown = false;
   /* La tarea puede traer las opciones elegidas por la maestra: "crucigrama~<opciones>" */
   function taskKey(t) { return String(t.task || "").split("~")[0]; }
-  function tkClean(a) { return (a || []).map(function (t) { var m = String(t.title || "").match(/^(.*?)\s+·\s+by\s+(Miss\s+[A-Za-zÁÉÍÓÚáéíóú]+)$/); if (m) { t = Object.assign({}, t, { title: m[1], by: m[2] }); } return t; }); }
+  /* Fecha de entrega: va en el título como " · due 2026-11-27". Las tareas asignadas antes del 9 nov 2026
+     no la traen: matemáticas vence el vie 13 nov y lo demás el vie 27 nov. */
+  var MATH_RX = /^(mision-matematica|la-tiendita|la-balanza|la-boveda|lluvia-de-numeros|pizzeria-fracciones|detective-patrones|que-hora-es|signos-jerarquia|numeros-operaciones|productos-factorizacion|matematicas-|repaso-)/;
+  function tkDue(t) {
+    if (t.due) return t.due;
+    if (new Date(t.created_at).getTime() < Date.UTC(2026, 10, 9, 6)) return MATH_RX.test(taskKey(t)) ? "2026-11-13" : "2026-11-27";
+    return null;
+  }
+  function tkClean(a) { return (a || []).map(function (t) { var ti = String(t.title || ""), by = null, due = null, m;
+    if ((m = ti.match(/^(.*?)\s+·\s+by\s+(Miss\s+[A-Za-zÁÉÍÓÚáéíóú]+)$/))) { ti = m[1]; by = m[2]; }
+    if ((m = ti.match(/^(.*?)\s+·\s+due\s+(\d{4}-\d{2}-\d{2})$/))) { ti = m[1]; due = m[2]; }
+    t = Object.assign({}, t, { title: ti, by: by || t.by, due: due }); t.due = tkDue(t); return t; }); }
+  function dueTxt(d) { try { var x = new Date(d + "T12:00:00"); return x.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }); } catch (e) { return d; } }
+  function dueLate(d) { return d && Date.now() > new Date(d + "T23:59:59").getTime(); }
   function taskUrl(t) {
     var q = "?task=" + encodeURIComponent(t.id), parts = String(t.task || "").split("~"), k = parts[0];
     if (parts[1]) q += "&pick=" + encodeURIComponent(parts[1]);
@@ -619,6 +632,7 @@
           if (get("mova-task-done-" + t.id)) return false;
           return !rows.some(function (r) { return taskRowMatch(t, r); });
         });
+        pend.sort(function (a, b) { var x = a.due || "9999", y = b.due || "9999"; return x < y ? -1 : x > y ? 1 : 0; });
         if (pend.length) showTask(pend);
       });
     }).catch(function () {});
@@ -642,7 +656,7 @@
     document.head.appendChild(st);
     var d = document.createElement("div"); d.id = "mva-task";
     d.innerHTML = '<span class="k">Assigned by ' + (t.by ? String(t.by).replace(/[<>&]/g, "") : "your teacher") + '</span><b>' + String(t.title || "Activity").replace(/[<>&]/g, "") + "</b>" +
-      "<p>" + (TASK_SUB[taskKey(t)] || "Your teacher assigned you this activity. Complete it when you can.") + "</p>" +
+      "<p>" + (TASK_SUB[taskKey(t)] || "Your teacher assigned you this activity.") + (t.due ? ' <b style="display:inline;font:800 14px \'Plus Jakarta Sans\',sans-serif;color:#D3F36B;margin:0">' + (dueLate(t.due) ? "It was due " : "Due ") + dueTxt(t.due) + ".</b>" : "") + "</p>" +
       '<div class="r"><a href="' + taskUrl(t) + '">Start now</a><button type="button">Later</button>' +
       (list.length > 1 ? '<span class="m">+' + (list.length - 1) + " more</span>" : "") + "</div>";
     d.querySelector("button").onclick = function () { d.remove(); };
@@ -664,7 +678,7 @@
           var m = rows.filter(function (r) { return taskRowMatch(t, r); });
           if (m.length || get("mova-task-done-" + t.id)) { var best = m.filter(function (r) { return r.total; })[0] || m[0] || null; done.push({ t: t, r: best }); } else pend.push(t);
         });
-        pend.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); });
+        pend.sort(function (a, b) { var x = a.due || "9999", y = b.due || "9999"; return x < y ? -1 : x > y ? 1 : new Date(b.created_at) - new Date(a.created_at); });
         done.sort(function (a, b) { return new Date((b.r || b.t).created_at) - new Date((a.r || a.t).created_at); });
         return { pend: pend, done: done };
       });
@@ -677,7 +691,7 @@
     var row = function (t, r) {
       var k = asgKind(t), done = !!r || r === null && false;
       return '<div class="asg-it"><span class="asg-ic" style="background:' + k[1] + '">' + k[0] + '</span><div><b>' + esc2(t.title || "Activity") + "</b><small>" + k[2] + " · " +
-        (r !== undefined ? "done" + (r && r.created_at ? " " + fdt(r.created_at) : "") + (r && r.total ? " · " + r.score + "/" + r.total : "") : "assigned " + fdt(t.created_at)) + (t.by ? " · " + esc2(t.by) : "") + "</small></div>" +
+        (r !== undefined ? "done" + (r && r.created_at ? " " + fdt(r.created_at) : "") + (r && r.total ? " · " + r.score + "/" + r.total : "") : (t.due ? '<span class="asg-due' + (dueLate(t.due) ? " late" : "") + '">' + (dueLate(t.due) ? "Was due " : "Due ") + dueTxt(t.due) + "</span>" : "assigned " + fdt(t.created_at))) + (t.by ? " · " + esc2(t.by) : "") + "</small></div>" +
         (r !== undefined ? '<span class="asg-dn">Done ✓</span>' : '<a class="asg-go" href="' + taskUrl(t) + '">Start</a>') + "</div>";
     };
     var h = '<div class="asg-hd"><h3>Assigned activities</h3>' + (o.pend.length ? '<span class="asg-n">' + o.pend.length + " to do</span>" : '<span class="asg-n ok">All done</span>') + "</div><small class=\"asg-sub\">From your teachers</small>";
@@ -689,6 +703,7 @@
     "#mvp-asg .asg-card{margin:0 0 14px;box-shadow:none;background:#F5F3FA}" +
     ".asg-hd{display:flex;align-items:center;gap:8px}.asg-hd h3{font:800 20px/1.1 'Bricolage Grotesque',sans-serif;margin:0;color:#15192B}" +
     ".asg-n{background:#FF8FC0;color:#15192B;font-weight:800;font-size:12px;border-radius:999px;padding:3px 9px}.asg-n.ok{background:#E4F8B0}" +
+    ".asg-due{display:inline-block;background:#FFF1C9;color:#7A5A00;font-weight:800;border-radius:999px;padding:1px 7px}.asg-due.late{background:#FFD3E6;color:#A3245E}" +
     ".asg-sub{display:block;color:#6A6F85;font-weight:600;font-size:12px;margin:2px 0 4px}" +
     ".asg-it{display:flex;align-items:center;gap:10px;padding:10px;border-radius:16px;background:#F5F3FA;margin-top:7px}#mvp-asg .asg-it{background:#fff}" +
     ".asg-ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font:800 14px 'Bricolage Grotesque',sans-serif;flex:none;color:#15192B}" +

@@ -306,7 +306,8 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
 .tabbar i{display:flex;padding:5px 14px;border-radius:14px}.tabbar svg{width:22px;height:22px}
 .tabbar .on{color:#D3F36B}.tabbar .on i{background:#D3F36B;color:#15192B}
 .logout{height:36px;padding:0 15px}
-/* Tareas */ .tkr .pill{border-radius:999px;padding:6px 10px;font-size:11.5px;font-weight:800;white-space:nowrap}.tkr .pill.pend{background:#FFE6F2;color:#A3245E}.tkr .pill.done{background:#ECFBC8;color:#3E5A07} .tabbar i{padding:5px 10px!important} .tkf{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 10px}.tkf button{border:0;border-radius:999px;padding:9px 14px;background:#fff;color:#15192B;font:700 13px 'Plus Jakarta Sans',sans-serif;box-shadow:0 0 0 1.5px #E3E0EF inset}.tkf button.on{background:#15192B;color:#fff;box-shadow:none}
+/* Tareas */ .duep{background:#FFF1C9;color:#7A5A00;font-weight:800;border-radius:999px;padding:1px 7px;white-space:nowrap;display:inline-block}.duep.late{background:#FFD3E6;color:#A3245E}.tkr .pill.late{background:#A3245E;color:#fff}
+.dch{display:flex;gap:6px;flex-wrap:wrap}.dch button,.dpk{background:#fff;border:0;box-shadow:0 0 0 1.5px #E3E0EF inset;border-radius:999px;padding:9px 13px;font:700 12.5px 'Plus Jakarta Sans',sans-serif;color:#15192B;display:inline-flex;align-items:center;gap:6px}.dch button.on,.dpk.on{background:#15192B;color:#D3F36B;box-shadow:none}.dpk input{border:0;background:transparent;font:700 12.5px 'Plus Jakarta Sans',sans-serif;color:inherit;width:124px;padding:0} .tkr .pill{border-radius:999px;padding:6px 10px;font-size:11.5px;font-weight:800;white-space:nowrap}.tkr .pill.pend{background:#FFE6F2;color:#A3245E}.tkr .pill.done{background:#ECFBC8;color:#3E5A07} .tabbar i{padding:5px 10px!important} .tkf{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 10px}.tkf button{border:0;border-radius:999px;padding:9px 14px;background:#fff;color:#15192B;font:700 13px 'Plus Jakarta Sans',sans-serif;box-shadow:0 0 0 1.5px #E3E0EF inset}.tkf button.on{background:#15192B;color:#fff;box-shadow:none}
 .tks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}.tks div{border-radius:18px;padding:12px 10px;text-align:center}.tks b{display:block;font:800 24px 'Bricolage Grotesque',sans-serif}.tks span{font-size:11.5px;font-weight:700;color:#5A5F75}
 .tkc{background:#fff;border-radius:22px;padding:14px;margin-bottom:10px;box-shadow:0 1px 0 #ECE9F5}.tkc .tkh{display:flex;align-items:center;gap:10px;margin-bottom:6px;cursor:pointer}.tkc .tkh .av2{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#E6E2FF;font-weight:800;font-size:13px;flex:none}.tkc .tkh b{font-size:15px}.tkc .tkh small{display:block;color:#6A6F85;font-weight:600;font-size:12px}.tkc .tkh .go{margin-left:auto;font-weight:800;font-size:12.5px;color:#15192B;background:#D3F36B;border-radius:999px;padding:7px 12px;white-space:nowrap}
 .tkr{display:flex;align-items:center;gap:10px;padding:9px 2px;border-top:1px solid #F0EDF7}.tkr div{flex:1;min-width:0}.tkr b{display:block;font-size:13.5px;line-height:1.25}.tkr small{color:#6A6F85;font-size:11.5px;font-weight:600}.tkr .pill{flex:none}.tkby{display:inline-block;border-radius:999px;padding:1px 7px;font-size:10.5px;font-weight:800;margin-right:4px}
@@ -498,7 +499,26 @@ $("#logoutBtn").onclick = () => { logout(); toast("Sesión cerrada"); };
 
 /* ---------- Students ---------- */
 async function showApp(){ $("#login").classList.add("hidden"); $("#app").classList.remove("hidden"); setTab(location.hash.replace("#","")||"students"); loadVisits(); loadLevelUp(); await loadStudents(); }
-function tkClean(a){ return (a||[]).map(t=>{ const m=String(t.title||"").match(/^(.*?)\s+·\s+by\s+(Miss\s+[A-Za-zÁÉÍÓÚáéíóú]+)$/); return m?Object.assign({},t,{title:m[1],by:m[2]}):t; }); }
+const MATH_RX=/^(mision-matematica|la-tiendita|la-balanza|la-boveda|lluvia-de-numeros|pizzeria-fracciones|detective-patrones|que-hora-es|signos-jerarquia|numeros-operaciones|productos-factorizacion|matematicas-|repaso-)/;
+function tkClean(a){ return (a||[]).map(t=>{ let ti=String(t.title||""), by=null, due=null, m;
+  if((m=ti.match(/^(.*?)\s+·\s+by\s+(Miss\s+[A-Za-zÁÉÍÓÚáéíóú]+)$/))){ ti=m[1]; by=m[2]; }
+  if((m=ti.match(/^(.*?)\s+·\s+due\s+(\d{4}-\d{2}-\d{2})$/))){ ti=m[1]; due=m[2]; }
+  /* tareas anteriores al 9 nov 2026: matemáticas vence vie 13 nov, lo demás vie 27 nov */
+  if(!due && new Date(t.created_at).getTime()<Date.UTC(2026,10,9,6)) due=MATH_RX.test(String(t.task||"").split("~")[0])?"2026-11-13":"2026-11-27";
+  return Object.assign({},t,{title:ti,by:by||t.by,due}); }); }
+function dueEs(d){ try{ return new Date(d+"T12:00:00").toLocaleDateString("es-MX",{weekday:"short",day:"numeric",month:"short"}); }catch(e){ return d; } }
+function dueLate(d){ return d && Date.now()>new Date(d+"T23:59:59").getTime(); }
+function ymdL(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function dueOptsEs(){ const t=new Date(); t.setHours(12,0,0,0); const fri=new Date(t); fri.setDate(t.getDate()+((5-t.getDay()+7)%7));
+  const lf=(y,m)=>{ const d=new Date(y,m+1,0,12); d.setDate(d.getDate()-((d.getDay()-5+7)%7)); return d; }; let eom=lf(t.getFullYear(),t.getMonth()); if(eom<t) eom=lf(t.getFullYear(),t.getMonth()+1);
+  const f=d=>d.toLocaleDateString("es-MX",{weekday:"short",day:"numeric",month:"short"});
+  return [["Hoy",ymdL(t)],["Este viernes · "+f(fri),ymdL(fri)],["Fin de mes · "+f(eom),ymdL(eom)]]; }
+let curDue=null;
+function dueHtml(){ const O=dueOptsEs(); if(!curDue) curDue=O[2][1];
+  return `<div class="duew"><b style="display:block;margin:12px 2px 6px;font-size:13px">Fecha de entrega</b><div class="dch">${O.map(([l,v])=>`<button type="button" data-d="${v}" class="${curDue===v?"on":""}">${esc(l)}</button>`).join("")}<label class="dpk ${O.every(o=>o[1]!==curDue)?"on":""}">Otra fecha <input type="date" value="${curDue}"></label></div></div>`; }
+function wireDue(box){ const w=box.querySelector(".duew"); if(!w) return; const re=()=>{ w.outerHTML=dueHtml(); wireDue(box); };
+  w.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{ curDue=b.dataset.d; re(); });
+  w.querySelector("input").onchange=e=>{ if(e.target.value){ curDue=e.target.value; re(); } }; }
 function tName(){ let em=""; try{ em=(localStorage.getItem("mova_teacher_email")||"").toLowerCase(); }catch(e){} const u=em.split("@")[0]; if(/let/.test(u)) return "Miss Letty"; if(/claud/.test(u)) return "Miss Claudia"; if(/mayte|teresa/.test(u)) return "Miss Mayte"; return "Miss Karla"; }
 function setTab(v){
   if(!["students","tasks","levelup","insights"].includes(v)) v="students";
@@ -1334,19 +1354,19 @@ function drawAllTasks(){
   const name=t=>String(t.task).includes("~")?t.title:(TASK_NAME[t.task]||t.title);
   const all=[].concat(...tkCache.map(g=>g.items)), pend=all.filter(x=>!x.done).length;
   const bys=[...new Set(all.map(x=>x.t.by).filter(Boolean))].sort();
-  const okBy=x=>tkF.by==="all"||(x.t.by||"")===tkF.by, okSt=x=>tkF.st==="all"||(tkF.st==="pend"?!x.done:!!x.done);
+  const okBy=x=>tkF.by==="all"||(x.t.by||"")===tkF.by, okSt=x=>tkF.st==="all"||(tkF.st==="pend"?!x.done:tkF.st==="late"?(!x.done&&dueLate(x.t.due)):!!x.done);
   const qq=tkF.q.trim().toLowerCase();
-  const groups=tkCache.filter(g=>!qq||g.s.full_name.toLowerCase().includes(qq)).map(g=>({s:g.s,items:g.items.filter(x=>okBy(x)&&okSt(x)).sort((a,b)=>new Date(b.t.created_at)-new Date(a.t.created_at))})).filter(g=>g.items.length)
+  const groups=tkCache.filter(g=>!qq||g.s.full_name.toLowerCase().includes(qq)).map(g=>({s:g.s,items:g.items.filter(x=>okBy(x)&&okSt(x)).sort((a,b)=>(!!a.done-!!b.done)||((a.t.due||"9")<(b.t.due||"9")?-1:(a.t.due||"9")>(b.t.due||"9")?1:new Date(b.t.created_at)-new Date(a.t.created_at)))})).filter(g=>g.items.length)
     .sort((a,b)=>a.s.full_name.localeCompare(b.s.full_name,"es"));
   const chip=(k,v,l)=>`<button data-tk="${k}" data-v="${esc(v)}" class="${tkF[k]===v?"on":""}">${esc(l)}</button>`;
   box.innerHTML=`<div class="tks"><div style="background:#FFE6F2"><b>${pend}</b><span>Pendientes</span></div><div style="background:#ECFBC8"><b>${all.length-pend}</b><span>Completadas</span></div><div style="background:#E5E9FF"><b>${tkCache.length}</b><span>Alumnos con tareas</span></div></div>
     <input class="in" id="tkQ" placeholder="Buscar alumno" value="${esc(tkF.q)}" style="margin-bottom:10px">
-    <div class="tkf">${chip("st","pend","Pendientes")}${chip("st","done","Completadas")}${chip("st","all","Todas")}</div>
+    <div class="tkf">${chip("st","pend","Pendientes")}${chip("st","late","Atrasadas")}${chip("st","done","Completadas")}${chip("st","all","Todas")}</div>
     ${bys.length?`<div class="tkf">${chip("by","all","Todas las maestras")}${bys.map(b=>chip("by",b,b)).join("")}</div>`:""}
     ${groups.length?groups.map(g=>{ const p=g.items.filter(x=>!x.done).length, c=g.items.length-p;
       return `<div class="tkc"><div class="tkh" data-open="${esc(g.s.id)}"><div class="av2">${esc(initials(g.s.full_name))}</div><div><b>${esc(g.s.full_name)}</b><small>${g.s.stage?esc(g.s.stage)+" · ":""}${p?p+" pendiente"+(p>1?"s":""):""}${p&&c?" · ":""}${c?c+" completada"+(c>1?"s":""):""}</small></div><span class="go">Ver perfil →</span></div>
       ${g.items.map(x=>{ const r=x.done, pc=r&&r.total?Math.round(r.score/r.total*100):null;
-        return `<div class="tkr"><div><b>${esc(name(x.t))}</b><small>${x.t.by?`<span class="tkby" style="background:${BYC[x.t.by]||"#EEE"}">${esc(x.t.by)}</span>`:""}Asignada ${esc(d(x.t.created_at))}${r?" · terminada "+esc(d(r.created_at)):""}</small></div>${r?`<span class="pill done">${pc!=null?pc+"% · "+r.score+"/"+r.total:"Completada"}</span>`:`<span class="pill pend">Pendiente</span>`}</div>`; }).join("")}</div>`; }).join("")
+        return `<div class="tkr"><div><b>${esc(name(x.t))}</b><small>${x.t.by?`<span class="tkby" style="background:${BYC[x.t.by]||"#EEE"}">${esc(x.t.by)}</span>`:""}Asignada ${esc(d(x.t.created_at))}${r?" · terminada "+esc(d(r.created_at)):(x.t.due?` · <span class="duep${dueLate(x.t.due)?" late":""}">${dueLate(x.t.due)?"Venció":"Vence"} ${esc(dueEs(x.t.due))}</span>`:"")}</small></div>${r?`<span class="pill done">${pc!=null?pc+"% · "+r.score+"/"+r.total:"Completada"}</span>`:dueLate(x.t.due)?`<span class="pill late">Atrasada</span>`:`<span class="pill pend">Pendiente</span>`}</div>`; }).join("")}</div>`; }).join("")
       :`<p class="sub" style="padding:14px 4px">${all.length?"No hay actividades con este filtro.":"Todavía no hay actividades asignadas."}</p>`}
     <p class="note" style="color:#8C91AD;font-size:12px;margin:8px 4px 0">Las actividades asignadas antes de hoy no muestran qué maestra las asignó.</p>
     <div style="text-align:center;margin:12px 0 90px"><button class="btn" id="tkRe" style="background:#fff">Actualizar</button></div>`;
@@ -1378,19 +1398,19 @@ async function loadTasks(s){
     const done=taskDoneRow(t,rows);
     const res=done&&done.total?` · ${Math.round(done.score/done.total*100)}%`:"";
     const see=done&&isSim(done)?`<button class="see" data-r="${esc(simKey(done))}">Ver reporte</button>`:"";
-    return `<div class="row"><div><b>${esc(String(t.task).includes("~")?t.title:(TASK_NAME[t.task]||t.title))}</b><small>Asignada ${esc(d(t.created_at))}${t.by?" por "+esc(t.by):""}${done?" · terminada "+esc(d(done.created_at)):""}</small></div>
+    return `<div class="row"><div><b>${esc(String(t.task).includes("~")?t.title:(TASK_NAME[t.task]||t.title))}</b><small>Asignada ${esc(d(t.created_at))}${t.by?" por "+esc(t.by):""}${done?" · terminada "+esc(d(done.created_at)):(t.due?` · <span class="duep${dueLate(t.due)?" late":""}">${dueLate(t.due)?"Venció":"Vence"} ${esc(dueEs(t.due))}</span>`:"")}</small></div>
       ${done?`<span class="pill done">Completada${res}</span>${see}`:`<span class="pill pend">Pendiente</span>`}
       <button class="rm" data-t="${t.id}" aria-label="Quitar tarea">×</button></div>`;}).join("");
   const sHtml=sims.length?`<h3 style="margin-top:16px">Simulaciones TOEFL</h3>`+sims.map(r=>`<div class="row"><div><b>${r.score}/${r.total} · ${Math.round(r.score/r.total*100)}%</b><small>${esc(d(r.created_at))} · ${r.detail&&r.detail.secs?fmtT(r.detail.secs)+" min":"Quick Simulation"}</small></div><button class="see" style="margin-left:auto" data-r="${esc(simKey(r))}">Ver reporte</button></div>`).join(""):"";
   const opts=TASK_CAT.map(([g,items])=>`<optgroup label="${esc(g)}">${items.map(([k,n])=>`<option value="${k}">${esc(n)}</option>`).join("")}</optgroup>`).join("");
   box.innerHTML=`<div class="tk"><h3>Tareas</h3><p class="sub">Elige una actividad. ${esc(s.full_name.split(" ")[0])} la verá al abrir la app con su usuario.</p>
-    <select class="in" id="asgSel" hidden>${opts}</select>${pickerHtml()}
+    <select class="in" id="asgSel" hidden>${opts}</select>${pickerHtml()}${dueHtml()}
     <button class="asg" id="asgBtn">Asignar actividad</button>${tHtml||`<p class="sub" style="margin:10px 2px 0">Todavía no tiene tareas asignadas.</p>`}${sHtml}</div>`;
-  wirePicker(box);
+  wirePicker(box); wireDue(box);
   $("#asgBtn").onclick=async()=>{ const b=$("#asgBtn"), k=$("#asgSel").value; b.disabled=true; b.textContent="Asignando…";
     const picks=NO_PICK.has(k)?[]:curPicks.slice(), labs=picks.map(x=>x.l).filter(Boolean);
     const task=picks.length?k+"~"+b64url({p:picks.map(x=>({a:x.a,t:x.t,l:x.l})),l:labs}):k, title=(TASK_NAME[k]||k)+(labs.length?" · "+labs.join(" · "):"");
-    try{ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:task,p_title:title+" · by "+tName()}); toast(`${title} asignada a ${s.full_name.split(" ")[0]}`); curPicks=[]; loadTasks(s); }
+    try{ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:task,p_title:title+(curDue?" · due "+curDue:"")+" · by "+tName()}); toast(`${title} asignada a ${s.full_name.split(" ")[0]}`); curPicks=[]; loadTasks(s); }
     catch(e){ toast(e.message); b.disabled=false; b.textContent="Asignar actividad"; } };
   box.querySelectorAll(".rm").forEach(b=>b.onclick=async()=>{ if(!confirm("¿Quitar esta tarea?")) return; try{ await rpc("admin_remove_task",{p_id:+b.dataset.t}); loadTasks(s); }catch(e){ toast(e.message); } });
   box.querySelectorAll(".see").forEach(b=>b.onclick=()=>{ const r=sims.find(x=>simKey(x)===b.dataset.r)||rows.find(x=>simKey(x)===b.dataset.r); if(r) openSimReport(s,r); });

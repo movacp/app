@@ -58,6 +58,8 @@
     ".tvs{position:fixed;left:50%;transform:translateX(-50%);bottom:0;z-index:9991;width:100%;max-width:560px;max-height:86vh;display:flex;flex-direction:column;background:#fff;border-radius:30px 30px 0 0;padding:18px 18px calc(env(safe-area-inset-bottom,0px) + 20px);font-family:'Plus Jakarta Sans',sans-serif;color:#15192B;box-sizing:border-box}" +
     ".tvs h3{font:800 21px/1.1 'Bricolage Grotesque',sans-serif;margin:0 0 3px}.tvs .sub{color:#6A6F85;font-weight:600;font-size:12.5px}" +
     ".tvs input{width:100%;box-sizing:border-box;background:#F5F3FA;border:0;border-radius:14px;padding:12px 14px;font:600 14.5px 'Plus Jakarta Sans',sans-serif;margin:10px 0 8px;outline:none;color:#15192B}" +
+    ".tvs .dch{display:flex;gap:6px;flex-wrap:wrap}.tvs .dch button,.tvs .dpk{background:#F5F3FA;border:0;border-radius:999px;padding:8px 12px;font:800 12px 'Plus Jakarta Sans',sans-serif;color:#15192B;cursor:pointer;display:inline-flex;align-items:center;gap:6px}" +
+    ".tvs .dch button.on,.tvs .dpk.on{background:#15192B;color:#D3F36B}.tvs .dpk input{border:0;background:transparent;font:700 12px 'Plus Jakarta Sans',sans-serif;color:inherit;width:118px;padding:0}" +
     ".tvs .ch{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}.tvs .ch button{background:#E6E2FF;border:0;border-radius:999px;padding:7px 11px;font:800 12px 'Plus Jakarta Sans',sans-serif;cursor:pointer;color:#15192B}.tvs .ch button.on{background:#15192B;color:#D3F36B}" +
     ".tvs .ls{overflow:auto;flex:1;min-height:120px;margin:0 -4px;padding:0 4px}" +
     ".tvs .li{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1.5px solid #EEEAF6;cursor:pointer}" +
@@ -135,16 +137,34 @@
   var students = null, COLORS = ["#FFC7E2", "#D3F36B", "#E6E2FF", "#FFE58A", "#BDF0D8", "#C9D2FF"];
   function ini(n) { return String(n || "?").split(/\s+/).slice(0, 2).map(function (x) { return x.charAt(0); }).join("").toUpperCase(); }
   function close() { document.querySelectorAll(".tvd, .tvs").forEach(function (x) { x.remove(); }); }
+  function ymd(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function dueOpts() {
+    var t = new Date(); t.setHours(12, 0, 0, 0);
+    var fri = new Date(t); fri.setDate(t.getDate() + ((5 - t.getDay() + 7) % 7));
+    var lf = function (y, m) { var d = new Date(y, m + 1, 0, 12); d.setDate(d.getDate() - ((d.getDay() - 5 + 7) % 7)); return d; };
+    var eom = lf(t.getFullYear(), t.getMonth()); if (eom < t) eom = lf(t.getFullYear(), t.getMonth() + 1);
+    var f = function (d) { return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }); };
+    return [["today", "Today", ymd(t)], ["fri", "Friday · " + f(fri), ymd(fri)], ["eom", "End of month · " + f(eom), ymd(eom)]];
+  }
   function openSheet(it) {
     close();
     var d = document.createElement("div"); d.className = "tvd"; d.onclick = close;
     var s = document.createElement("div"); s.className = "tvs"; s.setAttribute("role", "dialog");
     s.innerHTML = "<h3>Assign “" + esc(it.name) + "”</h3><span class=\"sub\">" + esc(it.sub) + " · choose one or more students</span>" +
       '<input type="search" placeholder="Search a student…" aria-label="Search a student"><div class="ch"></div><div class="ls"><p class="sub" style="padding:10px 0">Loading students…</p></div>' +
+      '<div class="due"><span class="sub" style="display:block;margin:12px 0 6px;font-weight:700;color:#15192B">Due date</span><div class="dch"></div></div>' +
       '<button class="go" type="button" disabled>Assign</button><button class="x" type="button">Cancel</button>';
     document.body.appendChild(d); document.body.appendChild(s);
     s.querySelector(".x").onclick = close;
-    var sel = {}, grp = "all", q = "";
+    var sel = {}, grp = "all", q = "", DO = dueOpts(), due = DO[2][2];
+    var dch = s.querySelector(".dch");
+    function paintDue() {
+      dch.innerHTML = DO.map(function (o) { return '<button type="button" data-d="' + o[2] + '" class="' + (due === o[2] ? "on" : "") + '">' + esc(o[1]) + "</button>"; }).join("") +
+        '<label class="dpk' + (DO.every(function (o) { return o[2] !== due; }) ? " on" : "") + '">Other date <input type="date" value="' + due + '"></label>';
+      dch.querySelector("input").onchange = function (e) { if (e.target.value) { due = e.target.value; paintDue(); } };
+    }
+    dch.onclick = function (e) { var b = e.target.closest("button"); if (!b) return; due = b.dataset.d; paintDue(); };
+    paintDue();
     var ls = s.querySelector(".ls"), ch = s.querySelector(".ch"), go = s.querySelector(".go"), inp = s.querySelector("input");
     function list() { return (students || []).filter(function (x) { return x.active !== false && (grp === "all" || x.stage === grp) && (!q || (x.full_name + " " + x.username).toLowerCase().indexOf(q) >= 0); }); }
     function paint() {
@@ -160,7 +180,7 @@
     go.onclick = function () {
       var arr = Object.keys(sel).map(function (k) { return sel[k]; }); if (!arr.length) return;
       go.disabled = true; go.textContent = "Assigning…";
-      Promise.all(arr.map(function (x) { return rpc("admin_assign_task", { p_student: String(x.id), p_username: x.username, p_task: it.key, p_title: it.title + " · by " + tName(localStorage.getItem("mova_teacher_email")) }).then(function () { return 1; }, function () { return 0; }); }))
+      Promise.all(arr.map(function (x) { return rpc("admin_assign_task", { p_student: String(x.id), p_username: x.username, p_task: it.key, p_title: it.title + (due ? " · due " + due : "") + " · by " + tName(localStorage.getItem("mova_teacher_email")) }).then(function () { return 1; }, function () { return 0; }); }))
         .then(function (r) { var ok = r.reduce(function (a, b) { return a + b; }, 0); close(); toast(ok === arr.length ? "“" + it.name + "” assigned to " + ok + (ok === 1 ? " student" : " students") : ok + " of " + arr.length + " assigned. Check your connection and try again."); });
     };
     if (students) paint();
