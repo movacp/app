@@ -25,7 +25,7 @@
     "verb-memory": "Verb Memory", "sentence-builder": "Sentence Builder", "locked-library": "Locked Library",
     "toefl-practice": "TOEFL Practice", "word-forms": "Word Forms", "sentence-scramble": "Sentence Scramble",
     "lee-con-mochi": "Aprende a leer con Mochi", "sopa-de-letras": "Sopa de letras", "crucigrama": "Crucigrama", "retos": "Retos multijugador", "craftland": "CraftLand",
-    "sugar-town": "Sugar Town", "mova-park": "Sugar Town", "speaking": "Speaking Lab", "feria-mochi": "La Feria de Mochi", "ruta": "My Path"
+    "sugar-town": "Sugar Town", "mova-park": "Sugar Town", "speaking": "Speaking Lab", "feria-mochi": "La Feria de Mochi", "writing": "Writing Lab", "ruta": "My Path"
   };
 
   function get(k) { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } }
@@ -593,7 +593,8 @@
     if (new Date(t.created_at).getTime() < Date.UTC(2026, 10, 9, 6)) return MATH_RX.test(taskKey(t)) ? "2026-11-13" : "2026-11-27";
     return null;
   }
-  function tkClean(a) { return (a || []).map(function (t) { var ti = String(t.title || ""), by = null, due = null, m;
+  function tkFeedback(a) { var o = []; (a || []).forEach(function (t) { var k = String(t.task || ""); if (k.indexOf("wfb:") === 0 && /^FB\|/.test(t.title || "")) { try { var j = JSON.parse(decodeURIComponent(escape(atob(String(t.title).slice(3))))); j.uid = k.slice(4); j.at = t.created_at; o.push(j); } catch (e) {} } }); o.sort(function (x, y) { return new Date(y.at) - new Date(x.at); }); var seen = {}; return o.filter(function (f) { if (seen[f.uid]) return false; seen[f.uid] = 1; return true; }); }
+  function tkClean(a) { return (a || []).filter(function (t) { return String(t.task || "").indexOf("wfb:") !== 0; }).map(function (t) { var ti = String(t.title || ""), by = null, due = null, m;
     if ((m = ti.match(/^(.*?)\s+·\s+by\s+(Miss\s+[A-Za-zÁÉÍÓÚáéíóú]+)$/))) { ti = m[1]; by = m[2]; }
     if ((m = ti.match(/^(.*?)\s+·\s+due\s+(\d{4}-\d{2}-\d{2})$/))) { ti = m[1]; due = m[2]; }
     t = Object.assign({}, t, { title: ti, by: by || t.by, due: due }); t.due = tkDue(t); return t; }); }
@@ -607,6 +608,7 @@
     if (k.indexOf("xv:") === 0) return "ruta.html" + q + "#/xv/" + encodeURIComponent(k.slice(3));
     if (k.indexOf("r:") === 0) return "index.html" + q + "#/library/" + encodeURIComponent(k.slice(2));
     if (k.indexOf("e:") === 0) return "index.html" + q + "#/lecturas/" + encodeURIComponent(k.slice(2));
+    if (k.indexOf("w:") === 0) return "juego-writing.html" + q + "#" + encodeURIComponent(k.slice(2));
     if (k === "m-levelup") return "index.html" + q + "#/matematicas/levelup";
     if (k.indexOf("m:") === 0) return "index.html" + q + "#/matematicas/practica/" + encodeURIComponent(k.slice(2));
     if (k === "toefl-sim") return "juego-toefl-practice.html" + q + "#sim";
@@ -621,6 +623,7 @@
     if (tk === "m-levelup") return r.activity === "math-level-up";
     if (tk.indexOf("m:") === 0) return r.activity === "math-comprueba" && String(r.item) === tk.slice(2);
     if (tk === "lectura") return /^app-(library|lecturas)$/.test(r.activity) && r.item && !/Explorando/.test(r.item);
+    if (tk.indexOf("w:") === 0) return r.activity === "writing" && !!r.detail && r.detail.w === tk.slice(2);
     if (r.activity !== tk) return false;
     var d = r.detail || {};
     return r.total != null || (d.kind === "time" && (d.seconds || 0) >= 60) || (!!d.kind && d.kind !== "time");
@@ -669,14 +672,15 @@
   }
   /* ---------- Assigned activities: tarjeta fija en el inicio, en My Progress y número en "Me" ---------- */
   var asgCache = null, asgAt = 0, asgBusy = false;
-  function asgKind(t) { var k = taskKey(t); return /^m(-levelup$|:)/.test(k) ? ["M", "#FFF1C9", "Matemáticas"] : /^t:/.test(k) ? ["G", "#D3F36B", "Grammar"] : /^(v|xv):/.test(k) ? ["F", "#FFC7E2", "Vocabulary"] : /^e:/.test(k) ? ["L", "#FFE58A", "Lectura"] : /^r:|^lectura$/.test(k) ? ["R", "#FFE58A", "Reading"] : k === "toefl-sim" || k === "level-up" ? ["E", "#C9D2FF", "Exam"] : ["P", "#BDF0D8", "Game"]; }
+  function asgKind(t) { var k = taskKey(t); return /^m(-levelup$|:)/.test(k) ? ["M", "#FFF1C9", "Matemáticas"] : /^t:/.test(k) ? ["G", "#D3F36B", "Grammar"] : /^(v|xv):/.test(k) ? ["F", "#FFC7E2", "Vocabulary"] : /^e:/.test(k) ? ["L", "#FFE58A", "Lectura"] : /^w:/.test(k) ? ["W", "#BDF0D8", "Writing"] : /^r:|^lectura$/.test(k) ? ["R", "#FFE58A", "Reading"] : k === "toefl-sim" || k === "level-up" ? ["E", "#C9D2FF", "Exam"] : ["P", "#BDF0D8", "Game"]; }
   function asgLoad(cb) {
     if (!user) return cb(null);
     if (asgCache && Date.now() - asgAt < 60000) return cb(asgCache);
     if (asgBusy) return; asgBusy = true; var me = user.username;
-    rpc("student_tasks", { p_username: me }).then(function (tasks) { tasks = tkClean(tasks);
+    var FB = [];
+    rpc("student_tasks", { p_username: me }).then(function (tasks) { FB = tkFeedback(tasks); tasks = tkClean(tasks);
       tasks = Array.isArray(tasks) ? tasks : [];
-      if (!tasks.length) return { pend: [], done: [] };
+      if (!tasks.length) return { pend: [], done: [], fb: FB };
       return rpc("student_my_progress", { p_token: user.token }).catch(function () { return []; }).then(function (rows) {
         rows = Array.isArray(rows) ? rows : []; var pend = [], done = [];
         tasks.forEach(function (t) {
@@ -685,7 +689,7 @@
         });
         pend.sort(function (a, b) { var x = a.due || "9999", y = b.due || "9999"; return x < y ? -1 : x > y ? 1 : new Date(b.created_at) - new Date(a.created_at); });
         done.sort(function (a, b) { return new Date((b.r || b.t).created_at) - new Date((a.r || a.t).created_at); });
-        return { pend: pend, done: done };
+        return { pend: pend, done: done, fb: FB };
       });
     }).then(function (o) { asgBusy = false; if (!o || !user || user.username !== me) return cb(null); asgCache = o; asgAt = Date.now(); cb(o); })
       .catch(function () { asgBusy = false; cb(null); });
@@ -709,6 +713,8 @@
     ".asg-hd{display:flex;align-items:center;gap:8px}.asg-hd h3{font:800 20px/1.1 'Bricolage Grotesque',sans-serif;margin:0;color:#15192B}" +
     ".asg-n{background:#FF8FC0;color:#15192B;font-weight:800;font-size:12px;border-radius:999px;padding:3px 9px}.asg-n.ok{background:#E4F8B0}" +
     ".asg-due{display:inline-block;background:#FFF1C9;color:#7A5A00;font-weight:800;border-radius:999px;padding:1px 7px}.asg-due.late{background:#FFD3E6;color:#A3245E}" +
+    ".fb-it{display:block;text-decoration:none;color:#15192B;background:#F5F3FA;border-radius:18px;padding:12px 14px;margin-top:8px}#mvp-asg .fb-it{background:#fff}.fb-top{display:flex;align-items:center;gap:8px}.fb-top b{font-size:14px}.fb-sc{margin-left:auto;background:#E4F8B0;font-weight:800;font-size:12.5px;border-radius:999px;padding:4px 10px}" +
+    ".fb-it p{margin:6px 0 0;font-size:13px;line-height:1.5;color:#3A4060}.fb-sig{display:flex;align-items:flex-end;gap:10px;margin-top:8px}.fb-sig img{height:34px}.fb-sig span{font-size:11px;font-weight:700;color:#6A6F85}.fb-sig b{display:block;color:#15192B;font-size:12.5px}" +
     ".asg-sub{display:block;color:#6A6F85;font-weight:600;font-size:12px;margin:2px 0 4px}" +
     ".asg-it{display:flex;align-items:center;gap:10px;padding:10px;border-radius:16px;background:#F5F3FA;margin-top:7px}#mvp-asg .asg-it{background:#fff}" +
     ".asg-ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font:800 14px 'Bricolage Grotesque',sans-serif;flex:none;color:#15192B}" +
@@ -731,7 +737,15 @@
       var c = document.createElement("div"); c.className = "asg-card home"; c.innerHTML = html; c.__h = html; g.after(c);
     });
   }
-  function asgProgress(box) { if (!box) return; asgLoad(function (o) { if (!o || (!o.pend.length && !o.done.length)) return; asgCss(); box.innerHTML = '<div class="asg-card">' + asgHtml(o, false) + "</div>"; }); }
+  var FB_SIG = { "Miss Karla": ["sig-karla.png", "Academic Coordinator"], "Miss Letty": ["sig-letty.png", "ESL Instructor · TOEFL Specialist"] };
+  function fbHtml(list) {
+    var e = function (x) { return String(x == null ? "" : x).replace(/[<>&"]/g, ""); };
+    return '<div class="asg-card"><div class="asg-hd"><h3>Teacher feedback</h3><span class="asg-n ok">Writing Lab</span></div><small class="asg-sub">Your teachers read your writing</small>' +
+      list.slice(0, 3).map(function (f) { var sg = FB_SIG[f.by] || null;
+        return '<a class="fb-it" href="juego-writing.html#' + e(f.w) + '"><div class="fb-top"><b>' + e(f.n || "Writing") + '</b><span class="fb-sc">' + f.s + '/16</span></div><p>' + e(f.c) + '</p><div class="fb-sig">' + (sg ? '<img src="' + sg[0] + '" alt="">' : "") + "<span><b>" + e(f.by || "Your teacher") + "</b>" + (sg ? sg[1] : "") + "</span></div></a>"; }).join("") + "</div>";
+  }
+  function asgProgress(box) { if (!box) return; asgLoad(function (o) { if (!o || (!o.pend.length && !o.done.length && !(o.fb && o.fb.length))) return; asgCss();
+    box.innerHTML = (o.pend.length || o.done.length ? '<div class="asg-card">' + asgHtml(o, false) + "</div>" : "") + (o.fb && o.fb.length ? fbHtml(o.fb) : ""); }); }
   /* Marca la tarea como hecha en este dispositivo cuando la alumna la trabaja */
   function taskContext() {
     var id = new URLSearchParams(location.search).get("task");
