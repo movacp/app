@@ -271,7 +271,7 @@
       rpc("student_login", { p_username: u, p_password: p }).then(function (r) {
         if (r && r.ok) {
           user = { token: r.token, name: r.name, stage: r.stage, username: r.username };
-          set(K_USER, user); renderChip(); close(); toast("Welcome, " + first(user.name) + "!"); flushQueue(); beginScreen(); taskShown = false; setTimeout(checkTasks, 1200);
+          set(K_USER, user); renderChip(); close(); toast("Welcome, " + first(user.name) + "!"); flushQueue(); beginScreen(); taskShown = false; setTimeout(function () { try { if (window.MovaPush) MovaPush.init(); } catch (e) {} }, 6000); setTimeout(checkTasks, 1200);
         } else {
           var e2 = r && r.error;
           err.textContent = e2 === "locked" ? "Too many tries. Wait 15 minutes and try again."
@@ -641,6 +641,7 @@
           return !rows.some(function (r) { return taskRowMatch(t, r); });
         });
         pend.sort(function (a, b) { var x = a.due || "9999", y = b.due || "9999"; return x < y ? -1 : x > y ? 1 : 0; });
+        try { var dn = tasks.filter(function (t) { return pend.indexOf(t) < 0; }).map(function (t) { return t.id; }); if (dn.length) rpc("push_done", { p_token: user.token, p_ids: dn }).catch(function () {}); } catch (e) {}
         if (pend.length) showTask(pend);
       });
     }).catch(function () {});
@@ -705,6 +706,7 @@
         });
         pend.sort(function (a, b) { var x = a.due || "9999", y = b.due || "9999"; return x < y ? -1 : x > y ? 1 : new Date(b.created_at) - new Date(a.created_at); });
         done.sort(function (a, b) { return new Date((b.r || b.t).created_at) - new Date((a.r || a.t).created_at); });
+        try { if (done.length) rpc("push_done", { p_token: user.token, p_ids: done.map(function (x) { return x.t.id; }) }).catch(function () {}); } catch (e) {}
         return { pend: pend, done: done, fb: FB };
       });
     }).then(function (o) { asgBusy = false; if (!o || !user || user.username !== me) return cb(null); asgCache = o; asgAt = Date.now(); cb(o); })
@@ -771,7 +773,7 @@
     window.__movaTaskId = id; window.__movaTaskMark = mark;
   }
   /* ---------- Arranque ---------- */
-  window.MovaAuth = { save: save, user: function () { return user; }, login: showLogin };
+  window.MovaAuth = { save: save, user: function () { return user; }, login: showLogin, progress: function () { if (user) showAccount(); else showLogin(); } };
   function boot() {
     /* Opciones de tareas: vista previa de la maestra o tarea del alumno */
     if (gameSlug() && /[?&]live=\d{4}/.test(location.search) && !window.__movaLiveLoaded) { window.__movaLiveLoaded = 1; var ls = document.createElement("script"); ls.src = "mova-live-play.js?v=84"; document.head.appendChild(ls); }

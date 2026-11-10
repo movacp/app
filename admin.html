@@ -400,7 +400,7 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
         <div class="stat"><b id="sActs">0</b><span>Actividades</span></div>
       </div>
       <div class="sech"><h3>Mis alumnos</h3><button class="lnk" id="expStudents">Exportar a Excel</button></div>
-      <div class="toolbar"><input class="in" id="search" type="search" placeholder="Buscar alumno"><button class="addb" id="addBtn">+ Agregar alumno</button></div><div style="display:flex;justify-content:flex-end;margin:-4px 0 10px"><button type="button" id="allPassBtn" style="border:0;background:none;color:#5B4BC4;font:800 13px inherit;font-family:inherit;text-decoration:underline;cursor:pointer;padding:6px 4px">Cambiar la contraseña de todos</button></div>
+      <div class="toolbar"><input class="in" id="search" type="search" placeholder="Buscar alumno"><button class="addb" id="addBtn">+ Agregar alumno</button></div><div style="display:flex;justify-content:flex-end;margin:-4px 0 10px"><button type="button" id="pushBtn" style="border:0;background:#15192B;color:#fff;font:800 13px inherit;font-family:inherit;border-radius:999px;padding:8px 14px;margin-right:auto;cursor:pointer;box-shadow:0 3px 0 #D3F36B">Enviar aviso</button><button type="button" id="allPassBtn" style="border:0;background:none;color:#5B4BC4;font:800 13px inherit;font-family:inherit;text-decoration:underline;cursor:pointer;padding:6px 4px">Cambiar la contraseña de todos</button></div>
       <div class="chips" id="stChips"></div>
       <div class="list" id="list"></div>
     </div>
@@ -993,6 +993,54 @@ document.addEventListener("click", async e => {
   }
   b.disabled = false; b.textContent = txt;
   alert(`Listo: ${ok} de ${students.length} alumnos ya tienen la contraseña ${pass}.` + (bad.length ? `\n\nNo se pudo cambiar a: ${bad.join(", ")}. Inténtalo de nuevo con esos alumnos.` : ""));
+});
+/* Avisos (notificaciones push) a los alumnos */
+document.addEventListener("click", async e => {
+  const b = e.target.closest && e.target.closest("#pushBtn"); if (!b) return;
+  if (document.getElementById("pushModal")) return;
+  let stats = [];
+  try { stats = await rpc("admin_push_stats") || []; } catch (err) { alert("Primero corre el SQL de notificaciones en Supabase (mova-v106-notificaciones.sql)."); return; }
+  const on = new Set(stats.map(x => String(x.username).toLowerCase()));
+  const opts = students.slice().sort((x, y) => String(x.full_name).localeCompare(String(y.full_name)))
+    .map(st => `<option value="${esc(st.username)}">${esc(st.full_name || st.username)}${on.has(String(st.username).toLowerCase()) ? "" : " · sin avisos activados"}</option>`).join("");
+  const m = document.createElement("div"); m.id = "pushModal";
+  m.innerHTML = `<style>#pushModal{position:fixed;inset:0;z-index:9999;background:rgba(14,16,30,.55);display:flex;align-items:center;justify-content:center;padding:16px;font-family:inherit}
+#pushModal .bx{background:#fff;border-radius:24px;width:min(460px,100%);padding:22px;box-shadow:0 20px 50px rgba(0,0,0,.3);max-height:92vh;overflow:auto}
+#pushModal h3{margin:0 0 4px;font-size:21px;font-weight:800;color:#15192B}#pushModal .sm{margin:0 0 14px;color:#6A6F85;font-size:13.5px;font-weight:600}
+#pushModal label{display:block;font-size:12.5px;font-weight:800;color:#15192B;margin:12px 0 5px}
+#pushModal select,#pushModal input,#pushModal textarea{width:100%;box-sizing:border-box;border:1.5px solid #E3E0EE;border-radius:14px;padding:11px 12px;font:600 14.5px inherit;font-family:inherit;color:#15192B;background:#FAF9FD}
+#pushModal textarea{min-height:84px;resize:vertical}#pushModal .seg{display:flex;gap:8px}#pushModal .seg button{flex:1;border:1.5px solid #E3E0EE;background:#FAF9FD;border-radius:999px;padding:9px;font:800 13.5px inherit;font-family:inherit;color:#15192B;cursor:pointer}
+#pushModal .seg button.on{background:#15192B;color:#fff;border-color:#15192B}#pushModal .row{display:flex;gap:10px;margin-top:18px}
+#pushModal .go{flex:1;border:0;border-radius:999px;background:#D3F36B;color:#15192B;font:800 15px inherit;font-family:inherit;padding:12px;cursor:pointer}#pushModal .no{border:0;background:none;color:#6A6F85;font:800 14px inherit;font-family:inherit;padding:12px 14px;cursor:pointer}
+#pushModal .pv{margin-top:14px;background:#15192B;color:#fff;border-radius:16px;padding:12px 14px;font-size:13px}#pushModal .pv b{display:block;font-size:14px;margin-bottom:2px}#pushModal .pv span{color:#C9CBE0}</style>
+<div class="bx"><h3>Enviar aviso</h3><p class="sm">${on.size} ${on.size === 1 ? "alumno tiene" : "alumnos tienen"} los avisos activados. Les llega como notificación en su celular, entre 8:00 am y 8:30 pm.</p>
+<label>Tipo</label><div class="seg"><button type="button" class="on" data-k="aviso">Aviso de MOVA</button><button type="button" data-k="contenido">Contenido nuevo</button></div>
+<label for="pTo">Para</label><select id="pTo"><option value="">Todos los alumnos</option>${opts}</select>
+<label for="pTi">Título</label><input id="pTi" maxlength="60" placeholder="Ej. No hay clases el lunes 17">
+<label for="pBo">Mensaje</label><textarea id="pBo" maxlength="200" placeholder="Ej. Por el día festivo no habrá clases. Nos vemos el martes."></textarea>
+<div class="pv"><b id="pvT">Título del aviso</b><span id="pvB">Mensaje del aviso</span></div>
+<div class="row"><button type="button" class="no">Cancelar</button><button type="button" class="go">Enviar aviso</button></div></div>`;
+  document.body.appendChild(m);
+  let kind = "aviso";
+  const ti = m.querySelector("#pTi"), bo = m.querySelector("#pBo");
+  const pv = () => { m.querySelector("#pvT").textContent = ti.value.trim() || "Título del aviso"; m.querySelector("#pvB").textContent = bo.value.trim() || "Mensaje del aviso"; };
+  ti.oninput = pv; bo.oninput = pv;
+  m.querySelectorAll(".seg button").forEach(x => x.onclick = () => {
+    m.querySelectorAll(".seg button").forEach(y => y.classList.toggle("on", y === x)); kind = x.dataset.k;
+    if (kind === "contenido" && !ti.value) { ti.value = "Hay algo nuevo en MOVA"; bo.value = "Entra a ver la nueva lectura que preparamos para ti."; pv(); }
+  });
+  m.querySelector(".no").onclick = () => m.remove();
+  m.onclick = ev => { if (ev.target === m) m.remove(); };
+  m.querySelector(".go").onclick = async ev => {
+    const btn = ev.currentTarget, to = m.querySelector("#pTo").value;
+    if (!ti.value.trim() || !bo.value.trim()) { alert("Escribe un título y un mensaje."); return; }
+    btn.disabled = true; btn.textContent = "Enviando…";
+    try {
+      const n = await rpc("admin_push_send", { p_usernames: to ? [to] : null, p_title: ti.value.trim(), p_body: bo.value.trim(), p_kind: kind });
+      m.remove();
+      toast(n ? `Aviso enviado a ${n} ${n === 1 ? "alumno" : "alumnos"}` : "Ese alumno todavía no tiene los avisos activados");
+    } catch (err) { btn.disabled = false; btn.textContent = "Enviar aviso"; alert(err.message || "No se pudo enviar el aviso."); }
+  };
 });
 async function loadStudents(){
   try{ students = await rpc("admin_list_students") || []; render(); }

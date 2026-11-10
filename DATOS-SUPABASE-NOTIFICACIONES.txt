@@ -1,0 +1,18 @@
+MOVA · NOTIFICACIONES (v106) — DATOS PARA SUPABASE
+Guarda este archivo en un lugar seguro. No lo compartas.
+
+SECRETOS (Supabase > Edge Functions > Secrets > Add new secret)
+
+Nombre: VAPID_PUBLIC_KEY
+Valor:  BIclZLvdW5NOd-xK3n9z_gto0GSWsbb3pM5DAPYkgI6hsDcd-sHkp1utlAu1c59Sese95wU4sIVMEUHFcIgGN1s
+
+Nombre: VAPID_PRIVATE_KEY
+Valor:  M6psbQr0kOj2wlOZ_iUQ67rz9YyYg1J5Bm8UWVdIHV8
+
+Nombre: MOVA_CRON_SECRET
+Valor:  gY3_WBDRzFsGpC-Z-EZq_kDODu6TVR8O
+
+FUNCIÓN
+Nombre exacto: mova-push
+Código: el archivo mova-push-funcion.ts (copiar y pegar todo)
+Importante: desactivar "Enforce JWT Verification" en la configuración de la función.
