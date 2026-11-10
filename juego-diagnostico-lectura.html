@@ -301,7 +301,7 @@ function result(){
   ${tags.length?`<div class="box" style="gap:8px"><span class="lbl">Lo que vamos a fortalecer</span><div class="tags">${tags.map(t=>`<span>${esc(t)}</span>`).join("")}</div></div>`:""}
   <div class="ruta"><b>Su Mi Ruta Lectora</b><span>${rd}${lvl>8?"":` y ${C.write<lvl?"refuerza":"avanza en"} el nivel ${C.write} de escritura.`}</span></div>
   <div class="noprint" style="margin-top:auto;display:flex;flex-direction:column;gap:8px">
-   ${S.saved?`<div class="done">Ruta asignada y guardada en el usuario de ${esc(nm)}.</div><button class="cta" id="nw">Siguiente alumno</button>`:`<button class="cta" id="sv">Asignar ruta</button>`}
+   ${S.saved?`<div class="done">Ruta asignada y guardada en el usuario de ${esc(nm)}.</div><a class="cta" style="display:block;text-decoration:none;box-sizing:border-box" href="index.html#/lectoescritura/ruta">Ver su ruta con el alumno</a><button class="sec" id="nw">Siguiente alumno</button>`:`<button class="cta" id="sv">Asignar ruta</button>`}
    <button class="sec" id="pr">Reporte de diagnóstico para la familia</button>
    ${S.saved?"":`<button class="link" id="nw">Volver a empezar</button>`}</div>
  </div>`;

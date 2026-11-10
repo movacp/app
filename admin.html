@@ -444,7 +444,7 @@ const GROUPS = ["Kids","Children","Teens","Adultos","TOEFL","Matemáticas","Lect
 const COLORS = ["#F6D776","#8EC9EE","#9DDCC0","#B9A6E8","#F9B8AE"];
 const ACT_NAMES = {"math-level-up":"Math Level Up","math-comprueba":"Matemáticas · comprobación","math-practica":"Matemáticas · práctica guiada","math-leccion":"Matemáticas · lección","word-quest":"Word Quest","mision-matematica":"Misión Matemática","level-up":"Level Up","verb-memory":"Verb Memory",
   "sentence-builder":"Sentence Builder","locked-library":"Locked Library","toefl-practice":"TOEFL Practice","word-forms":"Word Forms",
-  "sentence-scramble":"Sentence Scramble","lee-con-mochi":"Aprende a leer con Mochi","sopa-de-letras":"Sopa de letras","crucigrama":"Crucigrama","likes-dislikes":"Likes & Dislikes","speaking":"Speaking Lab","ruta":"My Path"};
+  "sentence-scramble":"Sentence Scramble","lee-con-mochi":"Aprende a leer con Mochi","diagnostico-lectura":"Diagnóstico de entrada · Lectoescritura","sopa-de-letras":"Sopa de letras","crucigrama":"Crucigrama","likes-dislikes":"Likes & Dislikes","speaking":"Speaking Lab","ruta":"My Path"};
 
 let session = null, students = [];
 const $ = s => document.querySelector(s);
@@ -1157,7 +1157,7 @@ const CAT = {"app-lecturas":["Lecturas","#8EC9EE"],"app-library":["Lecturas","#8
   "app-games":["Juegos","#F9B8AE"],"app-flashcards":["Flashcards","#B9A6E8"],"app-wordsearch":["Sopa de letras","#9DDCC0"],
   "app-coloring":["Para colorear","#F6D776"],"app-holidays":["Festividades","#F9B8AE"],"app-learn":["Aprende","#8EC9EE"],
   "app-lectoescritura":["Lectoescritura","#9DDCC0"],"app-matematicas":["Matemáticas","#B9A6E8"],"app-familias":["Familias","#F6D776"],
-  "app-shop":["Tienda","#E3E7F0"],"app-mova":["MOVA","#E3E7F0"],"lee-con-mochi":["Lectoescritura","#9DDCC0"],"speaking":["Speaking","#FF8FC8"],"ruta":["Grammar","#C9D2FF"],"monthly-quiz":["Monthly Quiz","#FF8FC0"],"module-exam":["Module Exam","#C9BDF5"]};
+  "app-shop":["Tienda","#E3E7F0"],"app-mova":["MOVA","#E3E7F0"],"lee-con-mochi":["Lectoescritura","#9DDCC0"],"diagnostico-lectura":["Lectoescritura","#9DDCC0"],"speaking":["Speaking","#FF8FC8"],"ruta":["Grammar","#C9D2FF"],"monthly-quiz":["Monthly Quiz","#FF8FC0"],"module-exam":["Module Exam","#C9BDF5"]};
 function catOf(a){ return CAT[a] || [ACT_NAMES[a] || (/^repaso-/.test(a)?"Repaso para exámenes":/^matematicas-/.test(a)?"Práctica de matemáticas":a), "#F2786B"]; }
 function secsOf(r){
   if(r.detail && r.detail.secs) return r.detail.secs;
@@ -1329,7 +1329,7 @@ async function buildReport(s, all, y, mo, note){
             mat:{n:"Matemáticas",c:"#FFF1C9",b:"#F6D776",ic:'<path d="M12 4v6M9 7h6M5 16h5M15 14l4 4M19 14l-4 4"/>'},
             lecto:{n:"Lectoescritura",c:"#ECFBC8",b:"#C4EA4F",ic:'<path d="M4 19l4-1 10-10-3-3L5 15z"/><path d="M13 7l3 3"/>'}};
   const MMx=window.MovaMath;
-  const rowSubj=r=>{ const a=String(r.activity||""); if(/^math-/.test(a)||MATH_RX.test(a)) return "mat"; if(/^(lee-con-mochi|feria-mochi)$/.test(a)) return "lecto"; return "en"; };
+  const rowSubj=r=>{ const a=String(r.activity||""); if(/^math-/.test(a)||MATH_RX.test(a)) return "mat"; if(/^(lee-con-mochi|feria-mochi|diagnostico-lectura)$/.test(a)) return "lecto"; return "en"; };
   const tSubj=t=>{ const k=tkSubj(t); return k==="toefl"?"en":k; };
   const tName=t=>String(t.task).includes("~")?t.title:(TASK_NAME[t.task]||String(t.title||"").replace(/ · due .*$/,"").replace(/ · by .*$/,""));
   const fd=d=>new Date(d).toLocaleDateString("es-MX",{day:"numeric",month:"short"});
@@ -1421,7 +1421,7 @@ const CAT_COL={"TOEFL":"#FFE58A","Lectura":"#BDF0D8","Juegos en inglés":"#C9D2F
 const BOOK_ART="data:image/svg+xml;base64,"+btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 90"><rect width="160" height="90" fill="#DDF5EA"/><circle cx="130" cy="18" r="9" fill="#fff" opacity=".7"/><circle cx="22" cy="70" r="14" fill="#D3F36B" opacity=".7"/><path d="M48 26 Q64 20 80 28 Q96 20 112 26 L112 70 Q96 64 80 72 Q64 64 48 70Z" fill="#fff" stroke="#15192B" stroke-width="2.6" stroke-linejoin="round"/><path d="M80 28 L80 72" stroke="#15192B" stroke-width="2.6"/><path d="M56 36 L72 34 M56 44 L72 42 M88 34 L104 36 M88 42 L104 44" stroke="#B9A6FF" stroke-width="2.6" stroke-linecap="round"/></svg>');
 function taskArt(k){ if(k==="lectura") return BOOK_ART; if(k==="word-forms") return "wf-cover.webp"; return "thumb-"+k+".webp"; }
 /* Opciones dentro del juego: la maestra elige en la vista previa (mova-task.js) */
-const NO_PICK=new Set(["toefl-sim","level-up","lectura"]);
+const NO_PICK=new Set(["toefl-sim","level-up","lectura","diagnostico-lectura"]);
 let curPicks=[];
 function taskKeyOf(t){ return String((t&&t.task)||t||"").split("~")[0]; }
 function b64url(o){ return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
@@ -1459,7 +1459,7 @@ const TASK_CAT=[
  ["Writing Lab",[["writing","Writing Lab · any task"]].concat((window.WL||[]).map(w=>["w:"+w.id,w.title+" · "+({kids:"Kids",children:"Children",teens:"Teens"})[w.st]+" "+w.lv]))],
  ["Juegos en inglés",[["speaking","Speaking Lab · Read aloud"],["word-quest","Word Quest"],["crucigrama","Crossword"],["sopa-de-letras","WordSearch"],["sentence-builder","Sentence Builder"],["sentence-scramble","Sentence Scramble"],["likes-dislikes","Likes & Dislikes"],["verb-memory","Verb Memory"]]],
  ["Escape rooms",[["locked-library","The Locked Library"],["haunted-mansion","The Haunted Mansion"],["lost-in-the-museum","Lost in the Museum"],["pirate-treasure-island","Pirate Treasure Island"],["space-station-rescue","Space Station Rescue"],["the-detectives-case","The Detective’s Case"],["trapped-in-the-train","Trapped in the Train"]]],
- ["Español y matemáticas",[["lee-con-mochi","Aprende a leer con Mochi"],["feria-mochi","La Feria de Mochi"],["mision-matematica","Misión Matemática"],["la-tiendita","La Tiendita"],["la-balanza","La Balanza"],["la-boveda","La Bóveda"],["lluvia-de-numeros","Lluvia de números"],["detective-patrones","Detective de patrones"],["pizzeria-fracciones","Pizzería de fracciones"],["que-hora-es","¿Qué hora es?"]]]
+ ["Español y matemáticas",[["diagnostico-lectura","Diagnóstico de entrada · Lectoescritura"],["lee-con-mochi","Aprende a leer con Mochi"],["feria-mochi","La Feria de Mochi"],["mision-matematica","Misión Matemática"],["la-tiendita","La Tiendita"],["la-balanza","La Balanza"],["la-boveda","La Bóveda"],["lluvia-de-numeros","Lluvia de números"],["detective-patrones","Detective de patrones"],["pizzeria-fracciones","Pizzería de fracciones"],["que-hora-es","¿Qué hora es?"]]]
 ];
 const TASK_NAME=Object.fromEntries(TASK_CAT.flatMap(g=>g[1]));
 function taskMatch(t0,r){
@@ -1481,7 +1481,7 @@ function wlDec(t){ try{ return /^FB\|/.test(t||"")?JSON.parse(decodeURIComponent
 let tkCache=null, tkF={st:"pend",by:"all",sub:"all",q:""};
 /* Materia de cada tarea: Inglés, Matemáticas, Lectoescritura o TOEFL */
 const SUBJ={en:["Inglés","#E5E9FF"],mat:["Matemáticas","#FFF1C9"],lecto:["Lectoescritura","#ECFBC8"],toefl:["TOEFL","#FFE6F2"]};
-function tkSubj(t){ const k=taskKeyOf(t); if(/^m(-levelup$|:)/.test(k)||MATH_RX.test(k)) return "mat"; if(/^toefl/.test(k)) return "toefl"; if(/^e:/.test(k)||/^(lee-con-mochi|feria-mochi)$/.test(k)) return "lecto"; return "en"; }
+function tkSubj(t){ const k=taskKeyOf(t); if(/^m(-levelup$|:)/.test(k)||MATH_RX.test(k)) return "mat"; if(/^toefl/.test(k)) return "toefl"; if(/^e:/.test(k)||/^(lee-con-mochi|feria-mochi|diagnostico-lectura)$/.test(k)) return "lecto"; return "en"; }
 async function loadAllTasks(force){
   const box=$("#tkAll"); if(!box) return;
   if(tkCache && !force) return drawAllTasks();
