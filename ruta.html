@@ -419,6 +419,7 @@ function route(){
   if(h[0]==="mix")return mix(h[1],h[2]);
   if(h[0]==="badges")return badges();
   if(h[0]==="mq")return monthlyQuiz(h[1]);
+  if(h[0]==="me")return moduleExam(h[1]);
   home(h[0]==="stage"&&D[h[1]]?h[1]:curStage());
 }
 
@@ -443,6 +444,7 @@ function monthlyQuiz(id){
   var today=new Date(),td=today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
   if(from&&td<from){app.innerHTML=bk+head+'<div class="mqn">This quiz opens on <b>'+esc(fmt(from))+'</b>. You will take it in class with your teacher.</div>';return;}
   if(to&&td>to){app.innerHTML=bk+head+'<div class="mqn">This quiz closed on <b>'+esc(fmt(to))+'</b>. Talk to your teacher.</div>';return;}
+  if(!user()&&!window.MovaAuth&&(window.__authWait=(window.__authWait||0)+1)<40){setTimeout(route,150);return;}
   if(!user()){app.innerHTML=bk+head+'<div class="mqn">Sign in with your MOVA account to take the quiz.</div><button class="cta" id="lg">Sign in</button>';document.getElementById("lg").onclick=function(){try{MovaAuth.login();}catch(e){}};return;}
   /* preguntas: se reparten entre los temas elegidos */
   var pools=TT.map(function(t){return shuffle((t.q||[]).filter(function(q){return q[1]&&q[1].length>1;})).map(function(q){return {t:t.t,q:q[0],o:shuffle(q[1].map(function(x,i){return {x:x,ok:i===q[2]};})),right:q[1][q[2]],why:q[3],say:q[4]};});});
@@ -471,6 +473,158 @@ function monthlyQuiz(id){
       (weak.length?'<div class="mqn" style="background:#FFE6F2"><b style="display:block;font-size:14px">Practice next</b>'+weak.map(esc).join(" · ")+' · Open it in My path to review.</div>':'')+
       '<button class="cta" id="sa">See my answers</button><div id="al" style="margin-top:12px"></div>';
     document.getElementById("sa").onclick=function(){document.getElementById("al").innerHTML=r.ans.map(function(a,i){return '<div class="mqa '+(a.ok?"ok":"no")+'"><b>'+(i+1)+'. '+esc(a.q)+'</b>Your answer: '+esc(a.a)+(a.ok?'':'<small>Correct: '+esc(a.right)+'</small>')+'</div>';}).join("");this.remove();};}
+}
+
+/* ---------- Module Exam: examen oficial del módulo (task "me:<id>~st|lv|desde|hasta|temas|mazos|modulo|nG") ---------- */
+var ME_CSS=0;
+function meLoadReadings(cb){if(window.MOVA_ME_READ)return cb();var s=document.createElement("script");s.src="me-readings.js?v=1";s.onload=function(){cb();};s.onerror=function(){window.MOVA_ME_READ=window.MOVA_ME_READ||{};cb();};document.head.appendChild(s);}
+function meHash(s){var h=17;String(s).split("").forEach(function(c){h=(h*31+c.charCodeAt(0))%1000003;});return h;}
+function moduleExam(id){
+  if(!ME_CSS){ME_CSS=1;var lk=document.createElement("link");lk.rel="stylesheet";lk.href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap";document.head.appendChild(lk);
+    var cs=document.createElement("style");cs.textContent=
+    '.mx{font-family:Poppins,system-ui,sans-serif;color:#1B1F33}.mx *{box-sizing:border-box}'+
+    '.mxh{background:#1E2A55;color:#fff;border-radius:20px 20px 0 0;padding:15px 16px 13px;display:flex;align-items:center;gap:12px}.mxh img{width:40px;height:40px;border-radius:10px;flex:none}.mxh b{display:block;font-size:13.5px}.mxh small{display:block;font-size:10.5px;color:#C9CDE0;letter-spacing:.1em;text-transform:uppercase}'+
+    '.mxs{display:flex;height:5px;border-radius:0 0 4px 4px;overflow:hidden;margin-bottom:16px}.mxs i{flex:1}'+
+    '.mxt{text-align:center;padding-bottom:12px;border-bottom:1px solid #E3E5EE;margin-bottom:12px}.mxt span{display:block;font-size:11px;font-weight:600;color:#6A7088;letter-spacing:.16em;text-transform:uppercase}.mxt h1{margin:2px 0;font-size:28px;line-height:1.15;font-weight:800;color:#1E2A55}.mxt p{margin:0;font-size:12.5px;color:#4E5468}'+
+    '.mxc{border:1.5px solid #1E2A55;border-radius:12px;overflow:hidden;margin-bottom:12px;background:#fff}.mxc>u{display:block;text-decoration:none;background:#E6E2FF;padding:8px 14px;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#1E2A55}.mxg{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;padding:11px 14px;font-size:12.5px}.mxg div:first-child{grid-column:1/-1}.mxg small{display:block;color:#6A7088;font-size:10.5px}.mxg b{font-size:13px}.mxg div:first-child b{font-size:15px}'+
+    '.mxp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:6px}.mxp div{border-radius:14px;padding:12px 10px;display:flex;flex-direction:column;gap:5px}.mxp em{font-style:normal;display:flex;justify-content:space-between;align-items:flex-start;font-size:10.5px;font-weight:800;color:#1E2A55}.mxp b{font-size:13.5px;color:#1E2A55}.mxp span{font-size:11px;color:#3A3F55;line-height:1.35}'+
+    '.mxtot{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#1E2A55;padding:0 2px;margin-bottom:12px}'+
+    '.mxr{background:#FFF6D1;border-radius:12px;padding:11px 14px;font-size:12.5px;line-height:1.5;color:#3A3F55;margin-bottom:12px}.mxr b{display:block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#1E2A55;margin-bottom:2px}'+
+    '.mxl{display:block;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#1E2A55;margin:0 2px 6px}'+
+    '.mxcode{width:100%;border:1.5px solid #1E2A55;border-radius:12px;padding:12px;text-align:center;font:700 22px Poppins,sans-serif;letter-spacing:.4em;color:#1E2A55;background:#fff}'+
+    '.mxchk{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.4;color:#3A3F55;margin:14px 2px 0;cursor:pointer}.mxchk input{width:18px;height:18px;margin:1px 0 0;accent-color:#1E2A55;flex:none}'+
+    '.mxb{display:block;width:100%;min-height:52px;text-align:center;padding:0 12px;border:0;border-radius:12px;background:#1E2A55;color:#fff;font:700 15px Poppins,sans-serif;margin-top:14px;cursor:pointer}.mxb.gh{background:#fff;color:#1E2A55;border:1.5px solid #1E2A55}.mxb:disabled{opacity:.45}'+
+    '.mxe{color:#C2185B;font-weight:700;font-size:13px;margin:6px 2px 0;min-height:16px}'+
+    '.mxq{background:#1E2A55;color:#fff;border-radius:20px 20px 0 0;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}.mxq small{display:block;font-size:10.5px;color:#C9CDE0;letter-spacing:.12em;text-transform:uppercase}.mxq .pt{display:inline-block;border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:800;color:#1E2A55;margin-top:3px}.mxq .tm{border:1px solid #4A5683;border-radius:8px;padding:6px 10px;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}.mxq .tm.lo{background:#FF8FC0;color:#1E2A55;border-color:#FF8FC0}'+
+    '.mxi{display:flex;justify-content:space-between;font-size:11.5px;color:#6A7088;font-weight:600;margin-bottom:7px}.mxbar{display:flex;gap:6px}.mxbar>div{display:flex;gap:2px}.mxbar span{flex:1;height:7px;border-radius:2px}.mxbl{display:flex;gap:6px;font-size:10px;font-weight:700;color:#6A7088;margin:5px 0 14px}.mxbl span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}'+
+    '.mxn{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}.mxn>b{width:36px;height:36px;border:1.5px solid #1E2A55;border-radius:10px;display:grid;place-items:center;font-weight:800;color:#1E2A55;flex:none}.mxn>div{flex:1;min-width:0}.mxn small{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6A7088;margin-bottom:8px}.mxn p{margin:0;font-size:18px;line-height:1.5;font-weight:600}'+
+    '.mxim{background:#EAF5FD;border-radius:12px;padding:8px;display:flex;justify-content:center;margin-bottom:10px}.mxim img{max-height:150px;max-width:100%;border-radius:10px}'+
+    '.mxtx{background:#F4F5FA;border-left:4px solid #BDF0D8;border-radius:0 12px 12px 0;padding:12px 14px;font-size:14px;line-height:1.6;max-height:240px;overflow:auto;margin-bottom:14px}.mxtx h3{margin:0 0 6px;font-size:15px;color:#1E2A55}.mxtx p{margin:0 0 8px}'+
+    '.mxo{display:flex;gap:12px;align-items:center;width:100%;text-align:left;border:1.5px solid #D5D8E4;background:#fff;border-radius:12px;padding:13px 14px;font:500 15px Poppins,sans-serif;color:#1B1F33;margin-bottom:10px;cursor:pointer}.mxo i{font-style:normal;width:26px;height:26px;border:1.5px solid #8A93B8;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;color:#4E5468;flex:none}.mxo.on{border:2px solid #1E2A55;background:#E6E2FF;font-weight:600;padding:12.5px 13.5px}.mxo.on i{background:#FF8FC0;border-color:#1E2A55;color:#1E2A55;font-weight:800}'+
+    '.mxf{display:inline-flex;align-items:center;gap:8px;font:600 12.5px Poppins,sans-serif;color:#4E5468;background:none;border:0;padding:4px 2px;cursor:pointer}.mxf.on{color:#C2185B}'+
+    '.mxnav{display:grid;grid-template-columns:1fr 1.6fr;gap:10px;margin-top:16px}.mxnav .mxb{margin:0}'+
+    '.mxgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:10px 0 6px}.mxgrid button{aspect-ratio:1;border-radius:10px;border:1.5px solid #D5D8E4;background:#fff;font:700 14px Poppins,sans-serif;color:#1E2A55;position:relative;cursor:pointer}.mxgrid button.a{background:#1E2A55;color:#fff;border-color:#1E2A55}.mxgrid button.f::after{content:"";position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:#FF8FC0}'+
+    '.mxseal{width:96px;height:96px;border-radius:50%;background:conic-gradient(#FF8FC0 0 20%,#8EC9F2 0 40%,#F2C55C 0 60%,#BDF0D8 0 80%,#C9BDF5 0);display:grid;place-items:center;position:relative;margin:6px auto 10px}.mxseal::before{content:"";position:absolute;inset:9px;border-radius:50%;background:#fff;border:2px solid #1E2A55}.mxseal svg{position:relative;width:38px;height:38px}'+
+    '.mxrc div{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #E3E5EE;font-size:13px}.mxrc div:last-child{border-bottom:0}.mxrc span{color:#6A7088;display:flex;align-items:center;gap:8px}.mxrc i{width:10px;height:10px;border-radius:50%;border:1.5px solid #1E2A55}'+
+    '.mxnote{display:flex;gap:12px;align-items:flex-start;border-left:4px solid #F2C55C;background:#FFF6D1;border-radius:0 10px 10px 0;padding:12px 14px;font-size:12.5px;line-height:1.5;color:#3A3F55}';
+    document.head.appendChild(cs);}
+  var Q=new URLSearchParams(location.search),pk=(Q.get("pick")||"").split("|"),taskId=Q.get("task");
+  var st=pk[0],lv=pk[1],from=pk[2],to=pk[3],ids=(pk[4]||"").split(",").filter(Boolean),decks=(pk[5]||"").split(",").filter(function(x){return x!=="";}).map(Number),mod=pk[6]||"1",nG=+pk[7]||18;
+  var KEY="mova_me_"+id,L=(D[st]||{})[lv]||{},name=STG[st]?STG[st].name:"",u=user()||{};
+  var TT=ids.map(function(x){var f=findTopic(x);return f&&f.t;}).filter(Boolean);
+  var MN=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var dd=function(x){return new Date(x+"T12:00:00");},fmt=function(x){return dd(x).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});};
+  var PER={"1":"September – November","2":"January – March","3":"April – June"}[mod]||"";
+  var COL=["#D3F36B","#FFE58A","#BDF0D8"],SOFT=[["#A6CC2E","#ECF7C6"],["#E8C94A","#FFF3BF"],["#7FD3AE","#DDF6EA"]],PN=["I","II","III"],PT=["Grammar","Vocabulary","Reading"];
+  var ICS=['<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1E2A55" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="13" width="8" height="7" rx="1.5" fill="#fff"/><rect x="13" y="13" width="8" height="7" rx="1.5" fill="#FF8FC0"/><rect x="8" y="4" width="8" height="7" rx="1.5" fill="#C9BDF5"/></svg>',
+    '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1E2A55" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="6" width="12" height="15" rx="2" fill="#fff"/><rect x="9" y="3" width="12" height="15" rx="2" fill="#8EC9F2"/><path d="M12.5 8h5M12.5 11.5h3.5" stroke-linecap="round"/></svg>',
+    '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1E2A55" stroke-width="1.8" stroke-linejoin="round"><path d="M12 6.5C9.5 4.8 6.5 4.5 3 5v13.5c3.5-.5 6.5-.2 9 1.5V6.5z" fill="#fff"/><path d="M12 6.5c2.5-1.7 5.5-2 9-1.5v13.5c-3.5-.5-6.5-.2-9 1.5V6.5z" fill="#FF8FC0"/></svg>'];
+  var STRIPE='<div class="mxs"><i style="background:#FF8FC0"></i><i style="background:#8EC9F2"></i><i style="background:#F2C55C"></i><i style="background:#BDF0D8"></i><i style="background:#C9BDF5"></i></div>';
+  var TOP='<div class="mxh"><img src="icon-192.png" alt="MOVA"><div><b>MOVA Centro Pedagógico</b><small>Official Assessment</small></div></div>'+STRIPE;
+  var examId="M"+mod+"-"+String(st||"x").charAt(0).toUpperCase()+String(lv||"").replace(/[^A-Za-z0-9]/g,"")+"-"+String(1000+meHash(id+"|"+(u.id||u.username||u.name||""))%9000);
+  var bk=back("./#/","Home");
+  var wrap=function(h){app.innerHTML='<div class="mx">'+h+'</div>';window.scrollTo(0,0);};
+  if(!TT.length){wrap(bk+'<div class="card"><h2>Exam not found</h2><p>Ask your teacher to assign it again.</p></div>');return;}
+  var S=null;try{S=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){}
+  var save=function(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+  if(S&&S.done)return receipt();
+  var today=new Date(),td=today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
+  var info=function(msg){wrap(bk+TOP+'<div class="mxt"><span>Module '+esc(mod)+' · '+esc(PER)+'</span><h1>Module Exam</h1><p>'+esc(name+" · "+lv)+'</p></div><div class="mxr"><b>Notice</b>'+msg+'</div>');};
+  if(from&&td<from&&!(S&&S.parts))return info('The Module Exam opens on <b>'+esc(fmt(from))+'</b>. You will take it in class with your teacher.');
+  if(to&&td>to&&!(S&&S.parts))return info('The Module Exam closed on <b>'+esc(fmt(to))+'</b>. Talk to your teacher.');
+  if(!user()&&!window.MovaAuth&&(window.__authWait=(window.__authWait||0)+1)<40){setTimeout(route,150);return;}
+  if(!user()){info('Sign in with your MOVA account to take the Module Exam.');return;}
+  meLoadReadings(function(){if(S&&S.parts)return resume();build();cover();});
+
+  /* ----- armar las 3 partes ----- */
+  function build(){
+    var PIC=window.MOVA_KIDS_PIC||{};
+    var pools=TT.map(function(t){var arr=shuffle((t.q||[]).filter(function(q){return q[1]&&q[1].length>1;})).map(function(q){var o=shuffle(q[1].map(function(x,i){return {x:x,ok:i===q[2]};}));return {t:t.t,q:q[0],o:o.map(function(z){return z.x;}),c:o.findIndex(function(z){return z.ok;}),say:q[4]||""};});
+      if(st==="kids"&&PIC[t.id]){shuffle(PIC[t.id]).slice(0,1).forEach(function(pc){var o=shuffle(pc[2].map(function(x,j){return {x:x,ok:j===0};}));arr.unshift({t:t.t,q:pc[1],img:pc[0],o:o.map(function(z){return z.x;}),c:o.findIndex(function(z){return z.ok;})});});}
+      return arr;});
+    var g=[],k=0,guard=0;while(g.length<nG&&guard<800){var P=pools[k%pools.length];if(P.length)g.push(P.shift());k++;guard++;if(pools.every(function(p){return !p.length;}))break;}
+    g=shuffle(g);
+    var DK=(L.vocab||[]).filter(function(_,i){return !decks.length||decks.indexOf(i)>=0;}),words=[];DK.forEach(function(d){(d.w||[]).forEach(function(w){words.push({w:w[0],d:w[1],img:w[2]||"",deck:d.n});});});
+    var all=[];(L.vocab||[]).forEach(function(d){(d.w||[]).forEach(function(w){all.push(w[0]);});});
+    var v=[];shuffle(words).slice(0,10).forEach(function(w,i){var pool=shuffle((words.length>=4?words.map(function(x){return x.w;}):all).filter(function(x){return x!==w.w;})).slice(0,3);
+      var mode=w.img?(i%3===2?"def":"pic"):(i%2?"mean":"def"),opts,ri;
+      if(mode==="mean"){var dpool=shuffle(words.filter(function(x){return x.w!==w.w;})).slice(0,3).map(function(x){return x.d;});if(dpool.length<3)mode="def";else{opts=shuffle([w.d].concat(dpool));v.push({t:"Vocabulary · "+w.deck,q:'What does "'+w.w+'" mean?',o:opts,c:opts.indexOf(w.d)});return;}}
+      opts=shuffle([w.w].concat(pool));ri=opts.indexOf(w.w);
+      if(mode==="pic")v.push({t:"Vocabulary · "+w.deck,q:"What is it?",img:w.img,o:opts,c:ri});
+      else v.push({t:"Vocabulary · "+w.deck,q:"Which word means: "+w.d+"?",o:opts,c:ri});});
+    var R=window.MOVA_ME_READ||{},ORD=["Pre-A1","A1","A1+","A2","A2+","B1","B1+","B2","C1","C2"],cand=R[st+"|"+lv]||(st==="kids"?R["|"+lv]:null);
+    if(!cand){var ix=ORD.indexOf(lv);for(var j=ix-1;j>=0&&!cand;j--)cand=R[st+"|"+ORD[j]];for(var j2=ix+1;j2<ORD.length&&!cand;j2++)cand=R[st+"|"+ORD[j2]];if(!cand)cand=R["|"+lv]||R["kids|"+lv];}
+    var rd=cand&&cand.length?cand[meHash(id)%cand.length]:null,r=[];
+    if(rd)rd.q.slice(0,8).forEach(function(q){var o=shuffle(q[1].map(function(x,i){return {x:x,ok:i===0};}));r.push({t:"Reading",q:q[0],o:o.map(function(z){return z.x;}),c:o.findIndex(function(z){return z.ok;})});});
+    var mG=Math.max(8,Math.round(g.length*5/6)),mR=st==="kids"?12:/C1|C2|B2/.test(lv)?20:15;
+    S={parts:[g,v,r],mins:[mG,10,r.length?mR:0],sel:[g.map(function(){return -1;}),v.map(function(){return -1;}),r.map(function(){return -1;})],flag:[[],[],[]],ends:[0,0,0],sub:[0,0,0],cur:0,i:0,rd:rd?{t:rd.t,p:rd.p}:null,t0:0};
+  }
+  function partsTot(){return S.parts[0].length+S.parts[1].length+S.parts[2].length;}
+  function minsTot(){return S.mins[0]+S.mins[1]+S.mins[2];}
+
+  /* ----- portada ----- */
+  function cover(){
+    var tiles=[0,1,2].filter(function(p){return S.parts[p].length;}).map(function(p){return '<div style="background:'+COL[p]+'"><em>'+ICS[p]+'PART '+PN[p]+'</em><b>'+PT[p]+'</b><span>'+S.parts[p].length+' questions<br>'+S.mins[p]+' min</span></div>';}).join("");
+    wrap(bk+TOP+'<div class="mxt"><span>Module '+esc(mod)+' · '+esc(PER)+'</span><h1>Module Exam</h1><p>English Program · Cycle '+esc(String(dd(from||td).getFullYear()-(dd(from||td).getMonth()<7?1:0)))+'–'+esc(String(dd(from||td).getFullYear()+(dd(from||td).getMonth()<7?0:1)))+'</p></div>'+
+      '<div class="mxc"><u>Candidate</u><div class="mxg"><div><small>Name</small><b>'+esc(u.name||"")+'</b></div><div><small>Program · Level</small><b>MOVA '+esc(name)+' · '+esc(lv)+'</b></div><div><small>Date</small><b>'+esc(fmt(td))+'</b></div><div><small>Module</small><b>Module '+esc(mod)+'</b></div><div><small>Exam ID</small><b>'+esc(examId)+'</b></div></div></div>'+
+      '<div class="mxp">'+tiles+'</div><div class="mxtot"><span>Total</span><span>'+partsTot()+' questions · '+minsTot()+' min</span></div>'+
+      '<div class="mxr"><b>Exam rules</b>1. Work on your own, in the classroom.<br>2. One attempt only. No hints and no Remember button.<br>3. Each part has its own timer. When time ends, the part closes.</div>'+
+      '<label class="mxl" for="mxc">Examiner code</label><input class="mxcode" id="mxc" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="····"><p class="mxe" id="mxe"></p>'+
+      '<label class="mxchk"><input type="checkbox" id="mxok"> I am ready to begin and I will answer on my own.</label><button class="mxb" id="mxgo" disabled>Start Module Exam</button>');
+    var ok=document.getElementById("mxok"),go=document.getElementById("mxgo");ok.onchange=function(){go.disabled=!ok.checked;};
+    go.onclick=function(){var v=(document.getElementById("mxc").value||"").replace(/\D/g,"");if(v!==mqCode(from)){document.getElementById("mxe").textContent=v?"That code is not right. Ask your teacher.":"Type the examiner code your teacher gives you.";return;}
+      S.t0=Date.now();S.cur=0;S.i=0;startPart(0);};}
+  function startPart(p){while(p<3&&!S.parts[p].length){S.sub[p]=1;p++;}if(p>2)return submitAll();S.cur=p;S.i=0;S.ends[p]=Date.now()+S.mins[p]*60000;save();question();}
+  function resume(){var p=S.cur;if(S.sub[p]){for(var n=p+1;n<3;n++)if(!S.sub[n])return between(n);return submitAll();}if(!S.ends[p])return between(p);if(Date.now()>=S.ends[p])return closePart(true);question();}
+
+  /* ----- pregunta ----- */
+  var tick=null;
+  function timer(){clearInterval(tick);var el=document.getElementById("mxtm");if(!el)return;var f=function(){var left=Math.max(0,S.ends[S.cur]-Date.now()),m=Math.floor(left/60000),s=Math.floor(left%60000/1000);if(!document.getElementById("mxtm")){clearInterval(tick);return;}el.textContent=m+":"+String(s).padStart(2,"0");el.classList.toggle("lo",left<60000);if(left<=0){clearInterval(tick);closePart(true);}};f();tick=setInterval(f,1000);}
+  function bars(){var p=S.cur,i=S.i;return '<div class="mxbar">'+[0,1,2].filter(function(x){return S.parts[x].length;}).map(function(x){var n=S.parts[x].length;if(x!==p)return '<div style="flex:'+Math.max(n,7)+'"><span style="background:'+(S.sub[x]?SOFT[x][0]:SOFT[x][1])+'"></span></div>';return '<div style="flex:'+Math.max(n,7)+'">'+S.parts[x].map(function(_,j){return '<span style="background:'+(j===i?"#1E2A55":S.sel[x][j]>=0?SOFT[x][0]:SOFT[x][1])+'"></span>';}).join("")+'</div>';}).join("")+'</div><div class="mxbl">'+[0,1,2].filter(function(x){return S.parts[x].length;}).map(function(x){return '<span style="flex:'+Math.max(S.parts[x].length,7)+'">'+PN[x]+' · '+(x===1?"VOCAB":PT[x].toUpperCase())+'</span>';}).join("")+'</div>';}
+  function question(){var p=S.cur,i=S.i,q=S.parts[p][i],n=S.parts[p].length,sel=S.sel[p][i],fl=S.flag[p].indexOf(i)>=0;
+    var txt=p===2&&S.rd?'<div class="mxtx"><h3>'+esc(S.rd.t)+'</h3>'+S.rd.p.map(function(x){return '<p>'+esc(x)+'</p>';}).join("")+'</div>':'';
+    wrap('<div class="mxq"><div><small>Module Exam · Module '+esc(mod)+'</small><span class="pt" style="background:'+COL[p]+'">Part '+PN[p]+' · '+PT[p]+'</span></div><div class="tm" id="mxtm">--:--</div></div>'+STRIPE+
+      '<div class="mxi"><span>Question '+(i+1)+' of '+n+'</span><span>'+esc(examId)+'</span></div>'+bars()+txt+
+      '<div class="mxn"><b style="background:'+COL[p]+'">'+(i+1)+'</b><div><small>'+(p===2?"Read and choose the correct answer.":"Choose the correct answer.")+'</small>'+(q.img?'<div class="mxim"><img src="'+esc(q.img)+'" alt=""></div>':'')+(q.say?'<button class="mxf" id="mxsay" style="color:#1E2A55">'+IC.spk.replace('<svg','<svg width="18" height="18"')+' Listen</button>':'')+'<p>'+esc(q.q).replace(/_{2,}/g,'<span style="display:inline-block;width:64px;border-bottom:2px solid #1E2A55"></span>')+'</p></div></div>'+
+      q.o.map(function(o,j){return '<button class="mxo'+(j===sel?" on":"")+'" data-j="'+j+'"><i>'+"ABCD".charAt(j)+'</i>'+esc(o)+'</button>';}).join("")+
+      '<button class="mxf'+(fl?" on":"")+'" id="mxfl"><svg width="16" height="16" viewBox="0 0 24 24" fill="'+(fl?"#FF8FC0":"none")+'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>'+(fl?"Marked for review":"Mark to review later")+'</button>'+
+      '<div class="mxnav"><button class="mxb gh" id="mxpv"'+(i===0?" disabled":"")+'>Previous</button><button class="mxb" id="mxnx">'+(i<n-1?"Next question":"Review Part "+PN[p])+'</button></div>');
+    app.querySelectorAll(".mxo").forEach(function(b){b.onclick=function(){S.sel[p][i]=+b.dataset.j;save();app.querySelectorAll(".mxo").forEach(function(x){x.classList.toggle("on",x===b);});};});
+    document.getElementById("mxfl").onclick=function(){var a=S.flag[p],k=a.indexOf(i);if(k>=0)a.splice(k,1);else a.push(i);save();question();};
+    document.getElementById("mxpv").onclick=function(){if(S.i>0){S.i--;save();question();}};
+    document.getElementById("mxnx").onclick=function(){if(S.i<n-1){S.i++;save();question();}else review();};
+    if(q.say){document.getElementById("mxsay").onclick=function(){say(q.say,.8);};}
+    timer();}
+  function review(){var p=S.cur,n=S.parts[p].length,un=S.sel[p].filter(function(x){return x<0;}).length;
+    wrap('<div class="mxq"><div><small>Module Exam · Module '+esc(mod)+'</small><span class="pt" style="background:'+COL[p]+'">Part '+PN[p]+' · Review</span></div><div class="tm" id="mxtm">--:--</div></div>'+STRIPE+
+      '<div class="mxc"><u>Your answers</u><div style="padding:6px 14px 12px"><div class="mxgrid">'+S.parts[p].map(function(_,j){return '<button class="'+(S.sel[p][j]>=0?"a":"")+(S.flag[p].indexOf(j)>=0?" f":"")+'" data-q="'+j+'">'+(j+1)+'</button>';}).join("")+'</div><p style="margin:6px 0 0;font-size:12px;color:#6A7088">Tap a number to go back to that question.'+(S.flag[p].length?' Pink dot: marked for review.':'')+'</p></div></div>'+
+      (un?'<div class="mxr"><b>Check</b>You have '+un+' unanswered question'+(un>1?"s":"")+'. Unanswered questions count as wrong.</div>':'<div class="mxr" style="background:#DDF6EA"><b>Ready</b>All '+n+' questions are answered.</div>')+
+      '<button class="mxb" id="mxsb">Submit Part '+PN[p]+'</button><p style="font-size:12px;color:#6A7088;text-align:center;margin:8px 0 0">After you submit, you cannot change these answers.</p>');
+    app.querySelectorAll("[data-q]").forEach(function(b){b.onclick=function(){S.i=+b.dataset.q;save();question();};});
+    document.getElementById("mxsb").onclick=function(){closePart(false);};timer();}
+  function closePart(auto){clearInterval(tick);var p=S.cur;if(S.sub[p])return;S.sub[p]=1;save();var nx=-1;for(var k=p+1;k<3;k++)if(S.parts[k].length&&!S.sub[k]){nx=k;break;}
+    if(nx<0)return submitAll();S.cur=nx;S.i=0;save();between(nx,auto?p:-1);}
+  function between(p,timed){S.cur=p;save();var pv=0;for(var k=p-1;k>=0;k--)if(S.parts[k].length&&S.sub[k]){pv=k;break;}
+    wrap(TOP+'<div class="mxt"><span>Module Exam · Module '+esc(mod)+'</span><h1>Part '+PN[pv]+' submitted</h1><p>'+(timed>=0&&timed!=null?"Time is up for Part "+PN[timed]+". Your answers were saved.":"Your answers were saved.")+'</p></div>'+
+      '<div class="mxp" style="grid-template-columns:1fr"><div style="background:'+COL[p]+';flex-direction:row;align-items:center;gap:14px;padding:16px">'+ICS[p].replace(/26/g,"40")+'<div><em style="justify-content:flex-start">NEXT · PART '+PN[p]+'</em><b style="display:block;font-size:17px">'+PT[p]+'</b><span>'+S.parts[p].length+' questions · '+S.mins[p]+' min</span></div></div></div>'+
+      '<div class="mxr" style="margin-top:12px"><b>Before you start</b>'+(p===2?"Read the text carefully. You can scroll it on every question.":"The timer starts when you tap the button.")+'</div><button class="mxb" id="mxst">Start Part '+PN[p]+'</button>');
+    document.getElementById("mxst").onclick=function(){S.i=0;S.ends[p]=Date.now()+S.mins[p]*60000;save();question();};}
+
+  /* ----- entrega ----- */
+  function submitAll(){clearInterval(tick);var by={},ps=[0,1,2].map(function(p){var s=0;S.parts[p].forEach(function(q,j){var ok=S.sel[p][j]===q.c;if(ok)s++;var t=p===0?q.t:p===1?"Vocabulary":"Reading";by[t]=by[t]||[0,0];by[t][1]++;if(ok)by[t][0]++;});return [s,S.parts[p].length];});
+    var sc=ps[0][0]+ps[1][0]+ps[2][0],tot=ps[0][1]+ps[1][1]+ps[2][1];
+    S.done={at:Date.now(),ps:ps};save();
+    var ans=[];[0,1,2].forEach(function(p){S.parts[p].forEach(function(q,j){ans.push({p:p,t:q.t,q:q.q,a:S.sel[p][j]>=0?q.o[S.sel[p][j]]:"",ok:S.sel[p][j]===q.c,r:q.o[q.c]});});});
+    try{MovaAuth.save("module-exam","Module "+mod+" Exam · "+name+" "+lv,sc,tot,{kind:"module-exam",me:id,task:taskId,stage:st,level:lv,mod:mod,from:from,to:to,examId:examId,parts:{g:ps[0],v:ps[1],r:ps[2]},by:by,reading:S.rd?S.rd.t:"",ans:ans,secs:Math.round((Date.now()-(S.t0||Date.now()))/1000)});}catch(e){}
+    try{localStorage.setItem("mova-task-done-"+taskId,"1");}catch(e){}
+    receipt();}
+  function receipt(){var ps=S.done.ps,at=new Date(S.done.at),first=String(u.name||"").split(" ")[0];
+    wrap(bk+TOP+'<div class="mxseal"><svg viewBox="0 0 24 24" fill="none" stroke="#1E2A55" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>'+
+      '<div class="mxt" style="border:0"><span>Module Exam · Module '+esc(mod)+'</span><h1 style="font-size:25px">Exam submitted</h1><p>'+(first?"Well done, "+esc(first)+". ":"")+'Your answers are safely recorded.</p></div>'+
+      '<div class="mxc"><u>Submission receipt</u><div class="mxrc"><div><span>Exam ID</span><b>'+esc(examId)+'</b></div><div><span>Submitted</span><b>'+esc(at.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})+" · "+at.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"}))+'</b></div>'+
+      [0,1,2].filter(function(p){return ps[p][1];}).map(function(p){var a=S.sel[p].filter(function(x){return x>=0;}).length;return '<div><span><i style="background:'+COL[p]+'"></i>Part '+PN[p]+' · '+PT[p]+'</span><b>'+a+' / '+ps[p][1]+' answered</b></div>';}).join("")+'</div></div>'+
+      '<div class="mxnote"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E2A55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>Your results will be released by your teacher, together with your official report card.</span></div>'+
+      '<a class="mxb gh" href="./#/" style="display:grid;place-items:center;text-decoration:none">Return to Home</a>');}
 }
 
 /* ---------- inicio: My path ---------- */

@@ -416,7 +416,7 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
       <div class="sech"><h3>Resultados por alumno</h3><button class="lnk" id="expLu">Exportar a Excel</button></div>
       <div class="list" id="luList"></div>
     </div>
-    <div id="v-tasks" class="hidden"><button class="btn btn-primary btn-full" id="mqNew" style="margin:0 0 14px">+ Crear Monthly Quiz</button><div id="tkAll"></div></div>
+    <div id="v-tasks" class="hidden"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 14px"><button class="btn btn-primary" id="mqNew">+ Crear Monthly Quiz</button><button class="btn" id="meNew" style="background:#1E2A55;color:#fff">+ Crear Module Exam</button></div><div id="tkAll"></div></div>
     <div class="view hidden" id="v-insights">
       <div class="visits" id="luIns" style="margin-top:0"></div>
       <div class="visits" id="visits"><h2>Visitas a la app</h2><p class="vs">Cargando…</p></div>
@@ -1157,7 +1157,7 @@ const CAT = {"app-lecturas":["Lecturas","#8EC9EE"],"app-library":["Lecturas","#8
   "app-games":["Juegos","#F9B8AE"],"app-flashcards":["Flashcards","#B9A6E8"],"app-wordsearch":["Sopa de letras","#9DDCC0"],
   "app-coloring":["Para colorear","#F6D776"],"app-holidays":["Festividades","#F9B8AE"],"app-learn":["Aprende","#8EC9EE"],
   "app-lectoescritura":["Lectoescritura","#9DDCC0"],"app-matematicas":["Matemáticas","#B9A6E8"],"app-familias":["Familias","#F6D776"],
-  "app-shop":["Tienda","#E3E7F0"],"app-mova":["MOVA","#E3E7F0"],"lee-con-mochi":["Lectoescritura","#9DDCC0"],"speaking":["Speaking","#FF8FC8"],"ruta":["Grammar","#C9D2FF"],"monthly-quiz":["Monthly Quiz","#FF8FC0"]};
+  "app-shop":["Tienda","#E3E7F0"],"app-mova":["MOVA","#E3E7F0"],"lee-con-mochi":["Lectoescritura","#9DDCC0"],"speaking":["Speaking","#FF8FC8"],"ruta":["Grammar","#C9D2FF"],"monthly-quiz":["Monthly Quiz","#FF8FC0"],"module-exam":["Module Exam","#C9BDF5"]};
 function catOf(a){ return CAT[a] || [ACT_NAMES[a] || (/^repaso-/.test(a)?"Repaso para exámenes":/^matematicas-/.test(a)?"Práctica de matemáticas":a), "#F2786B"]; }
 function secsOf(r){
   if(r.detail && r.detail.secs) return r.detail.secs;
@@ -1488,17 +1488,18 @@ async function loadAllTasks(force){
   box.innerHTML=`<p class="sub" style="padding:20px 4px">Cargando las actividades de todos los alumnos…</p>`;
   let list=(typeof students!=="undefined"&&students)||[]; if(!list.length){ try{ list=await rpc("admin_list_students")||[]; }catch(e){} }
   const out=[], q=list.slice();
-  const wl=[], bn=[];
+  const wl=[], bn=[], me=[];
   async function work(){ while(q.length){ const s=q.shift(); let raw=[]; try{ raw=await rpc("admin_list_tasks",{p_student:String(s.id)})||[]; }catch(e){}
     const t=tkClean(raw), fb={}; raw.slice().sort((a,b)=>new Date(a.created_at)-new Date(b.created_at)).forEach(x=>{ const k=String(x.task||""); if(k.startsWith("wfb:")) fb[k.slice(4)]=wlDec(x.title); });
     let rows=[]; try{ rows=await rpc("admin_student_progress",{p_student:s.id,p_limit:500})||[]; }catch(e){}
     { const b=rows.filter(r=>r.activity==="ruta"&&r.detail&&r.detail.kind==="bonus").sort((a,b)=>new Date(b.created_at)-new Date(a.created_at))[0];
       if(b&&s.active!==false&&(!lvOf(s.stage)||lvOf(s.stage)===b.detail.level)) bn.push({s,r:b}); }
+    rows.filter(r=>r.activity==="module-exam"&&r.total).forEach(r=>me.push({s,r,mqs:rows.filter(q=>q.activity==="monthly-quiz"&&q.total)}));
     rows.filter(r=>r.activity==="writing"&&r.detail&&r.detail.text).forEach(r=>{ const tk=t.find(x=>taskMatch(x,r)); wl.push({s,r,fb:fb[r.detail.uid]||null,by:tk&&tk.by||null}); });
     if(!t.length) continue;
     out.push({s,items:t.map(x=>({t:x,done:taskDoneRow(x,rows)}))}); } }
   await Promise.all([1,2,3,4,5,6].map(work));
-  tkCache=out; bnCache=bn; wlCache=wl.sort((a,b)=>new Date(b.r.created_at)-new Date(a.r.created_at)); drawAllTasks();
+  tkCache=out; bnCache=bn; meCache=me.sort((a,b)=>new Date(b.r.created_at)-new Date(a.r.created_at)); wlCache=wl.sort((a,b)=>new Date(b.r.created_at)-new Date(a.r.created_at)); drawAllTasks();
 }
 function drawAllTasks(){
   const box=$("#tkAll"); if(!box||!tkCache) return;
@@ -1519,9 +1520,9 @@ function drawAllTasks(){
     ${wlR.length?`<button class="wlmore" id="wlMore">${wlOpen?"Ocultar":"Ver"} revisados (${wlR.length})</button>${wlOpen?wlR.map(wlRow).join(""):""}`:""}</div>`:"";
   const bnBox=bnCache.length?`<div class="wlbox" style="background:#FFE6F2"><div class="wlh"><h3>Listos para el siguiente nivel</h3><span>${bnCache.length} alumno${bnCache.length>1?"s":""}</span></div>
     ${bnCache.map((x,i)=>{ const D0=x.r.detail; return `<div class="wlr" data-bn="${i}"><div class="av2">${esc(initials(x.s.full_name))}</div><div><b>${esc(x.s.full_name)}</b><small>${esc(grpOf(x.s.stage)||"")} ${esc(D0.level)} → ${esc(D0.next)} · ${d(x.r.created_at)}</small></div><span class="wls">Ver evidencia</span></div>`; }).join("")}</div>`:"";
-  const mqW={}; tkCache.forEach(g=>g.items.forEach(x=>{ const k=String(x.t.task||""); if(!/^mq:/.test(k)) return; const p=(k.split("~")[1]||"").split("|"), a=p[2], b=p[3], hoy=new Date().toISOString().slice(0,10); if(a&&b&&b>=hoy) mqW[a]=b; }));
-  const mqBox=Object.keys(mqW).sort().map(a=>`<div class="wlbox" style="background:#15192B;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px"><div><b style="display:block;font-size:15px">Código de clase · Monthly Quiz</b><small style="color:#C9CBE0">Semana del ${esc(new Date(a+"T12:00:00").toLocaleDateString("es-MX",{day:"numeric",month:"short"}))} al ${esc(new Date(mqW[a]+"T12:00:00").toLocaleDateString("es-MX",{day:"numeric",month:"short"}))}</small></div><b style="font-size:30px;letter-spacing:.16em;color:#D3F36B">${mqCode(a)}</b></div>`).join("");
-  box.innerHTML=mqBox+bnBox+wlBox+`<div class="tks"><div style="background:#FFE6F2"><b>${pend}</b><span>Pendientes</span></div><div style="background:#ECFBC8"><b>${all.length-pend}</b><span>Completadas</span></div><div style="background:#E5E9FF"><b>${tkCache.length}</b><span>Alumnos con tareas</span></div></div>
+  const mqW={}; tkCache.forEach(g=>g.items.forEach(x=>{ const k=String(x.t.task||""); if(!/^m[qe]:/.test(k)) return; const p=(k.split("~")[1]||"").split("|"), a=p[2], b=p[3], hoy=new Date().toISOString().slice(0,10); if(a&&b&&b>=hoy) mqW[a]=b; }));
+  const mqBox=Object.keys(mqW).sort().map(a=>`<div class="wlbox" style="background:#15192B;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px"><div><b style="display:block;font-size:15px">Código de clase · Monthly Quiz y Module Exam</b><small style="color:#C9CBE0">Semana del ${esc(new Date(a+"T12:00:00").toLocaleDateString("es-MX",{day:"numeric",month:"short"}))} al ${esc(new Date(mqW[a]+"T12:00:00").toLocaleDateString("es-MX",{day:"numeric",month:"short"}))}</small></div><b style="font-size:30px;letter-spacing:.16em;color:#D3F36B">${mqCode(a)}</b></div>`).join("");
+  box.innerHTML=mqBox+meBox()+bnBox+wlBox+`<div class="tks"><div style="background:#FFE6F2"><b>${pend}</b><span>Pendientes</span></div><div style="background:#ECFBC8"><b>${all.length-pend}</b><span>Completadas</span></div><div style="background:#E5E9FF"><b>${tkCache.length}</b><span>Alumnos con tareas</span></div></div>
     <input class="in" id="tkQ" placeholder="Buscar alumno" value="${esc(tkF.q)}" style="margin-bottom:10px">
     <div class="tkf">${chip("st","pend","Pendientes")}${chip("st","late","Atrasadas")}${chip("st","done","Completadas")}${chip("st","all","Todas")}</div>
     ${(()=>{ const ss=Object.keys(SUBJ).filter(k=>all.some(x=>tkSubj(x.t)===k)); return ss.length>1?`<div class="tkf">${chip("sub","all","Todas las materias")}${ss.map(k=>chip("sub",k,SUBJ[k][0])).join("")}</div>`:""; })()}
@@ -1538,6 +1539,7 @@ function drawAllTasks(){
   const qi=$("#tkQ"); qi.oninput=()=>{ tkF.q=qi.value; const pos=qi.selectionStart; drawAllTasks(); const n=$("#tkQ"); n.focus(); try{ n.setSelectionRange(pos,pos); }catch(e){} };
   $("#tkRe").onclick=()=>loadAllTasks(true);
   box.querySelectorAll("[data-wl]").forEach(b=>b.onclick=()=>openWriting(b.dataset.wl));
+  box.querySelectorAll("[data-me]").forEach(b=>b.onclick=()=>openBoleta(meCache[+b.dataset.me]));
   box.querySelectorAll("[data-bn]").forEach(b=>b.onclick=()=>openBonus(bnCache[+b.dataset.bn]));
   const wm=$("#wlMore"); if(wm) wm.onclick=()=>{ wlOpen=!wlOpen; drawAllTasks(); };
 }
@@ -1593,6 +1595,111 @@ function openMQ(){
     $("#mqOk").onclick=closeModal; loadAllTasks(true); };
 }
 document.addEventListener("click",e=>{ if(e.target&&e.target.id==="mqNew") openMQ(); });
+/* ---------- Module Exam: examen del módulo con boleta para papás ---------- */
+let meCache=[];
+function meGrade(p){ return Math.round(p*100)/10; }
+function meLabel(g){ return g>=9.5?"Excelente":g>=8.5?"Muy bien":g>=7?"Bien":g>=6?"Suficiente":"En proceso"; }
+function meModWeek(){ const t=new Date(); let m=t.getMonth(), y=t.getFullYear();
+  const mod = m<=2?2 : m<=5?3 : 1;
+  const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  let a = mod===1? new Date(m===11?y:y,11,1) : mod===2? new Date(y,2,14) : new Date(y,5,1);
+  while(a.getDay()!==1) a.setDate(a.getDate()+1); if(a<t){ a=new Date(t); while(a.getDay()!==1) a.setDate(a.getDate()+1); }
+  const b=new Date(a); b.setDate(a.getDate()+4); return [iso(a),iso(b),String(mod)]; }
+function openME(){
+  const P=window.MOVA_PATH||{}, SN={kids:"Kids",children:"Children",teens:"Teens"}, [w0,w1,md]=meModWeek();
+  openModal(`<button class="x" aria-label="Cerrar">×</button><h2>Crear Module Exam</h2>
+    <p class="sub">Examen oficial de cierre de módulo en 3 partes: Grammar, Vocabulary y Reading. Al terminar, el alumno no ve su calificación; usted la ve aquí y genera la boleta para papás.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px"><div><label class="f" for="meSt">Etapa</label><select class="in" id="meSt">${Object.keys(SN).map(k=>`<option value="${k}">${SN[k]}</option>`).join("")}</select></div>
+    <div><label class="f" for="meLv">Nivel</label><select class="in" id="meLv"></select></div>
+    <div><label class="f" for="meMd">Módulo</label><select class="in" id="meMd"><option value="1"${md==="1"?" selected":""}>1 · Sep–Nov</option><option value="2"${md==="2"?" selected":""}>2 · Ene–Mar</option><option value="3"${md==="3"?" selected":""}>3 · Abr–Jun</option></select></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end"><label class="f">Part I · Grammar: temas del módulo</label><button class="btn" id="meAll" style="padding:4px 10px;font-size:12px;background:#fff;margin-bottom:6px">Marcar todos</button></div>
+    <div id="meTp" style="display:flex;flex-direction:column;gap:6px;max-height:220px;overflow:auto;background:#F7F5FB;border-radius:14px;padding:10px 12px"></div>
+    <label class="f">Part II · Vocabulary: mazos</label><div id="meDk" style="display:flex;flex-direction:column;gap:6px;background:#FFF8E0;border-radius:14px;padding:10px 12px"></div>
+    <p class="sub" style="margin:8px 2px 0">Part III · Reading: se elige sola una lectura del nivel, la misma para todo el grupo.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 0.9fr;gap:10px"><div><label class="f" for="meA">Abre</label><input class="in" type="date" id="meA" value="${w0}"></div><div><label class="f" for="meB">Cierra</label><input class="in" type="date" id="meB" value="${w1}"></div>
+    <div><label class="f" for="meN">Grammar</label><select class="in" id="meN"><option value="12">12 preg.</option><option value="15">15 preg.</option><option value="18" selected>18 preg.</option></select></div></div>
+    <label class="f">Alumnos</label><div id="meSs" style="display:flex;flex-direction:column;gap:6px;max-height:200px;overflow:auto;background:#F7F5FB;border-radius:14px;padding:10px 12px"></div>
+    <button class="btn btn-primary btn-full" id="meGo" style="margin-top:14px">Asignar Module Exam</button><div class="msg err" id="meMsg"></div>`);
+  const paintLv=()=>{ const st=$("#meSt").value; $("#meLv").innerHTML=Object.keys(P[st]||{}).map(l=>`<option>${l}</option>`).join(""); $("#meN").value=st==="kids"?"15":"18"; paint(); };
+  const paint=()=>{ const st=$("#meSt").value, lv=$("#meLv").value, L=(P[st]||{})[lv]; const ts=L?L.topics.filter(t=>t.exp&&t.q&&t.q.length):[];
+    $("#meTp").innerHTML=ts.length?ts.map(t=>`<label style="display:flex;gap:10px;align-items:center;font-size:14px"><input type="checkbox" value="${esc(t.id)}"> ${esc(t.t)}</label>`).join(""):`<p class="sub" style="margin:0">Este nivel aún no tiene temas.</p>`;
+    const dk=L&&L.vocab||[]; $("#meDk").innerHTML=dk.length?dk.map((d,i)=>`<label style="display:flex;gap:10px;align-items:center;font-size:14px"><input type="checkbox" value="${i}" checked> ${esc(d.n)} <span class="sub" style="margin:0">${(d.w||[]).length} palabras</span></label>`).join(""):`<p class="sub" style="margin:0">Este nivel no tiene mazos.</p>`;
+    const G=SN[st], list=(students||[]).filter(x=>x.active!==false&&grpOf(x.stage)===G).sort((a,b)=>a.full_name.localeCompare(b.full_name,"es"));
+    $("#meSs").innerHTML=list.length?list.map(x=>{ const l=lvOf(x.stage); return `<label style="display:flex;gap:10px;align-items:center;font-size:14px"><input type="checkbox" value="${esc(x.id)}" ${l===lv?"checked":""}> ${esc(x.full_name)} <span class="sub" style="margin:0">${esc(l||"sin nivel")}</span></label>`; }).join(""):`<p class="sub" style="margin:0">No hay alumnos activos en ${G}.</p>`; };
+  $("#meSt").onchange=paintLv; $("#meLv").onchange=paint; paintLv();
+  $("#meAll").onclick=()=>{ const bx=[...$("#meTp").querySelectorAll("input")], on=bx.some(i=>!i.checked); bx.forEach(i=>i.checked=on); $("#meAll").textContent=on?"Quitar todos":"Marcar todos"; };
+  $("#meGo").onclick=async()=>{ const m=$("#meMsg"); m.textContent="";
+    const st=$("#meSt").value, lv=$("#meLv").value, md=$("#meMd").value, ids=[...$("#meTp").querySelectorAll("input:checked")].map(i=>i.value), dk=[...$("#meDk").querySelectorAll("input:checked")].map(i=>i.value), ss=[...$("#meSs").querySelectorAll("input:checked")].map(i=>(students||[]).find(x=>String(x.id)===i.value)).filter(Boolean);
+    const a=$("#meA").value, b=$("#meB").value, n=$("#meN").value;
+    if(ids.length<2){ m.textContent="Elija al menos dos temas de gramática."; return; } if(!dk.length){ m.textContent="Elija al menos un mazo de vocabulario."; return; }
+    if(!a||!b||a>b){ m.textContent="Revise las fechas."; return; } if(!ss.length){ m.textContent="Elija al menos un alumno."; return; }
+    const id=Date.now().toString(36), task="me:"+id+"~"+[st,lv,a,b,ids.join(","),dk.join(","),md,n].join("|"), title=`Module ${md} Exam · ${SN[st]} ${lv}`;
+    const btn=$("#meGo"); btn.disabled=true; btn.textContent="Asignando…"; let ok=0;
+    for(const x of ss){ try{ await rpc("admin_assign_task",{p_student:String(x.id),p_username:x.username,p_task:task,p_title:title+" · due "+b+" · by "+tName()}); ok++; }catch(e){} }
+    openModal(`<button class="x" aria-label="Cerrar">×</button><h2>Module Exam asignado</h2><p class="sub">${esc(title)} · ${ok} alumno${ok===1?"":"s"} · abre ${esc(a)} y cierra ${esc(b)}</p>
+      <div style="background:#1E2A55;color:#fff;border-radius:22px;padding:22px;text-align:center;margin:12px 0"><span style="font-size:12px;font-weight:800;letter-spacing:.12em;color:#D3F36B">CÓDIGO DEL EXAMINADOR · ESA SEMANA</span><b style="display:block;font-size:46px;letter-spacing:.18em;margin-top:6px">${mqCode(a)}</b></div>
+      <p class="sub">Díctelo en clase cuando el alumno esté listo; sin él, el examen no arranca. Siempre lo encuentra arriba de Tareas mientras el examen esté abierto.</p><button class="btn btn-primary btn-full" id="meOk">Listo</button>`);
+    $("#meOk").onclick=closeModal; loadAllTasks(true); };
+}
+document.addEventListener("click",e=>{ if(e.target&&e.target.id==="meNew") openME(); });
+function meBox(){
+  if(!meCache.length) return "";
+  const d=x=>new Date(x).toLocaleDateString("es-MX",{day:"numeric",month:"short"});
+  return `<div class="wlbox" style="background:#EEF0FA"><div class="wlh"><h3>Module Exam · resultados</h3><span>${meCache.length} alumno${meCache.length>1?"s":""}</span></div>
+    ${meCache.map((x,i)=>{ const D0=x.r.detail||{}, g=meGrade(x.r.score/x.r.total); return `<div class="wlr" data-me="${i}"><div class="av2">${esc(initials(x.s.full_name))}</div><div><b>${esc(x.s.full_name)}</b><small>Módulo ${esc(D0.mod||"")} · ${esc(D0.level||"")} · ${d(x.r.created_at)} · ${x.r.score}/${x.r.total}</small></div><span class="wls ok" style="background:#1E2A55;color:#fff">${g.toFixed(1)} · Boleta</span></div>`; }).join("")}</div>`;
+}
+function openBoleta(x){
+  const s=x.s, r=x.r, D0=r.detail||{}, P=D0.parts||{}, by=D0.by||{}, md=String(D0.mod||"1");
+  const pc=v=>v&&v[1]?Math.round(v[0]/v[1]*100):null, g=meGrade(r.score/r.total), first=String(s.full_name||"").split(" ")[0];
+  const SN={kids:"Kids",children:"Children",teens:"Teens"}, prog="MOVA "+(SN[D0.stage]||grpOf(s.stage)||""), y=new Date(D0.from||r.created_at).getFullYear();
+  const PER={"1":`Sep – Nov ${y}`,"2":`Ene – Mar ${y}`,"3":`Abr – Jun ${y}`}[md];
+  const MM={"1":[8,9,10],"2":[0,1,2],"3":[3,4,5]}[md]||[8,9,10], MES=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"], QC=["#FFE6F2","#E8F3FB","#EFEAFB"];
+  const mq=MM.map((m,i)=>{ const rr=(x.mqs||[]).filter(q=>{ const dt=new Date((q.detail&&q.detail.to?q.detail.to+"T12:00:00":q.created_at)); return dt.getMonth()===m&&Math.abs(dt.getFullYear()-y)<=1; }).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at))[0];
+    return `<div style="flex:1;background:${QC[i]};border-radius:16px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:13.5px;font-weight:600;color:#1E2A55">${MES[m]}</span><b style="font-size:20px;color:#1E2A55">${rr&&rr.total?meGrade(rr.score/rr.total).toFixed(1):"—"}</b></div>`; }).join("");
+  const TR={Vocabulary:"Vocabulario del módulo",Reading:"Comprensión de lectura"}, tp=Object.keys(by).map(k=>({t:TR[k]||k,p:pc(by[k])})).filter(t=>t.p!=null);
+  const okL=tp.filter(t=>t.p>=80).sort((a,b)=>b.p-a.p).slice(0,6), noL=tp.filter(t=>t.p<80).sort((a,b)=>a.p-b.p).slice(0,5);
+  const CK='<path d="M5 12.5l4.5 4.5L19 7.5"></path>', EX='<path d="M12 7v6M12 16.5v.01"></path>';
+  const li=(t,bg,ic)=>`<div style="display:flex;align-items:center;gap:10px;font-size:14px"><span style="width:24px;height:24px;border-radius:50%;background:${bg};display:grid;place-items:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E2A55" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${ic}</svg></span>${esc(t.t)}</div>`;
+  const note=g>=8.5?`${first} avanza muy bien. Diez minutos de My path dos veces por semana le ayudarán a consolidar estos temas.`:g>=7?`${first} va por buen camino. Practicar estos temas en My path dos veces por semana le ayudará a afianzarlos.`:`${first} necesita reforzar estos temas. En clase les daremos atención especial y le asignaremos práctica en My path.`;
+  const ring=(v,c,l)=>`<div style="display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:112px;height:112px;border-radius:50%;background:conic-gradient(${c} 0 ${v||0}%,#EEEBF4 ${v||0}% 100%);display:grid;place-items:center"><div style="width:86px;height:86px;border-radius:50%;background:#fff;display:grid;place-items:center"><b style="font-size:24px;color:#1E2A55">${v==null?"—":v+"%"}</b></div></div><span style="font-size:14px;font-weight:700;color:#1E2A55">${l}</span></div>`;
+  const lab=(a,b)=>`<div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#6A6F85">${a}</span><b style="font-size:15px;color:#1E2A55">${esc(b)}</b></div>`;
+  const folio="BM-"+String(y).slice(2)+String(new Date(r.created_at).getMonth()+1).padStart(2,"0")+"-"+String(D0.examId||"").split("-").pop();
+  const hoy=new Date().toLocaleDateString("es-MX",{day:"numeric",month:"long",year:"numeric"});
+  const base=location.href.replace(/[^/]*$/,"");
+  const html=`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Boleta · ${esc(s.full_name)} · Módulo ${md}</title><meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>@page{size:letter;margin:0}body{margin:0;background:#E9E7F0;font-family:Poppins,system-ui,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.bar{position:sticky;top:0;z-index:5;background:#1E2A55;color:#fff;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px;font-size:13px}.bar button{background:#D3F36B;color:#15192B;border:0;border-radius:999px;padding:9px 16px;font:700 13px Poppins,sans-serif;cursor:pointer}
+.pg{width:816px;height:1056px;margin:20px auto;box-sizing:border-box;background:#fff;color:#1B1F33;padding:42px 56px 38px;display:flex;flex-direction:column;gap:18px;overflow:hidden;position:relative;box-shadow:0 10px 30px -12px rgba(0,0,0,.25)}
+[contenteditable]{outline:1px dashed transparent;border-radius:6px}[contenteditable]:hover,[contenteditable]:focus{outline-color:#B9A6E8}
+@media print{body{background:#fff}.bar{display:none}.pg{margin:0;box-shadow:none}[contenteditable]{outline:0!important}}
+@media screen and (max-width:840px){.pg{transform:scale(calc(100vw/840));transform-origin:top left;margin:10px 0 calc((100vw/840 - 1)*1056px)}}</style></head><body>
+<div class="bar"><span>Boleta de ${esc(first)} · puede editar los textos tocándolos</span><button onclick="window.print()">Guardar PDF / Imprimir</button></div>
+<div class="pg">
+<div style="position:absolute;inset:16px;border:1.5px solid #1E2A55;border-radius:10px"></div>
+<div style="display:flex;align-items:center;gap:18px;position:relative"><img src="${base}icon-512.png" alt="MOVA" style="width:68px;height:68px;border-radius:16px">
+<div style="flex-grow:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;font-weight:700;letter-spacing:.16em;color:#6A6F85">MOVA CENTRO PEDAGÓGICO</span><h1 style="margin:0;font-size:32px;line-height:1.05;font-weight:800;color:#1E2A55">Boleta de Módulo</h1></div>
+<div style="text-align:right;display:flex;flex-direction:column;gap:4px;align-items:flex-end"><span style="background:#1E2A55;color:#fff;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700">Módulo ${md} · Inglés</span><span style="font-size:12px;color:#6A6F85">Folio ${esc(folio)}</span></div></div>
+<div style="display:flex;height:6px;border-radius:6px;overflow:hidden;position:relative"><span style="flex-grow:1;background:#FF8FC0"></span><span style="flex-grow:1;background:#8EC9EE"></span><span style="flex-grow:1;background:#F6D776"></span><span style="flex-grow:1;background:#9DDCC0"></span><span style="flex-grow:1;background:#B9A6E8"></span></div>
+<p style="margin:-6px 0 0;font-size:14px;line-height:1.55;color:#3D4258;position:relative">Este documento resume lo que su hijo(a) aprendió en los tres meses del módulo: el resultado de su examen final, sus quizzes mensuales y los temas que ya domina.</p>
+<div style="display:grid;grid-template-columns:1.5fr 1fr 0.7fr 1.1fr;gap:16px;background:#F7F5FB;border-radius:18px;padding:16px 22px;position:relative">${lab("ALUMNO",s.full_name)}${lab("PROGRAMA",prog)}${lab("NIVEL",D0.level||lvOf(s.stage))}${lab("PERIODO",PER)}</div>
+<div style="display:flex;align-items:center;gap:30px;position:relative">
+<div style="width:168px;height:168px;border-radius:50%;background:conic-gradient(#8EC9EE 0 25%,#9DDCC0 25% 50%,#F6D776 50% 75%,#FF8FC0 75% 100%);display:grid;place-items:center;flex-shrink:0"><div style="width:140px;height:140px;border-radius:50%;background:#1E2A55;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center"><b style="font-size:44px;line-height:1">${g.toFixed(1)}</b><span style="font-size:13px;font-weight:600;color:#DCE1F2;margin-top:4px">${meLabel(g)}</span></div></div>
+<div style="flex-grow:1;display:flex;justify-content:space-around">${ring(pc(P.g),"#8EC9EE","Gramática")}${ring(pc(P.v),"#F6D776","Vocabulario")}${ring(pc(P.r),"#9DDCC0","Lectura")}</div></div>
+<div style="display:flex;flex-direction:column;gap:10px;position:relative"><h2 style="margin:0;font-size:16px;font-weight:800;color:#1E2A55">Quizzes mensuales</h2><div style="display:flex;gap:12px">${mq}</div></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;position:relative">
+<div style="background:#EEF8F2;border-radius:18px;padding:16px 20px;display:flex;flex-direction:column;gap:9px"><h2 style="margin:0 0 2px;font-size:16px;font-weight:800;color:#1E2A55">Ya domina</h2>${okL.map(t=>li(t,"#9DDCC0",CK)).join("")||`<p style="margin:0;font-size:13px;color:#3D4258">Seguimos construyendo sus bases.</p>`}</div>
+<div style="background:#FFF8E5;border-radius:18px;padding:16px 20px;display:flex;flex-direction:column;gap:9px"><h2 style="margin:0 0 2px;font-size:16px;font-weight:800;color:#1E2A55">Reforzaremos</h2>${noL.map(t=>li(t,"#F6D776",EX)).join("")||`<p style="margin:0;font-size:13px;color:#3D4258">Domina todos los temas del módulo.</p>`}
+<p contenteditable="true" style="margin:6px 0 0;font-size:13px;line-height:1.5;color:#3D4258">${esc(note)}</p></div></div>
+<div style="flex-grow:1"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;padding:0 30px;position:relative">
+<div style="display:flex;flex-direction:column;align-items:center;text-align:center"><div style="position:relative;width:100%;height:58px"><img src="${base}sig-karla.png" alt="Firma" style="position:absolute;left:50%;bottom:-26px;transform:translateX(-50%);height:88px;z-index:1"></div><div style="width:100%;border-top:1.5px solid #1E2A55;padding-top:7px"><b style="display:block;font-size:14px;color:#1E2A55">Miss Karla Rodríguez</b><span style="font-size:12.5px;color:#4E5468">Academic Coordinator</span></div></div>
+<div style="display:flex;flex-direction:column;align-items:center;text-align:center"><div style="position:relative;width:100%;height:58px"><img src="${base}sig-letty.png" alt="Firma" style="position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);height:60px;z-index:1"></div><div style="width:100%;border-top:1.5px solid #1E2A55;padding-top:7px"><b style="display:block;font-size:14px;color:#1E2A55">Miss Letty Rodríguez</b><span style="font-size:12.5px;color:#4E5468">ESL Instructor / TOEFL Specialist</span></div></div></div>
+<div style="text-align:center;font-size:11.5px;color:#6A6F85;position:relative">Monterrey, N.L. · ${esc(hoy)} · @movacp.mx</div>
+</div></body></html>`;
+  const w=window.open("","_blank"); if(!w){ toast("Permita ventanas emergentes para ver la boleta"); return; } w.document.open(); w.document.write(html); w.document.close();
+}
+
 const WL_CRIT=["Contenido y tarea","Organización","Uso del idioma","Ortografía y puntuación"];
 const WL_CRIT_EN=["Task & content","Organization","Language","Spelling & punctuation"];
 function openWriting(uid){

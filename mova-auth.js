@@ -610,6 +610,7 @@
     if (k.indexOf("e:") === 0) return "index.html" + q + "#/lecturas/" + encodeURIComponent(k.slice(2));
     if (k.indexOf("w:") === 0) return "juego-writing.html" + q + "#" + encodeURIComponent(k.slice(2));
     if (k.indexOf("mq:") === 0) return "ruta.html" + q + "#/mq/" + encodeURIComponent(k.slice(3));
+    if (k.indexOf("me:") === 0) return "ruta.html" + q + "#/me/" + encodeURIComponent(k.slice(3));
     if (k === "m-levelup") return "index.html" + q + "#/matematicas/levelup";
     if (k.indexOf("m:") === 0) return "index.html" + q + "#/matematicas/practica/" + encodeURIComponent(k.slice(2));
     if (k === "toefl-sim") return "juego-toefl-practice.html" + q + "#sim";
@@ -689,7 +690,7 @@
   }
   /* ---------- Assigned activities: tarjeta fija en el inicio, en My Progress y número en "Me" ---------- */
   var asgCache = null, asgAt = 0, asgBusy = false;
-  function asgKind(t) { var k = taskKey(t); return /^mq:/.test(k) ? ["Q", "#FF8FC0", "Monthly Quiz"] : /^m(-levelup$|:)/.test(k) ? ["M", "#FFF1C9", "Matemáticas"] : /^t:/.test(k) ? ["G", "#D3F36B", "Grammar"] : /^(v|xv):/.test(k) ? ["F", "#FFC7E2", "Vocabulary"] : /^e:/.test(k) ? ["L", "#FFE58A", "Lectura"] : /^w:/.test(k) ? ["W", "#BDF0D8", "Writing"] : /^r:|^lectura$/.test(k) ? ["R", "#FFE58A", "Reading"] : k === "toefl-sim" || k === "level-up" ? ["E", "#C9D2FF", "Exam"] : ["P", "#BDF0D8", "Game"]; }
+  function asgKind(t) { var k = taskKey(t); return /^me:/.test(k) ? ["E", "#C9BDF5", "Module Exam"] : /^mq:/.test(k) ? ["Q", "#FF8FC0", "Monthly Quiz"] : /^m(-levelup$|:)/.test(k) ? ["M", "#FFF1C9", "Matemáticas"] : /^t:/.test(k) ? ["G", "#D3F36B", "Grammar"] : /^(v|xv):/.test(k) ? ["F", "#FFC7E2", "Vocabulary"] : /^e:/.test(k) ? ["L", "#FFE58A", "Lectura"] : /^w:/.test(k) ? ["W", "#BDF0D8", "Writing"] : /^r:|^lectura$/.test(k) ? ["R", "#FFE58A", "Reading"] : k === "toefl-sim" || k === "level-up" ? ["E", "#C9D2FF", "Exam"] : ["P", "#BDF0D8", "Game"]; }
   function asgLoad(cb) {
     if (!user) return cb(null);
     if (asgCache && Date.now() - asgAt < 60000) return cb(asgCache);
@@ -718,7 +719,7 @@
     var row = function (t, r) {
       var k = asgKind(t), done = !!r || r === null && false;
       return '<div class="asg-it"><span class="asg-ic" style="background:' + k[1] + '">' + k[0] + '</span><div><b>' + esc2(t.title || "Activity") + "</b><small>" + k[2] + " · " +
-        (r !== undefined ? "done" + (r && r.created_at ? " " + fdt(r.created_at) : "") + (r && r.total ? " · " + r.score + "/" + r.total : "") : (t.due ? '<span class="asg-due' + (dueLate(t.due) ? " late" : "") + '">' + (dueLate(t.due) ? "Was due " : "Due ") + dueTxt(t.due) + "</span>" : "assigned " + fdt(t.created_at))) + (t.by ? " · " + esc2(t.by) : "") + "</small></div>" +
+        (r !== undefined ? "done" + (r && r.created_at ? " " + fdt(r.created_at) : "") + (r && r.total && !/^me:/.test(taskKey(t)) ? " · " + r.score + "/" + r.total : "") : (t.due ? '<span class="asg-due' + (dueLate(t.due) ? " late" : "") + '">' + (dueLate(t.due) ? "Was due " : "Due ") + dueTxt(t.due) + "</span>" : "assigned " + fdt(t.created_at))) + (t.by ? " · " + esc2(t.by) : "") + "</small></div>" +
         (r !== undefined ? '<span class="asg-dn">Done ✓</span>' : '<a class="asg-go" href="' + taskUrl(t) + '">Start</a>') + "</div>";
     };
     var h = '<div class="asg-hd"><h3>Assigned activities</h3>' + (o.pend.length ? '<span class="asg-n">' + o.pend.length + " to do</span>" : '<span class="asg-n ok">All done</span>') + "</div><small class=\"asg-sub\">From your teachers</small>";
