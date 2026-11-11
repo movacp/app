@@ -115,6 +115,7 @@
     var parentHref = "#/", parentName = "Home";
     if (parts.length > 1 && parts[0] !== "library") { parentHref = "#/" + parts[0]; parentName = NAMES[parts[0]] || "Back"; }
     else if (parts.length > 1 && parts[0] === "library" && parts.length > 2) { parentHref = "#/library/" + parts[1]; parentName = "Read"; }
+    if (parts.length === 2 && /^(english\/own|matematicas\/cuenta)$/.test(parts.join("/"))) { parentHref = "#/"; parentName = "Home"; }
     if (parts.length === 1 && /^(structures|flashcards)$/.test(parts[0])) { parentHref = "#/learn"; parentName = "Learn"; }
     var u = user();
     var d = document.createElement("div"); d.className = "mr-back no-print";
