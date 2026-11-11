@@ -26,13 +26,13 @@
     { id: "ortografia", name: "Oraciones con ortografía", c: "#E6E2FF" }, { id: "parrafo", name: "Oraciones largas", c: "#FFD9C2" }
   ];
   var TILES = [
-    ["Lecciones · Nivel 3", "Unidad 1: la t, la n y la d", "t", "#FF8FC8", "#1A1B2E", "lectura-leccion.html"],
-    ["Sílabas", "Escucha y escribe sílabas", "ma", "#B9A6FF", "#1A1B2E", "#/lectoescritura/dictado/silabas"],
-    ["Palabras", "Forma palabras nuevas", "sol", "#FF8FC8", "#1A1B2E", "#/lectoescritura/dictado/palabras"],
-    ["Lecturas", "Lee y vuelve a leer", "Aa", "#1A1B2E", "#D3F36B", "#/lectoescritura/fluidez"],
-    ["Dictado", "Escucha y escribe", "ñ", "#16274A", "#FF8FC8", "#/lectoescritura/dictado"],
-    ["Islas de Mochi", "Aprende a leer con Mochi", "M", "#ECE7FF", "#1A1B2E", "juego-lee-con-mochi.html"],
-    ["La Feria de Mochi", "Juega y practica", "a", "#D3F36B", "#1A1B2E", "juego-feria-mochi.html"]
+    ["Lecciones · Nivel 3", "Unidad 1: la t, la n y la d", "t", "#FF8FC8", "#1A1B2E", "lectura-leccion.html", "le-ortografia.webp"],
+    ["Sílabas", "Escucha y escribe sílabas", "ma", "#B9A6FF", "#1A1B2E", "#/lectoescritura/dictado/silabas", "le-silabas.webp"],
+    ["Palabras", "Forma palabras nuevas", "sol", "#FF8FC8", "#1A1B2E", "#/lectoescritura/dictado/palabras", "le-palabras.webp"],
+    ["Lecturas", "Lee y vuelve a leer", "Aa", "#1A1B2E", "#D3F36B", "#/lectoescritura/fluidez", "le-parrafo.webp"],
+    ["Dictado", "Escucha y escribe", "ñ", "#16274A", "#FF8FC8", "#/lectoescritura/dictado", "le-oraciones.webp"],
+    ["Islas de Mochi", "Aprende a leer con Mochi", "M", "#ECE7FF", "#1A1B2E", "juego-lee-con-mochi.html", "thumb-lee-con-mochi.webp"],
+    ["La Feria de Mochi", "Juega y practica", "a", "#D3F36B", "#1A1B2E", "juego-feria-mochi.html", "thumb-feria-mochi.webp"]
   ];
 
   var css = [
@@ -72,6 +72,7 @@
     ".lx-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}",
     "@media(min-width:640px){.lx-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}",
     ".lx-tiles a{background:#fff;border:1.5px solid #E4E0EE;border-radius:24px;overflow:hidden;text-decoration:none;color:#1A1B2E;display:flex;flex-direction:column}",
+    ".lx-tiles .tp.im{height:auto;aspect-ratio:16/9;padding:0}.lx-tiles .tp.im img{width:100%;height:100%;object-fit:cover;display:block}",
     ".lx-tiles .tp{height:92px;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:30px}",
     ".lx-tiles .tx{padding:10px 12px 12px;display:flex;flex-direction:column;gap:2px}",
     ".lx-tiles b{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;line-height:1.1}",
@@ -189,7 +190,7 @@
   }
   function cuenta() {
     return '<div class="lx-tiles">' + TILES.map(function (t) {
-      return '<a href="' + t[5] + '"><span class="tp" style="background:' + t[3] + ";color:" + t[4] + '">' + esc(t[2]) + '</span><span class="tx"><b>' + esc(t[0]) + "</b><small>" + esc(t[1]) + "</small></span></a>";
+      return '<a href="' + t[5] + '">' + (t[6] ? '<span class="tp im" style="background:' + t[3] + '"><img src="' + t[6] + '" alt="" loading="lazy"></span>' : '<span class="tp" style="background:' + t[3] + ";color:" + t[4] + '">' + esc(t[2]) + '</span>') + '<span class="tx"><b>' + esc(t[0]) + "</b><small>" + esc(t[1]) + "</small></span></a>";
     }).join("") + "</div>";
   }
   function home() {
