@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script src="mova-gate.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F5F3FA">
+<title>Mi Ruta Lectora · MOVA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F3FA;--ink:#1A1B2E;--sub:#6B6E85;--lime:#D3F36B;--pink:#FF8FC8;--lila:#B9A6FF;--lilaS:#ECE7FF;--line:#E4E0EE;--navy:#16274A}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",sans-serif}
+button{font-family:inherit;color:var(--ink);cursor:pointer}
+.wrap{max-width:560px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding:calc(14px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom))}
+.top{display:flex;align-items:center;gap:10px}
+.x{width:42px;height:42px;border-radius:14px;border:0;background:#fff;font-size:20px;flex:none}
+.bar{flex:1;display:flex;gap:4px}.bar i{flex:1;height:8px;border-radius:4px;background:#E4E0EE}.bar i.ok{background:var(--lime)}.bar i.now{background:var(--lila)}
+.ttl{margin:14px 2px 10px;display:flex;align-items:center;gap:10px}
+.ttl img{width:52px;height:60px;object-fit:contain}
+.ttl b{display:block;font:800 19px "Bricolage Grotesque";line-height:1.1}.ttl span{font-size:13px;color:var(--sub)}
+.stage{flex:1;background:#fff;border-radius:28px;padding:20px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;min-height:360px}
+.rd{font-family:"Andika",sans-serif;font-weight:700}
+.big{font-size:76px;line-height:1}.mid{font-size:40px;line-height:1.1}.txt{font-size:24px;line-height:1.6;text-align:left}
+.play{width:76px;height:76px;border-radius:50%;border:0;background:var(--ink);display:grid;place-items:center;box-shadow:0 8px 20px rgba(26,27,46,.18)}
+.play svg{width:34px;height:34px}
+.play.sm{width:48px;height:48px}.play.sm svg{width:22px;height:22px}
+.pic{width:150px;height:130px;object-fit:contain}
+.opts{display:grid;gap:10px;width:100%}.o2{grid-template-columns:1fr 1fr}.o3{grid-template-columns:repeat(3,1fr)}
+.opt{min-height:70px;border-radius:20px;border:2px solid var(--line);background:#fff;font-size:30px;padding:8px}
+.opt.ok{background:var(--lime);border-color:var(--lime)}.opt.no{background:var(--pink);border-color:var(--pink);animation:sh .3s}
+.opt img{width:100%;height:84px;object-fit:contain;display:block}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.slots{display:flex;gap:8px;justify-content:center;min-height:68px;flex-wrap:wrap}
+.slot{min-width:78px;height:64px;border-radius:16px;border:2px dashed #CFC8E4;display:grid;place-items:center;font-size:32px;padding:0 10px}
+.slot.f{border-style:solid;border-color:var(--lila);background:var(--lilaS)}
+.tiles{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.tile{min-width:72px;height:60px;border-radius:16px;border:0;background:var(--lilaS);font-size:30px;padding:0 12px}
+.tile:disabled{opacity:.25}
+.wtile{font-size:22px;min-width:0;height:52px}
+.cta{border:0;border-radius:18px;background:var(--lime);font-weight:800;font-size:16px;padding:16px;width:100%;margin-top:12px}
+.cta.dk{background:var(--ink);color:#fff}.cta.pk{background:var(--pink)}.cta:disabled{opacity:.4}
+.hint{font-size:13px;color:var(--sub);font-weight:600}
+.syls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.syls button{border:0;border-radius:16px;background:var(--lilaS);font-size:34px;min-width:70px;height:64px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.mem{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.card{aspect-ratio:1/1;border-radius:16px;border:0;background:var(--navy);color:#fff;font-size:24px;display:grid;place-items:center;padding:4px}
+.card.up{background:#fff;color:var(--ink);border:2px solid var(--line)}.card.done{background:var(--lime);color:var(--ink)}
+.card img{width:90%;height:90%;object-fit:contain}
+.timer{font:800 40px "Bricolage Grotesque"}
+.times{display:flex;gap:8px;justify-content:center}.times span{background:var(--lilaS);border-radius:12px;padding:6px 12px;font-weight:800}
+.end{gap:10px}.stars{font-size:46px;letter-spacing:6px;color:#E4E0EE}.stars b{color:#F6C945}
+.seal{width:120px;height:120px;border-radius:50%;background:var(--lime);display:grid;place-items:center;font:800 18px "Bricolage Grotesque";border:6px solid #fff;box-shadow:0 0 0 3px var(--ink)}
+.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:14px;font-weight:700;font-size:14px;z-index:9}
+.home{gap:12px}
+.unit{background:var(--navy);color:#fff;border-radius:26px;padding:18px;width:100%;text-align:left}
+.unit b{font:800 22px "Bricolage Grotesque"}.unit p{margin:4px 0 0;color:#C9D3E6;font-size:13px}
+.ls{display:flex;flex-direction:column;gap:8px;width:100%}
+.lsn{display:flex;align-items:center;gap:12px;background:#fff;border:2px solid var(--line);border-radius:20px;padding:12px;text-align:left;width:100%}
+.lsn .n{width:52px;height:52px;border-radius:16px;background:var(--lilaS);display:grid;place-items:center;font:800 22px "Andika";flex:none}
+.lsn.done .n{background:var(--lime)}.lsn.lock{opacity:.5}
+.lsn b{display:block;font-size:15px}.lsn span{font-size:12.5px;color:var(--sub)}.lsn em{margin-left:auto;font-style:normal;font-size:16px;color:#F6C945;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+"use strict";
+/* ===== Programa · Nivel 3 · Unidad 1 (t, n, d) ===== */
+const U1={n:3,u:1,name:"Unidad 1 · t, n, d",lessons:[
+ {id:1,letter:"t",title:"La t",intro:"Esta es la letra te. Te, de tomate.",introWord:"tomate",syl:["ta","te","ti","to","tu"],w:["tapa","pato","moto","tela","tomate","pelota"],ps:["tamo","lute","pota","tusi"],no:["mesa","sopa","luna"],o:"Tita toma la pelota.",lec:"Tita toma la pelota. La pelota es de Tito. Tito mete la pelota en la maleta.",q:"¿De quién es la pelota?",qa:["de Tito","de Tita","de Lalo"]},
+ {id:2,letter:"n",title:"La n",intro:"Esta es la letra ene. Ene, de nido.",introWord:"nido",syl:["na","ne","ni","no","nu"],w:["mano","luna","pino","nota","mono","nena"],ps:["nopi","lenu","nate","sona"],no:["pato","sapo","mesa"],o:"Nina mete la nota en la tina.",lec:"Nina mira la luna. Nina toma la mano de su mamá. La luna mira a Nina.",q:"¿Qué mira Nina?",qa:["la luna","la tina","el pino"]},
+ {id:3,letter:"d",title:"La d",intro:"Esta es la letra de. De, de dado.",introWord:"dado",syl:["da","de","di","do","du"],w:["dedo","dama","nido","dado","moneda","dona"],ps:["dupa","nodi","demu","sado"],no:["pato","luna","sopa"],o:"El dado es de Dani.",lec:"Dani toma el dado. Dani mete el dado en la tina. ¡El dado es de Dani!",q:"¿Dónde mete Dani el dado?",qa:["en la tina","en la mesa","en la maleta"]},
+ {id:4,letter:"t n d",title:"Repaso t, n, d",review:true,intro:"Repasamos la te, la ene y la de.",w:["tomate","moneda","maleta","patineta"],ps:["tadu","nemo","dito"],lecTitle:"El nido de Lalo",lec:"El nido de Lalo. Lalo mira un nido en el pino. En el nido, una pata mima a su nene. Lalo mira el nido todo el día.",q:"¿Dónde está el nido?",qa:["en el pino","en la tina","en la mesa"]}
+]};
+const PREV=["ma","me","mi","mo","mu","pa","pe","pi","po","pu","sa","se","si","so","su","la","le","li","lo","lu"];
+const SPLIT={tapa:["ta","pa"],pato:["pa","to"],moto:["mo","to"],tela:["te","la"],tomate:["to","ma","te"],pelota:["pe","lo","ta"],mano:["ma","no"],luna:["lu","na"],pino:["pi","no"],nota:["no","ta"],mono:["mo","no"],nena:["ne","na"],dedo:["de","do"],dama:["da","ma"],nido:["ni","do"],dado:["da","do"],moneda:["mo","ne","da"],dona:["do","na"],maleta:["ma","le","ta"],patineta:["pa","ti","ne","ta"],mesa:["me","sa"],sopa:["so","pa"],sapo:["sa","po"],tina:["ti","na"]};
+const PSPLIT={tamo:["ta","mo"],lute:["lu","te"],pota:["po","ta"],tusi:["tu","si"],nopi:["no","pi"],lenu:["le","nu"],nate:["na","te"],sona:["so","na"],dupa:["du","pa"],nodi:["no","di"],demu:["de","mu"],sado:["sa","do"],tadu:["ta","du"],nemo:["ne","mo"],dito:["di","to"]};
+
+/* ===== Utilidades ===== */
+const $=s=>document.querySelector(s), app=$("#app");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const slug=s=>s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40);
+const AU=t=>"lecto-u1-"+slug(t)+".mp3", MO=t=>"lecto-mochi-"+slug(t)+".mp3", IMG=w=>"lecto-img-"+slug(w)+".webp";
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;};
+const pick=(a,n)=>shuffle(a).slice(0,n);
+let cur=null;
+function play(src){return new Promise(r=>{try{if(cur){cur.pause();}cur=new Audio(src);cur.onended=r;cur.onerror=r;cur.play().catch(r);}catch(e){r();}});}
+const SPK='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="#fff"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>';
+const imgOK={};function hasImg(w){return imgOK[w]===true;}
+function probe(list){return Promise.all(list.map(w=>new Promise(r=>{if(w in imgOK)return r();const i=new Image();i.onload=()=>{imgOK[w]=true;r()};i.onerror=()=>{imgOK[w]=false;r()};i.src=IMG(w);})));}
+function picHTML(w,cls){return hasImg(w)?`<img class="${cls||"pic"}" src="${IMG(w)}" alt="${esc(w)}">`:"";}
+function toast(m){const d=document.createElement("div");d.className="toast";d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),2200);}
+const PRAISE=["¡Muy bien!","¡Excelente!","¡Lo lograste!"];
+function good(){return play(MO(PRAISE[Math.random()*3|0]));}
+function bad(){return play(MO("Inténtalo otra vez."));}
+
+/* ===== Progreso (en el dispositivo y en el usuario del alumno) ===== */
+function me(){try{if(!localStorage.getItem("mova_student"))return null;return window.MovaAuth&&MovaAuth.user();}catch(e){return null;}}
+const PK=()=>"mova_lecto_prog_"+((me()&&me().username)||"anon");
+function prog(){try{return JSON.parse(localStorage.getItem(PK())||"{}");}catch(e){return {};}}
+function setProg(p){try{localStorage.setItem(PK(),JSON.stringify(p));}catch(e){}}
+function key(l){return "n3u1l"+l;}
+
+/* ===== Pantalla de la unidad ===== */
+function home(){
+ const P=prog();
+ app.innerHTML=`<div class="top"><button class="x" onclick="location.href='index.html#/lectoescritura'" aria-label="Volver">‹</button><div class="hint">Mi Ruta Lectora · Nivel 3</div></div>
+ <div class="ttl"><img src="mochi-lee.webp" alt=""><div><b>Sílabas directas</b><span>Practica en casa lo que ves en clase</span></div></div>
+ <div class="stage home" style="justify-content:flex-start;background:none;padding:0">
+  <div class="unit"><b>${U1.name}</b><p>${P.n3u1seal?"Sello de la unidad ganado":"4 lecciones · unos 15 minutos cada una"}</p></div>
+  <div class="ls">${U1.lessons.map((L,i)=>{const d=P[key(L.id)];const open=i===0||P[key(U1.lessons[i-1].id)];
+   return `<button class="lsn ${d?"done":""} ${open?"":"lock"}" data-l="${L.id}" ${open?"":"disabled"}><span class="n">${esc(L.letter)}</span><span><b>Lección ${L.id} · ${esc(L.title)}</b><span>${L.review?"Juegos, lectura y comprueba la unidad":"10 pasos · "+L.syl.join(" ")}</span></span><em>${d?"★".repeat(d.stars)+"☆".repeat(3-d.stars):open?"":"🔒"}</em></button>`}).join("")}</div>
+  <p class="hint" style="margin:6px 4px 0;text-align:left">Las unidades 2 a 6 se abren cuando las termines y las prepare tu maestra.</p>
+ </div>`;
+ app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>start(+b.dataset.l));
+}
+
+/* ===== Lección ===== */
+let LS=null;
+function start(id){
+ const L=U1.lessons.find(x=>x.id===id); const words=(L.w||[]).concat(L.no||[],[L.introWord].filter(Boolean));
+ LS={L,i:0,ok:0,tot:0,steps:L.review?reviewSteps(L):lessonSteps(L)};
+ probe(words).then(()=>next());
+}
+function lessonSteps(L){return [s_intro,s_hear,s_syl,s_build,s_match,s_pseudo,s_complete,s_order,s_dict,s_read];}
+function reviewSteps(L){return [s_intro,s_memo,s_match,s_pseudo,s_complete,s_closing,s_check];}
+function frame(title,sub,body,mochi){
+ const n=LS.steps.length;
+ app.innerHTML=`<div class="top"><button class="x" id="qx" aria-label="Salir">✕</button><div class="bar">${LS.steps.map((_,k)=>`<i class="${k<LS.i?"ok":k===LS.i?"now":""}"></i>`).join("")}</div></div>
+ <div class="ttl"><img src="${mochi||"mochi-lee.webp"}" alt=""><div><b>${esc(title)}</b><span>${esc(sub||"")}</span></div></div>
+ <div class="stage">${body}</div>`;
+ $("#qx").onclick=()=>{if(confirm("¿Salir de la lección? Tendrás que empezarla de nuevo."))home();};
+}
+function next(){if(LS.i>=LS.steps.length)return finish();const f=LS.steps[LS.i];f(LS.L);}
+function done(){LS.i++;next();}
+function score(ok){LS.tot++;if(ok)LS.ok++;}
+function ctaBtn(label,cls){return `<button class="cta ${cls||""}" id="go">${label}</button>`;}
+
+/* 1 · Escucha y descubre */
+function s_intro(L){
+ const sy=L.syl||[];
+ frame(L.review?"Vamos a repasar":"Escucha y descubre",L.review?"La te, la ene y la de":"Toca cada sílaba para oírla",
+ `<span class="rd big">${esc(L.review?"t  n  d":L.letter+" "+L.letter.toUpperCase())}</span>${L.introWord?picHTML(L.introWord):""}
+  <button class="play" id="pl" aria-label="Escuchar">${SPK}</button>
+  ${sy.length?`<div class="syls">${sy.map(s=>`<button class="rd" data-s="${s}">${s}</button>`).join("")}</div>`:""}`+ctaBtn("Continuar"),"mochi-hola.webp");
+ const p=()=>play(AU(L.intro));$("#pl").onclick=p;setTimeout(p,350);
+ app.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>play(AU(b.dataset.s)));
+ $("#go").onclick=done;
+}
+/* 2 · ¿Lo oyes? */
+function s_hear(L){
+ const yes=pick(L.w,3),no=L.no.slice(0,3),items=shuffle(yes.map(w=>[w,1]).concat(no.map(w=>[w,0])));let k=0;
+ const draw=()=>{const [w,y]=items[k];
+  frame("¿Lo oyes?",`¿La palabra tiene el sonido de la ${L.letter}? · ${k+1} de ${items.length}`,
+  `${picHTML(w)}<button class="play" id="pl" aria-label="Escuchar">${SPK}</button><div class="opts o2"><button class="opt" data-v="1" style="font-size:22px;font-weight:800">Sí</button><button class="opt" data-v="0" style="font-size:22px;font-weight:800">No</button></div>`);
+  const p=()=>play(AU(w));$("#pl").onclick=p;setTimeout(p,300);let tried=false;
+  app.querySelectorAll("[data-v]").forEach(b=>b.onclick=async()=>{const ok=+b.dataset.v===y;if(!tried)score(ok);tried=true;
+   b.classList.add(ok?"ok":"no");if(ok){await good();k++;k<items.length?draw():done();}else{bad();setTimeout(()=>b.classList.remove("no"),400);}});};
+ draw();
+}
+/* 3 · Elige la sílaba */
+function s_syl(L){
+ const items=shuffle(L.syl);let k=0;
+ const draw=()=>{const s=items[k];const opts=shuffle([s].concat(pick(L.syl.filter(x=>x!==s),1),pick(PREV,1)));
+  frame("Toca la sílaba que oyes",`${k+1} de ${items.length}`,`<button class="play" id="pl" aria-label="Escuchar">${SPK}</button><div class="opts o3">${opts.map(o=>`<button class="opt rd" data-v="${o}">${o}</button>`).join("")}</div>`);
+  const p=()=>play(AU(s));$("#pl").onclick=p;setTimeout(()=>play(MO("Toca la sílaba que oyes.")).then(p),250);let tried=false;
+  app.querySelectorAll("[data-v]").forEach(b=>b.onclick=async()=>{const ok=b.dataset.v===s;if(!tried)score(ok);tried=true;b.classList.add(ok?"ok":"no");
+   if(ok){await good();k++;k<items.length?draw():done();}else{bad();setTimeout(()=>b.classList.remove("no"),400);}});};
+ draw();
+}
+/* 4 · Arma la palabra */
+function s_build(L,list,title){
+ const items=list||pick(L.w,4);let k=0;
+ const draw=()=>{const w=items[k],parts=SPLIT[w]||PSPLIT[w];let got=[];
+  const tiles=shuffle(parts.map((p,i)=>({p,i})));let mist=false;
+  const paint=()=>{
+   frame(title||"Arma la palabra",`${k+1} de ${items.length}`,`${picHTML(w)}<button class="play sm" id="pl" aria-label="Escuchar">${SPK}</button>
+   <div class="slots">${parts.map((_,i)=>`<span class="slot rd ${got[i]?"f":""}">${got[i]?esc(got[i]):""}</span>`).join("")}</div>
+   <div class="tiles">${tiles.map((t,j)=>`<button class="tile rd" data-j="${j}" ${t.used?"disabled":""}>${esc(t.p)}</button>`).join("")}</div>`);
+   $("#pl").onclick=()=>play(AU(w));
+   app.querySelectorAll("[data-j]").forEach(b=>b.onclick=async()=>{const t=tiles[+b.dataset.j],need=parts[got.length];
+    if(t.p===need){t.used=true;got.push(t.p);if(got.length===parts.length){paint();score(!mist);await play(AU(w));await good();k++;k<items.length?draw():done();}else paint();}
+    else{mist=true;b.classList.add("no");bad();setTimeout(()=>b.classList.remove("no"),400);}});
+  };paint();if(k===0)play(MO("Arma la palabra.")).then(()=>play(AU(w)));else play(AU(w));};
+ draw();
+}
+/* 5 · Lee y une (con dibujo; sin dibujo: escucha y toca la palabra) */
+function s_match(L){
+ const pool=L.w.filter(w=>SPLIT[w]);const rounds=[pick(pool,3),pick(pool,3)];let r=0;
+ const withImg=pool.every(hasImg);
+ const draw=()=>{const set=rounds[r];
+  if(withImg){let sel=null,matched=[];const pics=shuffle(set);
+   const paint=()=>{frame("Lee y une con su dibujo",`Toca una palabra y luego su dibujo · ronda ${r+1} de 2`,
+    `<div class="pair"><div class="opts">${set.map(w=>`<button class="opt rd ${matched.includes(w)?"ok":""} ${sel===w?"no":""}" style="${sel===w?"background:var(--lilaS);border-color:var(--lila);animation:none":""}" data-w="${w}">${w}</button>`).join("")}</div>
+    <div class="opts">${pics.map(w=>`<button class="opt ${matched.includes(w)?"ok":""}" data-p="${w}">${picHTML(w,"")}</button>`).join("")}</div></div>`);
+    app.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{if(matched.includes(b.dataset.w))return;sel=b.dataset.w;paint();});
+    app.querySelectorAll("[data-p]").forEach(b=>b.onclick=async()=>{const w=b.dataset.p;if(!sel||matched.includes(w))return;const ok=sel===w;score(ok);
+     if(ok){matched.push(w);sel=null;paint();await play(AU(w));if(matched.length===set.length){await good();r++;r<2?draw():done();}}else{b.classList.add("no");bad();}});};
+   paint();if(r===0)play(MO("Lee y une con su dibujo."));
+  }else{let k=0;const ask=()=>{const w=set[k];
+   frame("Escucha y toca la palabra",`${k+1} de 3 · ronda ${r+1} de 2`,`<button class="play" id="pl">${SPK}</button><div class="opts">${shuffle(set).map(o=>`<button class="opt rd" data-v="${o}">${o}</button>`).join("")}</div>`);
+   const p=()=>play(AU(w));$("#pl").onclick=p;setTimeout(p,300);let tried=false;
+   app.querySelectorAll("[data-v]").forEach(b=>b.onclick=async()=>{const ok=b.dataset.v===w;if(!tried)score(ok);tried=true;b.classList.add(ok?"ok":"no");
+    if(ok){await good();k++;if(k<3)ask();else{r++;r<2?draw():done();}}else{bad();setTimeout(()=>b.classList.remove("no"),400);}});};ask();}
+ };draw();
+}
+/* 6 · Palabras inventadas */
+function s_pseudo(L){
+ const items=shuffle(L.ps);let k=0;
+ const draw=()=>{const w=items[k];const opts=shuffle([w].concat(pick(L.ps.filter(x=>x!==w),2)));
+  frame("Palabras inventadas",`No significan nada: escucha y toca la que oyes · ${k+1} de ${items.length}`,`<button class="play" id="pl">${SPK}</button><div class="opts o3">${opts.map(o=>`<button class="opt rd" style="font-size:26px" data-v="${o}">${o}</button>`).join("")}</div>`,"mochi-hola.webp");
+  const p=()=>play(AU(w));$("#pl").onclick=p;setTimeout(()=>(k===0?play(MO("Lee estas palabras inventadas.")):Promise.resolve()).then(p),250);let tried=false;
+  app.querySelectorAll("[data-v]").forEach(b=>b.onclick=async()=>{const ok=b.dataset.v===w;if(!tried)score(ok);tried=true;b.classList.add(ok?"ok":"no");
+   if(ok){await good();k++;k<items.length?draw():done();}else{bad();setTimeout(()=>b.classList.remove("no"),400);}});};
+ draw();
+}
+/* 7 · Completa */
+function s_complete(L){
+ const items=pick(L.w.filter(w=>SPLIT[w]),4);let k=0;
+ const draw=()=>{const w=items[k],parts=SPLIT[w];const miss=parts.findIndex(p=>L.review?true:p.startsWith(L.letter));const m=miss<0?0:miss;
+  const ans=parts[m];const pool=L.review?["ta","te","to","na","ne","no","da","de","do","ma","pa","la"]:L.syl.concat(PREV);
+  const opts=shuffle([ans].concat(pick(pool.filter(x=>x!==ans),2)));
+  frame("Completa la palabra",`${k+1} de ${items.length}`,`${picHTML(w)}<button class="play sm" id="pl">${SPK}</button>
+  <div class="slots">${parts.map((p,i)=>`<span class="slot rd ${i===m?"":"f"}" id="${i===m?"gap":""}">${i===m?"":esc(p)}</span>`).join("")}</div>
+  <div class="opts o3">${opts.map(o=>`<button class="opt rd" data-v="${o}">${o}</button>`).join("")}</div>`);
+  const p=()=>play(AU(w));$("#pl").onclick=p;if(k===0)play(MO("Completa la palabra.")).then(p);else setTimeout(p,250);let tried=false;
+  app.querySelectorAll("[data-v]").forEach(b=>b.onclick=async()=>{const ok=b.dataset.v===ans;if(!tried)score(ok);tried=true;b.classList.add(ok?"ok":"no");
+   if(ok){$("#gap").textContent=ans;$("#gap").classList.add("f");await play(AU(w));await good();k++;k<items.length?draw():done();}else{bad();setTimeout(()=>b.classList.remove("no"),400);}});};
+ draw();
+}
+/* 8 · Ordena la oración */
+function s_order(L){
+ const ws=L.o.replace(/[.¡!¿?]/g,"").split(" ");let got=[];const tiles=shuffle(ws.map((w,i)=>({w,i})));let mist=false;
+ const paint=()=>{frame("Ordena la oración","Toca las palabras en orden",`<div class="slots" style="min-height:56px">${got.map(w=>`<span class="slot rd f" style="min-width:0;font-size:22px;height:52px">${esc(w)}</span>`).join("")||'<span class="hint">Aquí se arma la oración</span>'}</div>
+  <div class="tiles">${tiles.map((t,j)=>`<button class="tile rd wtile" data-j="${j}" ${t.used?"disabled":""}>${esc(t.w)}</button>`).join("")}</div>`);
+  app.querySelectorAll("[data-j]").forEach(b=>b.onclick=async()=>{const t=tiles[+b.dataset.j];if(t.w===ws[got.length]){t.used=true;got.push(t.w);paint();
+   if(got.length===ws.length){score(!mist);await play(AU(L.o));await good();done();}}else{mist=true;b.classList.add("no");bad();setTimeout(()=>b.classList.remove("no"),400);}});};
+ paint();play(MO("Ordena la oración."));
+}
+/* 9 · Dictado: escucha y escribe con letras */
+function s_dict(L){
+ const items=[pick(L.syl,1)[0]].concat(pick(L.w.filter(w=>w.length<=5),2));let k=0;
+ const draw=()=>{const w=items[k];const letters=w.split("");const extra=pick("aeioumplstnd".split("").filter(c=>!letters.includes(c)),Math.max(2,6-letters.length));
+  const tiles=shuffle(letters.map(c=>({c})).concat(extra.map(c=>({c}))));let got=[];let mist=false;
+  const paint=()=>{frame("Escucha y escribe",`${k+1} de ${items.length}`,`<button class="play" id="pl">${SPK}</button>
+   <div class="slots">${letters.map((_,i)=>`<span class="slot rd ${got[i]?"f":""}" style="min-width:52px">${got[i]||""}</span>`).join("")}</div>
+   <div class="tiles">${tiles.map((t,j)=>`<button class="tile rd" style="min-width:56px" data-j="${j}" ${t.used?"disabled":""}>${t.c}</button>`).join("")}</div>`);
+   $("#pl").onclick=()=>play(AU(w));
+   app.querySelectorAll("[data-j]").forEach(b=>b.onclick=async()=>{const t=tiles[+b.dataset.j];if(t.c===letters[got.length]){t.used=true;got.push(t.c);paint();
+    if(got.length===letters.length){score(!mist);await good();k++;k<items.length?draw():done();}}else{mist=true;b.classList.add("no");bad();setTimeout(()=>b.classList.remove("no"),400);}});};
+  paint();if(k===0)play(MO("Escucha y escribe.")).then(()=>play(AU(w)));else play(AU(w));};
+ draw();
+}
+/* 10 · Lectura corta */
+function s_read(L){
+ frame("Lee la lectura","Léela en voz alta. Si quieres, escucha a Mochi después.",`<div class="txt rd">${esc(L.lec)}</div><button class="play sm" id="pl" aria-label="Escuchar a Mochi">${SPK}</button>`+ctaBtn("Ya la leí","dk"));
+ $("#pl").onclick=()=>play(AU(L.lec));play(MO("Lee la lectura."));
+ $("#go").onclick=()=>question(L);
+}
+function question(L){
+ frame(L.q,"Toca la respuesta",`<button class="play sm" id="pl">${SPK}</button><div class="opts">${shuffle(L.qa).map(o=>`<button class="opt rd" style="font-size:24px" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`);
+ const p=()=>play(AU(L.q));$("#pl").onclick=p;setTimeout(p,250);let tried=false;
+ app.querySelectorAll("[data-v]").forEach(b=>b.onclick=async()=>{const ok=b.dataset.v===L.qa[0];if(!tried)score(ok);tried=true;b.classList.add(ok?"ok":"no");if(ok){await good();done();}else{bad();setTimeout(()=>b.classList.remove("no"),400);}});
+}
+/* Repaso · memorama */
+function s_memo(L){
+ const ws=["tomate","moneda","maleta","patineta","nido","dado"].slice(0,6);const useImg=ws.every(hasImg);
+ const pick3=shuffle(ws).slice(0,4);
+ const cards=shuffle(pick3.flatMap(w=>[{w,t:"w"},{w,t:useImg?"i":"w"}]));let open=[],found=[],moves=0,lock=false;
+ const paint=()=>{frame("Memorama","Encuentra las parejas"+(useImg?": palabra y dibujo":""),`<div class="mem" style="grid-template-columns:repeat(4,1fr)">${cards.map((c,i)=>{const up=open.includes(i)||found.includes(c.w);
+   return `<button class="card ${up?"up":""} ${found.includes(c.w)?"done":""}" data-i="${i}">${up?(c.t==="i"?picHTML(c.w,""):`<span class="rd" style="font-size:18px">${esc(c.w)}</span>`):"?"}</button>`;}).join("")}</div>`,"mochi-hola.webp");
+  app.querySelectorAll("[data-i]").forEach(b=>b.onclick=async()=>{const i=+b.dataset.i;if(lock||open.includes(i)||found.includes(cards[i].w))return;open.push(i);paint();
+   if(open.length===2){moves++;lock=true;const [a,c]=open;if(cards[a].w===cards[c].w&&a!==c){found.push(cards[a].w);await play(AU(cards[a].w));open=[];lock=false;paint();
+    if(found.length===pick3.length){score(moves<=pick3.length+3);await good();done();}}else{setTimeout(()=>{open=[];lock=false;paint();},800);}}});};
+ paint();
+}
+/* Repaso · lectura de cierre con lectura repetida */
+function s_closing(L){
+ let times=[],t0=0,iv=null,phase="model";
+ const paint=()=>{frame(L.lecTitle,phase==="model"?"Primero escucha a Mochi":"Léela tú en voz alta · "+(times.length+1)+" de 3",
+  `<div class="txt rd" style="font-size:22px">${esc(L.lec.replace(L.lecTitle+". ",""))}</div>
+  ${phase==="model"?`<button class="play" id="pl">${SPK}</button>`:phase==="run"?`<div class="timer" id="tm">0:00</div>`:""}
+  ${times.length?`<div class="times">${times.map((s,i)=>`<span>${i+1}ª · ${s} s</span>`).join("")}</div>`:""}`+
+  (phase==="model"?ctaBtn("Ahora la leo yo","dk"):phase==="ready"?ctaBtn("Empezar a leer"):phase==="run"?ctaBtn("Terminé","pk"):ctaBtn("Siguiente")));
+  const pl=$("#pl");if(pl)pl.onclick=()=>play(AU(L.lec));
+  $("#go").onclick=()=>{if(phase==="model"){phase="ready";paint();}else if(phase==="ready"){phase="run";t0=Date.now();paint();iv=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);const e=$("#tm");if(e)e.textContent=Math.floor(s/60)+":"+String(s%60).padStart(2,"0");},250);}
+   else if(phase==="run"){clearInterval(iv);times.push(Math.max(1,Math.round((Date.now()-t0)/1000)));if(times.length<3){phase="ready";paint();if(times.length>1&&times[times.length-1]<times[times.length-2])toast("¡Más rápido que la vez anterior!");}else{phase="end";score(true);paint();}}
+   else{LS.times=times;question(L);}};
+ };paint();setTimeout(()=>play(AU(L.lec)),400);
+}
+/* Repaso · comprueba la unidad (10 reactivos) */
+function s_check(L){
+ const all=U1.lessons.slice(0,3);const syl=all.flatMap(x=>x.syl),ws=all.flatMap(x=>x.w),ps=all.flatMap(x=>x.ps);
+ const mk=(a,pool)=>({a,o:shuffle([a].concat(pick(pool.filter(x=>x!==a),2)))});
+ const items=shuffle(pick(syl,4).map(s=>Object.assign({k:"s"},mk(s,syl))).concat(pick(ws,4).map(w=>Object.assign({k:"w"},mk(w,ws))),pick(ps,2).map(w=>Object.assign({k:"p"},mk(w,ps)))));
+ let k=0,ok=0;
+ const draw=()=>{const it=items[k];
+  frame("Comprueba la unidad",`Escucha y toca · ${k+1} de 10`,`<button class="play" id="pl">${SPK}</button><div class="opts o3">${it.o.map(o=>`<button class="opt rd" style="font-size:${it.k==="s"?30:22}px" data-v="${o}">${o}</button>`).join("")}</div>`);
+  const p=()=>play(AU(it.a));$("#pl").onclick=p;setTimeout(p,250);
+  app.querySelectorAll("[data-v]").forEach(b=>b.onclick=async()=>{const r=b.dataset.v===it.a;if(r)ok++;score(r);b.classList.add(r?"ok":"no");
+   app.querySelectorAll("[data-v]").forEach(x=>x.disabled=true);await new Promise(z=>setTimeout(z,600));k++;if(k<10)draw();else{LS.check=ok;done();}});};
+ draw();
+}
+
+/* ===== Final ===== */
+function finish(){
+ const pct=LS.tot?Math.round(LS.ok/LS.tot*100):100;const pass=pct>=80&&(!LS.L.review||(LS.check||0)>=8);
+ const stars=pct>=95?3:pct>=85?2:pct>=80?1:0;const L=LS.L;
+ const P=prog();
+ if(pass){const prev=P[key(L.id)];P[key(L.id)]={stars:Math.max(stars,prev?prev.stars:0),pct,at:Date.now()};if(L.review)P.n3u1seal=true;setProg(P);
+  try{if(window.MovaAuth&&me())MovaAuth.save("lectura-leccion","Nivel 3 · Unidad 1 · Lección "+L.id+" · "+L.title,LS.ok,LS.tot,{kind:"leccion",nivel:3,unidad:1,leccion:L.id,stars,pct,times:LS.times||null,check:LS.check==null?null:LS.check,seal:!!L.review});}catch(e){}}
+ app.innerHTML=`<div class="top"><button class="x" id="qx">✕</button><div class="bar">${LS.steps.map(()=>'<i class="ok"></i>').join("")}</div></div>
+ <div class="stage end" style="margin-top:14px">
+  <img src="${pass?"mochi-salta.webp":"mochi-hola.webp"}" style="width:140px;height:170px;object-fit:contain" alt="">
+  ${pass&&L.review?`<div class="seal">Sello<br>U1</div>`:""}
+  <b style="font:800 26px 'Bricolage Grotesque'">${pass?(L.review?"¡Ganaste el sello de la unidad!":"¡Terminaste la lección!"):"¡Casi lo logras!"}</b>
+  ${pass?`<div class="stars">${"<b>★</b>".repeat(stars)}${"★".repeat(3-stars)}</div>`:""}
+  <span class="hint">${LS.ok} de ${LS.tot} a la primera · ${pct}%${pass?"":". Necesitas 80% para avanzar: vuelve a intentarlo"}</span>
+  ${ctaBtn(pass?"Volver a mi unidad":"Intentar de nuevo",pass?"":"pk")}
+ </div>`;
+ play(MO(pass?(L.review?"¡Ganaste el sello de la unidad!":"¡Terminaste la lección!"):"Casi. Escucha de nuevo."));
+ $("#qx").onclick=home;$("#go").onclick=()=>pass?home():start(L.id);
+}
+
+/* Entrada: ?l=2 abre directo la lección */
+window.addEventListener("load",()=>{const l=+new URLSearchParams(location.search).get("l");const P=prog();
+ if(l&&U1.lessons.some(x=>x.id===l)&&(l===1||P[key(l-1)]))start(l);else home();});
+</script>
+<script src="mova-auth.js"></script>
+</body>
+</html>

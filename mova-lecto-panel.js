@@ -74,7 +74,8 @@
     const dg = (rows || []).filter(r => r.activity === "diagnostico-lectura" && r.detail && r.detail.nivel_lectura).sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
     const diag = dg ? Object.assign({ fecha: dg.created_at }, dg.detail) : null;
     const pend = (tasks || []).some(t => String(t.task || "").split("~")[0] === "diagnostico-lectura" && (!dg || new Date(t.created_at) > new Date(dg.created_at)));
-    const D = { s, vals: live, diag, pend, L: current(diag, live) };
+    const lessons = {}; (rows || []).filter(r => r.activity === "lectura-leccion" && r.detail && r.detail.leccion).forEach(r => { const k = "N" + r.detail.nivel + " U" + r.detail.unidad + " L" + r.detail.leccion; if (!lessons[k] || (r.detail.stars || 0) > lessons[k].stars) lessons[k] = { stars: r.detail.stars || 0, seal: !!r.detail.seal, at: r.created_at }; });
+    const D = { s, vals: live, diag, pend, L: current(diag, live), lessons };
     DATA[s.id] = D; return D;
   }
   const isLecto = s => /lectoescritura/i.test(String(s.stage || ""));
@@ -126,6 +127,7 @@
     openModal(`<button class="x" aria-label="Cerrar">✕</button>
       <div class="lp-hd"><span class="lp-k">Mi Ruta Lectora</span><h2>${ESC(s.full_name)}</h2>
       <p>${dg ? `Diagnóstico del ${ESC(new Date(dg.fecha).toLocaleDateString("es-MX", { day: "numeric", month: "long" }))}: lectura nivel ${dg.nivel_lectura > 8 ? "8+" : dg.nivel_lectura}, escritura nivel ${dg.nivel_escritura}${dg.ppm ? ` · ${dg.ppm} ppm` : ""}` : D.pend ? "Tiene el diagnóstico de entrada asignado. Hazlo con el alumno en clase." : "Todavía no tiene diagnóstico de entrada."}</p></div>
+      ${Object.keys(D.lessons).length ? `<div class="lp-les"><span class="lp-k">Lecciones en casa</span><div>${Object.keys(D.lessons).sort().map(k => `<span>${ESC(k)} ${"★".repeat(D.lessons[k].stars)}${D.lessons[k].seal ? " · sello" : ""}</span>`).join("")}</div></div>` : ""}
       ${!dg ? `<button class="lp-btn ${D.pend ? "ghost" : ""}" id="lpDiag" style="width:100%;margin-bottom:12px">${D.pend ? "Volver a asignar el diagnóstico" : "Asignar diagnóstico de entrada"}</button>` : ""}
       <div class="lp-map">${LV.map((x, i) => { const c = stateOf(i, L, dg, D.vals); return `<button data-l="${i + 1}" class="${c}${i + 1 === SEL ? " sel" : ""}" title="${ESC(x)}"><img src="${i === 7 ? "le-libro.webp" : "le-n" + (i + 1) + ".webp"}" alt=""><small>${i + 1}</small></button>`; }).join("")}</div>
       <div class="lp-lvl"><div class="lp-lh"><div><span class="lp-k">Nivel ${SEL}${SEL === L ? " · en práctica" : ""}</span><h3>${ESC(LV[SEL - 1])}</h3></div>
@@ -276,6 +278,7 @@ td.w{font-size:13.5pt;font-weight:700}td.ps{color:#7A5CE0}td.d,td.o,td.q{font-si
 .lp-cr input{width:68px;text-align:center}.lp-cr b{font-size:13px;color:#6B6E85;flex:1;display:flex;align-items:center;gap:6px}
 .lp-res{margin:0;font-size:13px;font-weight:700;padding:9px 11px;border-radius:12px;background:#F1EEF8}.lp-res.ok{background:#F1FAD0}.lp-res.no{background:#FFE3F1}
 .lp-acts{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.lp-les{background:#F7F5FC;border-radius:16px;padding:10px 12px;margin-bottom:12px}.lp-les div{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.lp-les div span{background:#fff;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700}
 .lp-rule{font-size:12px;color:#6B6E85;line-height:1.45;margin:12px 2px 0}.lp-sub{color:#6B6E85;font-size:13px}`;
   const st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
 

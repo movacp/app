@@ -18,7 +18,7 @@
     { n: "Oraciones y fluidez", m: "Aa.", kid: "Lees oraciones completas con ritmo y con la voz de las preguntas y exclamaciones." },
     { n: "Textos y comprensión", m: "", kid: "Lees textos más largos, entiendes lo que pasa y explicas por qué." }
   ];
-  var PRACT = { 1: "juego-lee-con-mochi.html", 2: "juego-lee-con-mochi.html", 3: "juego-lee-con-mochi.html", 4: "#/lectoescritura/dictado/palabras",
+  var PRACT = { 1: "juego-lee-con-mochi.html", 2: "juego-lee-con-mochi.html", 3: "lectura-leccion.html", 4: "#/lectoescritura/dictado/palabras",
     5: "#/lectoescritura/dictado/trabadas", 6: "#/lectoescritura/dictado/ortografia", 7: "#/lectoescritura/fluidez", 8: "#/lectoescritura/fluidez" };
   var DT = [
     { id: "silabas", name: "Sílabas", c: "#FFC7E2" }, { id: "palabras", name: "Palabras sencillas", c: "#FFE58A" },
@@ -26,6 +26,7 @@
     { id: "ortografia", name: "Oraciones con ortografía", c: "#E6E2FF" }, { id: "parrafo", name: "Oraciones largas", c: "#FFD9C2" }
   ];
   var TILES = [
+    ["Lecciones · Nivel 3", "Unidad 1: la t, la n y la d", "t", "#FF8FC8", "#1A1B2E", "lectura-leccion.html"],
     ["Sílabas", "Escucha y escribe sílabas", "ma", "#B9A6FF", "#1A1B2E", "#/lectoescritura/dictado/silabas"],
     ["Palabras", "Forma palabras nuevas", "sol", "#FF8FC8", "#1A1B2E", "#/lectoescritura/dictado/palabras"],
     ["Lecturas", "Lee y vuelve a leer", "Aa", "#1A1B2E", "#D3F36B", "#/lectoescritura/fluidez"],
@@ -89,6 +90,7 @@
     ".lx-row .c span{font-size:13px;line-height:1.45;color:#3D3F5C}",
     ".lx-st{align-self:flex-start;font-size:11px;font-weight:800;padding:4px 10px;border-radius:999px;background:#F1EEF8;color:#6B6E85}",
     ".lx-row.done .lx-st{background:#F1FAD0;color:#3E4A12}.lx-row.now .lx-st{background:#FF8FC8;color:#1A1B2E}",
+    ".lx-go{align-self:flex-start;margin-top:4px;background:#1A1B2E;color:#D3F36B;font-weight:800;font-size:12.5px;padding:8px 13px;border-radius:999px;text-decoration:none}",
     ".lx-note{background:#ECE7FF;border-radius:18px;padding:12px 14px;font-size:13px;line-height:1.45}",
     "html[data-theme=dark] .lx{color:#F1F2F8}html[data-theme=dark] .lx-tiles a,html[data-theme=dark] .lx-row,html[data-theme=dark] .lx-diag,html[data-theme=dark] .lx-tabs{background:#23253A;border-color:#33354D;color:#F1F2F8}",
     "html[data-theme=dark] .lx-row .c span,html[data-theme=dark] .lx-tiles small,html[data-theme=dark] .lx-diag span{color:#C6C9DA}"
@@ -222,7 +224,8 @@
         "<h2>" + (u ? "La ruta de " + esc(first(u.name || u.username)) : "Mi Ruta Lectora") + "</h2><p>" + intro + "</p></div>" +
         '<div class="lx-list">' + LV.map(function (x, i) {
           var s = stateOf(i), vn = s === "now" ? lvStat(i + 1).n : 0, lab = s === "done" ? "Logrado" : s === "now" ? (vn ? "En práctica · " + vn + " de 2 validaciones" : "En práctica") : "Por iniciar";
-          return '<div class="lx-row ' + s + '"><div class="t">' + mark(i) + '</div><div class="c"><em>NIVEL ' + (i + 1) + "</em><b>" + esc(x.n) + "</b><span>" + esc(x.kid) + '</span><span class="lx-st">' + lab + "</span></div></div>";
+          return '<div class="lx-row ' + s + '"><div class="t">' + mark(i) + '</div><div class="c"><em>NIVEL ' + (i + 1) + "</em><b>" + esc(x.n) + "</b><span>" + esc(x.kid) + '</span><span class="lx-st">' + lab + "</span>" +
+            (i === 2 ? '<a class="lx-go" href="lectura-leccion.html">Unidad 1 · la t, la n y la d · Abrir lecciones</a>' : "") + "</div></div>";
         }).join("") + "</div>" +
         (L && L <= 8 ? '<div class="lx-btns"><a class="p" style="background:#FF8FC8" href="' + PRACT[L] + '">Practicar mi nivel</a></div>' : "") + "</div></section>"
     };
