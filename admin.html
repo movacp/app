@@ -316,7 +316,7 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
 .chips button.on{background:#15192B;border-color:#15192B;color:#fff}
 .st{padding:12px 14px;border-radius:20px}.st .nm{font-weight:800;font-size:14.5px}.av{width:42px;height:42px;font-weight:800;color:#15192B}
 .fab{display:none}
-.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));width:calc(100% - 24px);max-width:520px;height:68px;background:#15192B;border-radius:24px;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;z-index:15;box-shadow:0 12px 30px rgba(21,25,43,.25)}
+.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));width:calc(100% - 24px);max-width:520px;height:68px;background:#15192B;border-radius:24px;display:grid;grid-template-columns:repeat(6,1fr);align-items:center;z-index:15;box-shadow:0 12px 30px rgba(21,25,43,.25)}
 .tabbar a,.tabbar button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:4px;color:#8C91AD;font-size:10.5px;font-weight:700;font-family:inherit;text-decoration:none;padding:0}
 .tabbar i{display:flex;padding:5px 14px;border-radius:14px}.tabbar svg{width:22px;height:22px}
 .tabbar .on{color:#D3F36B}.tabbar .on i{background:#D3F36B;color:#15192B}
@@ -421,11 +421,13 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
       <div class="visits" id="luIns" style="margin-top:0"></div>
       <div class="visits" id="visits"><h2>Visitas a la app</h2><p class="vs">Cargando…</p></div>
     </div>
+  <div class="view hidden" id="v-lecto"></div>
   </main>
   <nav class="tabbar" id="tabbar">
     <button data-v="students" class="on"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.4c3 .2 5.5 2.4 5.5 5.6"/></svg></i>Alumnos</button>
     <button data-v="tasks"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 4.5h6v2.5H9zM8.5 12l2 2 4-4M8.5 17.5h7"/></svg></i>Tareas</button>
     <button data-v="levelup"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4v-6H4zM10 20h4V9h-4zM16 20h4V4h-4z"/></svg></i>Level Up</button>
+    <button data-v="lecto"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5z"/><path d="M12 6.5v13"/></svg></i>Lectura</button>
     <button data-v="insights"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 4 8-8"/><path d="M15 8h5v5"/></svg></i>Estadísticas</button>
     <a href="mova-live.html"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M6.3 6.3a8 8 0 0 0 0 11.4M17.7 6.3a8 8 0 0 1 0 11.4"/></svg></i>En vivo</a>
   </nav>
@@ -546,11 +548,11 @@ function wireDue(box){ const w=box.querySelector(".duew"); if(!w) return; const 
   w.querySelector("input").onchange=e=>{ if(e.target.value){ curDue=e.target.value; re(); } }; }
 function tName(){ let em=""; try{ em=(localStorage.getItem("mova_teacher_email")||"").toLowerCase(); }catch(e){} const u=em.split("@")[0]; if(/let/.test(u)) return "Miss Letty"; if(/claud/.test(u)) return "Miss Claudia"; if(/mayte|teresa/.test(u)) return "Miss Mayte"; return "Miss Karla"; }
 function setTab(v){
-  if(!["students","tasks","levelup","insights"].includes(v)) v="students";
-  ["students","tasks","levelup","insights"].forEach(k => $("#v-"+k).classList.toggle("hidden", k!==v));
+  if(!["students","tasks","levelup","lecto","insights"].includes(v)) v="students";
+  ["students","tasks","levelup","lecto","insights"].forEach(k => $("#v-"+k).classList.toggle("hidden", k!==v));
   document.querySelectorAll("#tabbar button").forEach(b => b.classList.toggle("on", b.dataset.v===v));
   const h=new Date().getHours(), hi=h<12?"Buenos días":h<19?"Buenas tardes":"Buenas noches";
-  const T={students:[hi+", "+tName(),"Panel de maestra"],tasks:["Actividades asignadas","Tareas"],levelup:["Placement and progress","Level Up Test"],insights:["Uso de la app","Estadísticas"]}[v];
+  const T={students:[hi+", "+tName(),"Panel de maestra"],tasks:["Actividades asignadas","Tareas"],levelup:["Placement and progress","Level Up Test"],insights:["Uso de la app","Estadísticas"],lecto:["Mi Ruta Lectora y validación","Lectura"]}[v];
   $("#hdSmall").textContent=T[0]; $("#hdTitle").textContent=T[1];
   history.replaceState(null,"",v==="students"?location.pathname:"#"+v); window.scrollTo(0,0);
   if(v==="tasks") loadAllTasks();
@@ -1868,5 +1870,6 @@ function openSimReport(s,r){
 </script>
 <script src="mova-math.js"></script>
 <script src="mova-math-panel.js"></script>
+<script src="mova-lecto-panel.js"></script>
 </body>
 </html>

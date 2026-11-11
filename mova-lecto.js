@@ -103,14 +103,36 @@
   }
   var BACK = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 
+  /* ---------- Validación presencial (la registra la maestra en el panel como "wfb:lv:…") ---------- */
+  function dec(t) { try { return /^LV\|/.test(t || "") ? JSON.parse(decodeURIComponent(escape(atob(String(t).slice(3))))) : null; } catch (e) { return null; } }
+  function pct(a) { return a && a[1] ? a[0] / a[1] * 100 : null; }
+  function sessionOk(v) {
+    if (v.m) return true;
+    var r = pct(v.r), p = pct(v.p), c = v.c && v.c[1] ? v.c[0] / v.c[1] : null;
+    if (r == null || r < 90) return false; if (p != null && p < 80) return false;
+    if (c != null && c < (v.c[1] <= 3 ? 0.66 : 0.8)) return false; return true;
+  }
+  function lvStat(l) {
+    var s = (ST.vals || []).filter(function (v) { return v.l === l; });
+    if (s.some(function (v) { return v.m; })) return { done: true, n: 2 };
+    var days = {}; s.filter(sessionOk).forEach(function (v) { days[v.d] = 1; });
+    var n = Object.keys(days).length; return { done: n >= 2, n: Math.min(2, n) };
+  }
+  function parseVals(tasks) {
+    var all = tasks.filter(function (t) { return String(t.task || "").indexOf("wfb:lv:") === 0; }).map(function (t) { return dec(t.title); }).filter(Boolean);
+    var del = {}; all.forEach(function (v) { if (v.x) del[v.x] = 1; });
+    return all.filter(function (v) { return !v.x && !del[v.u]; }).map(function (v) { return { l: v.l, d: v.d, r: v.r, p: v.p, c: v.c, m: v.m }; });
+  }
+
   /* ---------- Estado del alumno: diagnóstico guardado y tarea pendiente ---------- */
-  var ST = { diag: null, task: null, u: null };
+  var ST = { diag: null, task: null, u: null, vals: [] };
   function cached() {
     var u = user(); ST.u = u ? u.username : null;
     var c = u ? get("mova_lecto_state_" + u.username) : null;
     var local = u ? get("mova_lecto_diag_" + u.username) : null;
     ST.diag = (c && c.diag) || (local && local.nivel_lectura ? local : null);
     ST.task = c ? c.task : null;
+    ST.vals = (c && c.vals) || [];
   }
   function refresh() {
     var u = user(); if (!u) return;
@@ -120,7 +142,7 @@
     ]).then(function (res) {
       if (!user() || user().username !== u.username) return;
       var rows = Array.isArray(res[0]) ? res[0] : null, tasks = Array.isArray(res[1]) ? res[1] : null;
-      var diag = ST.diag, task = ST.task;
+      var diag = ST.diag, task = ST.task, vals = ST.vals;
       if (rows) {
         var d = rows.filter(function (r) { return r.activity === "diagnostico-lectura" && r.detail && r.detail.nivel_lectura; })
           .sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); })[0];
@@ -130,15 +152,19 @@
         var after = diag ? diag.fecha || 0 : 0;
         var t = tasks.filter(function (x) { return String(x.task || "").split("~")[0] === "diagnostico-lectura" && new Date(x.created_at).getTime() > after; })[0];
         task = t ? { id: t.id } : null;
+        vals = parseVals(tasks);
       }
-      var ch = JSON.stringify([diag && diag.nivel_lectura, diag && diag.fecha, task && task.id]) !== JSON.stringify([ST.diag && ST.diag.nivel_lectura, ST.diag && ST.diag.fecha, ST.task && ST.task.id]);
-      ST.diag = diag; ST.task = task;
-      try { localStorage.setItem("mova_lecto_state_" + u.username, JSON.stringify({ diag: diag ? { nivel_lectura: diag.nivel_lectura, nivel_escritura: diag.nivel_escritura, fecha: diag.fecha } : null, task: task })); } catch (e) {}
+      var ch = JSON.stringify([diag && diag.nivel_lectura, diag && diag.fecha, task && task.id, vals]) !== JSON.stringify([ST.diag && ST.diag.nivel_lectura, ST.diag && ST.diag.fecha, ST.task && ST.task.id, ST.vals]);
+      ST.diag = diag; ST.task = task; ST.vals = vals;
+      try { localStorage.setItem("mova_lecto_state_" + u.username, JSON.stringify({ diag: diag ? { nivel_lectura: diag.nivel_lectura, nivel_escritura: diag.nivel_escritura, fecha: diag.fecha } : null, task: task, vals: vals })); } catch (e) {}
       if (ch && /^#\/lectoescritura(\/ruta)?\/?$/.test(location.hash) && typeof router === "function") router();
     });
   }
-  function level() { var n = ST.diag && +ST.diag.nivel_lectura; return n ? Math.min(9, Math.max(1, n)) : 0; }
-  function stateOf(i) { var L = level(); if (!L) return "next"; return i + 1 < L ? "done" : i + 1 === L ? "now" : "next"; }
+  function level() {
+    var n = ST.diag && +ST.diag.nivel_lectura, L = n ? Math.min(9, Math.max(1, n)) : ((ST.vals || []).length ? 1 : 0);
+    if (!L) return 0; while (L <= 8 && lvStat(L).done) L++; return L;
+  }
+  function stateOf(i) { var L = level(); if (!L) return "next"; return i + 1 < L ? "done" : i + 1 === L ? "now" : lvStat(i + 1).done ? "done" : "next"; }
   function mark(i) { return i === 7 ? '<img src="le-libro.webp" alt="">' : esc(LV[i].m); }
 
   /* ---------- Portada ---------- */
@@ -193,7 +219,7 @@
         '<div class="lx-ruta"><div class="hd"><span class="lx-tag">MI RUTA LECTORA</span><span class="nv">' + (L ? (L > 8 ? "8 de 8 logrados" : "Nivel " + L + " de 8") : "Por empezar") + "</span></div>" +
         "<h2>" + (u ? "La ruta de " + esc(first(u.name || u.username)) : "Mi Ruta Lectora") + "</h2><p>" + intro + "</p></div>" +
         '<div class="lx-list">' + LV.map(function (x, i) {
-          var s = stateOf(i), lab = s === "done" ? "Logrado" : s === "now" ? "En práctica" : "Por iniciar";
+          var s = stateOf(i), vn = s === "now" ? lvStat(i + 1).n : 0, lab = s === "done" ? "Logrado" : s === "now" ? (vn ? "En práctica · " + vn + " de 2 validaciones" : "En práctica") : "Por iniciar";
           return '<div class="lx-row ' + s + '"><div class="t">' + mark(i) + '</div><div class="c"><em>NIVEL ' + (i + 1) + "</em><b>" + esc(x.n) + "</b><span>" + esc(x.kid) + '</span><span class="lx-st">' + lab + "</span></div></div>";
         }).join("") + "</div>" +
         (L && L <= 8 ? '<div class="lx-btns"><a class="p" style="background:#FF8FC8" href="' + PRACT[L] + '">Practicar mi nivel</a></div>' : "") + "</div></section>"
