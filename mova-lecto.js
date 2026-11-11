@@ -57,9 +57,10 @@
     ".lx-ruta p{margin:0;font-size:13px;line-height:1.45;color:#C9D3E6}",
     ".lx-lv{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}",
     "@media(min-width:640px){.lx-lv{grid-template-columns:repeat(8,minmax(0,1fr))}}",
-    ".lx-lv div{height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;background:#24375C;color:#C9D3E6}",
+    ".lx-lv div{height:66px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;background:#24375C;color:#C9D3E6}",
     ".lx-lv div.done{background:#D3F36B;color:#1A1B2E}.lx-lv div.now{background:#B9A6FF;color:#1A1B2E}",
-    ".lx-lv img{width:52px;height:46px;object-fit:contain}",
+    ".lx-lv img{width:58px;height:52px;object-fit:contain}",
+    ".lx-lv div.next img{opacity:.45;filter:grayscale(.35)}",
     ".lx-btns{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:2px}",
     ".lx-btns a{font-weight:800;font-size:14px;padding:13px 20px;border-radius:999px;text-decoration:none;color:#1A1B2E}",
     ".lx-btns .p{background:#FF8FC8}.lx-btns .g{background:#D3F36B}",
@@ -78,9 +79,10 @@
     ".lx-list{display:flex;flex-direction:column;gap:10px}",
     ".lx-row{background:#fff;border:1.5px solid #E4E0EE;border-radius:24px;padding:14px;display:flex;gap:14px;align-items:flex-start}",
     ".lx-row.now{border:2px solid #1A1B2E}",
-    ".lx-row .t{width:58px;height:58px;border-radius:18px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;background:#EEEAF6;color:#6B6E85}",
+    ".lx-row .t{width:68px;height:68px;border-radius:18px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;background:#EEEAF6;color:#6B6E85}",
     ".lx-row.done .t{background:#D3F36B;color:#1A1B2E}.lx-row.now .t{background:#B9A6FF;color:#1A1B2E}",
-    ".lx-row .t img{width:46px;height:40px;object-fit:contain}",
+    ".lx-row .t img{width:58px;height:52px;object-fit:contain}",
+    ".lx-row.next .t img{opacity:.5;filter:grayscale(.35)}",
     ".lx-row .c{flex:1;display:flex;flex-direction:column;gap:4px}",
     ".lx-row .c em{font-style:normal;font-size:11px;font-weight:800;color:#6B6E85}",
     ".lx-row .c b{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;line-height:1.15}",
@@ -165,7 +167,7 @@
     if (!L) return 0; while (L <= 8 && lvStat(L).done) L++; return L;
   }
   function stateOf(i) { var L = level(); if (!L) return "next"; return i + 1 < L ? "done" : i + 1 === L ? "now" : lvStat(i + 1).done ? "done" : "next"; }
-  function mark(i) { return i === 7 ? '<img src="le-libro.webp" alt="">' : esc(LV[i].m); }
+  function mark(i) { return '<img src="' + (i === 7 ? "le-libro.webp" : "le-n" + (i + 1) + ".webp") + '" alt="">'; }
 
   /* ---------- Portada ---------- */
   var tab = "ruta";
