@@ -4721,57 +4721,16 @@ window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
   const { WS, COLOR, buildWS, cimg, printHead } = window.__MOVA_SEASON;
   const IMG = (f) => f;
   const DDM = {
-    hero: "banner-dia-de-muertos.webp",
-    stories: {
-      en: {
-        id: "en", lang: "en-US", es: false, title: "Grandma’s Marigold Path", level: "Children · A2", cover: "thumb-ddm-en",
-        desc: "Emma and her family build an ofrenda to remember Grandma Rosa.", narr: "Narrated story · about 2 min",
-        text: [
-          "Every year on November 1 and 2, Mexico celebrates Día de Muertos, the Day of the Dead. It is not a sad holiday. It is a happy time to remember the people we love.",
-          "Emma lives in Monterrey with her parents. This year, her family is making an ofrenda, a special altar, for Grandma Rosa.",
-          "First, they put a photo of Grandma on the table. Then Emma places bright orange flowers called cempasúchil, or marigolds. “Their color and smell help the souls find the way home,” says Dad.",
-          "Mom brings pan de muerto, a sweet bread with little bones on top. Emma adds sugar skulls with names on them, and a glass of water for the long trip.",
-          "Last, Emma puts Grandma’s favorite thing: a cup of hot chocolate. “She always made it for me,” Emma says with a smile.",
-          "At night, the family lights candles and tells funny stories about Grandma. Emma feels warm inside. Grandma is not here, but she is still in their hearts."
-        ],
-        keys: ["remember", "ofrenda", "marigolds", "souls", "sugar skulls", "candles"],
-        vocab: [["ofrenda", "A special altar to remember loved ones."], ["marigold", "A bright orange flower. In Spanish: cempasúchil."], ["soul", "The spirit of a person."], ["sugar skull", "A candy skull with a name on it."], ["candle", "It gives a soft light at night."], ["remember", "To keep someone in your mind and heart."]],
-        quiz: [
-          ["When do people celebrate the Day of the Dead?", ["*November 1 and 2", "October 31", "December 24"]],
-          ["What is an ofrenda?", ["A costume", "*A special altar", "A sweet bread"]],
-          ["Why does the family use marigolds?", ["To decorate the school", "*To help the souls find the way home", "To make tea"]],
-          ["What did Emma add for Grandma?", ["*A cup of hot chocolate", "A toy car", "A book"]],
-          ["How does Emma feel at the end?", ["Scared", "Bored", "*Warm inside"]]
-        ]
-      },
-      es: {
-        id: "es", lang: "es-MX", es: true, title: "El camino de cempasúchil", level: "3° y 4° de primaria", cover: "thumb-ddm-es",
-        desc: "Mateo y Sofi preparan la ofrenda para su abuelo Chuy.", narr: "Historia narrada · unos 2 min",
-        text: [
-          "El 1 y 2 de noviembre, en México celebramos el Día de Muertos. No es una fiesta triste: es un día para recordar con cariño a quienes ya no están.",
-          "En casa de Mateo preparan la ofrenda para su abuelo Chuy. Su mamá cubre la mesa con papel picado morado, naranja y rosa.",
-          "Mateo coloca la foto del abuelo en el centro. A su lado pone una veladora, para que la luz lo guíe, y un vaso de agua, porque el viaje es largo.",
-          "Su hermana Sofi trae flores de cempasúchil y hace un caminito de pétalos desde la puerta hasta el altar. —Así el abuelo encontrará el camino —dice.",
-          "Después ponen pan de muerto, una calaverita de azúcar con su nombre y unos tamales, su comida favorita.",
-          "En la noche, toda la familia se sienta junto a la ofrenda. Cuentan las historias graciosas del abuelo y ríen mucho. Mateo siente que su abuelo está ahí, sonriendo con ellos."
-        ],
-        keys: ["ofrenda", "papel picado", "veladora", "cempasúchil", "pan de muerto", "calaverita"],
-        vocab: [["ofrenda", "Altar para recordar a nuestros seres queridos."], ["cempasúchil", "Flor naranja que guía el camino."], ["papel picado", "Papel de colores con figuras recortadas."], ["veladora", "Vela dentro de un vaso de vidrio."], ["calaverita", "Calavera de azúcar con un nombre."], ["pan de muerto", "Pan dulce con “huesitos” encima."]],
-        quiz: [
-          ["¿Para quién es la ofrenda?", ["Para la maestra", "*Para el abuelo Chuy", "Para el perro"]],
-          ["¿Para qué ponen la veladora?", ["*Para que su luz guíe al abuelo", "Para cocinar", "Para jugar"]],
-          ["¿Qué hizo Sofi con los pétalos?", ["Una corona", "*Un caminito hasta el altar", "Los guardó"]],
-          ["¿Cuál era la comida favorita del abuelo?", ["Pozole", "*Tamales", "Tacos"]]
-        ]
-      }
-    }
+    hero: "banner-thanksgiving.webp",
+    stories: { en: {"id": "en", "lang": "en-US", "es": false, "title": "The Thankful Jar", "level": "Children · A2", "cover": "thumb-tg-en", "desc": "Diego visits his cousins in Texas for his first Thanksgiving.", "narr": "Narrated story · about 2 min", "text": ["Every year on the fourth Thursday of November, families in the United States celebrate Thanksgiving. It is a day to say thank you for the good things in our lives.", "This year, Diego and his parents drive from Monterrey to San Antonio to visit his cousins, Mia and Leo. It is Diego’s first Thanksgiving, and he is very excited.", "In the morning, everybody helps in the kitchen. Aunt Kate cooks a big turkey. Mia makes mashed potatoes, and Leo mixes the corn. Diego helps Grandpa bake a pumpkin pie. “It smells amazing!” says Diego.", "Before dinner, Mia brings an empty glass jar and some small papers. “This is our Thankful Jar,” she says. “Everyone writes one thing they are thankful for.”", "Diego thinks for a moment. Then he writes: “I am thankful for my family, near and far.” He folds the paper and puts it in the jar.", "At the table, they read the papers out loud. Some are funny, and some are sweet. When Grandpa reads Diego’s paper, everyone smiles. Diego feels happy. Thanksgiving is about food, but it is also about love."], "keys": ["thankful", "turkey", "pumpkin pie", "mashed potatoes", "jar", "out loud"], "vocab": [["thankful", "Happy and grateful for something."], ["turkey", "A big bird. Families cook it for Thanksgiving."], ["pumpkin pie", "A sweet dessert made with pumpkin."], ["mashed potatoes", "Soft, smooth potatoes."], ["jar", "A glass container with a lid."], ["out loud", "So other people can hear you."]], "quiz": [["When do families celebrate Thanksgiving?", ["*The fourth Thursday of November", "December 25", "November 2"]], ["Where does Diego go for Thanksgiving?", ["Monterrey", "*San Antonio", "New York"]], ["What does Diego help Grandpa make?", ["Mashed potatoes", "A turkey", "*A pumpkin pie"]], ["What is the Thankful Jar for?", ["To keep cookies", "*To write what you are thankful for", "To drink water"]], ["What is Diego thankful for?", ["His new shoes", "*His family, near and far", "The pie"]]]},
+      es: {"id": "es", "lang": "es-MX", "es": true, "title": "La mesa de los agradecimientos", "level": "3° y 4° de primaria", "cover": "thumb-tg-es", "desc": "Valeria descubre cómo se celebra el Día de Acción de Gracias.", "narr": "Historia narrada · unos 2 min", "text": ["En Estados Unidos, el cuarto jueves de noviembre se celebra el Día de Acción de Gracias. Es un día para reunirse en familia y dar gracias por todo lo bueno que tenemos.", "Ava es nueva en el salón de Valeria. Su familia es de Estados Unidos y ahora vive en Monterrey. Un día, Ava la invita a su casa para celebrar juntas.", "Cuando Valeria llega, la casa huele delicioso. En la mesa hay un pavo dorado, puré de papa, elotes y un pay de calabaza. —¡Parece una fiesta! —dice Valeria.", "Antes de comer, la mamá de Ava pone en la mesa una calabaza con tarjetitas de colores. —Cada quien escribe algo por lo que está agradecido —explica.", "Valeria piensa un momento y escribe: «Doy gracias por mi nueva amiga». Ava lee la tarjeta, sonríe y le da un abrazo.", "Esa noche, Valeria regresa a casa con una idea. Durante la cena, le pregunta a su familia: —¿Por qué están agradecidos hoy? Todos comparten algo. Valeria entiende que dar gracias se puede hacer en cualquier lugar y cualquier día."], "keys": ["agradecido", "pavo", "pay de calabaza", "puré", "tarjetitas", "reunirse"], "vocab": [["agradecido", "Que siente gratitud por algo."], ["pavo", "Ave grande que se cocina en esta fiesta."], ["pay de calabaza", "Postre dulce hecho con calabaza."], ["puré de papa", "Papas cocidas y aplastadas, muy suaves."], ["reunirse", "Juntarse con otras personas."], ["tradición", "Costumbre que se repite cada año."]], "quiz": [["¿Cuándo se celebra el Día de Acción de Gracias?", ["El 2 de noviembre", "*El cuarto jueves de noviembre", "El 24 de diciembre"]], ["¿Quién invita a Valeria a celebrar?", ["Su abuela", "*Su amiga Ava", "Su maestra"]], ["¿Qué postre hay en la mesa?", ["Pan de muerto", "*Pay de calabaza", "Pastel de chocolate"]], ["¿Qué escribe Valeria en su tarjeta?", ["*Que da gracias por su nueva amiga", "Su comida favorita", "Su nombre"]], ["¿Qué aprende Valeria al final?", ["Que solo se celebra en Estados Unidos", "*Que dar gracias se puede hacer en cualquier lugar", "Que el pavo es difícil de cocinar"]]]} }
   };
 
   /* Sopas de letras (juego y hoja para imprimir) */
   WS.length = 0;
   WS.push(
-    { id: "ddm-en", stage: "en", label: "English", level: "Kids · Children", lang: "en", size: 11, dirs: [[0, 1], [1, 0], [1, 1]], words: ["marigold", "ofrenda", "candle", "skull", "bread", "soul", "photo", "family", "altar"] },
-    { id: "ddm-es", stage: "es", label: "Español", level: "1° a 6°", lang: "es", size: 11, dirs: [[0, 1], [1, 0], [1, 1]], words: ["cempasúchil", "ofrenda", "veladora", "calaverita", "catrina", "altar", "flores", "recuerdo", "vela"] }
+    { id: "ddm-en", stage: "en", label: "English", level: "Kids · Children", lang: "en", size: 11, dirs: [[0, 1], [1, 0], [1, 1]], words: ["turkey", "pumpkin", "thankful", "family", "corn", "autumn", "leaves", "dinner", "jar"] },
+    { id: "ddm-es", stage: "es", label: "Español", level: "1° a 6°", lang: "es", size: 11, dirs: [[0, 1], [1, 0], [1, 1]], words: ["pavo", "calabaza", "gracias", "familia", "otoño", "elote", "hojas", "amistad", "cena"] }
   );
   /* Dibujos para colorear */
   COLOR.length = 0;
@@ -4859,7 +4818,7 @@ window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
 
   const HP = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="#fff"/><rect x="16" y="14" width="5" height="7" rx="2" fill="#fff"/></svg>';
   const SPK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#D3F36B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="#D3F36B"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>';
-  const ddmWord = (w) => "ddm-es-w-" + String(w).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z]+/g, "-").replace(/^-|-$/g, "") + ".mp3";
+  const ddmWord = (w) => "tg-es-w-" + String(w).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z]+/g, "-").replace(/^-|-$/g, "") + ".mp3";
   const ddmPlay = (src) => { try { if (window.__ddmAu) window.__ddmAu.pause(); } catch (e) {} const a = new Audio(src); window.__ddmAu = a; return a; };
   const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="#15192B"/></svg>';
   const PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4.5" width="4" height="15" rx="1.5" fill="#15192B"/><rect x="14" y="4.5" width="4" height="15" rx="1.5" fill="#15192B"/></svg>';
@@ -4880,18 +4839,16 @@ window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
     const storyCard = (s) => `<a class="d-rc" href="#/holidays/story/${s.id}"><div class="im"><img src="${IMG(s.cover + ".webp")}" alt="" loading="lazy"><span class="d-badge">${HP} ${s.es ? "Historia narrada" : "Narrated story"}</span></div><div class="bd"><div class="d-tags">${tag(s.es ? "Español" : "English", s.es ? "t-es" : "t-en")}${tag(s.level, "t-lv")}${tag(s.quiz.length + (s.es ? " preguntas" : " questions"), "t-mari")}</div><h3>${esc(s.title)}</h3><p>${esc(s.desc)}</p></div></a>`;
     const colorCard = (c) => `<a class="d-pc d-cc" href="#/coloring/${c.id}"><div class="th"><img src="${IMG(c.thumb)}" alt="" loading="lazy"></div><div class="bd"><div class="d-tags">${tag(c.lang === "es" ? "Español" : "English", c.lang === "es" ? "t-es" : "t-en")}</div><h3>${esc(c.title)}</h3><span class="d-pbtn">${c.lang === "es" ? "Imprimir" : "Print"}</span></div></a>`;
     return {
-      title: "Día de Muertos",
+      title: "Thanksgiving",
       html: `<div class="ddm">
-      <div class="d-hero"><img src="${IMG(DDM.hero)}" alt="Ofrenda de Día de Muertos con cempasúchil, veladoras y papel picado"><div class="tx"><span class="d-pill">This season · Nov 1–2</span><h1>Día de Muertos</h1><p>Historias narradas, juegos y dibujos para recordar con cariño.</p></div></div>
+      <div class="d-hero"><img src="${IMG(DDM.hero)}" alt="Mesa de Thanksgiving con pavo, pay de calabaza y hojas de otoño"><div class="tx"><span class="d-pill">This season · Nov 26</span><h1>Thanksgiving</h1><p>Narrated stories and word searches to celebrate the Day of Thanksgiving.</p></div></div>
       <div class="d-sh"><h2>Listen &amp; Read</h2><span>2 historias</span></div>
       <div class="d-stories">${storyCard(st.en)}${storyCard(st.es)}</div>
       <div class="d-sh"><h2>Play</h2><span>Sopas de letras</span></div>
       <div class="d-g2">
-        <a class="d-pc" href="#/holidays/sopa/en"><div class="th" style="background:#2A1F4E">${wsThumb(false)}</div><div class="bd"><div class="d-tags">${tag("English", "t-en")}</div><h3>Day of the Dead WordSearch</h3></div></a>
-        <a class="d-pc" href="#/holidays/sopa/es"><div class="th" style="background:#FF8FC0">${wsThumb(true)}</div><div class="bd"><div class="d-tags">${tag("Español", "t-es")}</div><h3>Sopa de letras de Día de Muertos</h3></div></a>
+        <a class="d-pc" href="#/holidays/sopa/en"><div class="th" style="background:#2A1F4E">${wsThumb(false)}</div><div class="bd"><div class="d-tags">${tag("English", "t-en")}</div><h3>Thanksgiving WordSearch</h3></div></a>
+        <a class="d-pc" href="#/holidays/sopa/es"><div class="th" style="background:#FF8FC0">${wsThumb(true)}</div><div class="bd"><div class="d-tags">${tag("Español", "t-es")}</div><h3>Sopa de letras de Acción de Gracias</h3></div></a>
       </div>
-      <div class="d-sh"><h2>Print &amp; Color</h2><span>Tamaño carta</span></div>
-      <div class="d-g2 four">${COLOR.map(colorCard).join("")}</div>
       <div class="d-links"><a href="#/wordsearch/ddm-en">Printable WordSearch · English</a><a href="#/wordsearch/ddm-es">Sopa de letras para imprimir</a></div>
     </div>`
     };
@@ -4908,7 +4865,7 @@ window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
       title: s.title,
       html: `<div class="ddm" lang="${s.es ? "es" : "en"}">
       <div class="d-cover"><img src="${IMG(s.cover + "-hd.webp")}" alt=""></div>
-      <div class="d-rh"><div class="d-tags">${tag(s.es ? "Español" : "English", s.es ? "t-es" : "t-en")}${tag(s.level, "t-lv")}${tag(s.es ? "Día de Muertos" : "Day of the Dead", "t-mari")}</div><h1>${esc(s.title)}</h1></div>
+      <div class="d-rh"><div class="d-tags">${tag(s.es ? "Español" : "English", s.es ? "t-es" : "t-en")}${tag(s.level, "t-lv")}${tag(s.es ? "Acción de Gracias" : "Thanksgiving", "t-mari")}</div><h1>${esc(s.title)}</h1></div>
       <div class="d-player"><button class="d-play" type="button" aria-label="${s.es ? "Escuchar la historia" : "Listen to the story"}">${PLAY}</button><div style="flex:1;min-width:0"><b>${s.es ? "Escuchar la historia" : "Listen to the story"}</b><small>${s.narr}</small><div class="d-wave" aria-hidden="true">${bars}</div></div></div>
       <div class="d-story">${s.text.map((p) => `<p>${mark(esc(p))}</p>`).join("")}</div>
       <div class="d-sh"><h2>${s.es ? "Vocabulario clave" : "Key vocabulary"}</h2><span>${s.es ? "Toca para escuchar" : "Tap to listen"}</span></div>
@@ -4931,7 +4888,7 @@ window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
           if (idx >= paras.length) { stopUI(); idx = 0; return; }
           const i = idx;
           if (s.es) {
-            au = ddmPlay("ddm-es-p" + (i + 1) + ".mp3");
+            au = ddmPlay("tg-es-p" + (i + 1) + ".mp3");
             au.onplay = () => progress(i);
             au.onended = () => { if (!on) return; idx = i + 1; next(); };
             au.onerror = () => { au = null; if (!on) return; const v = tts(s.text[i], .9); if (!v) return stopUI(); v.onstart = () => progress(i); v.onend = () => { if (!on) return; idx = i + 1; next(); }; };
@@ -4970,8 +4927,8 @@ window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
     if (!res) return viewNotFound("We couldn’t find that word search.", "#/holidays", "This season");
     const es = lang === "es", N = ws.size;
     return {
-      title: es ? "Sopa de letras de Día de Muertos" : "Day of the Dead WordSearch",
-      html: `<div class="ddm" lang="${es ? "es" : "en"}">      <div class="d-wsh"><h1>${es ? "Día de Muertos" : "Day of the Dead"}</h1><div class="d-lang"><a href="#/holidays/sopa/en" class="${es ? "" : "on"}">EN</a><a href="#/holidays/sopa/es" class="${es ? "on" : ""}">ES</a></div></div>
+      title: es ? "Sopa de letras de Acción de Gracias" : "Thanksgiving WordSearch",
+      html: `<div class="ddm" lang="${es ? "es" : "en"}">      <div class="d-wsh"><h1>${es ? "Acción de Gracias" : "Thanksgiving"}</h1><div class="d-lang"><a href="#/holidays/sopa/en" class="${es ? "" : "on"}">EN</a><a href="#/holidays/sopa/es" class="${es ? "on" : ""}">ES</a></div></div>
       <div class="d-wsbox"><div class="d-ws" style="grid-template-columns:repeat(${N},1fr)">${res.g.flat().map((ch, i) => `<span data-i="${i}">${ch}</span>`).join("")}</div>
       <div class="d-bank">${res.placed.map((p) => p.w).sort().map((w) => `<span data-w="${esc(w)}">${esc(w)}</span>`).join("")}</div>
       <div class="d-done" aria-live="polite">${es ? "¡Encontraste todas las palabras!" : "You found all the words!"}</div></div>
@@ -5024,8 +4981,8 @@ window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
     if (!res) return viewNotFound("We couldn’t find that word search.", "#/coloring", "Coloring Pages");
     const N = ws.size, keyCells = new Set(res.placed.flatMap((p) => p.cells)), es = ws.lang === "es";
     const grid = (key) => `<div class="ws-grid" style="grid-template-columns:repeat(${N},1fr)">${res.g.flat().map((ch, i) => `<span class="${key && keyCells.has(i) ? "k" : ""}">${ch}</span>`).join("")}</div>`;
-    const t = es ? "Sopa de letras de Día de Muertos" : "Day of the Dead WordSearch";
-    return { title: t, html: printHead("#/holidays", "Día de Muertos", [ws.label, ws.level], t, es ? "Encuentra las palabras escondidas. La clave de respuestas está en la segunda hoja." : "Find the hidden words. The answer key is on the second page.") + `
+    const t = es ? "Sopa de letras de Acción de Gracias" : "Thanksgiving WordSearch";
+    return { title: t, html: printHead("#/holidays", "Thanksgiving", [ws.label, ws.level], t, es ? "Encuentra las palabras escondidas. La clave de respuestas está en la segunda hoja." : "Find the hidden words. The answer key is on the second page.") + `
     <div class="wrap sheet-wrap"><div class="sheet ws-sheet"><div class="sheet-top"><b>MOVA</b><span>Learning Studio</span></div><div class="sheet-name"><span>${es ? "Nombre:" : "Name:"}</span><span>${es ? "Fecha:" : "Date:"}</span></div>
       <h2 class="sheet-title">${t}</h2><p class="sheet-instr">${es ? "Encuentra y encierra las palabras del banco. Van a lo ancho, hacia abajo y en diagonal." : "Find and circle the words. They go across, down and diagonally."}</p>
       ${grid(false)}<div class="ws-bank">${res.placed.map((p) => p.w).sort().map((w) => `<span>${esc(w)}</span>`).join("")}</div>
@@ -5042,7 +4999,7 @@ window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
   const prevHome = window.viewHome;
   window.viewHome = function () {
     const v = prevHome();
-    v.html = v.html.replace(/<a class="pv-card" href="#\/holidays">[\s\S]*?<\/a>/, `<a class="pv-card" href="#/holidays"><div class="art" aria-hidden="true"><img class="ddm-home" src="${IMG(DDM.hero)}" alt=""></div><div class="tg"><span>Día de Muertos</span><span>English</span><span>Español</span></div><h3>Día de Muertos</h3><p>Historias narradas, sopas de letras y dibujos para colorear.</p><span class="cta">See activities →</span></a>`);
+    v.html = v.html.replace(/<a class="pv-card" href="#\/holidays">[\s\S]*?<\/a>/, `<a class="pv-card" href="#/holidays"><div class="art" aria-hidden="true"><img class="ddm-home" src="${IMG(DDM.hero)}" alt=""></div><div class="tg"><span>Nov 26</span><span>English</span><span>Español</span></div><h3>Thanksgiving</h3><p>Narrated stories, vocabulary, quizzes and word searches.</p><span class="cta">See activities →</span></a>`);
     return v;
   };
   /* Print & Learn: acceso a dibujos de temporada */
