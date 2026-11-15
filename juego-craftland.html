@@ -136,7 +136,9 @@ img{-webkit-user-drag:none;max-width:100%}
 .cloud .dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}
 .cloud a{color:var(--navy);font-weight:800}
 /* tabs */
-.tabs{display:flex;gap:6px;padding:8px 12px 0}
+.tabs{display:flex;gap:6px;padding:8px 12px 4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:0 0 auto!important;padding:7px 10px!important}
 .tabs button{flex:1;border:3px solid var(--navy);border-radius:14px;background:#fff;padding:7px 4px;font:800 14px 'Plus Jakarta Sans';color:var(--navy);box-shadow:0 3px 0 var(--navy);display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer}
 .tabs button img{width:16px;height:16px}
 .tabs button.sel{background:var(--lime)}
@@ -151,6 +153,14 @@ img{-webkit-user-drag:none;max-width:100%}
 .mini{height:10px;background:var(--bg);border-radius:8px;overflow:hidden;border:2px solid var(--navy);margin:6px 4px 2px}
 .mini i{display:block;height:100%;background:var(--ok)}
 .space small{font-weight:800;font-size:12px;opacity:.7}
+.space img.th.wide{aspect-ratio:2.2}
+.space.home{position:relative}
+.space.lockd img{filter:grayscale(.35) brightness(.95)}
+.space.soonh img{filter:grayscale(1) opacity(.55)}
+.space .price{display:flex;width:max-content;margin-left:auto;margin-right:auto;align-items:center;gap:4px;margin-top:6px;background:var(--lime);border:2px solid var(--navy);border-radius:12px;padding:2px 10px;font-weight:900}
+.space .price img{width:18px}
+.bzsub{grid-column:span 2;margin:6px 2px -4px;font:800 18px 'Bricolage Grotesque';color:var(--navy)}
+.tagnew{font-size:11px;background:var(--lila);border:2px solid var(--navy);border-radius:8px;padding:1px 6px;vertical-align:middle}
 /* room */
 .roombar{display:flex;align-items:center;justify-content:center;gap:8px;padding:4px 12px;font-weight:700;font-size:13px}
 .word{position:absolute;transform:translate(-50%,-100%);background:#fff;border:3px solid var(--navy);border-radius:12px;padding:3px 10px;font:800 15px 'Bricolage Grotesque';z-index:120;white-space:nowrap;box-shadow:0 3px 0 var(--navy);pointer-events:none;animation:pop .25s}
@@ -467,10 +477,20 @@ const LUNA = {
 <script>
 /* ===================== DATOS ===================== */
 const IMG = n => n + '.webp';
-const MATS = { wood:'cl-b-wood', stone:'cl-b-stone', dirt:'cl-b-dirt', grass:'cl-b-grass', coal:'cl-b-coal', iron:'cl-b-iron', gold:'cl-b-gold', ice:'cl-b-ice', amethyst:'cl-b-amethyst', ruby:'cl-b-ruby', diamond:'cl-b-diamond' };
-const MAT_COL = { wood:'#B07A44', stone:'#8C8C8C', dirt:'#7A5233', grass:'#6CC04A', coal:'#333', iron:'#D9C2A6', gold:'#F5C531', ice:'#9EDCF5', amethyst:'#A66BDC', ruby:'#E0384B', diamond:'#4FE3E0' };
+const MATS = { wood:'cl-b-wood', stone:'cl-b-stone', dirt:'cl-b-dirt', grass:'cl-b-grass', coal:'cl-b-coal', iron:'cl-b-iron', gold:'cl-b-gold', ice:'cl-b-ice', amethyst:'cl-b-amethyst', ruby:'cl-b-ruby', diamond:'cl-b-diamond', sand:'cl-b-sand', leaves:'cl-b-leaves', brick:'cl-b-brick', snow:'cl-b-snow' };
+const MAT_COL = { wood:'#B07A44', stone:'#8C8C8C', dirt:'#7A5233', grass:'#6CC04A', coal:'#333', iron:'#D9C2A6', gold:'#F5C531', ice:'#9EDCF5', amethyst:'#A66BDC', ruby:'#E0384B', diamond:'#4FE3E0', sand:'#E8D6A0', leaves:'#3F8F3A', brick:'#B5523B', snow:'#EEF4FA' };
 const RARITY = [['stone',22],['wood',22],['dirt',12],['grass',10],['coal',11],['iron',9],['ice',5],['gold',4],['amethyst',2],['ruby',2],['diamond',1]];
 const RARE = ['gold','amethyst','ruby','diamond'];
+// Fase C: materiales nuevos (salen en la mina cuando ya abriste la Build Zone)
+const RARITY_C = [['sand',6],['leaves',6],['brick',5],['snow',5]];
+function mineRarity(){ return S.made.length>=UNLOCK_BZ ? RARITY.concat(RARITY_C) : RARITY }
+// Casas nuevas: requisitos para comprarlas
+const HOMES = {
+ beach:{ price:80,  items:15, obby:0, why:'Craft 15 items' },
+ cabin:{ price:150, items:30, obby:2, why:'Craft 30 items and clear the Ice Bridge' }
+};
+function homeOwned(r){ return !HOMES[r] || (S.homes||[]).includes(r) }
+function homeReady(r){ const h=HOMES[r]; return S.made.length>=h.items && (!h.obby || (S.obby&&S.obby.done||[]).includes(h.obby)) }
 const UNLOCK_BZ = 6;
 // [clave, nombre en inglés, costo, ancho %, tipo] tipo: f = va en el piso (tapete), w = en la pared
 function I(room,k,n,cost,w,t){ return {k,n,room,img:'cl-i-'+k,cost,w,t:t||''} }
@@ -500,14 +520,39 @@ const ITEMS = [
  I('garden','watering-can','watering can',{iron:2,ice:1},10), I('garden','birdhouse','birdhouse',{wood:3,coal:1},11), I('garden','doghouse','doghouse',{wood:5,ruby:1},18),
  I('garden','slide','slide',{iron:3,gold:1},22), I('garden','sandbox','sandbox',{wood:3,dirt:3},20,'f'), I('garden','picnic-table','picnic table',{wood:6},22),
  I('garden','lamp-post','lamp post',{iron:2,coal:2},8), I('garden','pond','pond',{stone:3,ice:3},24,'f'), I('garden','wheelbarrow','wheelbarrow',{iron:2,wood:2},15),
- I('garden','trampoline','trampoline',{iron:3,amethyst:1},22)
+ I('garden','trampoline','trampoline',{iron:3,amethyst:1},22),
+ // Patio (Build Zone)
+ I('patio','bbq','barbecue grill',{iron:3,coal:2,brick:1},18), I('patio','patio-umbrella','patio table',{wood:4,iron:1,sand:1},24), I('patio','pool','swimming pool',{stone:3,ice:4,sand:2},32,'f'),
+ I('patio','campfire','campfire',{stone:3,wood:2,coal:1},16), I('patio','hammock','hammock',{wood:3,leaves:3},26), I('patio','treehouse','treehouse',{wood:6,leaves:4},28),
+ I('patio','outdoor-sofa','outdoor sofa',{wood:4,leaves:2,grass:1},28), I('patio','lounge-chair','lounge chair',{wood:3,sand:1},20), I('patio','hot-tub','hot tub',{wood:4,ice:3,iron:1},26),
+ I('patio','basketball','basketball hoop',{iron:3,brick:1},14), I('patio','soccer-goal','soccer goal',{iron:3,grass:2},26), I('patio','tent','tent',{leaves:3,wood:2},22),
+ I('patio','gnome','garden gnome',{brick:1,ruby:1,grass:1},9), I('patio','mailbox','mailbox',{iron:2,wood:1},10), I('patio','lemonade','lemonade stand',{wood:4,gold:1},20),
+ I('patio','string-lights','string lights',{wood:2,gold:1,coal:1},26),
+ // Casa de playa
+ I('beach','rattan-chair','rattan chair',{wood:2,sand:2},15), I('beach','surfboard','surfboard',{wood:2,ice:1},9), I('beach','beach-umbrella','beach umbrella',{sand:1,ice:2},16),
+ I('beach','beach-towel','beach towel',{sand:2,ice:1},22,'f'), I('beach','palm-tree','palm tree',{sand:2,leaves:3},18), I('beach','tropical-tank','fish tank',{ice:3,sand:2,leaves:1},18),
+ I('beach','hammock-chair','hanging chair',{wood:2,leaves:1,iron:1},13), I('beach','beach-bed','beach bed',{wood:4,sand:2,ice:1},30), I('beach','lighthouse','lighthouse',{brick:3,ruby:1},12),
+ I('beach','treasure-chest','treasure chest',{wood:5,gold:2},15), I('beach','shell-rug','shell rug',{sand:3,amethyst:1},26,'f'), I('beach','ship-wheel','ship wheel',{wood:4},13,'w'),
+ I('beach','sandcastle','sandcastle',{sand:5},15), I('beach','cooler','cooler',{ice:2,iron:1},12), I('beach','shell-shelf','shelf',{wood:4,sand:1},16),
+ I('beach','toy-boat','toy boat',{wood:2,ice:1},10),
+ // Cabaña de nieve
+ I('cabin','fireplace','fireplace',{brick:5,coal:2},24), I('cabin','plaid-armchair','armchair',{wood:2,ruby:1,dirt:2},17), I('cabin','bear-rug','bear rug',{dirt:3,coal:1},26,'f'),
+ I('cabin','cabin-bed','bed',{wood:5,ruby:1,snow:1},32), I('cabin','firewood','firewood',{wood:4,snow:1},14), I('cabin','cocoa','hot chocolate',{wood:1,dirt:1,snow:1},9),
+ I('cabin','skis','skis',{wood:2,snow:2},9), I('cabin','snowboard','snowboard',{wood:2,snow:2,iron:1},9), I('cabin','sled','sled',{wood:3,snow:2},17),
+ I('cabin','lantern','lantern',{iron:2,coal:1},8), I('cabin','rocking-chair','rocking chair',{wood:4},14), I('cabin','blanket-basket','blanket basket',{wood:2,grass:2},13),
+ I('cabin','pine-tree','pine tree',{leaves:3,snow:1,dirt:1},15), I('cabin','grandfather-clock','grandfather clock',{wood:4,gold:1},11), I('cabin','snowman','snowman',{snow:5,coal:1},14),
+ I('cabin','deer-head','deer head',{wood:2,dirt:2},13,'w')
 ];
 ITEMS.forEach(it=>{ if(it.room==='kitchen') it.w=Math.round(it.w*1.3) });
 const ROOMS = {
  house:  { name:'My bedroom', bg:'cl-house', col:'#EADCC8', who:'cl-juno', whoName:'Chef Juno', icon:'cl-i-bed' },
  kitchen:{ name:'My kitchen', bg:'cl-bg-kitchen', col:'#DCEFE6', who:'cl-rex', whoName:'Captain Rex', icon:'cl-i-stove' },
- garden: { name:'My garden', bg:'cl-bg-garden', col:'#D7EEF8', who:'cl-rex', whoName:'Captain Rex', icon:'cl-i-tree' }
+ garden: { name:'My garden', bg:'cl-bg-garden', col:'#D7EEF8', who:'cl-rex', whoName:'Captain Rex', icon:'cl-i-tree' },
+ patio:  { name:'My patio', bg:'cl-bg-patio', col:'#D9F0D2', who:'cl-rex', whoName:'Captain Rex', icon:'cl-i-bbq', tab:'Patio' },
+ beach:  { name:'My beach house', bg:'cl-bg-beach', col:'#CFEFF7', who:'cl-rex', whoName:'Captain Rex', icon:'cl-i-palm-tree', tab:'Beach', home:'cl-h-beach' },
+ cabin:  { name:'My snow cabin', bg:'cl-bg-cabin', col:'#DCE6F2', who:'cl-rex', whoName:'Captain Rex', icon:'cl-i-snowman', tab:'Cabin', home:'cl-h-cabin' }
 };
+ROOMS.house.tab='Bedroom'; ROOMS.kitchen.tab='Kitchen'; ROOMS.garden.tab='Garden';
 // Personajes: 1-3 gratis, 4-12 originales, 13-24 nueva colección (algunos son premio)
 const AVS = Array.from({length:24},(_,i)=>{ const n=i+1; let price=n<=3?0:n<=12?20+Math.floor(i/3)*10:[40,40,40,40,0,0,0,60,90,70,70,100][n-13];
   const reward={17:'kitchen',18:'garden',19:'build'}[n]||null; return {id:'cl-av'+n, price, reward} });
@@ -543,7 +588,8 @@ function migrate(s){
   if(!s.day||typeof s.day!=='object') s.day={};
   s.pets = s.pets || { owned:[], active:null, data:{} };
   s.day = s.day || {};
-  s.bz = s.bz || 0; s.v = 54; s.ts = s.ts || 0;
+  if(!Array.isArray(s.homes)) s.homes=[]; s.homes=s.homes.filter(h=>h==='beach'||h==='cabin');
+  s.bz = s.bz || 0; s.v = 56; s.ts = s.ts || 0;
   return s;
 }
 let S = migrate(load());
@@ -927,7 +973,7 @@ let R=null, busy=false;
 function openMine(){ sfx.click(); R={n:0,total:10,correct:0,streak:0,best:0,got:{}}; show('mine'); nextBlock(true) }
 function leaveMine(){ if(R&&R.n>0&&R.n<R.total){ if(!confirm('Leave the mine? Your materials are already saved.')) return } R=null; show('island') }
 function nextBlock(){
-  R.mat = Math.random()<.12 ? 'chest' : weighted(RARITY);
+  R.mat = Math.random()<.12 ? 'chest' : weighted(mineRarity());
   $('blockImg').src = R.mat==='chest' ? IMG('cl-r-chest') : IMG(MATS[R.mat]);
   $('crack').setAttribute('class','crack'); $('block').style.visibility='visible';
   $('pipSay').textContent = R.mat==='chest' ? 'A mystery chest!' : RARE.includes(R.mat) ? 'Wow, a rare block!' : pick(['Let\'s mine!','You can do it!','Answer to break it!','Go go go!']);
@@ -1003,15 +1049,18 @@ function endRound(){
 /* ===================== TALLER / PLANOS ===================== */
 let CROOM='house', CFROM='island';
 function canMake(it){ return Object.keys(it.cost).every(m=>(S.inv[m]||0)>=it.cost[m]) }
-function openCraft(room){ sfx.click(); if(room!=='house'&&S.made.length<UNLOCK_BZ) room='house'; CFROM=SCREEN==='house'?'house':SCREEN==='build'?'build':'island'; CROOM=room; show('workshop'); renderRecipes() }
+function openCraft(room){ sfx.click(); if((room!=='house'&&S.made.length<UNLOCK_BZ)||!homeOwned(room)) room='house'; CFROM=SCREEN==='house'?'house':SCREEN==='build'?'build':'island'; CROOM=room; show('workshop'); renderRecipes() }
 function craftBack(){ if(CFROM==='house') openRoom(CROOM); else if(CFROM==='build') openBuild(); else show('island') }
 function renderRecipes(){
   const R0=ROOMS[CROOM], open=S.made.length>=UNLOCK_BZ;
   $('wTitle').innerHTML=`<img src="${IMG(R0.who)}" alt="">${CROOM==='house'?'Workshop':'Blueprints'}`;
   $('wWhoImg').src=IMG(R0.who); $('wWho').textContent=R0.whoName+':';
   $('junoSay').textContent = CROOM==='house' ? 'Pick something to craft. Read the recipe!' : 'Pick a blueprint. Read it carefully!';
-  $('wTabs').innerHTML = Object.keys(ROOMS).map(r=>{ const lk=r!=='house'&&!open; return `<button class="${r===CROOM?'sel':''} ${lk?'lk':''}" data-r="${r}">${lk?`<img src="${IMG('cl-u-padlock')}">`:''}${r==='house'?'Bedroom':r==='kitchen'?'Kitchen':'Garden'} <small>${madeIn(r)}/${totalIn(r)}</small></button>` }).join('');
-  $('wTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{ const r=b.dataset.r; if(r!=='house'&&!open){ sfx.no(); toast(`Craft ${UNLOCK_BZ} items to open it · ${S.made.length}/${UNLOCK_BZ}`); return } sfx.click(); CROOM=r; renderRecipes() });
+  const lock=r=>(r!=='house'&&!open)||!homeOwned(r);
+  $('wTabs').innerHTML = Object.keys(ROOMS).map(r=>{ const lk=lock(r); return `<button class="${r===CROOM?'sel':''} ${lk?'lk':''}" data-r="${r}">${lk?`<img src="${IMG('cl-u-padlock')}">`:''}${ROOMS[r].tab} <small>${madeIn(r)}/${totalIn(r)}</small></button>` }).join('');
+  { const sel=$('wTabs').querySelector('.sel'); if(sel) sel.scrollIntoView({inline:'center',block:'nearest'}) }
+  $('wTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{ const r=b.dataset.r; if(r!=='house'&&!open){ sfx.no(); toast(`Craft ${UNLOCK_BZ} items to open it · ${S.made.length}/${UNLOCK_BZ}`); return }
+    if(!homeOwned(r)){ sfx.no(); toast(`Get the ${ROOMS[r].name.replace('My ','')} in the Build Zone first`); return } sfx.click(); CROOM=r; renderRecipes() });
   const list=ITEMS.filter(it=>it.room===CROOM).sort((a,b)=>(S.made.includes(a.k)-S.made.includes(b.k))||(canMake(b)-canMake(a)));
   $('recipes').innerHTML = list.map(it=>`<div class="rc ${S.made.includes(it.k)?'made':''}" onclick="tryCraft('${it.k}')"><img class="it" src="${IMG(it.img)}" alt=""><div class="nm">${it.n}</div>
     <div class="cost">${Object.keys(it.cost).map(m=>`<span class="${(S.inv[m]||0)>=it.cost[m]?'':'no'}"><img src="${IMG(MATS[m])}">${S.inv[m]||0}/${it.cost[m]}</span>`).join('')}</div></div>`).join('');
@@ -1030,7 +1079,7 @@ function recipeQ(it){
   }
   const t = it.room==='house'
     ? `First, collect ${listEn(it.cost)}. Then, place them carefully on the crafting table and combine them to build a sturdy <b>${nm}</b>. Don't forget: if you are missing a material, you won't be able to finish it.`
-    : `Captain Rex's blueprint: to build ${art(nm)} <b>${nm}</b> for your ${it.room}, you will need ${listEn(it.cost)}. Measure twice and build once, because a missing material means the job is not finished.`;
+    : `Captain Rex's blueprint: to build ${art(nm)} <b>${nm}</b> for ${ROOMS[it.room].name.replace('My','your')}, you will need ${listEn(it.cost)}. Measure twice and build once, because a missing material means the job is not finished.`;
   if(mats.length>=2){ const no=pick(others); return { text:t, say:t.replace(/<[^>]+>/g,''), q:`Which material is <u>NOT</u> needed for the ${nm}?`, a:no, opts:shuf([no,...mats.slice(0,3)]) } }
   return { text:t, say:t.replace(/<[^>]+>/g,''), q:`According to the ${it.room==='house'?'recipe':'blueprint'}, how many pieces of ${m} are required?`, a:NUMW[n], opts:nums.map(x=>NUMW[x]) };
 }
@@ -1065,7 +1114,7 @@ function craft(it){
 function unlockBuild(){
   save(); sfx.win(); confetti(80);
   modal(`<div style="display:flex;justify-content:center;align-items:flex-end;gap:6px"><img src="${IMG('cl-rex')}" style="height:140px"><img src="${IMG('cl-u-key')}" style="height:70px"></div>
-   <h2>The Build Zone is open!</h2><p><b>Captain Rex:</b> Great work, builder! Now you can build a <b>kitchen</b> and a <b>garden</b>.</p>
+   <h2>The Build Zone is open!</h2><p><b>Captain Rex:</b> Great work, builder! Now you can build a <b>kitchen</b>, a <b>garden</b> and a <b>patio</b>. Later, you can get new houses!</p>
    <button class="btn" style="width:100%" onclick="closeModal();openBuild();checkRewards()">Let's build!</button>`);
 }
 
@@ -1078,14 +1127,40 @@ function openBuild(){
   show('build'); renderBuild();
 }
 function renderBuild(){
-  $('spaces').innerHTML = ['kitchen','garden'].map(r=>{ const R0=ROOMS[r], n=madeIn(r), t=totalIn(r);
-    return `<div class="space" onclick="openRoom('${r}')"><img class="th" src="${IMG(R0.bg)}" alt=""><h3>${r==='kitchen'?'Kitchen':'Garden'}</h3><div class="mini"><i style="width:${n/t*100}%"></i></div><small>${n}/${t} built</small></div>` }).join('')
-   + `<div class="space" style="grid-column:span 2;display:flex;align-items:center;gap:10px;text-align:left" onclick="openRoom('house')"><img src="${IMG('cl-house')}" style="width:70px" alt=""><div><h3>My bedroom</h3><small>${madeIn('house')}/${totalIn('house')} crafted</small></div></div>`;
+  const card=r=>{ const R0=ROOMS[r], n=madeIn(r), t=totalIn(r);
+    return `<div class="space" onclick="openRoom('${r}')"><img class="th" src="${IMG(R0.bg)}" alt=""><h3>${R0.tab}</h3><div class="mini"><i style="width:${n/t*100}%"></i></div><small>${n}/${t} built</small></div>` };
+  const home=r=>{ const R0=ROOMS[r], h=HOMES[r], own=homeOwned(r), n=madeIn(r), t=totalIn(r), ready=homeReady(r);
+    if(own) return `<div class="space home" onclick="openRoom('${r}')"><img class="th" src="${IMG(R0.home)}" alt=""><h3>${R0.tab}</h3><div class="mini"><i style="width:${n/t*100}%"></i></div><small>${n}/${t} built</small></div>`;
+    return `<div class="space home lockd" onclick="buyHome('${r}')"><img class="th" src="${IMG(R0.home)}" alt=""><h3>${R0.tab}</h3>
+      <small>${ready?'Ready to buy!':h.why}</small><div class="price"><img src="${IMG('cl-r-coin')}">${h.price}</div></div>` };
+  $('spaces').innerHTML = card('kitchen')+card('garden')
+   + `<div class="space" style="grid-column:span 2" onclick="openRoom('patio')"><img class="th wide" src="${IMG(ROOMS.patio.bg)}" alt=""><h3>Patio <span class="tagnew">NEW</span></h3><div class="mini"><i style="width:${madeIn('patio')/totalIn('patio')*100}%"></i></div><small>${madeIn('patio')}/${totalIn('patio')} built</small></div>`
+   + `<h4 class="bzsub">My houses</h4>`
+   + `<div class="space" style="grid-column:span 2;display:flex;align-items:center;gap:10px;text-align:left" onclick="openRoom('house')"><img src="${IMG('cl-h-cottage')}" style="width:80px" alt=""><div><h3>My bedroom</h3><small>${madeIn('house')}/${totalIn('house')} crafted</small></div></div>`
+   + home('beach') + home('cabin')
+   + `<div class="space home lockd soonh" style="grid-column:span 2;display:flex;align-items:center;gap:10px;text-align:left" onclick="sfx.click();toast('The treehouse is coming soon!')"><img src="${IMG('cl-h-treehouse')}" style="width:80px" alt=""><div><h3>Treehouse</h3><small>Coming soon</small></div></div>`;
+  refresh();
+}
+function buyHome(r){
+  const R0=ROOMS[r], h=HOMES[r], ready=homeReady(r), money=S.coins>=h.price; sfx.click();
+  const obOk=!h.obby||(S.obby&&S.obby.done||[]).includes(h.obby);
+  const row=(ok,t)=>`<div style="display:flex;align-items:center;gap:8px;font-weight:800;margin:4px 0;text-align:left"><span style="width:26px;height:26px;border-radius:50%;border:2px solid var(--navy);display:grid;place-items:center;background:${ok?'var(--ok)':'#fff'};color:#fff">${ok?'✓':''}</span>${t}</div>`;
+  modal(`<img src="${IMG(R0.home)}" style="width:170px"><h2>${R0.name.replace('My ','The ')}</h2>
+    <div style="display:inline-block;margin:6px 0 12px">${row(S.made.length>=h.items,`Craft ${h.items} items · ${Math.min(S.made.length,h.items)}/${h.items}`)}${h.obby?row(obOk,'Clear the Ice Bridge in The Obby'):''}${row(money,`${h.price} coins · you have ${S.coins}`)}</div>
+    ${ready&&money?`<button class="btn" style="width:100%" onclick="getHome('${r}')">Buy it · ${h.price} coins</button>`:`<button class="btn w" style="width:100%" onclick="closeModal()">OK</button>`}`);
+}
+function getHome(r){
+  const h=HOMES[r]; if(!homeReady(r)||S.coins<h.price) return;
+  S.coins-=h.price; S.homes.push(r); save(); sfx.win(); confetti(80);
+  try{ window.MovaAuth&&MovaAuth.save('craftland','CraftLand · New house: '+ROOMS[r].name,1,1,{kind:'home',home:r,stage:S.stage}) }catch(e){}
+  modal(`<img class="hero" src="${IMG(ROOMS[r].home)}" style="height:160px"><h2>It's yours!</h2><p><b>Captain Rex:</b> Welcome to ${ROOMS[r].name.replace('My','your')}! Read my blueprints to fill it with furniture.</p>
+    <button class="btn" style="width:100%" onclick="closeModal();openCraft('${r}')">See the blueprints</button>`);
+  renderBuild();
 }
 
 /* ===================== HABITACIONES ===================== */
 let CUR='house';
-function openRoom(r){ sfx.click(); if(r!=='house'&&S.made.length<UNLOCK_BZ){ openBuild(); return } CUR=r; show('house'); renderRoom() }
+function openRoom(r){ sfx.click(); if((r!=='house'&&S.made.length<UNLOCK_BZ)||!homeOwned(r)){ openBuild(); return } CUR=r; show('house'); renderRoom() }
 function roomBack(){ if(CUR==='house') show('island'); else openBuild() }
 function renderRoom(){
   const R0=ROOMS[CUR], room=$('roomIn');
@@ -1232,7 +1307,7 @@ $('modal').addEventListener('click',e=>{ if(e.target.id==='modal') closeModal() 
 [today,renderHome,refresh].forEach(f=>{ try{ f() }catch(e){ console.error('CraftLand',e) } });
 try{ Cloud.pull() }catch(e){}
 window.addEventListener('error',e=>{ try{ if(!$('avRow').children.length){ S=migrate(null); renderHome() } }catch(x){} });
-['cl-pip-yay','cl-juno-yay','cl-r-chest','cl-mine','cl-workshop','cl-house','cl-island','cl-bg-kitchen','cl-bg-garden','cl-u-heart','cl-u-gift'].forEach(n=>{ const i=new Image(); i.src=IMG(n) });
+['cl-pip-yay','cl-juno-yay','cl-r-chest','cl-mine','cl-workshop','cl-house','cl-island','cl-bg-kitchen','cl-bg-garden','cl-bg-patio','cl-u-heart','cl-u-gift'].forEach(n=>{ const i=new Image(); i.src=IMG(n) });
 </script>
 </body>
 </html>
