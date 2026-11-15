@@ -9,6 +9,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
 <script src="mova-auth.js"></script>
+<script src="ruta-data.js"></script>
+<script src="vocab-extra.js"></script>
+<script src="fc-extra.js"></script>
 <style>
 
 :root{--bg:#F5F3FA;--lime:#D3F36B;--lila:#C7B5FF;--navy:#16274A;--ok:#3DBE6B;--bad:#F2545B;--gold:#FFC93C}
@@ -199,6 +202,7 @@ img{-webkit-user-drag:none;max-width:100%}
 .steps i{width:8px;height:8px;border-radius:50%;background:#d8d4e6}
 .steps i.on{background:var(--navy);width:20px;border-radius:6px}
 .tag{display:inline-block;background:var(--gold);border:2px solid var(--navy);border-radius:8px;padding:0 6px;font:800 11px 'Plus Jakarta Sans';margin-top:4px}
+.qimg{display:block;width:150px;height:150px;object-fit:contain;margin:0 auto 6px;border-radius:22px;background:#fff}.qsw{width:110px;height:110px;border-radius:26px;margin:0 auto 8px;border:3px solid rgba(21,25,43,.12)}.qnum{font:800 76px/1 "Bricolage Grotesque",sans-serif;text-align:center;color:#15192B;margin-bottom:4px}.opt.pic{padding:8px}.opt.pic img{display:block;width:84px;height:84px;object-fit:contain;margin:0 auto}
 </style>
 </head>
 <body>
@@ -356,19 +360,7 @@ img{-webkit-user-drag:none;max-width:100%}
 <script>
 /* ===================== BANCO DE PREGUNTAS ===================== */
 // KIDS: palabra ↔ dibujo. Cada palabra genera 2 tipos de pregunta (ver→elegir palabra, oír/leer→elegir dibujo)
-const KW = {
- animals:[['dog','🐶'],['cat','🐱'],['fish','🐟'],['bird','🐦'],['cow','🐮'],['pig','🐷'],['horse','🐴'],['duck','🦆'],['frog','🐸'],['lion','🦁'],['monkey','🐵'],['rabbit','🐰'],['bear','🐻'],['snake','🐍'],['elephant','🐘'],['turtle','🐢'],['bee','🐝'],['spider','🕷️'],['sheep','🐑'],['chicken','🐔']],
- food:[['apple','🍎'],['banana','🍌'],['bread','🍞'],['milk','🥛'],['egg','🥚'],['cake','🍰'],['pizza','🍕'],['cheese','🧀'],['carrot','🥕'],['orange','🍊'],['grapes','🍇'],['ice cream','🍦'],['cookie','🍪'],['water','💧'],['corn','🌽'],['strawberry','🍓'],['juice','🧃'],['sandwich','🥪']],
- colors:[['red','🟥'],['blue','🟦'],['green','🟩'],['yellow','🟨'],['orange','🟧'],['purple','🟪'],['black','⬛'],['white','⬜'],['brown','🟫']],
- things:[['ball','⚽'],['book','📘'],['pencil','✏️'],['chair','🪑'],['bed','🛏️'],['door','🚪'],['car','🚗'],['bus','🚌'],['house','🏠'],['tree','🌳'],['flower','🌸'],['sun','☀️'],['moon','🌙'],['star','⭐'],['rain','🌧️'],['hat','👒'],['shoes','👟'],['shirt','👕'],['bag','🎒'],['clock','⏰'],['key','🔑'],['boat','⛵'],['kite','🪁'],['drum','🥁'],['phone','📱'],['cup','🥤']],
- body:[['eye','👁️'],['ear','👂'],['nose','👃'],['mouth','👄'],['hand','✋'],['foot','🦶'],['tooth','🦷']],
- numbers:[['one','1️⃣'],['two','2️⃣'],['three','3️⃣'],['four','4️⃣'],['five','5️⃣'],['six','6️⃣'],['seven','7️⃣'],['eight','8️⃣'],['nine','9️⃣'],['ten','🔟']],
- actions:[['run','🏃'],['swim','🏊'],['sleep','😴'],['eat','😋'],['sing','🎤'],['read','📖'],['dance','💃'],['jump','🤸'],['cry','😢'],['laugh','😂']]
-};
-function kidsBank(){const out=[];for(const cat in KW){const L=KW[cat];L.forEach(([w,e],i)=>{
-  out.push({id:'k1'+cat+i,type:'pic',em:e,q:'What is it?',a:w,pool:L.map(x=>x[0]),say:w});
-  out.push({id:'k2'+cat+i,type:'word',q:w,a:e,pool:L.map(x=>x[1]),say:w,big:true,hint:'Find the picture'});
- });}return out;}
+
 
 // CHILDREN: frases cortas, completar
 const CH = [
@@ -430,7 +422,7 @@ function teenBank(){return TE.map((c,i)=>({id:'t'+i,type:'fill',q:c[0],a:c[1],op
 
 // LUNA: ropa, colores, números (por etapa)
 const LUNA = {
- kids:[['👕','shirt',['hat','sock','dress']],['👗','dress',['shirt','boots','cap']],['🧢','cap',['scarf','skirt','shoe']],['🧦','socks',['gloves','pants','hat']],['👖','jeans',['dress','shirt','coat']],['🧣','scarf',['shoes','cap','skirt']],['🧤','gloves',['socks','hat','jeans']],['🥾','boots',['gloves','dress','scarf']],['🟪','purple',['pink','blue','green']],['🟧','orange',['red','yellow','brown']],['🔢 7','seven',['six','eight','four']],['🔢 12','twelve',['twenty','two','eleven']]],
+ kids:[['<img src="tshirt.webp" style="width:120px;height:120px;object-fit:contain" alt="">','t-shirt',['dress','socks','boots']],['<img src="dress.webp" style="width:120px;height:120px;object-fit:contain" alt="">','dress',['skirt','shoes','jacket']],['<img src="socks.webp" style="width:120px;height:120px;object-fit:contain" alt="">','socks',['gloves','shoes','t-shirt']],['<img src="gloves.webp" style="width:120px;height:120px;object-fit:contain" alt="">','gloves',['socks','boots','dress']],['<img src="boots.webp" style="width:120px;height:120px;object-fit:contain" alt="">','boots',['shoes','gloves','skirt']],['<img src="shoes.webp" style="width:120px;height:120px;object-fit:contain" alt="">','shoes',['boots','socks','jacket']],['<img src="skirt.webp" style="width:120px;height:120px;object-fit:contain" alt="">','skirt',['dress','t-shirt','socks']],['<img src="jacket.webp" style="width:120px;height:120px;object-fit:contain" alt="">','jacket',['t-shirt','dress','gloves']],['<span style="display:inline-block;width:96px;height:96px;border-radius:22px;background:#9B6DDC"></span>','purple',['pink','blue','green']],['<span style="display:inline-block;width:96px;height:96px;border-radius:22px;background:#F28A2E"></span>','orange',['red','yellow','brown']],['7','seven',['six','eight','four']],['12','twelve',['twenty','two','eleven']]],
  children:[['It\'s sunny. Wear your ___.','sunglasses',['gloves','scarf','boots']],['It\'s snowing. Wear your ___.','coat',['shorts','sandals','t-shirt']],['How much is it? $15 = ___ dollars','fifteen',['fifty','five','sixteen']],['Red + yellow = ___','orange',['green','purple','pink']],['Blue + yellow = ___','green',['orange','brown','purple']],['Can I try ___ these jeans?','on',['in','at','up']],['These shoes are too ___. I need a bigger size.','small',['big','long','cheap']],['$30 = ___ dollars','thirty',['thirteen','three','forty']]],
  teens:[['These jeans don\'t ___ me. They\'re too tight.','fit',['suit','match','wear']],['That color really ___ you!','suits',['fits','wears','dresses']],['I\'d like to ___ these shoes for a bigger size.','exchange',['refund','repair','reserve']],['It\'s on sale: 50% ___.','off',['out','down','less']],['How much ___ these sneakers?','are',['is','does','do']],['Could I pay ___ card?','by',['with the','in','on']],['The sweater is made ___ wool.','of',['by','from to','with of']],['I can\'t ___ it. It\'s too expensive.','afford',['buy off','pay','spend']]]
 };
@@ -600,19 +592,82 @@ const madeIn = r => S.made.filter(k=>{ const it=ITEMS.find(x=>x.k===k); return i
 const totalIn = r => ITEMS.filter(x=>x.room===r).length;
 
 /* ===================== MAZO SIN REPETIR ===================== */
-function bankFor(stage){ return stage==='kids'?kidsBank():stage==='teens'?teenBank():childBank() }
+/* ===================== BANCO GRANDE POR NIVEL (Fase A) =====================
+   Usa las preguntas y el vocabulario de My Path (ruta-data.js) del nivel del alumno
+   y de los niveles anteriores como repaso. No repite una pregunta hasta pasar por todas. */
+const LV_ORDER={kids:['Pre-A1','A1','A1+','A2'],children:['A1','A1+','A2','A2+','B1','B1+'],teens:['A1','A1+','A2','A2+','B1','B1+','B2','C1']};
+const LV_DEFAULT={kids:3,children:2,teens:3};
+const SKIP_IMG=new Set(['vk2-banana.webp']);
+const KCOL=[['red','#E5484D'],['blue','#3E7BFA'],['green','#3DBE6B'],['yellow','#F5CF4B'],['orange','#F28A2E'],['purple','#9B6DDC'],['pink','#FF8FC0'],['black','#15192B'],['white','#FFFFFF'],['brown','#8B5A35'],['gray','#9AA0AE']];
+const KNUM=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty'];
+function myLevel(st){
+  const L=LV_ORDER[st]; let lv=null;
+  try{ const o=JSON.parse(localStorage.getItem('mova_ruta_v1')||'{}'); if(o.stage===st&&o.level) lv=o.level }catch(e){}
+  if(!lv&&U&&U.level) lv=String(U.level).toUpperCase().replace(/\s*PLUS/,'+').replace(/\s/g,'').replace('PRE-A1','Pre-A1');
+  return L.includes(lv)?lv:null;
+}
+function txt(s){ return String(s==null?'':s).replace(/<[^>]+>/g,'').replace(/&nbsp;/g,' ').trim() }
+function others(list,a,n){ return shuf([...new Set(list)].filter(x=>x&&x!==a)).slice(0,n) }
+const BANKS={};
+function bankFor(st){ const lv=myLevel(st)||'?', k=st+'|'+lv; if(!BANKS[k]) BANKS[k]=buildBank(st,lv); return BANKS[k] }
+function buildBank(st,lv){
+  const P=(window.MOVA_PATH||{})[st]||{}, L=LV_ORDER[st];
+  let top=L.indexOf(lv); if(top<0) top=Math.min(LV_DEFAULT[st],L.length-1);
+  const out=[];
+  L.slice(0,top+1).forEach((lvl,ix)=>{
+    const D=P[lvl]; if(!D) return;
+    const w = ix===top?4 : ix===top-1?2 : 1;
+    (D.topics||[]).forEach(t=>(t.q||[]).forEach((x,i)=>{
+      if(!Array.isArray(x[1])||x[1][x[2]]==null) return;
+      const opts=[...new Set(x[1].map(txt))], a=txt(x[1][x[2]]);
+      out.push({id:'g'+t.id+'-'+i,type:'fill',q:txt(x[0]),a,opts,ex:txt(x[3]),w});
+    }));
+    const vocab=D.vocab||[], allW=[].concat(...vocab.map(d=>d.w));
+    vocab.forEach((d,di)=>d.w.forEach((x,i)=>{
+      const id=st[0]+lvl+'-'+di+'-'+i;
+      if(st==='kids'){
+        if(!x[2]||SKIP_IMG.has(x[2])) return;
+        const ok=y=>y[2]&&!SKIP_IMG.has(y[2]);
+        const deck=d.w.filter(ok), pool=deck.length>=4?deck:allW.filter(ok);
+        out.push({id:'kp'+id,type:'pic',img:x[2],q:'What is it?',a:x[0],opts:[x[0],...others(pool.map(y=>y[0]),x[0],3)],say:x[0],big:true,w});
+        const ch=[x,...shuf(pool.filter(y=>y[0]!==x[0])).slice(0,3)], imgs={}; ch.forEach(y=>imgs[y[0]]=y[2]);
+        out.push({id:'kt'+id,type:'tap',q:'Listen and tap the picture.',a:x[0],opts:ch.map(y=>y[0]),imgs,say:x[0],w});
+      } else {
+        const src=d.w.length>=4?d.w:allW, def=txt(x[1]);
+        out.push({id:'vd'+id,type:'fill',q:`Which word means: <i>“${def}”</i>?`,a:x[0],opts:[x[0],...others(src.map(y=>y[0]),x[0],3)],w});
+        out.push({id:'vw'+id,type:'fill',q:`What does <b>${x[0]}</b> mean?`,a:def,opts:[def,...others(src.map(y=>txt(y[1])),def,3)],w});
+      }
+    }));
+    (window.MOVA_FC_EXTRA||[]).filter(dk=>dk.stage===st&&dk.level===lvl).forEach(dk=>{
+      const defs=dk.w.map(y=>txt(y[1]));
+      dk.w.forEach((x,i)=>out.push({id:'fx'+dk.id+'-'+i,type:'fill',q:txt((dk.ask||'What does “%” mean?').replace('%',x[0])),a:txt(x[1]),opts:[txt(x[1]),...others(defs,txt(x[1]),3)],w}));
+    });
+  });
+  if(st==='kids'){
+    KCOL.forEach(([c,h],i)=>out.push({id:'kc'+i,type:'swatch',col:h,q:'What color is it?',a:c,opts:[c,...others(KCOL.map(y=>y[0]),c,3)],say:c,big:true,w:1}));
+    const maxN=top>=2?20:10;
+    for(let n=1;n<=maxN;n++) out.push({id:'kn'+n,type:'num',num:n,q:'What number is it?',a:KNUM[n],opts:[KNUM[n],...others(KNUM.slice(1,maxN+1),KNUM[n],3)],say:KNUM[n],big:true,w:1});
+  }
+  if(st==='children') CH.forEach((c,i)=>out.push({id:'c'+i,type:'fill',q:c[0],a:c[1],opts:[c[1],...c[2]],w:1}));
+  if(st==='teens') TE.forEach((c,i)=>out.push({id:'t'+i,type:'fill',q:c[0],a:c[1],opts:[c[1],...c[2]],w:1}));
+  return out.filter(q=>q.opts.length>=2&&q.opts.includes(q.a));
+}
 function drawQ(){
-  const bank=bankFor(S.stage), used=S.used[S.stage]||[];
-  let pool=bank.filter(q=>!used.includes(q.id));
-  if(pool.length<4){ S.used[S.stage]=[]; pool=bank; }
-  const q=pick(pool); (S.used[S.stage]=S.used[S.stage]||[]).push(q.id); save();
-  if(q.type==='pic'||q.type==='word'){ const others=shuf(q.pool.filter(x=>x!==q.a)).slice(0,3); q.opts=shuf([q.a,...others]); }
-  else q.opts=shuf(q.opts);
-  return q;
+  const bank=bankFor(S.stage), key=S.stage+'|v2'; S.used=S.used||{};
+  const used=new Set(S.used[key]||[]);
+  let pool=bank.filter(q=>!used.has(q.id));
+  if(!pool.length){ S.used[key]=[]; pool=bank; }
+  let t=pool.reduce((a,q)=>a+(q.w||1),0), r=Math.random()*t, q=pool[pool.length-1];
+  for(const x of pool){ if((r-=(x.w||1))<0){ q=x; break } }
+  const u=(S.used[key]=S.used[key]||[]); u.push(q.id); if(u.length>700) S.used[key]=u.slice(-700);
+  delete S.used[S.stage]; save();
+  q=Object.assign({},q); q.opts=shuf(q.opts.slice()); return q;
 }
 function qHtml(q){
-  if(q.type==='pic') return `<div class="em">${q.em}</div><div class="q">${q.q}</div>`;
-  if(q.type==='word') return `<div class="q">${q.q}</div><div class="hint">${q.hint}</div><button class="say" onclick="speak('${q.say.replace(/'/g,"\\'")}')">🔊 Listen</button>`;
+  if(q.type==='pic') return `<img class="qimg" src="${q.img}" alt=""><div class="q">${q.q}</div>`;
+  if(q.type==='swatch') return `<div class="qsw" style="background:${q.col}"></div><div class="q">${q.q}</div>`;
+  if(q.type==='num') return `<div class="qnum">${q.num}</div><div class="q">${q.q}</div>`;
+  if(q.type==='tap') return `<div class="q">${q.q}</div><button class="say" onclick="speak(R.q.say)">🔊 Listen again</button>`;
   return `<div class="q">${q.q.replace('___','<span style="background:var(--lime);border-radius:8px;padding:0 10px">___</span>')}</div>`;
 }
 
@@ -712,14 +767,15 @@ function nextBlock(){
 function newQ(){
   busy=false; const q=R.q=drawQ();
   $('qbox').innerHTML=qHtml(q); $('qWrap').style.display='block';
-  $('opts').innerHTML=q.opts.map((o,i)=>`<button class="opt${q.big?' big':''}" data-i="${i}">${o}</button>`).join('');
+  const ev=v=>String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  $('opts').innerHTML=q.opts.map(o=>`<button class="opt${q.big?' big':''}${q.imgs?' pic':''}" data-v="${ev(o)}">${q.imgs?`<img src="${q.imgs[o]}" alt="">`:o}</button>`).join('');
   $('opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(b));
-  if(q.type==='word') setTimeout(()=>speak(q.say),250);
+  if(q.type==='tap') setTimeout(()=>speak(q.say),250);
   $('mCount').textContent=(R.n+1)+'/'+R.total; $('mProg').style.width=(R.n/R.total*100)+'%'; $('mStreak').textContent=R.streak;
 }
 function answer(btn){
   if(busy) return; busy=true; ac();
-  const q=R.q, ok=btn.textContent===q.a;
+  const q=R.q, ok=(btn.dataset.v||btn.textContent)===q.a;
   R.n++;
   if(ok){
     btn.classList.add('ok'); sfx.ok(); R.correct++; R.streak++; R.best=Math.max(R.best,R.streak); track('correct');
@@ -731,11 +787,11 @@ function answer(btn){
     breakBlock(mult);
   } else {
     btn.classList.add('bad'); sfx.no(); R.streak=0; $('combo').classList.remove('on'); $('mStreak').textContent=0;
-    $('opts').querySelectorAll('.opt').forEach(b=>{ if(b.textContent===q.a) b.classList.add('ok') });
-    $('pipSay').textContent = 'Oops! It\'s "'+q.a+'"';
+    $('opts').querySelectorAll('.opt').forEach(b=>{ if((b.dataset.v||b.textContent)===q.a) b.classList.add('ok') });
+    $('pipSay').textContent = 'Oops! It\'s "'+q.a+'"'+(q.ex?' · '+q.ex:'');
     if(S.stage==='kids'&&q.say) speak(q.say);
     $('block').classList.remove('hit'); void $('block').offsetWidth; $('block').classList.add('hit');
-    setTimeout(()=>{ if(R.n>=R.total) endRound(); else newQ() },1700);
+    setTimeout(()=>{ if(R.n>=R.total) endRound(); else newQ() },q.ex?2600:1700);
   }
 }
 function breakBlock(mult){
