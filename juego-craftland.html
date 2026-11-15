@@ -203,6 +203,26 @@ img{-webkit-user-drag:none;max-width:100%}
 .steps i.on{background:var(--navy);width:20px;border-radius:6px}
 .tag{display:inline-block;background:var(--gold);border:2px solid var(--navy);border-radius:8px;padding:0 6px;font:800 11px 'Plus Jakarta Sans';margin-top:4px}
 .qimg{display:block;width:150px;height:150px;object-fit:contain;margin:0 auto 6px;border-radius:22px;background:#fff}.qsw{width:110px;height:110px;border-radius:26px;margin:0 auto 8px;border:3px solid rgba(21,25,43,.12)}.qnum{font:800 76px/1 "Bricolage Grotesque",sans-serif;text-align:center;color:#15192B;margin-bottom:4px}.opt.pic{padding:8px}.opt.pic img{display:block;width:84px;height:84px;object-fit:contain;margin:0 auto}
+.oblist{flex:1;overflow:auto;padding:4px 12px 20px;display:grid;gap:12px;align-content:start}
+.obintro{display:flex;gap:10px;align-items:center;margin:4px 12px 12px;background:#fff;border:3px solid var(--navy);border-radius:18px;padding:8px 12px;box-shadow:0 4px 0 var(--navy);font:600 14px/1.35 'Plus Jakarta Sans'}.obintro img{width:58px;flex:none}
+.obc{display:flex;align-items:center;gap:12px;background:#fff;border:3px solid var(--navy);border-radius:20px;padding:10px;box-shadow:0 5px 0 var(--navy);cursor:pointer}.obc.off{opacity:.6}
+.obc-b{width:92px;height:84px;border-radius:14px;flex:none;position:relative;border:2px solid rgba(21,25,43,.15)}.obc-b img{position:absolute;width:34px}.obc-b img:nth-child(1){left:8px;bottom:6px}.obc-b img:nth-child(2){left:30px;bottom:26px}.obc-b img:nth-child(3){left:52px;bottom:46px}
+.obc-t{flex:1;min-width:0}.obc-t b{display:block;font:800 18px 'Bricolage Grotesque',sans-serif;color:var(--navy)}.obc-t span{display:block;font:700 13px 'Plus Jakarta Sans';color:#6A6F85;margin-top:2px}
+.obc-s{display:flex;align-items:center;gap:2px;margin-top:6px}.obc-s img{width:22px}.obc-s em{font:800 12px 'Plus Jakarta Sans';font-style:normal;margin-left:8px;background:#EEF9C6;border-radius:999px;padding:3px 8px}
+.obc-go{font-style:normal;width:40px;height:40px;border-radius:50%;background:var(--navy);color:#D3F36B;display:grid;place-items:center;font-size:16px;flex:none}.obc-lock{width:34px;flex:none}
+.obview{flex:1;min-height:200px;position:relative;overflow:hidden;margin:4px 12px 8px;border-radius:22px;border:3px solid var(--navy);background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,0)),radial-gradient(circle at 20% 15%,rgba(255,255,255,.9) 0 26px,transparent 27px),radial-gradient(circle at 80% 40%,rgba(255,255,255,.8) 0 20px,transparent 21px);box-shadow:0 5px 0 var(--navy)}
+.obview:after{content:"";position:absolute;left:0;right:0;bottom:0;height:46px;background:repeating-linear-gradient(90deg,#47b9d8 0 18px,#5cc8e4 18px 36px);border-top:3px solid #2f9fc0;z-index:3}
+.obtower{position:absolute;left:0;right:0;bottom:0;transition:transform .6s cubic-bezier(.3,.8,.3,1)}
+.obp{position:absolute;width:64px;transform:translateX(-50%)}.obp img{width:100%;display:block;filter:drop-shadow(0 6px 0 rgba(0,0,0,.18))}.obp.top{width:76px}
+.obcheck{position:absolute;transform:translateX(-50%);width:24px;height:24px;border-radius:50%;background:#D3F36B;border:2px solid var(--navy);font:800 13px/20px sans-serif;text-align:center;color:var(--navy);z-index:1}
+.obme{position:absolute;width:46px;transform:translateX(-50%);z-index:2;transition:left .45s ease,bottom .45s ease}.obme img{width:100%;display:block;filter:drop-shadow(0 4px 0 rgba(0,0,0,.2))}
+.obme.hop img{animation:obhop .45s ease}@keyframes obhop{0%{transform:translateY(0)}45%{transform:translateY(-46px) scale(1.05)}100%{transform:translateY(0)}}
+.obme.fall img{animation:obfall .9s ease-in}@keyframes obfall{0%{transform:none;opacity:1}55%{transform:translateY(160px) rotate(25deg);opacity:.2}56%{transform:translateY(-30px);opacity:0}100%{transform:none;opacity:1}}
+.obglitch{position:absolute;width:60px;transform:translateX(-50%);z-index:2}
+.obflag{position:absolute;width:40px;height:70px;z-index:1}.obflag i{position:absolute;left:4px;bottom:0;width:5px;height:70px;background:#6b4a2b;border-radius:3px}.obflag b{position:absolute;left:9px;top:2px;width:30px;height:22px;background:conic-gradient(#9B6DDC 0 25%,#D3F36B 0 50%,#9B6DDC 0 75%,#D3F36B 0);background-size:15px 11px}
+.obsay{left:10px;top:10px;max-width:70%;z-index:4}.obsay.pop{animation:obpop .3s ease}@keyframes obpop{0%{transform:scale(.85)}100%{transform:scale(1)}}
+.obtimer{display:none;height:10px;margin:0 12px 8px;background:#fff;border:2px solid var(--navy);border-radius:999px;overflow:hidden}.obtimer i{display:block;height:100%;background:#D3F36B;transition:width .1s linear}.obtimer.low i{background:#FF6B6B}
+#obQ .qimg{width:96px;height:96px}#obQ .q{font-size:17px}
 </style>
 </head>
 <body>
@@ -243,7 +263,7 @@ img{-webkit-user-drag:none;max-width:100%}
       <div class="zone" style="left:52%;top:28%;animation-delay:.4s" onclick="openCraft('house')"><img src="cl-juno.webp" alt=""><span>Workshop</span></div>
       <div class="zone" id="zBuild" style="left:78%;top:38%;animation-delay:.8s" onclick="openBuild()"><img src="cl-rex.webp" alt=""><span>Build Zone</span></div>
       <div class="zone" style="left:44%;top:60%;animation-delay:.2s" onclick="openShop()"><img src="cl-luna.webp" alt=""><span>Luna's Shop</span></div>
-      <div class="zone lock" style="left:76%;top:70%;animation-delay:.6s" onclick="soon('Glitch','cl-glitch')"><img src="cl-glitch.webp" alt=""><span>The Obby</span></div>
+      <div class="zone lock" id="zObby" style="left:76%;top:70%;animation-delay:.6s" onclick="openObby()"><img src="cl-glitch.webp" alt=""><span>The Obby</span></div>
     </div></div>
     <div class="inv" id="inv1"></div>
   </div>
@@ -279,6 +299,23 @@ img{-webkit-user-drag:none;max-width:100%}
 </section>
 
 <!-- CRAFT (Workshop / Blueprints) -->
+<section class="scr" id="obbyMenu" style="background:linear-gradient(#efe6ff,#F5F3FA)">
+  <div class="layer">
+    <div class="hud"><button class="ib" onclick="show('island')">←</button><div class="ttlpill"><img src="cl-glitch.webp" alt="">The Obby</div><div class="sp"></div><div class="pill"><img src="cl-r-coin.webp" alt=""><span class="cCoins">0</span></div></div>
+    <div class="obintro"><img src="cl-glitch.webp" alt=""><div><b>Glitch:</b> Climb my tower if you can! Every jump is a grammar question. Fall 3 times and you lose!</div></div>
+    <div id="obList" class="oblist"></div>
+  </div>
+</section>
+<section class="scr" id="obby">
+  <div class="layer">
+    <div class="hud"><button class="ib" onclick="leaveObby()">←</button><div class="pill" id="obHearts" style="padding:3px 8px;gap:2px"></div><div class="pill" style="padding-left:10px"><span id="obTime">0:00</span></div><div class="sp"></div><div class="pill" style="padding-left:10px"><b id="obName" style="margin-right:6px"></b><span id="obStep">0/8</span></div></div>
+    <div class="prog"><i id="obProg"></i></div>
+    <div class="obview" id="obView"><div class="obtower" id="obTower"></div><div class="bubble obsay" id="obSay">…</div></div>
+    <div class="obtimer" id="obTimer"><i></i></div>
+    <div class="qbox" id="obQ"></div>
+    <div class="opts" id="obOpts"></div>
+  </div>
+</section>
 <section class="scr" id="workshop">
   <div class="bgimg" style="background-image:url(cl-workshop.webp)"></div>
   <div class="layer">
@@ -663,6 +700,137 @@ function drawQ(){
   delete S.used[S.stage]; save();
   q=Object.assign({},q); q.opts=shuf(q.opts.slice()); return q;
 }
+/* ===================== THE OBBY (Fase B) =====================
+   Torre de obstáculos de Glitch: cada salto es una pregunta de gramática.
+   3 pistas que se desbloquean en orden; vidas, tiempo y récords. */
+const UNLOCK_OBBY = 12;
+const COURSES = [
+  { id:1, name:'Grass Run',    steps:8,  time:0,  block:'cl-b-grass',    coins:20, prize:{gold:1},            sky:'linear-gradient(#bfe6f7,#e9f6ff)' },
+  { id:2, name:'Ice Bridge',   steps:10, time:20, block:'cl-b-ice',      coins:35, prize:{amethyst:1,gold:1}, sky:'linear-gradient(#cfe0ff,#eef3ff)' },
+  { id:3, name:'Crystal Peak', steps:12, time:12, block:'cl-b-amethyst', coins:60, prize:{diamond:1,ruby:1},  sky:'linear-gradient(#e3d4ff,#f6efff)' }
+];
+const OB_X=[30,64,44,72,26,58,36,70,30,62,46,68,34];
+const GLITCH_TAUNT=['Ha! You can\'t pass!','Too easy for me!','Watch your step!','I built this tower!','Think fast!','Nope, not today!'];
+const GLITCH_SAD=['Grr! Lucky jump!','How did you do that?!','Okay, okay… nice one.','My tower is falling apart!'];
+let OB=null;
+function obState(){ S.obby=S.obby||{done:[],best:{},stars:{},runs:0}; return S.obby }
+function obbyOpen(){ return S.made.length>=UNLOCK_OBBY }
+function openObby(){
+  sfx.click();
+  if(!obbyOpen()){
+    modal(`<img class="hero" src="${IMG('cl-glitch')}"><h2>Glitch's Obby</h2><p>Glitch locked his tower!<br>It opens when you craft <b>${UNLOCK_OBBY} items</b>.</p>
+     <div class="mini" style="height:16px"><i style="width:${Math.min(100,S.made.length/UNLOCK_OBBY*100)}%"></i></div><p style="margin-top:4px"><b>${S.made.length}/${UNLOCK_OBBY}</b></p>
+     <button class="btn" onclick="closeModal();openCraft('house')">Go to the Workshop</button>`); return }
+  const o=obState(); show('obbyMenu');
+  $('obList').innerHTML=COURSES.map((c,i)=>{
+    const open=i===0||o.done.includes(COURSES[i-1].id), st=o.stars[c.id]||0, best=o.best[c.id];
+    return `<div class="obc ${open?'':'off'}" onclick="${open?`startObby(${c.id})`:`toast('Beat ${COURSES[i-1].name} first!')`}">
+      <div class="obc-b" style="background:${c.sky}"><img src="${IMG(c.block)}" alt=""><img src="${IMG(c.block)}" alt=""><img src="${IMG(c.block)}" alt=""></div>
+      <div class="obc-t"><b>${i+1}. ${c.name}</b><span>${c.steps} jumps · ${c.time?c.time+' s per question':'no timer'}</span>
+      <div class="obc-s">${[0,1,2].map(k=>`<img src="${IMG('cl-r-star')}" style="${k<st?'':'filter:grayscale(1) opacity(.3)'}">`).join('')}${best?`<em>Best ${fmtT(best)}</em>`:''}</div></div>
+      ${open?'<i class="obc-go">▶</i>':`<img class="obc-lock" src="${IMG('cl-u-padlock')}" alt="">`}</div>` }).join('');
+}
+function fmtT(s){ s=Math.round(s); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0') }
+function obQ(){
+  const all=bankFor(S.stage);
+  let bank=S.stage==='kids'?all:all.filter(q=>/^(g|c\d|t\d)/.test(q.id));
+  if(bank.length<20) bank=all;
+  const key=S.stage+'|obby', used=new Set(S.used[key]||[]);
+  let pool=bank.filter(q=>!used.has(q.id)); if(!pool.length){ S.used[key]=[]; pool=bank }
+  let t=pool.reduce((a,q)=>a+(q.w||1),0), r=Math.random()*t, q=pool[pool.length-1];
+  for(const x of pool){ if((r-=(x.w||1))<0){ q=x; break } }
+  const u=(S.used[key]=S.used[key]||[]); u.push(q.id); if(u.length>500) S.used[key]=u.slice(-500); save();
+  q=Object.assign({},q); q.opts=shuf(q.opts.slice()); return q;
+}
+function startObby(id){
+  closeModal(); sfx.ok(); const c=COURSES.find(x=>x.id===id);
+  OB={c,pos:0,lives:3,lost:0,start:Date.now(),busy:false,q:null,tmr:null,left:0};
+  show('obby'); $('obby').style.background=c.sky; $('obName').textContent=c.name;
+  const tw=$('obTower'); const H=120+c.steps*92+150; tw.style.height=H+'px';
+  let h='';
+  for(let i=0;i<=c.steps;i++){
+    const x=OB_X[i%OB_X.length], y=60+i*92, last=i===c.steps;
+    h+=`<div class="obp${last?' top':''}" style="left:${x}%;bottom:${y}px"><img src="${IMG(last?'cl-b-gold':c.block)}" alt=""></div>`;
+    if(i>0&&i<c.steps&&i%3===0) h+=`<div class="obcheck" style="left:${x}%;bottom:${y+64}px">✓</div>`;
+  }
+  const xt=OB_X[c.steps%OB_X.length], yt=60+c.steps*92;
+  h+=`<img class="obglitch" id="obGlitch" src="${IMG('cl-glitch')}" style="left:calc(${xt}% + 10px);bottom:${yt+52}px" alt="Glitch">`;
+  h+=`<div class="obflag" style="left:calc(${xt}% - 46px);bottom:${yt+56}px"><i></i><b></b></div>`;
+  h+=`<div class="obme" id="obMe"><img src="${IMG(S.av||'cl-av1')}" alt=""></div>`;
+  tw.innerHTML=h; obPlace(false); obHearts(); obSay('Welcome to my tower! Answer to jump!');
+  clearInterval(OB.clock); OB.clock=setInterval(()=>{ if(OB) $('obTime').textContent=fmtT((Date.now()-OB.start)/1000) },500);
+  setTimeout(obNext,700);
+}
+function obPlace(anim){
+  const c=OB.c, i=OB.pos, x=OB_X[i%OB_X.length], y=60+i*92, me=$('obMe');
+  me.style.left=`calc(${x}% + 6px)`; me.style.bottom=(y+52)+'px';
+  if(anim){ me.classList.remove('hop'); void me.offsetWidth; me.classList.add('hop') }
+  const view=$('obView'), vh=view.clientHeight, H=$('obTower').offsetHeight;
+  const off=Math.max(0,Math.min(H-vh, y-vh*0.28));
+  $('obTower').style.transform=`translateY(${off}px)`;
+  $('obProg').style.width=(i/c.steps*100)+'%'; $('obStep').textContent=i+'/'+c.steps;
+}
+function obHearts(){ $('obHearts').innerHTML=[0,1,2].map(k=>`<img src="${IMG('cl-u-heart')}" style="${k<OB.lives?'':'filter:grayscale(1) opacity(.3)'}">`).join('') }
+function obSay(t){ const b=$('obSay'); b.textContent=t; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop') }
+function obNext(){
+  if(!OB) return; OB.busy=false; const q=OB.q=obQ();
+  $('obQ').innerHTML=qHtml(q);
+  const ev=v=>String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  $('obOpts').innerHTML=q.opts.map(o=>`<button class="opt${q.big?' big':''}${q.imgs?' pic':''}" data-v="${ev(o)}">${q.imgs?`<img src="${q.imgs[o]}" alt="">`:o}</button>`).join('');
+  $('obOpts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>obAnswer(b));
+  if(q.type==='tap') setTimeout(()=>speak(q.say),250);
+  clearInterval(OB.tmr); const bar=$('obTimer');
+  if(OB.c.time){ OB.left=OB.c.time; bar.style.display='block'; bar.firstChild.style.width='100%';
+    OB.tmr=setInterval(()=>{ if(!OB||OB.busy) return; OB.left-=.1; bar.firstChild.style.width=Math.max(0,OB.left/OB.c.time*100)+'%';
+      bar.classList.toggle('low',OB.left<4); if(OB.left<=0){ clearInterval(OB.tmr); obAnswer(null) } },100);
+  } else bar.style.display='none';
+}
+function obAnswer(btn){
+  if(!OB||OB.busy) return; OB.busy=true; ac(); clearInterval(OB.tmr);
+  const q=OB.q, ok=!!btn&&(btn.dataset.v)===q.a;
+  $('obOpts').querySelectorAll('.opt').forEach(b=>{ if(b.dataset.v===q.a) b.classList.add('ok') });
+  if(ok){
+    btn.classList.add('ok'); sfx.ok(); track('correct'); OB.pos++; obPlace(true);
+    if(S.stage==='kids'&&q.say) setTimeout(()=>speak(q.say),300);
+    if(OB.pos>=OB.c.steps){ setTimeout(obWin,700); return }
+    if(OB.pos%3===0){ sfx.coin(); obSay('Checkpoint! '+pick(GLITCH_SAD)) } else obSay(pick(GLITCH_SAD));
+    setTimeout(obNext,900);
+  } else {
+    if(btn) btn.classList.add('bad'); sfx.no(); OB.lives--; OB.lost++; obHearts();
+    const me=$('obMe'); me.classList.remove('fall'); void me.offsetWidth; me.classList.add('fall');
+    const back=OB.pos%3; if(back&&OB.lives>0){ OB.pos-=back; setTimeout(()=>obPlace(false),900) }
+    obSay((btn?'':'Time\'s up! ')+'It\'s "'+q.a+'"'+(q.ex?' · '+q.ex:''));
+    if(OB.lives<=0){ setTimeout(obLose,1600); return }
+    setTimeout(obNext,q.ex?2800:1900);
+  }
+}
+function obEnd(){ clearInterval(OB&&OB.tmr); clearInterval(OB&&OB.clock) }
+function obWin(){
+  const c=OB.c, o=obState(), secs=(Date.now()-OB.start)/1000; obEnd();
+  const st=OB.lost===0?3:OB.lost===1?2:1, first=!o.done.includes(c.id);
+  const rec=!o.best[c.id]||secs<o.best[c.id];
+  if(first) o.done.push(c.id); if(rec) o.best[c.id]=Math.round(secs); o.stars[c.id]=Math.max(o.stars[c.id]||0,st); o.runs++;
+  const coins=first?c.coins:Math.round(c.coins/2); S.coins+=coins; S.stars+=st;
+  if(first) Object.keys(c.prize).forEach(m=>S.inv[m]=(S.inv[m]||0)+c.prize[m]);
+  track('obby'); track('stars',st); save(); refresh();
+  $('obGlitch').src=IMG('cl-glitch-sad'); obSay('Noooo! You beat my tower!');
+  try{ window.MovaAuth&&MovaAuth.save('craftland','CraftLand · The Obby · '+c.name+' ('+S.stage+')',c.steps,c.steps+OB.lost,{kind:'round',zone:'obby',course:c.id,stage:S.stage,stars:st,secs:Math.round(secs)}) }catch(e){}
+  sfx.win(); confetti(70);
+  const prize=first?Object.keys(c.prize).map(k=>`<span class="pill" style="display:inline-flex;margin:3px"><img src="${IMG(MATS[k])}">${c.prize[k]}</span>`).join(''):'';
+  const nxt=COURSES.find(x=>x.id===c.id+1);
+  setTimeout(()=>modal(`<img class="hero" src="${IMG('cl-glitch-sad')}"><h2>You beat Glitch!</h2>
+    <div style="display:flex;justify-content:center;gap:4px;margin:4px 0">${[0,1,2].map(i=>`<img src="${IMG('cl-r-star')}" style="width:40px;${i<st?'':'filter:grayscale(1) opacity(.3)'}">`).join('')}</div>
+    <p><b>${c.name}</b> in <b>${fmtT(secs)}</b>${rec&&!first?' · <b>New record!</b>':''}</p>
+    <div style="margin-bottom:8px"><span class="pill" style="display:inline-flex;margin:3px"><img src="${IMG('cl-r-coin')}">+${coins}</span>${prize}</div>
+    ${first&&nxt?`<p style="margin-top:0">New course unlocked: <b>${nxt.name}</b>!</p>`:''}
+    <div style="display:flex;gap:8px"><button class="btn w" style="flex:1" onclick="closeModal();startObby(${c.id})">Again</button><button class="btn" style="flex:1" onclick="closeModal();${nxt&&o.done.includes(c.id)?`startObby(${nxt.id})`:'openObby()'}">${nxt?'Next':'Courses'}</button></div>`),1100);
+}
+function obLose(){
+  const c=OB.c; obEnd(); sfx.no();
+  modal(`<img class="hero" src="${IMG('cl-glitch')}"><h2>Glitch wins this time!</h2><p>You got to jump <b>${OB.pos}/${c.steps}</b>.<br>Every question is practice. Try again!</p>
+   <div style="display:flex;gap:8px"><button class="btn w" style="flex:1" onclick="closeModal();openObby()">Courses</button><button class="btn" style="flex:1" onclick="closeModal();startObby(${c.id})">Try again</button></div>`);
+}
+function leaveObby(){ if(OB&&OB.pos>0&&!confirm('Leave the Obby? You will start this course again.')) return; obEnd(); OB=null; openObby() }
 function qHtml(q){
   if(q.type==='pic') return `<img class="qimg" src="${q.img}" alt=""><div class="q">${q.q}</div>`;
   if(q.type==='swatch') return `<div class="qsw" style="background:${q.col}"></div><div class="q">${q.q}</div>`;
@@ -725,6 +893,8 @@ function renderIsland(){
   z.classList.toggle('lock',!open); z.classList.toggle('new',open&&!S.bzSeen);
   const old=z.querySelector('.need'); if(old) old.remove();
   if(!open){ const d=document.createElement('div'); d.className='need'; d.textContent=`Craft ${UNLOCK_BZ} items · ${n}/${UNLOCK_BZ}`; z.appendChild(d) }
+  const zo=$('zObby'); if(zo){ const oo=obbyOpen(); zo.classList.toggle('lock',!oo); zo.classList.toggle('new',oo&&!(S.obby&&S.obby.runs)); const q=zo.querySelector('.need'); if(q) q.remove();
+    if(!oo){ const d=document.createElement('div'); d.className='need'; d.textContent=`Craft ${UNLOCK_OBBY} items · ${Math.min(n,UNLOCK_OBBY)}/${UNLOCK_OBBY}`; zo.appendChild(d) } }
   const p=S.pets.active; $('petBtnImg').src = p ? IMG('cl-pet-'+p) : IMG('cl-u-heart');
   missionBadge();
 }
