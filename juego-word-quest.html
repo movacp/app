@@ -99,6 +99,7 @@ h2{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-siz
 .wq-hint{border:0;background:none;color:var(--muted);font:700 13px inherit;font-family:inherit;cursor:pointer;justify-self:center;text-decoration:underline}
 .wq-first{font-size:13px;font-weight:700;color:var(--muted);text-align:center}
 .wq-clue{font-size:clamp(18px,4.8vw,22px);font-weight:700;line-height:1.4;text-align:center}
+.word .hole{display:inline-block;min-width:.7em;border-bottom:4px solid var(--sky);text-decoration:none}
 .spell-slots{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:6px 0 14px}
 .slot{width:40px;height:50px;border-radius:12px;border:2.5px dashed var(--edge);display:grid;place-items:center;font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:24px}
 .slot.on{border-style:solid;border-color:var(--sky);background:color-mix(in srgb,var(--sky) 14%,var(--card))}
@@ -570,11 +571,10 @@ Object.entries(MODES).forEach(([k, m]) => {
 function refresh() {
   const t = DATA[st.topic], isS = t.type === "sentence";
   if (isS && (st.mode === "spell" || st.mode === "read")) st.mode = "mix";
-  if (st.mode === "write" && st.stage === "kids") st.mode = "mix";
   stagesEl.querySelectorAll(".stage").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === st.stage));
   topicsEl.querySelectorAll(".topic").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === st.topic));
-  modesEl.querySelectorAll(".mode").forEach((b) => { b.setAttribute("aria-pressed", b.dataset.k === st.mode); b.hidden = (isS && (b.dataset.k === "spell" || b.dataset.k === "read")) || (b.dataset.k === "write" && st.stage === "kids"); if (b.dataset.k === "mix") b.textContent = isS ? "Practice" : "Mix"; });
-  $("#mode-hint").textContent = isS ? (st.mode === "rush" ? MODES.rush[1] : (t.rule || t.instr + ".")) : MODES[st.mode][1];
+  modesEl.querySelectorAll(".mode").forEach((b) => { b.setAttribute("aria-pressed", b.dataset.k === st.mode); b.hidden = (isS && (b.dataset.k === "spell" || b.dataset.k === "read")); if (b.dataset.k === "mix") b.textContent = isS ? "Practice" : "Mix"; });
+  $("#mode-hint").textContent = isS ? (st.mode === "rush" ? MODES.rush[1] : (t.rule || t.instr + ".")) : (st.mode === "write" && st.stage === "kids" ? "Find the missing letters and spell the words." : MODES[st.mode][1]);
   const best = getBest();
   $("#best").textContent = best ? `Best score in ${t.label}: ${best}` : "";
 }
@@ -591,7 +591,12 @@ function start() {
   next();
 }
 function pickKind(t, item) {
-  if (st.mode === "write") return "write";
+  if (st.mode === "write") {
+    if (t.stage !== "kids") return "write";
+    if (t.type === "sentence") return /^[A-Za-z]{2,7}$/.test(item[1]) ? "kspell" : "sentence";
+    if (!/^[a-z]+$/.test(item[0]) || item[0].length > 9) return t.face ? "face" : "en2es";
+    return Math.random() < .55 || !synth ? "miss" : "spell";
+  }
   if (t.type === "sentence") return "sentence";
   const canSpell = /^[a-z]+$/.test(item[0]) && item[0].length <= 9;
   let m = st.mode;
@@ -624,7 +629,7 @@ const WRITE_CUE = {
   "I enjoy ___ books.": "read", "She wants ___ a doctor.": "be", "They decided ___ to the beach.": "go", "He finished ___ his homework.": "do", "We hope ___ you soon.": "see", "Do you mind ___ the door?": "close", "I’m good at ___ soccer.": "play", "She promised ___ me with my project.": "help", "Please stop ___ noise!": "make", "I’d like ___ pizza tonight.": "order",
   "The movie was very long and ___.": "bore", "I’m ___. Let’s play a game!": "bore", "This book is really ___.": "interest", "She is ___ in science.": "interest", "We were ___ about the trip to the beach.": "excite", "The final was an ___ match.": "excite", "I was ___ after the long walk.": "tire", "Cleaning the whole house is ___.": "tire", "The test results were ___.": "surprise", "He was ___ when he saw the gift.": "surprise"
 };
-const wqCanWrite = (t, item) => t.type !== "sentence" || ((item[0].match(/___/g) || []).length === 1 && !/^Choose/.test(item[0]));
+const wqCanWrite = (t, item) => t.stage === "kids" || t.type !== "sentence" || ((item[0].match(/___/g) || []).length === 1 && !/^Choose/.test(item[0]));
 function wqNorm(x) { return String(x || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[\u2018\u2019`]/g, "'").replace(/won't/g, "will not").replace(/can't/g, "cannot").replace(/n't/g, " not").replace(/[.!?,]/g, " ").replace(/\s+/g, " ").trim(); }
 function wqLev(a, b) { const m = []; for (let i = 0; i <= a.length; i++) m[i] = [i]; for (let j = 0; j <= b.length; j++) m[0][j] = j; for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) m[i][j] = Math.min(m[i - 1][j] + 1, m[i][j - 1] + 1, m[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return m[a.length][b.length]; }
 function wqGrade(v, ans) { const n = wqNorm(v), a = wqNorm(ans); if (!n) return "empty"; if (n === a) return "ok"; if (a.length >= 4 && wqLev(a, n) === 1) return "close"; return "no"; }
@@ -641,7 +646,43 @@ function next() {
   $("#feedback").textContent = ""; $("#feedback").className = "feedback"; $("#why").textContent = "";
   const P = $("#prompt");
 
-  if (kind === "write") {
+  if (kind === "miss") {
+    const w = item[0], A = $("#answer"), V = "aeiou";
+    let pos = [...w].map((c, i) => i).filter((i) => V.includes(w[i]) && i > 0); if (!pos.length) pos = [...w].map((c, i) => i).slice(1);
+    const h = pos[Math.floor(Math.random() * pos.length)], right = w[h];
+    const pool = (V.includes(right) ? V : "bcdfghlmnprstw").split("").filter((c) => c !== right);
+    const opts = shuffle([right, ...shuffle(pool).slice(0, 2)]);
+    const clue = t.face ? `<div class="say">${face(t, item)}</div>` : `<p class="es">${esc(item[1])}</p>`;
+    P.innerHTML = `<p class="instr">Tap the missing letter</p>${clue}${speakerBtn(`<span class="word" id="mw">${[...w].map((c, i) => i === h ? '<u class="hole">&nbsp;</u>' : c).join("")}</span>`)}`;
+    A.innerHTML = `<div class="letters" id="mlet">${opts.map((l) => `<button class="letter" data-l="${l}">${l}</button>`).join("")}</div>`;
+    let tries = 0;
+    $("#mlet").addEventListener("click", (e) => {
+      const b = e.target.closest(".letter"); if (!b || st.locked || b.disabled) return;
+      if (b.dataset.l === right) { $("#mw").textContent = w; speak(w); answer(true); }
+      else if (++tries < 2) { b.disabled = true; buzz(); $("#feedback").className = "feedback bad"; $("#feedback").textContent = "Almost! Try again."; }
+      else { $("#mw").textContent = w; answer(false); }
+    });
+    later(() => speak(w), 350);
+  } else if (kind === "kspell") {
+    const w = item[1], A = $("#answer");
+    P.innerHTML = `<p class="instr">Spell the missing word</p>${speakerBtn(`<span class="sentence">${sentenceHTML(item[0]).replace('<span class="gap"></span>', '<span class="gap" id="kg">&nbsp;</span>')}</span>`)}`;
+    const extra = shuffle("abcdefghilmnoprstuwy".split("").filter((l) => !w.toLowerCase().includes(l))).slice(0, 2);
+    const tiles = shuffle([...w.toLowerCase().split(""), ...extra]);
+    A.innerHTML = `<div class="letters" id="letters">${tiles.map((l, i) => `<button class="letter" data-i="${i}" data-l="${l}">${l}</button>`).join("")}</div><div class="spell-tools"><button id="undo">Undo</button><button id="clear">Clear</button></div>`;
+    const typed = [], kg = $("#kg"); let tries = 0;
+    const paint = () => { kg.textContent = typed.map((x) => x.l).join("") || "\u00a0"; };
+    $("#letters").addEventListener("click", (e) => {
+      const b = e.target.closest(".letter"); if (!b || st.locked || b.disabled) return;
+      tick(); typed.push({ l: b.dataset.l, b }); b.disabled = true; paint();
+      if (typed.length === w.length) {
+        if (typed.map((x) => x.l).join("") === w.toLowerCase()) { kg.textContent = w; answer(true); }
+        else if (++tries < 2) { buzz(); $("#feedback").className = "feedback bad"; $("#feedback").textContent = "Almost! Try again."; later(() => { while (typed.length) typed.pop().b.disabled = false; paint(); }, 700); }
+        else { kg.textContent = w; answer(false); }
+      }
+    });
+    $("#undo").addEventListener("click", () => { const x = typed.pop(); if (x) { x.b.disabled = false; paint(); } });
+    $("#clear").addEventListener("click", () => { while (typed.length) typed.pop().b.disabled = false; paint(); });
+  } else if (kind === "write") {
     const isS = t.type === "sentence", A = $("#answer");
     let ans, clue, ctx = !isS && WRITE_CTX[item[0]] && Math.random() < .5;
     if (isS) { ans = item[1]; const cu = WRITE_CUE[item[0]]; P.innerHTML = `<p class="instr">Type the missing word${/ /.test(item[1]) ? "s" : ""}</p><div class="say"><span class="sentence">${sentenceHTML(cu && !/\(/.test(item[0]) ? item[0].replace("___", "___ (" + cu + ")") : item[0])}</span></div>${item[2] ? `<p class="es">${esc(item[2])}</p>` : ""}`; }
@@ -703,8 +744,8 @@ function next() {
     }
   }
   const sayBtn = $("#say");
-  if (sayBtn) sayBtn.addEventListener("click", () => { unlock(); speak(kind === "sentence" ? spoken(item[0]) : item[0]); });
-  if (st.mode !== "rush") startTimer(kind === "write" ? 45000 : kind === "spell" ? 25000 : kind === "sentence" && t.stage !== "kids" ? 22000 : 14000);
+  if (sayBtn) sayBtn.addEventListener("click", () => { unlock(); speak(kind === "sentence" || kind === "kspell" ? spoken(item[0]) : item[0]); });
+  if (st.mode !== "rush") startTimer(kind === "write" ? 45000 : kind === "kspell" || kind === "miss" ? 25000 : kind === "spell" ? 25000 : kind === "sentence" && t.stage !== "kids" ? 22000 : 14000);
 }
 function renderOpts(opts, correct, three) {
   const A = $("#answer");

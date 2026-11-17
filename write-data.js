@@ -576,6 +576,160 @@ window.MOVA_WRITE = {
  ["w", "___ you need any help, please let me know. (Should / Would)", ["Should"], "Formal conditional: Should + subject + verb."],
  ["f", "*If had I* known, I would have called.", ["Had I"], "Inverted third conditional: Had I known…"],
  ["t", "Rewrite without if", "If I were you, I would apologize.", ["Were I you, I would apologize.", "Were I you, I'd apologize."], "Inversion: Were I you…"]
+],
+/* ---------- MOVA Kids (sin teclado: fichas) ----------
+   ["b", "pregunta", ["fichas", ...], "respuesta armada", "por qué", "imagen"]   → Build it
+   ["x", "oración con *error*", ["correcta", "otra", "otra"], "por qué", "imagen"] → Fix it
+   ["s", "oración con ___ (pista)", "palabra", "letras extra", "por qué", "imagen"] → Spell it */
+"k-pre-a1-1": [
+ ["b", "Say hello and your name!", ["Hello!", "My", "name", "is", "Leo", "."], "Hello! My name is Leo .", "Hello! My name is Leo.", "boy.webp"],
+ ["x", "What *are* your name?", ["is", "am", "do"], "What is your name? (What's your name?)", "girl.webp"],
+ ["s", "Good ___! Time to sleep.", "night", "ae", "Good night! We say it before bed.", "moon.webp"]
+],
+"k-pre-a1-2": [
+ ["b", "What color is the banana?", ["The", "banana", "is", "yellow", "red", "."], "The banana is yellow .", "The banana is yellow.", "banana.webp"],
+ ["x", "The grass is *blue*.", ["green", "pink", "black"], "The grass is green.", "garden.webp"],
+ ["s", "The apple is ___.", "red", "bo", "r-e-d, red!", "apple.webp"]
+],
+"k-pre-a1-3": [
+ ["b", "How many balloons?", ["I", "see", "three", "two", "balloons", "."], "I see three balloons .", "I see three balloons.", "balloon.webp"],
+ ["x", "One, two, *for*, four, five.", ["three", "six", "ten"], "One, two, three, four, five.", null],
+ ["s", "I have ___ dog. (1)", "one", "tw", "o-n-e, one!", "dog.webp"]
+],
+"k-pre-a1-4": [
+ ["b", "What is it?", ["It's", "a", "robot", "car", "."], "It's a robot .", "It's a robot.", "robot.webp"],
+ ["x", "*It* is it? It's a kite.", ["What", "Who", "How"], "What is it? It's a kite.", "kite.webp"],
+ ["s", "It's a ___.", "cat", "do", "c-a-t, cat!", "cat.webp"]
+],
+"k-pre-a1-5": [
+ ["b", "Do you like pizza? (Yes!)", ["I", "like", "pizza", "don't", "."], "I like pizza .", "I like pizza.", "pizza.webp"],
+ ["x", "I *not* like spiders.", ["don't", "no", "am"], "I don't like spiders.", "spider.webp"],
+ ["s", "I ___ ice cream! Yum!", "like", "or", "l-i-k-e, like!", "icecream.webp"]
+],
+"k-pre-a1-6": [
+ ["b", "What do you see with?", ["I", "see", "with", "my", "eyes", "ears", "."], "I see with my eyes .", "I see with my eyes.", "glasses.webp"],
+ ["x", "I hear with my *nose*.", ["ears", "hands", "feet"], "I hear with my ears.", null],
+ ["s", "I smell with my ___.", "nose", "ai", "n-o-s-e, nose!", null]
+],
+"k-a1-1": [
+ ["b", "How is she?", ["She", "is", "happy", "are", "."], "She is happy .", "She is happy.", "happy.webp"],
+ ["x", "I *is* a student.", ["am", "are", "be"], "I am a student.", "school.webp"],
+ ["s", "They ___ my friends.", "are", "mi", "We use are with they: they are.", "party.webp"]
+],
+"k-a1-2": [
+ ["b", "Is it a dog? (Yes)", ["Yes,", "it", "is", "isn't", "."], "Yes, it is .", "Yes, it is.", "dog2.webp"],
+ ["x", "*Are* it a cat? Yes, it is.", ["Is", "Am", "Do"], "Is it a cat? Yes, it is.", "cat.webp"],
+ ["s", "Is it a bus? No, it ___.", "isn't", "ae", "No, it isn't. It's a car!", "car.webp"]
+],
+"k-a1-3": [
+ ["b", "What does she have?", ["She", "has", "a", "kite", "have", "."], "She has a kite .", "She has a kite.", "kite.webp"],
+ ["x", "He *have* a red ball.", ["has", "is", "haves"], "He has a red ball.", "ball.webp"],
+ ["s", "I ___ two eyes.", "have", "si", "With I we use have: I have.", null]
+],
+"k-a1-4": [
+ ["b", "Look! Near me…", ["This", "is", "my", "hat", "Those", "."], "This is my hat .", "This is my hat.", "hat.webp"],
+ ["x", "*This* are my shoes.", ["These", "That", "It"], "These are my shoes. (more than one)", "shoes.webp"],
+ ["s", "Look up! ___ is the moon. (far)", "That", "ei", "Far away and only one → that.", "moon.webp"]
+],
+"k-a1-5": [
+ ["b", "How many cats?", ["I", "have", "two", "cats", "cat", "."], "I have two cats .", "I have two cats.", "cat.webp"],
+ ["x", "I see three *bird*.", ["birds", "birdes", "bird's"], "More than one → birds.", "bird.webp"],
+ ["s", "one dog, two ___", "dogs", "ae", "More than one → add s: dogs.", "dog3.webp"]
+],
+"k-a1-6": [
+ ["b", "What can she do?", ["She", "can", "swim", "can't", "."], "She can swim .", "She can swim.", "swimming.webp"],
+ ["x", "Fish *can* walk.", ["can't", "cans", "is"], "Fish can't walk. They swim!", "fish.webp"],
+ ["s", "Birds can ___.", "fly", "ia", "f-l-y, fly!", "bird.webp"]
+],
+"k-a1-7": [
+ ["b", "What is in the garden?", ["There", "is", "a", "dog", "are", "."], "There is a dog .", "There is a dog.", "dog4.webp"],
+ ["x", "There *is* four chairs.", ["are", "am", "be"], "Four chairs → there are.", "chair.webp"],
+ ["s", "There ___ two cats.", "are", "si", "Two cats → there are.", "cat.webp"]
+],
+"k-a1-8": [
+ ["b", "Where is the fish?", ["The", "fish", "is", "in", "the", "water", "on", "."], "The fish is in the water .", "The fish is in the water.", "fish5.webp"],
+ ["x", "The lamp is *under* the desk. (on top)", ["on", "in", "at"], "The lamp is on the desk.", "lamp.webp"],
+ ["s", "The ball is ___ the table. (on top)", "on", "ia", "On top → on.", "ball.webp"]
+],
+"k-a1p-1": [
+ ["b", "What is she doing?", ["She", "is", "dancing", "dance", "."], "She is dancing .", "She is dancing.", "dancing.webp"],
+ ["x", "He is *cook* dinner.", ["cooking", "cooks", "cook"], "He is cooking dinner. After is we use -ing.", "chef.webp"],
+ ["s", "I am ___. (sing)", "singing", "oa", "sing → singing.", "singing.webp"]
+],
+"k-a1p-2": [
+ ["b", "What is he doing?", ["He", "is", "reading", "a", "book", "reads", "."], "He is reading a book .", "He is reading a book.", "reading.webp"],
+ ["x", "What *is* you doing?", ["are", "am", "do"], "What are you doing?", null],
+ ["s", "The baby is ___. (sleep)", "sleeping", "a", "sleep → sleeping.", "sleeping.webp"]
+],
+"k-a1p-3": [
+ ["b", "Ask your friend!", ["Do", "you", "like", "pizza", "?", "Does"], "Do you like pizza ?", "Do you like pizza?", "pizza.webp"],
+ ["x", "*Do* your brother like soccer?", ["Does", "Is", "Are"], "Your brother = he → Does.", "soccer.webp"],
+ ["s", "Do you like cats? Yes, I ___.", "do", "ae", "Short answer: Yes, I do.", "cat.webp"]
+],
+"k-a1p-4": [
+ ["b", "What do you do every morning?", ["I", "brush", "my", "teeth", "brushes", "."], "I brush my teeth .", "I brush my teeth.", "brushing.webp"],
+ ["x", "My sister *drink* milk every morning.", ["drinks", "drinking", "drinkes"], "She → drinks.", "milk.webp"],
+ ["s", "I ___ the bus to school. (take)", "take", "si", "I take the bus.", "bus.webp"]
+],
+"k-a1p-5": [
+ ["b", "Ana has a bag.", ["Her", "bag", "is", "blue", "His", "."], "Her bag is blue .", "Her bag is blue. (Ana = her)", "backpack.webp"],
+ ["x", "Leo has a dog. *Her* dog is big.", ["His", "My", "Your"], "Leo = he → his.", "dog.webp"],
+ ["s", "I have a cat. ___ cat is white.", "My", "ae", "I → my.", "cat.webp"]
+],
+"k-a1p-6": [
+ ["b", "Look at the dog.", ["It's", "a", "big", "dog", "bigs", "."], "It's a big dog .", "It's a big dog. The color or size goes before the thing.", "dog2.webp"],
+ ["x", "I have a *car red*.", ["red car", "reds car", "car reds"], "Color first: a red car.", "car.webp"],
+ ["s", "It's a ___ cat. (small)", "small", "ie", "s-m-a-l-l, small!", "cat.webp"]
+],
+"k-a1p-7": [
+ ["b", "Ask about the apples.", ["How", "many", "apples", "?", "much"], "How many apples ?", "How many apples?", "apple3.webp"],
+ ["x", "How *much* dogs do you have?", ["many", "lot", "more"], "Dogs can be counted → How many.", "dog3.webp"],
+ ["s", "How ___ cats? Two cats!", "many", "eo", "How many…?", "cat.webp"]
+],
+"k-a1p-8": [
+ ["b", "Where is the cat?", ["The", "cat", "is", "behind", "the", "box", "between", "."], "The cat is behind the box .", "The cat is behind the box.", "behind.webp"],
+ ["x", "I sit *next* my two friends. (in the middle)", ["between", "behind", "under"], "In the middle → between.", "between.webp"],
+ ["s", "The dog is ___ to the cat.", "next", "ia", "Next to = very close.", "next.webp"]
+],
+"k-a2-1": [
+ ["b", "How were you yesterday?", ["I", "was", "sick", "were", "."], "I was sick .", "I was sick. (I → was)", "sick.webp"],
+ ["x", "My friends *was* at my party.", ["were", "is", "be"], "They → were.", "party.webp"],
+ ["s", "She ___ at the beach yesterday.", "was", "ie", "She → was.", "beach.webp"]
+],
+"k-a2-2": [
+ ["b", "What did they do yesterday?", ["They", "played", "soccer", "play", "."], "They played soccer .", "They played soccer. Past → -ed.", "soccer.webp"],
+ ["x", "Yesterday I *watch* a movie.", ["watched", "watches", "watching"], "Yesterday → watched.", "cinema.webp"],
+ ["s", "She ___ her room. (clean)", "cleaned", "si", "clean → cleaned.", "bedroom.webp"]
+],
+"k-a2-3": [
+ ["b", "What did you eat yesterday?", ["I", "ate", "a", "sandwich", "eated", "."], "I ate a sandwich .", "eat → ate.", "sandwich.webp"],
+ ["x", "We *goed* to the farm.", ["went", "go", "gone"], "go → went.", "farm.webp"],
+ ["s", "Yesterday we ___ to the zoo. (go)", "went", "og", "go → went.", "zoo.webp"]
+],
+"k-a2-4": [
+ ["b", "Compare them!", ["A", "lion", "is", "bigger", "than", "a", "cat", "big", "."], "A lion is bigger than a cat .", "A lion is bigger than a cat.", "lion.webp"],
+ ["x", "A rabbit is *fast* than a turtle.", ["faster", "fastest", "more fast"], "Compare two → faster than.", "rabbit.webp"],
+ ["s", "An elephant is ___ than a mouse. (tall)", "taller", "si", "tall → taller.", "elephant.webp"]
+],
+"k-a2-5": [
+ ["b", "What is she going to do?", ["She", "is", "going", "to", "paint", "painting", "."], "She is going to paint .", "She is going to paint.", "painting.webp"],
+ ["x", "I am going *play* soccer.", ["to play", "playing", "plays"], "going to + play.", "soccer.webp"],
+ ["s", "We are going to ___ a cake. (make)", "make", "io", "going to make.", "bdaycake.webp"]
+],
+"k-a2-6": [
+ ["b", "What's in the bowl?", ["I", "have", "some", "grapes", "any", "."], "I have some grapes .", "Yes sentences → some.", "grapes.webp"],
+ ["x", "Do you have *some* pets?", ["any", "a", "many"], "Questions → any.", "rabbit.webp"],
+ ["s", "There isn't ___ milk.", "any", "so", "No sentences → any.", "milk.webp"]
+],
+"k-a2-7": [
+ ["b", "In the car…", ["You", "must", "wear", "a", "seatbelt", "mustn't", "."], "You must wear a seatbelt .", "You must wear a seatbelt.", "car.webp"],
+ ["x", "You *must* swim alone. It's dangerous!", ["mustn't", "can", "must to"], "Dangerous → mustn't.", "pool.webp"],
+ ["s", "You ___ wash your hands. (it's important)", "must", "ae", "Important → must.", "soap.webp"]
+],
+"k-a2-8": [
+ ["b", "Every night…", ["I", "always", "brush", "my", "teeth", "never", "."], "I always brush my teeth .", "Every night → always.", "brushing.webp"],
+ ["x", "I *always* wear a coat in summer. It's too hot!", ["never", "sometimes", "usually"], "Too hot → never.", "beach.webp"],
+ ["s", "I ___ eat vegetables. (100%)", "always", "eu", "100% → always.", "carrot.webp"]
 ]
 
 };
