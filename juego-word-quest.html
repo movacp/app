@@ -93,6 +93,12 @@ h2{font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-siz
 .opt.wrong{background:var(--bad-bg);border-color:var(--bad);animation:shake .35s}
 .opt.dim{opacity:.4}
 @keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.wq-in{width:100%;min-height:56px;border-radius:18px;border:2.5px solid var(--edge);background:var(--tile);padding:0 16px;font:700 20px inherit;font-family:inherit;color:inherit;text-align:center}
+.wq-in:focus{outline:none;border-color:var(--sky)}.wq-in.ok{border-color:#3FAF6C}.wq-in.bad{border-color:#E5484D}
+.wq-row{display:grid;gap:10px}.wq-go{min-height:52px;border-radius:999px;border:0;background:var(--ink,#15192B);color:#fff;font:800 16px inherit;font-family:inherit;cursor:pointer}
+.wq-hint{border:0;background:none;color:var(--muted);font:700 13px inherit;font-family:inherit;cursor:pointer;justify-self:center;text-decoration:underline}
+.wq-first{font-size:13px;font-weight:700;color:var(--muted);text-align:center}
+.wq-clue{font-size:clamp(18px,4.8vw,22px);font-weight:700;line-height:1.4;text-align:center}
 .spell-slots{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:6px 0 14px}
 .slot{width:40px;height:50px;border-radius:12px;border:2.5px dashed var(--edge);display:grid;place-items:center;font-family:"Bricolage Grotesque",Poppins,sans-serif;font-weight:800;font-size:24px}
 .slot.on{border-style:solid;border-color:var(--sky);background:color-mix(in srgb,var(--sky) 14%,var(--card))}
@@ -226,6 +232,7 @@ const G = {
   phrasal2: '<rect x="2" y="6" width="9" height="12" rx="3"/><rect x="13" y="6" width="9" height="12" rx="3" opacity=".7"/>',
   colloc: '<path d="M9.5 14.5 7 17a3.5 3.5 0 0 1-5-5l3.5-3.5a3.5 3.5 0 0 1 5 0M14.5 9.5 17 7a3.5 3.5 0 0 1 5 5l-3.5 3.5a3.5 3.5 0 0 1-5 0"/><path d="M8 16 16 8" stroke="#fff" stroke-width="2.4"/>',
   idioms: '<path d="M12 2l2.6 6.2L21 9l-5 4.4L17.5 20 12 16.6 6.5 20 8 13.4 3 9l6.4-.8z"/>',
+  wordforms: '<path d="M4 5h9v3H4zM4 11h6v3H4zM4 17h12v3H4z"/><path d="M15 9l3-3 3 3-3 3z" opacity=".8"/>',
   academic: '<path d="M2 9 12 4l10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5l-6 3z" opacity=".8"/>',
   nuance: '<path d="M12 2 4 7v10l8 5 8-5V7z"/><path d="M12 7l4 2.5v5L12 17l-4-2.5v-5z" fill="#1B2A55" fill-opacity=".3"/>'
 };
@@ -486,6 +493,7 @@ const DATA = {
     ["Can you ___ me a favor?","do"],["I need to ___ a decision soon.","make"],["Let’s ___ a break for ten minutes.","take"],["If you practice every day, you will ___ a lot of progress.","make"],["Let’s ___ a chat after class.","have"],["Don’t worry. It’s normal to ___ mistakes.","make"],["I have to ___ some research for my project.","do"],["You shouldn’t ___ risks when you drive.","take"],["We’re going to ___ a party on Saturday.","have"],["Could you ___ the dishes tonight?","do"]
   ].map(([s, a]) => [s, a, "", [a, ...["make","do","take","have"].filter((x) => x !== a)]]) },
   idioms: { stage: "teens", level: "C1", label: "Idioms", c: "var(--mint)", items: [["break the ice","start a conversation with new people"],["a piece of cake","very easy"],["hit the books","study hard"],["under the weather","a little sick"],["once in a blue moon","almost never"],["cost an arm and a leg","be very expensive"],["spill the beans","tell a secret"],["hit the nail on the head","be exactly right"],["the ball is in your court","it's your turn to decide"],["on the same page","agreeing about something"],["call it a day","stop working for today"],["beat around the bush","avoid saying something directly"]] },
+  wordforms: { level: "B1", stage: "teens", label: "Word Forms", c: "var(--mint)", type: "sentence", instr: "Choose the right form of the word", rule: "Nouns often end in -tion, -ment, -ness, -ity. Adjectives often end in -ful, -ous, -ive, -able. Adverbs often end in -ly.", items: [["We need to make a ___ (decide) before Friday.","decision","After a we need a noun",["decision","decide","decisive","decided"]],["Thanks for your ___ (help) advice!","helpful","Adjective before a noun",["helpful","help","helping","helpless"]],["She sings ___ (beautiful).","beautifully","How she sings → adverb",["beautifully","beautiful","beauty","beautify"]],["The ___ (develop) of the city was very fast.","development","After the we need a noun",["development","develop","developing","developed"]],["My little brother is very ___ (create). He loves drawing.","creative","After very → adjective",["creative","create","creation","creatively"]],["Their ___ (happy) is the most important thing.","happiness","Possessive + noun",["happiness","happy","happily","unhappy"]],["The museum was really ___ (interest).","interesting","Adjective after be",["interesting","interest","interested","interestingly"]],["Please answer the questions ___ (careful).","carefully","How you answer → adverb",["carefully","careful","care","careless"]],["Is this water safe to drink? There's a lot of ___ (pollute) in the river.","pollution","After a lot of → noun",["pollution","pollute","polluted","polluting"]],["I'm not ___ (comfort) in these shoes.","comfortable","After be → adjective",["comfortable","comfort","comfortably","comforting"]],["You need more ___ (confident) when you speak in public.","confidence","After more → noun here",["confidence","confident","confidently","confide"]],["It's ___ (possible) to finish this in five minutes. It's too long!","impossible","Opposite meaning → im-",["impossible","possible","possibility","possibly"]]] },
   academic: { stage: "teens", level: "C1", label: "Academic Vocabulary", c: "var(--lilac)", items: [["analyze","study something carefully in detail"],["evidence","facts that show something is true"],["hypothesis","an idea you test in research"],["significant","important or large enough to notice"],["approach","a way of dealing with something"],["assess","judge the value or quality of something"],["consistent","always the same; not contradicting itself"],["framework","a basic structure for ideas"],["interpret","interpretar"],["derive","get something from a source"],["implement","implementar"],["subsequent","coming after something else"]] },
   nuance: { stage: "teens", level: "C2", label: "Advanced Vocabulary", c: "var(--pink)", type: "sentence", instr: "Choose the most precise word", rule: "At C2, choose words for their exact nuance, not just their general meaning.", items: [
     ["The evidence was ___: it could support either conclusion.","equivocal","",["equivocal","unequivocal","eloquent","elaborate"]],
@@ -506,6 +514,7 @@ const MODES = {
   listen: ["Listen", "Hear the word and tap the right answer."],
   read: ["Read", "Read the word in Spanish or English and find its match."],
   spell: ["Spell", "Hear the word and build it letter by letter."],
+  write: ["Write", "Read the clue and type the answer yourself."],
   rush: ["60-second rush", "How many can you answer in one minute?"]
 };
 const PRAISE = ["Great job!", "Awesome!", "You got it!", "Super!", "Well done!", "Fantastic!", "Brilliant!"];
@@ -561,9 +570,10 @@ Object.entries(MODES).forEach(([k, m]) => {
 function refresh() {
   const t = DATA[st.topic], isS = t.type === "sentence";
   if (isS && (st.mode === "spell" || st.mode === "read")) st.mode = "mix";
+  if (st.mode === "write" && st.stage === "kids") st.mode = "mix";
   stagesEl.querySelectorAll(".stage").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === st.stage));
   topicsEl.querySelectorAll(".topic").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === st.topic));
-  modesEl.querySelectorAll(".mode").forEach((b) => { b.setAttribute("aria-pressed", b.dataset.k === st.mode); b.hidden = isS && (b.dataset.k === "spell" || b.dataset.k === "read"); if (b.dataset.k === "mix") b.textContent = isS ? "Practice" : "Mix"; });
+  modesEl.querySelectorAll(".mode").forEach((b) => { b.setAttribute("aria-pressed", b.dataset.k === st.mode); b.hidden = (isS && (b.dataset.k === "spell" || b.dataset.k === "read")) || (b.dataset.k === "write" && st.stage === "kids"); if (b.dataset.k === "mix") b.textContent = isS ? "Practice" : "Mix"; });
   $("#mode-hint").textContent = isS ? (st.mode === "rush" ? MODES.rush[1] : (t.rule || t.instr + ".")) : MODES[st.mode][1];
   const best = getBest();
   $("#best").textContent = best ? `Best score in ${t.label}: ${best}` : "";
@@ -581,6 +591,7 @@ function start() {
   next();
 }
 function pickKind(t, item) {
+  if (st.mode === "write") return "write";
   if (t.type === "sentence") return "sentence";
   const canSpell = /^[a-z]+$/.test(item[0]) && item[0].length <= 9;
   let m = st.mode;
@@ -595,19 +606,60 @@ const face = (t, item) => t.face === "swatch" ? `<span class="face-swatch" style
 const speakerBtn = (inner) => `<button class="say" id="say" aria-label="Hear it again"><span class="spk"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>${inner}</button>`;
 const sentenceHTML = (s) => esc(s).replace(/\(([^)]*)\)/g, '<span class="cue">($1)</span>').replace("___", '<span class="gap"></span>');
 
+/* Write mode (v120): pistas y oraciones para escribir la palabra */
+const WRITE_DEF = { laptop: "a small computer you can carry", map: "a drawing that shows streets, cities and countries", interpret: "explain the meaning of something", implement: "start using a plan or a system", planet: "a big round object that moves around the sun, like Earth or Mars", experiment: "a test scientists do to find something out", karate: "a martial art from Japan with kicks and punches", "brush my teeth": "clean my teeth with a toothbrush" };
+const WRITE_CTX = {
+  pencil: "I need a sharp ___ for my math test.", eraser: "Oops! I made a mistake. Can I borrow your ___?", ruler: "Use a ___ to draw a straight line.", book: "I'm reading a great ___ about dragons.", notebook: "Write the new words in your ___.", backpack: "My ___ is heavy because I have five books in it.", scissors: "Cut the paper with the ___.", glue: "Put some ___ on the back of the picture and stick it here.", desk: "Please sit at your ___ and open your book.", board: "The teacher wrote the date on the ___.", crayon: "Color the sun with a yellow ___.", teacher: "Our ___ helps us when we have questions.",
+  "wake up": "I ___ at 6:30 every morning.", "get dressed": "After my shower, I ___ for school.", "have breakfast": "I ___ at 7:00. I eat eggs and fruit.", "go to school": "I ___ by bus every day.", "do homework": "After school, I ___ at the kitchen table.", "have a shower": "I ___ every night before bed.", "have lunch": "We ___ at 1:00 in the school cafeteria.", "have dinner": "My family and I ___ together at 8:00.", "go to bed": "I'm tired. I'm going to ___ now.",
+  painting: "I love ___. I use a lot of colors.", swimming: "I go ___ in the pool on Saturdays.", cycling: "My dad loves ___. He rides his bike every weekend.", reading: "My favorite hobby is ___. I love stories!", dancing: "She takes ___ classes. Her favorite is hip-hop.", skating: "We go ___ at the park on Sundays.", cooking: "My grandma is teaching me ___. Yesterday we made tamales.", gardening: "My mom loves ___. She grows tomatoes and flowers.", photography: "He has a new camera. He loves ___.", chess: "Do you want to play ___? I have the board.", karate: "He wears a white uniform for his ___ class.", singing: "She is in the school choir because she loves ___.",
+  planet: "Mars is the red ___.", gravity: "Because of ___, the ball falls to the ground.", energy: "The sun gives us light and ___.", oxygen: "Plants make the ___ we breathe.", magnet: "The ___ picks up the paper clips.", skeleton: "Your ___ has more than 200 bones.", experiment: "In science class we did an ___ with water and salt.", microscope: "We looked at a tiny bug under the ___.", temperature: "The ___ today is 35 degrees. It's very hot!", liquid: "Water is a ___, but ice is a solid.", solid: "Ice is a ___, but water is a liquid.", habitat: "The ocean is the ___ of sharks and whales.",
+  pollution: "Cars and factories cause air ___.", recycle: "We ___ plastic bottles to make new things.", renewable: "Wind and solar energy are ___ because they never run out.", drought: "There was no rain for months. It was a terrible ___.", deforestation: "Cutting down the Amazon rainforest is called ___.", endangered: "Pandas are an ___ species.", waste: "Don't ___ water when you brush your teeth.", climate: "The ___ in Monterrey is hot in the summer.", emissions: "Electric cars help reduce ___.", conservation: "Wildlife ___ protects animals and their homes.", sustainable: "Riding a bike is a ___ way to travel.", wildlife: "The park has a lot of ___: birds, deer and foxes."
+};
+const WRITE_CUE = {
+  "An elephant is ___ than a dog.": "big", "My sister is ___ than me.": "tall", "Math is ___ than art for me.": "difficult", "This test is ___ than the last one.": "easy", "Today is ___ than yesterday.": "hot", "My new phone is ___ than my old phone.": "good", "Mount Everest is the ___ mountain in the world.": "high", "That was the ___ movie I have ever seen!": "bad", "A cheetah is ___ than a horse.": "fast", "Gold is ___ than silver.": "expensive",
+  "Look! The dog ___ the ball.": "chase", "I ___ my homework right now.": "do", "They ___ soccer at the moment.": "play", "Listen! The baby ___.": "cry", "We ___ TV now. We are reading.": "not / watch", "___ she sleeping?": "be", "My mom ___ dinner in the kitchen.": "cook", "What ___ you doing?": "be", "The kids ___ in the pool right now.": "swim",
+  "It’s cold. ___ your jacket.": "start wearing", "Please ___ the lights when you leave.": "switch off", "I’m ___ my keys. Have you seen them?": "searching for", "Can you ___ my dog this weekend?": "take care of", "I ___ at 7 every morning.": "leave my bed", "Don’t ___! You can do it.": "stop trying", "Please ___ your toys and put them in the box.": "take from the floor", "We ___ the bus at the museum.": "left",
+  "English ___ in many countries.": "speak", "The Mona Lisa ___ by Leonardo da Vinci.": "paint", "This bridge ___ in 1920.": "build", "The letters ___ every morning.": "deliver", "My bike ___ last night!": "steal", "The winners ___ tomorrow.": "announce", "Tacos ___ with corn tortillas.": "make", "The homework must ___ by Friday.": "finish", "A new library ___ next year.": "open", "Harry Potter ___ into more than 80 languages.": "translate",
+  "If it rains, we ___ at home.": "stay", "If I ___ rich, I would travel the world.": "be", "If you heat ice, it ___.": "melt", "If she studies, she ___ the exam.": "pass", "If I had a dog, I ___ it every day.": "walk", "What would you do if you ___ a million pesos?": "win", "If you don’t hurry, you ___ the bus.": "miss", "If I ___ you, I would talk to the coach.": "be",
+  "I enjoy ___ books.": "read", "She wants ___ a doctor.": "be", "They decided ___ to the beach.": "go", "He finished ___ his homework.": "do", "We hope ___ you soon.": "see", "Do you mind ___ the door?": "close", "I’m good at ___ soccer.": "play", "She promised ___ me with my project.": "help", "Please stop ___ noise!": "make", "I’d like ___ pizza tonight.": "order",
+  "The movie was very long and ___.": "bore", "I’m ___. Let’s play a game!": "bore", "This book is really ___.": "interest", "She is ___ in science.": "interest", "We were ___ about the trip to the beach.": "excite", "The final was an ___ match.": "excite", "I was ___ after the long walk.": "tire", "Cleaning the whole house is ___.": "tire", "The test results were ___.": "surprise", "He was ___ when he saw the gift.": "surprise"
+};
+const wqCanWrite = (t, item) => t.type !== "sentence" || ((item[0].match(/___/g) || []).length === 1 && !/^Choose/.test(item[0]));
+function wqNorm(x) { return String(x || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[\u2018\u2019`]/g, "'").replace(/won't/g, "will not").replace(/can't/g, "cannot").replace(/n't/g, " not").replace(/[.!?,]/g, " ").replace(/\s+/g, " ").trim(); }
+function wqLev(a, b) { const m = []; for (let i = 0; i <= a.length; i++) m[i] = [i]; for (let j = 0; j <= b.length; j++) m[0][j] = j; for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) m[i][j] = Math.min(m[i - 1][j] + 1, m[i][j - 1] + 1, m[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return m[a.length][b.length]; }
+function wqGrade(v, ans) { const n = wqNorm(v), a = wqNorm(ans); if (!n) return "empty"; if (n === a) return "ok"; if (a.length >= 4 && wqLev(a, n) === 1) return "close"; return "no"; }
 function next() {
   if (st.mode !== "rush" && st.round >= ROUNDS) return finish();
   if (st.mode === "rush" && performance.now() >= st.rushEnd) return finish();
   const t = DATA[st.topic];
   if (!st.queue.length) st.queue = shuffle(t.items);
-  const item = st.queue.shift();
+  let item = st.queue.shift();
+  if (st.mode === "write") { let guard = 0; while (!wqCanWrite(t, item) && guard++ < 40) { if (!st.queue.length) st.queue = shuffle(t.items); item = st.queue.shift(); } }
   st.item = item; st.round++; st.locked = false;
   const kind = st.kind = pickKind(t, item);
   $("#round").textContent = st.mode === "rush" ? `${st.correct} correct` : `${st.round} / ${ROUNDS}`;
   $("#feedback").textContent = ""; $("#feedback").className = "feedback"; $("#why").textContent = "";
   const P = $("#prompt");
 
-  if (kind === "spell") {
+  if (kind === "write") {
+    const isS = t.type === "sentence", A = $("#answer");
+    let ans, clue, ctx = !isS && WRITE_CTX[item[0]] && Math.random() < .5;
+    if (isS) { ans = item[1]; const cu = WRITE_CUE[item[0]]; P.innerHTML = `<p class="instr">Type the missing word${/ /.test(item[1]) ? "s" : ""}</p><div class="say"><span class="sentence">${sentenceHTML(cu && !/\(/.test(item[0]) ? item[0].replace("___", "___ (" + cu + ")") : item[0])}</span></div>${item[2] ? `<p class="es">${esc(item[2])}</p>` : ""}`; }
+    else if (ctx) { ans = item[0]; P.innerHTML = `<p class="instr">Complete the sentence</p><div class="say"><span class="sentence">${sentenceHTML(WRITE_CTX[item[0]])}</span></div><p class="wq-first">Starts with <b>${esc(item[0][0])}</b></p>`; }
+    else { ans = item[0]; clue = WRITE_DEF[item[0]] || item[1]; P.innerHTML = `<p class="instr">Read and type the word</p><div class="say"><span class="wq-clue">${esc(clue)}</span></div><p class="wq-first">Starts with <b>${esc(item[0][0])}</b> · ${item[0].replace(/[^ ]/g, "_ ").trim()}</p>`; }
+    A.innerHTML = `<div class="wq-row"><input class="wq-in" id="wqin" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type here" aria-label="Your answer"><button class="wq-go" id="wqgo">Check</button><button class="wq-hint" id="wqh">Show a hint</button></div>`;
+    const inp = $("#wqin"); let tries = 0, hint = 0;
+    try { inp.focus(); } catch (e) {}
+    const check = () => {
+      if (st.locked) return; const g = wqGrade(inp.value, ans); if (g === "empty") return;
+      if (g === "close" && tries < 1) { tries++; $("#feedback").className = "feedback bad"; $("#feedback").textContent = "Almost! Check your spelling."; return; }
+      inp.disabled = true; inp.classList.add(g === "ok" ? "ok" : "bad"); $("#wqgo").disabled = true;
+      if (g !== "ok") inp.value = ans;
+      answer(g === "ok", null);
+    };
+    $("#wqgo").addEventListener("click", check); inp.addEventListener("keydown", (e) => { if (e.key === "Enter") check(); });
+    $("#wqh").addEventListener("click", () => { hint++; const n = Math.min(hint + 1, Math.max(1, ans.length - 1)); $("#wqh").textContent = `Hint: ${ans.slice(0, n)}…`; });
+  } else if (kind === "spell") {
     const w = item[0], A = $("#answer");
     P.innerHTML = `<p class="instr">Listen and spell the word</p>${speakerBtn(`<span class="es">${item[1]}</span>`)}`;
     const extra = shuffle("abcdefghijklmnoprstuwy".split("").filter((l) => !w.includes(l))).slice(0, 2);
@@ -652,7 +704,7 @@ function next() {
   }
   const sayBtn = $("#say");
   if (sayBtn) sayBtn.addEventListener("click", () => { unlock(); speak(kind === "sentence" ? spoken(item[0]) : item[0]); });
-  if (st.mode !== "rush") startTimer(kind === "spell" ? 25000 : kind === "sentence" && t.stage !== "kids" ? 22000 : 14000);
+  if (st.mode !== "rush") startTimer(kind === "write" ? 45000 : kind === "spell" ? 25000 : kind === "sentence" && t.stage !== "kids" ? 22000 : 14000);
 }
 function renderOpts(opts, correct, three) {
   const A = $("#answer");

@@ -21,6 +21,8 @@
 <script src="kids-visual.js"></script>
 <script src="children-visual.js"></script>
 <script src="teens-visual.js"></script>
+<script src="write-data.js"></script>
+<script src="mova-write.js"></script>
 <style>
 :root{--bg:#F5F3FA;--ink:#15192B;--navy:#1A1B2E;--navy2:#2C3060;--muted:#6A6F85;--line:#ECE9F3;--lime:#D3F36B;--lav:#E6E2FF;--peri:#C9D2FF;--pink:#FF8FC0;--pinkSoft:#FFE1EE;--butter:#FFE58A;--mint:#BDF0D8;--okSoft:#E4F8B0;
   color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -693,7 +695,7 @@ function findTopic(id){for(var st in D)for(var code in D[st])for(var kind in KIN
 /* ---------- tema: explicación → construir → quiz ---------- */
 function topic(id,from){
   var f=findTopic(id);if(!f||!ready(f.t))return go("");
-  var t=f.t,es=STG[f.st].lang==="es",step=0,builtOk=0,qi=0,score=0,qs=null,bi=0;
+  var wRes=null,t=f.t,es=STG[f.st].lang==="es",step=0,builtOk=0,qi=0,score=0,qs=null,bi=0;
   var tabName=f.kind==='topics'?'grammar':f.kind,lvlHref=from==="g"?"./#/structures":"#/lv/"+f.st+"/"+encodeURIComponent(f.code)+"/"+tabName,hasB=t.b&&t.b.length,NS=hasB?3:2;
   function steps(n){if(!hasB&&n===2)n=1;return '<div class="steps">'+(hasB?[0,1,2]:[0,1]).map(function(i){return '<i class="'+(i<=n?"on":"")+'"></i>';}).join("")+"</div>";}
   function head(){return '<div class="rm-bar">'+back(lvlHref,from==="g"?"Grammar":STG[f.st].name+" · "+f.code)+(window.MovaRemember&&(f.kind==="topics"||f.kind==="writing")?MovaRemember.button():"")+'</div>';}
@@ -778,12 +780,16 @@ function topic(id,from){
     };});
   }
   function done(){
-    var st=score>=6?3:score>=4?2:1,o=S(),prev=o.done[t.id];
-    if(!prev||score>prev.score)o.done[t.id]={score:score,stars:st,d:Date.now()};
-    o.built+=builtOk;var nb=checkBadges(o,score);W(o);
-    var saved=saveCloud("My path · "+STG[f.st].name+" "+f.code+" · "+(f.kind!=="topics"?KINDS[f.kind]+": ":"")+t.t,score,6,{kind:"score",stage:f.st,level:f.code,topic:t.t,sentences_first_try:builtOk});
+    var WR=f.kind==="topics"&&window.MovaWrite&&MovaWrite.items(t.id);
+    if(WR&&wRes==null){return MovaWrite.run(app,WR,{head:head,steps:function(){return steps(2);},n:NS,say:function(x){say(x);}},function(ws,wt){wRes=[ws,wt];done();});}
+    var qT=6,wS=wRes?wRes[0]:0,wT=wRes?wRes[1]:0,tot=qT+wT,comb=Math.min(score,qT)+wS,s6=Math.round(comb/tot*6);
+    var st=s6>=6?3:s6>=4?2:1,o=S(),prev=o.done[t.id];
+    if(!prev||s6>prev.score)o.done[t.id]={score:s6,stars:st,d:Date.now()};
+    o.built+=builtOk;var nb=checkBadges(o,s6);W(o);
+    var saved=saveCloud("My path · "+STG[f.st].name+" "+f.code+" · "+(f.kind!=="topics"?KINDS[f.kind]+": ":"")+t.t,comb,tot,{kind:"score",stage:f.st,level:f.code,topic:t.t,sentences_first_try:builtOk,quiz:score,write:wRes?wS+"/"+wT:null});
+    var score0=score;score=s6;
     var nt=f.list.filter(function(x){return x.exp&&!S().done[x.id];})[0]||null;
-    app.innerHTML=head()+'<div class="res"><span class="ring"></span><span class="k">'+esc(t.t)+'</span><h2>'+score+'<small> / 6</small></h2>'+stars(st)+'<p>'+(score>=6?(es?"¡Perfecto! Dominas este tema.":"Perfect! You've mastered this topic."):score>=4?(es?"¡Muy bien! Un repaso más y será perfecto.":"Great work! One more review and it'll be perfect."):(es?"Buen intento. Vuelve a leer la explicación y repite el quiz.":"Good try. Read the explanation again and retake the quiz."))+'</p></div>'+newBadgesHtml(nb)+
+    app.innerHTML=head()+'<div class="res"><span class="ring"></span><span class="k">'+esc(t.t)+'</span><h2>'+comb+'<small> / '+tot+'</small></h2>'+stars(st)+(wRes?'<div class="nw-sum"><span>Quiz '+Math.min(score0,qT)+'/'+qT+'</span><span>Now write it '+wS+'/'+wT+'</span></div>':'')+'<p>'+(score>=6?(es?"¡Perfecto! Dominas este tema.":"Perfect! You've mastered this topic."):score>=4?(es?"¡Muy bien! Un repaso más y será perfecto.":"Great work! One more review and it'll be perfect."):(es?"Buen intento. Vuelve a leer la explicación y repite el quiz.":"Good try. Read the explanation again and retake the quiz."))+'</p></div>'+newBadgesHtml(nb)+
       '<div class="row2" style="margin-top:6px"><button class="cta ghost" id="again">'+(es?"Repetir":"Try again")+'</button><button class="cta" id="nt">'+(nt?(es?"Siguiente tema":"Next topic"):(es?"Ir al nivel":"Back to level"))+'</button></div><p class="saved" id="sv"></p>';
     document.getElementById("again").onclick=function(){topic(id);};
     document.getElementById("nt").onclick=function(){if(nt)go("t/"+nt.id+(from==="g"?"/g":""));else if(from==="g")location.href=lvlHref;else location.hash=lvlHref.slice(1);};

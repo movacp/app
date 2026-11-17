@@ -117,7 +117,7 @@
   function playLine(s, i, cb) {
     stopAll(); var my = chain, done = false;
     var fin = function () { if (done || my !== chain) return; done = true; if (cb) cb(); };
-    var a = new Audio("ee-audio/" + s.id + "-" + (i + 1) + ".mp3"); AU = a;
+    var a = new Audio("" + s.id + "-" + (i + 1) + ".mp3"); AU = a;
     a.onended = fin;
     a.onerror = function () { if (my !== chain || done) return; AU = null; speak(s.lines[i][1], fin); };
     var p = a.play(); if (p && p.catch) p.catch(function () { if (my !== chain || done) return; AU = null; speak(s.lines[i][1], fin); });
