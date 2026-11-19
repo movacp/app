@@ -529,7 +529,7 @@ $("#loginForm").addEventListener("submit", async e => {
 $("#logoutBtn").onclick = () => { logout(); toast("Sesión cerrada"); };
 
 /* ---------- Students ---------- */
-async function showApp(){ $("#login").classList.add("hidden"); $("#app").classList.remove("hidden"); setTab(location.hash.replace("#","")||"students"); loadVisits(); loadLevelUp(); await loadStudents(); }
+async function showApp(){ $("#login").classList.add("hidden"); $("#app").classList.remove("hidden"); const wantLive=location.hash==="#live"; setTab(wantLive?"students":(location.hash.replace("#","")||"students")); if(wantLive) setTimeout(openLivePicker,300); loadVisits(); loadLevelUp(); await loadStudents(); }
 const MATH_RX=/^(mision-matematica|la-tiendita|la-balanza|la-boveda|lluvia-de-numeros|pizzeria-fracciones|detective-patrones|que-hora-es|signos-jerarquia|numeros-operaciones|productos-factorizacion|matematicas-|repaso-)/;
 function tkClean(a){ return (a||[]).filter(t=>!String(t.task||"").startsWith("wfb:")).map(t=>{ let ti=String(t.title||""), by=null, due=null, m;
   if((m=ti.match(/^(.*?)\s+·\s+by\s+(Miss\s+[A-Za-zÁÉÍÓÚáéíóú]+)$/))){ ti=m[1]; by=m[2]; }
@@ -1445,6 +1445,14 @@ function pickerHtml(){
   return `<div class="pk"><div class="pk-cats">${TASK_CAT.map(([g],i)=>`<button type="button" class="pk-cat${i===pickCat?" on":""}" data-c="${i}"><i style="background:${CAT_COL[g]||"#EEE"}"></i>${esc(g)}</button>`).join("")}</div>
     <div class="pk-grid">${TASK_CAT[pickCat][1].map(([k,n])=>`<button type="button" class="pk-it" data-k="${k}"><span class="pk-img" style="background:${CAT_COL[TASK_CAT[pickCat][0]]}"><img src="${taskArt(k)}" alt="" loading="lazy" onerror="this.remove()"></span><b>${esc(n)}</b><em aria-hidden="true">✓</em></button>`).join("")}</div>
     <p class="pk-sel" id="pkSel">Toca una actividad para elegirla.</p></div>`;
+}
+function openLivePicker(){
+  const opts=TASK_CAT.map(([g,items])=>`<optgroup label="${esc(g)}">${items.map(([k,n])=>`<option value="${k}">${esc(n)}</option>`).join("")}</optgroup>`).join("");
+  openModal(`<button class="x" aria-label="Cerrar">×</button><h2 style="margin-bottom:4px">Live con el grupo</h2>
+    <p class="sub" style="margin:0 0 6px">Elige cualquier actividad de la app y todos la abren al mismo tiempo con el código en Game On.</p>
+    <div style="background:#F7F5FB;border-radius:14px;padding:10px 14px;margin:0 0 12px;font-size:13px;line-height:1.5;color:#3A3F58"><b>Todos lo mismo:</b> elige la lectura, el tema o el nivel en la vista previa.<br><b>Cada quien su nivel:</b> no elijas nada en la vista previa; cada alumno entra a lo de su propio nivel.</div>
+    <div class="tk" id="lpBox" style="padding:0;background:none;box-shadow:none"><select class="in" id="asgSel" hidden>${opts}</select>${pickerHtml()}<button class="asg" id="asgBtn" hidden></button></div>`);
+  wirePicker($("#lpBox"));
 }
 function wirePicker(box){
   const sel=box.querySelector("#asgSel"), btn=box.querySelector("#asgBtn"); if(!sel) return;
