@@ -12,6 +12,8 @@
 <link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script src="mova-voice.js"></script>
 <script src="ruta-data.js"></script>
+<script src="ruta-extra.js"></script>
+<script src="mova-px.js"></script>
 <script src="vocab-extra.js"></script>
 <script src="sp-data.js"></script>
 <script src="kids-pic.js"></script>
@@ -449,7 +451,7 @@ function monthlyQuiz(id){
   if(!user()&&!window.MovaAuth&&(window.__authWait=(window.__authWait||0)+1)<40){setTimeout(route,150);return;}
   if(!user()){app.innerHTML=bk+head+'<div class="mqn">Sign in with your MOVA account to take the quiz.</div><button class="cta" id="lg">Sign in</button>';document.getElementById("lg").onclick=function(){try{MovaAuth.login();}catch(e){}};return;}
   /* preguntas: se reparten entre los temas elegidos */
-  var pools=TT.map(function(t){return shuffle((t.q||[]).filter(function(q){return q[1]&&q[1].length>1;})).map(function(q){return {t:t.t,q:q[0],o:shuffle(q[1].map(function(x,i){return {x:x,ok:i===q[2]};})),right:q[1][q[2]],why:q[3],say:q[4]};});});
+  var pools=TT.map(function(t){return shuffle((t.q||[]).filter(function(q){return q[1]&&q[1].length>1;}).map(function(q){return {t:t.t,q:q[0],o:shuffle(q[1].map(function(x,i){return {x:x,ok:i===q[2]};})),right:q[1][q[2]],why:q[3],say:q[4]};}).concat(window.MovaPX?(t.px||[]).map(function(it){return {t:t.t,px:it,q:MovaPX.title(it)};}):[]));});
   var qs=[],k=0,guard=0;while(qs.length<N&&guard<500){var P=pools[k%pools.length];if(P.length)qs.push(P.shift());k++;guard++;if(pools.every(function(p){return !p.length;}))break;}
   qs=shuffle(qs);
   app.innerHTML=bk+head+'<div class="mqs"><div><b>'+qs.length+'</b><span>questions</span></div><div><b>'+Math.max(10,Math.round(qs.length*1.2))+'</b><span>minutes</span></div><div><b>1</b><span>try</span></div></div><div class="mqt"><h3>This month&#39;s topics</h3><ul>'+TT.map(function(t){return '<li><i></i>'+esc(t.t)+'</li>';}).join("")+'</ul></div><div class="mqn">Do it in class with your teacher. There is no Remember button and no hints. Do your best!</div><label for="mqc" style="display:block;font-weight:800;font-size:14px;margin:0 2px 6px">Class code</label><input class="tin" id="mqc" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="Your teacher will tell you" style="text-align:center;font-size:20px;letter-spacing:.3em;margin-bottom:6px"><p id="mqe" style="color:#C2185B;font-weight:700;font-size:13px;margin:0 2px 10px;min-height:16px"></p><button class="cta" id="go">Start my quiz →</button>';
@@ -457,6 +459,8 @@ function monthlyQuiz(id){
   document.getElementById("go").onclick=goQ;document.getElementById("mqc").onkeydown=function(e){if(e.key==="Enter")goQ();};
   var ans=[],t0=Date.now();
   function run(i){var q=qs[i],sel=-1;
+    if(q.px){app.innerHTML='<div class="mqbar">'+qs.map(function(_,j){return '<i class="'+(j<i?"on":j===i?"cur":"")+'"></i>';}).join("")+'</div><div class="card"><span class="kicker">QUESTION '+(i+1)+' OF '+qs.length+' · '+MovaPX.label(q.px)+'</span><div id="pxh"></div><p style="font-size:12.5px;color:var(--muted);margin:10px 2px 0">You will see your answers at the end.</p></div>';
+      MovaPX.render(document.getElementById("pxh"),q.px,{fb:false,next:i<qs.length-1?"Next question →":"Finish quiz",onDone:function(g){ans.push({t:q.t,q:q.q,a:g.a,ok:g.ok,right:g.r,why:q.px.why||""});if(i<qs.length-1)run(i+1);else finish();}});window.scrollTo(0,0);return;}
     var draw=function(){app.innerHTML='<div class="mqbar">'+qs.map(function(_,j){return '<i class="'+(j<i?"on":j===i?"cur":"")+'"></i>';}).join("")+'</div><div class="card"><span class="kicker">QUESTION '+(i+1)+' OF '+qs.length+'</span><div class="qtext">'+esc(q.q)+'</div>'+(q.say?'<button class="lk" id="hear" style="width:100%;background:var(--lav)"><span class="ic" style="background:#fff">'+IC.spk+'</span><b>Listen</b></button>':'')+q.o.map(function(o,j){return '<button class="opt'+(j===sel?" sel":"")+'" data-j="'+j+'">'+esc(o.x)+'</button>';}).join("")+'<p style="font-size:12.5px;color:var(--muted);margin:10px 2px 0">You will see your answers at the end.</p></div><button class="cta" id="nx"'+(sel<0?' disabled style="opacity:.45"':'')+'>'+(i<qs.length-1?"Next question →":"Finish quiz")+'</button>';
       if(q.say){document.getElementById("hear").onclick=function(){say(q.say,.8);};}
       app.querySelectorAll(".opt").forEach(function(b){b.onclick=function(){sel=+b.dataset.j;draw();};});
@@ -739,10 +743,13 @@ function topic(id,from){
       var cols=Object.keys(cnt).filter(function(k){return cnt[k]>=2;}),its=qq.filter(function(q){return cols.indexOf(q[1][q[2]])>=0;});
       if(cols.length>=2&&cols.length<=3&&its.length>=4){qs[qs.length-1]={ty:"sort",cols:cols,items:shuffle(its.map(function(q){return {s:q[0],a:q[1][q[2]]};})).slice(0,6)};}
     }
+    if(t.px&&t.px.length&&window.MovaPX){var PX=shuffle(t.px).map(function(it){return {ty:"px",it:it};}),A=qs,mx=[],ia=0,ip=0;for(var n=0;n<A.length+PX.length;n++){if(ip<PX.length&&(ia>=A.length||(ip+.5)/PX.length<(ia+.5)/A.length)){var c=ip;while(c<PX.length-1&&mx.length&&mx[mx.length-1].it&&PX[c].it.k===mx[mx.length-1].it.k)c++;if(c!==ip){var tmp=PX[ip];PX[ip]=PX[c];PX[c]=tmp;}mx.push(PX[ip++]);}else mx.push(A[ia++]);}qs=mx;}
     qi=0;score=0;quiz();}
   function finishQ(ok,msg){if(ok)score++;document.getElementById("fbq").innerHTML='<div class="fb '+(ok?"good":"bad")+'"><b>'+(ok?(es?"¡Correcto!":"Correct!"):(es?"No exactamente.":"Not quite."))+'</b>'+msg+'</div><button class="cta" id="qn">'+(qi<qs.length-1?(es?"Siguiente":"Next"):(es?"Ver resultado":"See my result"))+'</button>';document.getElementById("qn").onclick=function(){qi++;if(qi<qs.length)quiz();else done();};}
   function quiz(){
     var q=qs[qi];
+    if(q.ty==="px"){app.innerHTML=head()+steps(2)+'<div class="card" id="pxc"><span class="kicker">'+NS+' · '+MovaPX.label(q.it)+' · '+(qi+1)+'/'+qs.length+'</span><div id="pxh"></div><div id="fbq"></div></div>';
+      MovaPX.render(document.getElementById("pxh"),q.it,{fb:true,next:es?"Revisar":"Check",onDone:function(g){finishQ(g.ok,MovaPX.feedback(q.it,g));}});return;}
     if(q.ty==="sort"){var placed={},sel=null,miss=0;q.cols.forEach(function(c){placed[c]=[];});
       var drawS=function(msg){var left=q.items.filter(function(it){return !it.done;});
         app.innerHTML=head()+steps(2)+'<div class="card"><span class="kicker">'+NS+' · SORT IT · '+(qi+1)+'/'+qs.length+'</span><h2 style="font-size:20px">Tap a sentence, then tap its group.</h2><div class="srt">'+left.map(function(it){var k=q.items.indexOf(it);return '<button class="sit'+(sel===k?" on":"")+'" data-k="'+k+'">'+esc(it.s)+'</button>';}).join("")+'</div><div class="scol c'+q.cols.length+'">'+q.cols.map(function(c,ci){return '<button class="sc" data-c="'+esc(c)+'"><b style="background:'+["#FFE58A","#FF8FC0","#BDF0D8"][ci]+'">'+esc(c)+'</b>'+placed[c].map(function(x){return '<span>'+esc(x.replace("___","…"))+'</span>';}).join("")+'</button>';}).join("")+'</div><div id="fbq">'+(msg?'<p class="srtm">'+msg+'</p>':'')+'</div></div>';
@@ -782,7 +789,7 @@ function topic(id,from){
   function done(){
     var WR=f.kind==="topics"&&window.MovaWrite&&MovaWrite.items(t.id);
     if(WR&&wRes==null){return MovaWrite.run(app,WR,{head:head,steps:function(){return steps(2);},n:NS,say:function(x){say(x);}},function(ws,wt){wRes=[ws,wt];done();});}
-    var qT=6,wS=wRes?wRes[0]:0,wT=wRes?wRes[1]:0,tot=qT+wT,comb=Math.min(score,qT)+wS,s6=Math.round(comb/tot*6);
+    var qT=qs.length,wS=wRes?wRes[0]:0,wT=wRes?wRes[1]:0,tot=qT+wT,comb=Math.min(score,qT)+wS,s6=Math.round(comb/tot*6);
     var st=s6>=6?3:s6>=4?2:1,o=S(),prev=o.done[t.id];
     if(!prev||s6>prev.score)o.done[t.id]={score:s6,stars:st,d:Date.now()};
     o.built+=builtOk;var nb=checkBadges(o,s6);W(o);
