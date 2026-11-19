@@ -4,11 +4,11 @@
    el tiempo, regresa a Game On para ver el podio. */
 (function () {
   "use strict";
-  var code = (location.search.match(/[?&]live=(\d{4})/) || [])[1]; if (!code) return;
+  var code = (location.search.match(/[?&]live=(\d{4})/) || [])[1]; if (!code || window.__mlpOn) return; window.__mlpOn = 1;
   var u = null; try { u = JSON.parse(localStorage.getItem("mova_student") || "null"); } catch (e) {}
   if (!u || !u.token) return;
   var SB_URL = "https://fclafxrkibvcjktrgznt.supabase.co", SB_KEY = "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6";
-  var slug = (location.pathname.match(/juego-([a-z0-9-]+)\.html$/) || [])[1] || "game";
+  var slug = (location.pathname.match(/juego-([a-z0-9-]+)\.html$/) || [])[1] || (location.pathname.match(/([a-z0-9-]+)\.html$/) || [])[1] || "app";
   var live = null, offset = 0, round = 0, st = { pts: 0, ok: 0, bad: 0 }, over = false;
   function rpc(fn, args) {
     args = args || {}; args.p_token = u.token; var t0 = Date.now();

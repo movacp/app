@@ -4914,7 +4914,8 @@ window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
           if (q.dataset.d) return; q.dataset.d = "1"; done++;
           const ok = b.hasAttribute("data-ok"); b.classList.add(ok ? "ok" : "no"); if (!ok) q.querySelector("[data-ok]").classList.add("ok"); if (ok) got++;
           const fb = q.querySelector(".fb"); fb.textContent = ok ? (s.es ? "¡Muy bien!" : "Great job!") : (s.es ? "La respuesta correcta está en verde." : "The right answer is in green."); fb.style.color = ok ? "#3E6A0E" : "#B0246A";
-          if (done === qs.length) { score.hidden = false; score.style.display = "flex"; score.querySelector(".big").textContent = got + "/" + qs.length; again.hidden = false; }
+          if (done === qs.length) { score.hidden = false; score.style.display = "flex"; score.querySelector(".big").textContent = got + "/" + qs.length; again.hidden = false;
+            try { if (window.MovaAuth && window.MovaAuth.save) window.MovaAuth.save("season", "h:story/" + s.id, got, qs.length, { kind: "quiz", title: s.title }); } catch (e) {} }
         })));
         again.addEventListener("click", () => { got = 0; done = 0; qs.forEach((q) => { delete q.dataset.d; q.querySelectorAll("button").forEach((b) => b.classList.remove("ok", "no")); q.querySelector(".fb").textContent = ""; }); score.hidden = true; score.style.display = ""; again.hidden = true; qs[0].scrollIntoView({ behavior: "smooth", block: "center" }); });
       }
@@ -4949,7 +4950,7 @@ window.__MOVA_SEASON = { WS, COLOR, buildWS, cimg, printHead };
             found.add(hit.w); const c = "f" + (col++ % 5); hit.cells.forEach((i) => cells[i].classList.add(c));
             const b = root.querySelector(`.d-bank [data-w="${hit.w}"]`); if (b) b.classList.add("got");
             if (es) { const a = ddmPlay(ddmWord(hit.w)); a.onerror = () => { if (window.speechSynthesis) { const u = new SpeechSynthesisUtterance(hit.w); u.lang = "es-MX"; u.rate = .85; u.movaGender = "f"; speechSynthesis.cancel(); speechSynthesis.speak(u); } }; a.play().catch(() => {}); } else if (window.speechSynthesis) { const u = new SpeechSynthesisUtterance(hit.w); u.lang = "en-US"; u.rate = .85; speechSynthesis.cancel(); speechSynthesis.speak(u); }
-            if (found.size === res.placed.length) root.querySelector(".d-done").classList.add("on");
+            if (found.size === res.placed.length) { root.querySelector(".d-done").classList.add("on"); try { if (window.MovaAuth && window.MovaAuth.save) window.MovaAuth.save("season", "h:sopa/" + lang, res.placed.length, res.placed.length, { kind: "wordsearch" }); } catch (e) {} }
           }
           start = null; path = []; paint();
         };

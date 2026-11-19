@@ -255,6 +255,9 @@ header.top .brand-mark{box-shadow:none;border-radius:50%}
 .pk-it.on{border-color:#15192B;box-shadow:0 4px 0 #D3F36B}.pk-it.on em{display:grid}
 .pk-sel{margin:10px 2px 0;font-size:12.5px;color:#6B6F86}
 .tk .asg:disabled{opacity:.5;box-shadow:none}
+.tk .asg-live{width:100%;margin-top:8px;background:#FF8FC0;color:#15192B;border:0;border-radius:999px;padding:12px 16px;font-weight:800;font-size:14.5px;box-shadow:0 4px 0 #15192B;display:flex;align-items:center;justify-content:center;gap:8px}
+.tk .asg-live:disabled{opacity:.45;box-shadow:none}
+.tk .asg-live .dot{width:9px;height:9px;border-radius:50%;background:#15192B;animation:lvp 1.4s infinite}@keyframes lvp{50%{opacity:.25}}
 .tk{margin-top:16px;background:#F5F3FA;border-radius:20px;padding:14px 16px}
 .tk h3{margin:0 0 4px;font-family:"Bricolage Grotesque",sans-serif;font-size:17px}
 .tk .sub{margin:0 0 10px}
@@ -1430,7 +1433,7 @@ async function buildReport(s, all, y, mo, note){
 /* Selector visual de actividades para asignar */
 const CAT_COL={"TOEFL":"#FFE58A","Lectura":"#BDF0D8","Juegos en inglés":"#C9D2FF","Escape rooms":"#C7B5FF","Español y matemáticas":"#FFC7E2"};
 const BOOK_ART="data:image/svg+xml;base64,"+btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 90"><rect width="160" height="90" fill="#DDF5EA"/><circle cx="130" cy="18" r="9" fill="#fff" opacity=".7"/><circle cx="22" cy="70" r="14" fill="#D3F36B" opacity=".7"/><path d="M48 26 Q64 20 80 28 Q96 20 112 26 L112 70 Q96 64 80 72 Q64 64 48 70Z" fill="#fff" stroke="#15192B" stroke-width="2.6" stroke-linejoin="round"/><path d="M80 28 L80 72" stroke="#15192B" stroke-width="2.6"/><path d="M56 36 L72 34 M56 44 L72 42 M88 34 L104 36 M88 42 L104 44" stroke="#B9A6FF" stroke-width="2.6" stroke-linecap="round"/></svg>');
-function taskArt(k){ if(k==="lectura") return BOOK_ART; if(k==="word-forms") return "wf-cover.webp"; return "thumb-"+k+".webp"; }
+function taskArt(k){ if(k==="lectura") return BOOK_ART; if(k==="h:story/en") return "thumb-tg-en.webp"; if(k==="h:story/es") return "thumb-tg-es.webp"; if(/^h:/.test(k)) return "banner-thanksgiving.webp"; if(k==="word-forms") return "wf-cover.webp"; return "thumb-"+k+".webp"; }
 /* Opciones dentro del juego: la maestra elige en la vista previa (mova-task.js) */
 const NO_PICK=new Set(["toefl-sim","level-up","lectura","diagnostico-lectura"]);
 let curPicks=[];
@@ -1446,17 +1449,22 @@ function pickerHtml(){
 function wirePicker(box){
   const sel=box.querySelector("#asgSel"), btn=box.querySelector("#asgBtn"); if(!sel) return;
   const pk=box.querySelector(".pk"); btn.disabled=true; btn.textContent="Elige una actividad";
+  let lb=box.querySelector("#asgLive"); if(!lb){ btn.insertAdjacentHTML("afterend",`<button type="button" class="asg-live" id="asgLive" disabled><span class="dot"></span>Live con el grupo</button>`); lb=box.querySelector("#asgLive"); }
+  lb.disabled=true; lb.onclick=()=>{ const k=sel.value; if(!k) return;
+    const picks=(NO_PICK.has(k)||/^h:/.test(k))?[]:curPicks.slice(), labs=picks.map(x=>x.l).filter(Boolean);
+    const task=picks.length?k+"~"+b64url({p:picks.map(x=>({a:x.a,t:x.t,l:x.l})),l:labs}):k, name=(TASK_NAME[k]||k)+(labs.length?" · "+labs.join(" · "):"");
+    location.href="mova-live.html?act="+b64url({task,name}); };
   const bind=()=>{
     pk.querySelectorAll(".pk-cat").forEach(c=>c.onclick=()=>{ pickCat=+c.dataset.c; pk.outerHTML=pickerHtml(); wirePicker(box); });
     pk.querySelectorAll(".pk-it").forEach(it=>it.onclick=()=>{ pk.querySelectorAll(".pk-it").forEach(x=>x.classList.toggle("on",x===it)); sel.value=it.dataset.k;
-      const k=it.dataset.k; curPicks=[]; btn.disabled=false; const p=box.querySelector("#pkSel"); if(p) p.textContent="";
+      const k=it.dataset.k; curPicks=[]; btn.disabled=false; if(lb) lb.disabled=false; const p=box.querySelector("#pkSel"); if(p) p.textContent="";
       let c=box.querySelector(".pkc"); if(c) c.remove();
       const render=()=>{ const labs=curPicks.map(x=>x.l).filter(Boolean);
         btn.textContent=`Asignar: ${TASK_NAME[k]}${labs.length?" · "+labs.join(" · "):""}`;
         const sm=box.querySelector(".pkc .sum"); if(sm) sm.innerHTML=`Se asignará:${labs.length?labs.map(l=>`<span>${esc(l)}</span>`).join(""):`<span class="none">lo que el alumno elija</span>`}<button type="button" class="rs">Reiniciar</button>`, wireRs(); };
       const wireRs=()=>{ const r=box.querySelector(".pkc .rs"); if(r) r.onclick=()=>{ curPicks=[]; const f=box.querySelector(".pkc iframe"); if(f) f.src=f.src; render(); }; };
       window.__pkRender=render;
-      if(!NO_PICK.has(k)){
+      if(!NO_PICK.has(k)&&!/^h:/.test(k)){
         pk.insertAdjacentHTML("afterend",`<div class="pkc"><h4>Elige qué le vas a asignar</h4><p>Este es el juego tal como lo verá tu alumno. Toca el nivel, el tema o el modo que quieres; también puedes tocar Play para revisar el contenido. Si no eliges nada, el alumno escoge.</p><div class="ph"><iframe src="juego-${k}.html?pickmode=1" title="Vista previa" loading="lazy"></iframe></div><div class="sum"></div></div>`);
       }
       render(); });
@@ -1466,7 +1474,7 @@ function wirePicker(box){
 
 const TASK_CAT=[
  ["TOEFL",[["toefl-sim","TOEFL Quick Simulation"],["toefl-practice","TOEFL Practice"],["word-forms","Word Forms"],["level-up","Level Up · Placement test"]]],
- ["Lectura",[["lectura","Reading Library (one story)"]]],
+ ["Lectura",[["lectura","Reading Library (one story)"],["h:story/en","The Thankful Jar · Thanksgiving"],["h:story/es","La mesa de los agradecimientos"],["h:sopa/en","Thanksgiving WordSearch"],["h:sopa/es","Sopa de letras · Acción de Gracias"]]],
  ["Writing Lab",[["writing","Writing Lab · any task"]].concat((window.WL||[]).map(w=>["w:"+w.id,w.title+" · "+({kids:"Kids",children:"Children",teens:"Teens"})[w.st]+" "+w.lv]))],
  ["Juegos en inglés",[["speaking","Speaking Lab · Read aloud"],["word-quest","Word Quest"],["crucigrama","Crossword"],["sopa-de-letras","WordSearch"],["sentence-builder","Sentence Builder"],["sentence-scramble","Sentence Scramble"],["likes-dislikes","Likes & Dislikes"],["verb-memory","Verb Memory"]]],
  ["Escape rooms",[["locked-library","The Locked Library"],["haunted-mansion","The Haunted Mansion"],["lost-in-the-museum","Lost in the Museum"],["pirate-treasure-island","Pirate Treasure Island"],["space-station-rescue","Space Station Rescue"],["the-detectives-case","The Detective’s Case"],["trapped-in-the-train","Trapped in the Train"]]],
@@ -1479,6 +1487,7 @@ function taskMatch(t0,r){
   if(new Date(r.created_at) < new Date(t.created_at)) return false;
   if(t.task==="toefl-sim") return !!(r.detail && r.detail.kind==="toefl-sim");
   if(t.task==="lectura") return isReading(r);
+  if(/^h:/.test(t.task)) return r.activity==="season" && String(r.item)===t.task;
   if(t.task==="m-levelup") return r.activity==="math-level-up";
   if(/^m:/.test(t.task)) return r.activity==="math-comprueba"&&String(r.item)===t.task.slice(2);
   if(t.task.startsWith("w:")) return r.activity==="writing" && !!r.detail && r.detail.w===t.task.slice(2);
@@ -1776,7 +1785,7 @@ async function loadTasks(s){
     <button class="asg" id="asgBtn">Asignar actividad</button>${tHtml||`<p class="sub" style="margin:10px 2px 0">Todavía no tiene tareas asignadas.</p>`}${sHtml}</div>`;
   wirePicker(box); wireDue(box);
   $("#asgBtn").onclick=async()=>{ const b=$("#asgBtn"), k=$("#asgSel").value; b.disabled=true; b.textContent="Asignando…";
-    const picks=NO_PICK.has(k)?[]:curPicks.slice(), labs=picks.map(x=>x.l).filter(Boolean);
+    const picks=(NO_PICK.has(k)||/^h:/.test(k))?[]:curPicks.slice(), labs=picks.map(x=>x.l).filter(Boolean);
     const task=picks.length?k+"~"+b64url({p:picks.map(x=>({a:x.a,t:x.t,l:x.l})),l:labs}):k, title=(TASK_NAME[k]||k)+(labs.length?" · "+labs.join(" · "):"");
     try{ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:task,p_title:title+(curDue?" · due "+curDue:"")+" · by "+tName()}); toast(`${title} asignada a ${s.full_name.split(" ")[0]}`); curPicks=[]; loadTasks(s); }
     catch(e){ toast(e.message); b.disabled=false; b.textContent="Asignar actividad"; } };

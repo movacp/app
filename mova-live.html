@@ -143,10 +143,12 @@ td{background:#262B42;color:#fff}
 (function () {
 var SB_URL = "https://fclafxrkibvcjktrgznt.supabase.co", SB_KEY = "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6", STORE = "mova_admin_session", K_HOST = "mova_live_host";
 var PK = window.MOVA_PARK, BG = window.MOVA_BINGO, app = document.getElementById("app"), session = null, live = null, players = [], offset = 0, poll = null, raf = 0, screen = "";
+var ACT = null; try { var am = location.search.match(/[?&]act=([A-Za-z0-9_-]+)/); if (am) { var b = am[1].replace(/-/g, "+").replace(/_/g, "/"); while (b.length % 4) b += "="; ACT = JSON.parse(decodeURIComponent(escape(atob(b)))); if (!ACT || !ACT.task) ACT = null; } } catch (e) { ACT = null; }
+var TSECS = [600, 900, 1200, 1800];
 var settings = { game: "park", cats: ["vocab", "grammar"], level: "each", secs: 480, topic: "days", size: 3, pattern: "line", show: "audio", interval: 8 };
 function gameOf(st) { return (st && st.game) || "park"; }
 var ARCADE = [["word-quest", "Word Quest", "Vocabulary"], ["sentence-builder", "Sentence Builder", "Grammar"], ["sentence-scramble", "Sentence Scramble", "Grammar"], ["verb-memory", "Verb Memory", "Irregular verbs"], ["word-forms", "Word Forms", "Vocabulary"], ["likes-dislikes", "Likes & Dislikes", "Kids"], ["sopa-de-letras", "Word Search", "Vocabulary"], ["crucigrama", "Crossword", "Vocabulary"], ["craftland", "CraftLand", "Missions"], ["toefl-practice", "TOEFL Practice", "Exam prep"], ["locked-library", "Locked Library", "Escape room"], ["mision-matematica", "Misión Matemática", "Math"], ["lee-con-mochi", "Lee con Mochi", "Lectoescritura"]];
-function arcadeName(st) { var a = ARCADE.filter(function (x) { return x[0] === (st && st.slug); })[0]; return a ? a[1] : "Game"; }
+function arcadeName(st) { if (st && st.task) return st.name || "App activity"; var a = ARCADE.filter(function (x) { return x[0] === (st && st.slug); })[0]; return a ? a[1] : "Game"; }
 function gameName(st) { var g = gameOf(st); return g === "bingo" ? "MOVA Bingo" : g === "arcade" ? arcadeName(st) : "Sugar Town"; }
 function fixBingo(st) { var ok = BG.sizesFor(st.topic); if (ok.indexOf(Number(st.size)) < 0) st.size = ok[ok.length - 1]; st.secs = BG.topic(st.topic).words.length * (Number(st.interval) || 8) + 15; }
 var muted = false, synth = window.speechSynthesis;
@@ -210,6 +212,11 @@ function screenSetup(edit) {
       '<button class="choice" data-k="game" data-v="park" aria-pressed="' + (g === "park") + '"><small>Coins &amp; rides</small>Sugar Town</button>' +
       '<button class="choice" data-k="game" data-v="bingo" aria-pressed="' + (g === "bingo") + '"><small>Listen &amp; mark</small>MOVA Bingo</button></div>' +
       '<div class="label">More games · live leaderboard</div><div class="grid c3 cats">' + ARCADE.map(function (a) { return '<button class="choice" data-k="slug" data-v="' + a[0] + '" aria-pressed="' + (g === "arcade" && s.slug === a[0]) + '"><small>' + esc(a[2]) + "</small>" + esc(a[1]) + "</button>"; }).join("") + "</div>";
+    if (s.task) h = '<div class="label" style="margin-top:6px">App activity</div><div class="grid"><button class="choice" aria-pressed="true" style="text-align:left;padding:14px 16px"><small>Everyone opens it together</small>' + esc(s.name || "App activity") + '</button></div>' + h;
+    if (g === "arcade" && s.task) {
+      h += '<div class="label">Duration</div><div class="grid c4">' + TSECS.map(function (v) { return '<button class="choice" data-k="secs" data-v="' + v + '" aria-pressed="' + (Number(s.secs) === v) + '">' + v / 60 + " minutes</button>"; }).join("") + "</div>" +
+        '<p class="note">Each student opens ' + esc(s.name || "the activity") + ' on their own device at the same time. You see who joined and their results live.</p>';
+    } else
     if (g === "arcade") {
       h += '<div class="label">Duration</div><div class="grid c3">' + [300, 480, 600, 900].map(function (v) { return '<button class="choice" data-k="secs" data-v="' + v + '" aria-pressed="' + (Number(s.secs) === v) + '">' + v / 60 + " minutes</button>"; }).join("") + "</div>" +
         '<p class="note">Each student plays ' + esc(arcadeName(s)) + ' on their own device. Every finished round adds points, and you see the ranking live.</p>';
@@ -234,8 +241,8 @@ function screenSetup(edit) {
       var k = t.dataset.k, v = t.dataset.v;
       if (t.disabled) return;
       if (k === "cat") { var i = s.cats.indexOf(v); if (i >= 0) { if (s.cats.length > 1) s.cats.splice(i, 1); } else s.cats.push(v); }
-      else if (k === "slug") { s.game = "arcade"; s.slug = v; if ([300, 480, 600, 900].indexOf(Number(s.secs)) < 0) s.secs = 600; }
-      else if (k === "game") { s.game = v; s.secs = v === "park" ? 480 : s.secs; if (!s.cats) s.cats = ["vocab", "grammar"]; if (!s.topic) { s.topic = "days"; s.size = 3; s.pattern = "line"; s.show = "audio"; s.interval = 8; } }
+      else if (k === "slug") { delete s.task; delete s.name; s.game = "arcade"; s.slug = v; if ([300, 480, 600, 900].indexOf(Number(s.secs)) < 0) s.secs = 600; }
+      else if (k === "game") { delete s.task; delete s.name; s.game = v; s.secs = v === "park" ? 480 : s.secs; if (!s.cats) s.cats = ["vocab", "grammar"]; if (!s.topic) { s.topic = "days"; s.size = 3; s.pattern = "line"; s.show = "audio"; s.interval = 8; } }
       else if (k === "secs" || k === "size" || k === "interval") s[k] = Number(v); else s[k] = v;
       draw();
     };
@@ -243,9 +250,10 @@ function screenSetup(edit) {
     $("#go").onclick = async function () {
       var b = this; b.disabled = true; app.onclick = null;
       try {
-        if (gameOf(s) === "bingo") { fixBingo(s); BG.pack(s); } else if (gameOf(s) === "arcade") { if ([300, 480, 600, 900].indexOf(Number(s.secs)) < 0) s.secs = 600; } else if ([300, 480, 600].indexOf(Number(s.secs)) < 0) s.secs = 480;
+        if (gameOf(s) === "bingo") { fixBingo(s); BG.pack(s); } else if (gameOf(s) === "arcade") { if (s.task) { if (TSECS.indexOf(Number(s.secs)) < 0) s.secs = 900; } else if ([300, 480, 600, 900].indexOf(Number(s.secs)) < 0) s.secs = 600; } else if ([300, 480, 600].indexOf(Number(s.secs)) < 0) s.secs = 480;
         settings = s;
-        if (edit) await rpc("live_lobby", { p_code: live.code, p_settings: s }); else { await rpc("live_create", { p_settings: s }); try { localStorage.setItem(K_HOST, live.code); } catch (e) {} }
+        var send = async function () { if (edit) await rpc("live_lobby", { p_code: live.code, p_settings: s }); else { await rpc("live_create", { p_settings: s }); try { localStorage.setItem(K_HOST, live.code); } catch (e) {} } };
+        try { await send(); } catch (e1) { if (Number(s.secs) > 900) { s.secs = 900; settings = s; await send(); } else throw e1; }
         screen = ""; start();
       } catch (e) { $("#err").textContent = e.message; b.disabled = false; }
     };
@@ -445,13 +453,23 @@ function start() {
   var go = function () { if (!live || document.visibilityState !== "visible") return; rpc("live_host_state", { p_code: live.code }).then(onState).catch(function () {}); };
   poll = setInterval(go, 2000); onState(); go();
 }
-async function boot2() {
+async function boot1() {
   var saved = null; try { saved = localStorage.getItem(K_HOST); } catch (e) {}
   if (saved) {
     try { await rpc("live_host_state", { p_code: saved }); if (live && live.status !== "closed") { screen = ""; start(); return; } } catch (e) {}
     try { localStorage.removeItem(K_HOST); } catch (e) {}
   }
   live = null; screenSetup(false);
+}
+async function boot2() {
+  if (ACT) { settings = Object.assign({}, settings, { game: "arcade", slug: "", task: ACT.task, name: ACT.name, secs: 900 }); try { history.replaceState(null, "", location.pathname); } catch (e) {} }
+  var saved = null; try { saved = localStorage.getItem(K_HOST); } catch (e) {}
+  if (saved && ACT) {
+    try { await rpc("live_host_state", { p_code: saved }); if (live && (live.status === "lobby" || live.status === "ended")) { live.settings = Object.assign({}, live.settings || {}, { game: "arcade", slug: "", task: ACT.task, name: ACT.name, secs: 900 }); screenSetup(true); return; } if (live && live.status !== "closed") { screen = ""; start(); return; } } catch (e) {}
+    try { localStorage.removeItem(K_HOST); } catch (e) {}
+    live = null; screenSetup(false); return;
+  }
+  return boot1();
 }
 document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible" && live) rpc("live_host_state", { p_code: live.code }).then(onState).catch(function () {}); });
 (async function () {
