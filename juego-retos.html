@@ -1575,7 +1575,7 @@ function liveOnState() {
     liveLobby(); return;
   }
   if (playing && meP.round === live.round) {
-    if (!park || park.round !== live.round) { if (park) park.stop(); park = (liveGame() === "bingo" ? bingoGame : parkGame)(live, meP); liveScreen = "play"; }
+    if (!park || park.round !== live.round) { if (park) park.stop(); park = (liveGame() === "bingo" ? bingoGame : liveGame() === "quiz" ? quizGame : parkGame)(live, meP); liveScreen = "play"; }
     else park.onState();
     return;
   }
@@ -1589,7 +1589,7 @@ function liveLobby() {
     liveScreen = "lobby" + liveGame();
     var isB = liveGame() === "bingo";
     var isA = liveGame() === "arcade";
-    render(topBar(true) + '<div class="center"><span class="pkbadge">MOVA LIVE</span></div>' + (isA ? '<h1>' + esc(arcTask() ? arcTitle() : (ARC_NAMES[arcSlug()] || "Live game")) + '</h1><p class="lead">' + (arcTask() ? "When your teacher starts, the activity opens by itself on your device." : "When your teacher starts, the game opens by itself. Every round you finish adds points to the class ranking.") + '</p>' : isB ? '<h1>MOVA Bingo</h1><p class="lead">' + ((live.settings || {}).show === "read" ? "Read each word" : (live.settings || {}).show === "text" ? "Listen to and read each word" : "Listen to each word") + ', put a coin on your card and complete the pattern to win. BINGO!</p><div class="pkhero bhero">' + [0, 1, 2, 3].map(function (k) { return '<span>' + BG.chip + "</span>"; }).join("") + "</div>"
+    render(topBar(true) + '<div class="center"><span class="pkbadge">MOVA LIVE</span></div>' + (liveGame() === "quiz" ? '<h1>MOVA Quiz Show</h1><p class="lead">Questions appear on your screen at the same time for everyone. Answer right and fast to get more points!</p>' : isA ? '<h1>' + esc(arcTask() ? arcTitle() : (ARC_NAMES[arcSlug()] || "Live game")) + '</h1><p class="lead">' + (arcTask() ? "When your teacher starts, the activity opens by itself on your device." : "When your teacher starts, the game opens by itself. Every round you finish adds points to the class ranking.") + '</p>' : isB ? '<h1>MOVA Bingo</h1><p class="lead">' + ((live.settings || {}).show === "read" ? "Read each word" : (live.settings || {}).show === "text" ? "Listen to and read each word" : "Listen to each word") + ', put a coin on your card and complete the pattern to win. BINGO!</p><div class="pkhero bhero">' + [0, 1, 2, 3].map(function (k) { return '<span>' + BG.chip + "</span>"; }).join("") + "</div>"
         : '<div class="center"><img class="st-lg" src="st-logo.webp" alt="Sugar Town"></div><p class="lead">Answer correctly to earn coins and build the sweetest amusement park in town.</p><div class="pkhero2">' + PK.scene(["popcorn", "cotton", "icecream", "prizes", "ducks", "rings", "teacups", "carousel", "wheel"], { small: true, noLots: true }) + "</div>") +
       '<div class="wait"><span class="dots3"><i></i><i></i><i></i></span> Waiting for your teacher to start</div>' +
       '<div class="label">In the session</div><div class="plist" id="lpl"></div>');
@@ -1973,7 +1973,7 @@ function arcadeResults() {
   if (liveScreen === sig) return; var first = liveScreen.indexOf("arcres" + live.round + "|") !== 0; liveScreen = sig;
   var top = [list[1], list[0], list[2]], cls = ["p2", "p1", "p3"], place = [2, 1, 3], pts = function (v) { return Number(v || 0).toLocaleString("en-US") + " pts"; };
   sugarCss();
-  render(topBar(true) + '<div class="center" style="margin-top:6px"><span class="pkbadge st">' + esc((arcTask() ? "LIVE" : (ARC_NAMES[arcSlug()] || "LIVE")).toUpperCase()) + '</span></div><h1>' + (pos === 0 ? "You won!" : pos === 1 ? "2nd place!" : pos === 2 ? "3rd place!" : "Great job!") + "</h1>" +
+  render(topBar(true) + '<div class="center" style="margin-top:6px"><span class="pkbadge st">' + esc((liveGame() === "quiz" ? "QUIZ SHOW" : arcTask() ? "LIVE" : (ARC_NAMES[arcSlug()] || "LIVE")).toUpperCase()) + '</span></div><h1>' + (pos === 0 ? "You won!" : pos === 1 ? "2nd place!" : pos === 2 ? "3rd place!" : "Great job!") + "</h1>" +
     '<div class="podium">' + top.map(function (p, i) { return p ? '<div class="pod ' + cls[i] + '">' + av(p) + "<b>" + esc(p.id === me ? "You" : p.name) + '</b><div class="bar"><span>' + ordEn(place[i]) + "</span><small>" + pts(p.value) + "</small></div></div>" : "<div></div>"; }).join("") + "</div>" +
     '<div class="pkstats"><span><b>' + pts(mine.value) + "</b>Your points</span><span><b>" + (mine.correct || 0) + "</b>Correct</span><span><b>" + (mine.wrong || 0) + "</b>Wrong</span></div>" +
     (list.length > 3 ? '<div class="plist">' + list.slice(3).map(function (p, i) { return '<div class="prow' + (p.id === me ? " me" : "") + '"><b style="width:24px;text-align:center">' + (i + 4) + "</b>" + av(p) + "<span>" + esc(p.name) + '</span><span class="sc">' + pts(p.value) + "</span></div>"; }).join("") + "</div>" : "") +
@@ -1983,7 +1983,7 @@ function arcadeResults() {
 }
 function liveResults() {
   if (liveGame() === "bingo") return bingoResults();
-  if (liveGame() === "arcade") return arcadeResults();
+  if (liveGame() === "arcade" || liveGame() === "quiz") return arcadeResults();
   sugarCss();
   var list = lplayers.filter(function (p) { return p.round === live.round; }).slice().sort(function (a, b) { return b.value - a.value || b.correct - a.correct; });
   var pos = list.findIndex(function (p) { return p.id === me; }), mine = list[pos] || { items: [], value: 0, correct: 0, wrong: 0 };
@@ -1999,6 +1999,83 @@ function liveResults() {
     '<p class="lead" style="margin-top:16px">If your teacher starts another round, you’ll join automatically.</p>');
   $("#b-back").onclick = function () { lcall("live_leave", { p_code: liveCode }).catch(function () {}); liveForget(); screenHome(); };
   if (first && pos >= 0 && pos < 3) { confetti(pos === 0); sfx.go(); }
+}
+
+/* ---------- MOVA Live · Quiz Show (alumno) ---------- */
+var QZ_COL = ["#FF7BC0", "#C8EC4A", "#4FB3F6", "#9C8BFF"];
+function qzSeed(str) { var h = 1779033703 ^ str.length; for (var i = 0; i < str.length; i++) { h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = h << 13 | h >>> 19; } return function () { h = Math.imul(h ^ h >>> 16, 2246822507); h = Math.imul(h ^ h >>> 13, 3266489909); h ^= h >>> 16; return (h >>> 0) / 4294967296; }; }
+function qzPlan(s) { var n = Math.max(3, Math.min(20, Number(s.nq) || 10)), q = Math.max(8, Math.min(40, Number(s.qsecs) || 20)) * 1000; return { n: n, q: q, rev: 4000, lead: 3000 }; }
+function quizGame(lv, meP) {
+  var s = lv.settings || {}, P = qzPlan(s), round = lv.round, startAt = lv.start_at, endAt = lv.ends_at;
+  var cats = (s.cats && s.cats.length ? s.cats : ["vocab", "grammar"]), stage = liveStage(), same = s.level === "kids" || s.level === "children" || s.level === "teens";
+  var qs = [], pts = 0, ok = 0, bad = 0, ans = {}, stopped = false, done = false, raf = 0, lastPh = "", lastI = -1, timers = [];
+  try { R = same ? qzSeed(liveCode + "|" + round + "|" + stage + "|" + cats.join(",")) : Math.random; var pool = livePool(stage, cats); for (var k = 0; qs.length < P.n && k < 6; k++) { qs = qs.concat(pool); if (!pool.length) break; } } catch (e) {}
+  R = Math.random; qs = qs.slice(0, P.n);
+  if (!qs.length) { qs = []; }
+  try { var sv = JSON.parse(sessionStorage.getItem("qz-" + liveCode + "-" + round) || "null"); if (sv) { pts = sv.pts; ok = sv.ok; bad = sv.bad; ans = sv.ans || {}; } } catch (e) {}
+  function keep() { try { sessionStorage.setItem("qz-" + liveCode + "-" + round, JSON.stringify({ pts: pts, ok: ok, bad: bad, ans: ans })); } catch (e) {} }
+  function push() { lcall("live_push", { p_code: liveCode, p_round: round, p_value: pts, p_coins: 0, p_correct: ok, p_wrong: bad, p_items: { quiz: Object.keys(ans).length } }).catch(function () {}); }
+  function at(t) { var el = t - startAt - P.lead; if (el < 0) return { ph: "pre", i: -1, left: -el }; var slot = P.q + P.rev, i = Math.floor(el / slot); if (i >= qs.length) return { ph: "end", i: qs.length }; var r = el - i * slot; return r < P.q ? { ph: "q", i: i, left: P.q - r, el: r } : { ph: "rev", i: i, left: slot - r }; }
+  function rankTxt() { var list = lplayers.filter(function (p) { return p.round === round; }).slice().sort(function (a, b) { return b.value - a.value; }); var pos = list.findIndex(function (p) { return p.id === me; }); return pos < 0 ? "" : ordEn(pos + 1) + " of " + list.length; }
+  function shell(inner) {
+    render(topBar(true) + '<div class="qzhud"><span class="qzn">' + (lastI >= 0 ? "Question " + (Math.min(lastI, qs.length - 1) + 1) + " of " + qs.length : "Quiz Show") + '</span><span class="qzp"><b id="qzpts">' + pts.toLocaleString("en-US") + "</b> pts</span></div>" +
+      '<div class="qzbar"><i id="qzbar"></i></div><div id="qzbox">' + inner + "</div>");
+    $("#b-back").onclick = function () { if (confirm("Leave the session?")) { lcall("live_leave", { p_code: liveCode }).catch(function () {}); liveForget(); screenHome(); } };
+  }
+  function drawQ(i) {
+    var q = qs[i]; if (!q) return;
+    shell('<div class="prompt qzprompt">' + (q.say && synth && !q.bigSay ? '<button class="say" id="say" aria-label="Listen">' + ico("sound") + "</button>" : "") + q.html + "</div>" +
+      '<div class="opts qzopts' + (q.pics ? " pics" : "") + (q.cls ? " " + q.cls : "") + (q.options.length === 3 ? " three" : "") + '">' + q.options.map(function (o, j) { return '<button class="opt" style="--qc:' + QZ_COL[j % 4] + '" data-v="' + esc(o) + '"' + (q.pics ? ' aria-label="' + esc(q.label ? q.label(o) : o) + '"' : "") + ">" + (q.render ? q.render(o) : q.pics ? D2.PICS[o] : esc(o)) + "</button>"; }).join("") + "</div>" +
+      '<div class="qzwait" id="qzw"' + (ans[i] ? "" : " hidden") + '>Answer locked in. Waiting for the others…</div>');
+    var sb = $("#say"); if (q.say && synth && sb) { sb.onclick = function () { speak(q.say, q.lang); }; if (q.autoSay) speak(q.say, q.lang); }
+    if (ans[i]) { $$(".qzopts .opt").forEach(function (b) { b.disabled = true; if (String(b.dataset.v) === String(ans[i].v)) b.classList.add("pick"); }); }
+    $(".qzopts").onclick = function (e) {
+      var b = e.target.closest(".opt"); if (!b || ans[i] || done) return; var a = at(serverNow()); if (a.ph !== "q" || a.i !== i) return;
+      var good = String(b.dataset.v) === String(q.ans), gain = good ? 500 + Math.round(500 * Math.max(0, 1 - a.el / P.q)) : 0;
+      ans[i] = { v: b.dataset.v, ok: good, g: gain }; if (good) { ok++; pts += gain; } else bad++;
+      keep(); push(); sfx.tick();
+      $$(".qzopts .opt").forEach(function (x) { x.disabled = true; }); b.classList.add("pick"); $("#qzw").hidden = false;
+    };
+  }
+  function drawRev(i) {
+    var q = qs[i]; if (!q) return; var a = ans[i];
+    if (a && a.ok) sfx.ok(); else sfx.bad();
+    shell('<div class="qzrev ' + (a && a.ok ? "ok" : "no") + '"><div class="big">' + (a ? (a.ok ? "Correct!" : "Not this time") : "Time’s up!") + "</div>" +
+      (a && a.ok ? '<div class="gain">+' + a.g + " pts</div>" : '<div class="ans">Answer: <b>' + (q.pics && q.label ? esc(q.label(q.ans)) : esc(q.ans)) + "</b></div>") +
+      '<div class="rk" id="qzrk">' + esc(rankTxt()) + "</div></div>" +
+      (i + 1 < qs.length ? '<div class="qzwait">Next question coming…</div>' : '<div class="qzwait">That was the last one!</div>'));
+  }
+  function frame() {
+    if (stopped) return;
+    var t = serverNow(), a = at(t), b = $("#qzbar");
+    var ph = a.ph + a.i;
+    if (ph !== lastPh) {
+      lastPh = ph; lastI = a.i;
+      if (a.ph === "pre") shell('<div class="qzrev"><div class="big">Get ready!</div><div class="rk">' + qs.length + " questions · " + P.q / 1000 + ' seconds each</div><div class="qzcount" id="qzc"></div></div>');
+      else if (a.ph === "q") drawQ(a.i);
+      else if (a.ph === "rev") drawRev(a.i);
+      else { finish(); return; }
+    }
+    if (a.ph === "pre") { var c = $("#qzc"); if (c) c.textContent = Math.ceil(a.left / 1000); }
+    if (b) b.style.transform = "scaleX(" + (a.ph === "q" ? Math.max(0, a.left / P.q) : 0) + ")";
+    var pe = $("#qzpts"); if (pe) pe.textContent = pts.toLocaleString("en-US");
+    var rk = $("#qzrk"); if (rk && a.ph === "rev") rk.textContent = rankTxt();
+    if (t >= endAt) { finish(); return; }
+    raf = requestAnimationFrame(frame);
+  }
+  function stop() { stopped = true; cancelAnimationFrame(raf); timers.forEach(clearTimeout); }
+  function finish() { if (done) return; done = true; push(); stop(); liveScreen = ""; setTimeout(function () { liveResults(); }, 600); }
+  sugarCss(); qzCss(); push(); frame();
+  return { round: round, stop: stop, finish: finish, onState: function () {} };
+}
+function qzCss() {
+  if ($("#qzcss")) return; var st = document.createElement("style"); st.id = "qzcss";
+  st.textContent = ".qzhud{display:flex;justify-content:space-between;align-items:center;margin:8px 2px 8px;font-weight:800}.qzn{font-size:14px;color:var(--muted)}.qzp{font-size:14px}.qzp b{font-size:20px}" +
+    ".qzbar{height:10px;border-radius:99px;background:var(--track);overflow:hidden;margin-bottom:14px}.qzbar i{display:block;height:100%;background:linear-gradient(90deg,#FF7BC0,#9C8BFF);transform-origin:left;border-radius:99px}" +
+    ".qzopts .opt{background:var(--qc);border-color:var(--qc);color:#15192B;box-shadow:0 5px 0 rgba(0,0,0,.25);min-height:78px}.qzopts .opt:disabled{opacity:.45}.qzopts .opt.pick{opacity:1;outline:4px solid #15192B;outline-offset:2px}" +
+    ".qzwait{text-align:center;font-weight:700;color:var(--muted);margin-top:16px}" +
+    ".qzrev{text-align:center;border-radius:26px;padding:34px 18px;background:var(--track);margin-top:6px}.qzrev.ok{background:#E3F9C0}.qzrev.no{background:#FFE0EC}.qzrev .big{font-size:34px;font-weight:900;line-height:1.1}.qzrev .gain{font-size:28px;font-weight:900;margin-top:10px;color:#2E9B5F}.qzrev .ans{font-size:18px;margin-top:12px}.qzrev .rk{font-weight:800;margin-top:14px;color:var(--muted)}.qzcount{font-size:72px;font-weight:900;margin-top:12px}";
+  document.head.appendChild(st);
 }
 
 /* ---------- MOVA Live · MOVA Bingo (alumno) ---------- */

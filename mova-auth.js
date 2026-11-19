@@ -780,7 +780,7 @@
   window.MovaAuth = { save: save, user: function () { return user; }, login: showLogin, progress: function () { if (user) showAccount(); else showLogin(); } };
   function boot() {
     /* Opciones de tareas: vista previa de la maestra o tarea del alumno */
-    if (/[?&]live=\d{4}/.test(location.search) && !window.__movaLiveLoaded) { window.__movaLiveLoaded = 1; var ls = document.createElement("script"); ls.src = "mova-live-play.js?v=122"; document.head.appendChild(ls); }
+    if (/[?&]live=\d{4}/.test(location.search) && !/juego-retos\.html$/.test(location.pathname) && !window.__movaLiveLoaded) { window.__movaLiveLoaded = 1; var ls = document.createElement("script"); ls.src = "mova-live-play.js?v=122"; document.head.appendChild(ls); }
     if (gameSlug() && /[?&](pick|pickmode)=/.test(location.search) && !window.__movaTaskLoaded) { window.__movaTaskLoaded = 1; var ts = document.createElement("script"); ts.src = "mova-task.js?v=65"; document.head.appendChild(ts); }
     /* En la vista previa del panel de maestras no se registra nada */
     if (/[?&]pickmode=1/.test(location.search)) return;
