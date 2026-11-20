@@ -1155,7 +1155,7 @@ function credBox(name,user,pass){
 }
 function bindCred(name,user,pass){
   $("#copyCred").onclick = async () => {
-    const t = `MOVA Learning Studio\nAlumno: ${name}\nUsuario: ${user}\nContraseña: ${pass}\nEntra en: https://movacp.github.io/app/`;
+    const t = `MOVA Learning Studio\nAlumno: ${name}\nUsuario: ${user}\nContraseña: ${pass}\nEntra en: https://heymova.mx`;
     try{ await navigator.clipboard.writeText(t); toast("Datos copiados"); }catch(e){ toast("No se pudo copiar"); }
   };
   $("#doneCred").onclick = closeModal;

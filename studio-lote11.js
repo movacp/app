@@ -640,7 +640,7 @@ function buildSheet(grade, topicIds, count) {
   const key = items.map(({ it }, n) => `<li><b>${n + 1}.</b> ${plain(it.opts[0])}</li>`).join("");
   return `<div class="page">${head()}<div class="fields"><span>Nombre:</span><span style="flex:.5">Fecha:</span><span style="flex:.4">Aciertos:&nbsp;&nbsp;&nbsp;/${count}</span></div>
     <p style="font-size:11pt;margin:0 0 10px">Resuelve cada ejercicio y escribe tu respuesta en la línea. Muestra tus operaciones.</p>
-    <div class="grid2">${ex}</div><p class="ft">movacp.github.io/app · Av. Constituyentes de N.L. #111, Col. Lindavista · WhatsApp 812 342 6038</p></div>
+    <div class="grid2">${ex}</div><p class="ft">heymova.mx · Av. Constituyentes de N.L. #111, Col. Lindavista · WhatsApp 812 342 6038</p></div>
     <div class="page key">${head("Clave de respuestas")}<ol style="list-style:none;padding:0;columns:2">${key}</ol><p class="ft">Para el maestro o padre de familia. Cada hoja se genera con ejercicios nuevos.</p></div>`;
 }
 
