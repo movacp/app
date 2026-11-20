@@ -19,7 +19,7 @@
     { g: 7, n: "1° de secundaria", st: "MOVA Teens", c: LIME },
     { g: 8, n: "2° de secundaria", st: "MOVA Teens", c: LIME },
     { g: 9, n: "3° de secundaria", st: "MOVA Teens", c: LIME },
-    { g: 10, n: "1er semestre de prepa", st: "MOVA Teens", c: LIME }
+    { g: 10, n: "1er semestre de prepa", st: "MOVA Teens", c: LIME, f: "temas-g10.js" }
   ];
   var DATA = {}, LOADING = {};
   var LEVELS = [
@@ -256,8 +256,9 @@
     ".mt-opt{background:#fff;border:2px solid #ECE9F3;border-radius:18px;min-height:60px;padding:12px;font:inherit;font-weight:750;font-size:16px;color:#15192B;cursor:pointer;line-height:1.35}.mt-opt .mt-svg{max-width:150px}",
     ".mt-opt.sel{border-color:#15192B;box-shadow:0 3px 0 #D3F36B}.mt-opt.ok{border-color:#3FA77A;background:#DCF4EA}.mt-opt.no{border-color:#E46A9B;background:#FFE1EA}",
     ".mt-in{width:100%;font:inherit;font-size:22px;font-weight:800;text-align:center;border:2px solid #ECE9F3;border-radius:16px;padding:13px;color:#15192B;background:#fff;-moz-appearance:textfield}.mt-in:focus{outline:none;border-color:#15192B;box-shadow:0 3px 0 #D3F36B}",
-    ".mt-in.s{display:inline-block;width:auto;min-width:64px;max-width:120px;font-size:18px;padding:8px 6px;border-radius:12px;vertical-align:middle;margin:2px}",
+    ".mt-in.s{display:inline-block;width:auto;min-width:56px;max-width:88px;font-size:18px;padding:8px 6px;border-radius:12px;vertical-align:middle;margin:2px}",
     ".mt-in.ok{border-color:#3FA77A;background:#DCF4EA}.mt-in.no{border-color:#E46A9B;background:#FFE1EA}",
+    ".mt-sgn{flex:none;width:58px;height:58px;border-radius:16px;border:2px solid #ECE9F3;background:#fff;font:inherit;font-weight:800;font-size:24px;cursor:pointer;color:#15192B}.mt-sgn.s{width:34px;height:40px;font-size:17px;border-radius:10px;vertical-align:middle;padding:0;margin-left:4px}",
     ".mt-unit{display:flex;gap:8px;align-items:center}.mt-unit span{font-weight:800;font-size:17px;color:#4E5268;flex:none}",
     ".mt-fin{display:flex;flex-direction:column;align-items:center;gap:6px;max-width:140px;margin:0 auto}.mt-fin hr{width:100%;border:0;border-top:3px solid #15192B;margin:0}",
     ".mt-fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05;margin:0 2px;font-weight:800}.mt-fr span:first-child{border-bottom:2px solid currentColor;padding:0 3px}.mt-fr span{padding:0 3px}",
@@ -321,7 +322,7 @@
   /* ---------- Revisión ---------- */
   function norm(s) { return String(s == null ? "" : s).toLowerCase().trim().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\s+/g, " "); }
   function parseNum(v) {
-    v = String(v == null ? "" : v).trim().replace(/−/g, "-").replace(/\s+/g, "").replace(/^\$/, "");
+    v = String(v == null ? "" : v).trim().replace(/−/g, "-").replace(/\s+/g, "").replace(/^\$/, "").replace(/^\+/, "");
     if (/,/.test(v) && /\./.test(v)) v = v.replace(/,/g, "");
     else if (/^-?\d{1,3}(,\d{3})+$/.test(v)) v = v.replace(/,/g, "");
     else v = v.replace(/,/g, ".");
@@ -380,9 +381,9 @@
   function qHtml(q) {
     var h = '<p class="mt-q">' + q.q + "</p>" + (q.v ? '<div class="mt-vis">' + q.v + "</div>" : "");
     if (q.t === "mc") h += '<div class="mt-opts' + (q.one || q.o.some(function (o) { return String(o.h).length > 26; }) ? " one" : "") + '">' + q.o.map(function (o, i) { return '<button type="button" class="mt-opt" data-o="' + i + '">' + o.h + "</button>"; }).join("") + "</div>";
-    else if (q.t === "num") h += '<div class="mt-unit">' + (q.pre ? "<span>" + q.pre + "</span>" : "") + '<input class="mt-in" data-in inputmode="decimal" autocomplete="off" placeholder="Tu respuesta">' + (q.unit ? "<span>" + q.unit + "</span>" : "") + "</div>";
+    else if (q.t === "num") h += '<div class="mt-unit">' + (q.pre ? "<span>" + q.pre + "</span>" : "") + '' + (q.sg ? '<button type="button" class="mt-sgn" data-sgn="in" aria-label="Cambiar signo">±</button>' : "") + '<input class="mt-in" data-in inputmode="decimal" autocomplete="off" placeholder="Tu respuesta">' + (q.unit ? "<span>" + q.unit + "</span>" : "") + "</div>";
     else if (q.t === "frac") h += '<div class="mt-fin"><input class="mt-in" data-fn inputmode="numeric" autocomplete="off" aria-label="Numerador"><hr><input class="mt-in" data-fd inputmode="numeric" autocomplete="off" aria-label="Denominador"></div>';
-    else if (q.t === "fill") { var i = 0; h += '<div class="mt-lay">' + q.lay.replace(/\[\[(\d+)\]\]/g, function (_, k) { return '<input class="mt-in s" data-f="' + k + '" inputmode="' + (typeof q.ans[k] === "number" ? "decimal" : "text") + '" autocomplete="off" aria-label="Respuesta ' + (++i) + '">'; }) + "</div>"; }
+    else if (q.t === "fill") { var i = 0; h += '<div class="mt-lay">' + q.lay.replace(/\[\[(\d+)\]\]/g, function (_, k) { return (q.sg ? '<button type="button" class="mt-sgn s" data-sgn="' + k + '" aria-label="Cambiar signo">±</button>' : "") + '<input class="mt-in s" data-f="' + k + '" inputmode="' + (typeof q.ans[k] === "number" ? "decimal" : "text") + '" autocomplete="off" aria-label="Respuesta ' + (++i) + '">'; }) + "</div>"; }
     else if (q.t === "col") h += colHtml(q);
     else if (q.t === "shade") h += '<div class="mt-vis" data-sh>' + shadeSvg(q) + '</div><p style="text-align:center;margin:4px 0 0;font-weight:800;color:#4E5268;font-size:14px" data-shc>Coloreadas: 0</p>';
     else if (q.t === "order") h += '<div class="mt-chipx">' + q.perm.map(function (k) { return '<button type="button" class="mt-chip" data-it="' + k + '">' + q.items[k] + "</button>"; }).join("") + '</div><button type="button" class="mt-mini" data-clr>Borrar y empezar de nuevo</button>';
@@ -396,8 +397,9 @@
   var MCOL = ["#C7B5FF", "#FF9CC9", "#9FD8FF", "#D3F36B", "#FFE58A", "#9BE7C4"];
   function wire(box, q, ready) {
     var st = {};
+    box.querySelectorAll("[data-sgn]").forEach(function (b) { b.onclick = function () { if (box.dataset.lk) return; var k = b.dataset.sgn, i = box.querySelector(k === "in" ? "[data-in]" : '[data-f="' + k + '"]'); if (!i || i.readOnly) return; var neg = /^[−-]/.test(i.value), v = i.value.replace(/^[+−-]/, ""); i.value = neg ? v : "-" + v; if (i.oninput) i.oninput(); i.focus(); }; });
     var rc = box.querySelector("[data-rec]"); if (rc) { if (!q.h) rc.style.display = "none"; rc.onclick = function () { var hn = box.querySelector("[data-hint]"); hn.hidden = !hn.hidden; }; }
-    if (q.t === "mc") { box.querySelectorAll("[data-o]").forEach(function (b) { b.onclick = function () { if (st.lock) return; box.querySelectorAll("[data-o]").forEach(function (x) { x.classList.remove("sel"); }); b.classList.add("sel"); st.sel = +b.dataset.o; ready(true); }; }); return function () { return st.sel; }; }
+    if (q.t === "mc") { box.querySelectorAll("[data-o]").forEach(function (b) { b.onclick = function () { if (box.dataset.lk) return; box.querySelectorAll("[data-o]").forEach(function (x) { x.classList.remove("sel"); }); b.classList.add("sel"); st.sel = +b.dataset.o; ready(true); }; }); return function () { return st.sel; }; }
     if (q.t === "num" || q.t === "frac" || q.t === "fill") {
       var ins = box.querySelectorAll("input"); ins.forEach(function (i) { i.oninput = function () { ready(Array.prototype.every.call(ins, function (x) { return x.value.trim() !== ""; })); }; });
       if (q.t !== "fill" && ins[0]) setTimeout(function () { try { ins[0].focus({ preventScroll: true }); } catch (e) {} }, 80);
@@ -416,19 +418,19 @@
     }
     if (q.t === "shade") {
       st.on = {}; var cnt = box.querySelector("[data-shc]");
-      box.querySelectorAll("[data-p]").forEach(function (p) { p.addEventListener("click", function () { if (st.lock) return; var k = p.getAttribute("data-p"); st.on[k] = !st.on[k]; p.setAttribute("fill", st.on[k] ? (q.color || LAV) : "#fff"); var c = Object.keys(st.on).filter(function (x) { return st.on[x]; }).length; cnt.textContent = "Coloreadas: " + c; ready(c > 0); }); });
+      box.querySelectorAll("[data-p]").forEach(function (p) { p.addEventListener("click", function () { if (box.dataset.lk) return; var k = p.getAttribute("data-p"); st.on[k] = !st.on[k]; p.setAttribute("fill", st.on[k] ? (q.color || LAV) : "#fff"); var c = Object.keys(st.on).filter(function (x) { return st.on[x]; }).length; cnt.textContent = "Coloreadas: " + c; ready(c > 0); }); });
       return function () { return Object.keys(st.on).filter(function (x) { return st.on[x]; }).length; };
     }
     if (q.t === "order") {
       st.seq = []; var chips = box.querySelectorAll("[data-it]");
       var paint = function () { chips.forEach(function (c) { var k = +c.dataset.it, pos = st.seq.indexOf(k); c.classList.toggle("used", pos > -1); var bd = c.querySelector(".bd"); if (bd) bd.remove(); if (pos > -1) { var s = document.createElement("span"); s.className = "bd"; s.textContent = pos + 1; c.appendChild(s); } }); ready(st.seq.length === q.items.length); };
-      chips.forEach(function (c) { c.onclick = function () { if (st.lock) return; var k = +c.dataset.it, pos = st.seq.indexOf(k); if (pos > -1) st.seq.splice(pos, 1); else st.seq.push(k); paint(); }; });
-      box.querySelector("[data-clr]").onclick = function () { if (st.lock) return; st.seq = []; paint(); };
+      chips.forEach(function (c) { c.onclick = function () { if (box.dataset.lk) return; var k = +c.dataset.it, pos = st.seq.indexOf(k); if (pos > -1) st.seq.splice(pos, 1); else st.seq.push(k); paint(); }; });
+      box.querySelector("[data-clr]").onclick = function () { if (box.dataset.lk) return; st.seq = []; paint(); };
       return function () { return st.seq.slice(); };
     }
     if (q.t === "line") {
       var mk = box.querySelector("[data-mk]"), T = q.ticks, n = T.length - 1, sx = (330 - 48) / n;
-      box.querySelectorAll("[data-tk]").forEach(function (r) { r.addEventListener("click", function () { if (st.lock) return; st.sel = +r.getAttribute("data-tk"); mk.setAttribute("transform", "translate(" + (24 + st.sel * sx) + ",56)"); mk.style.display = ""; ready(true); }); });
+      box.querySelectorAll("[data-tk]").forEach(function (r) { r.addEventListener("click", function () { if (box.dataset.lk) return; st.sel = +r.getAttribute("data-tk"); mk.setAttribute("transform", "translate(" + (24 + st.sel * sx) + ",56)"); mk.style.display = ""; ready(true); }); });
       return function () { return st.sel; };
     }
     if (q.t === "match") {
@@ -438,20 +440,20 @@
         L.forEach(function (b) { var l = b.dataset.ml, on = st.p[l] != null; b.style.background = on ? MCOL[l % MCOL.length] : ""; b.style.borderColor = st.cur === l ? INK : ""; });
         Rr.forEach(function (b) { var r = b.dataset.mr, l = used[r]; b.style.background = l != null ? MCOL[l % MCOL.length] : ""; });
         ready(Object.keys(st.p).length === q.pairs.length); };
-      L.forEach(function (b) { b.onclick = function () { if (st.lock) return; var l = b.dataset.ml; if (st.p[l] != null && st.cur !== l) { delete st.p[l]; } st.cur = st.cur === l ? null : l; paintM(); }; });
-      Rr.forEach(function (b) { b.onclick = function () { if (st.lock) return; var r = b.dataset.mr; Object.keys(st.p).forEach(function (l) { if (st.p[l] === r) delete st.p[l]; }); if (st.cur != null) { st.p[st.cur] = r; st.cur = null; } paintM(); }; });
+      L.forEach(function (b) { b.onclick = function () { if (box.dataset.lk) return; var l = b.dataset.ml; if (st.p[l] != null && st.cur !== l) { delete st.p[l]; } st.cur = st.cur === l ? null : l; paintM(); }; });
+      Rr.forEach(function (b) { b.onclick = function () { if (box.dataset.lk) return; var r = b.dataset.mr; Object.keys(st.p).forEach(function (l) { if (st.p[l] === r) delete st.p[l]; }); if (st.cur != null) { st.p[st.cur] = r; st.cur = null; } paintM(); }; });
       return function () { return st.p; };
     }
     if (q.t === "sort") {
       st.a = {}; st.cur = null; var pool = box.querySelector("[data-pool]");
       var place = function () { box.querySelectorAll("[data-si]").forEach(function (c) { var i = c.dataset.si, b = st.a[i]; var dest = b == null ? pool : box.querySelector('[data-bk="' + b + '"] .mt-chipx'); if (c.parentNode !== dest) dest.appendChild(c); c.classList.toggle("sel", st.cur === i); }); box.querySelectorAll("[data-bk]").forEach(function (b) { b.classList.toggle("hot", st.cur != null); }); ready(Object.keys(st.a).length === q.items.length); };
-      box.querySelectorAll("[data-si]").forEach(function (c) { c.onclick = function (e) { e.stopPropagation(); if (st.lock) return; var i = c.dataset.si; if (st.cur != null && st.cur !== i && st.a[i] != null) { st.a[st.cur] = st.a[i]; st.cur = null; } else if (st.a[i] != null) { delete st.a[i]; st.cur = i; } else st.cur = st.cur === i ? null : i; place(); }; });
+      box.querySelectorAll("[data-si]").forEach(function (c) { c.onclick = function (e) { e.stopPropagation(); if (box.dataset.lk) return; var i = c.dataset.si; if (st.cur != null && st.cur !== i && st.a[i] != null) { st.a[st.cur] = st.a[i]; st.cur = null; } else if (st.a[i] != null) { delete st.a[i]; st.cur = i; } else st.cur = st.cur === i ? null : i; place(); }; });
       box.querySelectorAll("[data-bk]").forEach(function (b) { b.onclick = function () { if (st.lock || st.cur == null) return; st.a[st.cur] = +b.dataset.bk; st.cur = null; place(); }; });
       return function () { return st.a; };
     }
     if (q.t === "bars") {
       st.h = q.cats.map(function () { return 0; }); var y0 = 214, rh = 190 / q.max;
-      box.querySelectorAll("[data-bc]").forEach(function (r) { r.addEventListener("click", function () { if (st.lock) return; var p = r.getAttribute("data-bc").split(","), i = +p[0], k = +p[1]; st.h[i] = st.h[i] === k ? k - 1 : k; var b = box.querySelector('[data-bar="' + i + '"]'); b.setAttribute("y", y0 - st.h[i] * rh); b.setAttribute("height", st.h[i] * rh); ready(true); }); });
+      box.querySelectorAll("[data-bc]").forEach(function (r) { r.addEventListener("click", function () { if (box.dataset.lk) return; var p = r.getAttribute("data-bc").split(","), i = +p[0], k = +p[1]; st.h[i] = st.h[i] === k ? k - 1 : k; var b = box.querySelector('[data-bar="' + i + '"]'); b.setAttribute("y", y0 - st.h[i] * rh); b.setAttribute("height", st.h[i] * rh); ready(true); }); });
       return function () { return st.h.slice(); };
     }
     return function () { return null; };
@@ -461,7 +463,7 @@
     if (q.t === "mc") { var o = q.o[ans]; if (box) { box.querySelectorAll("[data-o]").forEach(function (b, i) { if (q.o[i].ok) b.classList.add("ok"); else if (i === ans) b.classList.add("no"); }); } return { ok: !!(o && o.ok), e: o && !o.ok ? o.e : "" }; }
     if (q.t === "num") { var v = parseNum(ans); if (v == null) return { ok: false, e: "Escribe solo el número." }; if (Math.abs(v - q.a) <= (q.tol || 1e-6)) { mark("[data-in]", true); return { ok: true }; } mark("[data-in]", false); for (var k in q.tr) if (Math.abs(Number(k) - v) < 1e-6) return { ok: false, e: q.tr[k] }; return { ok: false, e: "" }; }
     if (q.t === "frac") { var n = parseInt(ans[0], 10), d = parseInt(ans[1], 10); if (!(d > 0) || isNaN(n)) return { ok: false, e: "" }; var eq = n * q.a[1] === q.a[0] * d; if (eq && (!q.exact || (n === q.a[0] && d === q.a[1]))) { mark("input", true); return { ok: true }; } mark("input", false); if (eq) return { ok: false, e: q.exact === "simp" ? "Es equivalente, pero todavía se puede simplificar." : "Es una fracción equivalente, pero aquí se pide con denominador " + q.a[1] + "." }; return { ok: false, e: q.tr[n + "/" + d] || "" }; }
-    if (q.t === "fill") { var all = true, bad = -1; ans.forEach(function (a, i) { var ok = eqv(q.ans[i], a); if (!ok) { all = false; if (bad < 0) bad = i; } if (box) { var el = box.querySelector('[data-f="' + i + '"]'); if (el) el.classList.add(ok ? "ok" : "no"); } }); return { ok: all, e: !all && q.fe ? (typeof q.fe === "function" ? q.fe(bad, ans) : q.fe) : "" }; }
+    if (q.t === "fill") { var all = true, bad = -1, pool = q.unord ? q.ans.slice() : null; ans.forEach(function (a, i) { var ok; if (pool) { var j = -1; pool.forEach(function (x, k) { if (j < 0 && eqv(x, a)) j = k; }); ok = j > -1; if (ok) pool.splice(j, 1); } else ok = eqv(q.ans[i], a); if (!ok) { all = false; if (bad < 0) bad = i; } if (box) { var el = box.querySelector('[data-f="' + i + '"]'); if (el) el.classList.add(ok ? "ok" : "no"); } }); return { ok: all, e: !all && q.fe ? (typeof q.fe === "function" ? q.fe(bad, ans) : q.fe) : "" }; }
     if (q.t === "col") {
       var str = ans.map(function (x) { return x === "" ? " " : x; }).join(""), digits = str.replace(/^\s+/, "");
       if (/\s/.test(digits)) { mark("[data-dg]", false); return { ok: false, e: "Te faltó escribir alguna cifra del resultado." }; }
@@ -479,7 +481,7 @@
     if (q.t === "bars") { var okB = ans.every(function (h, i) { return h === q.vals[i]; }); return { ok: okB, e: okB ? "" : "Revisa la altura de cada barra con la tabla: cada renglón de la cuadrícula vale " + (q.unitv || 1) + "." }; }
     return { ok: false, e: "" };
   }
-  function lock(box, q) { box.querySelectorAll("input,button.mt-opt,button.mt-chip").forEach(function (x) { if (x.tagName === "INPUT") x.readOnly = true; else x.disabled = true; }); var c = box.querySelector("[data-clr]"); if (c) c.style.display = "none"; }
+  function lock(box, q) { box.dataset.lk = "1"; box.querySelectorAll("input,button.mt-opt,button.mt-chip,button.mt-sgn").forEach(function (x) { if (x.tagName === "INPUT") x.readOnly = true; else x.disabled = true; }); var c = box.querySelector("[data-clr]"); if (c) c.style.display = "none"; }
 
   /* ---------- Carga de grados ---------- */
   function gradeInfo(g) { for (var i = 0; i < GRADES.length; i++) if (GRADES[i].g === g) return GRADES[i]; return null; }
