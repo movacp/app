@@ -199,3 +199,105 @@ for(var st in NEW)for(var lv in NEW[st]){var L=D[st]&&D[st][lv];if(!L)continue;
 var ADD=window.MOVA_PX_ADD||{};
 for(var s in D)for(var l in D[s])D[s][l].topics.forEach(function(t){if(ADD[t.id])t.px=(t.px||[]).concat(ADD[t.id]);});
 })();
+/* ---- Lote 2: Now I Know 4 (U5–6) y Now I Know 5 (U1–2) ---- */
+(function(){
+var D=window.MOVA_PATH;if(!D)return;
+function find(id){for(var s in D)for(var l in D[s]){var t=D[s][l].topics.filter(function(x){return x.id===id;})[0];if(t)return t;}}
+function addPx(id,arr){var t=find(id);if(t&&!(t.px||[]).length)t.px=arr;}
+/* tema nuevo: adverbios */
+var A2=D.children&&D.children.A2;
+if(A2&&!A2.topics.some(function(x){return x.id==="c-a2-13";})){
+ var i=-1;A2.topics.forEach(function(x,j){if(x.id==="c-a2-6")i=j;});
+ A2.topics.splice(i+1,0,{id:"c-a2-13",t:"Adverbs: quickly, faster, the fastest",s:"adjectives vs. adverbs",
+  exp:["Adjectives describe <b>nouns</b>: a <b>quick</b> runner. Adverbs describe <b>verbs</b>: she runs <b>quickly</b>.","Most adverbs = adjective + <b>-ly</b>: slow → slowly, careful → carefully, easy → eas<b>ily</b>.","Irregular: good → <b>well</b>, fast → <b>fast</b>, hard → <b>hard</b>.","Comparing: <b>faster, harder, better, more carefully</b> than… / the <b>fastest, best, most carefully</b>."],
+  ex:[["She is a careful driver. She drives carefully.",""],["Leo plays the piano very well.",""],["My dad works harder than anyone.",""],["Who can run the fastest in your class?",""]],
+  b:["He speaks English very well.","Please walk slowly.","She can swim faster than me.","Who sings the most beautifully?"],
+  q:[["Mia is a very ___ swimmer.",["fast","fastly","faster than","most fast"],0,"Swimmer is a noun → adjective: fast."],
+     ["Please speak ___. The baby is sleeping.",["quietly","quiet","quieter","quietest"],0,"Speak is a verb → adverb: quietly."],
+     ["Leo plays the guitar very ___.",["well","good","better","goodly"],0,"Good → well (adverb)."],
+     ["My dad drives ___ than my mom.",["more carefully","carefuller","careful","most carefully"],0,"Long adverbs: more carefully than."],
+     ["Who can run the ___ in your class?",["fastest","faster","fast","most fast"],0,"Superlative: the fastest."],
+     ["She did the exam ___ than me. She got 10!",["better","well","best","gooder"],0,"Well → better than."]],
+  fx:[["He sings very good.","He sings very well.","Sing is a verb → adverb: well."],
+      ["She works hardly every day.","She works hard every day.","Hard is irregular: hard, not hardly."]],
+  px:[
+   {k:"match",p:[["A pilot has to fly","very carefully."],["A good dancer moves","gracefully to the music."],["Usain Bolt ran","the fastest in the world."],["My grandma speaks","more slowly than my mom."]],why:"Read both parts together. Do they make sense?"},
+   {k:"read",txt:"Three friends want to be in the school talent show. Ana sings beautifully and plays the piano well. Pablo dances faster than anyone in his class, but he sings badly. Lu draws the most creatively of the three. Their teacher says they all practice very hard.",
+    tf:[["Ana plays the piano well.",true],["Pablo sings beautifully.",false],["Lu draws the most creatively.",true],["The friends don't practice much.",false]],why:"Look for the adverbs in the text."},
+   {k:"pick",s:["The firefighter worked [bravely|brave] all night.","My brother is a [good|well] painter.","She speaks English [more fluently|fluentlier] than her sister.","Of all the players, Leo kicks the ball the [hardest|most hard]."],why:"Noun → adjective. Verb → adverb."},
+   {k:"ctx",box:["talented","skill","creative","practice","lazy"],s:[["She is very ___. She can sing, dance and act.","talented"],["Cooking is a useful ___ for life.","skill"],["Artists need to be ___ and have new ideas.","creative"],["If you ___ every day, you will play better.","practice"]],why:"One word in the box is extra."},
+   {k:"write",lab:"CHANGE THE SENTENCE",cue:"Sara is a careful driver.  →  Sara drives…",a:["Sara drives carefully."],why:"Careful → carefully."},
+   {k:"write",lab:"CHANGE THE SENTENCE",cue:"Leo is a good singer.  →  Leo sings…",a:["Leo sings well.","Leo sings very well."],why:"Good → well."},
+   {k:"write",lab:"COMPARE",cue:"My cousin swims fast. I swim faster.  →  I swim…",a:["I swim faster than my cousin.","I swim faster than my cousin does."],why:"Faster than…"},
+   {k:"un",s:"Who can solve the problem the most quickly?"},
+   {k:"un",s:"A vet has to work very carefully."}
+  ]});
+}
+addPx("c-a2-10",[
+ {k:"match",p:[["You mustn't touch the lava.","It's extremely hot."],["In the desert, you have to drink","a lot of water."],["It's Sunday, so we don't have to","get up early."],["Climbers must wear","warm clothes on the mountain."]],why:"Read both parts together. Do they make sense?"},
+ {k:"read",txt:"Volcano Tour Rules. Visitors must stay with the guide at all times. You have to wear strong boots because the rocks are sharp. You mustn't go near the crater. You don't have to bring water; we give everyone a bottle.",
+  tf:[["Visitors can walk alone.",false],["You have to wear strong boots.",true],["You must bring your own water.",false],["You mustn't go near the crater.",true]],why:"mustn't = not allowed. don't have to = not necessary."},
+ {k:"pick",s:["You [mustn't|don't have to] swim here. It's dangerous!","It's a holiday. We [don't have to|mustn't] go to school.","My sister [has to|have to] wear glasses.","Do you [have to|must] wear a uniform?"],why:"mustn't = not allowed. don't have to = not necessary."},
+ {k:"ctx",box:["shiver","sweat","lava","erupt","ash"],s:[["When it's very cold, our bodies ___ to get warm.","shiver"],["When it's very hot, we ___ and need to drink water.","sweat"],["Hot ___ came out of the volcano and ran down the mountain.","lava"],["The volcano can ___ at any time. People must leave!","erupt"]],why:"One word in the box is extra."},
+ {k:"write",lab:"WRITE THE RULE",cue:"not allowed: you / run / near the pool",a:["You mustn't run near the pool.","You must not run near the pool."],why:"Not allowed → mustn't."},
+ {k:"write",lab:"NOT NECESSARY",cue:"we / bring / lunch tomorrow",a:["We don't have to bring lunch tomorrow.","We do not have to bring lunch tomorrow.","Tomorrow we don't have to bring lunch."],why:"Not necessary → don't have to."},
+ {k:"write",lab:"NECESSARY",cue:"she / wear / a helmet",a:["She has to wear a helmet.","She must wear a helmet."],why:"She → has to."},
+ {k:"un",s:"Do we have to wear special clothes?"},
+ {k:"un",s:"You mustn't climb the volcano without a guide."}
+]);
+addPx("c-a2-2",[
+ {k:"match",p:[["Thomas Edison","improved the light bulb."],["Marie Curie","discovered radium."],["Alexander Graham Bell","invented the telephone."],["The Wright brothers","designed the first airplane."]],why:"Famous inventors and scientists."},
+ {k:"read",txt:"Last Saturday my brother and I visited a science museum. We watched a video about inventions and learned about Edison. Then we played with robots and tried a virtual reality game. My brother loved the robots, but I preferred the space room. We stayed there all day!",
+  tf:[["They visited a science museum.",true],["They watched a video about animals.",false],["The brother loved the robots.",true],["They stayed for one hour.",false]],why:"Look for the verbs with -ed."},
+ {k:"pick",s:["Yesterday I [watched|watch] a movie about robots.","She [studied|studyed] for her science test.","We [stopped|stoped] at a gas station.","They [didn't invent|didn't invented] the internet."],why:"Spelling: study → studied, stop → stopped. After didn't → base verb."},
+ {k:"ctx",box:["recorded","printed","discovered","designed","invented"],s:[["Edison ___ his voice on a machine in 1877.","recorded"],["Gutenberg ___ books with his new machine.","printed"],["Marie Curie ___ two new elements.","discovered"],["An engineer ___ the new bridge.","designed"]],why:"One word in the box is extra."},
+ {k:"write",cue:"yesterday: I / play / video games",a:["I played video games yesterday.","Yesterday I played video games.","Yesterday, I played video games."],why:"Regular verbs: + -ed."},
+ {k:"write",cue:"last week: my mom / study / English",a:["My mom studied English last week.","Last week my mom studied English.","Last week, my mom studied English."],why:"study → studied."},
+ {k:"write",cue:"last night: we / watch / TV  ✗",a:["We didn't watch TV last night.","We did not watch TV last night.","Last night we didn't watch TV.","Last night, we didn't watch TV."],why:"✗ = didn't + base verb."},
+ {k:"un",s:"Did you visit the museum last weekend?"},
+ {k:"un",s:"My grandpa repaired an old radio."}
+]);
+addPx("c-a2-3",[
+ {k:"match",h:"Match the verb with its past form.",p:[["go","went"],["eat","ate"],["see","saw"],["buy","bought"],["make","made"]],why:"Irregular verbs don't use -ed."},
+ {k:"read",txt:"When Ana was ten, she made a small robot for the science fair. She found old parts at home and built it in two weeks. On the day of the fair, the robot didn't move! Ana felt sad, but then she saw a loose cable. She fixed it, and the robot won first prize.",
+  tf:[["Ana bought new parts for the robot.",false],["She built the robot in two weeks.",true],["The robot moved at first.",false],["The robot won a prize.",true]],why:"Look for the irregular verbs: made, found, built, saw, won."},
+ {k:"pick",s:["Last summer we [went|goed] to the beach.","I [saw|seed] a shooting star last night.","She [didn't buy|didn't bought] anything.","They [made|maked] a cake for Mom."],why:"Irregular past forms. After didn't → base verb."},
+ {k:"ctx",box:["took","gave","broke","flew","wrote"],s:[["I ___ a lot of photos on my trip.","took"],["My friend ___ me a present for my birthday.","gave"],["I ___ my arm when I fell off my bike.","broke"],["We ___ to Cancún by plane.","flew"]],why:"One word in the box is extra."},
+ {k:"write",cue:"last weekend: we / go / to the cinema",a:["We went to the cinema last weekend.","Last weekend we went to the cinema.","Last weekend, we went to the cinema."],why:"go → went."},
+ {k:"write",cue:"this morning: she / have / cereal for breakfast",a:["She had cereal for breakfast this morning.","This morning she had cereal for breakfast.","This morning, she had cereal for breakfast."],why:"have → had."},
+ {k:"write",lab:"MAKE A QUESTION",cue:"you / see / the game yesterday ?",a:["Did you see the game yesterday?"],why:"Did + you + base verb…?"},
+ {k:"un",s:"Where did you go on your vacation?"},
+ {k:"un",s:"I lost my keys at school yesterday."}
+]);
+addPx("c-a2p-1",[
+ {k:"match",p:[["At 8 o'clock last night,","I was doing my homework."],["The archaeologists were digging","in the desert all morning."],["Were you sleeping","when I called you?"],["They weren't listening","to the teacher."]],why:"Read both parts together. Do they make sense?"},
+ {k:"read",txt:"Yesterday at 10 a.m. the team was working at an old Mayan city. Laura was cleaning a stone with a brush. Tom and Mike were digging near a pyramid. The guide wasn't working; he was taking photos. Suddenly, it started to rain!",
+  tf:[["Laura was cleaning a stone.",true],["Tom was taking photos.",false],["The guide was digging.",false],["The team was working at a Mayan city.",true]],why:"Look for was / were + -ing."},
+ {k:"pick",s:["At 9 p.m. I [was watching|were watching] TV.","They [were playing|was playing] soccer in the rain.","What [were|was] you doing at 7 o'clock?","She wasn't [sleeping|sleep] at midnight."],why:"I / he / she → was. You / we / they → were. + verb-ing."},
+ {k:"ctx",box:["archaeologist","pyramid","ancient","tomb","dig"],s:[["The ___ was studying old bones.","archaeologist"],["The Egyptians built a huge ___ for their king.","pyramid"],["We were reading about ___ Rome, 2,000 years ago.","ancient"],["They found gold inside the king's ___.","tomb"]],why:"One word in the box is extra."},
+ {k:"write",cue:"at 6 p.m. yesterday: I / play / basketball",a:["I was playing basketball at 6 p.m. yesterday.","At 6 p.m. yesterday I was playing basketball.","At 6 p.m. yesterday, I was playing basketball.","Yesterday at 6 p.m. I was playing basketball."],why:"was + verb-ing."},
+ {k:"write",cue:"my parents / sleep / at 11 p.m.  ✗",a:["My parents weren't sleeping at 11 p.m.","My parents were not sleeping at 11 p.m.","At 11 p.m. my parents weren't sleeping."],why:"✗ = weren't + verb-ing."},
+ {k:"write",lab:"MAKE A QUESTION",cue:"what / you / do / at 8 o'clock ?",a:["What were you doing at 8 o'clock?","What were you doing at eight o'clock?"],why:"What + were + you + verb-ing?"},
+ {k:"un",s:"What were the archaeologists looking for?"},
+ {k:"un",s:"My sister was talking on the phone all evening."}
+]);
+addPx("c-a2p-2",[
+ {k:"match",p:[["I was taking a shower","when the phone rang."],["While we were having lunch,","the lights went out."],["Ana fell off her bike","while she was riding to school."],["When the teacher came in,","the students were talking."]],why:"Long action (was/were + -ing) + short action (past simple)."},
+ {k:"read",txt:"Last summer, Diego was exploring a cave with his uncle when he saw something strange on the wall. It was an ancient painting of animals! While his uncle was taking photos, Diego found an old clay pot on the floor. They called a museum, and archaeologists arrived the next day.",
+  tf:[["Diego was exploring a cave when he saw a painting.",true],["Diego took the photos.",false],["Diego found a clay pot.",true],["The archaeologists arrived the same day.",false]],why:"Look for when and while."},
+ {k:"pick",s:["I [was reading|read] a book when you called.","While she was cooking, she [burned|was burning] her finger.","[While|When] I was walking home, I met my friend.","The dog barked [when|while] the doorbell rang."],why:"while + long action. when + short action."},
+ {k:"ctx",box:["ruins","discovered","clay","coins","statue"],s:[["Explorers found the ___ of an old city in the jungle.","ruins"],["While they were digging, they ___ a secret room.","discovered"],["People made pots from ___ thousands of years ago.","clay"],["The museum has old Roman ___ made of silver.","coins"]],why:"One word in the box is extra."},
+ {k:"write",lab:"JOIN WITH WHEN",cue:"I / watch TV  +  the lights / go out",a:["I was watching TV when the lights went out.","When the lights went out, I was watching TV.","When the lights went out I was watching TV."],why:"Long action: was watching. Short action: went out."},
+ {k:"write",lab:"JOIN WITH WHILE",cue:"we / walk to school  +  it / start to rain",a:["While we were walking to school, it started to rain.","While we were walking to school it started to rain.","It started to rain while we were walking to school."],why:"while + was/were + -ing."},
+ {k:"write",lab:"JOIN WITH WHILE",cue:"she / break her leg  +  she / ski",a:["She broke her leg while she was skiing.","While she was skiing, she broke her leg.","While she was skiing she broke her leg."],why:"Short action: broke. Long action: was skiing."},
+ {k:"un",s:"What were you doing when the earthquake started?"},
+ {k:"un",s:"While the archaeologists were working, it started to snow."}
+]);
+/* mazos de vocabulario nuevos (se agregan al final para no mover los existentes) */
+function deck(st,lv,n,w){var L=D[st]&&D[st][lv];if(!L)return;L.vocab=L.vocab||[];if(L.vocab.some(function(v){return v.n===n;}))return;L.vocab.push({n:n,w:w});}
+deck("children","A2","Talents and skills",[["talented","naturally very good at something"],["skill","an ability you learn and practice"],["creative","good at making new things and ideas"],["practice","do something many times to get better"],["patient","calm when you have to wait"],["hard-working","works a lot and doesn't give up"],["confident","sure about yourself and what you can do"],["brave","not afraid of danger"],["organized","keeps things neat and plans well"],["curious","wants to know and learn new things"]]);
+deck("children","A2","Extreme conditions",[["freezing","very, very cold"],["boiling","very, very hot"],["shiver","your body shakes because you are cold"],["sweat","water that comes out of your skin when you're hot"],["frostbite","when extreme cold hurts your fingers or toes"],["sunburn","red, painful skin from too much sun"],["thirsty","you need to drink something"],["desert","a very dry place with little rain"],["blizzard","a big snowstorm with strong wind"],["survive","stay alive in a difficult situation"]]);
+deck("children","A2","Volcanoes",[["volcano","a mountain that can throw out fire and hot rock"],["erupt","when a volcano suddenly throws out lava and ash"],["lava","hot liquid rock that comes out of a volcano"],["magma","hot liquid rock under the ground"],["ash","gray powder that comes out of a volcano"],["crater","the big hole at the top of a volcano"],["smoke","the gray cloud that comes from something burning"],["earthquake","when the ground shakes"],["dangerous","something that can hurt you"],["evacuate","leave a place because it isn't safe"]]);
+deck("children","A2+","Inventions and technology",[["invent","create something new for the first time"],["inventor","a person who invents things"],["device","a small machine with a special job"],["gadget","a small, clever machine or tool"],["robot","a machine that can do jobs by itself"],["battery","it gives power to phones and toys"],["charge","put power into a battery"],["screen","the flat part of a phone or computer where you see things"],["wireless","works without cables"],["experiment","a scientific test to learn something"]]);
+deck("children","A2+","Ancient civilizations",[["ancient","from a very long time ago"],["civilization","a big society with cities, rules and culture"],["archaeologist","a person who studies old objects and places"],["pyramid","a big building with a square base and a point on top"],["tomb","a place where a dead person is buried"],["ruins","what is left of old buildings"],["temple","a building for praying to gods"],["emperor","the ruler of an empire"],["clay","soft earth used to make pots"],["dig","make a hole in the ground"]]);
+})();
