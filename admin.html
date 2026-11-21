@@ -264,6 +264,8 @@ header.top .brand-mark{box-shadow:none;border-radius:50%}
 .pk-it:active{transform:scale(.97)}
 .pk-img{display:block;aspect-ratio:16/9;border-radius:13px;overflow:hidden;margin-bottom:8px}.pk-img img{width:100%;height:100%;object-fit:cover;display:block}
 .pk-it b{font-size:13px;line-height:1.25;padding:0 4px;font-weight:800}
+.pk-flag{align-self:flex-start;margin:6px 4px 0;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;line-height:1.5}.pk-flag.pend{background:#E9E4FF;color:#4B3BB5}.pk-flag.done{background:#DDF5C9;color:#2F6B12}.pk-flag.prac{background:#EEF0F4;color:#5A6075}
+.pk-warn{margin:6px 2px 0;font-size:12.5px;font-weight:700;border-radius:12px;padding:8px 12px}.pk-warn.pend{background:#F1EDFF;color:#4B3BB5}.pk-warn.done{background:#EAF8DD;color:#2F6B12}.pk-warn.prac{background:#F2F3F6;color:#5A6075}
 .pk-it em{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;background:#D3F36B;border:2px solid #15192B;display:none;place-items:center;font-style:normal;font-weight:800;font-size:13px}
 .pk-it.on{border-color:#15192B;box-shadow:0 4px 0 #D3F36B}.pk-it.on em{display:grid}
 .pk-sel{margin:10px 2px 0;font-size:12.5px;color:#6B6F86}
@@ -1563,12 +1565,26 @@ function taskKeyOf(t){ return String((t&&t.task)||t||"").split("~")[0]; }
 function b64url(o){ return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
 window.addEventListener("message",e=>{ if(e.origin!==location.origin||!e.data||e.data.type!=="mova-pick") return; curPicks=e.data.picks||[]; if(window.__pkRender) window.__pkRender(); });
 let pickCat=0;
+let PK_MARK={};
+function pkFlag(k){ const m=PK_MARK[k]; if(!m) return ""; return `<span class="pk-flag ${m.c}" title="${esc(m.tip)}">${esc(m.l)}</span>`; }
+function pkMarks(tasks,rows){
+  const out={}, d=x=>new Date(x).toLocaleDateString("es-MX",{day:"numeric",month:"short"});
+  TASK_CAT.forEach(([g,items])=>items.forEach(([k])=>{
+    const mine=(tasks||[]).filter(t=>String(t.task).split("~")[0]===k).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    if(mine.length){ const t=mine[0], done=taskDoneRow(t,rows||[]);
+      out[k]={c:done?"done":"pend", l:done?"Completada":"Asignada", tip:(mine.length>1?mine.length+" veces · ":"")+"Última: "+d(t.created_at)+(t.by?" por "+t.by:"")+(done?" · terminada "+d(done.created_at):" · pendiente"), t:mine}; return; }
+    try{ const r=(rows||[]).filter(r=>taskMatch({task:k},r)).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at))[0];
+      if(r) out[k]={c:"prac", l:"Ya la practicó", tip:"La hizo por su cuenta el "+d(r.created_at), t:[]}; }catch(e){}
+  }));
+  return out;
+}
 function pickerHtml(){
   return `<div class="pk"><div class="pk-cats">${TASK_CAT.map(([g],i)=>`<button type="button" class="pk-cat${i===pickCat?" on":""}" data-c="${i}"><i style="background:${CAT_COL[g]||"#EEE"}"></i>${esc(g)}</button>`).join("")}</div>
-    <div class="pk-grid">${TASK_CAT[pickCat][1].map(([k,n])=>`<button type="button" class="pk-it" data-k="${k}"><span class="pk-img" style="background:${CAT_COL[TASK_CAT[pickCat][0]]}"><img src="${taskArt(k)}" alt="" loading="lazy" onerror="this.remove()"></span><b>${esc(n)}</b><em aria-hidden="true">✓</em></button>`).join("")}</div>
+    <div class="pk-grid">${TASK_CAT[pickCat][1].map(([k,n])=>`<button type="button" class="pk-it" data-k="${k}"><span class="pk-img" style="background:${CAT_COL[TASK_CAT[pickCat][0]]}"><img src="${taskArt(k)}" alt="" loading="lazy" onerror="this.remove()"></span><b>${esc(n)}</b>${pkFlag(k)}<em aria-hidden="true">✓</em></button>`).join("")}</div>
     <p class="pk-sel" id="pkSel">Toca una actividad para elegirla.</p></div>`;
 }
 function openLivePicker(){
+  PK_MARK={};
   const opts=TASK_CAT.map(([g,items])=>`<optgroup label="${esc(g)}">${items.map(([k,n])=>`<option value="${k}">${esc(n)}</option>`).join("")}</optgroup>`).join("");
   openModal(`<button class="x" aria-label="Cerrar">×</button><h2 style="margin-bottom:4px">Live con el grupo</h2>
     <p class="sub" style="margin:0 0 6px">Elige cualquier actividad de la app y todos la abren al mismo tiempo con el código en Game On.</p>
@@ -1587,7 +1603,7 @@ function wirePicker(box){
   const bind=()=>{
     pk.querySelectorAll(".pk-cat").forEach(c=>c.onclick=()=>{ pickCat=+c.dataset.c; pk.outerHTML=pickerHtml(); wirePicker(box); });
     pk.querySelectorAll(".pk-it").forEach(it=>it.onclick=()=>{ pk.querySelectorAll(".pk-it").forEach(x=>x.classList.toggle("on",x===it)); sel.value=it.dataset.k;
-      const k=it.dataset.k; curPicks=[]; btn.disabled=false; if(lb) lb.disabled=false; const p=box.querySelector("#pkSel"); if(p) p.textContent="";
+      const k=it.dataset.k; curPicks=[]; btn.disabled=false; if(lb) lb.disabled=false; const p=box.querySelector("#pkSel"); if(p) p.textContent=""; const w0=box.querySelector("#pkWarn"); if(w0) w0.remove(); const mk=PK_MARK[k]; if(mk&&p) p.insertAdjacentHTML("afterend",`<p class="pk-warn ${mk.c}" id="pkWarn">${mk.c==="prac"?"Ya la practicó":"Ya está asignada"} · ${esc(mk.tip)}</p>`);
       let c=box.querySelector(".pkc"); if(c) c.remove();
       const render=()=>{ const labs=curPicks.map(x=>x.l).filter(Boolean);
         btn.textContent=`Asignar: ${TASK_NAME[k]}${labs.length?" · "+labs.join(" · "):""}`;
@@ -1909,6 +1925,7 @@ async function loadTasks(s){
       ${done?`<span class="pill done">Completada${res}</span>${see}`:`<span class="pill pend">Pendiente</span>`}
       <button class="rm" data-t="${t.id}" aria-label="Quitar tarea">×</button></div>`;}).join("");
   const sHtml=sims.length?`<h3 style="margin-top:16px">Simulaciones TOEFL</h3>`+sims.map(r=>`<div class="row"><div><b>${r.score}/${r.total} · ${Math.round(r.score/r.total*100)}%</b><small>${esc(d(r.created_at))} · ${r.detail&&r.detail.secs?fmtT(r.detail.secs)+" min":"Quick Simulation"}</small></div><button class="see" style="margin-left:auto" data-r="${esc(simKey(r))}">Ver reporte</button></div>`).join(""):"";
+  PK_MARK=pkMarks(tasks,rows);
   const opts=TASK_CAT.map(([g,items])=>`<optgroup label="${esc(g)}">${items.map(([k,n])=>`<option value="${k}">${esc(n)}</option>`).join("")}</optgroup>`).join("");
   box.innerHTML=`<div class="tk"><h3>Tareas</h3><p class="sub">Elige una actividad. ${esc(s.full_name.split(" ")[0])} la verá al abrir la app con su usuario.</p>
     <select class="in" id="asgSel" hidden>${opts}</select>${pickerHtml()}${dueHtml()}
@@ -1917,6 +1934,7 @@ async function loadTasks(s){
   $("#asgBtn").onclick=async()=>{ const b=$("#asgBtn"), k=$("#asgSel").value; b.disabled=true; b.textContent="Asignando…";
     const picks=(NO_PICK.has(k)||/^h:/.test(k))?[]:curPicks.slice(), labs=picks.map(x=>x.l).filter(Boolean);
     const task=picks.length?k+"~"+b64url({p:picks.map(x=>({a:x.a,t:x.t,l:x.l})),l:labs}):k, title=(TASK_NAME[k]||k)+(labs.length?" · "+labs.join(" · "):"");
+    const dup=tasks.find(t=>String(t.task)===task); if(dup){ const dd=taskDoneRow(dup,rows); if(!confirm(`${s.full_name.split(" ")[0]} ya tiene esta actividad (asignada el ${new Date(dup.created_at).toLocaleDateString("es-MX",{day:"numeric",month:"short"})}${dup.by?" por "+dup.by:""}, ${dd?"ya la terminó":"todavía pendiente"}).\n\n¿Asignarla otra vez?`)){ b.disabled=false; b.textContent="Asignar actividad"; return; } }
     try{ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:task,p_title:title+(curDue?" · due "+curDue:"")+" · by "+tName()}); toast(`${title} asignada a ${s.full_name.split(" ")[0]}`); curPicks=[]; loadTasks(s); }
     catch(e){ toast(e.message); b.disabled=false; b.textContent="Asignar actividad"; } };
   box.querySelectorAll(".rm").forEach(b=>b.onclick=async()=>{ if(!confirm("¿Quitar esta tarea?")) return; try{ await rpc("admin_remove_task",{p_id:+b.dataset.t}); loadTasks(s); }catch(e){ toast(e.message); } });
