@@ -381,7 +381,7 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
 .ins-lu b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:19px}.ins-lu span{font-size:10.5px;font-weight:800;color:#6B6F86}
 .vsw{display:grid;grid-template-columns:1fr 1fr;background:#15192B;border-radius:18px;padding:5px;margin:12px 0 2px}.vsw span,.vsw a{display:flex;align-items:center;justify-content:center;padding:10px;border-radius:14px;font-weight:800;font-size:14px;text-decoration:none;color:#9AA0B8}.vsw .on{background:#D3F36B;color:#15192B}
 </style>
-<style>.xg{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 6px}.xg button{border:1.5px solid #E6E1F2;background:#fff;border-radius:999px;padding:8px 13px;font:700 13px inherit;font-family:inherit;color:#15192B;cursor:pointer}.xg button.on{background:#D3F36B;border-color:#15192B}.xg button.on::before{content:"✓ "}</style>
+<style>.mqtb{display:grid;grid-template-columns:1fr 1fr;background:#E6E2FF;border-radius:14px;padding:4px;margin:4px 0 10px}.mqtb button{border:0;background:none;border-radius:11px;padding:9px;font:700 13.5px inherit;font-family:inherit;color:#6B6F85;cursor:pointer}.mqtb button.on{background:#15192B;color:#fff}.xg{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 6px}.xg button{border:1.5px solid #E6E1F2;background:#fff;border-radius:999px;padding:8px 13px;font:700 13px inherit;font-family:inherit;color:#15192B;cursor:pointer}.xg button.on{background:#D3F36B;border-color:#15192B}.xg button.on::before{content:"✓ "}</style>
 </head>
 <body>
 
@@ -462,13 +462,15 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
 <script src="vocab-extra.js"></script>
 <script src="ruta-extra.js"></script>
 <script src="mova-libros.js"></script>
+<script src="libros-quiz.js"></script>
+<script src="mova-bq.js"></script>
 <script>
 const SB_URL = "https://fclafxrkibvcjktrgznt.supabase.co";
 const SB_KEY = "sb_publishable_kkvlvfoXzgnG7vjAGj2nDA_dh-t6Ny6";
 const STORE = "mova_admin_session";
 const GROUPS = ["Kids","Children","Teens","Adultos","TOEFL","Matemáticas","Lectoescritura"];
 const COLORS = ["#F6D776","#8EC9EE","#9DDCC0","#B9A6E8","#F9B8AE"];
-const ACT_NAMES = {"la-balanza":"La Balanza","la-boveda":"La Bóveda","la-tiendita":"La Tiendita","lluvia-de-numeros":"Lluvia de números","pizzeria-fracciones":"Pizzería de fracciones","que-hora-es":"¿Qué hora es?","detective-patrones":"Detective de patrones","haunted-mansion":"The Haunted Mansion","lost-in-the-museum":"Lost in the Museum","pirate-treasure-island":"Pirate Treasure Island","space-station-rescue":"Space Station Rescue","the-detectives-case":"The Detective’s Case","trapped-in-the-train":"Trapped in the Train","math-level-up":"Math Level Up","math-comprueba":"Matemáticas · comprobación","math-practica":"Matemáticas · práctica guiada","math-leccion":"Matemáticas · lección","word-quest":"Word Quest","mision-matematica":"Misión Matemática","level-up":"Level Up","verb-memory":"Verb Memory",
+const ACT_NAMES = {"math-level-up":"Math Level Up","math-comprueba":"Matemáticas · comprobación","math-practica":"Matemáticas · práctica guiada","math-leccion":"Matemáticas · lección","word-quest":"Word Quest","mision-matematica":"Misión Matemática","level-up":"Level Up","verb-memory":"Verb Memory",
   "sentence-builder":"Sentence Builder","locked-library":"Locked Library","toefl-practice":"TOEFL Practice","word-forms":"Word Forms",
   "sentence-scramble":"Sentence Scramble","lee-con-mochi":"Aprende a leer con Mochi","diagnostico-lectura":"Diagnóstico de entrada · Lectoescritura","sopa-de-letras":"Sopa de letras","crucigrama":"Crucigrama","likes-dislikes":"Likes & Dislikes","speaking":"Speaking Lab","ruta":"My Path"};
 
@@ -1510,6 +1512,7 @@ function drawBooks(){
       <div class="un"><b>${un==null?"—":esc(bkUName(k,un))}</b><span>de ${core.length}</span></div></div>
       <div class="bar"><i style="width:${pct}%;background:${BK_BAR[bkSer(k)[0]]||"#B9A6FF"}"></i></div>
       ${g.length>1?`<div class="who">${g.map(x=>`<button data-chg="${x.s.id}">${esc(x.s.full_name.split(" ")[0])}</button>`).join("")}</div>`:`<div class="who"><button data-chg="${g[0].s.id}">Cambiar libro</button></div>`}
+      <div class="who"><button data-ws="${esc(k)}" data-u="${un||1}">Worksheets</button><button data-mqb="${esc(k)}">Monthly Quiz</button></div>
       <div class="mo"><span>${esc(MESES[new Date().getMonth()])}: <b>${cur?esc(bkRange(cur))+(cur.pg?" · p. "+esc(cur.pg):""):"sin registrar"}</b></span><button data-reg="${esc(k)}">${cur?"Actualizar":"Registrar"}</button></div></div>`; };
   const none=groups._none?`<div class="bkc"><div class="h"><div class="cov" style="background:#E6E1F2"></div><div><h3>Sin libro asignado</h3><small>${groups._none.length} alumno${groups._none.length===1?"":"s"}</small></div></div>
       <div class="who">${groups._none.map(x=>`<button data-chg="${x.s.id}">${esc(x.s.full_name)}</button>`).join("")}</div><p class="sub" style="margin:0">Toca un nombre para asignarle su libro.</p></div>`:"";
@@ -1518,6 +1521,8 @@ function drawBooks(){
   box.querySelectorAll("[data-bf]").forEach(b=>b.onclick=()=>{ bkF=b.dataset.bf; drawBooks(); });
   box.querySelectorAll("[data-chg]").forEach(b=>b.onclick=()=>openBookAssign(b.dataset.chg));
   box.querySelectorAll("[data-reg]").forEach(b=>b.onclick=()=>openBookProg(b.dataset.reg));
+  box.querySelectorAll("[data-ws]").forEach(b=>b.onclick=()=>window.open(`ruta.html#/ws/${encodeURIComponent(b.dataset.ws)}/${b.dataset.u}-${b.dataset.u}`,"_blank"));
+  box.querySelectorAll("[data-mqb]").forEach(b=>b.onclick=()=>openMQBook(b.dataset.mqb));
 }
 function openBookAssign(id){
   const x=bkCache.find(y=>String(y.s.id)===String(id)); if(!x) return; const B=window.MOVA_BOOKS||{};
@@ -1731,11 +1736,11 @@ function openBonus(x){
 /* ---------- Monthly Quiz: la maestra elige etapa, nivel, temas y semana ---------- */
 function mqCode(d){var h=7919;String(d||"").concat("·MOVA·aula").split("").forEach(function(c){h=(h*31+c.charCodeAt(0))%1000003;});return String(1000+h%9000);}
 function mqWeek(){ const t=new Date(), y=t.getFullYear(), m=t.getMonth(), last=new Date(y,m+1,0); let f=new Date(last); while(f.getDay()!==5) f.setDate(f.getDate()-1); const mo=new Date(f); mo.setDate(f.getDate()-4);
-  if(mo<t){ const n=new Date(t); n.setDate(n.getDate()+((8-n.getDay())%7||7)); mo.setTime(n.getTime()); f=new Date(n); f.setDate(n.getDate()+4); }
+  if(mo<new Date(y,m,t.getDate())){ const n=new Date(t); n.setDate(n.getDate()+((8-n.getDay())%7||7)); mo.setTime(n.getTime()); f=new Date(n); f.setDate(n.getDate()+4); }
   const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); return [iso(mo),iso(f)]; }
 function openMQ(){
   const P=window.MOVA_PATH||{}, SN={kids:"Kids",children:"Children",teens:"Teens"}, [w0,w1]=mqWeek();
-  openModal(`<button class="x" aria-label="Cerrar">×</button><h2>Crear Monthly Quiz</h2>
+  openModal(`<button class="x" aria-label="Cerrar">×</button><h2>Crear Monthly Quiz</h2>${mqTabs("tema")}
     <p class="sub">Elija el nivel y los temas que vieron este mes. Se abre solo en la semana que indique, para que cada alumno lo presente en su día de clase.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label class="f" for="mqSt">Etapa</label><select class="in" id="mqSt">${Object.keys(SN).map(k=>`<option value="${k}">${SN[k]}</option>`).join("")}</select></div>
     <div><label class="f" for="mqLv">Nivel</label><select class="in" id="mqLv"></select></div></div>
@@ -1753,7 +1758,7 @@ function openMQ(){
     paintSel(); if(stChanged!==true) return;
     const G=SN[st], list=(students||[]).filter(x=>x.active!==false&&grpOf(x.stage)===G).sort((a,b)=>a.full_name.localeCompare(b.full_name,"es"));
     $("#mqSs").innerHTML=list.length?list.map(x=>{ const l=lvOf(x.stage); return `<label style="display:flex;gap:10px;align-items:center;font-size:14px"><input type="checkbox" value="${esc(x.id)}" ${l===lv?"checked":""}> ${esc(x.full_name)} <span class="sub" style="margin:0">${esc(l||"sin nivel")}</span></label>`; }).join(""):`<p class="sub" style="margin:0">No hay alumnos activos en ${G}.</p>`; };
-  $("#mqSt").onchange=paintLv; $("#mqLv").onchange=()=>paint(); paintLv();
+  $("#mqSt").onchange=paintLv; $("#mqLv").onchange=()=>paint(); paintLv(); mqTabsWire();
   $("#mqGo").onclick=async()=>{ const m=$("#mqMsg"); m.textContent="";
     const st=$("#mqSt").value, lv=$("#mqLv").value, ids=[...sel.keys()], ss=[...$("#mqSs").querySelectorAll("input:checked")].map(i=>(students||[]).find(x=>String(x.id)===i.value)).filter(Boolean);
     const a=$("#mqA").value, b=$("#mqB").value, n=$("#mqN").value;
@@ -1768,6 +1773,62 @@ function openMQ(){
     $("#mqOk").onclick=closeModal; loadAllTasks(true); };
 }
 document.addEventListener("click",e=>{ if(e.target&&e.target.id==="mqNew") openMQ(); });
+/* ---------- Monthly Quiz por libro y unidad (v128) ---------- */
+function mqTabs(on){ return `<div class="mqtb"><button type="button" data-mqt="tema" class="${on==="tema"?"on":""}">Por tema</button><button type="button" data-mqt="libro" class="${on==="libro"?"on":""}">Por libro</button></div>`; }
+function mqTabsWire(){ document.querySelectorAll("[data-mqt]").forEach(b=>b.onclick=()=>{ if(b.classList.contains("on")) return; b.dataset.mqt==="libro"?openMQBook():openMQ(); }); }
+function studentBook(s){ const x=(bkCache||[]).find(y=>String(y.s.id)===String(s.id)); return x?x.b:(typeof bkDefault==="function"?bkDefault(s):null); }
+function openMQBook(pre){
+  const B=window.MOVA_BOOKS||{}, BQ=window.MOVA_BQ||{}, BQx=window.MovaBQ, [w0,w1]=mqWeek();
+  const keys=Object.keys(B).sort((a,c)=>(BQ[c]?1:0)-(BQ[a]?1:0)||B[a].name.localeCompare(B[c].name));
+  let bk=pre&&B[pre]?pre:keys[0], ua=null, ub=null;
+  openModal(`<button class="x" aria-label="Cerrar">×</button><h2>Crear Monthly Quiz</h2>${mqTabs("libro")}
+    <p class="sub">Elija el libro y las unidades. La app arma el quiz con los temas de esas unidades.</p>
+    <label class="f" for="mbB">Libro</label><select class="in" id="mbB">${keys.map(k=>`<option value="${esc(k)}"${k===bk?" selected":""}>${esc(B[k].name)}${BQ[k]?"":" · sin preguntas aún"}</option>`).join("")}</select>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label class="f" for="mbA">De la unidad</label><select class="in" id="mbA"></select></div><div><label class="f" for="mbZ">A la unidad</label><select class="in" id="mbZ"></select></div></div>
+    <div id="mbWarn"></div><label class="f">Temas que entran</label><div id="mbTp" style="line-height:1.5"></div>
+    <label class="f">Secciones del quiz</label><div id="mbSec"></div><div id="mbTot" class="sub" style="margin:6px 2px 0;font-weight:700"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label class="f" for="mqA">Abre</label><input class="in" type="date" id="mqA" value="${w0}"></div><div><label class="f" for="mqB">Cierra</label><input class="in" type="date" id="mqB" value="${w1}"></div></div>
+    <label class="f">Alumnos</label><div id="mbSs" style="display:flex;flex-direction:column;gap:6px;max-height:200px;overflow:auto;background:#F7F5FB;border-radius:14px;padding:10px 12px"></div>
+    <button class="btn btn-full" id="mbWs" style="margin-top:12px;background:#fff;border:2px solid #15192B;color:#15192B">Imprimir worksheet de estas unidades</button>
+    <button class="btn btn-primary btn-full" id="mbGo" style="margin-top:10px">Asignar quiz</button><div class="msg err" id="mbMsg"></div>`);
+  mqTabsWire();
+  const cnt={};
+  const units=()=>B[bk].units;
+  const paintUnits=()=>{ const has=n=>BQx&&BQx.has(bk,n), U=units(), first=(U.find(u=>has(u.n))||U[0]).n;
+    if(ua==null||!U.some(u=>u.n===ua)){ ua=first; ub=first; }
+    const o=sel=>U.map(u=>`<option value="${u.n}"${u.n===sel?" selected":""}>${esc(bkUName(bk,u.n))} · ${esc(u.t.replace(/^Starter unit: /,""))}${has(u.n)?"":" (sin preguntas)"}</option>`).join("");
+    $("#mbA").innerHTML=o(ua); $("#mbZ").innerHTML=o(ub); paintRest(); };
+  const paintRest=()=>{ const av=BQx?BQx.avail(bk,ua,ub):{units:[],missing:[]}, tp=bkTopics(bk,ua,ub);
+    $("#mbWarn").innerHTML=av.missing.length?`<p class="sub" style="background:#FFE6F2;border-radius:12px;padding:9px 12px;margin:10px 0 0">${av.units.length?`Las unidades ${av.missing.join(", ")} aún no tienen preguntas; el quiz usará solo ${av.units.length>1?"las unidades":"la unidad"} ${av.units.join(", ")}.`:"Estas unidades aún no tienen preguntas cargadas en la app."}</p>`:"";
+    const short=x=>x.length>34?x.slice(0,32)+"…":x;
+    $("#mbTp").innerHTML=tp.g.map(x=>`<span style="display:inline-block;background:#E6E2FF;border-radius:10px;padding:3px 9px;margin:2px 4px 2px 0;font-size:12px;font-weight:700">${esc(short(x))}</span>`).join("")+tp.v.map(x=>`<span style="display:inline-block;background:#E4F7C4;border-radius:10px;padding:3px 9px;margin:2px 4px 2px 0;font-size:12px;font-weight:700">${esc(short(x.split(":")[0]))}</span>`).join("");
+    $("#mbSec").innerHTML=(BQx?BQx.SEC:[]).map(([k,l,c])=>{ const mx=av[k]||0; if(cnt[k]==null||cnt[k]>mx) cnt[k]=Math.min(BQx.DEF[k],mx);
+      const opts=[...Array(mx+1).keys()].map(n=>`<option${n===cnt[k]?" selected":""}>${n}</option>`).join("");
+      return `<div style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #ECE8F5;border-radius:13px;padding:7px 10px;margin-bottom:6px;font-weight:700;font-size:14px"><span style="width:28px;height:28px;border-radius:9px;background:${c};display:grid;place-items:center;font-size:13px">${l[0]}</span>${l}<span class="sub" style="margin:0 0 0 auto;font-size:12px">${mx?"preguntas":"sin preguntas"}</span><select data-ck="${k}" class="in" style="width:72px;padding:6px 8px"${mx?"":" disabled"}>${opts}</select></div>`; }).join("");
+    $("#mbSec").querySelectorAll("[data-ck]").forEach(x=>x.onchange=()=>{ cnt[x.dataset.ck]=+x.value; tot(); }); tot(); };
+  const tot=()=>{ const n=Object.values(cnt).reduce((a,b)=>a+b,0); $("#mbTot").textContent=n?`${n} preguntas · unos ${Math.max(10,Math.round(n*1.3))} minutos`:""; $("#mbGo").textContent=n?`Asignar quiz · ${n} preguntas`:"Asignar quiz"; };
+  const paintSs=()=>{ const list=(students||[]).filter(x=>x.active!==false&&progsOf(x.stage).some(g=>ENG_RX.test(g))).sort((a,b)=>a.full_name.localeCompare(b.full_name,"es"));
+    $("#mbSs").innerHTML=list.length?list.map(x=>{ const b=studentBook(x); return `<label style="display:flex;gap:10px;align-items:center;font-size:14px"><input type="checkbox" value="${esc(x.id)}" ${b===bk?"checked":""}> ${esc(x.full_name)} <span class="sub" style="margin:0">${esc(b&&B[b]?B[b].name:"sin libro")}</span></label>`; }).join(""):`<p class="sub" style="margin:0">No hay alumnos de inglés activos.</p>`; };
+  $("#mbB").onchange=()=>{ bk=$("#mbB").value; ua=ub=null; Object.keys(cnt).forEach(k=>delete cnt[k]); paintUnits(); paintSs(); };
+  $("#mbA").onchange=()=>{ ua=+$("#mbA").value; if(ub<ua){ ub=ua; $("#mbZ").value=ub; } paintRest(); };
+  $("#mbZ").onchange=()=>{ ub=+$("#mbZ").value; if(ua>ub){ ua=ub; $("#mbA").value=ua; } paintRest(); };
+  $("#mbWs").onclick=()=>window.open(`ruta.html#/ws/${encodeURIComponent(bk)}/${ua}-${ub}`,"_blank");
+  paintUnits(); paintSs();
+  $("#mbGo").onclick=async()=>{ const m=$("#mbMsg"); m.textContent="";
+    const a=$("#mqA").value, b=$("#mqB").value, n=Object.values(cnt).reduce((x,y)=>x+y,0);
+    const ss=[...$("#mbSs").querySelectorAll("input:checked")].map(i=>(students||[]).find(x=>String(x.id)===i.value)).filter(Boolean);
+    if(!n){ m.textContent="Estas unidades aún no tienen preguntas. Elija otras unidades."; return; } if(!a||!b||a>b){ m.textContent="Revise las fechas de la semana."; return; } if(!ss.length){ m.textContent="Elija al menos un alumno."; return; }
+    const MN=["January","February","March","April","May","June","July","August","September","October","November","December"], mes=MN[new Date(b+"T12:00:00").getMonth()];
+    const cs=BQx.SEC.map(([k])=>cnt[k]?k+cnt[k]:"").filter(Boolean).join(".");
+    const id=Date.now().toString(36), task="mq:"+id+"~"+["book",bk,a,b,n,ua+"-"+ub,cs].join("|"), un=ua===ub?`U${ua}`:`U${ua}–${ub}`, title=`${mes} Quiz · ${B[bk].name} ${un}`;
+    const btn=$("#mbGo"); btn.disabled=true; btn.textContent="Asignando…"; let ok=0;
+    for(const x of ss){ try{ await rpc("admin_assign_task",{p_student:String(x.id),p_username:x.username,p_task:task,p_title:title+" · due "+b+" · by "+tName()}); ok++; }catch(e){} }
+    openModal(`<button class="x" aria-label="Cerrar">×</button><h2>Quiz asignado</h2><p class="sub">${esc(title)} · ${ok} alumno${ok===1?"":"s"} · abre ${esc(a)} y cierra ${esc(b)}</p>
+      <div style="background:#15192B;color:#fff;border-radius:22px;padding:22px;text-align:center;margin:12px 0"><span style="font-size:12px;font-weight:800;letter-spacing:.12em;color:#D3F36B">CÓDIGO DE CLASE DE ESA SEMANA</span><b style="display:block;font-size:46px;letter-spacing:.18em;margin-top:6px">${mqCode(a)}</b></div>
+      <p class="sub">Díganlo en voz alta en clase; sin este código el quiz no arranca.</p><button class="btn btn-primary btn-full" id="mqOk">Listo</button>`);
+    $("#mqOk").onclick=closeModal; loadAllTasks(true); };
+}
+
 document.addEventListener("click",async e=>{ if(!e.target||e.target.id!=="mqDel") return; const L=window.__mqAct||[]; if(!L.length) return;
   if(!confirm(`¿Quitar ${L.length} Monthly Quiz pendientes de todos los alumnos?\n\nLos que ya presentaron conservan su calificación.`)) return;
   const b=e.target; b.disabled=true; let ok=0; for(const x of L){ b.textContent=`Quitando ${ok+1}/${L.length}…`; try{ await rpc("admin_remove_task",{p_id:+x.id}); ok++; }catch(err){} }
