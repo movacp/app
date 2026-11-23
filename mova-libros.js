@@ -172,7 +172,7 @@ window.MOVA_BOOK_DEFAULTS = {
   "lucas resendez": "dream-makers-3",
   "mauricio de leon": "dream-makers-3",
   "luciano": "dream-makers-4",
-  "marcelo": "now-i-know-4",
-  "fernando uresti": "now-i-know-5",
+  "marcelo": "now-i-know-5", "marcelo soria": "now-i-know-5",
+  "fernando uresti": "now-i-know-3",
   "ariel soria": "new-keystone-a"
 };
