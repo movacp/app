@@ -631,6 +631,7 @@
     if (tk.indexOf("w:") === 0) return r.activity === "writing" && !!r.detail && r.detail.w === tk.slice(2);
     if (r.activity !== tk) return false;
     var d = r.detail || {};
+    if (/^(la-balanza|la-boveda|la-tiendita|lluvia-de-numeros|mision-matematica|pizzeria-fracciones|que-hora-es|detective-patrones|haunted-mansion|locked-library|lost-in-the-museum|pirate-treasure-island|space-station-rescue|the-detectives-case|trapped-in-the-train)$/.test(tk)) return r.total != null;
     return r.total != null || (d.kind === "time" && (d.seconds || 0) >= 60) || (!!d.kind && d.kind !== "time");
   }
   function checkTasks() {

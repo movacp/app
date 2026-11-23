@@ -195,7 +195,7 @@ function drawLevels() {
 $("#levels").addEventListener("click", (e) => { const b = e.target.closest(".level"); if (b) { unlock(); st.level = +b.dataset.i; try { localStorage.setItem(`mova-${KEY}-lvl`, st.level); } catch (er) {} drawLevels(); } });
 
 function dots() { $("#dots").innerHTML = Array.from({ length: ROUNDS }, (_, i) => `<i class="${st.results[i] === true ? "ok" : st.results[i] === false ? "ko" : i === st.round ? "now" : ""}"></i>`).join(""); }
-function startGame() { unlock(); clearLater(); st.round = 0; st.score = 0; st.results = []; $("#score").textContent = "0 pts"; show("game"); nextRound(); }
+function startGame() { try { window.MovaResults && MovaResults.start({ escape: false }); } catch (e) {} unlock(); clearLater(); st.round = 0; st.score = 0; st.results = []; $("#score").textContent = "0 pts"; show("game"); nextRound(); }
 function nextRound() {
   if (st.round >= ROUNDS) return finish();
   st.firstTry = true; feedback("");
@@ -218,6 +218,7 @@ function skipAfterReveal() { st.round++; later(nextRound, 2600); }
 function finish() {
   clearLater(); show("end");
   const ok = st.results.filter(Boolean).length, stars = ok >= ROUNDS - 1 ? 3 : ok >= Math.ceil(ROUNDS * .6) ? 2 : ok >= Math.ceil(ROUNDS * .3) ? 1 : 0;
+  try { window.MovaResults && MovaResults.finish({ ok: ok, total: ROUNDS, points: st.score, stars: stars, level: LEVELS[st.level] && LEVELS[st.level].name }); } catch (e) {}
   $("#stars").innerHTML = [0, 1, 2].map((i) => `<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.5l1.3-6.6L2.5 9.3l6.6-.8z" fill="${i < stars ? "#F7D96B" : "var(--track)"}" stroke="${i < stars ? "#E9B93A" : "none"}" stroke-width="1"/></svg>`).join("");
   $("#end-title").textContent = ["¡Sigue practicando!", "¡Buen intento!", "¡Muy bien!", "¡Increíble!"][stars];
   $("#final").textContent = st.score;
@@ -348,5 +349,6 @@ try { const l = +localStorage.getItem(`mova-${KEY}-lvl`); if (l >= 0 && l < LEVE
 drawLevels();
 })();
 </script>
+<script src="mova-results.js"></script><script src="mova-auth.js"></script>
 </body>
 </html>
