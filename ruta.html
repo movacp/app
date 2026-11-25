@@ -311,6 +311,10 @@ var KEY="mova_ruta_v1";
 function S(){try{var o=JSON.parse(localStorage.getItem(KEY)||"{}");o.done=o.done||{};o.vocab=o.vocab||{};o.checks=o.checks||{};o.badges=o.badges||{};o.built=o.built||0;return o;}catch(e){return {done:{},vocab:{},checks:{},badges:{},built:0};}}
 function W(o){try{localStorage.setItem(KEY,JSON.stringify(o));}catch(e){}}
 function user(){try{return window.MovaAuth&&MovaAuth.user();}catch(e){return null;}}
+function ansOf(q,ok){var tx=function(v){return String(v==null?"":v).replace(/<[^>]*>/g,"").trim();},it=q.it||{},o=(q.o||[]).find(function(x){return x.ok;});
+  var qt=q.q||q.s||it.q||it.s||it.w||(window.MovaPX&&q.it?MovaPX.title(q.it):"");
+  var r=q.right||(o&&o.x)||(q.r&&q.r.join?q.r.join(" "):"")||it.a||it.s||"";
+  return {q:tx(Array.isArray(qt)?qt.join(" "):qt),r:tx(Array.isArray(r)?r.join(" "):r),ok:!!ok};}
 function saveCloud(title,score,total,extra){if(!user())return false;try{MovaAuth.save("ruta",title,score,total,extra);return true;}catch(e){return false;}}
 
 function ready(t){return !!t.exp;}
@@ -708,7 +712,7 @@ function findTopic(id){for(var st in D)for(var code in D[st])for(var kind in KIN
 /* ---------- tema: explicación → construir → quiz ---------- */
 function topic(id,from){
   var f=findTopic(id);if(!f||!ready(f.t))return go("");
-  var wRes=null,t=f.t,es=STG[f.st].lang==="es",step=0,builtOk=0,qi=0,score=0,qs=null,bi=0;
+  var wRes=null,t=f.t,es=STG[f.st].lang==="es",step=0,builtOk=0,qi=0,score=0,qs=null,bi=0,MPA=[];
   var tabName=f.kind==='topics'?'grammar':f.kind,lvlHref=from==="g"?"./#/structures":"#/lv/"+f.st+"/"+encodeURIComponent(f.code)+"/"+tabName,hasB=t.b&&t.b.length,NS=hasB?3:2;
   function steps(n){if(!hasB&&n===2)n=1;return '<div class="steps">'+(hasB?[0,1,2]:[0,1]).map(function(i){return '<i class="'+(i<=n?"on":"")+'"></i>';}).join("")+"</div>";}
   function head(){return '<div class="rm-bar">'+back(lvlHref,from==="g"?"Grammar":STG[f.st].name+" · "+f.code)+(window.MovaRemember&&(f.kind==="topics"||f.kind==="writing")?MovaRemember.button():"")+'</div>';}
@@ -754,7 +758,7 @@ function topic(id,from){
     }
     if(t.px&&t.px.length&&window.MovaPX){var PX=shuffle(t.px).map(function(it){return {ty:"px",it:it};}),A=qs,mx=[],ia=0,ip=0;for(var n=0;n<A.length+PX.length;n++){if(ip<PX.length&&(ia>=A.length||(ip+.5)/PX.length<(ia+.5)/A.length)){var c=ip;while(c<PX.length-1&&mx.length&&mx[mx.length-1].it&&PX[c].it.k===mx[mx.length-1].it.k)c++;if(c!==ip){var tmp=PX[ip];PX[ip]=PX[c];PX[c]=tmp;}mx.push(PX[ip++]);}else mx.push(A[ia++]);}qs=mx;}
     qi=0;score=0;quiz();}
-  function finishQ(ok,msg){if(ok)score++;document.getElementById("fbq").innerHTML='<div class="fb '+(ok?"good":"bad")+'"><b>'+(ok?(es?"¡Correcto!":"Correct!"):(es?"No exactamente.":"Not quite."))+'</b>'+msg+'</div><button class="cta" id="qn">'+(qi<qs.length-1?(es?"Siguiente":"Next"):(es?"Ver resultado":"See my result"))+'</button>';document.getElementById("qn").onclick=function(){qi++;if(qi<qs.length)quiz();else done();};}
+  function finishQ(ok,msg){if(ok)score++;if(qi===0)MPA=[];try{MPA.push(ansOf(qs[qi],ok));}catch(e){}document.getElementById("fbq").innerHTML='<div class="fb '+(ok?"good":"bad")+'"><b>'+(ok?(es?"¡Correcto!":"Correct!"):(es?"No exactamente.":"Not quite."))+'</b>'+msg+'</div><button class="cta" id="qn">'+(qi<qs.length-1?(es?"Siguiente":"Next"):(es?"Ver resultado":"See my result"))+'</button>';document.getElementById("qn").onclick=function(){qi++;if(qi<qs.length)quiz();else done();};}
   function quiz(){
     var q=qs[qi];
     if(q.ty==="px"){app.innerHTML=head()+steps(2)+'<div class="card" id="pxc"><span class="kicker">'+NS+' · '+MovaPX.label(q.it)+' · '+(qi+1)+'/'+qs.length+'</span><div id="pxh"></div><div id="fbq"></div></div>';
@@ -802,7 +806,7 @@ function topic(id,from){
     var st=s6>=6?3:s6>=4?2:1,o=S(),prev=o.done[t.id];
     if(!prev||s6>prev.score)o.done[t.id]={score:s6,stars:st,d:Date.now()};
     o.built+=builtOk;var nb=checkBadges(o,s6);W(o);
-    var saved=saveCloud("My path · "+STG[f.st].name+" "+f.code+" · "+(f.kind!=="topics"?KINDS[f.kind]+": ":"")+t.t,comb,tot,{kind:"score",stage:f.st,level:f.code,topic:t.t,sentences_first_try:builtOk,quiz:score,write:wRes?wS+"/"+wT:null});
+    var saved=saveCloud("My path · "+STG[f.st].name+" "+f.code+" · "+(f.kind!=="topics"?KINDS[f.kind]+": ":"")+t.t,comb,tot,{kind:"score",stage:f.st,level:f.code,topic:t.t,sentences_first_try:builtOk,quiz:score,write:wRes?wS+"/"+wT:null,ans:MPA});
     var score0=score;score=s6;
     var nt=f.list.filter(function(x){return x.exp&&!S().done[x.id];})[0]||null;
     app.innerHTML=head()+'<div class="res"><span class="ring"></span><span class="k">'+esc(t.t)+'</span><h2>'+comb+'<small> / '+tot+'</small></h2>'+stars(st)+(wRes?'<div class="nw-sum"><span>Quiz '+Math.min(score0,qT)+'/'+qT+'</span><span>Now write it '+wS+'/'+wT+'</span></div>':'')+'<p>'+(score>=6?(es?"¡Perfecto! Dominas este tema.":"Perfect! You've mastered this topic."):score>=4?(es?"¡Muy bien! Un repaso más y será perfecto.":"Great work! One more review and it'll be perfect."):(es?"Buen intento. Vuelve a leer la explicación y repite el quiz.":"Good try. Read the explanation again and retake the quiz."))+'</p></div>'+newBadgesHtml(nb)+

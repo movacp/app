@@ -381,7 +381,7 @@ header.top .brand b{font-size:22px}header.top .brand small{font-size:12.5px;font
 .ins-lu b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:19px}.ins-lu span{font-size:10.5px;font-weight:800;color:#6B6F86}
 .vsw{display:grid;grid-template-columns:1fr 1fr;background:#15192B;border-radius:18px;padding:5px;margin:12px 0 2px}.vsw span,.vsw a{display:flex;align-items:center;justify-content:center;padding:10px;border-radius:14px;font-weight:800;font-size:14px;text-decoration:none;color:#9AA0B8}.vsw .on{background:#D3F36B;color:#15192B}
 </style>
-<style>.mqtb{display:grid;grid-template-columns:1fr 1fr;background:#E6E2FF;border-radius:14px;padding:4px;margin:4px 0 10px}.mqtb button{border:0;background:none;border-radius:11px;padding:9px;font:700 13.5px inherit;font-family:inherit;color:#6B6F85;cursor:pointer}.mqtb button.on{background:#15192B;color:#fff}.xg{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 6px}.xg button{border:1.5px solid #E6E1F2;background:#fff;border-radius:999px;padding:8px 13px;font:700 13px inherit;font-family:inherit;color:#15192B;cursor:pointer}.xg button.on{background:#D3F36B;border-color:#15192B}.xg button.on::before{content:"✓ "}</style>
+<style>.ansm .ans-hd{display:flex;gap:16px;align-items:center;background:#F4F2FA;border-radius:20px;padding:14px}.ans-sc{width:96px;height:96px;border-radius:50%;background:#15192B;color:#fff;display:grid;place-items:center;align-content:center;flex:none;box-shadow:inset 0 0 0 7px #C8EC4A}.ans-sc b{font-size:24px;line-height:1}.ans-sc small{font-size:9.5px;color:#D8D6E6;text-align:center;max-width:70px;line-height:1.2;margin-top:3px}.ans-bars{flex:1;display:flex;flex-direction:column;gap:7px}.ans-bars div{display:grid;grid-template-columns:82px 1fr 34px;gap:8px;align-items:center;font-size:12.5px;font-weight:700}.ans-bars i{height:8px;border-radius:9px;background:#E3DFEF;overflow:hidden}.ans-bars u{display:block;height:100%;background:#C8EC4A;border-radius:9px}.ans-bars em{font-style:normal;text-align:right}.ans-h{margin:16px 2px 8px;font-size:15px;display:flex;justify-content:space-between;align-items:baseline}.ans-h small{font-size:12px;color:#8C91AD;font-weight:600}.ans-f{display:flex;gap:6px;margin-bottom:8px}.ans-f button{border:0;border-radius:999px;padding:6px 12px;background:#F4F2FA;font:700 12.5px inherit;font-family:inherit;cursor:pointer}.ans-f button.on{background:#15192B;color:#fff}.ans-l{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}.ans-l li{display:flex;gap:10px;border-radius:14px;padding:10px 12px;background:#EEF8D6}.ans-l li.no{background:#FFE6F0}.ans-l .m{font-weight:800;font-size:16px;color:#5E8A00}.ans-l li.no .m{color:#D0306E}.ans-l b{display:block;font-size:13.5px;line-height:1.4}.ans-l em{display:block;font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#8C91AD;text-transform:uppercase}.ans-l small{display:block;font-size:12.5px;color:#666B80;margin-top:2px}.ans-l small span{font-weight:700;color:#15192B}.ans-l small.r span{color:#4F7A00}.tkr.tkok{cursor:pointer}.mqtb{display:grid;grid-template-columns:1fr 1fr;background:#E6E2FF;border-radius:14px;padding:4px;margin:4px 0 10px}.mqtb button{border:0;background:none;border-radius:11px;padding:9px;font:700 13.5px inherit;font-family:inherit;color:#6B6F85;cursor:pointer}.mqtb button.on{background:#15192B;color:#fff}.xg{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 6px}.xg button{border:1.5px solid #E6E1F2;background:#fff;border-radius:999px;padding:8px 13px;font:700 13px inherit;font-family:inherit;color:#15192B;cursor:pointer}.xg button.on{background:#D3F36B;border-color:#15192B}.xg button.on::before{content:"✓ "}</style>
 </head>
 <body>
 
@@ -974,6 +974,77 @@ function waLink(r){
   const who=r.stage==="adults"?`su examen Level Up: obtuvo un nivel estimado ${r.level}`:`el examen Level Up de ${first}: obtuvo un nivel estimado ${r.level}`;
   const t=`${hi}, ¿cómo está? Le saluda Miss Karla de MOVA Centro Pedagógico. Le comparto el resultado de ${who} (${(LUR.LVES[r.level]||{}).band||""}). Nos dará mucho gusto agendar su evaluación diagnóstica para confirmar el nivel y ubicarle en el grupo ideal. ¿Qué día y horario le acomodan?`;
   return `https://wa.me/${n}?text=${encodeURIComponent(t)}`;
+}
+
+/* ---------- Respuestas de una actividad terminada + informe PDF de quizzes (v132) ---------- */
+function isQuizRow(r){ return !!r&&(r.activity==="monthly-quiz"||r.activity==="module-exam"); }
+function ansList(r){ const d=r&&r.detail||{}; return Array.isArray(d.ans)?d.ans.filter(a=>a&&(a.q||a.r)):[]; }
+function ansSections(r){ const d=r.detail||{}; if(d.by&&typeof d.by==="object") return Object.entries(d.by).map(([k,v])=>[k,v[0],v[1]]);
+  const A=ansList(r), by={}; A.forEach(a=>{ if(!a.t) return; by[a.t]=by[a.t]||[0,0]; by[a.t][1]++; if(a.ok) by[a.t][0]++; }); return Object.entries(by).map(([k,v])=>[k,v[0],v[1]]); }
+function openAnswers(s,t,r){
+  const A=ansList(r), pc=r.total?Math.round(r.score/r.total*100):null, secs=ansSections(r), quiz=isQuizRow(r);
+  const when=new Date(r.created_at).toLocaleString("es-MX",{day:"numeric",month:"long",hour:"numeric",minute:"2-digit"});
+  const ttl=String(t.task).includes("~")?t.title:(TASK_NAME[t.task]||t.title);
+  openModal(`<button class="x" aria-label="Cerrar">×</button><div class="ansm">
+    <p class="sub" style="margin:2px 0 0">${esc(s.full_name)} · ${esc(when)}</p><h2 style="margin:4px 0 12px">${esc(String(ttl).replace(/ · due .*$/,""))}</h2>
+    <div class="ans-hd"><div class="ans-sc"><b>${pc!=null?pc+"%":"✓"}</b><small>${r.total?r.score+" de "+r.total+" correctas":"Completada"}</small></div>
+      ${secs.length?`<div class="ans-bars">${secs.map(([k,a,b])=>`<div><span>${esc(k)}</span><i><u style="width:${b?Math.round(a/b*100):0}%"></u></i><em>${a}/${b}</em></div>`).join("")}</div>`:""}</div>
+    ${quiz?`<button class="btn btn-primary btn-full" id="ansPdf" style="margin:12px 0 4px">Descargar informe PDF</button>`:""}
+    ${A.length?`<h4 class="ans-h">Respuestas <small>${A.filter(a=>a.ok).length} aciertos · ${A.filter(a=>!a.ok).length} errores</small></h4>
+      <div class="ans-f"><button class="on" data-af="all">Todas</button><button data-af="bad">Solo errores</button></div>
+      <ol class="ans-l">${A.map((a,i)=>`<li class="${a.ok?"ok":"no"}"><span class="m">${a.ok?"✓":"✗"}</span><div>${a.t?`<em>${esc(a.t)}</em>`:""}<b>${esc(a.q||"Pregunta "+(i+1))}</b>${a.a!=null&&a.a!==""?`<small>Respondió: <span>${esc(a.a)}</span></small>`:""}${!a.ok&&a.r?`<small class="r">Correcta: <span>${esc(a.r)}</span></small>`:""}</div></li>`).join("")}</ol>`
+      :`<p class="sub" style="background:#F4F2FA;border-radius:14px;padding:12px 14px;margin-top:12px">Esta actividad guarda solo la calificación; no registra cada respuesta.</p>`}
+  </div>`);
+  document.querySelectorAll("[data-af]").forEach(b=>b.onclick=()=>{ document.querySelectorAll("[data-af]").forEach(x=>x.classList.toggle("on",x===b)); document.querySelectorAll(".ans-l li.ok").forEach(li=>li.style.display=b.dataset.af==="bad"?"none":""); });
+  const pb=$("#ansPdf"); if(pb) pb.onclick=async()=>{ pb.disabled=true; pb.textContent="Generando…"; try{ await quizPdf(s,ttl,r); }catch(e){ toast("No se pudo generar el PDF"); } pb.disabled=false; pb.textContent="Descargar informe PDF"; };
+}
+async function quizPdf(s,ttl,r){
+  try{ await document.fonts.load('700 20px Poppins'); await document.fonts.load('500 20px Poppins'); }catch(e){}
+  const W=1224,H=1584,M=84,A=ansList(r),secs=ansSections(r),pc=r.total?Math.round(r.score/r.total*100):0,pages=[];
+  const F=(w,z)=>`${w} ${z}px Poppins, sans-serif`, NAVY="#15192B", COL=["#B9A9FF","#C8EC4A","#FF8FC0","#7CC4FA","#FFE08A","#C3A6FF"];
+  const wrap=(x,t,mw)=>{ const out=[]; let ln=""; String(t).split(/\s+/).forEach(w=>{ const tt=ln?ln+" "+w:w; if(x.measureText(tt).width>mw&&ln){ out.push(ln); ln=w; } else ln=tt; }); if(ln) out.push(ln); return out; };
+  const newPage=(first)=>{ const c=document.createElement("canvas"); c.width=W; c.height=H; const x=c.getContext("2d"); x.fillStyle="#fff"; x.fillRect(0,0,W,H);
+    x.fillStyle=NAVY; x.fillRect(0,0,W,first?300:120);
+    [[W-120,70,90,"#C8EC4A"],[W-250,first?250:105,54,"#FF8FC0"],[W-40,first?240:110,60,"#B9A9FF"]].forEach(([cx,cy,rr,cc])=>{ x.beginPath(); x.arc(cx,cy,rr,0,7); x.fillStyle=cc; x.globalAlpha=.9; x.fill(); x.globalAlpha=1; });
+    x.fillStyle="#C8EC4A"; x.font=F(700,22); x.fillText("MOVA CENTRO PEDAGÓGICO", M, 70);
+    if(first){ x.fillStyle="#fff"; x.font=F(700,52); x.fillText(r.activity==="module-exam"?"Module Exam Report":"Monthly Quiz Report", M, 150);
+      x.font=F(500,26); x.fillStyle="#D8D6E6"; wrap(x,String(ttl).replace(/ · due .*$/,""),W-M*2-260).slice(0,2).forEach((l,i)=>x.fillText(l,M,200+i*34)); }
+    else { x.fillStyle="#fff"; x.font=F(600,28); x.fillText(s.full_name+" · respuestas (continuación)", M, 100); }
+    pages.push(c); return x; };
+  let x=newPage(true), y=360;
+  x.fillStyle=NAVY; x.font=F(700,34); x.fillText(s.full_name, M, y); x.font=F(500,22); x.fillStyle="#666B80";
+  x.fillText(new Date(r.created_at).toLocaleDateString("es-MX",{day:"numeric",month:"long",year:"numeric"})+(s.stage?" · "+s.stage:""), M, y+36);
+  y+=80; x.fillStyle="#F4F2FA"; x.beginPath(); x.roundRect(M,y,W-M*2,secs.length?110+secs.length*58:170,28); x.fill();
+  x.beginPath(); x.arc(M+120,y+(secs.length?120:85),74,0,7); x.fillStyle=NAVY; x.fill(); x.lineWidth=12; x.strokeStyle="#C8EC4A"; x.beginPath(); x.arc(M+120,y+(secs.length?120:85),74,-Math.PI/2,-Math.PI/2+Math.PI*2*pc/100); x.stroke();
+  x.fillStyle="#fff"; x.font=F(700,46); x.textAlign="center"; x.fillText(pc+"%",M+120,y+(secs.length?136:101)); x.textAlign="left";
+  x.fillStyle=NAVY; x.font=F(600,24); x.fillText(`${r.score} de ${r.total} correctas`, M+230, y+70);
+  let by=y+120; secs.forEach(([k,a,b],i)=>{ const p=b?a/b:0, bx=M+230, bw=W-M*2-230-130; x.fillStyle=NAVY; x.font=F(600,21); x.fillText(k,bx,by); x.fillStyle="#E3DFEF"; x.beginPath(); x.roundRect(bx,by+10,bw,16,8); x.fill(); x.fillStyle=COL[i%COL.length]; x.beginPath(); x.roundRect(bx,by+10,Math.max(16,bw*p),16,8); x.fill(); x.fillStyle=NAVY; x.font=F(700,21); x.fillText(`${a}/${b}`,bx+bw+24,by+26); by+=58; });
+  y+=(secs.length?110+secs.length*58:170)+60;
+  if(A.length){ x.fillStyle=NAVY; x.font=F(700,28); x.fillText("Respuestas", M, y); x.font=F(500,20); x.fillStyle="#666B80"; x.fillText(`${A.filter(a=>a.ok).length} aciertos · ${A.filter(a=>!a.ok).length} errores`, M+180, y); y+=30;
+    A.forEach((a,i)=>{ x.font=F(600,21); const ql=wrap(x,(i+1)+". "+(a.q||""),W-M*2-70); x.font=F(500,19);
+      const extra=[]; if(a.a!=null&&a.a!=="") extra.push("Respondió: "+a.a); if(!a.ok&&a.r) extra.push("Correcta: "+a.r);
+      const el=extra.flatMap(t=>wrap(x,t,W-M*2-70)), h=ql.length*28+el.length*26+26;
+      if(y+h>H-80){ x=newPage(false); y=190; }
+      x.fillStyle=a.ok?"#EEF8D6":"#FFE6F0"; x.beginPath(); x.roundRect(M,y,W-M*2,h,16); x.fill();
+      x.fillStyle=a.ok?"#5E8A00":"#D0306E"; x.font=F(700,26); x.fillText(a.ok?"✓":"✗",M+18,y+38);
+      x.fillStyle=NAVY; x.font=F(600,21); ql.forEach((l,j)=>x.fillText(l,M+58,y+36+j*28));
+      x.font=F(500,19); el.forEach((l,j)=>{ x.fillStyle=/^Correcta/.test(l)?"#5E8A00":"#666B80"; x.fillText(l,M+58,y+36+ql.length*28+j*26); });
+      y+=h+12; }); }
+  pages.forEach((c,i)=>{ const z=c.getContext("2d"); z.fillStyle="#999"; z.font=F(500,17); z.fillText("MOVA Learning Studio · heymova.mx",M,H-40); z.textAlign="right"; z.fillText(`${i+1} / ${pages.length}`,W-M,H-40); z.textAlign="left"; });
+  const imgs=[]; for(const c of pages) imgs.push(await jpg(c));
+  await luSave(new File([LUR.pdfPages(imgs,612,792)],`Informe-${r.activity==="module-exam"?"Module-Exam":"Quiz"}-${s.full_name.replace(/\s+/g,"-")}.pdf`,{type:"application/pdf"}),"Informe del quiz");
+}
+/* Busca el resultado de Level Up de un alumno (por nombre y hora en que terminó la tarea) */
+async function luFind(s,when){
+  if(!LU.length){ try{ LU=await rpc("admin_list_levelup")||[]; }catch(e){ return null; } }
+  const t=new Date(when).getTime(), nm=luKey(s.full_name).split(" "), user=String(s.username||"").toLowerCase();
+  const sameName=r=>{ const k=luKey(r.name).split(" "); return k[0]===nm[0]&&(k.length<2||nm.includes(k[1])); };
+  const near=r=>Math.abs(new Date(r.created_at).getTime()-t);
+  const byUser=LU.filter(r=>r.username&&String(r.username).toLowerCase()===user);
+  const pool=byUser.length?byUser:LU.filter(sameName);
+  if(pool.length) return pool.slice().sort((a,b)=>near(a)-near(b))[0];
+  const close=LU.filter(r=>near(r)<15*60*1000).sort((a,b)=>near(a)-near(b));
+  return close[0]||null;
 }
 function openLU(id){
   const r=LU.find(x=>x.id===id); if(!r) return; const sk=r.skills||{}, wa=waLink(r);
@@ -1707,11 +1778,13 @@ function drawAllTasks(){
     ${groups.length?groups.map(g=>{ const p=g.items.filter(x=>!x.done).length, c=g.items.length-p;
       return `<div class="tkc"><div class="tkh" data-open="${esc(g.s.id)}"><div class="av2">${esc(initials(g.s.full_name))}</div><div><b>${esc(g.s.full_name)}</b><small>${g.s.stage?esc(g.s.stage)+" · ":""}${p?p+" pendiente"+(p>1?"s":""):""}${p&&c?" · ":""}${c?c+" completada"+(c>1?"s":""):""}</small></div><span class="go">Ver perfil →</span></div>
       ${g.items.map(x=>{ const r=x.done, pc=r&&r.total?Math.round(r.score/r.total*100):null;
-        return `<div class="tkr"><div><b>${esc(name(x.t))}</b><small><span class="tksb" style="background:${SUBJ[tkSubj(x.t)][1]}">${SUBJ[tkSubj(x.t)][0]}</span>${x.t.by?`<span class="tkby" style="background:${BYC[x.t.by]||"#EEE"}">${esc(x.t.by)}</span>`:""}Asignada ${esc(d(x.t.created_at))}${r?" · terminada "+esc(d(r.created_at)):(x.t.due?` · <span class="duep${dueLate(x.t.due)?" late":""}">${dueLate(x.t.due)?"Venció":"Vence"} ${esc(dueEs(x.t.due))}</span>`:"")}</small></div>${r?`<span class="pill done">${pc!=null?pc+"% · "+r.score+"/"+r.total:"Completada"}</span>`:dueLate(x.t.due)?`<span class="pill late">Atrasada</span>`:`<span class="pill pend">Pendiente</span>`}</div>`; }).join("")}</div>`; }).join("")
+        return `<div class="tkr${r?" tkok":""}"${r?` data-ans="${esc(g.s.id)}|${esc(x.t.id)}"`:""}><div><b>${esc(name(x.t))}</b><small><span class="tksb" style="background:${SUBJ[tkSubj(x.t)][1]}">${SUBJ[tkSubj(x.t)][0]}</span>${x.t.by?`<span class="tkby" style="background:${BYC[x.t.by]||"#EEE"}">${esc(x.t.by)}</span>`:""}Asignada ${esc(d(x.t.created_at))}${r?" · terminada "+esc(d(r.created_at)):(x.t.due?` · <span class="duep${dueLate(x.t.due)?" late":""}">${dueLate(x.t.due)?"Venció":"Vence"} ${esc(dueEs(x.t.due))}</span>`:"")}</small></div>${r?`<span class="pill done">${pc!=null?pc+"% · "+r.score+"/"+r.total:"Completada"}</span>`:dueLate(x.t.due)?`<span class="pill late">Atrasada</span>`:`<span class="pill pend">Pendiente</span>`}</div>`; }).join("")}</div>`; }).join("")
       :`<p class="sub" style="padding:14px 4px">${all.length?"No hay actividades con este filtro.":"Todavía no hay actividades asignadas."}</p>`}
     <p class="note" style="color:#8C91AD;font-size:12px;margin:8px 4px 0">Las actividades asignadas antes de hoy no muestran qué maestra las asignó.</p>
     <div style="text-align:center;margin:12px 0 90px"><button class="btn" id="tkRe" style="background:#fff">Actualizar</button></div>`;
   box.querySelectorAll("[data-tk]").forEach(b=>b.onclick=()=>{ tkF[b.dataset.tk]=b.dataset.v; drawAllTasks(); });
+  box.querySelectorAll("[data-ans]").forEach(b=>b.onclick=async()=>{ const [sid,tid]=b.dataset.ans.split("|"), g=tkCache.find(x=>String(x.s.id)===sid), it=g&&g.items.find(x=>String(x.t.id)===tid); if(!it) return;
+    if(taskKeyOf(it.t)==="level-up"){ const r=await luFind(g.s,it.done.created_at); if(r) openLU(r.id); else toast("No encontré el resultado de Level Up"); return; } openAnswers(g.s,it.t,it.done); });
   box.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{ const g=tkCache.find(x=>String(x.s.id)===b.dataset.open); if(g) openStudent(g.s.id); });
   const qi=$("#tkQ"); qi.oninput=()=>{ tkF.q=qi.value; const pos=qi.selectionStart; drawAllTasks(); const n=$("#tkQ"); n.focus(); try{ n.setSelectionRange(pos,pos); }catch(e){} };
   $("#tkRe").onclick=()=>loadAllTasks(true);
@@ -1995,7 +2068,7 @@ async function loadTasks(s){
   const tHtml=tasks.map(t=>{
     const done=taskDoneRow(t,rows);
     const res=done&&done.total?` · ${Math.round(done.score/done.total*100)}%`:"";
-    const see=done&&isSim(done)?`<button class="see" data-r="${esc(simKey(done))}">Ver reporte</button>`:"";
+    const see=done&&isSim(done)?`<button class="see" data-r="${esc(simKey(done))}">Ver reporte</button>`:done&&taskKeyOf(t)==="level-up"?`<button class="see lu-see" data-lu="${esc(done.created_at)}">Ver resultado · PDF</button>`:done?`<button class="see ans-see" data-t="${t.id}">${isQuizRow(done)?"Ver respuestas · PDF":"Ver respuestas"}</button>`:"";
     return `<div class="row"><div><b>${esc(String(t.task).includes("~")?t.title:(TASK_NAME[t.task]||t.title))}</b><small>Asignada ${esc(d(t.created_at))}${t.by?" por "+esc(t.by):""}${done?" · terminada "+esc(d(done.created_at)):(t.due?` · <span class="duep${dueLate(t.due)?" late":""}">${dueLate(t.due)?"Venció":"Vence"} ${esc(dueEs(t.due))}</span>`:"")}</small></div>
       ${done?`<span class="pill done">Completada${res}</span>${see}`:`<span class="pill pend">Pendiente</span>`}
       <button class="rm" data-t="${t.id}" aria-label="Quitar tarea">×</button></div>`;}).join("");
@@ -2013,7 +2086,9 @@ async function loadTasks(s){
     try{ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:task,p_title:title+(curDue?" · due "+curDue:"")+" · by "+tName()}); toast(`${title} asignada a ${s.full_name.split(" ")[0]}`); curPicks=[]; loadTasks(s); }
     catch(e){ toast(e.message); b.disabled=false; b.textContent="Asignar actividad"; } };
   box.querySelectorAll(".rm").forEach(b=>b.onclick=async()=>{ if(!confirm("¿Quitar esta tarea?")) return; try{ await rpc("admin_remove_task",{p_id:+b.dataset.t}); loadTasks(s); }catch(e){ toast(e.message); } });
-  box.querySelectorAll(".see").forEach(b=>b.onclick=()=>{ const r=sims.find(x=>simKey(x)===b.dataset.r)||rows.find(x=>simKey(x)===b.dataset.r); if(r) openSimReport(s,r); });
+  box.querySelectorAll(".lu-see").forEach(b=>b.onclick=async e=>{ e.stopPropagation(); const o=b.textContent; b.disabled=true; b.textContent="Buscando…"; const r=await luFind(s,b.dataset.lu); b.disabled=false; b.textContent=o; if(r) openLU(r.id); else toast("No encontré el resultado de Level Up de este alumno"); });
+  box.querySelectorAll(".ans-see").forEach(b=>b.onclick=e=>{ e.stopPropagation(); const t=tasks.find(x=>String(x.id)===b.dataset.t); const r=t&&taskDoneRow(t,rows); if(r) openAnswers(s,t,r); });
+  box.querySelectorAll(".see:not(.lu-see):not(.ans-see)").forEach(b=>b.onclick=()=>{ const r=sims.find(x=>simKey(x)===b.dataset.r)||rows.find(x=>simKey(x)===b.dataset.r); if(r) openSimReport(s,r); });
   if(tErr) box.querySelector(".tk").insertAdjacentHTML("beforeend",`<p class="sub" style="margin-top:10px">${esc(tErr)}</p>`);
 }
 function simReportHtml(s,r){
