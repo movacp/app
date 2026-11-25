@@ -949,7 +949,7 @@ function certHTML(d) {
       <div class="pc-skills">${d.skills.map(([k, p]) => `<div class="pc-sk"><small>${k}</small><b>${p}%</b><i><em style="width:${p}%"></em></i></div>`).join("")}</div>
       <div class="pc-can"><small>Lo que ya puedes hacer</small><ul>${d.I.can.map((c) => `<li>${c}</li>`).join("")}</ul></div>
       <div class="pc-foot"><div><small>Date</small><b>${d.today}</b></div><div><small>Assigned MOVA level</small><b>${esc(d.asg)}</b></div>
-        <div class="pc-sign"><div class="sg">${SIGNATURE ? `<img src="${SIGNATURE}" alt="">` : ""}</div><b>Miss Karla Rodríguez</b><small>MOVA Centro Pedagógico</small></div></div>
+        <div class="pc-sign"><div class="sg">${SIGNATURE ? `<img src="${SIGNATURE}" alt="">` : ""}</div><b>Miss Karla Rodríguez</b><small>Academic Coordinator</small></div></div>
       <p class="pc-note"><span>Estimated level from the Level Up online placement test. Confirm it with your placement assessment at MOVA.</span><span>Av. Constituyentes de N.L. #111, Col. Lindavista · 812 342 6038 · @movacp.mx</span></p>
     </section></div>`;
 }
@@ -1029,7 +1029,7 @@ async function certCanvas(d) {
   x.fillStyle = "#15192B"; x.fillRect(sx, FY - m(4), sw2, m(.4));
   if (SIGNATURE) { const si = await loadImg(SIGNATURE); if (si) { const sh = m(24), sw3 = sh * si.width / si.height; x.drawImage(si, sx + m(2), FY - m(4) - sh + m(3), sw3, sh); } }
   x.T("Miss Karla Rodríguez", sx, FY + m(2.5), f(800, 10), "#15192B");
-  x.T("MOVA Centro Pedagógico", sx, FY + m(7), f(600, 8.5), "#6A6F85");
+  x.T("Academic Coordinator", sx, FY + m(7), f(600, 8.5), "#6A6F85");
   const sc = R - m(14), sr = m(14), mx = sc - sr - m(8);
   const meta = [["Date", d.today], ["Certificate", d.folio], ["", "Monterrey, N.L."]];
   meta.forEach(([k, v], i) => { const yy = FY - m(8) + i * m(5.5); const w = x.T(v, mx, yy, f(800, 9), "#15192B", "right"); if (k) x.T(k + "  ", mx - w, yy, f(600, 9), "#6A6F85", "right"); });
@@ -1222,7 +1222,7 @@ async function reportPages(d) {
   if (SIGNATURE) { const si = await loadImg(SIGNATURE); if (si) { const sh = m(20), sw3 = sh * si.width / si.height; z.save(); z.filter = "invert(1)"; z.drawImage(si, SX + (SWd - sw3) / 2, SY - sh + m(2), sw3, sh); z.restore(); } }
   z.fillStyle = "rgba(255,255,255,.5)"; z.fillRect(SX, SY, SWd, m(.35));
   z.T("Miss Karla Rodríguez", SX + SWd / 2, SY + m(5.5), f(800, 9), "#FFFFFF", "center");
-  z.T("Dirección académica", SX + SWd / 2, SY + m(10), f(600, 7.5), "#AEB3CC", "center");
+  z.T("Coordinadora académica", SX + SWd / 2, SY + m(10), f(600, 7.5), "#AEB3CC", "center");
   foot(z, 2);
   return [c1, c2];
 }

@@ -688,7 +688,7 @@ async function certCanvas(d) {
   x.fillStyle = "#15192B"; x.fillRect(sx, FY - m(4), sw2, m(.4));
   if (SIGNATURE) { const si = await loadImg(SIGNATURE); if (si) { const sh = m(24), sw3 = sh * si.width / si.height; x.drawImage(si, sx + m(2), FY - m(4) - sh + m(3), sw3, sh); } }
   x.T("Miss Karla Rodríguez", sx, FY + m(2.5), f(800, 10), "#15192B");
-  x.T("MOVA Centro Pedagógico", sx, FY + m(7), f(600, 8.5), "#6A6F85");
+  x.T("Academic Coordinator", sx, FY + m(7), f(600, 8.5), "#6A6F85");
   const sc = R - m(14), sr = m(14), mx = sc - sr - m(8);
   const meta = [["Date", d.today], ["Certificate", d.folio], ["", "Monterrey, N.L."]];
   meta.forEach(([k, v], i) => { const yy = FY - m(8) + i * m(5.5); const w = x.T(v, mx, yy, f(800, 9), "#15192B", "right"); if (k) x.T(k + "  ", mx - w, yy, f(600, 9), "#6A6F85", "right"); });
@@ -870,7 +870,7 @@ async function reportPages(d) {
   if (SIGNATURE) { const si = await loadImg(SIGNATURE); if (si) { const sh = m(20), sw3 = sh * si.width / si.height; z.save(); z.filter = "invert(1)"; z.drawImage(si, SX + (SWd - sw3) / 2, SY - sh + m(2), sw3, sh); z.restore(); } }
   z.fillStyle = "rgba(255,255,255,.5)"; z.fillRect(SX, SY, SWd, m(.35));
   z.T("Miss Karla Rodríguez", SX + SWd / 2, SY + m(5.5), f(800, 9), "#FFFFFF", "center");
-  z.T("Dirección académica", SX + SWd / 2, SY + m(10), f(600, 7.5), "#AEB3CC", "center");
+  z.T("Coordinadora académica", SX + SWd / 2, SY + m(10), f(600, 7.5), "#AEB3CC", "center");
   foot(z, 2);
   return [c1, c2];
 }
@@ -1522,7 +1522,7 @@ async function buildReport(s, all, y, mo, note){
       return `<section class="sub"><header style="background:#FFE6F2"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#15192B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5z"/><path d="M12 6.5v13"/></svg></div><div><h3>En clase</h3><p>${esc(BB[bkRec.b].name)} · ${esc(bkRange(bkRec))}</p></div></header>${sb(tp.g.length?`<div><h4>Grammar</h4><ul>${L(tp.g)}</ul></div>`:"",tp.v.length?`<div><h4>Vocabulary</h4><ul>${L(tp.v)}</ul></div>`:"")}</section>`; })()}
     ${secs}
     ${note?`<div class="note"><h3>Comentario de la maestra</h3><p>${esc(note).replace(/\n/g,"<br>")}</p></div>`:""}
-    <div class="sig">${window.MovaSig?`<img src="${window.MovaSig}" alt="">`:""}<div class="ln"><b>Miss Karla Rodríguez</b><small>Coordinación Académica</small></div></div>
+    <div class="sig">${window.MovaSig?`<img src="${window.MovaSig}" alt="">`:""}<div class="ln"><b>Miss Karla Rodríguez</b><small>Coordinadora académica</small></div></div>
     <div class="ft"><span>MOVA Centro Pedagógico · Monterrey · @movacp.mx</span><span>Generado el ${new Date().toLocaleDateString("es-MX",{day:"numeric",month:"long",year:"numeric"})}</span></div>
   </div>`;
   let stage=document.getElementById("repStage"); if(!stage){ stage=document.createElement("div"); stage.id="repStage"; document.body.appendChild(stage); }
