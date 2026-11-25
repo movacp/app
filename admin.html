@@ -1053,7 +1053,7 @@ async function luFind(s,when){
   return close[0]||null;
 }
 function luUserOf(r){ if(r.username) return r.username; try{ const k=luKey(r.name); const st=STU_ALL().find(x=>luKey(x.full_name)===k)||STU_ALL().find(x=>luKey(x.full_name).startsWith(k.split(" ").slice(0,2).join(" "))); return st?st.username:""; }catch(_){ return ""; } }
-function luPassOf(u){ try{ return u?(localStorage.getItem("mova_lu_pass_"+String(u).toLowerCase())||""):""; }catch(_){ return ""; } }
+function luPassOf(u){ try{ return (u&&localStorage.getItem("mova_lu_pass_"+String(u).toLowerCase()))||"MOVA2027"; }catch(_){ return "MOVA2027"; } }
 function openLU(id){
   const r=LU.find(x=>x.id===id); if(!r) return; const sk=r.skills||{}, wa=waLink(r);
   const IC={doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M12 11v6M9 14l3 3 3-3"/></svg>',
