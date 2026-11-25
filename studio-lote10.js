@@ -778,15 +778,18 @@ function viewLectura(id) {
       check.addEventListener("click", () => {
         const sets = $$(".rq", root), missing = sets.filter((f) => !$("input:checked", f));
         if (missing.length) { result.className = "result warn"; result.textContent = `Contesta todas las preguntas. Te ${missing.length === 1 ? "falta 1" : `faltan ${missing.length}`}.`; $("input", missing[0]).focus(); return; }
-        let score = 0;
+        let score = 0; const ans = [];
         sets.forEach((f, qi) => {
           const chosen = $("input:checked", f).value, correct = qs[qi].correct;
+          ans.push({ t: "Lectura", q: qs[qi].q || "", a: chosen, ok: chosen === correct, r: correct });
           $$(".opt", f).forEach((lab) => { const v = $("input", lab).value; if (v === correct) lab.classList.add("is-correct"); else if (v === chosen) lab.classList.add("is-wrong"); $("input", lab).disabled = true; });
           if (chosen === correct) score++; else f.insertAdjacentHTML("beforeend", `<p class="rq-note">Respuesta correcta: ${esc(correct)}</p>`);
         });
         result.className = `result ${score === n ? "good" : score >= n / 2 ? "mid" : "warn"}`;
         result.textContent = score === n ? `¡Excelente! Tuviste ${score} de ${n} correctas.` : `Tuviste ${score} de ${n} correctas. Vuelve a leer el texto y vuelve a intentarlo.`;
-        if (score === n && !esIsDone(l.id)) { esToggle(l.id); $$("[data-es-done]", root).forEach((x) => { x.classList.add("is-done"); x.setAttribute("aria-pressed", true); $("span", x).textContent = "Leída"; }); }
+        window.__movaReadScore = { id: l.id, score, total: n, ans };
+        if (esIsDone(l.id) && window.MovaAuth && MovaAuth.saveReadingScore) MovaAuth.saveReadingScore(l.id, l.title);
+        if (!esIsDone(l.id)) { esToggle(l.id); $$("[data-es-done]", root).forEach((x) => { x.classList.add("is-done"); x.setAttribute("aria-pressed", true); $("span", x).textContent = "Leída"; }); }
         check.hidden = true; reset.hidden = false;
       });
       reset.addEventListener("click", () => {

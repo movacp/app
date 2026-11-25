@@ -125,14 +125,27 @@
 
   /* Resultados que los juegos y la app ya guardan en el dispositivo */
   var K_APP = "mova-learning-studio:v1";
+  /* Lecturas en español: se guardan en la cuenta al quedar leídas */
+  function onEsStore(before, v) {
+    var a = [], b = [];
+    try { a = JSON.parse(before || "[]") || []; } catch (e) {}
+    try { b = JSON.parse(v || "[]") || []; } catch (e) {}
+    b.forEach(function (id) {
+      if (a.indexOf(id) >= 0) return;
+      var m = window.__movaReadScore, s = screenInfo(), it = s && s.a === "app-lecturas" && !/Explorando/.test(s.i) ? s.i : "Lectura · " + id;
+      if (m && m.id === id) { window.__movaReadScore = null; save("app-lecturas", it, m.score, m.total, { kind: "done", id: id, ans: m.ans }); }
+      else save("app-lecturas", it, null, null, { kind: "done", id: id });
+    });
+  }
   function onAppStore(before, v) {
     var a = [], b = [];
     try { a = (JSON.parse(before || "{}") || {}).completed || []; } catch (e) {}
     try { b = (JSON.parse(v || "{}") || {}).completed || []; } catch (e) {}
     b.forEach(function (id) {
       if (a.indexOf(id) >= 0) return;
-      var s = screenInfo(), ok = s && /^app-(library|lecturas)$/.test(s.a) && !/Explorando/.test(s.i);
-      save(ok ? s.a : "app-library", ok ? s.i : "Lectura · " + id, null, null, { kind: "done", id: id });
+      var s = screenInfo(), ok = s && /^app-(library|lecturas)$/.test(s.a) && !/Explorando/.test(s.i), m = window.__movaReadScore;
+      if (m && m.id === id) { window.__movaReadScore = null; save(ok ? s.a : "app-library", ok ? s.i : "Lectura · " + id, m.score, m.total, { kind: "done", id: id, ans: m.ans }); }
+      else save(ok ? s.a : "app-library", ok ? s.i : "Lectura · " + id, null, null, { kind: "done", id: id });
     });
   }
   function watchResults() {
@@ -144,7 +157,7 @@
       orig.apply(this, arguments);
       if (this !== window.localStorage || !user || v === before) return;
       try {
-        if (!slug) { if (k === K_APP) onAppStore(before, v); return; }
+        if (!slug) { if (k === K_APP) onAppStore(before, v); else if (k === "mova-lecturas-leidas") onEsStore(before, v); return; }
         if (k === "mova-levelup") {
           var arr = JSON.parse(v), last = arr[arr.length - 1];
           if (last) save("level-up", "Placement test result: level " + last.l, last.r, last.t, { level: last.l, stage: last.s, folio: last.f });
@@ -619,6 +632,17 @@
     return "juego-" + k + ".html" + q;
   }
   window.MovaTaskUrl = function (t) { return taskUrl(t); };
+  /* My path: la tarea cuenta aunque la alumna la abra desde el mapa y no desde "Assigned" */
+  function pathMatch(tk, title, r) {
+    if (r.activity !== "ruta" || r.total == null) return false;
+    var d = r.detail || {}, T = String(title || "").toLowerCase(), it = String(r.item || "");
+    if (tk.indexOf("t:") === 0) return d.tid ? d.tid === tk.slice(2) : !!d.topic && T.indexOf(String(d.topic).toLowerCase()) >= 0;
+    var key = tk.indexOf("xv:") === 0 ? "x|" + tk.slice(3) : tk.slice(2);
+    if (d.vk) return d.vk === key;
+    var nm = (it.split("Vocabulary: ")[1] || it.split("Flashcards · ")[1] || "").toLowerCase();
+    return !!nm && T.indexOf(nm) >= 0;
+  }
+  window.MovaPathMatch = pathMatch;
   function taskRowMatch(t, r) {
     if (r.detail && r.detail.task != null && String(r.detail.task) === String(t.id)) return true;
     if (r.created_at && new Date(r.created_at).getTime() < new Date(t.created_at).getTime()) return false;
@@ -629,6 +653,8 @@
     if (tk === "lectura") return /^app-(library|lecturas)$/.test(r.activity) && r.item && !/Explorando/.test(r.item);
     if (tk.indexOf("h:") === 0) return r.activity === "season" && String(r.item) === tk;
     if (tk.indexOf("w:") === 0) return r.activity === "writing" && !!r.detail && r.detail.w === tk.slice(2);
+    if (/^(t|v|xv):/.test(tk)) return pathMatch(tk, t.title, r);
+    if (/^(r|e):/.test(tk)) return /^app-(library|lecturas)$/.test(r.activity) && !!r.detail && String(r.detail.id) === tk.slice(2);
     if (r.activity !== tk) return false;
     var d = r.detail || {};
     if (/^(la-balanza|la-boveda|la-tiendita|lluvia-de-numeros|mision-matematica|pizzeria-fracciones|que-hora-es|detective-patrones|haunted-mansion|locked-library|lost-in-the-museum|pirate-treasure-island|space-station-rescue|the-detectives-case|trapped-in-the-train)$/.test(tk)) return r.total != null;
@@ -778,7 +804,10 @@
     window.__movaTaskId = id; window.__movaTaskMark = mark;
   }
   /* ---------- Arranque ---------- */
-  window.MovaAuth = { save: save, user: function () { return user; }, login: showLogin, progress: function () { if (user) showAccount(); else showLogin(); } };
+  function saveReadingScore(id, title) { var m = window.__movaReadScore; if (!m || m.id !== id) return; window.__movaReadScore = null;
+    var s = screenInfo(), ok = s && /^app-(library|lecturas)$/.test(s.a) && !/Explorando/.test(s.i);
+    save(ok ? s.a : "app-library", ok ? s.i : "Lectura · " + (title || id), m.score, m.total, { kind: "score", id: id, ans: m.ans }); }
+  window.MovaAuth = { save: save, saveReadingScore: saveReadingScore, user: function () { return user; }, login: showLogin, progress: function () { if (user) showAccount(); else showLogin(); } };
   function boot() {
     /* Opciones de tareas: vista previa de la maestra o tarea del alumno */
     if (/[?&]live=\d{4}/.test(location.search) && !/juego-retos\.html$/.test(location.pathname) && !window.__movaLiveLoaded) { window.__movaLiveLoaded = 1; var ls = document.createElement("script"); ls.src = "mova-live-play.js?v=122"; document.head.appendChild(ls); }

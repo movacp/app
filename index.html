@@ -1594,9 +1594,10 @@ function viewReading(id) {
           $("input", missing[0]).focus();
           return;
         }
-        let score = 0;
+        let score = 0; const ans = [];
         sets.forEach((f, qi) => {
           const chosen = $("input:checked", f).value, correct = qs[qi].correct;
+          ans.push({ t: "Reading", q: qs[qi].q || "", a: chosen, ok: chosen === correct, r: correct });
           $$(".opt", f).forEach((l) => {
             const v = $("input", l).value;
             if (v === correct) l.classList.add("is-correct");
@@ -1609,8 +1610,15 @@ function viewReading(id) {
         const nq = qs.length;
         result.className = `result ${score === nq ? "good" : score >= Math.ceil(nq * 0.6) ? "mid" : "warn"}`;
         result.textContent = score === nq
-          ? `Excellent! You got ${nq} of ${nq} correct.${isDone(r.id) ? "" : " You can mark this reading as completed."}`
+          ? `Excellent! You got ${nq} of ${nq} correct.`
           : `You got ${score} of ${nq} correct. Read the text again and try once more.`;
+        /* Al contestar las preguntas la lectura queda completada sola (y se guarda la calificación) */
+        window.__movaReadScore = { id: r.id, score, total: nq, ans };
+        if (!isDone(r.id)) {
+          state.completed = [...state.completed, r.id]; persist();
+          $$('[data-action="done"]').filter((b) => b.dataset.id === r.id).forEach((b) => { b.classList.add("is-done"); b.setAttribute("aria-pressed", true); $("span", b).textContent = "Completed"; });
+          toast("Reading completed");
+        } else if (window.MovaAuth && MovaAuth.saveReadingScore) MovaAuth.saveReadingScore(r.id, r.title);
         check.hidden = true; reset.hidden = false;
       });
       reset.addEventListener("click", () => {

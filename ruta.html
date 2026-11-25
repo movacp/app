@@ -806,7 +806,7 @@ function topic(id,from){
     var st=s6>=6?3:s6>=4?2:1,o=S(),prev=o.done[t.id];
     if(!prev||s6>prev.score)o.done[t.id]={score:s6,stars:st,d:Date.now()};
     o.built+=builtOk;var nb=checkBadges(o,s6);W(o);
-    var saved=saveCloud("My path · "+STG[f.st].name+" "+f.code+" · "+(f.kind!=="topics"?KINDS[f.kind]+": ":"")+t.t,comb,tot,{kind:"score",stage:f.st,level:f.code,topic:t.t,sentences_first_try:builtOk,quiz:score,write:wRes?wS+"/"+wT:null,ans:MPA});
+    var saved=saveCloud("My path · "+STG[f.st].name+" "+f.code+" · "+(f.kind!=="topics"?KINDS[f.kind]+": ":"")+t.t,comb,tot,{kind:"score",tid:id,stage:f.st,level:f.code,topic:t.t,sentences_first_try:builtOk,quiz:score,write:wRes?wS+"/"+wT:null,ans:MPA});
     var score0=score;score=s6;
     var nt=f.list.filter(function(x){return x.exp&&!S().done[x.id];})[0]||null;
     app.innerHTML=head()+'<div class="res"><span class="ring"></span><span class="k">'+esc(t.t)+'</span><h2>'+comb+'<small> / '+tot+'</small></h2>'+stars(st)+(wRes?'<div class="nw-sum"><span>Quiz '+Math.min(score0,qT)+'/'+qT+'</span><span>Now write it '+wS+'/'+wT+'</span></div>':'')+'<p>'+(score>=6?(es?"¡Perfecto! Dominas este tema.":"Perfect! You've mastered this topic."):score>=4?(es?"¡Muy bien! Un repaso más y será perfecto.":"Great work! One more review and it'll be perfect."):(es?"Buen intento. Vuelve a leer la explicación y repite el quiz.":"Good try. Read the explanation again and retake the quiz."))+'</p></div>'+newBadgesHtml(nb)+
@@ -942,7 +942,7 @@ function deck(V,c){
       return {q:c.ask?c.ask.replace("%",w[0]):"What does “"+w[0]+"” mean?",o:shuffle(others.concat([{x:w[1],ok:true}])),why:w[0]+": "+w[1]};});
     runQuiz({qs:qs,es:false,kicker:esc(V.n.toUpperCase()),backHref:c.bh,backLabel:c.bl,done:function(sc,n){
       var o=S(),kk=c.key;if(o.vocab[kk]==null||sc>o.vocab[kk])o.vocab[kk]=sc;var nb=checkBadges(o,null);W(o);
-      var saved=saveCloud(c.log,sc,n,{kind:"score",stage:c.st,level:c.code});
+      var saved=saveCloud(c.log,sc,n,{kind:"score",vk:c.key,stage:c.st,level:c.code});
       app.innerHTML=back(c.bh,c.bl)+'<div class="res"><span class="ring"></span><span class="k">'+esc(V.n.toUpperCase())+'</span><h2>'+sc+'<small> / '+n+'</small></h2>'+stars(sc>=10?3:sc>=8?2:1)+'</div>'+newBadgesHtml(nb)+'<div class="row2"><button class="cta ghost" id="ag">Study again</button><button class="cta" id="bk">Back to '+esc(c.bl)+'</button></div><p class="saved" id="sv"></p>';
       document.getElementById("ag").onclick=function(){mode="study";k=0;study();};
       document.getElementById("bk").onclick=goBack;savedNote(saved,false);}});

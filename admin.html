@@ -1715,6 +1715,15 @@ const TASK_CAT=[
  ["Español y matemáticas",[["diagnostico-lectura","Diagnóstico de entrada · Lectoescritura"],["lee-con-mochi","Aprende a leer con Mochi"],["feria-mochi","La Feria de Mochi"],["mision-matematica","Misión Matemática"],["la-tiendita","La Tiendita"],["la-balanza","La Balanza"],["la-boveda","La Bóveda"],["lluvia-de-numeros","Lluvia de números"],["detective-patrones","Detective de patrones"],["pizzeria-fracciones","Pizzería de fracciones"],["que-hora-es","¿Qué hora es?"]]]
 ];
 const TASK_NAME=Object.fromEntries(TASK_CAT.flatMap(g=>g[1]));
+function pathMatchA(tk,title,r){
+  if(r.activity!=="ruta"||r.total==null) return false;
+  const d=r.detail||{}, T=String(title||"").toLowerCase(), it=String(r.item||"");
+  if(tk.startsWith("t:")) return d.tid?d.tid===tk.slice(2):!!d.topic&&T.includes(String(d.topic).toLowerCase());
+  const key=tk.startsWith("xv:")?"x|"+tk.slice(3):tk.slice(2);
+  if(d.vk) return d.vk===key;
+  const nm=(it.split("Vocabulary: ")[1]||it.split("Flashcards · ")[1]||"").toLowerCase();
+  return !!nm&&T.includes(nm);
+}
 function taskMatch(t0,r){
   const t=Object.assign({},t0,{task:taskKeyOf(t0)});
   if(r.detail && r.detail.task!=null && String(r.detail.task)===String(t.id)) return true;
@@ -1725,6 +1734,8 @@ function taskMatch(t0,r){
   if(t.task==="m-levelup") return r.activity==="math-level-up";
   if(/^m:/.test(t.task)) return r.activity==="math-comprueba"&&String(r.item)===t.task.slice(2);
   if(t.task.startsWith("w:")) return r.activity==="writing" && !!r.detail && r.detail.w===t.task.slice(2);
+  if(/^(t|v|xv):/.test(t.task)) return pathMatchA(t.task,t.title,r);
+  if(/^(r|e):/.test(t.task)) return /^app-(library|lecturas)$/.test(r.activity)&&!!r.detail&&String(r.detail.id)===t.task.slice(2);
   if(r.activity!==t.task) return false;
   if(t.task==="toefl-practice" && r.detail && r.detail.kind==="toefl-sim") return false;
   return r.total!=null || secsOf(r)>=60 || !!(r.detail && r.detail.kind && r.detail.kind!=="time");
