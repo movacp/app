@@ -855,17 +855,22 @@ async function reportPages(d) {
   z.fillStyle = "#F7F5FC"; z.rr(L, y, CW, m(16), m(4)); z.fill();
   z.fillStyle = LIME; z.beginPath(); z.arc(L + m(8), y + m(8), m(3.2), 0, 7); z.fill();
   z.strokeStyle = INK; z.lineWidth = m(.5); z.beginPath(); z.arc(L + m(8), y + m(8), m(1.8), -1.6, 3.4); z.stroke(); z.beginPath(); z.moveTo(L + m(8), y + m(6.2)); z.lineTo(L + m(8), y + m(8)); z.lineTo(L + m(9.2), y + m(8.8)); z.stroke();
-  const pw1 = z.T("Avance: ", L + m(15), y + m(6.8), f(800, 9.5), INK);
-  z.wrap("Los programas de MOVA incluyen evaluaciones periódicas para dar seguimiento al progreso de cada alumno.", CW - m(21) - pw1, f(500, 9.5)).forEach((l, j) => z.T(l, L + m(15) + pw1, y + m(6.8) + j * m(4.8), f(500, 9.5), BODY));
-  y += m(16) + m(8);
+  const pw1 = z.T("Importante: ", L + m(15), y + m(6.8), f(800, 9.5), INK);
+  z.wrap("Este reporte corresponde al examen Level Up (Placement Test). El reporte de diagnóstico inicial, que integra speaking y writing, se entregará por separado.", CW - m(21) - pw1, f(500, 9.5)).forEach((l, j) => z.T(l, L + m(15) + pw1, y + m(6.8) + j * m(4.8), f(500, 9.5), BODY));
+  y += m(16) + m(5);
   // siguiente paso + firma
-  const NH = Math.min(m(52), H - m(26) - y);
+  const NH = Math.min(m(60), H - m(26) - y);
   z.fillStyle = INK; z.rr(L, y, CW, NH, m(6)); z.fill();
   const NX = L + m(8), NW = CW * .58;
-  z.T("EL SIGUIENTE PASO", NX, y + m(10), f(800, 7.5), LIME, "left", sp(.16, 7.5));
-  z.T("Confirmar su nivel en MOVA", NX, y + m(19), f(800, 13, "b"), "#FFFFFF");
-  para(z, `Level Up mide gramática, vocabulario, lectura y comprensión auditiva. En la evaluación diagnóstica también valoramos speaking y writing para ubicar a ${first} en el grupo ideal.`, NX, y + m(26.5), NW, f(500, 8.8), "#C9CCE0", m(4.7));
-  z.T("Agenden por WhatsApp: 812 342 6038", NX, y + NH - m(7), f(800, 9), LIME);
+  z.T("ACCESO A MOVA LEARNING STUDIO", NX, y + m(9), f(800, 7.5), LIME, "left", sp(.16, 7.5));
+  z.T(`Datos de acceso de ${first}`, NX, y + m(17), f(800, 13, "b"), "#FFFFFF");
+  const ph = para(z, `Compartimos los datos de acceso de ${first} a MOVA Learning Studio. Junto con el reporte de diagnóstico inicial, Coordinación Académica les enviará una presentación sobre cómo usar la plataforma en casa y dónde consultar las actividades que asigna su maestra.`, NX, y + m(23), NW, f(500, 8.4), "#C9CCE0", m(4.3));
+  if (d.user || d.pass) { const CY = y + m(23) + ph - m(1), cw = (NW - m(4)) / 2;
+    [["USUARIO", d.user || "—"], ["CONTRASEÑA", d.pass || "—"]].forEach(([k, v], i) => { const X = NX + i * (cw + m(4));
+      z.fillStyle = "rgba(255,255,255,.08)"; z.rr(X, CY, cw, m(10), m(3)); z.fill();
+      z.T(k, X + m(3.5), CY + m(4), f(800, 6.5), "#AEB3CC", "left", sp(.14, 6.5));
+      z.T(v, X + m(3.5), CY + m(8.3), f(800, 9.5), LIME); }); }
+  else z.T("heymova.mx", NX, y + NH - m(7), f(800, 9), LIME);
   const SX = L + CW * .7, SWd = R - m(8) - SX, SY = y + NH - m(17);
   if (SIGNATURE) { const si = await loadImg(SIGNATURE); if (si) { const sh = m(20), sw3 = sh * si.width / si.height; z.save(); z.filter = "invert(1)"; z.drawImage(si, SX + (SWd - sw3) / 2, SY - sh + m(2), sw3, sh); z.restore(); } }
   z.fillStyle = "rgba(255,255,255,.5)"; z.fillRect(SX, SY, SWd, m(.35));
@@ -957,7 +962,7 @@ function luData(r){
   const rep=["g","v","r","l"].filter(k=>sk[k]&&sk[k][1]).map(k=>[k,sk[k][0],sk[k][1]]);
   return { level:r.level, I, name:r.name, folio:r.folio||"", stage:LU_STAGE[r.stage]||r.stage, stageKey:r.stage, asg:`${LU_STAGE[r.stage]||r.stage} · ${r.level}`,
     today:d.toLocaleDateString("en-US",{day:"numeric",month:"long",year:"numeric"}), todayEs:d.toLocaleDateString("es-MX",{day:"numeric",month:"long",year:"numeric"}),
-    skills:rep.map(([k,a,t])=>[LUR.SKILL[k],Math.round(a/t*100)]), rep, right:r.correct, total:r.total };
+    skills:rep.map(([k,a,t])=>[LUR.SKILL[k],Math.round(a/t*100)]), rep, right:r.correct, total:r.total, user:r._user||"", pass:r._pass||"" };
 }
 async function luSave(file, name){
   if(navigator.canShare&&navigator.canShare({files:[file]})){ try{ await navigator.share({files:[file],title:name}); return; }catch(e){ if(e&&e.name==="AbortError") return; } }
@@ -971,8 +976,9 @@ async function luCertPdf(r){ const d=luData(r); LUR.setLevels(LU_LEVELS[r.stage]
 function waLink(r){
   let n=(r.contact||"").replace(/\D/g,""); if(n.length===10) n="52"+n; if(!n) return "";
   const first=r.name.split(" ")[0], h=new Date().getHours(), hi=h<12?"Buenos días":h<19?"Buenas tardes":"Buenas noches";
-  const who=r.stage==="adults"?`su examen Level Up: obtuvo un nivel estimado ${r.level}`:`el examen Level Up de ${first}: obtuvo un nivel estimado ${r.level}`;
-  const t=`${hi}, ¿cómo está? Le saluda Miss Karla de MOVA Centro Pedagógico. Le comparto el resultado de ${who} (${(LUR.LVES[r.level]||{}).band||""}). Nos dará mucho gusto agendar su evaluación diagnóstica para confirmar el nivel y ubicarle en el grupo ideal. ¿Qué día y horario le acomodan?`;
+  const who=r.stage==="adults"?`el reporte de su examen Level Up, en el que obtuvo un nivel estimado ${r.level}`:`el reporte del examen Level Up de ${first}, en el que obtuvo un nivel estimado ${r.level}`;
+  const acc=r.stage==="adults"?"sus datos de acceso":`los datos de acceso de ${first}`;
+  const t=`${hi}, ¿cómo está? Le saluda Miss Karla de MOVA Centro Pedagógico. Le comparto ${who} (${(LUR.LVES[r.level]||{}).band||""}). En el reporte encontrará también ${acc} a MOVA Learning Studio. Próximamente le enviaremos el reporte de diagnóstico inicial, junto con una presentación sobre el uso de la plataforma en casa. Quedo a sus órdenes para cualquier duda.`;
   return `https://wa.me/${n}?text=${encodeURIComponent(t)}`;
 }
 
@@ -1046,6 +1052,8 @@ async function luFind(s,when){
   const close=LU.filter(r=>near(r)<15*60*1000).sort((a,b)=>near(a)-near(b));
   return close[0]||null;
 }
+function luUserOf(r){ if(r.username) return r.username; try{ const k=luKey(r.name); const st=STU_ALL().find(x=>luKey(x.full_name)===k)||STU_ALL().find(x=>luKey(x.full_name).startsWith(k.split(" ").slice(0,2).join(" "))); return st?st.username:""; }catch(_){ return ""; } }
+function luPassOf(u){ try{ return u?(localStorage.getItem("mova_lu_pass_"+String(u).toLowerCase())||""):""; }catch(_){ return ""; } }
 function openLU(id){
   const r=LU.find(x=>x.id===id); if(!r) return; const sk=r.skills||{}, wa=waLink(r);
   const IC={doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M12 11v6M9 14l3 3 3-3"/></svg>',
@@ -1055,12 +1063,13 @@ function openLU(id){
     <div class="big"><div class="L${r.level.length>2?" sm":""}">${esc(r.level)}</div><div><b>${esc(r.name)}</b><small>${LU_STAGE[r.stage]||esc(r.stage)} · ${esc((LUR.LVES[r.level]||{}).band||"")}<br>Folio ${esc(r.folio||"—")} · ${r.correct} de ${r.total} correctas</small></div></div>
     <div class="bx"><h4>Desempeño por habilidad</h4>${["g","v","r","l"].filter(k=>sk[k]&&sk[k][1]).map(k=>{const p=Math.round(sk[k][0]/sk[k][1]*100);return `<div class="sk"><span>${{g:"Gramática",v:"Vocabulario",r:"Lectura",l:"Comprensión auditiva"}[k]}</span><i><em style="width:${p}%"></em></i><span>${p}%</span></div>`;}).join("")}</div>
     <div class="bx"><h4>Notas de la maestra</h4><textarea class="in" id="luN" placeholder="Ej. Repasar past simple antes del siguiente Level Up">${esc(r.notes||"")}</textarea><div class="ctr" style="margin-top:8px;justify-content:flex-end"><span style="flex:1"></span><button id="luNs">Guardar nota</button></div></div>
+    <div class="bx"><h4>Acceso a la app (sale en el reporte para padres)</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input class="in" id="luU" placeholder="Usuario" autocapitalize="none" autocomplete="off" value="${esc(luUserOf(r))}"><input class="in" id="luP" placeholder="Contraseña" autocapitalize="none" autocomplete="off" value="${esc(luPassOf(luUserOf(r)))}"></div></div>
     <div class="acts"><button class="dk" id="luRep">${IC.doc} Reporte para padres</button><button id="luCert">${IC.doc} Certificado</button></div>
     <button class="del" id="luDel">Eliminar este resultado</button></div>`);
   const upd=async(args,msg)=>{ try{ await rpc("admin_update_levelup",Object.assign({p_id:r.id},args)); Object.assign(r,{status:args.p_status??r.status,notes:args.p_notes??r.notes,contact:args.p_contact??r.contact}); renderLU(); renderLUIns(); toast(msg); }catch(e){ toast(e.message||"No se pudo guardar"); } };
   $("#luNs").onclick=()=>upd({p_notes:$("#luN").value.trim()},"Nota guardada");
   const busy=async(btn,fn)=>{ const o=btn.innerHTML; btn.disabled=true; btn.textContent="Generando…"; try{ await fn(); }catch(e){ toast("No se pudo generar el PDF"); } btn.disabled=false; btn.innerHTML=o; };
-  $("#luRep").onclick=e=>busy(e.currentTarget,()=>luParentPdf(r));
+  $("#luRep").onclick=e=>{ r._user=$("#luU").value.trim(); r._pass=$("#luP").value.trim(); try{ if(r._user&&r._pass) localStorage.setItem("mova_lu_pass_"+r._user.toLowerCase(),r._pass); }catch(_){} busy(e.currentTarget,()=>luParentPdf(r)); };
   $("#luCert").onclick=e=>busy(e.currentTarget,()=>luCertPdf(r));
   $("#luDel").onclick=async()=>{ if(!confirm(`¿Eliminar el resultado de ${r.name}?`)) return; try{ await rpc("admin_delete_levelup",{p_id:r.id}); LU=LU.filter(x=>x.id!==r.id); closeModal(); renderLU(); renderLUIns(); toast("Resultado eliminado"); }catch(e){ toast(e.message||"No se pudo eliminar"); } };
 }
@@ -2187,5 +2196,6 @@ function openSimReport(s,r){
 <script src="mova-math.js"></script>
 <script src="mova-math-panel.js"></script>
 <script src="mova-lecto-panel.js"></script>
+<script src="mova-boleta.js"></script>
 </body>
 </html>
