@@ -512,6 +512,7 @@
     var P = pload(), all = flat(G), done = all.filter(function (x) { var p = P[x.t.id] || {}; return (p[1] || 0) >= 80; }).length;
     var html = back("#/matematicas/temas", "Grados") + hero({ k: gi.st, h: gi.n, c: gi.c, p: G.book ? "Igual que tu libro <b>" + G.book + "</b>." : "", extra: '<div class="mt-prog" style="background:rgba(255,255,255,.55)"><i style="width:' + Math.round(done / all.length * 100) + '%;background:#15192B"></i></div><p style="font-size:13px;font-weight:800;margin-top:6px">' + done + " de " + all.length + " temas dominados en Mi grado</p>" });
     html += '<p style="font-size:12.5px;color:#6A6F85;margin:0 6px 12px;display:flex;gap:12px;flex-wrap:wrap;align-items:center"><span>' + lvDots({ 0: 100 }) + " Nivelación</span><span>" + lvDots({ 1: 100 }) + " Mi grado</span><span>" + lvDots({ 2: 100 }) + " Reto</span></p>";
+    if (QUIZZES[g]) html += '<a class="mt-row" href="#/matematicas/temas/' + g + '/quiz" style="background:#15192B;color:#fff;margin-bottom:14px"><span class="n" style="background:#D3F36B;color:#15192B">Q</span><span class="t"><b style="color:#fff">' + esc(QUIZZES[g].n) + '</b><br><small style="color:#C9CCE0">' + QUIZZES[g].topics.length + ' preguntas · ' + esc(QUIZZES[g].sub) + '</small></span><span class="mt-go">' + ARW + '</span></a>';
     var num = 0;
     G.units.forEach(function (u, ui) {
       html += '<div class="mt-u"><div class="mt-uh"><span class="mt-un" style="background:' + UCOL[ui % UCOL.length] + '">' + (ui + 1) + "</span><span><small>Unidad " + (ui + 1) + "</small><b>" + esc(u.n) + "</b></span></div>" +
@@ -578,13 +579,13 @@
   function heroVis(on) { document.querySelectorAll(".mt > .mt-hero, .mt > .mt-back").forEach(function (x) { x.style.display = on ? "" : "none"; }); }
   function runLevel(box, g, G, T, L, next, onExit0) {
     var onExit = function () { heroVis(true); window.scrollTo(0, 0); onExit0(); }; heroVis(false);
-    var Q = build(T, L), i = 0, score = 0, misses = [], t0 = Date.now();
+    var Q = T._qs ? T._qs() : build(T, L), i = 0, score = 0, misses = [], t0 = Date.now();
     window.scrollTo(0, 0);
     function step() {
       if (i >= Q.length) return finish();
       var q = Q[i]; window.MovaTemas._q = q;
       box.innerHTML = '<div class="mt-top"><button type="button" class="mt-x" data-quit aria-label="Salir">' + XI + '</button><div class="mt-prog"><i style="width:' + Math.round(i / Q.length * 100) + '%"></i></div><small>' + (i + 1) + " / " + Q.length + "</small></div>" +
-        '<div class="mt-card" data-q><p class="mt-n">' + LEVELS[L].n + " · " + esc(T.n) + "</p>" + qHtml(q) + '<div data-fbk></div></div><div class="mt-act"><button type="button" class="mt-btn dk" data-chk disabled>Comprobar</button></div>';
+        '<div class="mt-card" data-q><p class="mt-n">' + (T._quiz ? esc(T.n) + (q._tn ? " · " + esc(q._tn) : "") : LEVELS[L].n + " · " + esc(T.n)) + "</p>" + qHtml(q) + '<div data-fbk></div></div><div class="mt-act"><button type="button" class="mt-btn dk" data-chk disabled>Comprobar</button></div>';
       var card = box.querySelector("[data-q]"), btn = box.querySelector("[data-chk]"), get = wire(card, q, function (ok) { btn.disabled = !ok; }), done = false;
       box.querySelector("[data-quit]").onclick = function () { onExit(); };
       var go = function () {
@@ -604,6 +605,7 @@
       if (cur[L] == null || pct > cur[L]) cur[L] = pct; P[T.id] = cur; pstore(P);
       var tags = {}; misses.forEach(function (m) { tags[m.tag] = (tags[m.tag] || 0) + 1; });
       var topTags = Object.keys(tags).sort(function (a, b) { return tags[b] - tags[a]; }).slice(0, 2);
+      if (T._quiz) return quizEnd(box, T, score, Q.length, pct, misses, t0);
       cloud(T.id, score, Q.length, { kind: "math-tema", grade: g, topic: T.n, level: LEVELS[L].n, pct: pct, weak: topTags, secs: Math.min(3600, Math.round((Date.now() - t0) / 1000)) });
       var stars = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 40 ? 1 : 0, u = who(), first = u && (u.name || u.display_name) ? String(u.name || u.display_name).split(" ")[0] : "";
       var msg;
@@ -629,6 +631,48 @@
     step();
   }
 
+  /* ---------- Quiz mensual de matemáticas (una pregunta por tema, nivel Mi grado) ---------- */
+  var QUIZZES = {
+    4: { id: "quiz-nov-2026-4", n: "Quiz de noviembre", sub: "Matemáticas · 4° de primaria", units: "Unidades 1 a 4: números naturales, sumas y restas, multiplicación y división, y fracciones.",
+      topics: ["lectura-numeros", "antecesor-sucesor", "numeros-decimales", "suma-transformaciones", "resta-transformaciones", "suma-decimales", "resta-decimales", "multiplicacion", "division-resta", "problemas-division", "doble-triple-mitad", "fraccion-todo", "equivalencia", "suma-fracciones", "resta-fracciones"] }
+  };
+  function quizQs(G, ids) {
+    var out = [];
+    ids.forEach(function (id) {
+      var f = topicById(G, id); if (!f) return;
+      var gens = (f.t.gen || []).filter(function (x) { return !x.lv || x.lv.indexOf(1) > -1; }); if (!gens.length) return;
+      var q = null, k = 0; while (!q && k < 6) { try { q = pick(gens).f(1); } catch (e) { q = null; } k++; }
+      if (q) { q._tn = f.t.n; q.tag = q.tag || f.t.n; out.push(q); }
+    });
+    return out;
+  }
+  function vQuiz(g) {
+    var G = DATA[g]; if (!G) return vLoading(g);
+    var Z = QUIZZES[g], gi = gradeInfo(g); if (!Z) return vGrade(g);
+    var html = back("#/matematicas/temas/" + g, gi.n) + hero({ dk: 1, k: Z.sub, h: Z.n, p: Z.units }) + '<div id="mt-box"></div>';
+    return page(Z.n, html, function (root) {
+      var box = root.querySelector("#mt-box"), u = who();
+      var T = { id: Z.id, n: Z.n, _quiz: Z, _qs: function () { return quizQs(G, Z.topics); } };
+      box.innerHTML = '<div class="mt-card"><p class="mt-n">Antes de empezar</p><h2 class="mt-h">' + Z.topics.length + ' preguntas · unos 25 minutos</h2>' +
+        '<p class="mt-p">Lee cada pregunta con calma, haz tus operaciones en tu hoja y después escribe o elige tu respuesta. Al final verás tu resultado.</p>' +
+        (u ? "" : '<p class="mt-p" style="background:#FFE6F2;border-radius:14px;padding:10px 14px;font-size:13.5px">Inicia sesión con tu usuario MOVA para que tu maestra reciba tu calificación.</p>') +
+        '</div><div class="mt-rowb"><button type="button" class="mt-btn dk" data-start>Empezar quiz</button></div>';
+      box.querySelector("[data-start]").onclick = function () { runLevel(box, g, G, T, 1, null, function () { location.hash = "#/matematicas/temas/" + g; }); };
+    });
+  }
+  function quizEnd(box, T, score, total, pct, misses, t0) {
+    var Z = T._quiz, grade = Math.round(score / total * 100) / 10;
+    var tags = {}; misses.forEach(function (m) { tags[m.tag] = (tags[m.tag] || 0) + 1; });
+    var weak = Object.keys(tags).sort(function (a, b) { return tags[b] - tags[a]; }).slice(0, 3);
+    try { if (window.MovaAuth && window.MovaAuth.user()) window.MovaAuth.save("math-tema", Z.n + " · " + Z.sub, score, total, { kind: "math-quiz", grade: 4, topic: Z.n, level: "Mi grado", pct: pct, weak: weak, secs: Math.min(5400, Math.round((Date.now() - t0) / 1000)) }); } catch (e) {}
+    var u = who(), first = u && (u.name || u.display_name) ? String(u.name || u.display_name).split(" ")[0] : "";
+    var msg = (first ? first + ", terminaste" : "Terminaste") + " tu quiz. " + (pct >= 90 ? "¡Excelente trabajo!" : pct >= 70 ? "¡Muy buen trabajo!" : "Gracias por tu esfuerzo; vamos a seguir practicando juntos.") + (weak.length && pct < 100 ? " Lo que vamos a repasar: <b>" + weak.map(esc).join("</b>, <b>") + "</b>." : "");
+    heroVis(true); window.scrollTo(0, 0);
+    box.innerHTML = '<div class="mt-card"><div class="mt-res"><p class="mt-n">' + esc(Z.n) + " · " + esc(Z.sub) + '</p><div class="big">' + grade.toFixed(1) + '</div><p style="margin:2px 0 0;font-weight:800;color:#4E5268">' + score + " de " + total + " aciertos</p></div></div>" +
+      '<div class="mt-note"><div class="w"><i>K</i>Comentario de tu maestra</div>' + msg + '<div class="sg">Miss Karla Rodríguez<small>Academic Coordinator</small></div></div>' +
+      '<div class="mt-stack"><a class="mt-btn dk" href="#/matematicas/temas/4">Terminar</a></div>';
+  }
+
   /* ---------- Tarjeta en el inicio de Matemáticas ---------- */
   function homeCard() {
     return '<a class="mt-home" href="#/matematicas/temas"><span class="mt-hth"><span class="k">Temas</span><span class="lst">' +
@@ -651,6 +695,7 @@
           if (!p[1]) return vGrades();
           var g = parseInt(p[1], 10); if (!gradeInfo(g) || !gradeInfo(g).f) return vGrades();
           if (!p[2]) return vGrade(g);
+          if (p[2] === "quiz") return vQuiz(g);
           return vTopic(g, p[2], p[3]);
         }
       } catch (e) { if (window.console) console.error("MOVA Temas", e); }
