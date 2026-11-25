@@ -664,7 +664,7 @@
     var Z = T._quiz, grade = Math.round(score / total * 100) / 10;
     var tags = {}; misses.forEach(function (m) { tags[m.tag] = (tags[m.tag] || 0) + 1; });
     var weak = Object.keys(tags).sort(function (a, b) { return tags[b] - tags[a]; }).slice(0, 3);
-    try { if (window.MovaAuth && window.MovaAuth.user()) window.MovaAuth.save("math-tema", Z.n + " · " + Z.sub, score, total, { kind: "math-quiz", grade: 4, topic: Z.n, level: "Mi grado", pct: pct, weak: weak, secs: Math.min(5400, Math.round((Date.now() - t0) / 1000)) }); } catch (e) {}
+    try { if (window.MovaAuth && window.MovaAuth.user()) window.MovaAuth.save("math-tema", Z.n + " · " + Z.sub, score, total, { kind: "math-quiz", task: (function () { try { return new URLSearchParams(location.search).get("task") || undefined; } catch (e) { return undefined; } })(), grade: 4, topic: Z.n, level: "Mi grado", pct: pct, weak: weak, secs: Math.min(5400, Math.round((Date.now() - t0) / 1000)) }); } catch (e) {}
     var u = who(), first = u && (u.name || u.display_name) ? String(u.name || u.display_name).split(" ")[0] : "";
     var msg = (first ? first + ", terminaste" : "Terminaste") + " tu quiz. " + (pct >= 90 ? "¡Excelente trabajo!" : pct >= 70 ? "¡Muy buen trabajo!" : "Gracias por tu esfuerzo; vamos a seguir practicando juntos.") + (weak.length && pct < 100 ? " Lo que vamos a repasar: <b>" + weak.map(esc).join("</b>, <b>") + "</b>." : "");
     heroVis(true); window.scrollTo(0, 0);
