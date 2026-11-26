@@ -70,7 +70,8 @@ async function evLoad(s,y,mo){
     const k="wfb:ev:"+mkey(y,mo), bk="wfb:bp:"+mkey(y,mo);
     const ev=raw.filter(t=>String(t.task)===k).sort((a,c)=>new Date(a.created_at)-new Date(c.created_at)).map(t=>evDec(t.title)).filter(Boolean).pop()||null;
     const bp=raw.filter(t=>String(t.task)===bk).sort((a,c)=>new Date(a.created_at)-new Date(c.created_at)).map(t=>bkDec(t.title)).filter(Boolean).pop()||null;
-    return {raw, ev, bp};
+    const asg=raw.filter(t=>String(t.task)==="wfb:bk:book").sort((a,c)=>new Date(a.created_at)-new Date(c.created_at)).map(t=>bkDec(t.title)).filter(Boolean).pop()||null;
+    return {raw, ev, bp, asg};
   }catch(_){ return {raw:[], ev:null, bp:null}; }
 }
 async function evSave(s,y,mo,o){ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:"wfb:ev:"+mkey(y,mo),p_title:evEnc(o)}); }
@@ -146,6 +147,7 @@ function buildBoleta(s, all, y, mo, ev, cur, nx){
   const bigW = wg!=null && (dg==null || wg>=dg);
   /* Libro */
   const BB=window.MOVA_BOOKS||{}, bp=cur.bp, book=bp&&BB[bp.b]?BB[bp.b]:null;
+  const asgB=cur.asg&&cur.asg.b&&BB[cur.asg.b]?BB[cur.asg.b]:null, bookName=book?book.name:(asgB?asgB.name:"");
   const bt=book?bkTopics(bp.b,bp.f,bp.t):{g:[],v:[]};
   const bookLine=book?`${book.name}, ${bkRange(bp)}`:(s.stage||"");
   /* Agrupar práctica por área */
@@ -257,7 +259,7 @@ h2{margin:0;font-size:13px;font-weight:800;color:#1E2A55;letter-spacing:.06em;te
 @media screen and (max-width:840px){.pg{transform:scale(calc(100vw/840));transform-origin:top left;margin:10px 0 calc((100vw/840 - 1)*1056px)}}`;
   const p1=`<div class="pg"><div class="ct">${band("MOVA CENTRO PEDAGÓGICO","Boleta Mensual",`${MESES[mo]} ${y} · Inglés`,"Folio "+folio)}
 <div class="body">
-<div class="info"><div><span>ALUMNO(A)</span><b>${e(nm)}</b></div><div><span>PROGRAMA</span><b>${e(prog||"—")}</b></div><div><span>NIVEL</span><b>${e(lv||"—")}</b></div><div><span>LIBRO</span><b>${e(book?book.name:"—")}</b></div></div>
+<div class="info"><div><span>ALUMNO(A)</span><b>${e(nm)}</b></div><div><span>PROGRAMA</span><b>${e(prog||"—")}</b></div><div><span>NIVEL</span><b>${e(lv||"—")}</b></div><div><span>LIBRO</span><b>${e(bookName||"—")}</b></div></div>
 <h2>Resultados de evaluación</h2><div class="ev"${evCols}>${res}</div>
 <h2>Contenidos trabajados${book?" · "+e(bookLine):""}</h2>
 <div class="tb">${areas||`<div class="tr"><div class="h" style="--c:#8EC9EE"><b>Este mes</b></div><ul><li>Sin actividad registrada.</li></ul></div>`}</div>
