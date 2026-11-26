@@ -57,6 +57,113 @@ const GX=[
 ];
 function gx(t){ const f=GX.find(([rx])=>rx.test(t)); return f?f[1]:""; }
 
+/* Descripción pedagógica de cada tema de gramática (nombre del tema en inglés, descripción en español) */
+const GD=[
+ [/^when /i,"expresa fechas, horarios y momentos del día con precisión."],
+ [/used to/i,"describe hábitos y situaciones del pasado que ya no ocurren, con <i>used to</i>."],
+ [/relative clauses/i,"une y precisa información sobre personas, objetos y lugares con <i>who, which, that</i> y <i>where</i>."],
+ [/phrasal verbs/i,"comprende y utiliza <i>phrasal verbs</i> de uso frecuente en contextos cotidianos."],
+ [/so and such|so \/ such|so … that|such a/i,"intensifica cualidades y expresa consecuencias con <i>so</i> y <i>such</i>."],
+ [/too and not enough/i,"expresa exceso e insuficiencia con <i>too</i> y <i>not enough</i>."],
+ [/adjectives vs\.? adverbs|use of english: adverbs/i,"distingue entre adjetivos y adverbios, y los utiliza para describir con precisión."],
+ [/-ed and -ing/i,"distingue adjetivos terminados en <i>-ed</i> e <i>-ing</i> para describir emociones y situaciones."],
+ [/modal verbs|obligation/i,"expresa obligación, permiso y capacidad con verbos modales en distintos contextos."],
+ [/-ing or to|to \+ infinitive|plan \/ hope|\+ infinitive/i,"elige entre gerundio e infinitivo después de ciertos verbos y adjetivos."],
+ [/need to/i,"expresa necesidades con <i>need to</i>."],
+ [/before \/ after \/ when|^before|^after/i,"relaciona acciones en el tiempo con <i>before, after</i> y <i>when</i>."],
+ [/what about|how about/i,"hace sugerencias y responde a ellas de manera adecuada."],
+ [/know|understand how/i,"expresa lo que sabe hacer y lo que comprende con <i>know</i> y <i>understand</i>."],
+ [/some- \/ every-/i,"emplea pronombres indefinidos para referirse a personas y cosas no específicas."],
+ [/past progressive/i,"describe acciones que estaban en curso en el pasado con <i>was / were + -ing</i>."],
+ [/present progressive/i,"describe acciones que ocurren en el momento en que habla, con la estructura <i>am / is / are + -ing</i>."],
+ [/a few|a little|a bit of/i,"distingue sustantivos contables e incontables y elige el cuantificador adecuado (<i>a few, a little, a bit of</i>)."],
+ [/\bmay\b|might/i,"expresa distintos grados de certeza sobre el futuro con <i>may</i> y <i>might</i>."],
+ [/made of|made by/i,"describe de qué están hechos los objetos y quién los elabora."],
+ [/talking about the future/i,"habla de planes, intenciones y predicciones utilizando distintas formas de futuro."],
+ [/present tenses/i,"distingue entre rutinas y acciones en curso, y elige el tiempo presente adecuado según el contexto."],
+ [/order of adjectives/i,"ordena correctamente los adjetivos dentro de la oración."],
+ [/i wish/i,"expresa deseos sobre situaciones presentes con <i>I wish</i>."],
+ [/years old/i,"dice su edad y pregunta la de los demás."],
+ [/is my…|he \/ she is my/i,"presenta a las personas de su entorno y describe su relación con ellas."],
+ [/is before|is after/i,"ubica días y acontecimientos en orden con <i>before</i> y <i>after</i>."],
+ [/in the morning|goes camping|^i go/i,"describe rutinas, hábitos y hechos generales, aplicando correctamente la terminación <i>-s</i> en tercera persona."],
+ [/^do /i,"formula preguntas y respuestas cortas con <i>do / does</i> para conocer gustos, rutinas y hábitos."],
+ [/in the bedroom|on the shelf/i,"describe la ubicación de personas y objetos utilizando preposiciones de lugar."],
+ [/are you hungry|we are in/i,"se presenta y describe a personas, lugares y estados con el verbo <i>to be</i>."],
+ [/this is my/i,"presenta y describe sus objetos personales."],
+ [/present perfect.*(already|just|yet)|just \/ yet \/ already/i,"utiliza <i>already, just</i> y <i>yet</i> para referirse a acciones recientes y a lo que aún no ha sucedido, en afirmativo, negativo y preguntas."],
+ [/present perfect.*(ever|never)|have you ever/i,"comparte experiencias de vida con <i>ever</i> y <i>never</i>, y formula preguntas para conocer las de los demás."],
+ [/past perfect/i,"ordena acontecimientos del pasado distinguiendo cuál ocurrió primero, al combinar <i>past perfect</i> y <i>past simple</i>."],
+ [/present perfect/i,"emplea el presente perfecto para referirse a experiencias y logros personales, y distingue cuándo una acción pasada conserva relevancia en el presente."],
+ [/passive/i,"transforma oraciones de voz activa a pasiva y reconoce cuándo conviene dar mayor peso a la acción o al resultado que a quien la realiza."],
+ [/complex sentences|subordinat|although/i,"construye oraciones subordinadas con <i>although, because, if</i> para expresar contraste, causa y condición, una habilidad clave en la redacción académica."],
+ [/compound sentences|subject.verb agreement/i,"enlaza ideas independientes con <i>and, but, or, so</i> y cuida la concordancia entre sujeto y verbo, lo que aporta fluidez y cohesión a su escritura."],
+ [/coordinating conjunctions|conjunctive adverbs|showing contrast/i,"expresa contraste y relación entre ideas con conjunciones y adverbios conectores, dando mayor cohesión a sus textos."],
+ [/adverbs of frequency/i,"expresa con qué frecuencia realiza sus actividades (<i>always, usually, sometimes, never</i>) y ubica correctamente el adverbio en la oración."],
+ [/adverbs? of manner|^adverbs/i,"precisa la forma en que se realiza una acción y enriquece así sus descripciones orales y escritas."],
+ [/present simple (and|vs\.?) present continuous/i,"distingue entre rutinas y hábitos (<i>present simple</i>) y acciones en curso (<i>present continuous</i>), y elige el tiempo adecuado según el contexto."],
+ [/present continuous for future/i,"comunica planes y compromisos ya acordados utilizando el <i>present continuous</i> con sentido de futuro."],
+ [/present continuous|what are you doing|wearing|are you singing/i,"describe acciones que ocurren en el momento en que habla, con la estructura <i>am / is / are + -ing</i>."],
+ [/present simple questions|^do you|does he|does she|does it/i,"formula preguntas y respuestas cortas con <i>do / does</i> para conocer gustos, rutinas y hábitos de los demás."],
+ [/present simple|simple present|for facts/i,"describe rutinas, hábitos y hechos generales, aplicando correctamente la terminación <i>-s</i> en tercera persona."],
+ [/past simple negatives|questions in the past|^did you|what happened/i,"formula preguntas y respuestas en pasado con <i>did / didn't</i> para narrar y conocer experiencias."],
+ [/past simple: (was|to be)|was \/ were|was \/ wasn't|were you born/i,"se refiere a estados y situaciones del pasado utilizando <i>was / were</i>."],
+ [/past continuous/i,"describe acciones que estaban en curso en el pasado con <i>was / were + -ing</i>."],
+ [/past simple|regular and irregular|simple past|what did you do/i,"narra hechos y experiencias del pasado utilizando verbos regulares e irregulares."],
+ [/could/i,"expresa habilidades y posibilidades en el pasado con <i>could / couldn't</i>."],
+ [/going to and will/i,"distingue entre planes ya decididos (<i>be going to</i>) y predicciones o decisiones espontáneas (<i>will</i>)."],
+ [/degrees of certainty/i,"expresa distintos grados de certeza sobre el futuro, matizando sus ideas con precisión."],
+ [/going to/i,"expresa planes e intenciones a futuro con <i>be going to</i>."],
+ [/\bwill\b/i,"hace predicciones y toma decisiones en el momento utilizando <i>will</i>."],
+ [/conditional|^if /i,"plantea situaciones posibles y sus consecuencias con el primer condicional (<i>If…, will…</i>)."],
+ [/reported speech/i,"transmite lo que otra persona dijo, ajustando tiempos verbales y pronombres."],
+ [/quotation/i,"incorpora citas textuales en su escritura con la puntuación adecuada."],
+ [/\(not\) as|too, \(not\) enough/i,"expresa igualdad, exceso y suficiencia con <i>(not) as … as, too</i> y <i>enough</i>."],
+ [/comparative|superlative|more \/ most|less \/ least|taller than/i,"compara personas, objetos e ideas, y distingue el uso de comparativos y superlativos."],
+ [/must|have to|has to/i,"expresa obligación, ausencia de obligación y prohibición en normas y situaciones cotidianas."],
+ [/should/i,"da y solicita consejos con <i>should / shouldn't</i>."],
+ [/\bcan\b|can't/i,"expresa habilidades y permisos con <i>can / can't</i>, y pregunta por los de los demás."],
+ [/countable|non-count|quantifiers|some and any|some \/ any|much|many/i,"distingue sustantivos contables e incontables y elige el cuantificador adecuado (<i>some, any, much, many, a lot of</i>)."],
+ [/there is|there are|there's|is there|are there/i,"describe lugares indicando lo que hay en ellos, en afirmativo, negativo y preguntas."],
+ [/prepositions? of time|in, on, at/i,"ubica acontecimientos en el tiempo con <i>in, on</i> y <i>at</i>."],
+ [/prepositional phrases/i,"amplía sus oraciones con frases preposicionales que aportan detalle y precisión."],
+ [/preposition|next to|behind|in front of|where is|where's|where are/i,"describe la ubicación de personas y objetos utilizando preposiciones de lugar."],
+ [/reflexive/i,"utiliza pronombres reflexivos para indicar que alguien realiza una acción por sí mismo."],
+ [/indefinite pronouns/i,"emplea pronombres indefinidos para referirse a personas y cosas no específicas."],
+ [/possessive|'s\b/i,"expresa pertenencia con adjetivos y pronombres posesivos y con el <i>'s</i> posesivo."],
+ [/have got|has got|do you have|have \/ don't have|i have|has \/ she doesn't have/i,"describe lo que tiene y lo que tienen otros, en afirmativo, negativo y preguntas."],
+ [/pronoun/i,"utiliza pronombres para referirse a personas y objetos sin repetir sus nombres."],
+ [/this, that|this \/ that|these|those/i,"señala objetos cercanos y lejanos, en singular y plural, con <i>this, that, these</i> y <i>those</i>."],
+ [/to be|am, is, are/i,"se presenta y describe a personas, lugares y objetos con el verbo <i>to be</i>."],
+ [/imperative/i,"da instrucciones y recomendaciones de forma clara utilizando el imperativo."],
+ [/plural|articles/i,"forma plurales y utiliza correctamente los artículos <i>a, an</i> y <i>the</i>."],
+ [/parts of speech/i,"identifica las partes de la oración y su función, base para construir oraciones más complejas."],
+ [/participial adjectives/i,"distingue adjetivos terminados en <i>-ed</i> e <i>-ing</i> para describir emociones y situaciones."],
+ [/placement of adjectives/i,"ordena correctamente los adjetivos dentro de la oración."],
+ [/transitions|sequence words/i,"organiza sus ideas con palabras de transición y secuencia, logrando textos más claros."],
+ [/capitalization|punctuation/i,"aplica las reglas de mayúsculas y puntuación para dar claridad a su escritura."],
+ [/ordinal|telling the time|what time|o'clock|time expressions|what day|birthday|season|born/i,"expresa fechas, horarios y momentos del día con precisión."],
+ [/like.*-ing|like doing|good at|likes skiing|crazy about/i,"habla de sus gustos, intereses y habilidades con <i>like, love</i> y <i>good at</i> seguidos de <i>-ing</i>."],
+ [/want/i,"expresa deseos y planes con <i>want / want to</i>."],
+ [/because|why/i,"explica causas y motivos utilizando <i>because</i>."],
+ [/like|favorite|love/i,"expresa sus gustos y preferencias, y pregunta por los de los demás."],
+ [/question|wh-|who|how many|how old/i,"formula preguntas para obtener información específica con palabras interrogativas."],
+ [/greeting|introduc|name/i,"se presenta, saluda y solicita datos personales con seguridad."],
+ [/spell/i,"deletrea palabras en inglés con claridad."],
+ [/plus|minus|equals|number/i,"utiliza los números en inglés para contar, comparar y resolver operaciones sencillas."],
+ [/weather|temperature/i,"describe el clima y la temperatura."],
+ [/feel|matter|nervous|crying/i,"expresa cómo se siente y explica el motivo."],
+ [/look like|looks/i,"describe la apariencia de personas, animales y objetos."],
+ [/direction|turn left|how do you get|go by/i,"da y sigue indicaciones para llegar a un lugar, y habla de medios de transporte."],
+ [/let's/i,"hace sugerencias y responde a ellas de manera adecuada."],
+ [/how heavy|how tall/i,"pregunta y expresa medidas como peso y altura."],
+ [/address|live/i,"pregunta y proporciona información sobre dónde vive."],
+ [/gift|thank you|welcome/i,"utiliza expresiones de cortesía al dar y recibir."],
+ [/what is it|is it|is this|are they|it's a/i,"identifica y describe objetos, y responde preguntas de sí o no."]
+];
+function gdesc(t,kid){ const f=GD.find(([rx])=>rx.test(t)); return f?f[1]:(kid?"lo practica en diálogos y juegos de clase, y lo utiliza para comunicarse en situaciones cotidianas.":"lo aplica en ejercicios orales y escritos, integrándolo a su comunicación en clase."); }
+function gname(t){ let n=String(t).split(":")[0].trim(); if(n.length>60){ const q=n.indexOf("?"); n=q>8&&q<60?n.slice(0,q+1):n.slice(0,58).replace(/\s+\S*$/,"")+"…"; } return n; }
+
 const AREA=[
  {k:"g",n:"Grammar",c:"#8EC9EE",rx:/grammar|gram[aá]tica|game on|retos|my path|ruta|sentence/i},
  {k:"v",n:"Vocabulary &amp; Phonics",c:"#F6D776",rx:/vocab|craft|flash|palabras|words|phonics|spelling/i},
@@ -71,7 +178,8 @@ async function evLoad(s,y,mo){
     const ev=raw.filter(t=>String(t.task)===k).sort((a,c)=>new Date(a.created_at)-new Date(c.created_at)).map(t=>evDec(t.title)).filter(Boolean).pop()||null;
     const bp=raw.filter(t=>String(t.task)===bk).sort((a,c)=>new Date(a.created_at)-new Date(c.created_at)).map(t=>bkDec(t.title)).filter(Boolean).pop()||null;
     const asg=raw.filter(t=>String(t.task)==="wfb:bk:book").sort((a,c)=>new Date(a.created_at)-new Date(c.created_at)).map(t=>bkDec(t.title)).filter(Boolean).pop()||null;
-    return {raw, ev, bp, asg};
+    const bpAny=bp||raw.filter(t=>String(t.task).startsWith("wfb:bp:")).sort((a,c)=>new Date(a.created_at)-new Date(c.created_at)).map(t=>bkDec(t.title)).filter(Boolean).pop()||null;
+    return {raw, ev, bp, asg, bpAny};
   }catch(_){ return {raw:[], ev:null, bp:null}; }
 }
 async function evSave(s,y,mo,o){ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:"wfb:ev:"+mkey(y,mo),p_title:evEnc(o)}); }
@@ -87,6 +195,10 @@ window.openReport=function(s, rows){
     <label class="f" for="bMonth">Mes</label><select class="in" id="bMonth">${opts.map(([y,m],i)=>`<option value="${y}-${m}" ${i===0?"selected":""}>${MESES[m]} ${y}</option>`).join("")}</select>
     <label class="f" for="bW">Calificación del quiz escrito</label><input class="in" id="bW" inputmode="decimal" placeholder="Ej. 9.7 o 97">
     <p class="sub" style="margin:6px 2px 0;font-size:12.5px">En la boleta dirá: «${WRITTEN_TXT}».</p>
+    <details style="margin-top:8px"><summary style="cursor:pointer;font-weight:700;font-size:14px">Speaking (opcional)</summary>
+      <label class="f" for="bS">Nivel</label><select class="in" id="bS"><option value="">Sin evaluar</option>${SPK.map(x=>`<option>${x}</option>`).join("")}</select>
+      <label class="f" for="bSc">Comentario breve</label><input class="in" id="bSc" placeholder="Ej. Participa cada vez con mayor seguridad">
+    </details>
     <label class="f" for="bN">Observaciones de la maestra</label>
     <textarea class="in" id="bN" rows="5" placeholder="Lo que quieres que lean los papás."></textarea>
     <details style="margin-top:8px"><summary style="cursor:pointer;font-weight:700;font-size:14px">Próxima evaluación (sale en todas las boletas del mes)</summary>
@@ -103,12 +215,12 @@ window.openReport=function(s, rows){
   const ym=()=>$w("#bMonth").value.split("-").map(Number);
   const fill=async()=>{ const [y,mo]=ym(); msg.className="msg"; msg.textContent="Cargando…";
     cur=await evLoad(s,y,mo); const v=cur.ev||{};
-    $w("#bW").value=v.w!=null?v.w:""; $w("#bN").value=v.n||"";
+    $w("#bW").value=v.w!=null?v.w:""; $w("#bN").value=v.n||""; $w("#bS").value=v.sp||""; $w("#bSc").value=v.spc||"";
     const nx=getNext(y,mo); $w("#bNt").value=nx.t; $w("#bNd").value=nx.d; $w("#bNx").value=nx.x;
-    msg.textContent=cur.ev?"Datos guardados de este mes cargados.":""; };
+    msg.textContent=(cur.ev?"Datos guardados de este mes cargados. ":"")+(cur.bp?"":"Para que salgan los temas del libro, registre en Libros las unidades vistas este mes."); };
   $w("#bMonth").onchange=fill; fill();
   const read=()=>{ let wv=String($w("#bW").value).replace(",",".").trim(), wn=parseFloat(wv); if(!isNaN(wn)&&wn>10) wn=wn/10;
-    return {w:isNaN(wn)?null:Math.round(wn*10)/10, n:$w("#bN").value.trim()}; };
+    return {w:isNaN(wn)?null:Math.round(wn*10)/10, n:$w("#bN").value.trim(), sp:$w("#bS").value, spc:$w("#bSc").value.trim()}; };
   $w("#bGo").onclick=async function(){
     const [y,mo]=ym(), o=read(), b=this; b.disabled=true; msg.className="msg"; msg.textContent="Guardando…";
     setNext(y,mo,{t:$w("#bNt").value.trim(),d:$w("#bNd").value.trim(),x:$w("#bNx").value.trim()});
@@ -146,34 +258,49 @@ function buildBoleta(s, all, y, mo, ev, cur, nx){
   const wg=ev.w;
   const bigW = wg!=null && (dg==null || wg>=dg);
   /* Libro */
-  const BB=window.MOVA_BOOKS||{}, bp=cur.bp, book=bp&&BB[bp.b]?BB[bp.b]:null;
+  const BB=window.MOVA_BOOKS||{}, bp=cur.bp||cur.bpAny||null, book=bp&&BB[bp.b]?BB[bp.b]:null;
   const asgB=cur.asg&&cur.asg.b&&BB[cur.asg.b]?BB[cur.asg.b]:null, bookName=book?book.name:(asgB?asgB.name:"");
   const bt=book?bkTopics(bp.b,bp.f,bp.t):{g:[],v:[]};
   const bookLine=book?`${book.name}, ${bkRange(bp)}`:(s.stage||"");
-  /* Agrupar práctica por área */
-  const usedTask=new Set(tasks.filter(x=>x.done).map(x=>x.done));
-  const cats={}; rows.filter(r=>r.activity!=="monthly-quiz").forEach(r=>{ const [n]=catOf(r.activity); const o=cats[n]=cats[n]||{n,k:0,it:[]}; o.k++; const t=rowTitle(r); if(t&&t!==n&&!/minuto/.test(t)&&o.it.length<2&&!o.it.includes(t)) o.it.push(t); });
-  const catList=Object.values(cats).sort((a,b)=>b.k-a.k);
-  const areaOf=n=>{ const a=AREA.find(a=>a.rx.test(n)); return a?a.k:"g"; };
-  const L={g:[],v:[],r:[],w:[]}, W={g:new Set(),v:new Set(),r:new Set(),w:new Set()};
-  bt.g.slice(0,8).forEach(t=>{ L.g.push(`<li><b>${e(t)}:</b> ${gx(t)||"trabajado en clase con su libro"}</li>`); W.g.add("Clase"); });
-  const tg=tasks.filter(x=>tkSubj(x.t)==="en"&&!/^(monthly-quiz|module-exam|level-up|toefl)/.test(taskKeyOf(x.t))).map(x=>tN(x.t).replace(/ · .*$/,""));
-  const tgNew=tg.filter(n=>!bt.g.some(b=>b.toLowerCase().includes(n.toLowerCase().slice(0,8))));
-  if(tgNew.length){ L.g.push(`<li><b>En la app:</b> ${e(tgNew.slice(0,6).join(", "))}</li>`); W.g.add("App"); } else if(tg.length) W.g.add("App");
-  if(bt.v.length){ L.v.push(`<li><b>Vocabulario de clase:</b> ${e(bt.v.slice(0,5).join(", "))}</li>`); W.v.add("Clase"); }
-  catList.forEach(c=>{ const k=areaOf(c.n); if(k==="g"&&L.g.length>=9) return; const it=c.it.length?": "+e(c.it.join(", ")):""; L[k].push(`<li><b>${e(c.n)}</b>${it}</li>`); W[k].add("App"); });
-  if(by.Vocabulary||by.Phonics){ W.v.add("Quiz"); if(!L.v.length) L.v.push(`<li><b>Vocabulario y phonics</b> de las unidades, evaluados en el quiz.</li>`); }
-  if(by.Reading||by.Listening){ W.r.add("Quiz"); L.r.push(`<li><b>Comprensión:</b> idea general e información específica en lecturas y audios del quiz.</li>`); }
-  if(by.Grammar){ W.g.add("Quiz"); if(!L.g.length) L.g.push(`<li><b>Gramática</b> de las unidades, evaluada en el quiz.</li>`); }
-  if(ev.sp){ W.w.add("Clase"); L.w.push(`<li><b>Speaking en clase:</b> ${e(ev.spc||"conversación guiada")}</li>`); }
-  if(by.Writing){ W.w.add("Quiz"); L.w.push(`<li><b>Writing:</b> redacción de oraciones evaluada en el quiz.</li>`); }
-  const areas=AREA.filter(a=>L[a.k].length).map(a=>`<div class="tr"><div class="h" style="--c:${a.c}"><b>${a.n}</b><small>${[...W[a.k]].join(" · ")}</small></div><ul>${L[a.k].slice(0,10).join("")}</ul></div>`).join("");
+  /* Lo que aprendió: temas en inglés + descripción pedagógica */
+  const grp=grpOf(s.stage), kid=/^(Kids|Children)$/.test(grp);
+  const used=new Set(), gl=[];
+  const addG=t=>{ const d=gdesc(t,kid); if(used.has(d)||gl.length>=6) return; used.add(d); gl.push(`<li><b>${e(gname(t))}:</b> ${d}</li>`); };
+  bt.g.forEach(addG);
+  const tg=tasks.filter(x=>tkSubj(x.t)==="en"&&!/^(monthly-quiz|module-exam|level-up|toefl|wfb)/.test(taskKeyOf(x.t))).map(x=>tN(x.t).replace(/ · .*$/,""));
+  if(gl.length<3) tg.forEach(addG);
+  const vg=[], VC={"academic words":"#FFF1C9","key words":"#E5E9FF","literary words":"#DDF5E8","measurement":"#F1ECFB"};
+  let ws=null; const topics=[];
+  bt.v.forEach(x=>{ const m=String(x).match(/^([^:]{3,30}):\s*(.+)$/);
+    if(m&&/word study/i.test(m[1])){ ws=m[2].trim(); return; }
+    if(m){ vg.push([m[1].trim(),m[2].split(/\s*,\s*/).filter(Boolean)]); return; }
+    if(/,/.test(x)) vg.push(["Content words",String(x).split(/\s*,\s*/).filter(Boolean)]); else topics.push(x); });
+  if(topics.length) vg.unshift(["Temas de vocabulario",topics]);
+  const chips=(ws2,c)=>ws2.slice(0,12).map(w=>`<span class="wd" style="background:${c}">${e(w)}</span>`).join("");
+  let vh=vg.map(([l,ws2],i)=>`<div class="wl"><small>${e(l)}</small><div>${chips(ws2,VC[l.toLowerCase()]||["#FFF1C9","#E5E9FF","#DDF5E8","#FFE6F2"][i%4])}</div></div>`).join("");
+  if(ws){ const hom=/homophone/i.test(ws); vh+=`<div class="wl"><small>Word study · ${e(ws.charAt(0).toUpperCase()+ws.slice(1))}</small><div style="font-size:11.3px;color:#2E3348">${hom?`Distingue palabras que suenan igual pero difieren en escritura y significado: <span class="wd" style="background:#FFE6F2">their / there</span> <span class="wd" style="background:#FFE6F2">to / two</span> <span class="wd" style="background:#FFE6F2">won / one</span>`:`Analiza la formación de palabras para ampliar su vocabulario y comprender términos nuevos.`}</div></div>`; }
+  const uT=book?book.units.filter(u=>u.n>=+bp.f&&u.n<=+bp.t).map(u=>u.t).filter(t=>t&&!/^Unit\b/i.test(t)):[];
+  const theme=uT.length?uT[uT.length-1]:"";
+  const qq=k=>by[k]&&by[k][1]?`, con un desempeño de ${by[k][0]} de ${by[k][1]} en el quiz`:"";
+  const rl=[`<li><b>Reading:</b> ${kid?`lee textos breves${theme?` sobre <i>${e(theme)}</i>`:" relacionados con la unidad"}, identifica información específica y responde preguntas de comprensión.`:`a partir de textos académicos y literarios${theme?` sobre <i>${e(theme)}</i>`:" de la unidad"}, identifica la idea principal, realiza inferencias y analiza los recursos que utiliza el autor.`}</li>`,
+    `<li><b>Listening:</b> ${kid?"comprende instrucciones, diálogos y audios breves relacionados con los temas de la unidad":"comprende información general y específica en audios de nivel académico"}${qq("Listening")}.</li>`];
+  const cx=bt.g.some(t=>/complex|compound|subordinat/i.test(t));
+  const wl2=[`<li><b>Writing:</b> ${kid?"escribe oraciones sencillas aplicando el vocabulario y las estructuras trabajadas":cx?"integra oraciones compuestas y complejas para explicar y sustentar sus ideas con mayor claridad":"redacta oraciones y textos breves aplicando la gramática y el vocabulario de la unidad, con ideas cada vez más claras"}.</li>`,
+    `<li><b>Speaking:</b> ${kid?"participa en diálogos breves y responde preguntas en clase utilizando las estructuras de la unidad.":"argumenta su postura sobre los temas de la unidad; su seguridad al expresarse se fortalece semana a semana."}</li>`];
+  const rowsC=[];
+  if(gl.length) rowsC.push(`<div class="tr"><div class="h" style="--c:#8EC9EE"><b>Grammar</b><small>Lo que ya puede hacer</small></div><ul>${gl.join("")}</ul></div>`);
+  if(vh) rowsC.push(`<div class="tr"><div class="h" style="--c:#F6D776"><b>Vocabulary</b>${book?`<small>${e(bkRange(bp).replace(/^Units? /,m=>m.trim()==="Units"?"Unidades ":"Unidad "))}</small>`:""}</div><div class="vw">${vh}</div></div>`);
+  rowsC.push(`<div class="tr"><div class="h" style="--c:#9DDCC0"><b>Reading &amp; Listening</b></div><ul>${rl.join("")}</ul></div>`);
+  rowsC.push(`<div class="tr"><div class="h" style="--c:#FF8FC0"><b>Writing &amp; Speaking</b></div><ul>${wl2.join("")}</ul></div>`);
+  const areas=rowsC.join("");
+  const unitLbl=book?bkRange(bp).replace(/^Units /,"Unidades ").replace(/^Unit /,"Unidad "):"";
   /* Fortalezas y áreas */
-  const fo=[], ar=[];
-  Object.keys(by).forEach(k=>{ const v=by[k]; if(!v||!v[1]) return; const p=v[0]/v[1]; (p>=0.8?fo:ar).push([QL[k]||k,`Quiz ${v[0]}/${v[1]}`,p]); });
-  if(wg!=null&&wg>=9) fo.unshift(["Quiz escrito",wg.toFixed(1),wg/10]);
-  tasks.forEach(x=>{ const p=pct(x); if(p==null) return; const n=tN(x.t).replace(/ · .*$/,"")+" (en la app)"; if(p<70) ar.push([n,p+"%",p/100]); });
-  if(ev.sp){ (SPK_PCT[ev.sp]>=85?fo:ar).push(["Speaking"+(SPK_PCT[ev.sp]>=85?"":": fluidez y pronunciación"),ev.sp,SPK_PCT[ev.sp]/100]); }
+  const QL2=Object.assign({},QL,{Vocabulary:"Vocabulario de la unidad",Grammar:"Gramática de la unidad"});
+  const fo=[], ar=[], seen=new Set();
+  Object.keys(by).forEach(k=>{ const v=by[k]; if(!v||!v[1]) return; const p=v[0]/v[1]; (p>=0.8?fo:ar).push([QL2[k]||k,`${v[0]}/${v[1]}`,p]); });
+  if(!fo.length&&wg!=null&&wg>=9) fo.push(["Quiz escrito",wg.toFixed(1),wg/10]);
+  tasks.forEach(x=>{ const p=pct(x); if(p==null||p>=70) return; const n=tN(x.t).replace(/ · .*$/,""); if(seen.has(n.toLowerCase())) return; seen.add(n.toLowerCase()); ar.push([n,"Gramática",p/100]); });
+  if(ev.sp&&SPK_PCT[ev.sp]<85) ar.push(["Fluidez al hablar","Speaking",SPK_PCT[ev.sp]/100]); else if(ev.sp) fo.push(["Expresión oral","Speaking",SPK_PCT[ev.sp]/100]);
   fo.sort((a,b)=>b[2]-a[2]); ar.sort((a,b)=>a[2]-b[2]);
   const li2=a=>`<div><span>${e(a[0])}</span><b>${e(a[1])}</b></div>`;
   /* Resultados */
@@ -191,11 +318,6 @@ function buildBoleta(s, all, y, mo, ev, cur, nx){
   const fst=new Date(y,mo,1), dim=new Date(y,mo+1,0).getDate(), lead=(fst.getDay()+6)%7;
   let cal=["L","M","M","J","V","S","D"].map(d=>`<em>${d}</em>`).join(""); for(let i=0;i<lead;i++) cal+="<u></u>"; for(let d=1;d<=dim;d++) cal+=`<u class="${days.has(d)?"on":""}">${d}</u>`;
   let streak=0,run=0; for(let d=1;d<=dim;d++){ run=days.has(d)?run+1:0; streak=Math.max(streak,run); }
-  const own={}; rows.filter(r=>!usedTask.has(r)&&r.activity!=="monthly-quiz").forEach(r=>{ const [n]=catOf(r.activity); const o=own[n]=own[n]||{n,k:0,it:[]}; o.k++; const t=rowTitle(r); if(t&&t!==n&&!/minuto/.test(t)&&o.it.length<1) o.it.push(t); });
-  const BC=["#B9A6E8","#FF8FC0","#8EC9EE","#C4EA4F","#F6D776","#9DDCC0"];
-  const ownL=Object.values(own).sort((a,b)=>b.k-a.k).slice(0,7).map((c,i)=>`<div class="ac"><span class="dot" style="background:${BC[i%6]}"></span><div><b>${e(c.n)}</b>${c.it.length?` <small>· ${e(c.it[0])}</small>`:""}</div><em>${c.k} ${c.k===1?"vez":"veces"}</em></div>`).join("")||`<p class="cap">Sin práctica por su cuenta este mes.</p>`;
-  const CK='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1E2A55" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-  const tkL=tasks.slice(0,10).map(x=>{ const p=pct(x), n=tN(x.t).split(" · "); return `<div class="row"><span class="c" style="background:${x.done?"#9DDCC0":"#FFE6F2"}">${x.done?CK:`<i></i>`}</span><div><b class="n">${e(n[0])}</b><small>${e(n.slice(1).join(" · "))}${n.length>1?" · ":""}${x.done?"Completada el "+fd(x.done.created_at):"Asignada el "+fd(x.t.created_at)}</small></div><span class="chip" style="background:${x.done?(p!=null&&p<70?"#FFF8E5":"#EEF8F2"):"#FFE6F2"}">${x.done?(p!=null?p+"%":"Completada"):"Pendiente"}</span></div>`; }).join("");
   const tDone=tasks.filter(x=>x.done).length;
   const ini=String(nm).split(/\s+/).filter(Boolean).slice(0,3).map(w=>w[0]).join("").toUpperCase();
   const folio=`BMM-${String(y).slice(2)}${String(mo+1).padStart(2,"0")}-${ini}`;
@@ -230,6 +352,9 @@ h2{margin:0;font-size:13px;font-weight:800;color:#1E2A55;letter-spacing:.06em;te
 .tr .h{padding:9px 14px;background:#F7F8FB;border-left:4px solid var(--c);display:flex;flex-direction:column;gap:2px}.tr .h b{font-size:12.8px;color:#1E2A55}.tr .h small{font-size:10px;font-weight:600;color:#6A6F85}
 .tr ul{margin:0;padding:8px 14px;list-style:none;display:flex;flex-direction:column;gap:2px}.tr li{font-size:11.3px;line-height:1.38;color:#2E3348}.tr li b{color:#1E2A55}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.vw{padding:8px 14px;display:flex;flex-direction:column;gap:6px}.wl small{display:block;font-size:10px;font-weight:700;letter-spacing:.08em;color:#6A6F85;text-transform:uppercase;margin-bottom:3px}
+.wl div{display:flex;flex-wrap:wrap;gap:5px;align-items:center}.wd{font-size:11.3px;font-weight:600;color:#1E2A55;border-radius:999px;padding:2px 10px}
+.tr .h{justify-content:center}.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.mini div{border-top:4px solid var(--c);background:#F7F8FB;border-radius:10px;padding:8px 10px;display:flex;flex-direction:column}.mini b{font-size:20px;color:#1E2A55;line-height:1.1}.mini span{font-size:11px;color:#4E5468}
 .fb{border:1.5px solid #E3E5EE;border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:4px;border-top:4px solid var(--c)}
 .fb h3{margin:0 0 2px;font-size:13px;color:#1E2A55}.fb h3 small{font-weight:600;color:#6A6F85;font-size:11px;margin-left:6px}
 .fb div{display:flex;justify-content:space-between;gap:8px;font-size:11.8px;padding:2px 0}.fb div b{color:#1E2A55;font-size:11.5px;white-space:nowrap}.fb p{margin:0;font-size:11.5px;color:#4E5468}
@@ -261,18 +386,18 @@ h2{margin:0;font-size:13px;font-weight:800;color:#1E2A55;letter-spacing:.06em;te
 <div class="body">
 <div class="info"><div><span>ALUMNO(A)</span><b>${e(nm)}</b></div><div><span>PROGRAMA</span><b>${e(prog||"—")}</b></div><div><span>NIVEL</span><b>${e(lv||"—")}</b></div><div><span>LIBRO</span><b>${e(bookName||"—")}</b></div></div>
 <h2>Resultados de evaluación</h2><div class="ev"${evCols}>${res}</div>
-<h2>Contenidos trabajados${book?" · "+e(bookLine):""}</h2>
-<div class="tb">${areas||`<div class="tr"><div class="h" style="--c:#8EC9EE"><b>Este mes</b></div><ul><li>Sin actividad registrada.</li></ul></div>`}</div>
+<h2>Lo que aprendió este mes${unitLbl?" · "+e(unitLbl):""}</h2>
+<div class="tb">${areas}</div>
 <div class="fr">
- <div class="fb" style="--c:#9DDCC0"><h3>Fortalezas de ${MESES[mo].toLowerCase()}${book?`<small>${e(bkRange(bp))}</small>`:""}</h3>${fo.slice(0,4).map(li2).join("")||`<p>Seguimos construyendo sus bases.</p>`}</div>
+ <div class="fb" style="--c:#9DDCC0"><h3>Fortalezas de ${MESES[mo].toLowerCase()}</h3>${fo.slice(0,4).map(li2).join("")||`<p>Seguimos construyendo sus bases.</p>`}</div>
  <div class="fb" style="--c:#F6D776"><h3>Áreas de reforzamiento<small>${MESES[(mo+1)%12]}</small></h3>${ar.slice(0,4).map(li2).join("")||`<p>Mantendremos el ritmo de trabajo.</p>`}</div>
 </div></div>
 <div class="ft"><span>MOVA Centro Pedagógico · Monterrey, N.L. · @movacp.mx</span><span>Página 1 de 2</span></div></div></div>`;
-  const p2=`<div class="pg"><div class="ct">${band("BOLETA MENSUAL · "+MESES[mo].toUpperCase()+" "+y,"Su práctica en la app","MOVA Learning Studio",e(nm))}
+  const pracTxt=(tasks.length?(tDone===tasks.length?"Completó todas las tareas asignadas por su maestra":`Completó ${tDone} de ${tasks.length} tareas asignadas por su maestra`):"Trabajó en la plataforma como complemento de sus clases")+(days.size>=6?" y practicó de manera constante durante el mes, reforzando la gramática y la lectura de la unidad.":days.size>=1?`, con ${days.size} ${days.size===1?"día":"días"} de práctica durante el mes.`:".");
+  const p2=`<div class="pg"><div class="ct">${band("BOLETA MENSUAL · "+MESES[mo].toUpperCase()+" "+y,"Su práctica y observaciones","MOVA Learning Studio",e(nm))}
 <div class="body">
-<div class="stats"><div style="--c:#FF8FC0"><b>${days.size}</b><span>${days.size===1?"Día de práctica":"Días de práctica"}</span></div><div style="--c:#8EC9EE"><b>${tasks.length?tDone+" de "+tasks.length:"—"}</b><span>Tareas completadas</span></div><div style="--c:#F6D776"><b>${rows.length}</b><span>Actividades realizadas</span></div></div>
-<div class="g2"><div class="box"><h3>Practicó por su cuenta</h3>${ownL}</div><div class="box"><h3>Días que practicó</h3><div class="cal">${cal}</div>${streak>=2?`<p class="cap">Su mejor racha: ${streak} días seguidos</p>`:""}</div></div>
-${tkL?`<div class="box"><h3>Tareas asignadas por la maestra</h3><div class="tk">${tkL}</div></div>`:""}
+<div class="g2"><div class="box"><h3>Su práctica en la app</h3><div class="mini"><div style="--c:#FF8FC0"><b>${days.size}</b><span>${days.size===1?"día de práctica":"días de práctica"}</span></div><div style="--c:#8EC9EE"><b>${tasks.length?tDone+" de "+tasks.length:"—"}</b><span>tareas completadas</span></div><div style="--c:#F6D776"><b>${rows.length}</b><span>actividades realizadas</span></div></div><p class="cap" style="color:#3D4258;line-height:1.5">${pracTxt}</p></div>
+<div class="box"><h3>Días que practicó</h3><div class="cal">${cal}</div></div></div>
 <h2>Observaciones de la maestra</h2><div class="ob" contenteditable="true">${e(ev.n||"")}</div>
 ${nx&&nx.t?`<div class="next"><div style="flex-grow:1;display:flex;flex-direction:column"><b contenteditable="true">Próximo: ${e(nx.t)}</b><span contenteditable="true">${e(nx.x||"")}</span></div>${nx.d?`<span class="d" contenteditable="true">${e(nx.d)}</span>`:""}</div>`:""}
 <div style="flex-grow:1"></div>
