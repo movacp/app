@@ -68,7 +68,7 @@ const GD=[
  [/adjectives vs\.? adverbs|use of english: adverbs/i,"distingue entre adjetivos y adverbios, y los utiliza para describir con precisión."],
  [/-ed and -ing/i,"distingue adjetivos terminados en <i>-ed</i> e <i>-ing</i> para describir emociones y situaciones."],
  [/modal verbs|obligation/i,"expresa obligación, permiso y capacidad con verbos modales en distintos contextos."],
- [/-ing or to|to \+ infinitive|plan \/ hope|\+ infinitive/i,"elige entre gerundio e infinitivo después de ciertos verbos y adjetivos."],
+ [/-ing or to|to \+ infinitive|plan \/ hope|\+ infinitive|gerund/i,"elige entre gerundio e infinitivo después de ciertos verbos y adjetivos."],
  [/need to/i,"expresa necesidades con <i>need to</i>."],
  [/before \/ after \/ when|^before|^after/i,"relaciona acciones en el tiempo con <i>before, after</i> y <i>when</i>."],
  [/what about|how about/i,"hace sugerencias y responde a ellas de manera adecuada."],
@@ -259,7 +259,7 @@ function buildBoleta(s, all, y, mo, ev, cur, nx){
   const bigW = wg!=null && (dg==null || wg>=dg);
   /* Libro */
   const BB=window.MOVA_BOOKS||{}, bp=cur.bp||cur.bpAny||null, book=bp&&BB[bp.b]?BB[bp.b]:null;
-  const asgB=cur.asg&&cur.asg.b&&BB[cur.asg.b]?BB[cur.asg.b]:null, bookName=book?book.name:(asgB?asgB.name:"");
+  const asgB=cur.asg&&cur.asg.b&&BB[cur.asg.b]?BB[cur.asg.b]:null, defB=(typeof bkDefault==="function"&&BB[bkDefault(s)])?BB[bkDefault(s)]:null, bookName=book?book.name:(asgB?asgB.name:(defB?defB.name:""));
   const bt=book?bkTopics(bp.b,bp.f,bp.t):{g:[],v:[]};
   const bookLine=book?`${book.name}, ${bkRange(bp)}`:(s.stage||"");
   /* Lo que aprendió: temas en inglés + descripción pedagógica */
@@ -298,9 +298,10 @@ function buildBoleta(s, all, y, mo, ev, cur, nx){
   const QL2=Object.assign({},QL,{Vocabulary:"Vocabulario de la unidad",Grammar:"Gramática de la unidad"});
   const fo=[], ar=[], seen=new Set();
   Object.keys(by).forEach(k=>{ const v=by[k]; if(!v||!v[1]) return; const p=v[0]/v[1]; (p>=0.8?fo:ar).push([QL2[k]||k,`${v[0]}/${v[1]}`,p]); });
-  if(!fo.length&&wg!=null&&wg>=9) fo.push(["Quiz escrito",wg.toFixed(1),wg/10]);
+  if(fo.length<4&&wg!=null&&wg>=8.5) fo.push(["Quiz escrito",wg.toFixed(1),wg/10]);
   tasks.forEach(x=>{ const p=pct(x); if(p==null||p>=70) return; const n=tN(x.t).replace(/ · .*$/,""); if(seen.has(n.toLowerCase())) return; seen.add(n.toLowerCase()); ar.push([n,"Gramática",p/100]); });
   if(ev.sp&&SPK_PCT[ev.sp]<85) ar.push(["Fluidez al hablar","Speaking",SPK_PCT[ev.sp]/100]); else if(ev.sp) fo.push(["Expresión oral","Speaking",SPK_PCT[ev.sp]/100]);
+  if(ev.sp&&SPK_PCT[ev.sp]>=65&&SPK_PCT[ev.sp]<85&&fo.length<4) fo.push(["Seguridad al expresarse","Speaking",SPK_PCT[ev.sp]/100]);
   fo.sort((a,b)=>b[2]-a[2]); ar.sort((a,b)=>a[2]-b[2]);
   const li2=a=>`<div><span>${e(a[0])}</span><b>${e(a[1])}</b></div>`;
   /* Resultados */
