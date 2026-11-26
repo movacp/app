@@ -88,6 +88,7 @@ window.openReport=function(s, rows){
       <div><label class="f" for="bWn">Reactivos</label><input class="in" id="bWn" inputmode="numeric" placeholder="Ej. 30"></div>
     </div>
     <label class="f" for="bWd">Qué evaluó el quiz escrito</label><input class="in" id="bWd" placeholder="Grammar, vocabulary, reading, writing y phonics">
+    <label class="f" for="bWb">Resultado por sección del quiz escrito (opcional)</label><input class="in" id="bWb" placeholder="Grammar 8/8, Vocabulary 8/8, Writing 7/7, Phonics 4/4">
     <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:10px">
       <div><label class="f" for="bS">Speaking</label><select class="in" id="bS"><option value="">Sin evaluar</option>${SPK.map(x=>`<option>${x}</option>`).join("")}</select></div>
       <div><label class="f" for="bSc">Comentario de speaking</label><input class="in" id="bSc" placeholder="Ej. Ha mejorado de forma notable"></div>
@@ -108,12 +109,12 @@ window.openReport=function(s, rows){
   const ym=()=>$w("#bMonth").value.split("-").map(Number);
   const fill=async()=>{ const [y,mo]=ym(); msg.className="msg"; msg.textContent="Cargando…";
     cur=await evLoad(s,y,mo); const v=cur.ev||{};
-    $w("#bW").value=v.w!=null?v.w:""; $w("#bWn").value=v.wn||""; $w("#bWd").value=v.wd||""; $w("#bS").value=v.sp||""; $w("#bSc").value=v.spc||""; $w("#bN").value=v.n||"";
+    $w("#bW").value=v.w!=null?v.w:""; $w("#bWn").value=v.wn||""; $w("#bWd").value=v.wd||""; $w("#bWb").value=v.wb||""; $w("#bS").value=v.sp||""; $w("#bSc").value=v.spc||""; $w("#bN").value=v.n||"";
     const nx=getNext(y,mo); $w("#bNt").value=nx.t; $w("#bNd").value=nx.d; $w("#bNx").value=nx.x;
     msg.textContent=cur.ev?"Datos guardados de este mes cargados.":""; };
   $w("#bMonth").onchange=fill; fill();
   const read=()=>{ let wv=String($w("#bW").value).replace(",",".").trim(), wn=parseFloat(wv); if(!isNaN(wn)&&wn>10) wn=wn/10;
-    return {w:isNaN(wn)?null:Math.round(wn*10)/10, wn:+$w("#bWn").value||null, wd:$w("#bWd").value.trim(), sp:$w("#bS").value, spc:$w("#bSc").value.trim(), n:$w("#bN").value.trim()}; };
+    return {w:isNaN(wn)?null:Math.round(wn*10)/10, wn:+$w("#bWn").value||null, wd:$w("#bWd").value.trim(), wb:$w("#bWb").value.trim(), sp:$w("#bS").value, spc:$w("#bSc").value.trim(), n:$w("#bN").value.trim()}; };
   $w("#bGo").onclick=async function(){
     const [y,mo]=ym(), o=read(), b=this; b.disabled=true; msg.className="msg"; msg.textContent="Guardando…";
     setNext(y,mo,{t:$w("#bNt").value.trim(),d:$w("#bNd").value.trim(),x:$w("#bNx").value.trim()});
@@ -143,7 +144,11 @@ function buildBoleta(s, all, y, mo, ev, cur, nx){
   const pct=x=>x.done&&x.done.total?Math.round(x.done.score/x.done.total*100):null;
   /* Quiz digital */
   const mq=rows.filter(r=>r.activity==="monthly-quiz"&&r.total).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at))[0]||null;
-  const dg=mq?Math.round(mq.score/mq.total*100)/10:null, by=(mq&&mq.detail&&mq.detail.by)||{};
+  const dg=mq?Math.round(mq.score/mq.total*100)/10:null;
+  /* Desglose del quiz escrito: "Grammar 8/8, Vocabulary 8/8…" */
+  const wby={}; String(ev.wb||"").replace(/([A-Za-zÁÉÍÓÚáéíóúñÑ&][A-Za-zÁÉÍÓÚáéíóúñÑ& ]*?)\s*:?\s*(\d+)\s*\/\s*(\d+)/g,(_,k,a,b)=>{ k=k.trim(); k=k.charAt(0).toUpperCase()+k.slice(1); wby[k]=[+a,+b]; return ""; });
+  const by=(mq&&mq.detail&&mq.detail.by)||(Object.keys(wby).length?wby:{});
+  const wsg=Object.keys(wby).map(k=>`<div><span>${e(k)}</span><b>${wby[k][0]}/${wby[k][1]}</b></div>`).join("");
   const wg=ev.w;
   const bigW = wg!=null && (dg==null || wg>=dg);
   /* Libro */
@@ -164,7 +169,7 @@ function buildBoleta(s, all, y, mo, ev, cur, nx){
   catList.forEach(c=>{ const k=areaOf(c.n); if(k==="g"&&L.g.length>=9) return; const it=c.it.length?": "+e(c.it.join(", ")):""; L[k].push(`<li><b>${e(c.n)}</b>${it}</li>`); W[k].add("App"); });
   if(by.Vocabulary||by.Phonics){ W.v.add("Quiz"); if(!L.v.length) L.v.push(`<li><b>Vocabulario y phonics</b> de las unidades, evaluados en el quiz.</li>`); }
   if(by.Reading||by.Listening){ W.r.add("Quiz"); L.r.push(`<li><b>Comprensión:</b> idea general e información específica en lecturas y audios del quiz.</li>`); }
-  if(by.Grammar) W.g.add("Quiz");
+  if(by.Grammar){ W.g.add("Quiz"); if(!L.g.length) L.g.push(`<li><b>Gramática</b> de las unidades, evaluada en el quiz.</li>`); }
   if(ev.sp){ W.w.add("Clase"); L.w.push(`<li><b>Speaking en clase:</b> ${e(ev.spc||"conversación guiada")}</li>`); }
   if(by.Writing){ W.w.add("Quiz"); L.w.push(`<li><b>Writing:</b> redacción de oraciones evaluada en el quiz.</li>`); }
   const areas=AREA.filter(a=>L[a.k].length).map(a=>`<div class="tr"><div class="h" style="--c:${a.c}"><b>${a.n}</b><small>${[...W[a.k]].join(" · ")}</small></div><ul>${L[a.k].slice(0,10).join("")}</ul></div>`).join("");
@@ -179,10 +184,11 @@ function buildBoleta(s, all, y, mo, ev, cur, nx){
   /* Resultados */
   const spP=SPK_PCT[ev.sp]||0;
   const skg=Object.keys(by).map(k=>`<div><span>${e(k)}</span><b>${by[k][0]}/${by[k][1]}</b></div>`).join("");
-  const wCard=(main)=>`<div class="e${main?" main":""}"><span class="lb">QUIZ ESCRITO</span>${main?`<div class="sc">${wg.toFixed(1)}<small>/10</small></div>`:`<div style="display:flex;align-items:baseline;gap:8px"><span class="sc2">${wg.toFixed(1)}</span><p>${ev.wn?ev.wn+" reactivos":""}</p></div>`}<p contenteditable="true">${ev.wn&&main?ev.wn+" reactivos de ":""}${e(ev.wd||"grammar, vocabulary, reading, writing y phonics")}.</p>${main&&dg!=null?`<span class="tag">Mejor resultado del mes</span>`:""}</div>`;
+  const wCard=(main)=>`<div class="e${main?" main":""}"><span class="lb">QUIZ ESCRITO</span>${main?`<div class="sc">${wg.toFixed(1)}<small>/10</small></div>`:`<div style="display:flex;align-items:baseline;gap:8px"><span class="sc2">${wg.toFixed(1)}</span><p>${ev.wn?ev.wn+" reactivos":""}</p></div>`}<p contenteditable="true">${ev.wn&&main?ev.wn+" reactivos de ":""}${e(ev.wd||"grammar, vocabulary, reading, writing y phonics")}.</p>${main&&wsg?`<div class="sg">${wsg}</div>`:""}${main&&dg!=null?`<span class="tag">Mejor resultado del mes</span>`:""}</div>`;
   const dCard=(main)=>dg==null?`<div class="e"><span class="lb">QUIZ DIGITAL</span><p>Sin quiz digital registrado este mes.</p></div>`:`<div class="e${main?" main":""}"><span class="lb">QUIZ DIGITAL</span><div style="display:flex;align-items:baseline;gap:8px"><span class="${main?"sc":"sc2"}">${dg.toFixed(1)}</span><p>${mq.score} de ${mq.total} aciertos</p></div>${skg?`<div class="sg">${skg}</div>`:""}${main&&wg!=null?`<span class="tag">Mejor resultado del mes</span>`:""}</div>`;
   const sCard=`<div class="e"><span class="lb">SPEAKING</span><span class="sc2" style="font-size:20px">${e(ev.sp||"—")}</span><p contenteditable="true">${e(ev.sp?(ev.spc||"Evaluación en clase."):"Sin evaluación de speaking este mes.")}</p></div>`;
-  const res = wg==null&&dg==null ? `<div class="e"><p>Este mes no hay quizzes registrados.</p></div>` : bigW ? wCard(true)+dCard(false)+sCard : dCard(true)+(wg!=null?wCard(false):"")+sCard;
+  const res = wg==null&&dg==null ? `<div class="e"><p>Este mes no hay quizzes registrados.</p></div>` : dg==null ? wCard(true)+sCard : bigW ? wCard(true)+dCard(false)+sCard : dCard(true)+(wg!=null?wCard(false):"")+sCard;
+  const evCols = wg!=null&&dg==null ? ' style="grid-template-columns:1.5fr 1fr"' : "";
   /* Página 2 */
   const days=new Set(rows.map(r=>new Date(r.created_at).getDate()));
   const fst=new Date(y,mo,1), dim=new Date(y,mo+1,0).getDate(), lead=(fst.getDay()+6)%7;
@@ -257,7 +263,7 @@ h2{margin:0;font-size:13px;font-weight:800;color:#1E2A55;letter-spacing:.06em;te
   const p1=`<div class="pg"><div class="ct">${band("MOVA CENTRO PEDAGÓGICO","Boleta Mensual",`${MESES[mo]} ${y} · Inglés`,"Folio "+folio)}
 <div class="body">
 <div class="info"><div><span>ALUMNO(A)</span><b>${e(nm)}</b></div><div><span>PROGRAMA</span><b>${e(prog||"—")}</b></div><div><span>NIVEL</span><b>${e(lv||"—")}</b></div><div><span>LIBRO</span><b>${e(book?book.name:"—")}</b></div></div>
-<h2>Resultados de evaluación</h2><div class="ev">${res}</div>
+<h2>Resultados de evaluación</h2><div class="ev"${evCols}>${res}</div>
 <h2>Contenidos trabajados${book?" · "+e(bookLine):""}</h2>
 <div class="tb">${areas||`<div class="tr"><div class="h" style="--c:#8EC9EE"><b>Este mes</b></div><ul><li>Sin actividad registrada.</li></ul></div>`}</div>
 <div class="fr">
