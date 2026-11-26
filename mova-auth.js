@@ -625,6 +625,7 @@
     if (k.indexOf("mq:") === 0) return "ruta.html" + q + "#/mq/" + encodeURIComponent(k.slice(3));
     if (k.indexOf("me:") === 0) return "ruta.html" + q + "#/me/" + encodeURIComponent(k.slice(3));
     if (k === "m-levelup") return "index.html" + q + "#/matematicas/levelup";
+    if (k.indexOf("lq:") === 0) return "index.html?task=" + encodeURIComponent(t.id) + "#/lecto-quiz/" + encodeURIComponent(k.slice(3));
     if (k.indexOf("mt:") === 0) return "index.html?task=" + encodeURIComponent(t.id) + "#/matematicas/temas/" + encodeURIComponent(k.slice(3)) + "/quiz";
     if (k.indexOf("m:") === 0) return "index.html" + q + "#/matematicas/practica/" + encodeURIComponent(k.slice(2));
     if (k === "toefl-sim") return "juego-toefl-practice.html" + q + "#sim";
@@ -651,6 +652,7 @@
     if (tk === "toefl-sim") return !!(r.detail && r.detail.kind === "toefl-sim");
     if (tk === "m-levelup") return r.activity === "math-level-up";
     if (tk.indexOf("m:") === 0) return r.activity === "math-comprueba" && String(r.item) === tk.slice(2);
+    if (tk.indexOf("lq:") === 0) return r.activity === "lecto-quiz" && !!r.detail && r.detail.nivel === tk.slice(3).split("~")[0];
     if (tk.indexOf("mt:") === 0) return r.activity === "math-tema" && !!r.detail && r.detail.kind === "math-quiz";
     if (tk === "lectura") return /^app-(library|lecturas)$/.test(r.activity) && r.item && !/Explorando/.test(r.item);
     if (tk.indexOf("h:") === 0) return r.activity === "season" && String(r.item) === tk;
@@ -722,7 +724,7 @@
   }
   /* ---------- Assigned activities: tarjeta fija en el inicio, en My Progress y número en "Me" ---------- */
   var asgCache = null, asgAt = 0, asgBusy = false;
-  function asgKind(t) { var k = taskKey(t); return /^me:/.test(k) ? ["E", "#C9BDF5", "Module Exam"] : /^(mq|mt):/.test(k) ? ["Q", "#FF8FC0", "Monthly Quiz"] : /^m(-levelup$|:)/.test(k) ? ["M", "#FFF1C9", "Matemáticas"] : /^t:/.test(k) ? ["G", "#D3F36B", "Grammar"] : /^(v|xv):/.test(k) ? ["F", "#FFC7E2", "Vocabulary"] : /^e:/.test(k) ? ["L", "#FFE58A", "Lectura"] : /^w:/.test(k) ? ["W", "#BDF0D8", "Writing"] : /^r:|^lectura$/.test(k) ? ["R", "#FFE58A", "Reading"] : k === "toefl-sim" || k === "level-up" ? ["E", "#C9D2FF", "Exam"] : ["P", "#BDF0D8", "Game"]; }
+  function asgKind(t) { var k = taskKey(t); return /^me:/.test(k) ? ["E", "#C9BDF5", "Module Exam"] : /^(mq|mt|lq):/.test(k) ? ["Q", "#FF8FC0", "Monthly Quiz"] : /^m(-levelup$|:)/.test(k) ? ["M", "#FFF1C9", "Matemáticas"] : /^t:/.test(k) ? ["G", "#D3F36B", "Grammar"] : /^(v|xv):/.test(k) ? ["F", "#FFC7E2", "Vocabulary"] : /^e:/.test(k) ? ["L", "#FFE58A", "Lectura"] : /^w:/.test(k) ? ["W", "#BDF0D8", "Writing"] : /^r:|^lectura$/.test(k) ? ["R", "#FFE58A", "Reading"] : k === "toefl-sim" || k === "level-up" ? ["E", "#C9D2FF", "Exam"] : ["P", "#BDF0D8", "Game"]; }
   function asgLoad(cb) {
     if (!user) return cb(null);
     if (asgCache && Date.now() - asgAt < 60000) return cb(asgCache);
