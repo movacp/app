@@ -6,7 +6,7 @@
    tarea oculta "wfb:ev:AAAA-MM" para que Miss Karla y Miss Letty vean lo mismo. */
 (function(){
 const MES=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
-const NEXT_KEY="mova_boleta_next";
+const NEXT_KEY="mova_boleta_next2";
 const SPK=["Excelente","Logrado","En avance","En desarrollo","Por reforzar"];
 const SPK_PCT={"Excelente":100,"Logrado":85,"En avance":65,"En desarrollo":45,"Por reforzar":30};
 const e=v=>esc(v==null?"":String(v));
@@ -14,7 +14,7 @@ function evEnc(o){ return "EV|"+btoa(unescape(encodeURIComponent(JSON.stringify(
 function evDec(t){ try{ return /^EV\|/.test(t||"")?JSON.parse(decodeURIComponent(escape(atob(String(t).slice(3))))):null; }catch(_){ return null; } }
 function mkey(y,mo){ return y+"-"+String(mo+1).padStart(2,"0"); }
 function lastFriday(y,mo){ const d=new Date(y,mo+1,0); while(d.getDay()!==5) d.setDate(d.getDate()-1); return d; }
-function nextDefault(y,mo){ const n=new Date(y,mo+1,1); return {t:"Quiz de "+MES[n.getMonth()].toLowerCase(), d:"Última semana de "+MES[n.getMonth()].toLowerCase(), x:"Evaluación de los temas que trabajaremos en "+MES[n.getMonth()].toLowerCase()}; }
+function nextDefault(y,mo){ const n=new Date(y,mo+1,1); if(n.getMonth()===11) return {t:"Quiz de diciembre", d:"Semana del 14 al 18 de diciembre", x:"Evaluación de los temas que trabajaremos en las semanas de diciembre, antes de vacaciones"}; return {t:"Quiz de "+MES[n.getMonth()].toLowerCase(), d:"Última semana de "+MES[n.getMonth()].toLowerCase(), x:"Evaluación de los temas que trabajaremos en "+MES[n.getMonth()].toLowerCase()}; }
 function getNext(y,mo){ try{ const o=JSON.parse(localStorage.getItem(NEXT_KEY)||"null"); if(o&&o.k===mkey(y,mo)) return o; }catch(_){} return nextDefault(y,mo); }
 function setNext(y,mo,o){ try{ localStorage.setItem(NEXT_KEY,JSON.stringify(Object.assign({k:mkey(y,mo)},o))); }catch(_){} }
 
