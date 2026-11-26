@@ -1,4 +1,4 @@
-/* MOVA · Teacher view (v84)
+/* MOVA · Teacher view (v85: alumno en foco con “✓ Assigned”)
    Con la sesión del panel de maestras abierta, la app se ve completa con una barra
    "TEACHER VIEW" y un botón "+ Assign" en cada tema, mazo, lectura y juego para
    asignarlo a uno o varios alumnos a la vez. La sesión se comparte con el panel,
@@ -70,6 +70,8 @@
     ".tvs .li.on .c{background:#15192B;border-color:#15192B}.tvs .li.on .c:after{content:'';position:absolute;left:7px;top:2px;width:6px;height:12px;border:solid #D3F36B;border-width:0 3px 3px 0;transform:rotate(45deg)}" +
     ".tvs .go{display:block;width:100%;text-align:center;background:#15192B;color:#fff;border:0;border-radius:999px;padding:15px;font:800 15px 'Plus Jakarta Sans',sans-serif;margin-top:12px;cursor:pointer}.tvs .go:disabled{opacity:.45}" +
     ".tvs .x{background:none;border:0;color:#6A6F85;font:700 13.5px 'Plus Jakarta Sans',sans-serif;padding:10px;cursor:pointer;width:100%}" +
+    ".tvbar .tvst{flex:none;display:inline-flex;align-items:center;gap:6px;background:#2A3050;color:#fff;border:0;border-radius:999px;padding:7px 11px;font:700 12px 'Plus Jakarta Sans',sans-serif;cursor:pointer;max-width:46vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tvbar .tvst.on{background:#D3F36B;color:#15192B}" +
+    ".tvasg.as{background:#D3F36B;color:#15192B}.tvs .li .tag{font-size:10.5px;font-weight:800;background:#D3F36B;color:#15192B;border-radius:999px;padding:3px 8px;margin-left:6px;white-space:nowrap}" +
     ".tvtoast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 96px);transform:translateX(-50%);z-index:9995;background:#15192B;color:#fff;font:700 14px 'Plus Jakarta Sans',sans-serif;padding:12px 18px;border-radius:999px;box-shadow:0 10px 30px rgba(21,25,43,.35);max-width:90%;text-align:center}";
   var st = document.createElement("style"); st.id = "mova-teacher-view"; st.textContent = css; document.head.appendChild(st);
   function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
@@ -82,9 +84,43 @@
     if (document.querySelector(".tvbar")) return;
     var em = ""; try { em = localStorage.getItem("mova_teacher_email") || ""; } catch (e) {}
     var b = document.createElement("div"); b.className = "tvbar";
-    b.innerHTML = '<span class="k">TEACHER VIEW</span><b>' + esc(tName(em)) + '</b><a href="admin.html">Panel →</a>';
+    b.innerHTML = '<span class="k">TEACHER VIEW</span><b>' + esc(tName(em)) + '</b><button type="button" class="tvst"></button><a href="admin.html">Panel →</a>';
     document.body.prepend(b);
+    b.querySelector(".tvst").onclick = pickStudent; paintPick();
   }
+
+  /* ---------- alumno en foco: marca lo que ya tiene asignado ---------- */
+  var FKEY = "mova_tv_focus", focus = null, assigned = {};
+  try { focus = JSON.parse(sessionStorage.getItem(FKEY) || "null"); } catch (e) {}
+  function keyOf(t) { var k = String(t.task || ""); return k.split("~")[0]; }
+  function loadAssigned() {
+    assigned = {}; relabel(); if (!focus) return;
+    rpc("admin_list_tasks", { p_student: String(focus.id) }).then(function (r) {
+      (r || []).forEach(function (t) { var k = keyOf(t); if (k && k.indexOf("wfb:") !== 0) assigned[k] = (assigned[k] || 0) + 1; });
+      relabel();
+    }).catch(function () { toast("Could not load " + focus.name + "'s assignments."); });
+  }
+  function paintPick() { var b = document.querySelector(".tvbar .tvst"); if (!b) return; b.classList.toggle("on", !!focus); b.textContent = focus ? focus.name.split(" ")[0] + " ✕" : "Student ▾"; }
+  function setFocus(x) { focus = x ? { id: x.id, name: x.full_name, username: x.username } : null; try { if (focus) sessionStorage.setItem(FKEY, JSON.stringify(focus)); else sessionStorage.removeItem(FKEY); } catch (e) {} paintPick(); loadAssigned(); }
+  function relabel() {
+    document.querySelectorAll(".tvasg").forEach(function (b) { var it = b.__it; if (!it) return; var n = focus && assigned[it.key];
+      b.classList.toggle("as", !!n); b.textContent = n ? "✓ Assigned" + (n > 1 ? " ×" + n : "") : b.__lbl; });
+  }
+  function pickStudent() {
+    if (focus) { setFocus(null); toast("Showing all students"); return; }
+    close();
+    var d = document.createElement("div"); d.className = "tvd"; d.onclick = close;
+    var s = document.createElement("div"); s.className = "tvs"; s.setAttribute("role", "dialog");
+    s.innerHTML = '<h3>Whose assignments?</h3><span class="sub">The app will show “✓ Assigned” on everything this student already has.</span><input type="search" placeholder="Search a student…" aria-label="Search a student"><div class="ls"><p class="sub" style="padding:10px 0">Loading students…</p></div><button class="x" type="button">Cancel</button>';
+    document.body.appendChild(d); document.body.appendChild(s); s.querySelector(".x").onclick = close;
+    var ls = s.querySelector(".ls"), inp = s.querySelector("input"), q = "";
+    function paint() { var L = (students || []).filter(function (x) { return x.active !== false && (!q || (x.full_name + " " + x.username).toLowerCase().indexOf(q) >= 0); });
+      ls.innerHTML = L.map(function (x, i) { return '<div class="li" data-id="' + esc(x.id) + '"><span class="av" style="background:' + COLORS[i % COLORS.length] + '">' + esc(ini(x.full_name)) + "</span><div><b>" + esc(x.full_name) + "</b><small>" + esc(x.stage || x.username) + "</small></div></div>"; }).join("") || '<p class="sub" style="padding:10px 0">No students found.</p>'; }
+    inp.oninput = function () { q = inp.value.trim().toLowerCase(); paint(); };
+    ls.onclick = function (e) { var r = e.target.closest(".li"); if (!r) return; var x = (students || []).filter(function (y) { return String(y.id) === r.dataset.id; })[0]; if (!x) return; close(); setFocus(x); toast("Showing " + x.full_name + "'s assignments"); };
+    loadStudents().then(paint, function () { ls.innerHTML = '<p class="sub" style="padding:10px 0">Could not load your students. Open the panel once and try again.</p>'; });
+  }
+  function loadStudents() { if (students) return Promise.resolve(students); return rpc("admin_list_students").then(function (r) { students = (r || []).sort(function (a, b) { return String(a.full_name).localeCompare(String(b.full_name)); }); return students; }); }
 
   /* ---------- qué es cada enlace ---------- */
   function PATH() { return window.MOVA_PATH || {}; }
@@ -110,7 +146,7 @@
       var f = findTopic(b0.dataset.id); if (!f) return;
       var it = { key: "t:" + f.t.id, title: f.t.t + " · " + f.k + " " + SN[f.s] + " " + f.l, name: f.t.t, sub: f.k + " · " + SN[f.s] + " " + f.l };
       if (getComputedStyle(b0).position === "static") b0.style.position = "relative";
-      var x = document.createElement("span"); x.className = "tvasg"; x.setAttribute("role", "button"); x.textContent = "+ Assign"; x.style.top = "50%"; x.style.transform = "translateY(-50%)";
+      var x = document.createElement("span"); x.className = "tvasg"; x.setAttribute("role", "button"); x.textContent = "+ Assign"; x.__it = it; x.__lbl = "+ Assign"; x.style.top = "50%"; x.style.transform = "translateY(-50%)";
       x.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation(); openSheet(it); }, true);
       b0.appendChild(x);
     });
@@ -126,7 +162,7 @@
       if (host.__tvh) return; host.__tvh = 1;
       if (getComputedStyle(host).position === "static") host.style.position = "relative";
       var add = function (item, label, top) {
-        var b = document.createElement("button"); b.type = "button"; b.className = "tvasg"; b.textContent = label; if (top) b.style.top = top;
+        var b = document.createElement("button"); b.type = "button"; b.className = "tvasg"; b.textContent = label; b.__it = item; b.__lbl = label; if (top) b.style.top = top;
         b.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation(); openSheet(item); });
         host.appendChild(b);
       };
@@ -159,6 +195,7 @@
     document.body.appendChild(d); document.body.appendChild(s);
     s.querySelector(".x").onclick = close;
     var sel = {}, grp = "all", q = "", DO = dueOpts(), due = DO[2][2];
+    if (focus && !assigned[it.key]) sel[focus.id] = { id: focus.id, username: focus.username, full_name: focus.name };
     var dch = s.querySelector(".dch");
     function paintDue() {
       dch.innerHTML = DO.map(function (o) { return '<button type="button" data-d="' + o[2] + '" class="' + (due === o[2] ? "on" : "") + '">' + esc(o[1]) + "</button>"; }).join("") +
@@ -173,7 +210,7 @@
       var gs = []; (students || []).forEach(function (x) { var g0 = x.stage && String(x.stage).split(" · ")[0]; if (g0 && gs.indexOf(g0) < 0) gs.push(g0); });
       ch.innerHTML = '<button type="button" data-g="all" class="' + (grp === "all" ? "on" : "") + '">All</button>' + gs.map(function (g) { return '<button type="button" data-g="' + esc(g) + '" class="' + (grp === g ? "on" : "") + '">' + esc(g) + "</button>"; }).join("") + '<button type="button" data-g="__sel">Select all shown</button>';
       var L = list();
-      ls.innerHTML = L.length ? L.map(function (x, i) { return '<div class="li' + (sel[x.id] ? " on" : "") + '" data-id="' + esc(x.id) + '"><span class="av" style="background:' + COLORS[i % COLORS.length] + '">' + esc(ini(x.full_name)) + "</span><div><b>" + esc(x.full_name) + "</b><small>" + esc(x.stage || x.username) + '</small></div><span class="c"></span></div>'; }).join("") : '<p class="sub" style="padding:10px 0">No students found.</p>';
+      ls.innerHTML = L.length ? L.map(function (x, i) { return '<div class="li' + (sel[x.id] ? " on" : "") + '" data-id="' + esc(x.id) + '"><span class="av" style="background:' + COLORS[i % COLORS.length] + '">' + esc(ini(x.full_name)) + "</span><div><b>" + esc(x.full_name) + "</b><small>" + esc(x.stage || x.username) + (focus && String(focus.id) === String(x.id) && assigned[it.key] ? '<span class="tag">Already assigned</span>' : "") + '</small></div><span class="c"></span></div>'; }).join("") : '<p class="sub" style="padding:10px 0">No students found.</p>';
       var n = Object.keys(sel).length; go.disabled = !n; go.textContent = n ? "Assign to " + n + (n === 1 ? " student" : " students") : "Assign";
     }
     ch.onclick = function (e) { var b = e.target.closest("button"); if (!b) return; if (b.dataset.g === "__sel") list().forEach(function (x) { sel[x.id] = x; }); else grp = b.dataset.g; paint(); };
@@ -183,7 +220,7 @@
       var arr = Object.keys(sel).map(function (k) { return sel[k]; }); if (!arr.length) return;
       go.disabled = true; go.textContent = "Assigning…";
       Promise.all(arr.map(function (x) { return rpc("admin_assign_task", { p_student: String(x.id), p_username: x.username, p_task: it.key, p_title: it.title + (due ? " · due " + due : "") + " · by " + tName(localStorage.getItem("mova_teacher_email")) }).then(function () { return 1; }, function () { return 0; }); }))
-        .then(function (r) { var ok = r.reduce(function (a, b) { return a + b; }, 0); close(); toast(ok === arr.length ? "“" + it.name + "” assigned to " + ok + (ok === 1 ? " student" : " students") : ok + " of " + arr.length + " assigned. Check your connection and try again."); });
+        .then(function (r) { var ok = r.reduce(function (a, b) { return a + b; }, 0); close(); if (focus && sel[focus.id]) loadAssigned(); toast(ok === arr.length ? "“" + it.name + "” assigned to " + ok + (ok === 1 ? " student" : " students") : ok + " of " + arr.length + " assigned. Check your connection and try again."); });
     };
     if (students) paint();
     else rpc("admin_list_students").then(function (r) { students = (r || []).sort(function (a, b) { return String(a.full_name).localeCompare(String(b.full_name)); }); paint(); })
@@ -191,6 +228,6 @@
   }
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
 
-  function start() { scan(); setInterval(scan, 1000); }
+  function start() { scan(); relabel(); setInterval(function () { scan(); relabel(); }, 1000); if (focus) { loadStudents().catch(function () {}); loadAssigned(); } }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 })();
