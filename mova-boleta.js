@@ -76,6 +76,7 @@ async function evLoad(s,y,mo){
 async function evSave(s,y,mo,o){ await rpc("admin_assign_task",{p_student:String(s.id),p_username:s.username,p_task:"wfb:ev:"+mkey(y,mo),p_title:evEnc(o)}); }
 
 /* ---------- Diálogo ---------- */
+const WRITTEN_TXT="Se evaluó grammar, vocabulary, writing, reading y phonics";
 window.openReport=function(s, rows){
   const now=new Date(), opts=[];
   for(let i=0;i<6;i++){ const d=new Date(now.getFullYear(), now.getMonth()-i, 1); opts.push([d.getFullYear(), d.getMonth()]); }
@@ -83,16 +84,8 @@ window.openReport=function(s, rows){
   w.innerHTML=`<div class="sheet" role="dialog" aria-modal="true" style="max-height:92vh;overflow:auto"><button class="x" aria-label="Cerrar">×</button>
     <h2>Boleta mensual</h2><p class="sub">${e(s.full_name)}</p>
     <label class="f" for="bMonth">Mes</label><select class="in" id="bMonth">${opts.map(([y,m],i)=>`<option value="${y}-${m}" ${i===0?"selected":""}>${MESES[m]} ${y}</option>`).join("")}</select>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div><label class="f" for="bW">Quiz escrito</label><input class="in" id="bW" inputmode="decimal" placeholder="Ej. 9.7 o 97"></div>
-      <div><label class="f" for="bWn">Reactivos</label><input class="in" id="bWn" inputmode="numeric" placeholder="Ej. 30"></div>
-    </div>
-    <label class="f" for="bWd">Qué evaluó el quiz escrito</label><input class="in" id="bWd" placeholder="Grammar, vocabulary, reading, writing y phonics">
-    <label class="f" for="bWb">Resultado por sección del quiz escrito (opcional)</label><input class="in" id="bWb" placeholder="Grammar 8/8, Vocabulary 8/8, Writing 7/7, Phonics 4/4">
-    <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:10px">
-      <div><label class="f" for="bS">Speaking</label><select class="in" id="bS"><option value="">Sin evaluar</option>${SPK.map(x=>`<option>${x}</option>`).join("")}</select></div>
-      <div><label class="f" for="bSc">Comentario de speaking</label><input class="in" id="bSc" placeholder="Ej. Ha mejorado de forma notable"></div>
-    </div>
+    <label class="f" for="bW">Calificación del quiz escrito</label><input class="in" id="bW" inputmode="decimal" placeholder="Ej. 9.7 o 97">
+    <p class="sub" style="margin:6px 2px 0;font-size:12.5px">En la boleta dirá: «${WRITTEN_TXT}».</p>
     <label class="f" for="bN">Observaciones de la maestra</label>
     <textarea class="in" id="bN" rows="5" placeholder="Lo que quieres que lean los papás."></textarea>
     <details style="margin-top:8px"><summary style="cursor:pointer;font-weight:700;font-size:14px">Próxima evaluación (sale en todas las boletas del mes)</summary>
@@ -109,12 +102,12 @@ window.openReport=function(s, rows){
   const ym=()=>$w("#bMonth").value.split("-").map(Number);
   const fill=async()=>{ const [y,mo]=ym(); msg.className="msg"; msg.textContent="Cargando…";
     cur=await evLoad(s,y,mo); const v=cur.ev||{};
-    $w("#bW").value=v.w!=null?v.w:""; $w("#bWn").value=v.wn||""; $w("#bWd").value=v.wd||""; $w("#bWb").value=v.wb||""; $w("#bS").value=v.sp||""; $w("#bSc").value=v.spc||""; $w("#bN").value=v.n||"";
+    $w("#bW").value=v.w!=null?v.w:""; $w("#bN").value=v.n||"";
     const nx=getNext(y,mo); $w("#bNt").value=nx.t; $w("#bNd").value=nx.d; $w("#bNx").value=nx.x;
     msg.textContent=cur.ev?"Datos guardados de este mes cargados.":""; };
   $w("#bMonth").onchange=fill; fill();
   const read=()=>{ let wv=String($w("#bW").value).replace(",",".").trim(), wn=parseFloat(wv); if(!isNaN(wn)&&wn>10) wn=wn/10;
-    return {w:isNaN(wn)?null:Math.round(wn*10)/10, wn:+$w("#bWn").value||null, wd:$w("#bWd").value.trim(), wb:$w("#bWb").value.trim(), sp:$w("#bS").value, spc:$w("#bSc").value.trim(), n:$w("#bN").value.trim()}; };
+    return {w:isNaN(wn)?null:Math.round(wn*10)/10, n:$w("#bN").value.trim()}; };
   $w("#bGo").onclick=async function(){
     const [y,mo]=ym(), o=read(), b=this; b.disabled=true; msg.className="msg"; msg.textContent="Guardando…";
     setNext(y,mo,{t:$w("#bNt").value.trim(),d:$w("#bNd").value.trim(),x:$w("#bNx").value.trim()});
@@ -184,11 +177,13 @@ function buildBoleta(s, all, y, mo, ev, cur, nx){
   /* Resultados */
   const spP=SPK_PCT[ev.sp]||0;
   const skg=Object.keys(by).map(k=>`<div><span>${e(k)}</span><b>${by[k][0]}/${by[k][1]}</b></div>`).join("");
-  const wCard=(main)=>`<div class="e${main?" main":""}"><span class="lb">QUIZ ESCRITO</span>${main?`<div class="sc">${wg.toFixed(1)}<small>/10</small></div>`:`<div style="display:flex;align-items:baseline;gap:8px"><span class="sc2">${wg.toFixed(1)}</span><p>${ev.wn?ev.wn+" reactivos":""}</p></div>`}<p contenteditable="true">${ev.wn&&main?ev.wn+" reactivos de ":""}${e(ev.wd||"grammar, vocabulary, reading, writing y phonics")}.</p>${main&&wsg?`<div class="sg">${wsg}</div>`:""}${main&&dg!=null?`<span class="tag">Mejor resultado del mes</span>`:""}</div>`;
+  const wCard=(main)=>`<div class="e${main?" main":""}"><span class="lb">QUIZ ESCRITO</span>${main?`<div class="sc">${wg.toFixed(1)}<small>/10</small></div>`:`<div style="display:flex;align-items:baseline;gap:8px"><span class="sc2">${wg.toFixed(1)}</span><p>${ev.wn?ev.wn+" reactivos":""}</p></div>`}<p contenteditable="true">${WRITTEN_TXT}.</p>${main&&wsg?`<div class="sg">${wsg}</div>`:""}${main&&dg!=null?`<span class="tag">Mejor resultado del mes</span>`:""}</div>`;
   const dCard=(main)=>dg==null?`<div class="e"><span class="lb">QUIZ DIGITAL</span><p>Sin quiz digital registrado este mes.</p></div>`:`<div class="e${main?" main":""}"><span class="lb">QUIZ DIGITAL</span><div style="display:flex;align-items:baseline;gap:8px"><span class="${main?"sc":"sc2"}">${dg.toFixed(1)}</span><p>${mq.score} de ${mq.total} aciertos</p></div>${skg?`<div class="sg">${skg}</div>`:""}${main&&wg!=null?`<span class="tag">Mejor resultado del mes</span>`:""}</div>`;
   const sCard=`<div class="e"><span class="lb">SPEAKING</span><span class="sc2" style="font-size:20px">${e(ev.sp||"—")}</span><p contenteditable="true">${e(ev.sp?(ev.spc||"Evaluación en clase."):"Sin evaluación de speaking este mes.")}</p></div>`;
-  const res = wg==null&&dg==null ? `<div class="e"><p>Este mes no hay quizzes registrados.</p></div>` : dg==null ? wCard(true)+sCard : bigW ? wCard(true)+dCard(false)+sCard : dCard(true)+(wg!=null?wCard(false):"")+sCard;
-  const evCols = wg!=null&&dg==null ? ' style="grid-template-columns:1.5fr 1fr"' : "";
+  const sC = ev.sp ? sCard : "";
+  const res = wg==null&&dg==null ? `<div class="e"><p>Este mes no hay quizzes registrados.</p></div>` : dg==null ? wCard(true)+sC : bigW ? wCard(true)+dCard(false)+sC : dCard(true)+(wg!=null?wCard(false):"")+sC;
+  const nCards = (wg!=null?1:0)+(dg!=null?1:0)+(ev.sp?1:0);
+  const evCols = nCards<=1 ? ' style="grid-template-columns:1fr"' : wg!=null&&dg==null ? ' style="grid-template-columns:1.5fr 1fr"' : "";
   /* Página 2 */
   const days=new Set(rows.map(r=>new Date(r.created_at).getDate()));
   const fst=new Date(y,mo,1), dim=new Date(y,mo+1,0).getDate(), lead=(fst.getDay()+6)%7;
