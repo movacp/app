@@ -127,6 +127,7 @@
     openModal(`<button class="x" aria-label="Cerrar">✕</button>
       <div class="lp-hd"><span class="lp-k">Mi Ruta Lectora</span><h2>${ESC(s.full_name)}</h2>
       <p>${dg ? `Diagnóstico del ${ESC(new Date(dg.fecha).toLocaleDateString("es-MX", { day: "numeric", month: "long" }))}: lectura nivel ${dg.nivel_lectura > 8 ? "8+" : dg.nivel_lectura}, escritura nivel ${dg.nivel_escritura}${dg.ppm ? ` · ${dg.ppm} ppm` : ""}` : D.pend ? "Tiene el diagnóstico de entrada asignado. Hazlo con el alumno en clase." : "Todavía no tiene diagnóstico de entrada."}</p></div>
+      <button class="lp-btn" id="lpRep" style="width:100%;margin-bottom:12px;background:#1E2A55;color:#fff">Informe para la familia</button>
       ${Object.keys(D.lessons).length ? `<div class="lp-les"><span class="lp-k">Lecciones en casa</span><div>${Object.keys(D.lessons).sort().map(k => `<span>${ESC(k)} ${"★".repeat(D.lessons[k].stars)}${D.lessons[k].seal ? " · sello" : ""}</span>`).join("")}</div></div>` : ""}
       ${!dg ? `<button class="lp-btn ${D.pend ? "ghost" : ""}" id="lpDiag" style="width:100%;margin-bottom:12px">${D.pend ? "Volver a asignar el diagnóstico" : "Asignar diagnóstico de entrada"}</button>` : ""}
       <div class="lp-map">${LV.map((x, i) => { const c = stateOf(i, L, dg, D.vals); return `<button data-l="${i + 1}" class="${c}${i + 1 === SEL ? " sel" : ""}" title="${ESC(x)}"><img src="${i === 7 ? "le-libro.webp" : "le-n" + (i + 1) + ".webp"}" alt=""><small>${i + 1}</small></button>`; }).join("")}</div>
@@ -157,6 +158,7 @@
       try { await R("admin_assign_task", { p_student: String(s.id), p_username: s.username, p_task: "diagnostico-lectura", p_title: "Diagnóstico de entrada · Lectoescritura · by " + T() }); toast(`Diagnóstico asignado a ${first(s.full_name)}`); await loadOne(s); draw(); openStudent(id); }
       catch (e) { dB.disabled = false; toast(e.message || "No se pudo asignar"); } };
     document.getElementById("lpSheet").onclick = () => printSheet(s, SEL);
+    document.getElementById("lpRep").onclick = () => { if (!D.diag && !D.vals.length) { toast("Aún no hay diagnóstico ni niveles validados para el informe"); return; } openReport(D); };
     document.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => { if (!confirm("¿Borrar esta sesión de validación?")) return; b.disabled = true;
       try { await R("admin_assign_task", { p_student: String(s.id), p_username: s.username, p_task: "wfb:lv:x" + Date.now().toString(36), p_title: enc({ v: 1, x: b.dataset.del, by: T() }) }); await loadOne(s); draw(); openStudent(id, SEL); toast("Sesión borrada"); }
       catch (e) { b.disabled = false; toast(e.message || "No se pudo borrar"); } });
@@ -192,6 +194,95 @@
       toast(D.L > before ? `¡${first(s.full_name)} logró el nivel ${before}! Su ruta ya avanzó.` : "Sesión guardada");
       openStudent(id, D.L > before && D.L <= 8 ? D.L : SEL);
     } catch (e) { toast(e.message || "No se pudo guardar"); }
+  }
+
+
+  /* ---------- Informe para la familia (formal, enfoque pedagógico) ---------- */
+  const DESC = [
+    "Reconoce y nombra las cinco vocales en mayúscula y minúscula, e identifica el sonido inicial de las palabras.",
+    "Une consonante y vocal para leer y escribir sílabas y palabras con m, p, s y l.",
+    "Lee y escribe sílabas directas con el resto de las consonantes, en palabras y oraciones cortas.",
+    "Lee y escribe sílabas inversas y mixtas dentro de palabras (al, es, sol, mar).",
+    "Lee y escribe sílabas trabadas (pl, br, cr, tr) y palabras con diptongo (piano, nieve).",
+    "Aplica los casos especiales de la lengua: que-qui, gue-gui, ge-gi, ce-ci, r y rr, h, ll y z.",
+    "Lee oraciones con entonación adecuada y respeta los signos de puntuación, interrogación y exclamación.",
+    "Lee textos completos con fluidez y precisión, y responde preguntas literales e inferenciales."
+  ];
+  const HOME = [
+    ["Jugar a encontrar objetos de la casa que empiecen con cada vocal.", "Leer cuentos en voz alta y pedirle que repita las palabras que más le gusten."],
+    ["Leer juntos palabras sencillas en etiquetas, empaques y letreros.", "Pedirle que escriba la lista del súper con palabras cortas."],
+    ["Leer en voz alta un párrafo corto al día y repetirlo hasta leerlo sin pausas.", "Dictarle tres palabras nuevas cada noche."],
+    ["Buscar en un libro palabras que terminen en consonante (sol, mar, pez) y leerlas juntos.", "Escribir oraciones cortas con esas palabras."],
+    ["Leer juntos palabras con trabadas (plato, tren, globo) en libros y revistas.", "Hacer dictados breves de oraciones de cinco o seis palabras."],
+    ["Señalar en sus lecturas palabras con que, gue, ce y gi, y leerlas juntos.", "Corregir con calma su escritura, explicando la regla."],
+    ["Leer un texto corto dos o tres veces seguidas para ganar fluidez.", "Turnarse en voz alta: un párrafo usted y uno su hijo(a)."],
+    ["Leer diariamente quince minutos un libro de su interés.", "Al terminar, conversar sobre qué pasó, por qué y qué le gustó."]
+  ];
+  function openReport(D) {
+    const s = D.s, L = D.L, dg = D.diag, nm = first(s.full_name);
+    const done = LV.map((x, i) => stateOf(i, L, dg, D.vals) === "done");
+    const nDone = done.filter(Boolean).length, all = L > 8;
+    const lastD = l => { const ss = D.vals.filter(v => v.l === l && (v.m || sessionOk(v))).map(v => v.d).sort(); return ss.length ? ss[ss.length - 1] : null; };
+    const ppmV = D.vals.filter(v => v.ppm).sort((a, b) => (a.d < b.d ? -1 : 1));
+    const ppm = ppmV.length ? ppmV[ppmV.length - 1].ppm : (dg && dg.ppm) || null;
+    const nLes = Object.keys(D.lessons).length;
+    const hoy = new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
+    const fL = d => { try { return new Date(d + "T12:00:00").toLocaleDateString("es-MX", { day: "numeric", month: "long" }); } catch (e) { return d; } };
+    const base = location.href.replace(/[^/]*$/, "");
+    const folio = "IL-" + new Date().toISOString().slice(2, 7).replace("-", "") + "-" + String(s.id).slice(-4).toUpperCase();
+    const cur = all ? "Ruta completa" : `Nivel ${L} · ${LV[L - 1]}`;
+    const obs = all
+      ? `${nm} acreditó los ocho niveles de la ruta de lectoescritura. Lee con seguridad, respeta la puntuación y comprende lo que lee. En la siguiente etapa trabajaremos comprensión lectora, ortografía y redacción de acuerdo con su grado escolar.`
+      : nDone
+        ? `${nm} acreditó ${nDone} de los ocho niveles de la ruta. Actualmente trabaja en ${LV[L - 1].toLowerCase()}: ${DESC[L - 1].charAt(0).toLowerCase() + DESC[L - 1].slice(1)} Avanza de manera constante y en clase reforzamos esta habilidad antes de acreditar el nivel.`
+        : `${nm} inicia su ruta de lectoescritura en el nivel ${L}, ${LV[L - 1].toLowerCase()}. En clase trabajaremos esta habilidad de forma sistemática y la acreditaremos de manera presencial.`;
+    const home = HOME[all ? 7 : L - 1];
+    const C = ["#FF8FC0", "#B9A6E8", "#8EC9EE", "#9DDCC0", "#F6D776", "#FF8FC0", "#B9A6E8", "#8EC9EE"];
+    const map = LV.map((x, i) => { const c = stateOf(i, L, dg, D.vals); const lab = c === "done" ? "Acreditado" : c === "now" ? "En proceso" : "Por iniciar";
+      return `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center"><div style="width:56px;height:48px;border-radius:13px;background:${c === "done" ? "#EAF7C4" : c === "now" ? "#ECE7FF" : "#F2F0F6"};display:grid;place-items:center;${c === "now" ? "border:2px solid #1E2A55;" : ""}"><img src="${base}${i === 7 ? "le-libro.webp" : "le-n" + (i + 1) + ".webp"}" alt="" style="width:38px;height:34px;object-fit:contain;${c === "next" ? "opacity:.45;filter:grayscale(.5)" : ""}"></div><b style="font-size:10px;color:#1E2A55;line-height:1.15">${i + 1}. ${ESC(x)}</b><span style="font-size:10px;font-weight:700;color:${c === "done" ? "#4E7A12" : c === "now" ? "#5B45B8" : "#8A8DA3"}">${lab}</span></div>`; }).join("");
+    const dts = new Set(LV.map((x, i) => done[i] ? lastD(i + 1) : null).filter(Boolean)); const oneDay = dts.size === 1 && LV.every((x, i) => !done[i] || lastD(i + 1));
+    const CK = '<path d="M5 12.5l4.5 4.5L19 7.5"></path>';
+    const skills = LV.map((x, i) => done[i] ? `<div style="display:flex;gap:10px;align-items:flex-start"><span style="width:20px;height:20px;border-radius:50%;background:#9DDCC0;display:grid;place-items:center;flex-shrink:0;margin-top:1px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1E2A55" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${CK}</svg></span><span style="font-size:11px;line-height:1.38;color:#2E3350"><b style="color:#1E2A55">${ESC(x)}.</b> ${ESC(DESC[i])}${lastD(i + 1) && !oneDay ? ` <span style="color:#6A6F85;white-space:nowrap">· ${ESC(fmtD(lastD(i + 1)))}</span>` : ""}</span></div>` : "").join("");
+    const lab = (a, b) => `<div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:10.5px;font-weight:700;letter-spacing:.1em;color:#6A6F85">${a}</span><b style="font-size:14px;color:#1E2A55">${ESC(b)}</b></div>`;
+    const fact = (a, b) => `<span style="background:#F7F5FB;border-radius:999px;padding:6px 13px;font-size:11.5px;color:#3D4258"><span style="font-weight:700;letter-spacing:.06em;color:#6A6F85;font-size:10px">${a}</span> &nbsp;<b style="color:#1E2A55">${b}</b></span>`;
+    const facts = [];
+    if (dg) facts.push(fact("DIAGNÓSTICO DE ENTRADA", `lectura nivel ${dg.nivel_lectura > 8 ? "8+" : ESC(dg.nivel_lectura)} · escritura nivel ${ESC(dg.nivel_escritura || "—")}`));
+    if (ppm) facts.push(fact("FLUIDEZ", `${ESC(ppm)} palabras por minuto`));
+    if (nLes) facts.push(fact("PRÁCTICA EN CASA", `${nLes} lecciones completadas`));
+    const next = all
+      ? `<p contenteditable="true" style="margin:0;font-size:11.5px;line-height:1.45;color:#2E3350">Consolidar la comprensión lectora (literal, inferencial y crítica), la ortografía y la redacción de textos breves, de acuerdo con su grado escolar.</p>`
+      : `<p contenteditable="true" style="margin:0;font-size:11.5px;line-height:1.45;color:#2E3350"><b style="color:#1E2A55">Nivel ${L} · ${ESC(LV[L - 1])}.</b> ${ESC(DESC[L - 1])}${L < 8 ? ` Después continuará con ${ESC(LV[L].toLowerCase())}.` : ""}</p>`;
+    const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Informe de Lectoescritura · ${ESC(s.full_name)}</title><meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>@page{size:letter;margin:0}body{margin:0;background:#E9E7F0;font-family:Poppins,system-ui,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.bar{position:sticky;top:0;z-index:5;background:#1E2A55;color:#fff;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px;font-size:13px}.bar button{background:#D3F36B;color:#15192B;border:0;border-radius:999px;padding:9px 16px;font:700 13px Poppins,sans-serif;cursor:pointer}
+.pg{width:816px;height:1056px;margin:20px auto;box-sizing:border-box;background:#fff;color:#1B1F33;padding:34px 52px 28px;display:flex;flex-direction:column;gap:8px;overflow:hidden;position:relative;box-shadow:0 10px 30px -12px rgba(0,0,0,.25)}
+h2{margin:0;font-size:14.5px;font-weight:800;color:#1E2A55}.pg>*{flex-shrink:0}
+[contenteditable]{outline:1px dashed transparent;border-radius:6px}[contenteditable]:hover,[contenteditable]:focus{outline-color:#B9A6E8}
+@media print{body{background:#fff}.bar{display:none}.pg{margin:0;box-shadow:none}[contenteditable]{outline:0!important}}
+@media screen and (max-width:840px){.pg{transform:scale(calc(100vw/840));transform-origin:top left;margin:10px 0 calc((100vw/840 - 1)*1056px)}}</style></head><body>
+<div class="bar"><span>Informe de ${ESC(nm)} · puede editar los textos tocándolos</span><button onclick="window.print()">Guardar PDF / Imprimir</button></div>
+<div class="pg">
+<div style="position:absolute;inset:16px;border:1.5px solid #1E2A55;border-radius:10px"></div>
+<div style="display:flex;align-items:center;gap:18px;position:relative"><img src="${base}icon-512.png" alt="MOVA" style="width:54px;height:54px;border-radius:14px">
+<div style="flex-grow:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;font-weight:700;letter-spacing:.16em;color:#6A6F85">MOVA CENTRO PEDAGÓGICO</span><h1 style="margin:0;font-size:27px;line-height:1.05;font-weight:800;color:#1E2A55">Informe de Lectoescritura</h1></div>
+<div style="text-align:right;display:flex;flex-direction:column;gap:4px;align-items:flex-end"><span style="background:#1E2A55;color:#fff;border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:700">Mi Ruta Lectora</span><span style="font-size:11.5px;color:#6A6F85">Folio ${ESC(folio)}</span></div></div>
+<div style="display:flex;height:6px;border-radius:6px;overflow:hidden;position:relative"><span style="flex-grow:1;background:#FF8FC0"></span><span style="flex-grow:1;background:#8EC9EE"></span><span style="flex-grow:1;background:#F6D776"></span><span style="flex-grow:1;background:#9DDCC0"></span><span style="flex-grow:1;background:#B9A6E8"></span></div>
+<p style="margin:-2px 0 0;font-size:11.5px;line-height:1.5;color:#3D4258;position:relative">El programa de lectoescritura de MOVA se organiza en ocho niveles de habilidad, desde la conciencia de los sonidos hasta la comprensión de textos. Cada nivel se acredita de forma presencial, cuando el alumno demuestra el dominio de la habilidad frente a su maestra.</p>
+<div style="display:grid;grid-template-columns:1.5fr 1.4fr 1fr 1fr;gap:14px;background:#F7F5FB;border-radius:16px;padding:11px 18px;position:relative">${lab("ALUMNO", s.full_name)}${lab("NIVEL ACTUAL", cur)}${lab("NIVELES ACREDITADOS", nDone + " de 8")}${lab("FECHA", hoy)}</div>
+<div style="position:relative"><h2 style="margin-bottom:6px">Ruta lectora</h2><div style="display:grid;grid-template-columns:repeat(8,1fr);gap:6px">${map}</div></div>
+${facts.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;position:relative">${facts.join("")}</div>` : ""}
+<div style="background:#EEF8F2;border-radius:16px;padding:11px 16px;position:relative"><h2 style="margin-bottom:7px">Habilidades consolidadas${oneDay ? ` <span style="font-weight:600;font-size:11px;color:#6A6F85">· acreditadas el ${ESC(fL([...dts][0]))}</span>` : ""}</h2>${skills ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 18px">${skills}</div>` : `<p style="margin:0;font-size:12px;color:#3D4258">Inicia su ruta; las habilidades acreditadas aparecerán aquí.</p>`}</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;position:relative">
+<div style="background:#ECE7FF;border-radius:16px;padding:11px 16px;display:flex;flex-direction:column;gap:5px"><h2>${all ? "Siguiente etapa" : "En proceso"}</h2>${next}</div>
+<div style="background:#FFF8E5;border-radius:16px;padding:11px 16px;display:flex;flex-direction:column;gap:5px"><h2>Recomendaciones para casa</h2>${home.map(t => `<p contenteditable="true" style="margin:0;font-size:11.5px;line-height:1.42;color:#2E3350;padding-left:14px;position:relative"><span style="position:absolute;left:0;top:6px;width:6px;height:6px;border-radius:50%;background:#1E2A55"></span>${ESC(t)}</p>`).join("")}</div>
+</div>
+<div style="border:1.5px solid #E4E0EE;border-radius:16px;padding:11px 16px;position:relative"><h2 style="margin-bottom:4px">Observaciones de la maestra</h2><p contenteditable="true" style="margin:0;font-size:11.5px;line-height:1.5;color:#2E3350">${ESC(obs)}</p></div>
+<div style="flex-grow:1"></div>
+<div style="display:flex;justify-content:center;position:relative"><div style="width:300px;display:flex;flex-direction:column;align-items:center;text-align:center"><div style="position:relative;width:100%;height:32px"><img src="${base}sig-karla.png" alt="Firma" style="position:absolute;left:50%;bottom:-22px;transform:translateX(-50%);height:72px;z-index:1"></div><div style="width:100%;border-top:1.5px solid #1E2A55;padding-top:7px"><b style="display:block;font-size:14px;color:#1E2A55">Miss Karla Rodríguez</b><span style="font-size:12px;color:#4E5468">Coordinadora Académica</span></div></div></div>
+<div style="text-align:center;font-size:11px;color:#6A6F85;position:relative">Monterrey, N.L. · ${ESC(hoy)} · @movacp.mx</div>
+</div></body></html>`;
+    const w = window.open("", "_blank"); if (!w) { toast("Permita ventanas emergentes para ver el informe"); return; } w.document.open(); w.document.write(html); w.document.close();
   }
 
   /* ---------- Hoja de registro para imprimir ---------- */
